@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
 
 <meta charset="UTF-8">
@@ -12,21 +13,7 @@
 *{
 box-sizing:border-box;
 }
-<section class="reviews">
 
-<h2>آراء عملائنا 🤎</h2>
-
-<div class="reviews-container">
-
-<img src="review1.jpg">
-<img src="review2.jpg">
-<img src="review3.jpg">
-<img src="review4.jpg">
-<img src="review5.jpg">
-
-</div>
-
-</section>
 body{
 margin:0;
 font-family:Tahoma, Arial;
@@ -34,66 +21,48 @@ background:#fff8f2;
 color:#4b3621;
 }
 
-.hero{
-height:80vh;
-position:relative;
-overflow:hidden;
+
+header{
+
 background:#c89b6d;
-}
-
-.hero video{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.overlay{
-position:absolute;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.35);
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
+color:white;
 text-align:center;
-color:white;
-padding:20px;
+padding:40px 20px;
+
 }
 
-.overlay h1{
-font-size:55px;
-margin:10px;
+
+header h1{
+
+font-size:50px;
+margin:0;
+
 }
 
-.overlay p{
+
+header p{
+
 font-size:22px;
+
 }
 
-
-.btn{
-display:inline-block;
-background:#25D366;
-color:white;
-padding:14px 30px;
-border-radius:30px;
-text-decoration:none;
-font-weight:bold;
-}
 
 
 .title{
+
 text-align:center;
 padding:35px;
+
 }
 
+
 .title h2{
+
 font-size:35px;
 color:#8b5e3c;
+
 }
+
 
 
 .products{
@@ -106,6 +75,7 @@ padding:30px;
 }
 
 
+
 .product{
 
 background:white;
@@ -114,6 +84,7 @@ overflow:hidden;
 box-shadow:0 5px 20px #ddd;
 
 }
+
 
 
 .product img{
@@ -125,12 +96,14 @@ object-fit:cover;
 }
 
 
+
 .content{
 
 padding:20px;
 text-align:center;
 
 }
+
 
 
 .content h2{
@@ -141,12 +114,13 @@ font-size:22px;
 }
 
 
+
 .content p{
 
 line-height:1.9;
-font-size:16px;
 
 }
+
 
 
 .price{
@@ -157,6 +131,57 @@ color:#b22222;
 margin:15px;
 
 }
+
+
+
+.btn{
+
+display:inline-block;
+background:#25D366;
+color:white;
+padding:14px 30px;
+border-radius:30px;
+text-decoration:none;
+font-weight:bold;
+
+}
+
+
+
+.reviews{
+
+text-align:center;
+padding:40px 20px;
+
+}
+
+
+.reviews h2{
+
+font-size:35px;
+color:#8b5e3c;
+
+}
+
+
+.reviews-container{
+
+display:flex;
+gap:20px;
+overflow-x:auto;
+padding:20px;
+
+}
+
+
+.reviews-container img{
+
+width:280px;
+border-radius:15px;
+box-shadow:0 5px 15px #ddd;
+
+}
+
 
 
 footer{
@@ -177,16 +202,7 @@ padding:25px;
 <body>
 
 
-<section class="hero">
-
-<video autoplay muted loop playsinline preload="auto">
-
-<source src="./1.mp4" type="video/mp4">
-
-</video>
-
-
-<div class="overlay">
+<header>
 
 <h1>🕯️ VelaLight</h1>
 
@@ -194,13 +210,7 @@ padding:25px;
 شموع يدوية مصنوعة بإتقان وحرفية
 </p>
 
-<a href="#products" class="btn">
-اكتشف المنتجات
-</a>
-
-</div>
-
-</section>
+</header>
 
 
 
@@ -214,7 +224,7 @@ padding:25px;
 
 
 
-<div class="products" id="products">
+<div class="products">
 
 
 
@@ -277,117 +287,3 @@ padding:25px;
 </div>
 
 </div>
-
-
-
-<div class="product">
-
-<img src="q.jpg">
-
-<div class="content">
-
-<h2>
-نبضين في قلب واحد.. 🤎
-</h2>
-
-<p>
-أجمل الهدايا هتلاقيها في VelaLight.
-<br><br>
-هنساعدكم تختاروا الهدية والعطر المناسب، ولو عاوزين شكل معين في خيالكم بنعمله.
-<br><br>
-اكسروا روتين الهدايا التقليدية 🎁
-</p>
-
-<div class="price">
-650 جنيه
-</div>
-
-<a class="btn" href="https://wa.me/201223526105" target="_blank">
-اطلب الآن واتساب
-</a>
-
-</div>
-
-</div>
-
-
-
-<div class="product">
-
-<img src="qq.jpg">
-
-<div class="content">
-
-<h2>
-نبضين في قلب واحد.. 🤎
-</h2>
-
-<p>
-أجمل الهدايا هتلاقيها في VelaLight.
-<br><br>
-اختاروا الهدية والرائحة المناسبة لكم 🎁
-</p>
-
-<div class="price">
-650 جنيه
-</div>
-
-<a class="btn" href="https://wa.me/201223526105" target="_blank">
-اطلب الآن واتساب
-</a>
-
-</div>
-
-</div>
-
-
-
-<div class="product">
-
-<img src="qqq.jpg">
-
-<div class="content">
-
-<h2>
-نبضين في قلب واحد.. 🤎
-</h2>
-
-<p>
-هدية مختلفة بتفاصيل مميزة من VelaLight.
-<br><br>
-اكسروا روتين الهدايا التقليدية 🎁
-</p>
-
-<div class="price">
-650 جنيه
-</div>
-
-<a class="btn" href="https://wa.me/201223526105" target="_blank">
-اطلب الآن واتساب
-</a>
-
-</div>
-
-</div>
-
-
-</div>
-
-
-
-<footer>
-
-<h2>
-VelaLight
-</h2>
-
-<p>
-شموع تصنع لحظات لا تنسى 🤎
-</p>
-
-</footer>
-
-
-</body>
-
-</html>
