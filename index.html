@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -20,12 +21,16 @@ color:#4b3621;
 }
 
 .hero{
+height:80vh;
 position:relative;
-height:75vh;
 overflow:hidden;
+background:#c89b6d;
 }
 
 .hero video{
+position:absolute;
+top:0;
+left:0;
 width:100%;
 height:100%;
 object-fit:cover;
@@ -33,8 +38,6 @@ object-fit:cover;
 
 .overlay{
 position:absolute;
-top:0;
-left:0;
 width:100%;
 height:100%;
 background:rgba(0,0,0,.35);
@@ -42,8 +45,9 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-color:white;
 text-align:center;
+color:white;
+padding:20px;
 }
 
 .overlay h1{
@@ -55,6 +59,7 @@ margin:10px;
 font-size:22px;
 }
 
+
 .btn{
 display:inline-block;
 background:#25D366;
@@ -64,6 +69,7 @@ border-radius:30px;
 text-decoration:none;
 font-weight:bold;
 }
+
 
 .title{
 text-align:center;
@@ -77,10 +83,12 @@ color:#8b5e3c;
 
 
 .products{
+
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 gap:25px;
 padding:30px;
+
 }
 
 
@@ -90,7 +98,6 @@ background:white;
 border-radius:20px;
 overflow:hidden;
 box-shadow:0 5px 20px #ddd;
-text-align:center;
 
 }
 
@@ -98,7 +105,7 @@ text-align:center;
 .product img{
 
 width:100%;
-height:320px;
+height:330px;
 object-fit:cover;
 
 }
@@ -107,6 +114,7 @@ object-fit:cover;
 .content{
 
 padding:20px;
+text-align:center;
 
 }
 
@@ -114,20 +122,22 @@ padding:20px;
 .content h2{
 
 color:#8b5e3c;
+font-size:22px;
 
 }
 
 
 .content p{
 
-line-height:1.8;
+line-height:1.9;
+font-size:16px;
 
 }
 
 
 .price{
 
-font-size:25px;
+font-size:26px;
 font-weight:bold;
 color:#b22222;
 margin:15px;
@@ -144,6 +154,7 @@ padding:25px;
 
 }
 
+
 </style>
 
 </head>
@@ -154,9 +165,9 @@ padding:25px;
 
 <section class="hero">
 
-<video autoplay muted loop playsinline>
+<video autoplay muted loop playsinline preload="auto">
 
-<source src="1.mp4" type="video/mp4">
+<source src="./1.mp4" type="video/mp4">
 
 </video>
 
@@ -165,10 +176,12 @@ padding:25px;
 
 <h1>🕯️ VelaLight</h1>
 
-<p>شموع يدوية مصنوعة بإتقان وحرفية</p>
+<p>
+شموع يدوية مصنوعة بإتقان وحرفية
+</p>
 
 <a href="#products" class="btn">
-اكتشف منتجاتنا
+اكتشف المنتجات
 </a>
 
 </div>
@@ -179,7 +192,9 @@ padding:25px;
 
 <div class="title">
 
-<h2>مجموعة شموعنا ✨</h2>
+<h2>
+مجموعة شموع VelaLight ✨
+</h2>
 
 </div>
 
@@ -195,7 +210,9 @@ padding:25px;
 
 <div class="content">
 
-<h2>هنا بيبدأ السحر... هنا بيبدأ الهدوء ✨</h2>
+<h2>
+هنا بيبدأ السحر... هنا بيبدأ الهدوء ✨
+</h2>
 
 <p>
 شمعة المنديلا... الشمعة البست سيلر عندنا.
@@ -209,14 +226,13 @@ padding:25px;
 375 جنيه
 </div>
 
-<a class="btn" href="https://wa.me/201223526105">
+<a class="btn" href="https://wa.me/201223526105" target="_blank">
 اطلب الآن واتساب
 </a>
 
 </div>
 
 </div>
-
 
 
 
@@ -226,10 +242,12 @@ padding:25px;
 
 <div class="content">
 
-<h2>لو الفخامة ليها عنوان... هتكون الشمعة دي ✨</h2>
+<h2>
+لو الفخامة ليها عنوان... هتكون الشمعة دي ✨
+</h2>
 
 <p>
-تفصيلة واحدة زيها في ركن إنتِ بتحبيه في بيتك كفيلة تدي المكان كله شياكة، فخامة، روقان... وريحة حلوة تخليكي تفصلي 🤎
+تفصيلة واحدة زيها في ركن إنتِ بتحبيه في بيتك كفيلة تدي المكان كله شياكة وفخامة وريحة حلوة تخليكي تفصلي 🤎
 <br><br>
 قطعة واحدة باللون الدهبي قادرة تغير طاقة ومود المكان كله 🌟
 </p>
@@ -238,7 +256,7 @@ padding:25px;
 680 جنيه
 </div>
 
-<a class="btn" href="https://wa.me/201223526105">
+<a class="btn" href="https://wa.me/201223526105" target="_blank">
 اطلب الآن واتساب
 </a>
 
@@ -248,14 +266,15 @@ padding:25px;
 
 
 
-
 <div class="product">
 
 <img src="q.jpg">
 
 <div class="content">
 
-<h2>نبضين في قلب واحد.. 🤎</h2>
+<h2>
+نبضين في قلب واحد.. 🤎
+</h2>
 
 <p>
 أجمل الهدايا هتلاقيها في VelaLight.
@@ -269,14 +288,13 @@ padding:25px;
 650 جنيه
 </div>
 
-<a class="btn" href="https://wa.me/201223526105">
+<a class="btn" href="https://wa.me/201223526105" target="_blank">
 اطلب الآن واتساب
 </a>
 
 </div>
 
 </div>
-
 
 
 
@@ -286,28 +304,27 @@ padding:25px;
 
 <div class="content">
 
-<h2>نبضين في قلب واحد.. 🤎</h2>
+<h2>
+نبضين في قلب واحد.. 🤎
+</h2>
 
 <p>
 أجمل الهدايا هتلاقيها في VelaLight.
 <br><br>
-هنساعدكم تختاروا الهدية والعطر المناسب.
-<br><br>
-اكسروا روتين الهدايا التقليدية 🎁
+اختاروا الهدية والرائحة المناسبة لكم 🎁
 </p>
 
 <div class="price">
 650 جنيه
 </div>
 
-<a class="btn" href="https://wa.me/201223526105">
+<a class="btn" href="https://wa.me/201223526105" target="_blank">
 اطلب الآن واتساب
 </a>
 
 </div>
 
 </div>
-
 
 
 
@@ -317,12 +334,12 @@ padding:25px;
 
 <div class="content">
 
-<h2>نبضين في قلب واحد.. 🤎</h2>
+<h2>
+نبضين في قلب واحد.. 🤎
+</h2>
 
 <p>
-أجمل الهدايا هتلاقيها في VelaLight.
-<br><br>
-هدايا مميزة بتصميمات وروائح تختارها بنفسك.
+هدية مختلفة بتفاصيل مميزة من VelaLight.
 <br><br>
 اكسروا روتين الهدايا التقليدية 🎁
 </p>
@@ -331,7 +348,7 @@ padding:25px;
 650 جنيه
 </div>
 
-<a class="btn" href="https://wa.me/201223526105">
+<a class="btn" href="https://wa.me/201223526105" target="_blank">
 اطلب الآن واتساب
 </a>
 
@@ -340,14 +357,15 @@ padding:25px;
 </div>
 
 
-
 </div>
 
 
 
 <footer>
 
-<h2>VelaLight</h2>
+<h2>
+VelaLight
+</h2>
 
 <p>
 شموع تصنع لحظات لا تنسى 🤎
@@ -357,4 +375,5 @@ padding:25px;
 
 
 </body>
+
 </html>
