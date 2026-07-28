@@ -8,7 +8,11 @@
 
 <title>VelaLight | شموع يدوية فاخرة</title>
 
-<meta name="description" content="VelaLight شموع يدوية فاخرة بعطور مميزة وهدايا راقية">
+<meta name="description" content="VelaLight - شموع يدوية فاخرة مصنوعة بحرفية، عطور مميزة، وهدايا بمعنى. اطلب شمعتك الآن عبر واتساب.">
+
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕯️</text></svg>">
+
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
@@ -19,26 +23,29 @@
 
 <style>
 
-
 :root{
 
 --cream:#F6EDE0;
 --ivory:#FFFBF3;
---brown:#2B1B12;
+--cocoa:#2B1B12;
 --espresso:#4A2E1E;
---gold:#B8874A;
---gold-light:#D9AE71;
---line:rgba(43,27,18,.12);
+--brass:#B8874A;
+--brass-light:#D9AE71;
+--ember:#C4622D;
+--line:rgba(43,27,18,0.12);
 
 }
 
 
 *{
-
 margin:0;
 padding:0;
 box-sizing:border-box;
+}
 
+
+html{
+scroll-behavior:smooth;
 }
 
 
@@ -46,8 +53,9 @@ body{
 
 font-family:'Tajawal',sans-serif;
 background:var(--cream);
-color:var(--brown);
-line-height:1.8;
+color:var(--cocoa);
+line-height:1.9;
+overflow-x:hidden;
 
 }
 
@@ -55,6 +63,7 @@ line-height:1.8;
 h1,h2,h3{
 
 font-family:'Amiri',serif;
+font-weight:700;
 
 }
 
@@ -69,337 +78,126 @@ display:block;
 
 a{
 
-text-decoration:none;
 color:inherit;
+text-decoration:none;
 
 }
 
 
-.container{
+.wrap{
 
-max-width:1150px;
-margin:auto;
-padding:0 25px;
+max-width:1120px;
+margin:0 auto;
+padding:0 24px;
 
 }
 
 
+/* ===== إضافات السلة فقط ===== */
 
-/* الهيدر */
 
+.cart-panel{
 
-header{
-
-position:sticky;
+position:fixed;
 top:0;
-z-index:100;
-
-background:rgba(246,237,224,.95);
-
-backdrop-filter:blur(8px);
-
-border-bottom:1px solid var(--line);
+right:-420px;
+width:380px;
+max-width:95%;
+height:100vh;
+background:var(--ivory);
+z-index:9999;
+padding:25px;
+box-shadow:-10px 0 30px rgba(0,0,0,.2);
+transition:.4s;
+overflow-y:auto;
 
 }
 
 
-.nav{
+.cart-panel.active{
 
-height:75px;
+right:0;
+
+}
+
+
+.cart-title{
 
 display:flex;
-
-align-items:center;
-
 justify-content:space-between;
-
-}
-
-
-.logo{
-
-font-family:'Amiri';
-
-font-size:30px;
-
-font-weight:bold;
-
-color:var(--brown);
-
-}
-
-
-.logo span{
-
-color:var(--gold);
-
-}
-
-
-
-.cart-btn{
-
-background:var(--espresso);
-
-color:white;
-
-border:none;
-
-padding:12px 25px;
-
-border-radius:30px;
-
-cursor:pointer;
-
-font-weight:bold;
-
-position:relative;
-
-}
-
-
-
-.cart-count{
-
-position:absolute;
-
-top:-8px;
-
-left:-8px;
-
-background:#c62828;
-
-width:25px;
-
-height:25px;
-
-border-radius:50%;
-
-font-size:13px;
-
-display:flex;
-
 align-items:center;
-
-justify-content:center;
-
-}
-
-
-
-/* البطل */
-
-
-.hero{
-
-background:
-
-linear-gradient(
-rgba(43,27,18,.8),
-rgba(43,27,18,.8)
-),
-
-url("https://velalight.github.io/eeeee.jpg");
-
-
-background-size:cover;
-
-background-position:center;
-
-color:white;
-
-text-align:center;
-
-padding:90px 20px;
-
-}
-
-
-
-.hero h1{
-
-font-size:55px;
-
 margin-bottom:20px;
 
 }
 
 
+.close-cart{
 
-.hero p{
-
-font-size:20px;
-
-max-width:650px;
-
-margin:auto auto 35px;
-
-color:#eee;
-
-}
-
-
-
-.hero-btn{
-
-background:var(--gold-light);
-
-padding:15px 35px;
-
-border-radius:30px;
-
-font-weight:bold;
-
-color:var(--brown);
-
-display:inline-block;
-
-}
-
-
-
-/* المنتجات */
-
-
-.products{
-
-padding:80px 0;
-
-}
-
-
-
-.section-title{
-
-text-align:center;
-
-font-size:42px;
-
-margin-bottom:45px;
-
-}
-
-
-
-.products-grid{
-
-display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-
-gap:30px;
-
-}
-
-
-
-.product-card{
-
-background:var(--ivory);
-
-border-radius:18px;
-
-overflow:hidden;
-
-border:1px solid var(--line);
-
-box-shadow:0 15px 35px rgba(0,0,0,.08);
-
-}
-
-
-
-.product-image{
-
-height:280px;
-
-overflow:hidden;
-
-}
-
-
-
-.product-image img{
-
-width:100%;
-
-height:100%;
-
-object-fit:cover;
-
-}
-
-
-
-.product-info{
-
-padding:22px;
-
-}
-
-
-
-.product-info h3{
-
-font-size:25px;
-
-margin-bottom:10px;
-
-}
-
-
-
-.product-info p{
-
-font-size:15px;
-
-color:#654;
-
-margin-bottom:15px;
-
-}
-
-
-
-.price{
-
-font-size:22px;
-
-font-weight:bold;
-
-color:var(--espresso);
-
-margin-bottom:15px;
-
-}
-
-
-
-.add-cart{
-
-width:100%;
-
-padding:13px;
-
-background:var(--espresso);
-
+background:var(--cocoa);
 color:white;
-
 border:none;
-
-border-radius:10px;
-
-font-size:16px;
-
+border-radius:50%;
+width:35px;
+height:35px;
 cursor:pointer;
 
 }
 
 
+.cart-item{
 
-.add-cart:hover{
+border-bottom:1px solid var(--line);
+padding:15px 0;
 
-background:var(--brown);
+}
+
+
+.qty-btn{
+
+border:none;
+background:var(--espresso);
+color:white;
+width:28px;
+height:28px;
+border-radius:50%;
+cursor:pointer;
+
+}
+
+
+.cart-total{
+
+font-size:22px;
+font-weight:bold;
+margin:20px 0;
+color:var(--espresso);
+
+}
+
+
+.checkout-btn{
+
+width:100%;
+padding:14px;
+background:#25D366;
+color:white;
+border:none;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+
+}
+
+
+.cart-open-btn{
+
+background:var(--espresso);
+color:white;
+padding:10px 20px;
+border-radius:30px;
+font-weight:bold;
+cursor:pointer;
+border:none;
 
 }
 
@@ -411,24 +209,59 @@ background:var(--brown);
 <body>
 
 
+<svg style="display:none">
+
+<symbol id="wa-icon" viewBox="0 0 24 24">
+
+<path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.39 1.26 4.81L2 22l5.42-1.42a9.87 9.87 0 0 0 4.62 1.18h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.91-7.01A9.82 9.82 0 0 0 12.04 2z"/>
+
+</symbol>
+
+</svg>
+
+
+
+
+<!-- الهيدر الأصلي + زر السلة -->
+
+
 <header>
 
-<div class="container nav">
+<div class="wrap nav">
+
 
 <div class="logo">
-<span>🕯️</span> VelaLight
+
+<span class="flame"></span> VelaLight
+
 </div>
 
 
-<button class="cart-btn" onclick="openCart()">
+
+<div style="display:flex;gap:12px;align-items:center;">
+
+
+<button class="cart-open-btn" onclick="openCart()">
 
 🛒 السلة
 
-<span class="cart-count" id="cartCount">
-0
-</span>
+<span id="cartCount">0</span>
 
 </button>
+
+
+
+<a class="nav-cta"
+href="https://wa.me/201223526105?text=عايز+أعرف+أكتر+عن+شموع+VelaLight"
+target="_blank">
+
+اطلب الآن
+
+</a>
+
+
+</div>
+
 
 </div>
 
@@ -436,28 +269,72 @@ background:var(--brown);
 
 
 
+
+
+
+
 <section class="hero">
 
-<div class="container">
+
+<div class="wrap">
+
+
+<div class="eyebrow">
+
+<span class="flame"></span>
+
+شموع يدوية فاخرة
+
+<span class="flame"></span>
+
+</div>
+
+
 
 <h1>
 هنا يبدأ السحر... هنا يبدأ الهدوء
 </h1>
 
 
-<p>
-شموع مصنوعة بإتقان وحرفية، بعطور مختارة بعناية، عشان دايمًا ريحة بيتك تكون حلوة زيك.
+
+<p class="sub">
+
+شموع مصنوعة بإتقان وحرفية، بعطور مختارة بعناية، عشان دايمًا ريحة بيتك تكون حلوة زيك
+
 </p>
 
 
-<a class="hero-btn" href="#products">
-اكتشفي المجموعة
+
+<a class="btn-glow"
+
+href="https://wa.me/201223526105?text=عايز+أطلب+شمعة+من+VelaLight">
+
+اطلب الآن عبر واتساب
+
 </a>
+
+
+
+<img class="hero-img"
+
+src="https://velalight.github.io/eeeee.jpg"
+
+alt="شمعة VelaLight الفاخرة">
 
 
 </div>
 
+
 </section>
+
+
+
+
+
+<div class="wax-drip on-dark"></div>
+
+
+
 
 
 
@@ -465,28 +342,49 @@ background:var(--brown);
 <section class="products" id="products">
 
 
-<div class="container">
+<div class="wrap">
 
 
-<h2 class="section-title">
+<div class="section-head">
+
+
+<h2>
+
 مجموعة شموع VelaLight
+
 </h2>
 
 
+<p>
 
-<div class="products-grid">
+كل قطعة مصنوعة يدويًا بحب وتفاصيل مدروسة
 
-
-
-
-
-<!-- شمعة المنديلا -->
+</p>
 
 
-<div class="product-card">
+</div>
 
 
-<div class="product-image">
+
+
+
+
+
+<div class="grid-products">
+
+
+
+
+
+
+
+<!-- المنتج الأول -->
+
+
+<div class="card">
+
+
+<div class="card-img">
 
 <img src="https://velalight.github.io/2.jpg"
 alt="شمعة المنديلا">
@@ -495,26 +393,36 @@ alt="شمعة المنديلا">
 
 
 
-<div class="product-info">
+<div class="card-body">
 
 
 <h3>
+
 شمعة المنديلا 🕯️
+
 </h3>
 
 
+
 <p>
-الشمعة الأكثر طلبًا لدينا، مناسبة للمكتب وغرفة النوم والليڤينج.
+
+الشمعة البست سيلر عندنا. مناسبة للمكتب، أوضة النوم، الليفينج، الحمام، والمطبخ.
+
 </p>
 
 
+
 <div class="price">
+
 375 جنيه
+
 </div>
 
 
 
-<button class="add-cart"
+
+<button class="order-btn"
+
 onclick="addToCart('شمعة المنديلا',375)">
 
 أضف للسلة 🛒
@@ -533,41 +441,53 @@ onclick="addToCart('شمعة المنديلا',375)">
 
 
 
-<!-- الشمعة الفاخرة -->
 
 
-<div class="product-card">
+<!-- المنتج الثاني -->
 
 
-<div class="product-image">
+<div class="card">
+
+
+<div class="card-img">
 
 <img src="https://velalight.github.io/eeeee.jpg"
+
 alt="الشمعة الفاخرة">
 
 </div>
 
 
 
-<div class="product-info">
+<div class="card-body">
 
 
 <h3>
+
 الشمعة الفاخرة ✨
+
 </h3>
 
 
+
 <p>
-قطعة فخمة تضيف لمسة ذهبية وأناقة لأي مكان.
+
+قطعة واحدة باللون الدهبي قادرة تغير طاقة ومود المكان كله.
+
 </p>
 
 
+
 <div class="price">
+
 680 جنيه
+
 </div>
 
 
 
-<button class="add-cart"
+<button class="order-btn"
+
 onclick="addToCart('الشمعة الفاخرة',680)">
 
 أضف للسلة 🛒
@@ -575,52 +495,65 @@ onclick="addToCart('الشمعة الفاخرة',680)">
 </button>
 
 
-</div>
-
 
 </div>
 
 
+</div>
 
 
 
 
 
-<!-- مجموعة نبضين -->
 
 
-<div class="product-card">
 
 
-<div class="product-image">
+<!-- المنتج الثالث -->
+
+
+<div class="card">
+
+
+<div class="card-img">
 
 <img src="https://velalight.github.io/q.jpg"
+
 alt="مجموعة نبضين">
 
 </div>
 
 
 
-<div class="product-info">
+<div class="card-body">
 
 
 <h3>
+
 مجموعة نبضين 🤎
+
 </h3>
 
 
+
 <p>
-هدية مميزة تجمع بين التصميم الراقي والعطر الفاخر.
+
+مجموعة مميزة تجمع بين جمال التصميم وروعة العطر.
+
 </p>
 
 
+
 <div class="price">
+
 650 جنيه
+
 </div>
 
 
 
-<button class="add-cart"
+<button class="order-btn"
+
 onclick="addToCart('مجموعة نبضين',650)">
 
 أضف للسلة 🛒
@@ -628,53 +561,65 @@ onclick="addToCart('مجموعة نبضين',650)">
 </button>
 
 
-</div>
-
 
 </div>
 
 
+</div>
 
 
 
 
 
 
-<!-- كونتر الخشب -->
 
 
-<div class="product-card">
+
+<!-- المنتج الرابع -->
 
 
-<div class="product-image">
+<div class="card">
+
+
+<div class="card-img">
 
 <img src="https://velalight.github.io/RRRRRR.jpg"
+
 alt="كونتر الخشب الطبيعي">
 
 </div>
 
 
 
-<div class="product-info">
+<div class="card-body">
 
 
 <h3>
+
 كونتر الخشب الطبيعي 🤎
+
 </h3>
 
 
+
 <p>
-قطعة ديكور طبيعية مزينة بشموع معطرة بتفاصيل راقية.
+
+قطعة فنية من الخشب الطبيعي مزينة بشموع معطرة بتفاصيل راقية.
+
 </p>
 
 
+
 <div class="price">
+
 650 جنيه
+
 </div>
 
 
 
-<button class="add-cart"
+<button class="order-btn"
+
 onclick="addToCart('كونتر الخشب الطبيعي',650)">
 
 أضف للسلة 🛒
@@ -682,10 +627,12 @@ onclick="addToCart('كونتر الخشب الطبيعي',650)">
 </button>
 
 
+
 </div>
 
 
 </div>
+
 
 
 
@@ -698,58 +645,41 @@ onclick="addToCart('كونتر الخشب الطبيعي',650)">
 
 </section>
 
-<section class="why" style="padding:70px 0;background:#FFFBF3;">
+<section class="why">
 
-<div class="container">
+<div class="wrap">
 
 
-<h2 class="section-title">
-ليه VelaLight؟ ✨
+<div class="section-head">
+
+<h2>
+
+ليه VelaLight؟
+
 </h2>
 
-
-
-<div class="products-grid">
-
-
-
-<div class="product-card" style="padding:25px;text-align:center;">
-
-<h3>
-🕯️ صناعة يدوية
-</h3>
-
-<p>
-كل شمعة مصنوعة بعناية وتفاصيل خاصة تعكس الجودة والفخامة.
-</p>
-
 </div>
 
 
 
-<div class="product-card" style="padding:25px;text-align:center;">
+<div class="grid-why">
+
+
+
+<div class="why-item">
+
+<div class="icon">🕯️</div>
 
 <h3>
-🌸 عطور مميزة
+
+صناعة يدوية
+
 </h3>
 
 <p>
-اختيارات عطرية راقية تضيف إحساس بالهدوء والدفء.
-</p>
 
-</div>
+كل شمعة مصنوعة بعناية وتفاصيل مميزة تعكس جودة وفخامة VelaLight.
 
-
-
-
-<div class="product-card" style="padding:25px;text-align:center;">
-
-<h3>
-🎁 هدايا مختلفة
-</h3>
-
-<p>
-قطع مميزة تناسب المناسبات وتترك ذكرى جميلة.
 </p>
 
 </div>
@@ -757,23 +687,76 @@ onclick="addToCart('كونتر الخشب الطبيعي',650)">
 
 
 
-<div class="product-card" style="padding:25px;text-align:center;">
+
+<div class="why-item">
+
+<div class="icon">✨</div>
 
 <h3>
-🤎 تصميم حسب الطلب
+
+عطور مميزة
+
 </h3>
 
 <p>
-نحوّل فكرتك لشمعة خاصة مصممة حسب ذوقك.
+
+اختيارات عطرية راقية تضيف لبيتك إحساسًا بالهدوء والدفء.
+
 </p>
 
 </div>
 
 
+
+
+
+<div class="why-item">
+
+<div class="icon">🎁</div>
+
+<h3>
+
+هدايا مختلفة
+
+</h3>
+
+<p>
+
+قطع مميزة تناسب المناسبات وتجعل الهدية لها معنى خاص.
+
+</p>
+
+</div>
+
+
+
+
+
+<div class="why-item">
+
+<div class="icon">🤎</div>
+
+<h3>
+
+تصميم حسب الطلب
+
+</h3>
+
+<p>
+
+عندك فكرة معينة؟ نحول خيالك لقطعة شموع خاصة بيك.
+
+</p>
+
+</div>
+
+
+
 </div>
 
 
 </div>
+
 
 </section>
 
@@ -782,38 +765,43 @@ onclick="addToCart('كونتر الخشب الطبيعي',650)">
 
 
 
-<section style="padding:70px 0;background:#2B1B12;color:white;text-align:center;">
 
 
-<div class="container">
+<section class="custom-banner">
 
 
-<h2 class="section-title" style="color:white;">
+<div class="wrap">
+
+
+<h2>
 
 اطلب تصميمك الخاص ✨
 
 </h2>
 
 
-<p style="max-width:600px;margin:auto;font-size:18px;color:#ead8c0;">
+
+<p>
 
 عندك فكرة شمعة مختلفة أو هدية بتفاصيل خاصة؟
-اختاري الشكل واللون والعطر وسيبي الباقي علينا.
+ابعتيلنا الشكل اللي في خيالك، وإحنا نحوله لقطعة مميزة مصممة مخصوص ليكِ.
 
 </p>
 
 
-<br>
 
+<a class="btn-glow"
 
-<a class="hero-btn"
-href="https://wa.me/201223526105">
+href="https://wa.me/201223526105?text=عايز+أعمل+طلب+تصميم+خاص"
+
+target="_blank">
 
 ابدأ طلبك الآن
 
 </a>
 
 
+
 </div>
 
 
@@ -824,64 +812,27 @@ href="https://wa.me/201223526105">
 
 
 
-<section style="padding:80px 0;">
 
 
-<div class="container">
+
+<section class="scents" id="scents">
 
 
-<h2 class="section-title">
+<div class="wrap">
 
-اختاري عطرك المفضل 🌸
+
+<div class="section-head">
+
+<h2>
+
+اختاري عطرك المفضل
 
 </h2>
 
 
-
-<div class="products-grid">
-
-
-
-<div class="product-card" style="padding:25px;">
-
-
-<h3>
-دافئة وحلوة 🍯
-</h3>
-
-
 <p>
 
-فانيلا 🍦<br>
-سينامون سبايس فانيلا ✨<br>
-موكا ☕<br>
-كراميل 🍯<br>
-شيكولاتة 🍫<br>
-عود فانيليا 🤎<br>
-عنبر 🤎
-
-</p>
-
-
-</div>
-
-
-
-
-
-<div class="product-card" style="padding:25px;">
-
-
-<h3>
-منعشة وفاكهية 🌴
-</h3>
-
-
-<p>
-
-كاريبيان فروت 🌴<br>
-أناناس 🍍<br>
-كوكونات 🥥
+كل عطر له إحساسه الخاص... اختاري الرائحة التي تناسب مودك وبيتك
 
 </p>
 
@@ -893,23 +844,94 @@ href="https://wa.me/201223526105">
 
 
 
-<div class="product-card" style="padding:25px;">
+
+<div class="scent-groups">
+
+
+
+
+
+
+
+<div class="scent-group">
 
 
 <h3>
-زهرية 🌹
+
+<span class="flame"></span>
+
+دافئة وحلوة
+
 </h3>
 
 
-<p>
+<div class="scent-item">
 
-فل 🌼<br>
-ياسمين 🌸<br>
-بوكيت روز 🌹<br>
-ورد بلدي 🌹<br>
-تيوليب 🌷
+<span class="name">فانيلا 🍦</span>
 
-</p>
+<span class="desc">دفء وحلاوة ناعمة</span>
+
+</div>
+
+
+<div class="scent-item">
+
+<span class="name">سينامون سبايس فانيلا ✨</span>
+
+<span class="desc">فانيلا وتوابل فاخرة</span>
+
+</div>
+
+
+
+<div class="scent-item">
+
+<span class="name">موكا ☕</span>
+
+<span class="desc">أجواء دافئة ومميزة</span>
+
+</div>
+
+
+
+<div class="scent-item">
+
+<span class="name">كراميل 🍯</span>
+
+<span class="desc">حلاوة ناعمة ودافئة</span>
+
+</div>
+
+
+
+<div class="scent-item">
+
+<span class="name">شيكولاتة 🍫</span>
+
+<span class="desc">دفء وحلاوة غنية</span>
+
+</div>
+
+
+
+<div class="scent-item">
+
+<span class="name">عود فانيليا 🤎</span>
+
+<span class="desc">فخامة شرقية ودفء</span>
+
+</div>
+
+
+
+<div class="scent-item">
+
+<span class="name">عنبر 🤎</span>
+
+<span class="desc">رائحة شرقية فاخرة</span>
+
+</div>
+
 
 
 </div>
@@ -919,21 +941,48 @@ href="https://wa.me/201223526105">
 
 
 
-<div class="product-card" style="padding:25px;">
+
+
+
+<div class="scent-group">
 
 
 <h3>
-قهوة ☕
+
+<span class="flame"></span>
+
+منعشة وفاكهية
+
 </h3>
 
 
-<p>
 
-قهوة<br>
-قهوة فانيلا<br>
-قهوة بندق
+<div class="scent-item">
 
-</p>
+<span class="name">كاريبيان فروت 🌴</span>
+
+<span class="desc">انتعاش صيفي منعش</span>
+
+</div>
+
+
+<div class="scent-item">
+
+<span class="name">أناناس 🍍</span>
+
+<span class="desc">فاكهية تضيف طاقة</span>
+
+</div>
+
+
+
+<div class="scent-item">
+
+<span class="name">كوكونات 🥥</span>
+
+<span class="desc">إحساس استوائي مريح</span>
+
+</div>
 
 
 </div>
@@ -943,24 +992,170 @@ href="https://wa.me/201223526105">
 
 
 
-<div class="product-card" style="padding:25px;">
+
+
+<div class="scent-group">
 
 
 <h3>
-للاسترخاء 💜
+
+<span class="flame"></span>
+
+زهرية
+
 </h3>
 
 
-<p>
 
-لافندر 💜<br>
-كاسيليا 🤎<br>
-إنتو زانايت ✨
+<div class="scent-item">
 
-</p>
+<span class="name">فل 🌼</span>
+
+<span class="desc">زهرية راقية ومنعشة</span>
+
+</div>
+
+
+<div class="scent-item">
+
+<span class="name">ياسمين 🌸</span>
+
+<span class="desc">رومانسية وأنيقة</span>
+
+</div>
+
+
+<div class="scent-item">
+
+<span class="name">بوكيت روز 🌹</span>
+
+<span class="desc">باقة ورد ناعمة</span>
+
+</div>
+
+
+<div class="scent-item">
+
+<span class="name">ورد بلدي 🌹</span>
+
+<span class="desc">ورد أصيل ورومانسي</span>
+
+</div>
+
+
+<div class="scent-item">
+
+<span class="name">تيوليب 🌷</span>
+
+<span class="desc">زهرية رقيقة ومميزة</span>
+
+</div>
+
 
 
 </div>
+
+
+
+
+
+
+
+
+<div class="scent-group">
+
+
+<h3>
+
+<span class="flame"></span>
+
+قهوة
+
+</h3>
+
+
+
+<div class="scent-item">
+
+<span class="name">قهوة ☕</span>
+
+<span class="desc">دفء القهوة الأصيل</span>
+
+</div>
+
+
+<div class="scent-item">
+
+<span class="name">قهوة فانيلا ☕🍦</span>
+
+<span class="desc">قهوة ونعومة الفانيلا</span>
+
+</div>
+
+
+<div class="scent-item">
+
+<span class="name">قهوة بندق 🌰</span>
+
+<span class="desc">غنية ودافئة</span>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="scent-group">
+
+
+<h3>
+
+<span class="flame"></span>
+
+للاسترخاء والمساج
+
+</h3>
+
+
+
+<div class="scent-item">
+
+<span class="name">لافندر 💜</span>
+
+<span class="desc">تساعد على الاسترخاء</span>
+
+</div>
+
+
+<div class="scent-item">
+
+<span class="name">كاسيليا 🤎</span>
+
+<span class="desc">هادئة لأجواء المساج</span>
+
+</div>
+
+
+<div class="scent-item">
+
+<span class="name">إنتو زانايت ✨</span>
+
+<span class="desc">فاخرة للحظات الهدوء</span>
+
+</div>
+
+
+
+</div>
+
 
 
 
@@ -973,26 +1168,33 @@ href="https://wa.me/201223526105">
 
 </section>
 
-<section style="padding:70px 0;background:#FFFBF3;">
+<section class="occasions">
+
+<div class="wrap">
 
 
-<div class="container">
+<div class="section-head">
 
+<h2>
 
-<h2 class="section-title">
 هديتك لكل مناسبة 🎁
+
 </h2>
 
-
-
-<div class="products-grid">
+</div>
 
 
 
-<div class="product-card" style="padding:25px;text-align:center;">
+<div class="grid-occ">
+
+
+
+<div class="occ-card">
+
+<div class="icon">🎂</div>
 
 <h3>
-🎂 أعياد الميلاد
+أعياد الميلاد
 </h3>
 
 <p>
@@ -1003,14 +1205,17 @@ href="https://wa.me/201223526105">
 
 
 
-<div class="product-card" style="padding:25px;text-align:center;">
+
+<div class="occ-card">
+
+<div class="icon">💍</div>
 
 <h3>
-💍 مناسبات خاصة
+مناسبات خاصة
 </h3>
 
 <p>
-تصميمات راقية للحظات التي تستحق الذكرى.
+تصميمات راقية للحظات التي تستحق أن تبقى ذكرى.
 </p>
 
 </div>
@@ -1018,14 +1223,16 @@ href="https://wa.me/201223526105">
 
 
 
-<div class="product-card" style="padding:25px;text;text-align:center;">
+<div class="occ-card">
+
+<div class="icon">🏠</div>
 
 <h3>
-🏠 ديكور البيت
+ديكور البيت
 </h3>
 
 <p>
-قطع شموع تضيف دفء وأناقة لكل ركن.
+قطع شموع تضيف دفء وأناقة لكل ركن في منزلك.
 </p>
 
 </div>
@@ -1033,10 +1240,12 @@ href="https://wa.me/201223526105">
 
 
 
-<div class="product-card" style="padding:25px;text-align:center;">
+<div class="occ-card">
+
+<div class="icon">🎁</div>
 
 <h3>
-🎁 هدية بدون مناسبة
+هدية بدون مناسبة
 </h3>
 
 <p>
@@ -1061,26 +1270,35 @@ href="https://wa.me/201223526105">
 
 
 
-<section style="padding:70px 0;background:#2B1B12;color:white;">
+
+<section class="gift-details">
 
 
-<div class="container">
+<div class="wrap">
 
 
-<h2 class="section-title" style="color:white;">
+<h2>
 تفاصيل هدايانا 🎁
 </h2>
 
 
+<p>
+في VelaLight نهتم بكل تفصيلة... من اختيار الشمعة حتى لحظة وصولها ليكِ
+</p>
 
-<div class="products-grid">
 
 
 
-<div class="product-card" style="padding:25px;text-align:center;">
+<div class="grid-gift">
+
+
+
+<div class="gift-item">
+
+<div class="icon">🎀</div>
 
 <h3>
-🎀 تغليف فاخر
+تغليف فاخر
 </h3>
 
 <p>
@@ -1092,14 +1310,17 @@ href="https://wa.me/201223526105">
 
 
 
-<div class="product-card" style="padding:25px;text-align:center;">
+
+<div class="gift-item">
+
+<div class="icon">🕯️</div>
 
 <h3>
-🕯️ تفاصيل يدوية
+تفاصيل يدوية
 </h3>
 
 <p>
-كل قطعة لها لمستها الخاصة المصنوعة بحب.
+كل قطعة لها لمستها الخاصة المصنوعة بعناية وحب.
 </p>
 
 </div>
@@ -1107,14 +1328,17 @@ href="https://wa.me/201223526105">
 
 
 
-<div class="product-card" style="padding:25px;text-align:center;">
+
+<div class="gift-item">
+
+<div class="icon">🌿</div>
 
 <h3>
-🌿 عطور مختارة
+عطور مختارة
 </h3>
 
 <p>
-روائح راقية تضيف للبيت إحساس الراحة والفخامة.
+روائح راقية تضيف للبيت إحساسًا بالراحة والفخامة.
 </p>
 
 </div>
@@ -1122,10 +1346,13 @@ href="https://wa.me/201223526105">
 
 
 
-<div class="product-card" style="padding:25px;text-align:center;">
+
+<div class="gift-item">
+
+<div class="icon">🎁</div>
 
 <h3>
-🤎 هدية بمعنى
+هدية بمعنى
 </h3>
 
 <p>
@@ -1151,23 +1378,37 @@ href="https://wa.me/201223526105">
 
 
 
-<section style="padding:80px 0;">
+
+<section class="testimonials">
 
 
-<div class="container">
+<div class="wrap">
 
 
-<h2 class="section-title">
+<div class="section-head">
+
+
+<h2>
 آراء عملائنا 🤎
 </h2>
 
 
+<p>
+ثقة عميلاتنا هي أجمل هدية بالنسبالنا
+</p>
 
-<div class="products-grid">
+
+</div>
 
 
 
-<div class="product-card">
+
+
+<div class="polaroid-row">
+
+
+
+<div class="polaroid">
 
 <img src="https://velalight.github.io/review1.jpg"
 alt="رأي عميلة">
@@ -1176,7 +1417,8 @@ alt="رأي عميلة">
 
 
 
-<div class="product-card">
+
+<div class="polaroid">
 
 <img src="https://velalight.github.io/review2.jpg"
 alt="رأي عميلة">
@@ -1185,7 +1427,8 @@ alt="رأي عميلة">
 
 
 
-<div class="product-card">
+
+<div class="polaroid">
 
 <img src="https://velalight.github.io/review3.jpg"
 alt="رأي عميلة">
@@ -1194,7 +1437,8 @@ alt="رأي عميلة">
 
 
 
-<div class="product-card">
+
+<div class="polaroid">
 
 <img src="https://velalight.github.io/review4.jpg"
 alt="رأي عميلة">
@@ -1203,7 +1447,8 @@ alt="رأي عميلة">
 
 
 
-<div class="product-card">
+
+<div class="polaroid">
 
 <img src="https://velalight.github.io/review5.jpg"
 alt="رأي عميلة">
@@ -1225,82 +1470,91 @@ alt="رأي عميلة">
 
 
 
-<footer style="background:#2B1B12;color:white;padding:50px 20px;text-align:center;">
+
+<footer>
 
 
-<h2 style="font-family:'Amiri';">
-🕯️ VelaLight
-</h2>
+<div class="wrap">
 
 
-<p style="color:#dcc9af;">
+<div class="logo">
+
+<span class="flame"></span>
+
+VelaLight
+
+</div>
+
+
+
+<p class="tag">
+
 شموع تصنع لحظات لا تنسى 🤎
+
 </p>
 
 
-<br>
 
 
-<p>
-📷 Instagram &nbsp; | &nbsp; 📘 Facebook &nbsp; | &nbsp; 🎵 TikTok
-</p>
+<div class="social-row">
 
 
-<br>
+<a href="#" aria-label="Instagram">
+📷
+</a>
 
 
-<p style="font-size:13px;color:#dcc9af;">
+<a href="#" aria-label="Facebook">
+📘
+</a>
+
+
+<a href="#" aria-label="TikTok">
+🎵
+</a>
+
+
+<a href="https://wa.me/201223526105"
+target="_blank">
+
+<svg class="ic-wa">
+<use href="#wa-icon"></use>
+</svg>
+
+</a>
+
+
+
+</div>
+
+
+
+<p class="fine">
 
 © 2026 VelaLight — جميع الحقوق محفوظة
 
 </p>
 
 
+</div>
+
+
 </footer>
 
-<!-- نافذة السلة -->
+<!-- سلة المشتريات -->
 
-<div id="cartBox" style="
-position:fixed;
-top:0;
-left:-450px;
-width:400px;
-max-width:90%;
-height:100vh;
-background:#FFFBF3;
-z-index:9999;
-padding:25px;
-box-shadow:0 0 30px rgba(0,0,0,.3);
-transition:.4s;
-overflow:auto;
-">
+<div class="cart-panel" id="cartPanel">
 
 
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-">
-
+<div class="cart-title">
 
 <h2>
-🛒 السلة
+🛒 سلة الشراء
 </h2>
 
 
-<button onclick="closeCart()" style="
-border:none;
-background:#2B1B12;
-color:white;
-border-radius:50%;
-width:35px;
-height:35px;
-cursor:pointer;
-">
-
+<button class="close-cart" onclick="closeCart()">
 ✖
-
 </button>
 
 
@@ -1315,37 +1569,53 @@ cursor:pointer;
 
 
 
-<h3 style="margin:20px 0;color:#4A2E1E;">
+
+<div class="cart-total">
 
 الإجمالي:
-<span id="totalPrice">0</span>
+<span id="cartTotal">0</span>
 جنيه
 
-</h3>
+</div>
 
 
 
-
-
-<div style="display:flex;flex-direction:column;gap:10px;">
 
 
 <input id="customerName"
 placeholder="الاسم"
-style="padding:12px;border-radius:8px;border:1px solid #ddd;">
+style="
+width:100%;
+padding:12px;
+margin-bottom:10px;
+border:1px solid #ddd;
+border-radius:8px;
+">
 
 
 
 <input id="customerPhone"
 placeholder="رقم الهاتف"
-style="padding:12px;border-radius:8px;border:1px solid #ddd;">
+style="
+width:100%;
+padding:12px;
+margin-bottom:10px;
+border:1px solid #ddd;
+border-radius:8px;
+">
 
 
 
 <select id="customerScent"
-style="padding:12px;border-radius:8px;border:1px solid #ddd;">
+style="
+width:100%;
+padding:12px;
+margin-bottom:10px;
+border:1px solid #ddd;
+border-radius:8px;
+">
 
-<option value="">
+<option>
 اختاري العطر
 </option>
 
@@ -1376,26 +1646,21 @@ style="padding:12px;border-radius:8px;border:1px solid #ddd;">
 
 <textarea id="customerNote"
 placeholder="ملاحظات إضافية"
-style="padding:12px;height:80px;border-radius:8px;border:1px solid #ddd;"></textarea>
-
-
-
-</div>
-
-
-
-
-<button onclick="checkoutWhatsApp()" style="
-margin-top:20px;
+style="
 width:100%;
-padding:15px;
-background:#25D366;
-color:white;
-border:none;
-border-radius:10px;
-font-size:17px;
-cursor:pointer;
+padding:12px;
+height:80px;
+border:1px solid #ddd;
+border-radius:8px;
 ">
+
+</textarea>
+
+
+
+
+<button class="checkout-btn"
+onclick="sendWhatsApp()">
 
 إتمام الطلب عبر واتساب 📱
 
@@ -1411,36 +1676,6 @@ cursor:pointer;
 
 
 
-<!-- زر واتساب عائم -->
-
-<a href="https://wa.me/201223526105"
-target="_blank"
-style="
-position:fixed;
-bottom:25px;
-left:25px;
-width:60px;
-height:60px;
-background:#25D366;
-color:white;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:30px;
-text-decoration:none;
-z-index:999;
-">
-
-💬
-
-</a>
-
-
-
-
-
-
 <script>
 
 
@@ -1450,20 +1685,35 @@ let cart = JSON.parse(localStorage.getItem("velaCart")) || [];
 
 
 
+function saveCart(){
+
+localStorage.setItem(
+"velaCart",
+JSON.stringify(cart)
+);
+
+}
+
+
+
+
+
 function addToCart(name,price){
 
 
-let item = cart.find(
-p => p.name === name
+let product = cart.find(
+item => item.name === name
 );
 
 
 
-if(item){
+if(product){
 
-item.qty++;
+product.qty++;
 
-}else{
+}
+
+else{
 
 
 cart.push({
@@ -1485,7 +1735,7 @@ saveCart();
 updateCart();
 
 
-alert("تمت إضافة المنتج للسلة 🕯️");
+openCart();
 
 
 }
@@ -1499,78 +1749,82 @@ alert("تمت إضافة المنتج للسلة 🕯️");
 function updateCart(){
 
 
-let box=document.getElementById("cartItems");
+let items = document.getElementById("cartItems");
+
+items.innerHTML="";
 
 
-box.innerHTML="";
+let total = 0;
 
+let count = 0;
 
-let total=0;
-
-let count=0;
 
 
 
 cart.forEach((item,index)=>{
 
 
-let subtotal=item.price * item.qty;
+let sub = item.price * item.qty;
 
 
-total += subtotal;
+total += sub;
 
 count += item.qty;
 
 
 
-box.innerHTML += `
+items.innerHTML += `
 
 
-<div style="
-border-bottom:1px solid #ddd;
-padding:15px 0;
-display:flex;
-justify-content:space-between;
-align-items:center;
-">
+<div class="cart-item">
 
 
-<div>
+<strong>
+${item.name}
+</strong>
 
-<b>${item.name}</b>
 
 <br>
+
 
 ${item.price} جنيه × ${item.qty}
 
 <br>
 
-<strong>${subtotal} جنيه</strong>
 
-</div>
-
-
+الإجمالي:
+${sub} جنيه
 
 
-<div>
+<br><br>
 
 
-<button onclick="plus(${index})">
+
+<button class="qty-btn"
+onclick="increase(${index})">
+
 +
+
 </button>
 
 
-<button onclick="minus(${index})">
+
+<button class="qty-btn"
+onclick="decrease(${index})">
+
 -
+
 </button>
 
 
-<button onclick="removeItem(${index})">
-🗑️
+
+<button class="qty-btn"
+onclick="removeProduct(${index})">
+
+🗑
+
 </button>
 
-
-</div>
 
 
 </div>
@@ -1583,18 +1837,13 @@ ${item.price} جنيه × ${item.qty}
 
 
 
-document.getElementById("totalPrice").innerHTML=total;
+document.getElementById("cartTotal").innerHTML = total;
 
 
-document.getElementById("cartCount").innerHTML=count;
+document.getElementById("cartCount").innerHTML = count;
 
 
-
-localStorage.setItem(
-"velaCart",
-JSON.stringify(cart)
-);
-
+saveCart();
 
 
 }
@@ -1604,7 +1853,8 @@ JSON.stringify(cart)
 
 
 
-function plus(index){
+
+function increase(index){
 
 cart[index].qty++;
 
@@ -1615,7 +1865,8 @@ updateCart();
 
 
 
-function minus(index){
+
+function decrease(index){
 
 
 cart[index].qty--;
@@ -1636,14 +1887,13 @@ updateCart();
 
 
 
-function removeItem(index){
 
+
+function removeProduct(index){
 
 cart.splice(index,1);
 
-
 updateCart();
-
 
 }
 
@@ -1654,16 +1904,21 @@ updateCart();
 
 function openCart(){
 
-document.getElementById("cartBox").style.left="0";
+document
+.getElementById("cartPanel")
+.classList.add("active");
 
 }
+
 
 
 
 
 function closeCart(){
 
-document.getElementById("cartBox").style.left="-450px";
+document
+.getElementById("cartPanel")
+.classList.remove("active");
 
 }
 
@@ -1673,7 +1928,7 @@ document.getElementById("cartBox").style.left="-450px";
 
 
 
-function checkoutWhatsApp(){
+function sendWhatsApp(){
 
 
 if(cart.length===0){
@@ -1686,31 +1941,33 @@ return;
 
 
 
-let message=
-"مرحبا، أريد طلب من VelaLight 🕯️%0A%0A";
+let msg =
+"طلب جديد من VelaLight 🕯️%0A%0A";
 
 
 
-message +=
+msg +=
 "👤 الاسم: "+
 document.getElementById("customerName").value+
 "%0A";
 
 
-message +=
+
+msg +=
 "📞 الهاتف: "+
 document.getElementById("customerPhone").value+
 "%0A";
 
 
-message +=
+
+msg +=
 "🌸 العطر: "+
 document.getElementById("customerScent").value+
 "%0A%0A";
 
 
 
-message +=
+msg +=
 "الطلبات:%0A";
 
 
@@ -1722,20 +1979,19 @@ let total=0;
 cart.forEach(item=>{
 
 
-let subtotal=item.price*item.qty;
+let sum=item.price*item.qty;
+
+total+=sum;
 
 
-total+=subtotal;
 
-
-
-message +=
+msg +=
 "🕯️ "+
 item.name+
 " × "+
 item.qty+
 " = "+
-subtotal+
+sum+
 " جنيه%0A";
 
 
@@ -1743,14 +1999,14 @@ subtotal+
 
 
 
-message +=
+msg +=
 "%0A💰 الإجمالي: "+
 total+
 " جنيه";
 
 
 
-message +=
+msg +=
 "%0A📝 ملاحظات: "+
 document.getElementById("customerNote").value;
 
@@ -1759,7 +2015,7 @@ document.getElementById("customerNote").value;
 
 window.open(
 
-"https://wa.me/201223526105?text="+message,
+"https://wa.me/201223526105?text="+msg,
 
 "_blank"
 
@@ -1773,149 +2029,33 @@ window.open(
 
 
 
+
 updateCart();
+
 
 
 </script>
 
 
-</body>
 
-</body>
-</html>
-<style>
 
-/* تحسين شكل أزرار السلة */
 
-#cartItems button{
+<!-- واتساب عائم -->
 
-border:none;
-background:#4A2E1E;
-color:white;
-width:28px;
-height:28px;
-border-radius:50%;
-cursor:pointer;
-margin:2px;
 
-}
+<a class="wa-float"
+href="https://wa.me/201223526105"
+target="_blank">
 
+<svg class="ic-wa-float">
 
-#cartItems button:hover{
+<use href="#wa-icon"></use>
 
-background:#B8874A;
+</svg>
 
-}
+</a>
 
 
-/* حركة زر السلة */
-
-.cart-btn{
-
-transition:.3s;
-
-}
-
-
-.cart-btn:hover{
-
-transform:translateY(-2px);
-
-}
-
-
-
-/* تحسين الموبايل */
-
-@media(max-width:600px){
-
-
-.hero h1{
-
-font-size:36px;
-
-}
-
-
-.section-title{
-
-font-size:32px;
-
-}
-
-
-#cartBox{
-
-width:95% !important;
-
-}
-
-
-
-}
-
-
-
-</style>
-
-
-
-
-<script>
-
-
-// إغلاق السلة بالضغط خارجها
-
-document.addEventListener("click",function(e){
-
-
-let cartBox=document.getElementById("cartBox");
-
-let btn=document.querySelector(".cart-btn");
-
-
-
-if(
-
-cartBox.style.left==="0px" &&
-
-!cartBox.contains(e.target) &&
-
-!btn.contains(e.target)
-
-){
-
-
-closeCart();
-
-
-}
-
-
-});
-
-
-
-
-// مسح السلة بعد تأكيد الطلب
-
-function clearAfterOrder(){
-
-
-cart=[];
-
-
-localStorage.removeItem("velaCart");
-
-
-updateCart();
-
-
-}
-
-
-
-</script>
 
 
 
