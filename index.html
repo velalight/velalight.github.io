@@ -196,6 +196,7 @@ font-weight:bold;
 display:flex;
 gap:8px;
 align-items:center;
+position:relative;
 
 }
 
@@ -411,16 +412,20 @@ font-size:18px;
 /* ===== المنتجات ===== */
 
 
-.grid-products,
+.grid-products{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+
 .grid-why,
 .grid-occ,
 .grid-gift{
 
 grid-template-columns:1fr;
-width:100%;
 
 }
-
 .card{
 
 width:100%;
@@ -861,7 +866,25 @@ z-index:900;
 .wrap{
 width:100%;
 padding:0 15px;
+.cart-open-btn{
+font-size:0;
+width:50px;
+height:50px;
+padding:0;
+justify-content:center;
+border-radius:50%;
 }
+
+.cart-open-btn::before{
+content:"🛒";
+font-size:24px;
+}
+
+#cartCount{
+position:absolute;
+margin-top:-35px;
+margin-right:-35px;
+}}
 
 
 .hero h1{
@@ -1484,81 +1507,41 @@ placeholder="رقم الهاتف">
 placeholder="العنوان بالتفصيل">
 
 
-
-
-
-<select id="paymentMethod">
-
+<select id="customerScent">
 
 <option>
-
-اختاري طريقة الدفع
-
+اختاري العطر
 </option>
 
-
-<option>
-
-الدفع عند الاستلام 💵
-
-</option>
-
-
-<option>
-
-تحويل بنكي 🏦
-
-</option>
-
+<option>فانيلا 🍦</option>
+<option>لافندر 💜</option>
+<option>قهوة ☕</option>
+<option>ورد 🌹</option>
+<option>عنبر 🤎</option>
+<option>ياسمين 🌸</option>
+<option>موكا ☕</option>
+<option>كراميل 🍮</option>
+<option>عود 🤎</option>
+<option>مسك أبيض 🤍</option>
+<option>ساندال وود 🌳</option>
 
 </select>
 
 
-
-
-
-
-<select id="customerColor">
-
+<select id="paymentMethod">
 
 <option>
-
-اختاري لون الشمعة
-
+اختاري طريقة الدفع
 </option>
 
-
 <option>
-
-أبيض 🤍
-
+تحويل InstaPay
 </option>
 
+</select>
 
 <option>
-
-بيج 🤎
-
-</option>
-
-
-<option>
-
-ذهبي ✨
-
-</option>
-
-
-<option>
-
-وردي 🌸
-
-</option>
-
-
-<option>
-
-أسود 🖤
+placeholder="العنوان بالتفصيل">
 
 </option>
 
@@ -2358,13 +2341,11 @@ item => item.name === name
 );
 
 
-
 if(product){
 
-product.qty += qty;
+alert("المنتج موجود بالفعل في السلة، يمكنك تعديل العدد من السلة");
 
 }else{
-
 
 cart.push({
 
@@ -2423,8 +2404,7 @@ let sum = item.price * item.qty;
 
 total += sum;
 
-count += item.qty;
-
+count++;
 
 
 box.innerHTML += `
@@ -2455,8 +2435,9 @@ box.innerHTML += `
 <select onchange="changeScent(${index},this.value)">
 
 
-<option>${item.scent}</option>
-
+<option value="">
+اختاري العطر 🌸
+</option
 <option>فانيلا 🍦</option>
 <option>موكا ☕</option>
 <option>كراميل 🍮</option>
@@ -2666,8 +2647,7 @@ let payment =
 document.getElementById("paymentMethod").value;
 
 
-let color =
-document.getElementById("customerColor").value;
+
 
 
 let details =
@@ -2739,14 +2719,9 @@ msg +=
 
 
 
-msg +=
-"🎨 اللون: "
-+color+
-"%0A";
-
-
 
 msg +=
+"🏦 تفاصيل التحويل: InstaPay سيتم إرسال البيانات عبر واتساب%0A";
 "✨ تفاصيل الطلب: "
 +details+
 "%0A%0A";
