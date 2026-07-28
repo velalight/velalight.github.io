@@ -18,7 +18,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <style>
 
 :root{
@@ -708,6 +708,16 @@ border-radius:8px;
 }
 .stars{
 
+text-align:center;
+color:#D9AE71;
+font-size:24px;
+letter-spacing:4px;
+margin-top:10px;
+
+}
+
+.stars{
+
 margin-top:10px;
 text-align:center;
 font-size:22px;
@@ -730,7 +740,9 @@ margin-top:20px;
 }
 
 .social-links a{
-
+.social-links a i{
+font-size:20px;
+}
 display:flex;
 align-items:center;
 justify-content:center;
@@ -965,7 +977,30 @@ border-radius:20px;
 
 }
 </style>
+.mini-gallery{
 
+display:flex;
+gap:10px;
+margin-top:15px;
+
+}
+
+.mini-gallery img{
+
+width:70px;
+height:70px;
+object-fit:cover;
+border-radius:12px;
+cursor:pointer;
+transition:.3s;
+
+}
+
+.mini-gallery img:hover{
+
+transform:scale(1.1);
+
+}
 </head>
 
 
@@ -1310,7 +1345,18 @@ onclick="openImage(this.src)"
 تصميم مميز يجمع بين الجمال والرائحة الفاخرة.
 </p>
 
+<div class="mini-gallery">
 
+<img src="https://velalight.github.io/q.jpg"
+onclick="openImage(this.src)">
+
+<img src="https://velalight.github.io/q2.jpg"
+onclick="openImage(this.src)">
+
+<img src="https://velalight.github.io/q3.jpg"
+onclick="openImage(this.src)">
+
+</div>
 <div class="price">
 650 جنيه
 </div>
@@ -1372,7 +1418,18 @@ onclick="openImage(this.src)"
 قطعة فنية من الخشب الطبيعي مع شموع معطرة.
 </p>
 
+<div class="mini-gallery">
 
+<img src="https://velalight.github.io/RRRRRR.jpg"
+onclick="openImage(this.src)">
+
+<img src="https://velalight.github.io/R2.jpg"
+onclick="openImage(this.src)">
+
+<img src="https://velalight.github.io/R3.jpg"
+onclick="openImage(this.src)">
+
+</div>
 <div class="price">
 650 جنيه
 </div>
@@ -2011,7 +2068,6 @@ onclick="sendWhatsApp()">
 
 
 <div class="polaroid-row">
-
 <div class="polaroid">
 
 <img src="https://velalight.github.io/review1.jpg" alt="رأي عميل">
@@ -2021,7 +2077,6 @@ onclick="sendWhatsApp()">
 </div>
 
 </div>
-
 
 <div class="polaroid">
 
@@ -2065,11 +2120,6 @@ onclick="sendWhatsApp()">
 </div>
 
 
-</div>
-
-
-</div>
-
 
 </section>
 <!-- ===== التواصل والسوشيال ===== -->
@@ -2078,28 +2128,36 @@ onclick="sendWhatsApp()">
 <section>
 <div class="social-links">
 
-
 <a href="https://www.facebook.com/VelaLight/" target="_blank">
+
 <i class="fab fa-facebook-f"></i>
-<span>Facebook</span>
+Facebook
+
 </a>
 
 <a href="https://www.instagram.com/velaa_lighttt" target="_blank">
-<i class="fab fa-instagram"></i>
-<span>Instagram 1</span>
-</a>
 
-<a href="https://www.instagram.com/velaalight/" target="_blank">
 <i class="fab fa-instagram"></i>
-<span>Instagram 2</span>
+Instagram 1
+
+</a>
+<<a href="https://www.instagram.com/velaalight/" target="_blank">
+
+<i class="fab fa-instagram"></i>
+Instagram 2
+
 </a>
 <a href="https://www.tiktok.com/@vela.light0" target="_blank">
+
 <i class="fab fa-tiktok"></i>
-<span>TikTok</span>
+TikTok
+
 </a>
 <a href="https://wa.me/201223526105" target="_blank">
+
 <i class="fab fa-whatsapp"></i>
-<span>WhatsApp</span>
+WhatsApp
+
 </a>
 
 </div>
