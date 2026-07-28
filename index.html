@@ -235,28 +235,11 @@ overflow-y:auto;
 
 }
 
-
 .cart-panel.active{
 
 right:0;
 
 }
-background:var(--ivory);
-z-index:9999;
-padding:25px;
-box-shadow:-10px 0 30px rgba(0,0,0,.25);
-transition:.4s;
-overflow-y:auto;
-
-}
-
-
-.cart-panel.active{
-
-right:0;
-
-}
-
 
 .cart-title{
 
@@ -1505,8 +1488,6 @@ onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4')">
 <div id="cartItems"></div>
 
 
-
-
 <div class="cart-total">
 
 الإجمالي:
@@ -1514,11 +1495,8 @@ onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4')">
 <span id="cartTotal">0</span>
 
 جنيه
-<select id="customerScent">
 
 </div>
-
-
 
 
 
@@ -1536,51 +1514,24 @@ placeholder="رقم الهاتف">
 class="customer-input"
 placeholder="العنوان بالتفصيل"></textarea>
 
-</select>
 
-<select id="paymentMethod">
+<select id="paymentMethod" class="customer-input">
 
 <option>
 تحويل InstaPay
 </option>
 
 </select>
-<option>
-placeholder="العنوان بالتفصيل">
-
-</option>
-
-
-</select>
-
-
-
-
 
 
 <textarea id="customDetails"
-
-placeholder="تفاصيل خاصة للطلب">
-
-</textarea>
-
-
-
-
+class="customer-input"
+placeholder="تفاصيل خاصة للطلب"></textarea>
 
 
 <textarea id="customerNote"
-
-placeholder="ملاحظات إضافية">
-
-</textarea>
-
-
-
-
-
-<button class="checkout-btn"
-
+class="customer-input"
+placeholder="ملاحظات إضافية"></textarea>
 onclick="sendWhatsApp()">
 
 إتمام الطلب عبر واتساب 📱
@@ -2348,7 +2299,7 @@ item => item.name === name
 
 if(product){
 
-alert("المنتج موجود بالفعل في السلة، يمكنك تعديل العدد من السلة");
+product.qty += qty;
 
 }else{
 
@@ -2400,11 +2351,14 @@ let total = 0;
 let count = 0;
 
 
+cart.forEach((item,index)=>{
 
-count += item.qty;
 
 let sum = item.price * item.qty;
 
+total += sum;
+
+count++;
 
 total += sum;
 
