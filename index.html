@@ -55,14 +55,11 @@ line-height:1.9;
 overflow-x:hidden;
 width:100%;
 }
-
 html{
 overflow-x:hidden;
 width:100%;
 }
 
-
-}
 
 
 h1,h2,h3{
@@ -183,21 +180,13 @@ box-shadow:0 10px 25px rgba(184,135,74,.35);
 
 }
 
-
 .cart-open-btn{
-
-background:var(--espresso);
-color:white;
-border:none;
-padding:11px 20px;
-border-radius:30px;
-cursor:pointer;
-font-weight:bold;
-display:flex;
-gap:8px;
-align-items:center;
-position:relative;
-
+font-size:0;
+width:50px;
+height:50px;
+padding:0;
+justify-content:center;
+border-radius:50%;
 }
 
 
@@ -731,9 +720,6 @@ gap:15px;
 margin-top:20px;
 
 }
-
-
-.social-links a{
 .social-links a{
 
 display:flex;
@@ -754,8 +740,7 @@ transition:.3s;
 background:var(--brass);
 transform:translateY(-3px);
 
-}}
-
+}
 
 .social-links a:hover{
 
@@ -849,9 +834,15 @@ z-index:900;
 .wrap{
 width:100%;
 padding:0 15px;
+}
+
 .cart-open-btn{
 font-size:0;
 width:50px;
+height:50px;
+padding:0;
+justify-content:center;
+border-radius:50%;
 height:50px;
 padding:0;
 justify-content:center;
@@ -934,6 +925,29 @@ font-size:16px;
 
 min-height:100px;
 resize:vertical;
+
+}
+#imageViewer{
+
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.8);
+z-index:99999;
+align-items:center;
+justify-content:center;
+
+}
+
+
+#imageViewer img{
+
+max-width:90%;
+max-height:90%;
+border-radius:20px;
 
 }
 </style>
@@ -1107,12 +1121,10 @@ VelaLight علامة متخصصة في صناعة الشموع اليدوية ا
 
 
 
-
 <!-- ===== المنتجات ===== -->
 
 
 <section id="products">
-
 
 <div class="wrap">
 
@@ -1120,21 +1132,14 @@ VelaLight علامة متخصصة في صناعة الشموع اليدوية ا
 <div class="section-head">
 
 <h2>
-
 مجموعة شموع VelaLight
-
 </h2>
 
-
 <p>
-
 اختاري قطعتك المفضلة
-
 </p>
 
-
 </div>
-
 
 
 
@@ -1142,64 +1147,48 @@ VelaLight علامة متخصصة في صناعة الشموع اليدوية ا
 
 
 
-
-
 <!-- المنتج الأول -->
-
 
 <div class="card">
 
-
 <div class="card-img">
 
-<img src="https://velalight.github.io/2.jpg">
+<img 
+src="https://velalight.github.io/2.jpg"
+onclick="openImage(this.src)"
+>
 
 </div>
 
 
 <div class="card-body">
 
-
 <h3>
-
 شمعة المنديلا 🕯️
-
 </h3>
 
 
 <p>
-
 الشمعة الأكثر طلبًا، مناسبة لكل أركان البيت.
-
 </p>
 
 
-
 <div class="price">
-
 375 جنيه
-
 </div>
-
 
 
 <div class="product-actions">
 
 
 <input class="product-qty"
-
 id="qty1"
-
 type="number"
-
 min="1"
-
 value="1">
 
 
-
 <button class="order-btn"
-
 onclick="addProductWithQty('شمعة المنديلا',375,'qty1')">
 
 أضف للسلة 🛒
@@ -1207,12 +1196,10 @@ onclick="addProductWithQty('شمعة المنديلا',375,'qty1')">
 </button>
 
 
-
 </div>
 
 
 </div>
-
 
 </div>
 
@@ -1226,57 +1213,44 @@ onclick="addProductWithQty('شمعة المنديلا',375,'qty1')">
 
 <div class="card">
 
-
 <div class="card-img">
 
-<img src="https://velalight.github.io/eeeee.jpg">
+<img 
+src="https://velalight.github.io/eeeee.jpg"
+onclick="openImage(this.src)"
+>
 
 </div>
 
 
 <div class="card-body">
 
-
 <h3>
-
 الشمعة الفاخرة ✨
-
 </h3>
 
 
 <p>
-
 تصميم راقي يغير شكل المكان بالكامل.
-
 </p>
 
 
-
 <div class="price">
-
 680 جنيه
-
 </div>
-
 
 
 <div class="product-actions">
 
 
 <input class="product-qty"
-
 id="qty2"
-
 type="number"
-
 min="1"
-
 value="1">
 
 
-
 <button class="order-btn"
-
 onclick="addProductWithQty('الشمعة الفاخرة',680,'qty2')">
 
 أضف للسلة 🛒
@@ -1284,14 +1258,13 @@ onclick="addProductWithQty('الشمعة الفاخرة',680,'qty2')">
 </button>
 
 
-
 </div>
 
 
 </div>
 
-
 </div>
+
 
 
 
@@ -1302,57 +1275,44 @@ onclick="addProductWithQty('الشمعة الفاخرة',680,'qty2')">
 
 <div class="card">
 
-
 <div class="card-img">
 
-<img src="https://velalight.github.io/q.jpg">
+<img 
+src="https://velalight.github.io/q.jpg"
+onclick="openImage(this.src)"
+>
 
 </div>
 
 
 <div class="card-body">
 
-
 <h3>
-
 مجموعة نبضين 🤎
-
 </h3>
 
 
 <p>
-
 تصميم مميز يجمع بين الجمال والرائحة الفاخرة.
-
 </p>
 
 
-
 <div class="price">
-
 650 جنيه
-
 </div>
-
 
 
 <div class="product-actions">
 
 
 <input class="product-qty"
-
 id="qty3"
-
 type="number"
-
 min="1"
-
 value="1">
 
 
-
 <button class="order-btn"
-
 onclick="addProductWithQty('مجموعة نبضين',650,'qty3')">
 
 أضف للسلة 🛒
@@ -1360,14 +1320,13 @@ onclick="addProductWithQty('مجموعة نبضين',650,'qty3')">
 </button>
 
 
-
 </div>
 
 
 </div>
 
-
 </div>
+
 
 
 
@@ -1378,57 +1337,44 @@ onclick="addProductWithQty('مجموعة نبضين',650,'qty3')">
 
 <div class="card">
 
-
 <div class="card-img">
 
-<img src="https://velalight.github.io/RRRRRR.jpg">
+<img 
+src="https://velalight.github.io/RRRRRR.jpg"
+onclick="openImage(this.src)"
+>
 
 </div>
 
 
 <div class="card-body">
 
-
 <h3>
-
 كونتر الخشب الطبيعي 🤎
-
 </h3>
 
 
 <p>
-
 قطعة فنية من الخشب الطبيعي مع شموع معطرة.
-
 </p>
 
 
-
 <div class="price">
-
 650 جنيه
-
 </div>
-
 
 
 <div class="product-actions">
 
 
 <input class="product-qty"
-
 id="qty4"
-
 type="number"
-
 min="1"
-
 value="1">
 
 
-
 <button class="order-btn"
-
 onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4')">
 
 أضف للسلة 🛒
@@ -1436,29 +1382,20 @@ onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4')">
 </button>
 
 
-
 </div>
 
 
 </div>
 
-
 </div>
 
 
 
+</div>
 
 </div>
 
-
-</div>
-
-
-</section>
-<!-- ===== السلة ===== -->
-
-
-<div class="cart-panel" id="cartPanel">
+</section><div class="cart-panel" id="cartPanel">
 
 
 <div class="cart-title">
@@ -2154,7 +2091,6 @@ onclick="sendWhatsApp()">
 
 </div>
 
-</div>
 
 
 </section>
@@ -2250,6 +2186,13 @@ target="_blank">
 🛒
 
 </button>
+<!-- تكبير الصورة -->
+<div id="imageViewer" onclick="closeImage()">
+
+<img id="bigImage">
+
+</div>
+
 <script>
 
 let cart = JSON.parse(localStorage.getItem("velaCart")) || [];
@@ -2318,7 +2261,6 @@ scent:"اختاري العطر"
 
 saveCart();
 
-updateCart();
 
 openCart();
 
@@ -2354,7 +2296,7 @@ let sum = item.price * item.qty;
 
 total += sum;
 
-count++;
+count += item.qty;
 
 box.innerHTML += `
 
@@ -2369,25 +2311,11 @@ box.innerHTML += `
 السعر: ${item.price} جنيه
 </p>
 
-<div style="display:flex;align-items:center;gap:10px;margin:10px 0;">
 
-<span>العدد:</span>
+<p>
+العدد: ${item.qty}
+</p>
 
-<input 
-type="number"
-min="1"
-value="${item.qty}"
-onchange="changeQty(${index},this.value)"
-style="
-width:70px;
-padding:8px;
-border:1px solid #B8874A;
-border-radius:10px;
-text-align:center;
-font-size:16px;
-">
-
-</div>
 
 
 
@@ -2471,22 +2399,6 @@ saveCart();
 
 }
 
-function changeQty(index,value){
-
-let qty = parseInt(value);
-
-if(!qty || qty < 1){
-qty = 1;
-}
-
-cart[index].qty = qty;
-
-saveCart();
-
-updateCart();
-
-}
-
 
 
 function increase(index){
@@ -2496,6 +2408,30 @@ cart[index].qty++;
 updateCart();
 
 }
+
+function openImage(src){
+
+document.getElementById("bigImage").src = src;
+document.getElementById("imageViewer").style.display="flex";
+
+}
+
+
+function closeImage(){
+
+document.getElementById("imageViewer").style.display="none";
+
+}
+function openImage(src){
+
+document.getElementById("bigImage").src = src;
+
+document.getElementById("imageViewer").style.display="flex";
+
+}
+
+
+
 
 
 
@@ -2535,8 +2471,9 @@ updateCart();
 
 
 
-
 function openCart(){
+
+updateCart();
 
 document
 .getElementById("cartPanel")
@@ -2809,8 +2746,9 @@ cart=[];
 
 saveCart();
 
-updateCart();
-
+window.onload = function(){
+    updateCart();
+};
 
 }
 
@@ -2820,13 +2758,6 @@ updateCart();
 
 updateCart();
 
-
 </script>
-
-
-updateCart();
-
-</script>
-
 </body>
 </html>
