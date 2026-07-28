@@ -2369,11 +2369,25 @@ box.innerHTML += `
 السعر: ${item.price} جنيه
 </p>
 
+<div style="display:flex;align-items:center;gap:10px;margin:10px 0;">
 
-<p>
-العدد: ${item.qty}
-</p>
+<span>العدد:</span>
 
+<input 
+type="number"
+min="1"
+value="${item.qty}"
+onchange="changeQty(${index},this.value)"
+style="
+width:70px;
+padding:8px;
+border:1px solid #B8874A;
+border-radius:10px;
+text-align:center;
+font-size:16px;
+">
+
+</div>
 
 
 
@@ -2457,7 +2471,21 @@ saveCart();
 
 }
 
+function changeQty(index,value){
 
+let qty = parseInt(value);
+
+if(!qty || qty < 1){
+qty = 1;
+}
+
+cart[index].qty = qty;
+
+saveCart();
+
+updateCart();
+
+}
 
 
 
