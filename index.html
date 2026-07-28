@@ -394,13 +394,13 @@ font-size:18px;
 
 /* ===== المنتجات ===== */
 
-
 .grid-products{
 
+display:grid;
 grid-template-columns:repeat(2,1fr);
+gap:25px;
 
 }
-
 
 .grid-why,
 .grid-occ,
@@ -910,7 +910,6 @@ grid-template-columns:1fr;
 }
 
 }
-</style>
 .customer-input{
 width:100%;
 padding:16px;
@@ -937,6 +936,8 @@ min-height:100px;
 resize:vertical;
 
 }
+</style>
+
 </head>
 
 
@@ -2355,11 +2356,6 @@ total += sum;
 
 count++;
 
-total += sum;
-
-count++;
-
-
 box.innerHTML += `
 
 
@@ -2381,10 +2377,12 @@ box.innerHTML += `
 
 
 
+<select onchange="changeScent(${index},this.value)">
 
 <option value="">
 اختاري العطر 🌸
-</option
+</option>
+
 <option>فانيلا 🍦</option>
 <option>موكا ☕</option>
 <option>كراميل 🍮</option>
@@ -2404,13 +2402,8 @@ box.innerHTML += `
 <option>كاريبيان فروت 🌴</option>
 <option>مانجو 🥭</option>
 <option>توت 🍓</option>
-<option>نعناع 🌿</option>
-<option>روز فاخر 🌹</option>
-
 
 </select>
-
-
 
 
 
@@ -2803,16 +2796,9 @@ updateCart();
 </script>
 
 
-
-</body>
-<script>
-
-...الكود...
-
 updateCart();
 
 </script>
 
 </body>
-</html>
 </html>
