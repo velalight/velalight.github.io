@@ -769,15 +769,18 @@ gap:15px;
 margin-top:20px;
 
 }
-
 .social-links a{
-.social-links a i{
-font-size:20px;
-}
+
 display:flex;
 align-items:center;
 justify-content:center;
 gap:10px;
+
+}
+
+.social-links a i{
+font-size:20px;
+}
 
 background:var(--espresso);
 color:white;
@@ -846,20 +849,6 @@ left:25px;
 width:60px;
 height:60px;
 
-border-radius:50%;
-background:#25D366;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-font-size:28px;
-z-index:900;
-
-box-shadow:0 10px 25px rgba(37,211,102,.4);
-animation:pulse 2s infinite;
-
-}
 
 border-radius:50%;
 background:#25D366;
@@ -1138,7 +1127,7 @@ cursor:pointer;
 z-index:900;
 
 }
-</style>
+
 .mini-gallery{
 
 display:flex;
@@ -1146,6 +1135,7 @@ gap:10px;
 margin-top:15px;
 
 }
+</style>
 
 .mini-gallery img{
 
@@ -1462,6 +1452,23 @@ onclick="openImage(this.src)"
 تصميم راقي يغير شكل المكان بالكامل.
 </p>
 
+<select id="scent2" class="customer-input">
+
+<option value="">
+اختاري العطر 🌸
+</option>
+
+<option>فانيلا 🍦</option>
+<option>موكا ☕</option>
+<option>كراميل 🍮</option>
+<option>قرفة 🤎</option>
+<option>عنبر 🤎</option>
+<option>عود 🤎</option>
+<option>لافندر 💜</option>
+<option>ورد 🌹</option>
+<option>ياسمين 🌸</option>
+
+</select>
 
 <div class="price">
 680 جنيه
@@ -1479,7 +1486,7 @@ value="1">
 
 
 <button class="order-btn"
-onclick="addProductWithQty('الشمعة الفاخرة',680,'qty2')">
+onclick="addProductWithQty('الشمعة الفاخرة',680,'qty2','scent2')"
 
 أضف للسلة 🛒
 
@@ -1520,6 +1527,22 @@ onclick="openImage(this.src)"
 مجموعة نبضين 🤎
 </h3>
 
+<select id="scent3" class="customer-input">
+
+<option value="">
+اختاري العطر 🌸
+</option>
+
+<option>فانيلا 🍦</option>
+<option>موكا ☕</option>
+<option>كراميل 🍮</option>
+<option>عنبر 🤎</option>
+<option>عود 🤎</option>
+<option>ورد 🌹</option>
+<option>مسك أبيض 🤍</option>
+
+</select>
+
 
 <p>
 تصميم مميز يجمع بين الجمال والرائحة الفاخرة.
@@ -1553,7 +1576,7 @@ value="1">
 
 
 <button class="order-btn"
-onclick="addProductWithQty('مجموعة نبضين',650,'qty3')">
+onclick="addProductWithQty('مجموعة نبضين',650,'qty3','scent3')"
 
 أضف للسلة 🛒
 
@@ -1596,6 +1619,19 @@ onclick="openImage(this.src)"
 كونتر الخشب الطبيعي 🤎
 </h3>
 
+<select id="scent4" class="customer-input">
+
+<option value="">
+اختاري العطر 🌸
+</option>
+
+<option>فانيلا 🍦</option>
+<option>قهوة ☕</option>
+<option>عود 🤎</option>
+<option>عنبر 🤎</option>
+<option>لافندر 💜</option>
+
+</select>
 
 <p>
 قطعة فنية من الخشب الطبيعي مع شموع معطرة.
@@ -1629,7 +1665,7 @@ value="1">
 
 
 <button class="order-btn"
-onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4')">
+onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4','scent4')"
 
 أضف للسلة 🛒
 
@@ -2451,6 +2487,8 @@ target="_blank">
 
 </div>
 
+<script>
+
 window.onscroll=function(){
 
 let btn=document.getElementById("topBtn");
@@ -2479,11 +2517,10 @@ behavior:"smooth"
 });
 
 }
-<script>
+
 
 let cart = JSON.parse(localStorage.getItem("velaCart")) || [];
 
-let orders = JSON.parse(localStorage.getItem("velaOrders")) || [];
 
 
 
@@ -2849,13 +2886,6 @@ alert("السلة فارغة");
 return;
 
 }
-if(name=="" || phone=="" || address==""){
-
-alert("من فضلك اكتب الاسم ورقم الهاتف والعنوان");
-
-return;
-
-}
 
 
 
@@ -2888,14 +2918,6 @@ return;
 
 if(!/^01[0125][0-9]{8}$/.test(phone)){
 alert("أدخل رقم هاتف مصري صحيح");
-return;
-}
-}
-
-for(let item of cart){
-
-if(item.scent=="اختاري العطر" || item.scent==""){
-alert("من فضلك اختر عطراً لكل منتج");
 return;
 }
 
