@@ -928,7 +928,38 @@ grid-template-columns:1fr;
 
 }
 </style>
+.customer-input{
 
+width:100%;
+padding:14px;
+margin:10px 0;
+border:1px solid var(--brass);
+border-radius:12px;
+font-family:'Tajawal',sans-serif;
+font-size:16px;
+background:white;
+
+}
+
+
+.cart-panel select{
+
+width:100%;
+padding:14px;
+margin:10px 0;
+border-radius:12px;
+border:1px solid var(--brass);
+font-size:16px;
+
+}
+
+
+.cart-panel textarea{
+
+min-height:100px;
+resize:vertical;
+
+}
 </head>
 
 
@@ -1483,6 +1514,7 @@ onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4')">
 <span id="cartTotal">0</span>
 
 جنيه
+<select id="customerScent">
 
 </div>
 
@@ -1491,55 +1523,28 @@ onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4')">
 
 
 <input id="customerName"
-
-placeholder="الاسم">
-
+class="customer-input"
+placeholder="الاسم بالكامل">
 
 
 <input id="customerPhone"
-
+class="customer-input"
 placeholder="رقم الهاتف">
 
 
-
-<input id="customerAddress"
-
-placeholder="العنوان بالتفصيل">
-
-
-<select id="customerScent">
-
-<option>
-اختاري العطر
-</option>
-
-<option>فانيلا 🍦</option>
-<option>لافندر 💜</option>
-<option>قهوة ☕</option>
-<option>ورد 🌹</option>
-<option>عنبر 🤎</option>
-<option>ياسمين 🌸</option>
-<option>موكا ☕</option>
-<option>كراميل 🍮</option>
-<option>عود 🤎</option>
-<option>مسك أبيض 🤍</option>
-<option>ساندال وود 🌳</option>
+<textarea id="customerAddress"
+class="customer-input"
+placeholder="العنوان بالتفصيل"></textarea>
 
 </select>
 
-
 <select id="paymentMethod">
-
-<option>
-اختاري طريقة الدفع
-</option>
 
 <option>
 تحويل InstaPay
 </option>
 
 </select>
-
 <option>
 placeholder="العنوان بالتفصيل">
 
@@ -2396,8 +2401,7 @@ let count = 0;
 
 
 
-cart.forEach((item,index)=>{
-
+count += item.qty;
 
 let sum = item.price * item.qty;
 
@@ -2427,12 +2431,6 @@ box.innerHTML += `
 
 
 
-<label>
-اختاري العطر:
-</label>
-
-
-<select onchange="changeScent(${index},this.value)">
 
 
 <option value="">
@@ -2464,7 +2462,6 @@ box.innerHTML += `
 </select>
 
 
-<br><br>
 
 
 
@@ -2722,10 +2719,12 @@ msg +=
 
 msg +=
 "🏦 تفاصيل التحويل: InstaPay سيتم إرسال البيانات عبر واتساب%0A";
+
+
+msg +=
 "✨ تفاصيل الطلب: "
 +details+
 "%0A%0A";
-
 
 
 msg +=
