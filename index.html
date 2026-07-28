@@ -706,7 +706,15 @@ object-fit:cover;
 border-radius:8px;
 
 }
+.stars{
 
+margin-top:10px;
+text-align:center;
+font-size:22px;
+color:#FFD700;
+letter-spacing:3px;
+
+}
 
 
 /* ===== التواصل والسوشيال ===== */
@@ -720,11 +728,14 @@ gap:15px;
 margin-top:20px;
 
 }
+
 .social-links a{
 
 display:flex;
 align-items:center;
-gap:8px;
+justify-content:center;
+gap:10px;
+
 background:var(--espresso);
 color:white;
 padding:12px 18px;
@@ -734,6 +745,9 @@ transition:.3s;
 
 }
 
+.social-links a i{
+font-size:20px;
+}
 
 .social-links a:hover{
 
@@ -1998,46 +2012,57 @@ onclick="sendWhatsApp()">
 
 <div class="polaroid-row">
 
-
-
 <div class="polaroid">
 
 <img src="https://velalight.github.io/review1.jpg" alt="رأي عميل">
 
+<div class="stars">
+★★★★★
 </div>
 
+</div>
 
 
 <div class="polaroid">
 
 <img src="https://velalight.github.io/review2.jpg" alt="رأي عميل">
 
+<div class="stars">
+★★★★★
 </div>
 
-
+</div>
 
 <div class="polaroid">
 
 <img src="https://velalight.github.io/review3.jpg" alt="رأي عميل">
 
+<div class="stars">
+★★★★★
 </div>
 
+</div>
 
 
 <div class="polaroid">
 
 <img src="https://velalight.github.io/review4.jpg" alt="رأي عميل">
 
+<div class="stars">
+★★★★★
 </div>
 
-
+</div>
 
 <div class="polaroid">
 
 <img src="https://velalight.github.io/review5.jpg" alt="رأي عميل">
 
+<div class="stars">
+★★★★★
 </div>
 
+</div>
 
 
 </div>
@@ -2055,39 +2080,27 @@ onclick="sendWhatsApp()">
 
 
 <a href="https://www.facebook.com/VelaLight/" target="_blank">
-
-📘 Facebook
-
+<i class="fab fa-facebook-f"></i>
+<span>Facebook</span>
 </a>
-
 
 <a href="https://www.instagram.com/velaa_lighttt" target="_blank">
-
-📸 Instagram 1
-
+<i class="fab fa-instagram"></i>
+<span>Instagram 1</span>
 </a>
-
 
 <a href="https://www.instagram.com/velaalight/" target="_blank">
-
-📸 Instagram 2
-
+<i class="fab fa-instagram"></i>
+<span>Instagram 2</span>
 </a>
-
-
 <a href="https://www.tiktok.com/@vela.light0" target="_blank">
-
-🎵 TikTok
-
+<i class="fab fa-tiktok"></i>
+<span>TikTok</span>
 </a>
-
-
 <a href="https://wa.me/201223526105" target="_blank">
-
-💬 WhatsApp
-
+<i class="fab fa-whatsapp"></i>
+<span>WhatsApp</span>
 </a>
-
 
 </div>
 
@@ -2545,8 +2558,30 @@ document.getElementById("customerPhone").value;
 
 let address =
 document.getElementById("customerAddress").value;
+if(name.trim()==""){
+alert("من فضلك أدخل الاسم بالكامل");
+return;
+}
 
+if(phone.trim()==""){
+alert("من فضلك أدخل رقم الهاتف");
+return;
+}
 
+if(!/^01[0125][0-9]{8}$/.test(phone)){
+alert("أدخل رقم هاتف مصري صحيح");
+return;
+}
+}
+
+for(let item of cart){
+
+if(item.scent=="اختاري العطر" || item.scent==""){
+alert("من فضلك اختر عطراً لكل منتج");
+return;
+}
+
+}
 let payment =
 document.getElementById("paymentMethod").value;
 
@@ -2577,66 +2612,25 @@ new Date().toLocaleDateString("ar-EG");
 
 
 let msg =
-"🕯️ طلب جديد من VelaLight%0A%0A";
+msg += "🕯️ طلب جديد من VelaLight\n\n";
+
+msg += "🧾 رقم الطلب: " + orderNumber + "\n";
+
+msg += "📅 التاريخ: " + date + "\n\n";
 
 
+msg += "👤 الاسم: " + name + "\n";
 
-msg +=
-"🧾 رقم الطلب: "
-+orderNumber+
-"%0A";
-
+msg += "📞 الهاتف: " + phone + "\n";
+msg += "📍 العنوان: " + address + "\n";
 
 
-msg +=
-"📅 التاريخ: "
-+date+
-"%0A%0A";
+msg += "💳 الدفع: " + payment + "\n";
 
 
-
-msg +=
-"👤 الاسم: "
-+name+
-"%0A";
-
-
-
-msg +=
-"📞 الهاتف: "
-+phone+
-"%0A";
-
-
-
-msg +=
-"📍 العنوان: "
-+address+
-"%0A";
-
-
-
-msg +=
-"💳 الدفع: "
-+payment+
-"%0A";
-
-
-
-
-msg +=
-"🏦 تفاصيل التحويل: InstaPay سيتم إرسال البيانات عبر واتساب%0A";
-
-
-msg +=
-"✨ تفاصيل الطلب: "
-+details+
-"%0A%0A";
-
-
-msg +=
-"🛒 المنتجات:%0A";
-
+msg += "🏦 تفاصيل التحويل: InstaPay سيتم إرسال البيانات عبر واتساب\n";
+msg += "✨ تفاصيل الطلب: " + details + "\n\n";
+msg += "🛒 المنتجات:\n";
 
 
 let total = 0;
@@ -2652,49 +2646,21 @@ let sum = item.price * item.qty;
 total += sum;
 
 
+msg += "🕯️ " + item.name + "\n";
 
-msg +=
-"🕯️ "
-+item.name+
-"%0A";
+msg += "🌸 العطر: " + item.scent + "\n";
 
+msg += "🔢 العدد: " + item.qty + "\n";
 
-
-msg +=
-"🌸 العطر: "
-+item.scent+
-"%0A";
-
-
-
-msg +=
-"🔢 العدد: "
-+item.qty+
-"%0A";
-
-
-
-msg +=
-"💰 السعر: "
-+sum+
-" جنيه%0A%0A";
-
+msg += "💰 السعر: " + sum + " جنيه\n\n";
 
 });
 
 
-
-msg +=
-"💰 الإجمالي: "
-+total+
-" جنيه%0A";
+msg += "💰 الإجمالي: " + total + " جنيه\n";
 
 
-
-msg +=
-"📝 ملاحظات: "
-+note;
-
+msg += "📝 ملاحظات: " + note;
 
 
 
@@ -2728,29 +2694,27 @@ JSON.stringify(orders)
 
 
 
-
-
 window.open(
-
-"https://wa.me/201223526105?text="+msg,
-
+"https://wa.me/201223526105?text="+encodeURIComponent(msg),
 "_blank"
-
 );
 
-
-
-
-
-cart=[];
-
+cart = [];
 saveCart();
+updateCart();
 
-window.onload = function(){
-    updateCart();
-};
+document.getElementById("customerName").value = "";
+document.getElementById("customerPhone").value = "";
+document.getElementById("customerAddress").value = "";
+document.getElementById("customDetails").value = "";
+document.getElementById("customerNote").value = "";
+document.getElementById("paymentMethod").selectedIndex = 0;
+
+closeCart();
 
 }
+
+
 
 
 
