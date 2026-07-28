@@ -13,6 +13,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕯️</text></svg>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -28,7 +29,6 @@
 --espresso:#4A2E1E;
 --brass:#B8874A;
 --brass-light:#D9AE71;
---ember:#C4622D;
 --line:rgba(43,27,18,.12);
 
 }
@@ -97,7 +97,6 @@ padding:0 24px;
 }
 
 
-
 /* الهيدر */
 
 header{
@@ -145,8 +144,6 @@ margin:0 5px;
 }
 
 
-/* أزرار */
-
 .nav-cta,
 .btn-glow{
 
@@ -169,9 +166,6 @@ box-shadow:0 10px 25px rgba(184,135,74,.35);
 
 }
 
-
-
-/* زر السلة */
 
 .cart-open-btn{
 
@@ -203,8 +197,6 @@ font-size:13px;
 
 }
 
-
-/* السلة */
 
 .cart-panel{
 
@@ -297,13 +289,14 @@ cursor:pointer;
 
 }
 
- 
+
+/* باقي التنسيقات تكمل في الجزء الثاني */
+
 /* ===== الهيرو ===== */
 
 .hero{
 
 padding:70px 0;
-
 text-align:center;
 
 background:
@@ -316,7 +309,6 @@ transparent 45%
 }
 
 
-
 .eyebrow{
 
 color:var(--brass);
@@ -325,7 +317,6 @@ font-size:18px;
 margin-bottom:20px;
 
 }
-
 
 
 .hero h1{
@@ -337,7 +328,6 @@ color:var(--cocoa);
 }
 
 
-
 .hero .sub{
 
 font-size:20px;
@@ -346,7 +336,6 @@ margin:25px auto;
 color:var(--espresso);
 
 }
-
 
 
 .hero-img{
@@ -366,13 +355,11 @@ box-shadow:
 
 /* ===== الأقسام ===== */
 
-
 section{
 
 padding:70px 0;
 
 }
-
 
 
 .section-head{
@@ -383,13 +370,11 @@ margin-bottom:45px;
 }
 
 
-
 .section-head h2{
 
 font-size:42px;
 
 }
-
 
 
 .section-head p{
@@ -525,7 +510,7 @@ color:var(--cocoa);
 
 
 
-/* ===== الكمية ===== */
+/* الكمية */
 
 
 .product-actions{
@@ -535,7 +520,6 @@ gap:10px;
 align-items:center;
 
 }
-
 
 
 .product-qty{
@@ -550,7 +534,7 @@ text-align:center;
 
 
 
-/* ===== لماذا VelaLight ===== */
+/* لماذا VelaLight */
 
 
 .grid-why{
@@ -574,13 +558,11 @@ transition:.3s;
 }
 
 
-
 .why-item:hover{
 
 transform:translateY(-8px);
 
 }
-
 
 
 .icon{
@@ -592,7 +574,7 @@ margin-bottom:15px;
 
 
 
-/* ===== العطور ===== */
+/* العطور */
 
 
 .scent-groups{
@@ -632,16 +614,6 @@ padding:12px;
 margin-bottom:8px;
 background:white;
 border-radius:10px;
-transition:.3s;
-
-}
-
-
-
-.scent-item:hover{
-
-transform:translateX(-5px);
-background:var(--cream);
 
 }
 
@@ -661,8 +633,10 @@ color:#806654;
 font-size:14px;
 
 }
- 
-/* ===== المناسبات والهدايا ===== */
+
+
+
+/* المناسبات */
 
 
 .grid-occ,
@@ -683,24 +657,12 @@ background:var(--ivory);
 padding:25px;
 border-radius:18px;
 text-align:center;
-transition:.3s;
 
 }
 
 
 
-.occ-card:hover,
-.gift-item:hover{
-
-transform:translateY(-7px);
-
-}
-
-
-
-
-
-/* ===== آراء العملاء ===== */
+/* آراء العملاء */
 
 
 .polaroid-row{
@@ -718,9 +680,7 @@ gap:15px;
 background:white;
 padding:10px;
 border-radius:10px;
-
 box-shadow:
-
 0 10px 25px rgba(0,0,0,.12);
 
 }
@@ -738,9 +698,7 @@ border-radius:8px;
 
 
 
-
-
-/* ===== واتساب عائم ===== */
+/* واتساب */
 
 
 .wa-float{
@@ -753,44 +711,32 @@ width:60px;
 height:60px;
 
 border-radius:50%;
-
 background:#25D366;
 
 display:flex;
 align-items:center;
 justify-content:center;
 
-z-index:900;
-
-box-shadow:
-
-0 10px 25px rgba(0,0,0,.25);
-
 font-size:28px;
+z-index:900;
 
 }
 
 
 
-
-
-/* ===== زر السلة العائم ===== */
+/* السلة العائمة */
 
 
 .floating-cart{
 
 position:fixed;
-
 bottom:95px;
-
 right:25px;
 
 width:60px;
-
 height:60px;
 
 border-radius:50%;
-
 border:none;
 
 background:linear-gradient(
@@ -800,32 +746,22 @@ var(--espresso)
 );
 
 color:white;
-
 font-size:25px;
 
 cursor:pointer;
-
 z-index:900;
 
 }
 
-
-
-
-
-
 /* ===== تحسين الموبايل ===== */
 
-
 @media(max-width:900px){
-
 
 .grid-products{
 
 grid-template-columns:repeat(2,1fr);
 
 }
-
 
 
 .grid-why,
@@ -837,13 +773,11 @@ grid-template-columns:repeat(2,1fr);
 }
 
 
-
 .scent-groups{
 
 grid-template-columns:1fr;
 
 }
-
 
 
 .polaroid-row{
@@ -853,21 +787,17 @@ grid-template-columns:repeat(2,1fr);
 }
 
 
-
 .hero h1{
 
 font-size:38px;
 
 }
 
-
 }
 
 
 
-
 @media(max-width:600px){
-
 
 .wrap{
 
@@ -876,17 +806,13 @@ padding:0 15px;
 }
 
 
-
 .nav{
 
 flex-direction:column;
-
 gap:15px;
-
 padding:15px 0;
 
 }
-
 
 
 .grid-products,
@@ -899,7 +825,6 @@ grid-template-columns:1fr;
 }
 
 
-
 .hero-img{
 
 width:100%;
@@ -907,18 +832,12 @@ height:auto;
 
 }
 
-
-
 }
 
-
-
-/* نهاية CSS */
 
 </style>
 
 </head>
-
 
 
 <body>
@@ -927,12 +846,9 @@ height:auto;
 
 <!-- ===== الهيدر ===== -->
 
-
 <header>
 
-
 <div class="wrap nav">
-
 
 
 <div class="logo">
@@ -945,9 +861,7 @@ VelaLight
 
 
 
-
 <div style="display:flex;gap:12px;align-items:center;">
-
 
 
 <button class="cart-open-btn" onclick="openCart()">
@@ -971,13 +885,10 @@ target="_blank">
 </a>
 
 
-
 </div>
 
 
-
 </div>
-
 
 </header>
 
@@ -1022,7 +933,6 @@ target="_blank">
 
 
 
-
 <a class="btn-glow"
 
 href="https://wa.me/201223526105?text=عايز+أطلب+شمعة+من+VelaLight">
@@ -1039,8 +949,6 @@ href="https://wa.me/201223526105?text=عايز+أطلب+شمعة+من+VelaLight"
 src="https://velalight.github.io/eeeee.jpg"
 
 alt="شمعة VelaLight">
-
-
 
 
 </div>
@@ -1063,7 +971,6 @@ alt="شمعة VelaLight">
 
 <div class="section-head">
 
-
 <h2>
 
 مجموعة شموع VelaLight
@@ -1081,12 +988,10 @@ alt="شمعة VelaLight">
 </div>
 
 
+
 <div class="grid-products">
 
 
-
-
-<!-- المنتج الأول -->
 
 <div class="card">
 
@@ -1109,11 +1014,13 @@ alt="شمعة VelaLight">
 </h3>
 
 
+
 <p>
 
 الشمعة البست سيلر عندنا. مناسبة لكل أركان البيت.
 
 </p>
+
 
 
 <div class="price">
@@ -1125,6 +1032,7 @@ alt="شمعة VelaLight">
 
 
 <div class="product-actions">
+
 
 <input class="product-qty" id="qty1" type="number" min="1" value="1">
 
@@ -1145,7 +1053,9 @@ onclick="addProductWithQty('شمعة المنديلا',375,'qty1')">
 
 
 </div>
-<!-- المنتج الثاني -->
+
+
+
 
 
 <div class="card">
@@ -1192,7 +1102,6 @@ onclick="addProductWithQty('شمعة المنديلا',375,'qty1')">
 <input class="product-qty" id="qty2" type="number" min="1" value="1">
 
 
-
 <button class="order-btn"
 
 onclick="addProductWithQty('الشمعة الفاخرة',680,'qty2')">
@@ -1202,7 +1111,6 @@ onclick="addProductWithQty('الشمعة الفاخرة',680,'qty2')">
 </button>
 
 
-
 </div>
 
 
@@ -1210,12 +1118,6 @@ onclick="addProductWithQty('الشمعة الفاخرة',680,'qty2')">
 
 
 </div>
-
-
-
-
-
-
 
 <!-- المنتج الثالث -->
 
@@ -1274,7 +1176,6 @@ onclick="addProductWithQty('مجموعة نبضين',650,'qty3')">
 </button>
 
 
-
 </div>
 
 
@@ -1282,8 +1183,6 @@ onclick="addProductWithQty('مجموعة نبضين',650,'qty3')">
 
 
 </div>
-
-
 
 
 
@@ -1344,7 +1243,6 @@ onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4')">
 أضف للسلة 🛒
 
 </button>
-
 
 
 </div>
@@ -1416,7 +1314,6 @@ onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4')">
 
 
 
-
 <input id="customerName"
 
 placeholder="الاسم">
@@ -1432,6 +1329,7 @@ placeholder="رقم الهاتف">
 <input id="customerAddress"
 
 placeholder="العنوان بالتفصيل">
+
 
 
 
@@ -1527,16 +1425,6 @@ placeholder="تفاصيل خاصة للطلب">
 
 
 
-<input type="file"
-
-id="designImage"
-
-accept="image/*">
-
-
-
-
-
 <textarea id="customerNote"
 
 placeholder="ملاحظات إضافية">
@@ -1564,7 +1452,6 @@ onclick="sendWhatsApp()">
 
 
 
-
 <!-- زر السلة العائم -->
 
 
@@ -1574,14 +1461,14 @@ onclick="sendWhatsApp()">
 
 </button>
 
+
+
 <script>
 
 
 let cart = JSON.parse(localStorage.getItem("velaCart")) || [];
 
 let orders = JSON.parse(localStorage.getItem("velaOrders")) || [];
-
-
 
 
 
@@ -1593,7 +1480,6 @@ JSON.stringify(cart)
 );
 
 }
-
 
 
 
@@ -1623,9 +1509,7 @@ if(product){
 
 product.qty += qty;
 
-}
-
-else{
+}else{
 
 
 cart.push({
@@ -1653,11 +1537,6 @@ openCart();
 
 
 }
-
-
-
-
-
 
 
 
@@ -1704,79 +1583,77 @@ box.innerHTML += `
 
 
 <h3>
-
 ${item.name}
-
 </h3>
 
 
 
 <p>
-
 السعر: ${item.price} جنيه
-
 </p>
 
 
 
 <p>
-
 العدد: ${item.qty}
-
 </p>
 
+
+
+<label>
+اختاري العطر:
+</label>
 
 
 <select onchange="changeScent(${index},this.value)">
 
 
 <option>
-
 ${item.scent}
-
 </option>
 
 
-<option>
+<option>فانيلا 🍦</option>
 
-فانيلا 🍦
+<option>لافندر 💜</option>
 
-</option>
+<option>قهوة ☕</option>
 
+<option>ورد 🌹</option>
 
-<option>
+<option>عنبر 🤎</option>
 
-لافندر 💜
+<option>ياسمين 🌸</option>
 
-</option>
+<option>موكا ☕</option>
 
+<option>كراميل 🍮</option>
 
-<option>
+<option>عود 🤎</option>
 
-قهوة ☕
+<option>مسك أبيض 🤍</option>
 
-</option>
+<option>ساندال وود 🌳</option>
 
+<option>باتشولي 🌿</option>
 
-<option>
+<option>توت 🍓</option>
 
-ورد 🌹
+<option>مانجو 🥭</option>
 
-</option>
+<option>أناناس 🍍</option>
 
+<option>كوكونات 🥥</option>
 
-<option>
+<option>كاريبيان فروت 🌴</option>
 
-عنبر 🤎
+<option>فل 🌼</option>
 
-</option>
+<option>روز فاخر 🌹</option>
 
+<option>قرفة 🤎</option>
 
-<option>
-
-ياسمين 🌸
-
-</option>
+<option>نعناع 🌿</option>
 
 
 </select>
@@ -1784,7 +1661,6 @@ ${item.scent}
 
 
 <br><br>
-
 
 
 <button class="qty-btn"
@@ -1797,7 +1673,6 @@ onclick="increase(${index})">
 
 
 
-
 <button class="qty-btn"
 
 onclick="decrease(${index})">
@@ -1805,8 +1680,6 @@ onclick="decrease(${index})">
 -
 
 </button>
-
-
 
 
 
@@ -1852,9 +1725,6 @@ saveCart();
 
 
 
-
-
-
 function changeScent(index,value){
 
 cart[index].scent=value;
@@ -1866,9 +1736,6 @@ saveCart();
 
 
 
-
-
-
 function increase(index){
 
 cart[index].qty++;
@@ -1876,7 +1743,6 @@ cart[index].qty++;
 updateCart();
 
 }
-
 
 
 
@@ -1906,7 +1772,6 @@ updateCart();
 
 
 
-
 function removeProduct(index){
 
 cart.splice(index,1);
@@ -1919,18 +1784,13 @@ updateCart();
 
 
 
-
-
 function openCart(){
 
 document
 .getElementById("cartPanel")
 .classList.add("active");
 
-
 }
-
-
 
 
 
@@ -1942,11 +1802,7 @@ document
 .getElementById("cartPanel")
 .classList.remove("active");
 
-
 }
-
-
-
 
 
 
@@ -1977,40 +1833,6 @@ return "VL-"
 
 
 
-
-
-
-function calculateExtra(total){
-
-
-let shipping=0;
-
-
-
-if(total<1000){
-
-shipping=60;
-
-}
-
-
-
-let discount=0;
-
-
-
-return {
-
-shipping:shipping,
-
-discount:discount
-
-};
-
-
-}
-
-
 function sendWhatsApp(){
 
 
@@ -2024,40 +1846,32 @@ return;
 
 
 
-
 let name =
 document.getElementById("customerName").value;
-
 
 
 let phone =
 document.getElementById("customerPhone").value;
 
 
-
 let address =
 document.getElementById("customerAddress").value;
-
 
 
 let payment =
 document.getElementById("paymentMethod").value;
 
 
-
 let color =
 document.getElementById("customerColor").value;
-
 
 
 let details =
 document.getElementById("customDetails").value;
 
 
-
 let note =
 document.getElementById("customerNote").value;
-
 
 
 
@@ -2071,14 +1885,14 @@ new Date().toLocaleDateString("ar-EG");
 
 
 
-
-
 let msg =
+
 "🕯️ طلب جديد من VelaLight%0A%0A";
 
 
 
 msg +=
+
 "🧾 رقم الطلب: "
 +orderNumber+
 "%0A";
@@ -2086,6 +1900,7 @@ msg +=
 
 
 msg +=
+
 "📅 التاريخ: "
 +date+
 "%0A%0A";
@@ -2093,6 +1908,7 @@ msg +=
 
 
 msg +=
+
 "👤 الاسم: "
 +name+
 "%0A";
@@ -2100,6 +1916,7 @@ msg +=
 
 
 msg +=
+
 "📞 الهاتف: "
 +phone+
 "%0A";
@@ -2107,6 +1924,7 @@ msg +=
 
 
 msg +=
+
 "📍 العنوان: "
 +address+
 "%0A";
@@ -2114,6 +1932,7 @@ msg +=
 
 
 msg +=
+
 "💳 الدفع: "
 +payment+
 "%0A";
@@ -2121,6 +1940,7 @@ msg +=
 
 
 msg +=
+
 "🎨 اللون: "
 +color+
 "%0A";
@@ -2128,6 +1948,7 @@ msg +=
 
 
 msg +=
+
 "✨ التفاصيل: "
 +details+
 "%0A%0A";
@@ -2135,6 +1956,7 @@ msg +=
 
 
 msg +=
+
 "🛒 الطلبات:%0A";
 
 
@@ -2155,27 +1977,28 @@ total += sum;
 
 
 msg +=
+
 "🕯️ "
 +item.name+
 "%0A";
 
 
-
 msg +=
+
 "🌸 العطر: "
 +item.scent+
 "%0A";
 
 
-
 msg +=
+
 "🔢 العدد: "
 +item.qty+
 "%0A";
 
 
-
 msg +=
+
 "💰 "
 +sum+
 " جنيه%0A%0A";
@@ -2185,37 +2008,18 @@ msg +=
 
 
 
-
-let extra =
-calculateExtra(total);
-
-
-
-let finalTotal =
-total + extra.shipping - extra.discount;
-
-
-
-
 msg +=
-"🚚 الشحن: "
-+extra.shipping+
+
+"💰 الإجمالي: "
++total+
 " جنيه%0A";
 
 
 
 msg +=
-"💰 الإجمالي النهائي: "
-+finalTotal+
-" جنيه%0A";
 
-
-
-msg +=
 "📝 ملاحظات: "
 +note;
-
-
 
 
 
@@ -2228,7 +2032,7 @@ name:name,
 
 phone:phone,
 
-total:finalTotal,
+total:total,
 
 date:date
 
@@ -2247,7 +2051,6 @@ JSON.stringify(orders)
 
 
 
-
 window.open(
 
 "https://wa.me/201223526105?text="+msg,
@@ -2258,7 +2061,6 @@ window.open(
 
 
 
-
 cart=[];
 
 saveCart();
@@ -2266,24 +2068,13 @@ saveCart();
 updateCart();
 
 
-
 }
-
 
 
 
 updateCart();
 
-
-</script>
-
-
-
-
-
-
-<!-- لماذا VelaLight -->
-
+<!-- ===== لماذا VelaLight ===== -->
 
 <section class="why">
 
@@ -2295,6 +2086,10 @@ updateCart();
 ليه VelaLight؟
 </h2>
 
+<p>
+تفاصيل صغيرة تصنع تجربة مختلفة
+</p>
+
 </div>
 
 
@@ -2305,10 +2100,12 @@ updateCart();
 
 <div class="icon">🕯️</div>
 
-<h3>صناعة يدوية</h3>
+<h3>
+صناعة يدوية
+</h3>
 
 <p>
-كل شمعة مصنوعة بعناية وتفاصيل مميزة.
+كل شمعة مصنوعة بعناية وبلمسة فنية خاصة.
 </p>
 
 </div>
@@ -2319,10 +2116,12 @@ updateCart();
 
 <div class="icon">✨</div>
 
-<h3>عطور مميزة</h3>
+<h3>
+عطور مختارة
+</h3>
 
 <p>
-روائح راقية تضيف للبيت إحساس بالدفء.
+21 عطر مختلف تختاري منهم الرائحة المناسبة لك.
 </p>
 
 </div>
@@ -2333,10 +2132,12 @@ updateCart();
 
 <div class="icon">🎁</div>
 
-<h3>هدايا مختلفة</h3>
+<h3>
+هدايا مميزة
+</h3>
 
 <p>
-قطع مناسبة لكل المناسبات.
+تصميمات تناسب كل المناسبات واللحظات الخاصة.
 </p>
 
 </div>
@@ -2347,10 +2148,12 @@ updateCart();
 
 <div class="icon">🤎</div>
 
-<h3>تصميم حسب الطلب</h3>
+<h3>
+تصميم حسب الطلب
+</h3>
 
 <p>
-نحول فكرتك لقطعة خاصة.
+نحول فكرتك لقطعة شموع خاصة بك.
 </p>
 
 </div>
@@ -2365,11 +2168,10 @@ updateCart();
 
 
 
-
+<!-- ===== العطور ===== -->
 
 
 <section class="scents">
-
 
 <div class="wrap">
 
@@ -2377,10 +2179,15 @@ updateCart();
 <div class="section-head">
 
 <h2>
-اختاري عطرك المفضل
+اختاري عطرك المفضل 🌸
 </h2>
 
+<p>
+اختاري من مجموعة عطور VelaLight
+</p>
+
 </div>
+
 
 
 <div class="scent-groups">
@@ -2388,44 +2195,83 @@ updateCart();
 
 <div class="scent-group">
 
-<h3>دافئة وحلوة</h3>
+
+<h3>
+دافئة وحلوة
+</h3>
+
 
 <div class="scent-item">
 <span class="name">فانيلا 🍦</span>
-<span class="desc">دفء وحلاوة</span>
+<span class="desc">حلو ودافئ</span>
 </div>
 
 
 <div class="scent-item">
 <span class="name">موكا ☕</span>
-<span class="desc">أجواء دافئة</span>
+<span class="desc">أجواء قهوة</span>
+</div>
+
+
+<div class="scent-item">
+<span class="name">كراميل 🍮</span>
+<span class="desc">حلاوة ناعمة</span>
+</div>
+
+
+<div class="scent-item">
+<span class="name">قرفة 🤎</span>
+<span class="desc">دفء شرقي</span>
 </div>
 
 
 <div class="scent-item">
 <span class="name">عنبر 🤎</span>
-<span class="desc">فخامة شرقية</span>
+<span class="desc">فخامة</span>
 </div>
 
 
 </div>
+
 
 
 
 
 <div class="scent-group">
 
-<h3>منعشة وفاكهية</h3>
+
+<h3>
+منعشة وفاكهية
+</h3>
+
 
 <div class="scent-item">
 <span class="name">أناناس 🍍</span>
-<span class="desc">انتعاش</span>
+<span class="desc">انتعاش صيفي</span>
 </div>
 
 
 <div class="scent-item">
 <span class="name">كوكونات 🥥</span>
-<span class="desc">استوائي</span>
+<span class="desc">إحساس استوائي</span>
+</div>
+
+
+<div class="scent-item">
+<span class="name">كاريبيان فروت 🌴</span>
+<span class="desc">فاكهية منعشة</span>
+</div>
+
+
+<div class="scent-item">
+<span class="name">مانجو 🥭</span>
+<span class="desc">رائحة مرحة</span>
+</div>
+
+
+<div class="scent-item">
+<span class="name">توت 🍓</span>
+<span class="desc">حيوية</span>
 </div>
 
 
@@ -2437,30 +2283,54 @@ updateCart();
 
 <div class="scent-group">
 
-<h3>زهرية</h3>
 
-<div class="scent-item">
-<span class="name">فل 🌼</span>
-<span class="desc">رائحة راقية</span>
-</div>
+<h3>
+زهرية وفاخرة
+</h3>
 
 
 <div class="scent-item">
-<span class="name">ياسمين 🌸</span>
+<span class="name">ورد 🌹</span>
 <span class="desc">رومانسية</span>
 </div>
 
 
 <div class="scent-item">
-<span class="name">ورد 🌹</span>
-<span class="desc">أصيل</span>
+<span class="name">ياسمين 🌸</span>
+<span class="desc">رائحة راقية</span>
+</div>
+
+
+<div class="scent-item">
+<span class="name">فل 🌼</span>
+<span class="desc">زهرية ناعمة</span>
+</div>
+
+
+<div class="scent-item">
+<span class="name">لافندر 💜</span>
+<span class="desc">هدوء واسترخاء</span>
+</div>
+
+
+<div class="scent-item">
+<span class="name">مسك أبيض 🤍</span>
+<span class="desc">نظافة وفخامة</span>
+</div>
+
+
+<div class="scent-item">
+<span class="name">عود 🤎</span>
+<span class="desc">شرقي فاخر</span>
 </div>
 
 
 </div>
 
 
+
 </div>
+
 
 </div>
 
@@ -2471,8 +2341,11 @@ updateCart();
 
 
 
+<!-- ===== آراء العملاء ===== -->
+
 
 <section class="testimonials">
+
 
 <div class="wrap">
 
@@ -2483,6 +2356,12 @@ updateCart();
 آراء عملائنا 🤎
 </h2>
 
+
+<p>
+ثقتكم أجمل هدية لنا
+</p>
+
+
 </div>
 
 
@@ -2490,21 +2369,36 @@ updateCart();
 <div class="polaroid-row">
 
 
-<img class="polaroid" src="https://velalight.github.io/review1.jpg">
-
-<img class="polaroid" src="https://velalight.github.io/review2.jpg">
-
-<img class="polaroid" src="https://velalight.github.io/review3.jpg">
-
-<img class="polaroid" src="https://velalight.github.io/review4.jpg">
-
-<img class="polaroid" src="https://velalight.github.io/review5.jpg">
+<div class="polaroid">
+<img src="https://velalight.github.io/review1.jpg">
+</div>
 
 
+<div class="polaroid">
+<img src="https://velalight.github.io/review2.jpg">
+</div>
+
+
+<div class="polaroid">
+<img src="https://velalight.github.io/review3.jpg">
+</div>
+
+
+<div class="polaroid">
+<img src="https://velalight.github.io/review4.jpg">
+</div>
+
+
+<div class="polaroid">
+<img src="https://velalight.github.io/review5.jpg">
 </div>
 
 
 </div>
+
+
+</div>
+
 
 </section>
 
@@ -2513,10 +2407,14 @@ updateCart();
 
 
 
+<!-- ===== الفوتر ===== -->
+
 
 <footer>
 
+
 <div class="wrap">
+
 
 <div class="logo">
 
@@ -2527,9 +2425,11 @@ VelaLight
 </div>
 
 
+
 <p>
 شموع تصنع لحظات لا تنسى 🤎
 </p>
+
 
 
 <p>
@@ -2537,13 +2437,19 @@ VelaLight
 </p>
 
 
+
 </div>
+
 
 </footer>
 
 
 
 
+
+
+
+<!-- واتساب عائم -->
 
 
 <a class="wa-float"
@@ -2555,7 +2461,6 @@ target="_blank">
 📱
 
 </a>
-
 
 
 
