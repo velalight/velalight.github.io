@@ -12,16 +12,101 @@
 <meta name="description" content="VelaLight شموع يدوية فاخرة في مصر. شموع معطرة، هدايا مميزة، وتصميمات يدوية تضيف دفء وأناقة لكل مكان.">
 <meta name="keywords" content="شموع يدوية, شموع معطرة, هدايا فاخرة, شموع مصر, VelaLight, شموع هاند ميد">
 <meta name="author" content="VelaLight">
+
+<!-- Canonical URL - غيّري الرابط ده لو استخدمتي دومين خاص -->
+<link rel="canonical" href="https://velalight.github.io/">
+
+<!-- Open Graph كامل لفيسبوك وواتساب -->
+<meta property="og:site_name" content="VelaLight">
 <meta property="og:title" content="VelaLight | شموع يدوية فاخرة">
 <meta property="og:description" content="شموع مصنوعة بحب وعطور مختارة وهدايا تناسب كل المناسبات">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:url" content="https://velalight.github.io/">
+<meta property="og:image" content="https://velalight.github.io/eeeee.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VelaLight | شموع يدوية فاخرة">
+<meta name="twitter:description" content="شموع مصنوعة بحب وعطور مختارة وهدايا تناسب كل المناسبات">
+<meta name="twitter:image" content="https://velalight.github.io/eeeee.jpg">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%95%AF%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%95%AF%EF%B8%8F%3C/text%3E%3C/svg%3E">
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- ===== Schema.org SEO ===== -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "VelaLight",
+  "url": "https://velalight.github.io/",
+  "logo": "https://velalight.github.io/eeeee.jpg",
+  "sameAs": [
+    "https://www.facebook.com/VelaLight/",
+    "https://www.instagram.com/velaalight/",
+    "https://www.tiktok.com/@vela.light0"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "VelaLight",
+  "url": "https://velalight.github.io/"
+}
+</script>
+<script type="application/ld+json" id="productsSchema">
+{
+  "@context": "https://schema.org",
+  "@graph": []
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "كام مدة توصيل الأوردر؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "التوصيل داخل القاهرة والجيزة بياخد من 1 إلى 3 أيام عمل، وباقي المحافظات من 3 إلى 6 أيام عمل." }
+    },
+    {
+      "@type": "Question",
+      "name": "طرق الدفع المتاحة إيه؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "الدفع عند الاستلام، أو تحويل InstaPay قبل الشحن." }
+    },
+    {
+      "@type": "Question",
+      "name": "هل ينفع استبدال المنتج لو مش عاجبني؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "أيوه، عندنا سياسة استبدال خلال 3 أيام من الاستلام بشرط أن المنتج لم يُستخدم." }
+    },
+    {
+      "@type": "Question",
+      "name": "مدة اشتعال الشمعة قد إيه؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "حسب حجم الشمعة، بتتراوح بين 20 إلى 45 ساعة اشتعال متواصل." }
+    },
+    {
+      "@type": "Question",
+      "name": "الشموع آمنة على الأطفال والحيوانات الأليفة؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "الشموع مصنوعة من شمع صويا طبيعي وفتيلة قطنية، وننصح دائمًا بعدم تركها مشتعلة بدون إشراف وبعيدًا عن متناول الأطفال." }
+    },
+    {
+      "@type": "Question",
+      "name": "بتوصلوا لكل المحافظات؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "أيوه، بنوصل لكل محافظات مصر عن طريق شركات شحن موثوقة." }
+    }
+  ]
+}
+</script>
 
 <style>
 
@@ -34,6 +119,8 @@
 --brass-light:#D9AE71;
 --line:rgba(43,27,18,.12);
 --gold:#C9A15A;
+--green:#25D366;
+--red:#c0392b;
 }
 
 *{
@@ -87,6 +174,26 @@ background:var(--brass);
 color:white;
 }
 
+/* ===== إتاحة الوصول (Accessibility) ===== */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible{
+outline:3px solid var(--brass);
+outline-offset:3px;
+border-radius:6px;
+}
+
+@media(prefers-reduced-motion: reduce){
+*{
+animation-duration:.001s !important;
+transition-duration:.001s !important;
+}
+}
+
 /* ===== reveal on scroll ===== */
 
 .reveal{
@@ -98,6 +205,17 @@ transition:opacity .7s ease, transform .7s ease;
 .reveal.active{
 opacity:1;
 transform:translateY(0);
+}
+
+/* ===== flash عند التمرير للمنتج ===== */
+
+@keyframes flashHighlight{
+0%{ box-shadow:0 0 0 0 rgba(184,135,74,.7); }
+100%{ box-shadow:0 0 0 18px rgba(184,135,74,0); }
+}
+
+.flash{
+animation:flashHighlight 1s ease-out;
 }
 
 /* ===== HEADER ===== */
@@ -123,6 +241,8 @@ font-size:32px;
 font-family:'Amiri',serif;
 font-weight:bold;
 color:var(--espresso);
+display:flex;
+align-items:center;
 }
 
 .flame{
@@ -133,6 +253,15 @@ background:var(--brass);
 border-radius:50% 50% 50% 0;
 transform:rotate(-45deg);
 margin:0 5px;
+transform-origin:bottom center;
+animation:flicker 2.4s ease-in-out infinite;
+}
+
+@keyframes flicker{
+0%,100%{ transform:rotate(-45deg) scale(1); }
+25%{ transform:rotate(-38deg) scale(1.06); }
+50%{ transform:rotate(-50deg) scale(.94); }
+75%{ transform:rotate(-40deg) scale(1.03); }
 }
 
 .nav-buttons{
@@ -190,6 +319,17 @@ align-items:center;
 justify-content:center;
 font-size:12px;
 font-weight:bold;
+}
+
+@keyframes bump{
+0%{ transform:scale(1); }
+35%{ transform:scale(1.5); }
+65%{ transform:scale(.9); }
+100%{ transform:scale(1); }
+}
+
+.bump{
+animation:bump .45s ease;
 }
 
 /* ===== CART ===== */
@@ -351,6 +491,7 @@ object-fit:cover;
 border-radius:30px;
 margin:40px auto 0;
 box-shadow:0 25px 50px rgba(43,27,18,.25);
+cursor:zoom-in;
 }
 
 .trust-bar{
@@ -396,6 +537,59 @@ color:#6b5140;
 font-size:18px;
 }
 
+/* ===== شريط البحث والترتيب ===== */
+
+.tools-bar{
+display:flex;
+flex-wrap:wrap;
+gap:14px;
+justify-content:center;
+align-items:center;
+margin-bottom:35px;
+}
+
+.search-box{
+position:relative;
+flex:1;
+min-width:240px;
+max-width:400px;
+}
+
+.search-box input{
+width:100%;
+padding:14px 44px 14px 16px;
+border-radius:30px;
+border:1px solid var(--brass);
+background:var(--ivory);
+font-size:15px;
+}
+
+.search-box i{
+position:absolute;
+top:50%;
+left:16px;
+transform:translateY(-50%);
+color:var(--brass);
+}
+
+.sort-box select{
+padding:14px 18px;
+border-radius:30px;
+border:1px solid var(--brass);
+background:var(--ivory);
+font-size:15px;
+cursor:pointer;
+min-width:190px;
+}
+
+.no-results{
+grid-column:1/-1;
+text-align:center;
+padding:60px 20px;
+color:#8a725c;
+font-size:18px;
+}
+
 /* ===== المنتجات ===== */
 
 .grid-products{
@@ -433,28 +627,98 @@ z-index:5;
 box-shadow:0 6px 14px rgba(0,0,0,.25);
 }
 
-.card-img{
+.badge-discount{
+position:absolute;
+top:14px;
+left:14px;
+background:linear-gradient(135deg,#1f8f4d,#33b869);
+color:white;
+font-size:13px;
+font-weight:bold;
+padding:6px 14px;
+border-radius:20px;
+z-index:5;
+box-shadow:0 6px 14px rgba(0,0,0,.25);
+}
+
+/* ===== سلايدر صور المنتج ===== */
+
+.card-slider{
 position:relative;
 height:300px;
 overflow:hidden;
-cursor:zoom-in;
+direction:ltr;
 }
 
-.card-img img{
+.slider-track{
+display:flex;
+height:100%;
+transition:transform .4s ease;
+direction:ltr;
+}
+
+.slider-track img{
 width:100%;
 height:100%;
 object-fit:cover;
-transition:.5s;
+flex-shrink:0;
+cursor:zoom-in;
 }
 
-.card:hover img{
-transform:scale(1.08);
+.slider-arrow{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+width:38px;
+height:38px;
+border-radius:50%;
+border:none;
+background:rgba(43,27,18,.55);
+color:white;
+font-size:16px;
+cursor:pointer;
+z-index:6;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:.25s;
+}
+
+.slider-arrow:hover{
+background:var(--brass);
+}
+
+.slider-arrow.prev{ right:10px; }
+.slider-arrow.next{ left:10px; }
+
+.slider-dots{
+position:absolute;
+bottom:10px;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+gap:6px;
+z-index:6;
+}
+
+.slider-dots span{
+width:7px;
+height:7px;
+border-radius:50%;
+background:rgba(255,255,255,.6);
+}
+
+.slider-dots span.active{
+background:white;
+width:18px;
+border-radius:6px;
 }
 
 .zoom-hint{
 position:absolute;
 bottom:10px;
-left:10px;
+left:50%;
+transform:translateX(-50%);
 background:rgba(43,27,18,.6);
 color:white;
 font-size:12px;
@@ -462,9 +726,10 @@ padding:5px 12px;
 border-radius:20px;
 opacity:0;
 transition:.3s;
+pointer-events:none;
 }
 
-.card-img:hover .zoom-hint{
+.card-slider:hover .zoom-hint{
 opacity:1;
 }
 
@@ -476,22 +741,72 @@ padding:22px;
 font-size:25px;
 }
 
-.card-body p{
+.card-body > p.desc{
 color:#6b5140;
-min-height:70px;
+min-height:50px;
 }
+
+/* ===== تقييم النجوم ===== */
+
+.rating-row{
+display:flex;
+align-items:center;
+gap:8px;
+margin:6px 0 10px;
+font-size:14px;
+color:#6b5140;
+}
+
+.rating-row .stars{
+color:#FFB100;
+letter-spacing:1px;
+font-size:16px;
+}
+
+/* ===== حالة المخزون ===== */
+
+.stock-line{
+font-size:14px;
+font-weight:bold;
+margin:6px 0;
+}
+
+.stock-available{ color:#1f8f4d; }
+.stock-low{ color:#c07d1c; }
+.stock-out{ color:var(--red); }
 
 .price{
 font-size:23px;
 font-weight:bold;
 color:var(--brass);
-margin:15px 0;
+margin:12px 0 4px;
+display:flex;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.old-price{
+font-size:16px;
+color:#a08d7c;
+text-decoration:line-through;
+font-weight:normal;
+}
+
+.save-badge{
+font-size:12px;
+background:rgba(31,143,77,.12);
+color:#1f8f4d;
+padding:3px 10px;
+border-radius:20px;
+font-weight:bold;
 }
 
 .product-actions{
 display:flex;
 gap:10px;
 align-items:center;
+margin-top:10px;
 }
 
 .product-qty{
@@ -522,6 +837,148 @@ color:var(--cocoa);
 .order-btn.added{
 background:#25D366;
 color:white;
+}
+
+.order-btn:disabled,
+.buy-now-btn:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+.buy-now-btn{
+width:100%;
+margin-top:8px;
+padding:12px;
+border:none;
+border-radius:30px;
+background:linear-gradient(135deg,var(--brass),var(--gold));
+color:var(--cocoa);
+cursor:pointer;
+font-weight:bold;
+transition:.25s;
+}
+
+.buy-now-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 20px rgba(184,135,74,.35);
+}
+
+/* ===== المشاركة ===== */
+
+.share-row{
+display:flex;
+gap:8px;
+margin-top:12px;
+}
+
+.share-btn{
+flex:1;
+padding:9px;
+border-radius:20px;
+border:1px solid var(--line);
+background:white;
+font-size:13px;
+cursor:pointer;
+text-align:center;
+transition:.2s;
+color:var(--espresso);
+}
+
+.share-btn:hover{
+background:var(--cream);
+}
+
+/* ===== تقييمات نصية داخل الكارت ===== */
+
+.reviews-toggle{
+width:100%;
+text-align:center;
+background:none;
+border:none;
+color:var(--espresso);
+font-weight:bold;
+padding:10px 0 0;
+cursor:pointer;
+text-decoration:underline;
+font-size:14px;
+}
+
+.reviews-list{
+display:none;
+margin-top:10px;
+border-top:1px dashed var(--line);
+padding-top:10px;
+}
+
+.reviews-list.open{
+display:block;
+}
+
+.review-item{
+background:white;
+border-radius:12px;
+padding:12px 14px;
+margin-bottom:8px;
+}
+
+.review-item .stars{
+color:#FFB100;
+font-size:14px;
+letter-spacing:1px;
+}
+
+.review-item p{
+font-size:14px;
+color:#4a3a2c;
+margin:4px 0;
+}
+
+.review-item .rname{
+font-size:12px;
+color:#8a725c;
+font-weight:bold;
+}
+
+/* ===== منتجات مشابهة ===== */
+
+.related-box{
+margin-top:16px;
+border-top:1px dashed var(--line);
+padding-top:14px;
+}
+
+.related-box h4{
+font-size:14px;
+color:var(--espresso);
+margin-bottom:10px;
+}
+
+.related-strip{
+display:flex;
+gap:10px;
+overflow-x:auto;
+}
+
+.related-mini{
+flex-shrink:0;
+width:90px;
+cursor:pointer;
+text-align:center;
+}
+
+.related-mini img{
+width:90px;
+height:90px;
+object-fit:cover;
+border-radius:12px;
+border:1px solid var(--line);
+}
+
+.related-mini span{
+display:block;
+font-size:11px;
+margin-top:4px;
+color:#6b5140;
 }
 
 /* ===== لماذا VelaLight ===== */
@@ -643,6 +1100,70 @@ transform:translateY(-6px);
 box-shadow:0 15px 30px rgba(43,27,18,.1);
 }
 
+/* ===== فيديو التصنيع ===== */
+
+.video-box{
+max-width:640px;
+margin:auto;
+border-radius:24px;
+overflow:hidden;
+box-shadow:0 25px 50px rgba(43,27,18,.2);
+position:relative;
+}
+
+.video-box video{
+width:100%;
+display:block;
+background:#000;
+}
+
+/* ===== FAQ ===== */
+
+.faq-list{
+max-width:800px;
+margin:auto;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.faq-item{
+background:var(--ivory);
+border-radius:14px;
+padding:6px 20px;
+border:1px solid rgba(184,135,74,.2);
+}
+
+.faq-item summary{
+cursor:pointer;
+font-weight:bold;
+padding:16px 0;
+font-size:17px;
+color:var(--espresso);
+list-style:none;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.faq-item summary::-webkit-details-marker{ display:none; }
+
+.faq-item summary::after{
+content:"+";
+font-size:22px;
+color:var(--brass);
+transition:.25s;
+}
+
+.faq-item[open] summary::after{
+transform:rotate(45deg);
+}
+
+.faq-item p{
+padding-bottom:16px;
+color:#6b5140;
+}
+
 /* ===== آراء العملاء ===== */
 
 .polaroid-row{
@@ -717,11 +1238,30 @@ text-align:center;
 
 footer .logo{
 color:white;
+justify-content:center;
 }
 
 footer p{
 margin-top:10px;
 opacity:.9;
+}
+
+.footer-links{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:16px;
+margin-top:18px;
+font-size:14px;
+}
+
+.footer-links a{
+opacity:.85;
+text-decoration:underline;
+}
+
+.footer-links a:hover{
+opacity:1;
 }
 
 /* ===== الأزرار العائمة ===== */
@@ -782,6 +1322,61 @@ opacity:1;
 transform:translateX(-50%) translateY(0);
 }
 
+/* ===== نافذة تذكير السلة (Exit Intent) ===== */
+
+.exit-modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+z-index:10001;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.exit-modal.active{
+display:flex;
+}
+
+.exit-box{
+background:var(--ivory);
+border-radius:22px;
+padding:35px 28px;
+max-width:380px;
+text-align:center;
+box-shadow:0 30px 60px rgba(0,0,0,.35);
+}
+
+.exit-box h3{
+font-size:24px;
+color:var(--espresso);
+margin-bottom:10px;
+}
+
+.exit-box p{
+color:#6b5140;
+margin-bottom:20px;
+}
+
+.exit-box button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:30px;
+background:var(--brass);
+color:var(--cocoa);
+font-weight:bold;
+cursor:pointer;
+margin-bottom:10px;
+}
+
+.exit-box .exit-close{
+background:none;
+color:#8a725c;
+text-decoration:underline;
+}
+
 @media(max-width:992px){
 
 .grid-products{
@@ -840,7 +1435,7 @@ font-size:12px;
 padding:8px 14px;
 }
 
-.card-img{
+.card-slider{
 height:280px;
 }
 
@@ -888,6 +1483,17 @@ font-size:22px;
 bottom:85px;
 }
 
+.tools-bar{
+flex-direction:column;
+}
+
+.search-box,
+.sort-box,
+.sort-box select{
+width:100%;
+max-width:100%;
+}
+
 }
 
 .customer-input{
@@ -922,16 +1528,66 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,.85);
+background:rgba(0,0,0,.9);
 z-index:99999;
 align-items:center;
 justify-content:center;
-cursor:zoom-out;
 }
 
 #imageViewer img{
-max-width:90%;
-max-height:90%;
+max-width:88%;
+max-height:82%;
+border-radius:16px;
+user-select:none;
+}
+
+.viewer-close{
+position:absolute;
+top:20px;
+left:20px;
+width:44px;
+height:44px;
+border-radius:50%;
+border:none;
+background:rgba(255,255,255,.15);
+color:white;
+font-size:20px;
+cursor:pointer;
+z-index:2;
+}
+
+.viewer-arrow{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+width:52px;
+height:52px;
+border-radius:50%;
+border:none;
+background:rgba(255,255,255,.15);
+color:white;
+font-size:22px;
+cursor:pointer;
+z-index:2;
+}
+
+.viewer-arrow:hover,
+.viewer-close:hover{
+background:rgba(255,255,255,.3);
+}
+
+.viewer-arrow.prev{ right:20px; }
+.viewer-arrow.next{ left:20px; }
+
+.viewer-counter{
+position:absolute;
+bottom:24px;
+left:50%;
+transform:translateX(-50%);
+color:white;
+font-size:14px;
+background:rgba(255,255,255,.15);
+padding:6px 16px;
 border-radius:20px;
 }
 
@@ -969,25 +1625,6 @@ z-index:900;
 box-shadow:0 10px 25px rgba(0,0,0,.25);
 }
 
-.mini-gallery{
-display:flex;
-gap:10px;
-margin-top:15px;
-}
-
-.mini-gallery img{
-width:70px;
-height:70px;
-object-fit:cover;
-border-radius:12px;
-cursor:zoom-in;
-transition:.3s;
-}
-
-.mini-gallery img:hover{
-transform:scale(1.1);
-}
-
 </style>
 </head>
 
@@ -1007,7 +1644,7 @@ VelaLight
 
 <div class="nav-buttons">
 
-<button class="cart-open-btn" onclick="openCart()" aria-label="السلة">
+<button class="cart-open-btn" onclick="openCart()" aria-label="فتح السلة">
 <span id="cartCount">0</span>
 </button>
 
@@ -1048,7 +1685,11 @@ target="_blank">
 <img class="hero-img"
 src="https://velalight.github.io/eeeee.jpg"
 alt="شموع VelaLight"
-onclick="openImage(this.src)">
+loading="lazy"
+tabindex="0"
+role="button"
+aria-label="تكبير صورة شموع VelaLight"
+onclick="openImageGallery(['https://velalight.github.io/eeeee.jpg'],0)">
 
 <div class="trust-bar">
 <div class="trust-item">🚚 توصيل لكل المحافظات</div>
@@ -1133,185 +1774,38 @@ VelaLight علامة متخصصة في صناعة الشموع اليدوية ا
 <p>اختاري قطعتك المفضلة</p>
 </div>
 
-<div class="grid-products">
+<div class="tools-bar">
 
-<!-- المنتج الأول -->
-
-<div class="card reveal">
-<span class="badge">🔥 الأكثر مبيعًا</span>
-<div class="card-img" onclick="openImage('https://velalight.github.io/2.jpg')">
-<img loading="lazy" src="https://velalight.github.io/2.jpg" alt="شمعة المنديلا">
-<span class="zoom-hint">اضغطي للتكبير 🔍</span>
+<div class="search-box">
+<input type="text" id="productSearch" placeholder="دوّري على منتج... 🔍" aria-label="البحث عن منتج">
+<i class="fa-solid fa-magnifying-glass"></i>
 </div>
 
-<div class="card-body">
-<h3>شمعة المنديلا 🕯️</h3>
-
-<p>الشمعة الأكثر طلبًا، مناسبة لكل أركان البيت.</p>
-
-<select id="scent1" class="customer-input">
-<option value="">اختاري العطر 🌸</option>
-<option>فانيلا 🍦</option>
-<option>موكا ☕</option>
-<option>كراميل 🍮</option>
-<option>قرفة 🤎</option>
-<option>عنبر 🤎</option>
-<option>عود 🤎</option>
-<option>لافندر 💜</option>
-<option>ورد 🌹</option>
+<div class="sort-box">
+<select id="sortSelect" aria-label="ترتيب المنتجات">
+<option value="bestselling">الأكثر مبيعًا</option>
+<option value="newest">الأحدث</option>
+<option value="price-asc">السعر: من الأقل للأعلى</option>
+<option value="price-desc">السعر: من الأعلى للأقل</option>
+<option value="rating">الأعلى تقييمًا</option>
 </select>
-
-<div class="price">375 جنيه</div>
-
-<div class="product-actions">
-<input class="product-qty" id="qty1" type="number" min="1" value="1">
-<button class="order-btn" id="btn1"
-onclick="addProductWithQty('شمعة المنديلا',375,'qty1','scent1','https://velalight.github.io/2.jpg','btn1')">
-أضف للسلة 🛒
-</button>
 </div>
 
 </div>
-</div>
 
+<div class="grid-products" id="productsGrid"></div>
 
-<!-- المنتج الثاني -->
-
-<div class="card reveal">
-<div class="card-img" onclick="openImage('https://velalight.github.io/eeeee.jpg')">
-<img loading="lazy" src="https://velalight.github.io/eeeee.jpg" alt="الشمعة الفاخرة">
-<span class="zoom-hint">اضغطي للتكبير 🔍</span>
-</div>
-
-<div class="card-body">
-<h3>الشمعة الفاخرة ✨</h3>
-
-<p>تصميم راقي يغير شكل المكان بالكامل.</p>
-
-<select id="scent2" class="customer-input">
-<option value="">اختاري العطر 🌸</option>
-<option>فانيلا 🍦</option>
-<option>موكا ☕</option>
-<option>كراميل 🍮</option>
-<option>قرفة 🤎</option>
-<option>عنبر 🤎</option>
-<option>عود 🤎</option>
-<option>لافندر 💜</option>
-<option>ورد 🌹</option>
-<option>ياسمين 🌸</option>
-</select>
-
-<div class="price">680 جنيه</div>
-
-<div class="product-actions">
-<input class="product-qty" id="qty2" type="number" min="1" value="1">
-<button class="order-btn" id="btn2"
-onclick="addProductWithQty('الشمعة الفاخرة',680,'qty2','scent2','https://velalight.github.io/eeeee.jpg','btn2')">
-أضف للسلة 🛒
-</button>
-</div>
-
-</div>
-</div>
-
-
-<!-- المنتج الثالث -->
-
-<div class="card reveal">
-<div class="card-img" onclick="openImage('https://velalight.github.io/q.jpg')">
-<img loading="lazy" src="https://velalight.github.io/q.jpg" alt="مجموعة نبضين">
-<span class="zoom-hint">اضغطي للتكبير 🔍</span>
-</div>
-
-<div class="card-body">
-<h3>مجموعة نبضين 🤎</h3>
-
-<select id="scent3" class="customer-input">
-<option value="">اختاري العطر 🌸</option>
-<option>فانيلا 🍦</option>
-<option>موكا ☕</option>
-<option>كراميل 🍮</option>
-<option>عنبر 🤎</option>
-<option>عود 🤎</option>
-<option>ورد 🌹</option>
-<option>مسك أبيض 🤍</option>
-</select>
-
-<p>تصميم مميز يجمع بين الجمال والرائحة الفاخرة.</p>
-
-<div class="mini-gallery">
-<img src="https://velalight.github.io/q.jpg" onclick="openImage(this.src)">
-<img src="https://velalight.github.io/q2.jpg" onclick="openImage(this.src)">
-<img src="https://velalight.github.io/q3.jpg" onclick="openImage(this.src)">
-</div>
-
-<div class="price">650 جنيه</div>
-
-<div class="product-actions">
-<input class="product-qty" id="qty3" type="number" min="1" value="1">
-<button class="order-btn" id="btn3"
-onclick="addProductWithQty('مجموعة نبضين',650,'qty3','scent3','https://velalight.github.io/q.jpg','btn3')">
-أضف للسلة 🛒
-</button>
-</div>
-
-</div>
-</div>
-
-
-<!-- المنتج الرابع -->
-
-<div class="card reveal">
-<div class="card-img" onclick="openImage('https://velalight.github.io/RRRRRR.jpg')">
-<img loading="lazy" src="https://velalight.github.io/RRRRRR.jpg" alt="كونتر الخشب الطبيعي">
-<span class="zoom-hint">اضغطي للتكبير 🔍</span>
-</div>
-
-<div class="card-body">
-<h3>كونتر الخشب الطبيعي 🤎</h3>
-
-<select id="scent4" class="customer-input">
-<option value="">اختاري العطر 🌸</option>
-<option>فانيلا 🍦</option>
-<option>قهوة ☕</option>
-<option>عود 🤎</option>
-<option>عنبر 🤎</option>
-<option>لافندر 💜</option>
-</select>
-
-<p>قطعة فنية من الخشب الطبيعي مع شموع معطرة.</p>
-
-<div class="mini-gallery">
-<img src="https://velalight.github.io/RRRRRR.jpg" onclick="openImage(this.src)">
-<img src="https://velalight.github.io/R2.jpg" onclick="openImage(this.src)">
-<img src="https://velalight.github.io/R3.jpg" onclick="openImage(this.src)">
-</div>
-
-<div class="price">650 جنيه</div>
-
-<div class="product-actions">
-<input class="product-qty" id="qty4" type="number" min="1" value="1">
-<button class="order-btn" id="btn4"
-onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4','scent4','https://velalight.github.io/RRRRRR.jpg','btn4')">
-أضف للسلة 🛒
-</button>
-</div>
-
-</div>
-</div>
-
-</div>
 </div>
 
 <div id="cartOverlay" onclick="closeCart()"></div>
 </section>
 
 
-<div class="cart-panel" id="cartPanel">
+<div class="cart-panel" id="cartPanel" role="dialog" aria-modal="true" aria-label="سلة الشراء">
 
 <div class="cart-title">
 <h2>🛒 سلة الشراء</h2>
-<button class="close-cart" onclick="closeCart()">✖</button>
+<button class="close-cart" onclick="closeCart()" aria-label="إغلاق السلة">✖</button>
 </div>
 
 <div id="cartItems"></div>
@@ -1476,6 +1970,28 @@ onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4','sc
 </section>
 
 
+<!-- ===== فيديو كواليس التصنيع ===== -->
+
+<section>
+<div class="wrap">
+
+<div class="section-head">
+<h2>من قلب الورشة 🎥</h2>
+<p>شاهدي شمعتك وهي بتتولد خطوة بخطوة</p>
+</div>
+
+<div class="video-box reveal">
+<!-- ضيفي رابط الفيديو الحقيقي هنا (mp4) أو استبدلي الفيديو بإمبيد إنستجرام/تيك توك -->
+<video controls preload="none" poster="https://velalight.github.io/eeeee.jpg" aria-label="فيديو كواليس تصنيع الشموع">
+<source src="ADD-YOUR-VIDEO-LINK.mp4" type="video/mp4">
+متصفحك لا يدعم تشغيل الفيديو.
+</video>
+</div>
+
+</div>
+</section>
+
+
 <!-- ===== آراء العملاء ===== -->
 
 <section class="testimonials">
@@ -1489,29 +2005,76 @@ onclick="addProductWithQty('كونتر الخشب الطبيعي',650,'qty4','sc
 <div class="polaroid-row">
 
 <div class="polaroid reveal">
-<img src="https://velalight.github.io/review1.jpg" alt="رأي عميل" onclick="openImage(this.src)">
+<img src="https://velalight.github.io/review1.jpg" alt="رأي عميل" loading="lazy" tabindex="0" role="button" aria-label="تكبير صورة رأي العميلة" onclick="openImageGallery(['https://velalight.github.io/review1.jpg'],0)">
 <div class="stars">★★★★★</div>
 </div>
 
 <div class="polaroid reveal">
-<img src="https://velalight.github.io/review2.jpg" alt="رأي عميل" onclick="openImage(this.src)">
+<img src="https://velalight.github.io/review2.jpg" alt="رأي عميل" loading="lazy" tabindex="0" role="button" aria-label="تكبير صورة رأي العميلة" onclick="openImageGallery(['https://velalight.github.io/review2.jpg'],0)">
 <div class="stars">★★★★★</div>
 </div>
 
 <div class="polaroid reveal">
-<img src="https://velalight.github.io/review3.jpg" alt="رأي عميل" onclick="openImage(this.src)">
+<img src="https://velalight.github.io/review3.jpg" alt="رأي عميل" loading="lazy" tabindex="0" role="button" aria-label="تكبير صورة رأي العميلة" onclick="openImageGallery(['https://velalight.github.io/review3.jpg'],0)">
 <div class="stars">★★★★★</div>
 </div>
 
 <div class="polaroid reveal">
-<img src="https://velalight.github.io/review4.jpg" alt="رأي عميل" onclick="openImage(this.src)">
+<img src="https://velalight.github.io/review4.jpg" alt="رأي عميل" loading="lazy" tabindex="0" role="button" aria-label="تكبير صورة رأي العميلة" onclick="openImageGallery(['https://velalight.github.io/review4.jpg'],0)">
 <div class="stars">★★★★★</div>
 </div>
 
 <div class="polaroid reveal">
-<img src="https://velalight.github.io/review5.jpg" alt="رأي عميل" onclick="openImage(this.src)">
+<img src="https://velalight.github.io/review5.jpg" alt="رأي عميل" loading="lazy" tabindex="0" role="button" aria-label="تكبير صورة رأي العميلة" onclick="openImageGallery(['https://velalight.github.io/review5.jpg'],0)">
 <div class="stars">★★★★★</div>
 </div>
+
+</div>
+</div>
+</section>
+
+
+<!-- ===== الأسئلة الشائعة ===== -->
+
+<section id="faq">
+<div class="wrap">
+
+<div class="section-head">
+<h2>الأسئلة الشائعة ❓</h2>
+<p>كل اللي محتاجة تعرفيه قبل الطلب</p>
+</div>
+
+<div class="faq-list">
+
+<details class="faq-item">
+<summary>كام مدة توصيل الأوردر؟</summary>
+<p>التوصيل داخل القاهرة والجيزة بياخد من 1 إلى 3 أيام عمل، وباقي المحافظات من 3 إلى 6 أيام عمل.</p>
+</details>
+
+<details class="faq-item">
+<summary>طرق الدفع المتاحة إيه؟</summary>
+<p>الدفع عند الاستلام، أو تحويل InstaPay قبل الشحن.</p>
+</details>
+
+<details class="faq-item">
+<summary>هل ينفع استبدال المنتج لو مش عاجبني؟</summary>
+<p>أيوه، عندنا سياسة استبدال خلال 3 أيام من الاستلام بشرط أن المنتج لم يُستخدم. التفاصيل في صفحة سياسة الاستبدال بالفوتر.</p>
+</details>
+
+<details class="faq-item">
+<summary>مدة اشتعال الشمعة قد إيه؟</summary>
+<p>حسب حجم الشمعة، بتتراوح بين 20 إلى 45 ساعة اشتعال متواصل.</p>
+</details>
+
+<details class="faq-item">
+<summary>الشموع آمنة على الأطفال والحيوانات الأليفة؟</summary>
+<p>الشموع مصنوعة من شمع صويا طبيعي وفتيلة قطنية، وننصح دائمًا بعدم تركها مشتعلة بدون إشراف وبعيدًا عن متناول الأطفال.</p>
+</details>
+
+<details class="faq-item">
+<summary>بتوصلوا لكل المحافظات؟</summary>
+<p>أيوه، بنوصل لكل محافظات مصر عن طريق شركات شحن موثوقة.</p>
+</details>
 
 </div>
 </div>
@@ -1566,6 +2129,13 @@ VelaLight
 
 <p>شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب</p>
 
+<div class="footer-links">
+<a href="contact.html">اتصلي بنا</a>
+<a href="exchange-policy.html">سياسة الاستبدال</a>
+<a href="privacy.html">سياسة الخصوصية</a>
+<a href="terms.html">شروط الاستخدام</a>
+</div>
+
 <p>© 2026 VelaLight — جميع الحقوق محفوظة</p>
 
 </div>
@@ -1574,23 +2144,27 @@ VelaLight
 
 <!-- ===== زر واتساب العائم ===== -->
 
-<a class="wa-float" href="https://wa.me/201223526105" target="_blank" aria-label="واتساب">📱</a>
+<a class="wa-float" href="https://wa.me/201223526105" target="_blank" aria-label="تواصل عبر واتساب">📱</a>
 
 
 <!-- ===== زر السلة العائم ===== -->
 
-<button class="floating-cart" onclick="openCart()" aria-label="السلة">🛒</button>
+<button class="floating-cart" onclick="openCart()" aria-label="فتح السلة">🛒</button>
 
 
 <!-- زر الصعود لأعلى -->
 
-<button id="topBtn" onclick="goTop()" aria-label="لأعلى">↑</button>
+<button id="topBtn" onclick="goTop()" aria-label="الرجوع لأعلى الصفحة">↑</button>
 
 
-<!-- تكبير الصورة -->
+<!-- تكبير الصورة الاحترافي -->
 
-<div id="imageViewer" onclick="closeImage()">
-<img id="bigImage">
+<div id="imageViewer" role="dialog" aria-modal="true" aria-label="عرض الصورة">
+<button class="viewer-close" onclick="closeImage()" aria-label="إغلاق">✖</button>
+<button class="viewer-arrow prev" id="viewerPrev" onclick="viewerNav(1)" aria-label="الصورة السابقة">›</button>
+<img id="bigImage" alt="عرض مكبر">
+<button class="viewer-arrow next" id="viewerNext" onclick="viewerNav(-1)" aria-label="الصورة التالية">‹</button>
+<div class="viewer-counter" id="viewerCounter"></div>
 </div>
 
 
@@ -1599,41 +2173,386 @@ VelaLight
 <div class="toast" id="toast">تمت الإضافة للسلة ✅</div>
 
 
+<!-- نافذة تذكير السلة -->
+
+<div class="exit-modal" id="exitModal">
+<div class="exit-box">
+<h3>🎁 لسه فيه منتجات في سلتك!</h3>
+<p>متنسيش تكملي طلبك قبل ما ينفد المخزون</p>
+<button onclick="openCart(); closeExitModal();">أكملي طلبك الآن</button>
+<button class="exit-close" onclick="closeExitModal()">لا شكرًا</button>
+</div>
+</div>
+
+
 <script>
 
-/* ===== زر الصعود لأعلى ===== */
+/* =========================================================
+   بيانات المنتجات — لإضافة منتج جديد، ضيفي عنصر جديد هنا بس
+   ========================================================= */
 
-window.addEventListener("scroll", function(){
-let btn = document.getElementById("topBtn");
-if(document.documentElement.scrollTop > 400){
-btn.style.display = "flex";
+const PRODUCTS = [
+{
+id:1,
+name:"شمعة المنديلا",
+images:["https://velalight.github.io/2.jpg"],
+price:375,
+oldPrice:null,
+badge:"🔥 الأكثر مبيعًا",
+desc:"الشمعة الأكثر طلبًا، مناسبة لكل أركان البيت.",
+scents:["فانيلا 🍦","موكا ☕","كراميل 🍮","قرفة 🤎","عنبر 🤎","عود 🤎","لافندر 💜","ورد 🌹"],
+stock:{status:"available", count:null},
+rating:4.9,
+reviewsCount:128,
+sales:320,
+dateAdded:"2025-11-01",
+reviews:[
+{name:"سارة", stars:5, text:"الرائحة ثابتة جدًا وبتفضل موجودة ساعات طويلة."},
+{name:"منى", stars:5, text:"شكلها فخم جدًا واتغلفت بشكل راقي."}
+]
+},
+{
+id:2,
+name:"الشمعة الفاخرة",
+images:["https://velalight.github.io/eeeee.jpg"],
+price:680,
+oldPrice:850,
+badge:null,
+desc:"تصميم راقي يغير شكل المكان بالكامل.",
+scents:["فانيلا 🍦","موكا ☕","كراميل 🍮","قرفة 🤎","عنبر 🤎","عود 🤎","لافندر 💜","ورد 🌹","ياسمين 🌸"],
+stock:{status:"low", count:3},
+rating:5.0,
+reviewsCount:76,
+sales:210,
+dateAdded:"2026-01-15",
+reviews:[
+{name:"ندى", stars:5, text:"أحلى هدية قدمتها، الريحة فخمة والحجم كبير."},
+{name:"إيمان", stars:5, text:"استحقت كل جنيه فيها، خامة ممتازة."}
+]
+},
+{
+id:3,
+name:"مجموعة نبضين",
+images:["https://velalight.github.io/q.jpg","https://velalight.github.io/q2.jpg","https://velalight.github.io/q3.jpg"],
+price:650,
+oldPrice:750,
+badge:null,
+desc:"تصميم مميز يجمع بين الجمال والرائحة الفاخرة.",
+scents:["فانيلا 🍦","موكا ☕","كراميل 🍮","عنبر 🤎","عود 🤎","ورد 🌹","مسك أبيض 🤍"],
+stock:{status:"available", count:null},
+rating:4.7,
+reviewsCount:54,
+sales:150,
+dateAdded:"2026-03-01",
+reviews:[
+{name:"هبة", stars:5, text:"شكل المجموعة تحفة والتغليف كان مرتب جدًا."},
+{name:"ريهام", stars:4, text:"جميلة جدًا بس تمنيت العطر يكون أقوى شوية."}
+]
+},
+{
+id:4,
+name:"كونتر الخشب الطبيعي",
+images:["https://velalight.github.io/RRRRRR.jpg","https://velalight.github.io/R2.jpg","https://velalight.github.io/R3.jpg"],
+price:650,
+oldPrice:null,
+badge:null,
+desc:"قطعة فنية من الخشب الطبيعي مع شموع معطرة.",
+scents:["فانيلا 🍦","قهوة ☕","عود 🤎","عنبر 🤎","لافندر 💜"],
+stock:{status:"out", count:0},
+rating:4.8,
+reviewsCount:39,
+sales:90,
+dateAdded:"2026-06-01",
+reviews:[
+{name:"داليا", stars:5, text:"من أرقى القطع اللي جربتها، مناسبة جدًا كديكور."}
+]
+}
+];
+
+let currentQuery = "";
+let currentSort = "bestselling";
+const sliderState = {};
+
+/* ===== محرك البحث والترتيب ===== */
+
+function getVisibleProducts(){
+
+let list = PRODUCTS.slice();
+
+if(currentQuery.trim() !== ""){
+let q = currentQuery.trim();
+list = list.filter(function(p){
+return p.name.indexOf(q) !== -1 || p.desc.indexOf(q) !== -1;
+});
+}
+
+switch(currentSort){
+case "price-asc":
+list.sort(function(a,b){ return a.price - b.price; });
+break;
+case "price-desc":
+list.sort(function(a,b){ return b.price - a.price; });
+break;
+case "rating":
+list.sort(function(a,b){ return b.rating - a.rating; });
+break;
+case "newest":
+list.sort(function(a,b){ return new Date(b.dateAdded) - new Date(a.dateAdded); });
+break;
+default:
+list.sort(function(a,b){ return b.sales - a.sales; });
+}
+
+return list;
+
+}
+
+function starsHTML(rating){
+let full = Math.round(rating);
+let out = "";
+for(let i=0;i<5;i++){
+out += i < full ? "★" : "☆";
+}
+return out;
+}
+
+function stockHTML(p){
+if(p.stock.status === "out"){
+return '<div class="stock-line stock-out">🔴 نفد من المخزون</div>';
+}
+if(p.stock.status === "low"){
+return '<div class="stock-line stock-low">🟠 متبقي ' + p.stock.count + ' فقط</div>';
+}
+return '<div class="stock-line stock-available">🟢 متوفر الآن</div>';
+}
+
+function priceHTML(p){
+
+if(p.oldPrice && p.oldPrice > p.price){
+let discount = Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100);
+let saved = p.oldPrice - p.price;
+return '<div class="price">' +
+'<span>' + p.price + ' جنيه</span>' +
+'<span class="old-price">' + p.oldPrice + ' جنيه</span>' +
+'<span class="save-badge">🔥 خصم ' + discount + '% - وفرتي ' + saved + ' جنيه</span>' +
+'</div>';
+}
+
+return '<div class="price"><span>' + p.price + ' جنيه</span></div>';
+
+}
+
+function sliderHTML(p){
+
+let imgs = p.images.map(function(src,i){
+return '<img src="' + src + '" alt="' + p.name + '" loading="lazy" data-action="zoom" data-id="' + p.id + '" data-idx="' + i + '">';
+}).join("");
+
+let dots = p.images.length > 1 ? p.images.map(function(_,i){
+return '<span class="' + (i===0 ? "active" : "") + '"></span>';
+}).join("") : "";
+
+let arrows = p.images.length > 1 ?
+'<button class="slider-arrow prev" data-action="slide" data-dir="-1" data-id="' + p.id + '" aria-label="الصورة السابقة">›</button>' +
+'<button class="slider-arrow next" data-action="slide" data-dir="1" data-id="' + p.id + '" aria-label="الصورة التالية">‹</button>'
+: "";
+
+return '<div class="card-slider" id="slider-' + p.id + '">' +
+'<div class="slider-track" id="track-' + p.id + '" style="transform:translateX(0)">' + imgs + '</div>' +
+arrows +
+'<div class="slider-dots">' + dots + '</div>' +
+'<div class="zoom-hint">اضغطي للتكبير 🔍</div>' +
+'</div>';
+
+}
+
+function scentOptionsHTML(p, selected){
+let out = '<option value="">اختاري العطر 🌸</option>';
+p.scents.forEach(function(s){
+out += '<option' + (s===selected ? ' selected' : '') + '>' + s + '</option>';
+});
+return out;
+}
+
+function reviewsHTML(p){
+
+let items = p.reviews.map(function(r){
+return '<div class="review-item">' +
+'<div class="stars">' + "★".repeat(r.stars) + "☆".repeat(5-r.stars) + '</div>' +
+'<p>"' + r.text + '"</p>' +
+'<div class="rname">- ' + r.name + '</div>' +
+'</div>';
+}).join("");
+
+return '<button class="reviews-toggle" data-action="toggle-reviews" data-id="' + p.id + '">عرض تقييمات العميلات (' + p.reviewsCount + ') ▾</button>' +
+'<div class="reviews-list" id="reviews-' + p.id + '">' + items + '</div>';
+
+}
+
+function relatedHTML(p){
+
+let others = PRODUCTS.filter(function(x){ return x.id !== p.id; }).slice(0,3);
+
+if(others.length === 0) return "";
+
+let strip = others.map(function(o){
+return '<div class="related-mini" data-action="goto" data-id="' + o.id + '">' +
+'<img src="' + o.images[0] + '" alt="' + o.name + '" loading="lazy">' +
+'<span>' + o.name + '</span>' +
+'</div>';
+}).join("");
+
+return '<div class="related-box"><h4>قد يعجبك أيضًا 👇</h4><div class="related-strip">' + strip + '</div></div>';
+
+}
+
+function cardHTML(p){
+
+let disabled = p.stock.status === "out" ? "disabled" : "";
+let btnLabel = p.stock.status === "out" ? "نفد من المخزون" : "أضف للسلة 🛒";
+let buyLabel = p.stock.status === "out" ? "غير متاح حاليًا" : "اشترِ الآن ⚡";
+
+return '<div class="card reveal active" id="prod-' + p.id + '">' +
+(p.badge ? '<span class="badge">' + p.badge + '</span>' : '') +
+(p.oldPrice && p.oldPrice > p.price ? '<span class="badge-discount">خصم</span>' : '') +
+sliderHTML(p) +
+'<div class="card-body">' +
+'<h3>' + p.name + '</h3>' +
+'<div class="rating-row"><span class="stars">' + starsHTML(p.rating) + '</span><span>' + p.rating.toFixed(1) + ' (' + p.reviewsCount + ' تقييم)</span></div>' +
+'<p class="desc">' + p.desc + '</p>' +
+stockHTML(p) +
+'<select class="customer-input scent-select" id="scent' + p.id + '" data-id="' + p.id + '">' + scentOptionsHTML(p,"") + '</select>' +
+priceHTML(p) +
+'<div class="product-actions">' +
+'<input class="product-qty" id="qty' + p.id + '" type="number" min="1" value="1">' +
+'<button class="order-btn" id="btn' + p.id + '" data-action="add" data-id="' + p.id + '" ' + disabled + '>' + btnLabel + '</button>' +
+'</div>' +
+'<button class="buy-now-btn" data-action="buy-now" data-id="' + p.id + '" ' + disabled + '>' + buyLabel + '</button>' +
+'<div class="share-row">' +
+'<button class="share-btn" data-action="share-wa" data-id="' + p.id + '"><i class="fab fa-whatsapp"></i> واتساب</button>' +
+'<button class="share-btn" data-action="share-fb" data-id="' + p.id + '"><i class="fab fa-facebook-f"></i> فيسبوك</button>' +
+'<button class="share-btn" data-action="share-copy" data-id="' + p.id + '"><i class="fa-solid fa-link"></i> نسخ الرابط</button>' +
+'</div>' +
+reviewsHTML(p) +
+relatedHTML(p) +
+'</div>' +
+'</div>';
+
+}
+
+function renderProducts(){
+
+let list = getVisibleProducts();
+let grid = document.getElementById("productsGrid");
+
+if(list.length === 0){
+grid.innerHTML = '<div class="no-results">لا توجد منتجات مطابقة لبحثك 🔍<br>جربي كلمة مختلفة</div>';
+return;
+}
+
+grid.innerHTML = list.map(cardHTML).join("");
+
+}
+
+/* ===== أحداث البحث والترتيب ===== */
+
+document.getElementById("productSearch").addEventListener("input", function(e){
+currentQuery = e.target.value;
+renderProducts();
+});
+
+document.getElementById("sortSelect").addEventListener("change", function(e){
+currentSort = e.target.value;
+renderProducts();
+});
+
+/* ===== تفويض الأحداث (Event Delegation) داخل شبكة المنتجات ===== */
+
+document.getElementById("productsGrid").addEventListener("click", function(e){
+
+let el = e.target.closest("[data-action]");
+if(!el) return;
+
+let action = el.dataset.action;
+let id = parseInt(el.dataset.id);
+let product = PRODUCTS.find(function(p){ return p.id === id; });
+
+if(action === "add"){
+addToCart(product);
+}
+
+if(action === "buy-now"){
+buyNow(product);
+}
+
+if(action === "slide"){
+slideProduct(product, parseInt(el.dataset.dir));
+}
+
+if(action === "zoom"){
+let idx = parseInt(el.dataset.idx);
+openImageGallery(product.images, idx);
+}
+
+if(action === "toggle-reviews"){
+let box = document.getElementById("reviews-" + id);
+box.classList.toggle("open");
+el.textContent = box.classList.contains("open") ? "إخفاء التقييمات ▴" : "عرض تقييمات العميلات (" + product.reviewsCount + ") ▾";
+}
+
+if(action === "goto"){
+let target = document.getElementById("prod-" + id);
+if(target){
+target.scrollIntoView({behavior:"smooth", block:"center"});
+target.classList.add("flash");
+setTimeout(function(){ target.classList.remove("flash"); },1000);
+}
+}
+
+if(action === "share-wa"){
+let url = location.href.split("#")[0] + "#prod-" + id;
+let text = "شوفي شمعة " + product.name + " من VelaLight 🕯️ بسعر " + product.price + " جنيه: " + url;
+window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank");
+}
+
+if(action === "share-fb"){
+let url = location.href.split("#")[0] + "#prod-" + id;
+window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "_blank");
+}
+
+if(action === "share-copy"){
+let url = location.href.split("#")[0] + "#prod-" + id;
+if(navigator.clipboard){
+navigator.clipboard.writeText(url).then(function(){
+showToast("تم نسخ رابط المنتج 🔗");
+});
 }else{
-btn.style.display = "none";
+showToast("انسخي رابط الصفحة يدويًا 🔗");
 }
-});
-
-function goTop(){
-window.scrollTo({ top:0, behavior:"smooth" });
 }
 
-/* ===== ظهور العناصر عند التمرير ===== */
+});
 
-document.addEventListener("DOMContentLoaded", function(){
-let items = document.querySelectorAll(".reveal");
-let observer = new IntersectionObserver(function(entries){
-entries.forEach(function(entry){
-if(entry.isIntersecting){
-entry.target.classList.add("active");
+function slideProduct(p, dir){
+
+if(!sliderState[p.id]) sliderState[p.id] = 0;
+
+let total = p.images.length;
+sliderState[p.id] = (sliderState[p.id] + (dir>0?1:-1) + total) % total;
+
+let track = document.getElementById("track-" + p.id);
+track.style.transform = "translateX(-" + (sliderState[p.id] * 100) + "%)";
+
+let dots = document.querySelectorAll("#slider-" + p.id + " .slider-dots span");
+dots.forEach(function(d,i){
+d.classList.toggle("active", i === sliderState[p.id]);
+});
+
 }
-});
-},{threshold:0.15});
-items.forEach(function(item){ observer.observe(item); });
-});
 
-/* ===== السلة ===== */
-
-// لمسح السلة القديمة مرة واحدة عند الحاجة
-// localStorage.removeItem("velaCart");
+/* =========================================================
+   السلة
+   ========================================================= */
 
 try{
 cart = JSON.parse(localStorage.getItem("velaCart")) || [];
@@ -1653,6 +2572,23 @@ localStorage.setItem("velaCart", JSON.stringify(cart));
 }catch(e){}
 }
 
+function playDing(){
+try{
+let ctx = new (window.AudioContext || window.webkitAudioContext)();
+let o = ctx.createOscillator();
+let g = ctx.createGain();
+o.type = "sine";
+o.frequency.setValueAtTime(880, ctx.currentTime);
+o.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
+g.gain.setValueAtTime(0.15, ctx.currentTime);
+g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+o.connect(g);
+g.connect(ctx.destination);
+o.start();
+o.stop(ctx.currentTime + 0.25);
+}catch(e){}
+}
+
 function showToast(text){
 let toast = document.getElementById("toast");
 toast.textContent = text;
@@ -1662,48 +2598,54 @@ toast.classList.remove("show");
 },1800);
 }
 
-function addProductWithQty(name,price,inputId,scentId,img,btnId){
+function bumpCartIcons(){
+let count = document.getElementById("cartCount");
+let floating = document.querySelector(".floating-cart");
+[count, floating].forEach(function(elm){
+if(!elm) return;
+elm.classList.remove("bump");
+void elm.offsetWidth;
+elm.classList.add("bump");
+});
+}
 
-let qty = parseInt(document.getElementById(inputId).value);
-let selectedScent = "";
+function addToCart(product){
 
-if(scentId){
-selectedScent = document.getElementById(scentId).value;
-if(selectedScent==""){
+let scentSelect = document.getElementById("scent" + product.id);
+let selectedScent = scentSelect ? scentSelect.value : "";
+
+if(product.scents.length > 0 && selectedScent === ""){
 alert("من فضلك اختاري العطر أولاً");
 return;
 }
-}
 
-if(!qty || qty < 1){
-qty = 1;
-}
+let qtyInput = document.getElementById("qty" + product.id);
+let qty = parseInt(qtyInput.value);
+if(!qty || qty < 1) qty = 1;
 
-let product = cart.find(function(item){ 
-return item.name === name && item.scent === selectedScent;
+let existing = cart.find(function(item){
+return item.name === product.name && item.scent === selectedScent;
 });
 
-if(product){
-
-product.qty += qty;
-
+if(existing){
+existing.qty += qty;
 }else{
-
 cart.push({
-name:name,
-price:price,
+name:product.name,
+price:product.price,
 qty:qty,
 scent:selectedScent,
-img:img
+img:product.images[0]
 });
-
 }
 
 saveCart();
 updateCart();
+bumpCartIcons();
+playDing();
 
-if(btnId){
-let btn = document.getElementById(btnId);
+let btn = document.getElementById("btn" + product.id);
+if(btn){
 let original = btn.innerHTML;
 btn.classList.add("added");
 btn.innerHTML = "تمت الإضافة ✔";
@@ -1713,7 +2655,39 @@ btn.innerHTML = original;
 },1200);
 }
 
-showToast("تمت إضافة " + name + " للسلة 🛒");
+showToast("تمت إضافة " + product.name + " للسلة 🛒");
+
+}
+
+function buyNow(product){
+
+let scentSelect = document.getElementById("scent" + product.id);
+let selectedScent = scentSelect ? scentSelect.value : "";
+
+if(product.scents.length > 0 && selectedScent === ""){
+alert("من فضلك اختاري العطر أولاً");
+return;
+}
+
+let qtyInput = document.getElementById("qty" + product.id);
+let qty = parseInt(qtyInput.value);
+if(!qty || qty < 1) qty = 1;
+
+cart = [{
+name:product.name,
+price:product.price,
+qty:qty,
+scent:selectedScent,
+img:product.images[0]
+}];
+
+saveCart();
+updateCart();
+openCart();
+
+setTimeout(function(){
+document.getElementById("customerName").focus();
+},450);
 
 }
 
@@ -1752,19 +2726,20 @@ box.innerHTML += `
 <div class="cart-item">
 <img class="cart-thumb" 
 src="${item.img || 'https://velalight.github.io/eeeee.jpg'}" 
-alt="${item.name}">
+alt="${item.name}"
+loading="lazy">
 <div class="cart-item-body">
 <h3>${item.name}</h3>
 <p>السعر: ${item.price} جنيه × ${item.qty} = ${sum} جنيه</p>
 
 <div style="display:flex;align-items:center;gap:8px;margin:8px 0;">
-<button class="qty-btn" onclick="decrease(${index})">-</button>
+<button class="qty-btn" onclick="decrease(${index})" aria-label="تقليل الكمية">-</button>
 <span style="font-size:16px;font-weight:bold;">${item.qty}</span>
-<button class="qty-btn" onclick="increase(${index})">+</button>
-<button class="qty-btn" onclick="removeProduct(${index})">🗑</button>
+<button class="qty-btn" onclick="increase(${index})" aria-label="زيادة الكمية">+</button>
+<button class="qty-btn" onclick="removeProduct(${index})" aria-label="حذف المنتج">🗑</button>
 </div>
 
-<select onchange="changeScent(${index},this.value)">
+<select onchange="changeScent(${index},this.value)" aria-label="تغيير العطر">
 ${optionsHtml}
 </select>
 
@@ -1787,14 +2762,12 @@ saveCart();
 }
 
 function increase(index){
-
 if(cart[index]){
 cart[index].qty++;
 }
-
 updateCart();
-
 }
+
 function decrease(index){
 cart[index].qty--;
 if(cart[index].qty<=0){
@@ -1816,21 +2789,68 @@ updateCart();
 }
 }
 
-/* ===== تكبير الصور ===== */
+/* =========================================================
+   تكبير الصور الاحترافي (سابق / تالي / إغلاق / سحب باللمس)
+   ========================================================= */
 
-function openImage(src){
-document.getElementById("bigImage").src = src;
+let viewerImages = [];
+let viewerIndex = 0;
+
+function openImageGallery(images, index){
+viewerImages = images;
+viewerIndex = index || 0;
+renderViewer();
 document.getElementById("imageViewer").style.display = "flex";
+}
+
+function renderViewer(){
+document.getElementById("bigImage").src = viewerImages[viewerIndex];
+let multi = viewerImages.length > 1;
+document.getElementById("viewerPrev").style.display = multi ? "flex" : "none";
+document.getElementById("viewerNext").style.display = multi ? "flex" : "none";
+document.getElementById("viewerCounter").style.display = multi ? "block" : "none";
+document.getElementById("viewerCounter").textContent = (viewerIndex+1) + " / " + viewerImages.length;
+}
+
+function viewerNav(dir){
+let total = viewerImages.length;
+viewerIndex = (viewerIndex + (dir>0?1:-1) + total) % total;
+renderViewer();
 }
 
 function closeImage(){
 document.getElementById("imageViewer").style.display = "none";
 }
 
+document.addEventListener("keydown", function(e){
+let viewer = document.getElementById("imageViewer");
+if(viewer.style.display === "flex"){
+if(e.key === "Escape") closeImage();
+if(e.key === "ArrowRight") viewerNav(1);
+if(e.key === "ArrowLeft") viewerNav(-1);
+}
+if(e.key === "Escape"){
+closeCart();
+closeExitModal();
+}
+});
+
+let touchStartX = 0;
+document.getElementById("imageViewer").addEventListener("touchstart", function(e){
+touchStartX = e.touches[0].clientX;
+});
+document.getElementById("imageViewer").addEventListener("touchend", function(e){
+let diff = e.changedTouches[0].clientX - touchStartX;
+if(Math.abs(diff) > 50){
+viewerNav(diff > 0 ? -1 : 1);
+}
+});
+
 /* ===== فتح وغلق السلة ===== */
 
 function openCart(){
 updateCart();
+prefillCustomer();
 document.getElementById("cartPanel").classList.add("active");
 document.getElementById("cartOverlay").classList.add("active");
 }
@@ -1840,10 +2860,22 @@ document.getElementById("cartPanel").classList.remove("active");
 document.getElementById("cartOverlay").classList.remove("active");
 }
 
+/* ===== حفظ بيانات العميل تلقائيًا ===== */
+
+function prefillCustomer(){
+try{
+let saved = JSON.parse(localStorage.getItem("velaCustomer"));
+if(saved){
+document.getElementById("customerName").value = saved.name || "";
+document.getElementById("customerPhone").value = saved.phone || "";
+document.getElementById("customerAddress").value = saved.address || "";
+}
+}catch(e){}
+}
+
 /* ===== إتمام الطلب ===== */
 
 function generateOrderNumber(){
-let d = new Date();
 return "VL-" + Date.now();
 }
 
@@ -1936,6 +2968,10 @@ try{
 localStorage.setItem("velaOrders", JSON.stringify(orders));
 }catch(e){}
 
+try{
+localStorage.setItem("velaCustomer", JSON.stringify({name:name, phone:phone, address:address}));
+}catch(e){}
+
 window.open("https://wa.me/201223526105?text="+encodeURIComponent(msg), "_blank");
 
 alert("تم تجهيز طلبك بنجاح 🕯️ سيتم فتح واتساب الآن لإرساله");
@@ -1950,9 +2986,6 @@ updateCart();
 
 document.getElementById("cartCount").innerHTML = 0;
 
-document.getElementById("customerName").value = "";
-document.getElementById("customerPhone").value = "";
-document.getElementById("customerAddress").value = "";
 document.getElementById("customDetails").value = "";
 document.getElementById("customerNote").value = "";
 document.getElementById("paymentMethod").selectedIndex = 0;
@@ -1961,11 +2994,119 @@ closeCart();
 
 }
 
-window.onload = function(){
+/* =========================================================
+   تذكير السلة عند محاولة مغادرة الصفحة (Exit Intent)
+   ========================================================= */
 
-updateCart();
+function closeExitModal(){
+document.getElementById("exitModal").classList.remove("active");
+}
 
+document.addEventListener("mouseout", function(e){
+if(e.clientY <= 0 && cart.length > 0 && !sessionStorage.getItem("exitShown")){
+document.getElementById("exitModal").classList.add("active");
+sessionStorage.setItem("exitShown","1");
+}
+});
+
+// نسخة موبايل: تنبيه واحد لو المستخدمة قربت من الفوتر وعندها منتجات لسه ملحقتش تطلبها
+let exitFooterObserver = new IntersectionObserver(function(entries){
+entries.forEach(function(entry){
+if(entry.isIntersecting && cart.length > 0 && !sessionStorage.getItem("exitShown")){
+document.getElementById("exitModal").classList.add("active");
+sessionStorage.setItem("exitShown","1");
+}
+});
+},{threshold:0.4});
+
+document.addEventListener("DOMContentLoaded", function(){
+let footerEl = document.querySelector("footer");
+if(footerEl) exitFooterObserver.observe(footerEl);
+});
+
+/* ===== زر الصعود لأعلى ===== */
+
+window.addEventListener("scroll", function(){
+let btn = document.getElementById("topBtn");
+if(document.documentElement.scrollTop > 400){
+btn.style.display = "flex";
+}else{
+btn.style.display = "none";
+}
+});
+
+function goTop(){
+window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+/* ===== ظهور العناصر عند التمرير ===== */
+
+document.addEventListener("DOMContentLoaded", function(){
+let observer = new IntersectionObserver(function(entries){
+entries.forEach(function(entry){
+if(entry.isIntersecting){
+entry.target.classList.add("active");
+}
+});
+},{threshold:0.15});
+
+document.querySelectorAll(".reveal").forEach(function(item){
+observer.observe(item);
+});
+});
+
+/* ===== دعم لوحة المفاتيح للعناصر القابلة للتكبير ===== */
+
+document.addEventListener("keydown", function(e){
+if((e.key === "Enter" || e.key === " ") && document.activeElement){
+if(document.activeElement.getAttribute("role") === "button"){
+e.preventDefault();
+document.activeElement.click();
+}
+}
+});
+
+/* ===== تسجيل الـ Service Worker (PWA) ===== */
+
+if("serviceWorker" in navigator){
+window.addEventListener("load", function(){
+navigator.serviceWorker.register("sw.js").catch(function(){});
+});
+}
+
+/* ===== تعبئة Schema.org للمنتجات ديناميكيًا ===== */
+
+(function fillProductSchema(){
+let graph = PRODUCTS.map(function(p){
+return {
+"@type":"Product",
+"name":p.name,
+"image":p.images,
+"description":p.desc,
+"offers":{
+"@type":"Offer",
+"priceCurrency":"EGP",
+"price":p.price,
+"availability": p.stock.status === "out" ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"
+},
+"aggregateRating":{
+"@type":"AggregateRating",
+"ratingValue":p.rating,
+"reviewCount":p.reviewsCount
+}
 };
+});
+let schemaTag = document.getElementById("productsSchema");
+let data = JSON.parse(schemaTag.textContent);
+data["@graph"] = graph;
+schemaTag.textContent = JSON.stringify(data);
+})();
+
+/* ===== التشغيل الأولي ===== */
+
+renderProducts();
+updateCart();
+prefillCustomer();
 
 </script>
 
