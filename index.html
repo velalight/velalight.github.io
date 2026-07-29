@@ -476,8 +476,46 @@ font-weight:bold;
 }
 
 /* ===== HERO ===== */
+@media(max-width:768px){
 
-.hero{
+.hero-layout{
+grid-template-columns:1fr;
+}
+
+.hero-cards{
+margin-top:25px;
+}
+
+}
+
+.hero .wrap{
+width:100%;
+}
+
+.hero-cards{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-top:30px;
+}
+
+.hero-card{
+background:rgba(255,255,255,.65);
+border:1px solid rgba(184,135,74,.25);
+border-radius:20px;
+padding:18px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+font-size:14px;
+}
+
+.hero-card h3{
+font-size:20px;
+margin-bottom:10px;
+}
+
+.candle-scene{
+flex-shrink:0;
+}
 padding:70px 0 40px;
 text-align:center;
 background:
@@ -1928,12 +1966,17 @@ rel="noopener noreferrer">
 <div class="candle-body"></div>
 </div>
 
+<div class="hero-content">
+
 <a class="btn-glow"
 href="#products">
 اكتشف مجموعة الشموع المبهرة
 </a>
 
-<div class="hero-side">
+</div>
+</div>
+
+<div class="hero-cards">
 <div class="hero-cards">
 
 <div class="hero-card">
@@ -1970,7 +2013,23 @@ VelaLight علامة متخصصة في صناعة الشموع اليدوية ا
 
 </div>
 </section>
+.hero-layout{
+display:grid;
+grid-template-columns:1fr 1.2fr;
+align-items:center;
+gap:35px;
+}
 
+.hero-cards{
+display:grid;
+grid-template-columns:1fr;
+gap:15px;
+margin-top:0;
+}
+
+.hero-card{
+min-height:120px;
+}
 <!-- ===== من نحن ===== -->
 
 <section>
