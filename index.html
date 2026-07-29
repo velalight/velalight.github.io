@@ -514,38 +514,22 @@ box-shadow:0 25px 50px rgba(43,27,18,.25);
 cursor:zoom-in;
 }
 
-.hero-cards{
+
+.trust-mini{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:25px;
-margin-top:50px;
+gap:10px;
+margin-top:25px;
 }
 
-.hero-card{
+.trust-mini div{
 background:#fff;
-padding:28px;
-border-radius:22px;
-box-shadow:0 10px 35px rgba(0,0,0,.08);
-border:1px solid rgba(0,0,0,.06);
-transition:.35s;
+border-radius:15px;
+padding:12px 5px;
+text-align:center;
+font-size:13px;
+box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
-
-.hero-card:hover{
-transform:translateY(-8px);
-box-shadow:0 18px 45px rgba(0,0,0,.12);
-}
-
-.hero-card h3{
-margin-bottom:18px;
-font-size:26px;
-color:var(--espresso);
-}
-
-.hero-card p{
-line-height:2;
-color:#555;
-}
-
 .feature,
 .trust-item{
 padding:12px 0;
@@ -1859,6 +1843,17 @@ bottom:20px;
 }
 }
 
+@media(max-width:768px){
+
+.trust-mini{
+grid-template-columns:repeat(3,1fr);
+}
+
+.trust-mini div{
+font-size:11px;
+}
+
+}
 </style>
 </head>
 
@@ -1930,97 +1925,24 @@ href="#products">
 اكتشف مجموعة الشموع المبهرة
 </a>
 
-<div class="hero-cards">
+<div class="trust-mini">
 
-<div class="hero-card">
-<h3>🤎 من نحن</h3>
-<p>
-VelaLight علامة متخصصة في صناعة الشموع اليدوية الفاخرة.
-نصنع كل شمعة بحب واهتمام بالتفاصيل لنقدم تجربة دافئة تضيف جمالًا لكل مكان.
-</p>
+<div>
+🚚<br>
+توصيل لكل المحافظات
 </div>
 
-<div class="hero-card">
-<h3>✨ ليه تختاري VelaLight؟</h3>
-
-<div class="feature">🌿 خامات طبيعية 100%</div>
-<div class="feature">✋ صناعة يدوية بعناية</div>
-<div class="feature">🚚 شحن سريع وآمن</div>
-<div class="feature">💯 ضمان استبدال</div>
-
+<div>
+🔒<br>
+دفع آمن 100%
 </div>
 
-<div class="hero-card">
-
-<div class="trust-item">🚚 توصيل لكل المحافظات</div>
-<div class="trust-item">🔒 دفع آمن 100%</div>
-<div class="trust-item">🎁 تغليف هدايا مجاني</div>
-<div class="trust-item">⭐ +500 عميلة راضية</div>
-
+<div>
+🎁<br>
+تغليف هدايا مجاني
 </div>
 
 </div>
-
-</section>
-
-
-<!-- ===== من نحن ===== -->
-
-<section>
-<div class="wrap">
-<div class="about-box reveal">
-
-<h2>
-من نحن 🤎
-</h2>
-
-<p>
-VelaLight علامة متخصصة في صناعة الشموع اليدوية الفاخرة.
-نصنع كل شمعة بحب واهتمام بالتفاصيل، بداية من اختيار الخامات وحتى اختيار العطور،
-لنقدم تجربة دافئة تضيف جمال وراحة لكل مكان.
-</p>
-
-</div>
-</div>
-</section>
-
-
-<!-- ===== لماذا VelaLight ===== -->
-
-<section>
-<div class="wrap">
-
-<div class="section-head">
-<h2>ليه تختاري VelaLight؟</h2>
-<p>مش مجرد شمعة... تجربة كاملة</p>
-</div>
-
-<div class="grid-why">
-
-<div class="why-item reveal">
-<div class="icon">🌿</div>
-<h3>خامات طبيعية 100%</h3>
-<p>شمع صويا نقي وفتائل قطنية آمنة على صحتك وبيتك</p>
-</div>
-
-<div class="why-item reveal">
-<div class="icon">✋</div>
-<h3>صناعة يدوية بعناية</h3>
-<p>كل قطعة بتتصنع وتتغلف بإيد فريقنا خطوة بخطوة</p>
-</div>
-
-<div class="why-item reveal">
-<div class="icon">🚚</div>
-<h3>شحن سريع وآمن</h3>
-<p>بنوصلك لأي مكان في مصر بتغليف يحمي شمعتك</p>
-</div>
-
-<div class="why-item reveal">
-<div class="icon">💯</div>
-<h3>ضمان استبدال</h3>
-<p>مش راضية عن طلبك؟ بنستبدله أو نرجع فلوسك فورًا</p>
-</div>
-
 </div>
 </div>
 </section>
@@ -3436,3 +3358,4 @@ prefillCustomer();
 
 </body>
 </html>
+
