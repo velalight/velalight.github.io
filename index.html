@@ -111,11 +111,12 @@
   ]
 }
 </script>
-
 <style>
+
 
 :root{
 --cream:#F6EDE0;
+
 --ivory:#FFFBF3;
 --cocoa:#2B1B12;
 --espresso:#4A2E1E;
@@ -125,6 +126,52 @@
 --gold:#C9A15A;
 --green:#25D366;
 --red:#c0392b;
+}
+.candle-animation {
+  position: relative;
+  width: 180px;
+  height: 350px;
+  margin: auto;
+}
+
+.candle-body {
+  position: absolute;
+  bottom: 0;
+  left: 35px;
+  width: 110px;
+  height: 220px;
+  background: linear-gradient(90deg,#fff,#e8cfa8,#fff);
+  border-radius: 20px;
+  box-shadow:
+    0 0 40px rgba(255,220,150,.5),
+    inset -10px 0 20px rgba(0,0,0,.1);
+}
+
+.flame {
+  position: absolute;
+  top: 20px;
+  left: 70px;
+  width: 55px;
+  height: 95px;
+  background: radial-gradient(circle at 50% 30%,
+    #fff9c4 0%,
+    #ffc400 35%,
+    #ff6600 70%);
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  filter:
+    drop-shadow(0 0 25px #ffb300)
+    drop-shadow(0 0 50px #ff6600);
+  animation: flameMove .7s infinite alternate;
+}
+
+@keyframes flameMove {
+  from {
+    transform: rotate(-45deg) scale(1);
+  }
+  to {
+    transform: rotate(-35deg) scale(1.15);
+  }
 }
 
 *{
@@ -1731,15 +1778,16 @@ rel="noopener noreferrer">
 شموع يدوية فاخرة مصنوعة من الشمع الطبيعي بعطور مختارة لتحول كل مساحة إلى تجربة دافئة وفريدة.
 </p>
 
-<a class="btn-glow"
-href="#products"
-target="_blank">
-اكتشف مجموعه الشموع المبهره 
-</a>
 <div class="candle-animation">
   <div class="flame"></div>
   <div class="candle-body"></div>
 </div>
+
+<a class="btn-glow"
+href="#products"
+target="_blank">
+اكتشف مجموعة الشموع المبهرة
+</a>
 
 <div class="trust-bar">
 <div class="trust-item">🚚 توصيل لكل المحافظات</div>
