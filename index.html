@@ -4,13 +4,12 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#4A2E1E">
 
 <title>VelaLight | شموع يدوية فاخرة في مصر | Luxury Handmade Candles</title>
 
-<meta name="description" content="VelaLight شموع يدوية فاخرة في مصر. شموع معطرة، هدايا مميزة، وتصميمات يدوية تضيف دفء وأناقة لكل مكان.">
-<meta name="description" content="VelaLight creates handcrafted luxury candles with premium fragrances, elegant designs and personalized gifts delivered across Egypt.">
+<meta name="description" content="VelaLight شموع يدوية فاخرة في مصر. شموع معطرة، هدايا مميزة، وتصميمات يدوية تضيف دفء وأناقة لكل مكان. Handcrafted luxury candles delivered across Egypt.">
 
 <meta name="keywords" content="شموع يدوية, شموع معطرة, هدايا فاخرة, شموع مصر, VelaLight, شموع هاند ميد">
 <meta name="author" content="VelaLight">
@@ -47,9 +46,9 @@
 {
   "@context": "https://schema.org",
   "@type": "Store",
-"areaServed": "Egypt",
-"priceRange": "$$",
-"name": "VelaLight",
+  "areaServed": "Egypt",
+  "priceRange": "$$",
+  "name": "VelaLight",
   "url": "https://velalight.github.io/",
   "logo": "https://velalight.github.io/eeeee.jpg",
   "sameAs": [
@@ -81,12 +80,12 @@
     {
       "@type": "Question",
       "name": "كام مدة توصيل الأوردر؟",
-      "acceptedAnswer": { "@type": "Answer", "text": "التوصيل داخل القاهرة والجيزة بياخد من 3 إلى 5 أيام عمل، وباقي المحافظات من 5 إلى 7 أيام عمل." }
+      "acceptedAnswer": { "@type": "Answer", "text": "التوصيل داخل القاهرة والجيزة بياخد من 1 إلى 3 أيام عمل، وباقي المحافظات من 3 إلى 6 أيام عمل." }
     },
     {
       "@type": "Question",
       "name": "طرق الدفع المتاحة إيه؟",
-      "acceptedAnswer": { "@type": "Answer", "text": " تحويل InstaPay قبل الشحن." }
+      "acceptedAnswer": { "@type": "Answer", "text": "الدفع عند الاستلام، أو تحويل InstaPay قبل الشحن." }
     },
     {
       "@type": "Question",
@@ -96,7 +95,7 @@
     {
       "@type": "Question",
       "name": "مدة اشتعال الشمعة قد إيه؟",
-      "acceptedAnswer": { "@type": "Answer", "text": "حسب حجم الشمعة، بتتراوح بين 72 إلى 100 ساعة اشتعال متواصل." }
+      "acceptedAnswer": { "@type": "Answer", "text": "حسب حجم الشمعة، بتتراوح بين 20 إلى 45 ساعة اشتعال متواصل." }
     },
     {
       "@type": "Question",
@@ -111,12 +110,11 @@
   ]
 }
 </script>
-<style>
 
+<style>
 
 :root{
 --cream:#F6EDE0;
-
 --ivory:#FFFBF3;
 --cocoa:#2B1B12;
 --espresso:#4A2E1E;
@@ -126,58 +124,6 @@
 --gold:#C9A15A;
 --green:#25D366;
 --red:#c0392b;
-}
-
-.candle-animation {
-  position: relative;
-  width: 260px;
-  height: 480px;
-  margin: 40px auto;
-}
-
-.candle-body {
-  position: absolute;
-  bottom: 0;
-  left: 55px;
-  width: 150px;
-  height: 300px;
-  background: linear-gradient(90deg,#fff,#e8cfa8,#fff);
-  border-radius: 25px;
-  box-shadow:
-    0 0 60px rgba(255,220,150,.8),
-    0 0 120px rgba(255,180,70,.5),
-    inset -15px 0 25px rgba(0,0,0,.12);
-}
-
-.flame {
-  position: absolute;
-  top: 10px;
-  left: 105px;
-  width: 75px;
-  height: 140px;
-  background: radial-gradient(circle at 50% 35%,
-    #ffffff 0%,
-    #fff59d 20%,
-    #ffc400 45%,
-    #ff6600 80%);
-  border-radius: 50% 50% 50% 0;
-  transform: rotate(-45deg);
-  filter:
-    drop-shadow(0 0 35px #ffd000)
-    drop-shadow(0 0 80px #ff8800)
-    drop-shadow(0 0 120px #ff5500);
-  animation: flameMove .6s infinite alternate;
-}
-
-@keyframes flameMove {
-  from {
-    transform: rotate(-45deg) scale(1);
-  }
-  to {
-    transform: rotate(-35deg) scale(1.25);
-  }
-}
-
 }
 
 *{
@@ -291,6 +237,9 @@ min-height:75px;
 display:flex;
 align-items:center;
 justify-content:space-between;
+flex-wrap:wrap;
+gap:10px;
+padding:8px 0;
 }
 
 .logo{
@@ -312,6 +261,7 @@ font-weight:500;
 opacity:.7;
 }
 
+/* شعلة صغيرة تظهر جنب اللوجو في الهيدر والفوتر */
 .flame{
 display:inline-block;
 width:15px;
@@ -365,6 +315,8 @@ border-radius:50%;
 background:var(--ivory);
 border:1px solid rgba(184,135,74,.3);
 cursor:pointer;
+display:flex;
+align-items:center;
 }
 
 .cart-open-btn::before{
@@ -530,6 +482,7 @@ padding:70px 0 40px;
 text-align:center;
 background:
 radial-gradient(circle at top,rgba(217,174,113,.25),transparent 45%);
+position:relative;
 }
 
 .eyebrow{
@@ -581,6 +534,134 @@ border-radius:30px;
 font-size:14px;
 font-weight:bold;
 color:var(--espresso);
+}
+
+/* =========================================================
+   الشمعة المتحركة (Hero Candle) — نسخة نظيفة واحدة فقط
+   ========================================================= */
+
+.candle-scene{
+position:relative;
+width:min(34vw,170px);
+height:min(64vw,300px);
+margin:44px auto 6px;
+}
+
+/* توهج دافئ خلفي بيتنفس ببطء حوالين الشمعة كلها */
+.candle-ambient{
+position:absolute;
+left:50%;
+top:8%;
+transform:translateX(-50%);
+width:220%;
+height:85%;
+background:radial-gradient(circle,rgba(255,190,90,.35) 0%,rgba(255,140,40,.14) 45%,transparent 72%);
+filter:blur(4px);
+animation:ambientBreathe 4.2s ease-in-out infinite;
+pointer-events:none;
+z-index:0;
+}
+
+@keyframes ambientBreathe{
+0%,100%{ opacity:.65; transform:translateX(-50%) scale(1); }
+50%{ opacity:1; transform:translateX(-50%) scale(1.12); }
+}
+
+/* جسم الشمعة */
+.candle-body{
+position:absolute;
+left:50%;
+bottom:0;
+transform:translateX(-50%);
+width:60%;
+height:62%;
+border-radius:16px 16px 20px 20px;
+background:linear-gradient(90deg,#fffaf0 0%,#f3e3c5 45%,#e9d3aa 75%,#fffaf0 100%);
+box-shadow:
+inset -12px 0 20px rgba(74,46,30,.16),
+inset 10px 0 16px rgba(255,255,255,.55),
+0 22px 40px rgba(43,27,18,.28);
+overflow:hidden;
+z-index:2;
+}
+
+/* خط شمع سايل بيلمع بهدوء أعلى الشمعة */
+.candle-body::before{
+content:"";
+position:absolute;
+top:0;
+right:18%;
+width:14%;
+height:38%;
+background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,0));
+border-radius:0 0 50% 50%;
+opacity:.8;
+}
+
+/* الفتيلة وذيل النور فوق الشمعة */
+.candle-top{
+position:absolute;
+left:50%;
+bottom:62%;
+transform:translateX(-50%);
+display:flex;
+flex-direction:column;
+align-items:center;
+z-index:4;
+}
+
+.candle-wick{
+width:4px;
+height:16px;
+background:linear-gradient(180deg,#3a2a1d,#1c130c);
+border-radius:2px;
+}
+
+.candle-flame{
+position:relative;
+width:clamp(20px,7vw,32px);
+height:clamp(32px,11vw,50px);
+margin-bottom:-4px;
+border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+background:radial-gradient(circle at 50% 68%,#fffceb 0%,#ffe28a 26%,#ffb238 55%,#ff7a1a 82%,#ff5400 100%);
+filter:
+drop-shadow(0 0 10px rgba(255,180,60,.85))
+drop-shadow(0 0 22px rgba(255,120,20,.55))
+drop-shadow(0 0 38px rgba(255,90,0,.3));
+transform-origin:50% 100%;
+animation:candleFlicker 3s ease-in-out infinite;
+}
+
+/* القلب الأزرق-الأبيض الداخلي للهبة */
+.candle-flame::before{
+content:"";
+position:absolute;
+left:50%;
+bottom:14%;
+transform:translateX(-50%);
+width:32%;
+height:38%;
+border-radius:50%;
+background:radial-gradient(circle,#eaf6ff 0%,#bfe4ff 40%,rgba(191,228,255,0) 80%);
+opacity:.9;
+}
+
+@keyframes candleFlicker{
+0%,100%{ transform:scale(1,1) rotate(0deg); }
+12%{ transform:scale(1.05,.95) rotate(-2deg); }
+27%{ transform:scale(.94,1.06) rotate(2deg); }
+41%{ transform:scale(1.06,.94) rotate(-1deg); }
+56%{ transform:scale(.96,1.04) rotate(3deg); }
+71%{ transform:scale(1.04,.97) rotate(-3deg); }
+86%{ transform:scale(.97,1.05) rotate(1deg); }
+}
+
+@media(max-width:600px){
+.candle-scene{
+width:min(46vw,150px);
+height:min(84vw,260px);
+margin:32px auto 4px;
+}
 }
 
 /* ===== الأقسام العامة ===== */
@@ -1333,10 +1414,10 @@ opacity:1;
 
 /* ===== الأزرار العائمة ===== */
 
-font-size:14px;
+.wa-float{
+font-size:28px;
 font-weight:bold;
 color:white;
-
 position:fixed;
 bottom:25px;
 left:25px;
@@ -1347,9 +1428,26 @@ background:#25D366;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:28px;
 z-index:900;
 box-shadow:0 10px 25px rgba(0,0,0,.25);
+overflow:hidden;
+text-indent:-9999px;
+white-space:nowrap;
+}
+
+.wa-float::before{
+content:"";
+position:absolute;
+width:26px;
+height:26px;
+background:white;
+-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-4-10.5-6.7z'/%3E%3C/svg%3E") center/contain no-repeat;
+mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-4-10.5-6.7z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.wa-float:hover{
+transform:translateY(-3px);
+box-shadow:0 14px 30px rgba(0,0,0,.32);
 }
 
 .floating-cart{
@@ -1492,8 +1590,30 @@ width:100%;
 padding:0 15px;
 }
 
+.logo{
+font-size:24px;
+}
+
+.logo small{
+font-size:9px;
+}
+
+.nav-cta{
+padding:10px 18px;
+font-size:14px;
+}
+
+.cart-open-btn{
+width:44px;
+height:44px;
+}
+
+.hero{
+padding:40px 0 25px;
+}
+
 .hero h1{
-font-size:32px;
+font-size:30px;
 }
 
 .hero .sub{
@@ -1505,8 +1625,12 @@ font-size:12px;
 padding:8px 14px;
 }
 
+.section-head h2{
+font-size:30px;
+}
+
 .card-slider{
-height:280px;
+height:260px;
 }
 
 .product-actions{
@@ -1695,36 +1819,13 @@ z-index:900;
 box-shadow:0 10px 25px rgba(0,0,0,.25);
 }
 
-<style>
-
-body {
-...
+@media(max-width:600px){
+#topBtn{
+width:44px;
+height:44px;
+right:82px;
+bottom:20px;
 }
-
-/* أكواد الشمعة الجديدة هنا */
-.candle-animation {
-  position: relative;
-  width: 180px;
-  height: 350px;
-  margin: auto;
-}
-
-.candle-body {
-  position: absolute;
-  bottom: 0;
-  left: 35px;
-  width: 110px;
-  height: 220px;
-  background: linear-gradient(90deg,#fff,#e8cfa8,#fff);
-  border-radius: 20px;
-}
-
-.flame {
-  ...
-}
-
-@keyframes flameMove {
-  ...
 }
 
 </style>
@@ -1784,14 +1885,17 @@ rel="noopener noreferrer">
 شموع يدوية فاخرة مصنوعة من الشمع الطبيعي بعطور مختارة لتحول كل مساحة إلى تجربة دافئة وفريدة.
 </p>
 
-<div class="candle-animation">
-  <div class="flame"></div>
-  <div class="candle-body"></div>
+<div class="candle-scene" aria-hidden="true">
+<div class="candle-ambient"></div>
+<div class="candle-top">
+<div class="candle-flame"></div>
+<div class="candle-wick"></div>
+</div>
+<div class="candle-body"></div>
 </div>
 
 <a class="btn-glow"
-href="#products"
-target="_blank">
+href="#products">
 اكتشف مجموعة الشموع المبهرة
 </a>
 
@@ -1835,8 +1939,6 @@ VelaLight علامة متخصصة في صناعة الشموع اليدوية ا
 <div class="section-head">
 <h2>ليه تختاري VelaLight؟</h2>
 <p>مش مجرد شمعة... تجربة كاملة</p>
-<h2>Why VelaLight</h2>
-<p>More than a candle. A complete sensory experience.</p>
 </div>
 
 <div class="grid-why">
@@ -2192,27 +2294,27 @@ VelaLight علامة متخصصة في صناعة الشموع اليدوية ا
 <section>
 <div class="social-links">
 
-<a href="https://www.facebook.com/VelaLight/" target="_blank">
+<a href="https://www.facebook.com/VelaLight/" target="_blank" rel="noopener noreferrer">
 <i class="fab fa-facebook-f"></i>
 Facebook
 </a>
 
-<a href="https://www.instagram.com/velaa_lighttt" target="_blank">
+<a href="https://www.instagram.com/velaa_lighttt" target="_blank" rel="noopener noreferrer">
 <i class="fab fa-instagram"></i>
 Instagram 1
 </a>
 
-<a href="https://www.instagram.com/velaalight/" target="_blank">
+<a href="https://www.instagram.com/velaalight/" target="_blank" rel="noopener noreferrer">
 <i class="fab fa-instagram"></i>
 Instagram 2
 </a>
 
-<a href="https://www.tiktok.com/@vela.light0" target="_blank">
+<a href="https://www.tiktok.com/@vela.light0" target="_blank" rel="noopener noreferrer">
 <i class="fab fa-tiktok"></i>
 TikTok
 </a>
 
-<a href="https://wa.me/201223526105" target="_blank">
+<a href="https://wa.me/201223526105" target="_blank" rel="noopener noreferrer">
 <i class="fab fa-whatsapp"></i>
 WhatsApp
 </a>
@@ -2250,7 +2352,7 @@ VelaLight
 
 <!-- ===== زر واتساب العائم ===== -->
 
-<a class="wa-float" href="https://wa.me/201223526105" target="_blank" aria-label="تواصل عبر واتساب">
+<a class="wa-float" href="https://wa.me/201223526105" target="_blank" rel="noopener noreferrer" aria-label="تواصل عبر واتساب">
 WhatsApp
 </a>
 
@@ -2278,7 +2380,7 @@ WhatsApp
 
 <!-- توست التنبيه -->
 
-<div class="toast" id="toast">تمت الإضافة للسلة ✅</div>
+<div class="toast" id="toast" role="status" aria-live="polite">تمت الإضافة للسلة ✅</div>
 
 
 <!-- نافذة تذكير السلة -->
@@ -2453,7 +2555,7 @@ return '<div class="price"><span>' + p.price + ' جنيه</span></div>';
 function sliderHTML(p){
 
 let imgs = p.images.map(function(src,i){
-return '<img src="' + src + '" alt="' + p.name + ' شمعة معطرة يدوية من VelaLight'"  loading="lazy" data-action="zoom" data-id="' + p.id + '" data-idx="' + i + '">';
+return '<img src="' + src + '" alt="' + p.name + ' - شمعة معطرة يدوية من VelaLight" loading="lazy" data-action="zoom" data-id="' + p.id + '" data-idx="' + i + '">';
 }).join("");
 
 let dots = p.images.length > 1 ? p.images.map(function(_,i){
