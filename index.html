@@ -7,9 +7,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#4A2E1E">
 
-<title>VelaLight | شموع يدوية فاخرة</title>
+<title>VelaLight | شموع يدوية فاخرة في مصر | Luxury Handmade Candles</title>
 
 <meta name="description" content="VelaLight شموع يدوية فاخرة في مصر. شموع معطرة، هدايا مميزة، وتصميمات يدوية تضيف دفء وأناقة لكل مكان.">
+<meta name="description" content="VelaLight creates handcrafted luxury candles with premium fragrances, elegant designs and personalized gifts delivered across Egypt.">
+
 <meta name="keywords" content="شموع يدوية, شموع معطرة, هدايا فاخرة, شموع مصر, VelaLight, شموع هاند ميد">
 <meta name="author" content="VelaLight">
 
@@ -44,8 +46,10 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "VelaLight",
+  "@type": "Store",
+"areaServed": "Egypt",
+"priceRange": "$$",
+"name": "VelaLight",
   "url": "https://velalight.github.io/",
   "logo": "https://velalight.github.io/eeeee.jpg",
   "sameAs": [
@@ -77,12 +81,12 @@
     {
       "@type": "Question",
       "name": "كام مدة توصيل الأوردر؟",
-      "acceptedAnswer": { "@type": "Answer", "text": "التوصيل داخل القاهرة والجيزة بياخد من 1 إلى 3 أيام عمل، وباقي المحافظات من 3 إلى 6 أيام عمل." }
+      "acceptedAnswer": { "@type": "Answer", "text": "التوصيل داخل القاهرة والجيزة بياخد من 3 إلى 5 أيام عمل، وباقي المحافظات من 5 إلى 7 أيام عمل." }
     },
     {
       "@type": "Question",
       "name": "طرق الدفع المتاحة إيه؟",
-      "acceptedAnswer": { "@type": "Answer", "text": "الدفع عند الاستلام، أو تحويل InstaPay قبل الشحن." }
+      "acceptedAnswer": { "@type": "Answer", "text": " تحويل InstaPay قبل الشحن." }
     },
     {
       "@type": "Question",
@@ -92,7 +96,7 @@
     {
       "@type": "Question",
       "name": "مدة اشتعال الشمعة قد إيه؟",
-      "acceptedAnswer": { "@type": "Answer", "text": "حسب حجم الشمعة، بتتراوح بين 20 إلى 45 ساعة اشتعال متواصل." }
+      "acceptedAnswer": { "@type": "Answer", "text": "حسب حجم الشمعة، بتتراوح بين 72 إلى 100 ساعة اشتعال متواصل." }
     },
     {
       "@type": "Question",
@@ -243,6 +247,16 @@ font-weight:bold;
 color:var(--espresso);
 display:flex;
 align-items:center;
+gap:8px;
+}
+
+.logo small{
+display:block;
+font-family:'Tajawal',sans-serif;
+font-size:10px;
+letter-spacing:2px;
+font-weight:500;
+opacity:.7;
 }
 
 .flame{
@@ -1266,7 +1280,10 @@ opacity:1;
 
 /* ===== الأزرار العائمة ===== */
 
-.wa-float{
+font-size:14px;
+font-weight:bold;
+color:white;
+
 position:fixed;
 bottom:25px;
 left:25px;
@@ -1625,6 +1642,38 @@ z-index:900;
 box-shadow:0 10px 25px rgba(0,0,0,.25);
 }
 
+<style>
+
+body {
+...
+}
+
+/* أكواد الشمعة الجديدة هنا */
+.candle-animation {
+  position: relative;
+  width: 180px;
+  height: 350px;
+  margin: auto;
+}
+
+.candle-body {
+  position: absolute;
+  bottom: 0;
+  left: 35px;
+  width: 110px;
+  height: 220px;
+  background: linear-gradient(90deg,#fff,#e8cfa8,#fff);
+  border-radius: 20px;
+}
+
+.flame {
+  ...
+}
+
+@keyframes flameMove {
+  ...
+}
+
 </style>
 </head>
 
@@ -1637,10 +1686,15 @@ box-shadow:0 10px 25px rgba(0,0,0,.25);
 <header>
 <div class="wrap nav">
 
+
 <div class="logo">
 <span class="flame"></span>
+<div>
 VelaLight
+<small>Luxury Candle Studio</small>
 </div>
+</div>
+
 
 <div class="nav-buttons">
 
@@ -1650,7 +1704,8 @@ VelaLight
 
 <a class="nav-cta"
 href="https://wa.me/201223526105?text=عايز%20اعرف%20اكتر%20عن%20VelaLight"
-target="_blank">
+target="_blank"
+rel="noopener noreferrer">
 اطلب الآن
 </a>
 
@@ -1673,23 +1728,18 @@ target="_blank">
 </h1>
 
 <p class="sub">
-شموع مصنوعة بإتقان وحرفية، بعطور مختارة بعناية عشان ريحة بيتك تكون مميزة زيك
+شموع يدوية فاخرة مصنوعة من الشمع الطبيعي بعطور مختارة لتحول كل مساحة إلى تجربة دافئة وفريدة.
 </p>
 
 <a class="btn-glow"
-href="https://wa.me/201223526105?text=عايز%20اطلب%20شمعة%20من%20VelaLight"
+href="#products"
 target="_blank">
-اطلب الآن عبر واتساب
+اكتشف مجموعه الشموع المبهره 
 </a>
-
-<img class="hero-img"
-src="https://velalight.github.io/eeeee.jpg"
-alt="شموع VelaLight"
-loading="lazy"
-tabindex="0"
-role="button"
-aria-label="تكبير صورة شموع VelaLight"
-onclick="openImageGallery(['https://velalight.github.io/eeeee.jpg'],0)">
+<div class="candle-animation">
+  <div class="flame"></div>
+  <div class="candle-body"></div>
+</div>
 
 <div class="trust-bar">
 <div class="trust-item">🚚 توصيل لكل المحافظات</div>
@@ -1731,6 +1781,8 @@ VelaLight علامة متخصصة في صناعة الشموع اليدوية ا
 <div class="section-head">
 <h2>ليه تختاري VelaLight؟</h2>
 <p>مش مجرد شمعة... تجربة كاملة</p>
+<h2>Why VelaLight</h2>
+<p>More than a candle. A complete sensory experience.</p>
 </div>
 
 <div class="grid-why">
@@ -2136,7 +2188,7 @@ VelaLight
 <a href="terms.html">شروط الاستخدام</a>
 </div>
 
-<p>© 2026 VelaLight — جميع الحقوق محفوظة</p>
+<p>© 2026 VelaLight — All Rights Reserved</p>
 
 </div>
 </footer>
@@ -2144,7 +2196,9 @@ VelaLight
 
 <!-- ===== زر واتساب العائم ===== -->
 
-<a class="wa-float" href="https://wa.me/201223526105" target="_blank" aria-label="تواصل عبر واتساب">📱</a>
+<a class="wa-float" href="https://wa.me/201223526105" target="_blank" aria-label="تواصل عبر واتساب">
+WhatsApp
+</a>
 
 
 <!-- ===== زر السلة العائم ===== -->
@@ -2345,7 +2399,7 @@ return '<div class="price"><span>' + p.price + ' جنيه</span></div>';
 function sliderHTML(p){
 
 let imgs = p.images.map(function(src,i){
-return '<img src="' + src + '" alt="' + p.name + '" loading="lazy" data-action="zoom" data-id="' + p.id + '" data-idx="' + i + '">';
+return '<img src="' + src + '" alt="' + p.name + ' شمعة معطرة يدوية من VelaLight'"  loading="lazy" data-action="zoom" data-id="' + p.id + '" data-idx="' + i + '">';
 }).join("");
 
 let dots = p.images.length > 1 ? p.images.map(function(_,i){
@@ -2374,18 +2428,52 @@ out += '<option' + (s===selected ? ' selected' : '') + '>' + s + '</option>';
 return out;
 }
 
+
+function escapeHTML(text){
+return String(text)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+}
+
+
 function reviewsHTML(p){
 
 let items = p.reviews.map(function(r){
-return '<div class="review-item">' +
-'<div class="stars">' + "★".repeat(r.stars) + "☆".repeat(5-r.stars) + '</div>' +
-'<p>"' + r.text + '"</p>' +
-'<div class="rname">- ' + r.name + '</div>' +
-'</div>';
+
+return `
+<div class="review-item">
+
+<div class="stars">
+${"★".repeat(r.stars)}
+${"☆".repeat(5-r.stars)}
+</div>
+
+<p>"${escapeHTML(r.text)}"</p>
+
+<div class="rname">
+- ${escapeHTML(r.name)}
+</div>
+
+</div>
+`;
+
 }).join("");
 
-return '<button class="reviews-toggle" data-action="toggle-reviews" data-id="' + p.id + '">عرض تقييمات العميلات (' + p.reviewsCount + ') ▾</button>' +
-'<div class="reviews-list" id="reviews-' + p.id + '">' + items + '</div>';
+
+return `
+<button class="reviews-toggle" 
+data-action="toggle-reviews" 
+data-id="${p.id}">
+عرض تقييمات العميلات (${p.reviewsCount}) ▾
+</button>
+
+<div class="reviews-list" id="reviews-${p.id}">
+${items}
+</div>
+`;
 
 }
 
@@ -2496,7 +2584,10 @@ openImageGallery(product.images, idx);
 
 if(action === "toggle-reviews"){
 let box = document.getElementById("reviews-" + id);
-box.classList.toggle("open");
+
+if(box){
+ box.classList.toggle("open");
+}
 el.textContent = box.classList.contains("open") ? "إخفاء التقييمات ▴" : "عرض تقييمات العميلات (" + product.reviewsCount + ") ▾";
 }
 
@@ -2554,8 +2645,16 @@ d.classList.toggle("active", i === sliderState[p.id]);
    السلة
    ========================================================= */
 
+let cart = [];
+let orders = [];
+
 try{
 cart = JSON.parse(localStorage.getItem("velaCart")) || [];
+
+if(!Array.isArray(cart)){
+cart = [];
+}
+
 }catch(e){
 cart = [];
 }
@@ -2566,10 +2665,22 @@ orders = JSON.parse(localStorage.getItem("velaOrders")) || [];
 orders = [];
 }
 
+
 function saveCart(){
+
 try{
-localStorage.setItem("velaCart", JSON.stringify(cart));
-}catch(e){}
+
+localStorage.setItem(
+"velaCart",
+JSON.stringify(cart)
+);
+
+}catch(e){
+
+console.log("Cart save error");
+
+}
+
 }
 
 function playDing(){
@@ -2624,19 +2735,22 @@ let qty = parseInt(qtyInput.value);
 if(!qty || qty < 1) qty = 1;
 
 let existing = cart.find(function(item){
-return item.name === product.name && item.scent === selectedScent;
+return item.id === product.id && item.scent === selectedScent;
 });
 
 if(existing){
 existing.qty += qty;
 }else{
+
 cart.push({
+id:product.id,
 name:product.name,
 price:product.price,
 qty:qty,
 scent:selectedScent,
 img:product.images[0]
 });
+
 }
 
 saveCart();
