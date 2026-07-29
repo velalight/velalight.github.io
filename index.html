@@ -1632,8 +1632,8 @@ items.forEach(function(item){ observer.observe(item); });
 
 /* ===== السلة ===== */
 
-let cart = [];
-let orders = [];
+// لمسح السلة القديمة مرة واحدة عند الحاجة
+// localStorage.removeItem("velaCart");
 
 try{
 cart = JSON.parse(localStorage.getItem("velaCart")) || [];
@@ -1679,19 +1679,24 @@ if(!qty || qty < 1){
 qty = 1;
 }
 
-let product = cart.find(function(item){ return item.name === name; });
+let product = cart.find(function(item){ 
+return item.name === name && item.scent === selectedScent;
+});
 
 if(product){
+
 product.qty += qty;
-product.scent = selectedScent || product.scent;
+
 }else{
+
 cart.push({
 name:name,
 price:price,
 qty:qty,
-scent:selectedScent || "اختاري العطر",
+scent:selectedScent,
 img:img
 });
+
 }
 
 saveCart();
@@ -1745,7 +1750,9 @@ optionsHtml += '<option' + (item.scent===s ? ' selected' : '') + '>' + s + '</op
 
 box.innerHTML += `
 <div class="cart-item">
-<img class="cart-thumb" src="${item.img || ''}" alt="${item.name}">
+<img class="cart-thumb" 
+src="${item.img || 'https://velalight.github.io/eeeee.jpg'}" 
+alt="${item.name}">
 <div class="cart-item-body">
 <h3>${item.name}</h3>
 <p>السعر: ${item.price} جنيه × ${item.qty} = ${sum} جنيه</p>
@@ -1780,10 +1787,14 @@ saveCart();
 }
 
 function increase(index){
+
+if(cart[index]){
 cart[index].qty++;
-updateCart();
 }
 
+updateCart();
+
+}
 function decrease(index){
 cart[index].qty--;
 if(cart[index].qty<=0){
@@ -1833,7 +1844,7 @@ document.getElementById("cartOverlay").classList.remove("active");
 
 function generateOrderNumber(){
 let d = new Date();
-return "VL-"+d.getFullYear()+(d.getMonth()+1)+d.getDate()+"-"+Math.floor(1000+Math.random()*9000);
+return "VL-" + Date.now();
 }
 
 function sendWhatsApp(){
@@ -1930,8 +1941,14 @@ window.open("https://wa.me/201223526105?text="+encodeURIComponent(msg), "_blank"
 alert("تم تجهيز طلبك بنجاح 🕯️ سيتم فتح واتساب الآن لإرساله");
 
 cart = [];
+
+localStorage.removeItem("velaCart");
+
 saveCart();
+
 updateCart();
+
+document.getElementById("cartCount").innerHTML = 0;
 
 document.getElementById("customerName").value = "";
 document.getElementById("customerPhone").value = "";
@@ -1944,7 +1961,11 @@ closeCart();
 
 }
 
+window.onload = function(){
+
 updateCart();
+
+};
 
 </script>
 
