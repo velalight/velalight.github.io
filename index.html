@@ -287,6 +287,16 @@ gap:12px;
 align-items:center;
 }
 
+.menu-link{
+font-weight:bold;
+color:var(--espresso);
+font-size:15px;
+transition:.3s;
+}
+
+.menu-link:hover{
+color:var(--brass);
+}
 .nav-cta,
 .btn-glow{
 display:inline-block;
@@ -1880,8 +1890,19 @@ VelaLight
 </div>
 </div>
 
-
 <div class="nav-buttons">
+
+<a class="menu-link" href="#about">
+من نحن
+</a>
+
+<a class="menu-link" href="#why">
+لماذا VelaLight؟
+</a>
+
+<a class="menu-link" href="#products">
+الشموع
+</a>
 
 <button class="cart-open-btn" onclick="openCart()" aria-label="فتح السلة">
 <span id="cartCount">0</span>
@@ -1895,6 +1916,7 @@ rel="noopener noreferrer">
 </a>
 
 </div>
+
 </div>
 </header>
 
