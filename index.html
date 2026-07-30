@@ -292,6 +292,37 @@ animation:flicker 2.4s ease-in-out infinite;
 }
 
 .nav-buttons{
+.info-menu{
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+.info-menu button{
+border:none;
+background:transparent;
+color:var(--espresso);
+font-weight:bold;
+cursor:pointer;
+font-size:15px;
+}
+
+.info-menu button:hover{
+color:var(--brass);
+}
+
+
+.info-panel{
+display:none;
+background:var(--ivory);
+border-bottom:1px solid var(--line);
+padding:25px;
+text-align:center;
+}
+
+.info-panel.active{
+display:block;
+}
 display:flex;
 gap:12px;
 align-items:center;
@@ -923,9 +954,8 @@ margin-bottom:7px;
 /* ===== المنتجات ===== */
 
 .grid-products{
-display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:25px;
+gap:15px;
 }
 
 .card{
@@ -1813,7 +1843,7 @@ grid-template-columns:repeat(3,1fr);
 gap:10px;
 }
 
-/* ===== نسخة مصغّرة من كارت المنتج للموبايل (3 في الصف) ===== */
+/* ===== نسخة مصغّرة من كارت المنتج للموبايل (2 في الصف) ===== */
 
 .grid-products .card{
 border-radius:12px;
