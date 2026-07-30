@@ -957,8 +957,18 @@ transition:.35s;
 }
 
 .card:hover{
-transform:translateY(-8px);
-box-shadow:0 20px 40px rgba(43,27,18,.15);
+
+transform:
+translateY(-10px)
+scale(1.015);
+
+box-shadow:
+
+0 25px 60px rgba(43,27,18,.18);
+
+border-color:
+rgba(184,135,74,.45);
+
 }
 
 .badge{
@@ -1166,15 +1176,48 @@ text-align:center;
 }
 
 .order-btn{
+
 flex:1;
-padding:13px;
+
+padding:15px;
+
 border:none;
+
 border-radius:30px;
-background:var(--espresso);
+
+background:
+
+linear-gradient(
+135deg,
+#4A2E1E,
+#7a5030
+);
+
 color:white;
+
 cursor:pointer;
-font-weight:bold;
-transition:.25s;
+
+font-weight:700;
+
+font-size:15px;
+
+box-shadow:
+
+0 8px 20px rgba(74,46,30,.25);
+
+transition:.3s;
+
+}
+
+
+.order-btn:hover{
+
+transform:translateY(-3px);
+
+box-shadow:
+
+0 15px 30px rgba(74,46,30,.35);
+
 }
 
 .order-btn:hover{
