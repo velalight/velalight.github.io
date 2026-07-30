@@ -2711,8 +2711,14 @@ if(currentQuery.trim() !== ""){
 
     list = list.filter(function(p){
 
-let name = normalizeArabic(p.name || "");
-let desc = normalizeArabic(p.desc || "");
+list = list.filter(function(p){
+
+    let name = normalizeArabic(p.name || "");
+    let desc = normalizeArabic(p.desc || "");
+
+    return name.includes(q) || desc.includes(q);
+
+});
 
         return name.includes(q) || desc.includes(q);
 
