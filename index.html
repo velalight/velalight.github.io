@@ -272,22 +272,17 @@ height:70px;
 }
 
 }
+
 .logo{
-
-font-size:36px;
-
-letter-spacing:.5px;
-
-text-shadow:
-0 3px 8px rgba(74,46,30,.12);
-
-}
 font-family:'Amiri',serif;
+font-size:36px;
+letter-spacing:.5px;
 font-weight:bold;
 color:var(--espresso);
 display:flex;
 align-items:center;
 gap:8px;
+text-shadow:0 3px 8px rgba(74,46,30,.12);
 }
 
 .logo small{
@@ -2697,15 +2692,32 @@ const sliderState = {};
 
 /* ===== محرك البحث والترتيب ===== */
 
+function normalizeArabic(text){
+return text
+.toLowerCase()
+.replace(/[أإآ]/g,"ا")
+.replace(/ى/g,"ي")
+.replace(/ة/g,"ه")
+.replace(/\s+/g," ")
+.trim();
+}
+
 function getVisibleProducts(){
 
 let list = PRODUCTS.slice();
-
 if(currentQuery.trim() !== ""){
-let q = currentQuery.trim();
-list = list.filter(function(p){
-return p.name.indexOf(q) !== -1 || p.desc.indexOf(q) !== -1;
-});
+
+    let q = normalizeArabic(currentQuery.trim());
+
+    list = list.filter(function(p){
+
+let name = normalizeArabic(p.name || "");
+let desc = normalizeArabic(p.desc || "");
+
+        return name.includes(q) || desc.includes(q);
+
+    });
+
 }
 
 switch(currentSort){
@@ -2741,9 +2753,16 @@ return out;
 function stockHTML(p){
 
 if(p.stock.status==="out"){
-return '<div class="stock-line stock-out">🔥 متبقي 3 قطع فقط</div>';
+return '<div class="stock-line stock-out">❌ غير متوفر حاليًا</div>';
 }
 
+if(p.stock.status==="low"){
+return '<div class="stock-line stock-low">🔥 متبقي '+p.stock.count+' قطع فقط</div>';
+}
+
+return '<div class="stock-line stock-available">✅ متوفر</div>';
+
+}
 if(p.stock.status==="low"){
 return '<div class="stock-line stock-low">🔥 متبقي '+p.stock.count+' قطع فقط</div>';
 }
