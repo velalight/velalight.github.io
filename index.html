@@ -1677,10 +1677,43 @@ font-size:30px;
 }
 
 .grid-products{
-grid-template-columns:repeat(3,1fr);
-gap:10px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
 }
 
+.card-body{
+padding:14px 10px;
+}
+
+.card-body h3{
+font-size:18px;
+}
+
+.card-body > p.desc{
+font-size:13px;
+min-height:auto;
+}
+
+.price{
+font-size:18px;
+}
+
+.product-actions{
+flex-direction:column;
+}
+
+.product-qty{
+width:100%;
+}
+
+.order-btn{
+width:100%;
+}
+
+.buy-now-btn{
+font-size:14px;
+}
 .grid-occ,
 .grid-gift{
 grid-template-columns:1fr;
