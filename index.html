@@ -2012,6 +2012,10 @@ rel="noopener noreferrer">
 </h1>
 
 <p class="sub">
+<div class="hero-rating">
+⭐⭐⭐⭐⭐
+<span>4.9 من 200+ عميل</span>
+</div>
 شموع يدوية فاخرة مصنوعة من الشمع الطبيعي بعطور مختارة لتحول كل مساحة إلى تجربة دافئة وفريدة.
 </p>
 
@@ -2735,13 +2739,17 @@ return out;
 }
 
 function stockHTML(p){
-if(p.stock.status === "out"){
-return '<div class="stock-line stock-out">🔴 نفد من المخزون</div>';
+
+if(p.stock.status==="out"){
+return '<div class="stock-line stock-out">🔥 متبقي 3 قطع فقط</div>';
 }
-if(p.stock.status === "low"){
-return '<div class="stock-line stock-low">🟠 متبقي ' + p.stock.count + ' فقط</div>';
+
+if(p.stock.status==="low"){
+return '<div class="stock-line stock-low">🔥 متبقي '+p.stock.count+' قطع فقط</div>';
 }
-return '<div class="stock-line stock-available">🟢 متوفر الآن</div>';
+
+return '<div class="stock-line stock-available">🔥 متبقي 4 قطع فقط</div>';
+
 }
 
 function priceHTML(p){
@@ -3171,14 +3179,23 @@ qty:qty,
 scent:selectedScent,
 img:product.images[0]
 }];
-
 saveCart();
+
 updateCart();
 openCart();
 
 setTimeout(function(){
-document.getElementById("customerName").focus();
-},450);
+
+let customer = document.getElementById("customerName");
+
+if(customer){
+customer.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+}
+
+},300);
 
 }
 
