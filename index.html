@@ -1193,31 +1193,6 @@ transform:translateY(-2px);
 box-shadow:0 10px 20px rgba(184,135,74,.35);
 }
 
-/* ===== المشاركة ===== */
-
-.share-row{
-display:flex;
-gap:8px;
-margin-top:12px;
-}
-
-.share-btn{
-flex:1;
-padding:9px;
-border-radius:20px;
-border:1px solid var(--line);
-background:white;
-font-size:13px;
-cursor:pointer;
-text-align:center;
-transition:.2s;
-color:var(--espresso);
-}
-
-.share-btn:hover{
-background:var(--cream);
-}
-
 /* ===== تقييمات نصية داخل الكارت ===== */
 
 .reviews-toggle{
@@ -2414,7 +2389,6 @@ VelaLight علامة متخصصة في صناعة الشموع اليدوية ا
 
 <div class="field-label">طريقة الدفع</div>
 <select id="paymentMethod" class="customer-input">
-<option>الدفع عند الاستلام</option>
 <option>تحويل InstaPay</option>
 </select>
 
@@ -2727,7 +2701,7 @@ VelaLight
 <a href="terms.html">شروط الاستخدام</a>
 </div>
 
-<p>© 2026 VelaLight — All Rights Reserved</p>
+<p>© 2026 - 2030 VelaLight — All Rights Reserved</p>
 
 </div>
 </footer>
@@ -3055,11 +3029,6 @@ priceHTML(p) +
 '<button class="order-btn" id="btn' + p.id + '" data-action="add" data-id="' + p.id + '" ' + disabled + '>' + btnLabel + '</button>' +
 '</div>' +
 '<button class="buy-now-btn" data-action="buy-now" data-id="' + p.id + '" ' + disabled + '>' + buyLabel + '</button>' +
-'<div class="share-row">' +
-'<button class="share-btn" data-action="share-wa" data-id="' + p.id + '"><i class="fab fa-whatsapp"></i> واتساب</button>' +
-'<button class="share-btn" data-action="share-fb" data-id="' + p.id + '"><i class="fab fa-facebook-f"></i> فيسبوك</button>' +
-'<button class="share-btn" data-action="share-copy" data-id="' + p.id + '"><i class="fa-solid fa-link"></i> نسخ الرابط</button>' +
-'</div>' +
 reviewsHTML(p) +
 relatedHTML(p) +
 '</div>' +
