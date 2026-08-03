@@ -2729,7 +2729,7 @@ case "newest":
 list.sort(function(a,b){ return new Date(b.dateAdded) - new Date(a.dateAdded); });
 break;
 default:
-list.sort(function(a,b){ return b.sales - a.sales; });
+list.sort(function(a,b){ return new Date(b.dateAdded) - new Date(a.dateAdded); });
 }
 return list;
 }
