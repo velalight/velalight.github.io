@@ -2661,7 +2661,7 @@ oldPrice:null,
 badge:null,
 desc:"قطعة فنية من الخشب الطبيعي مع شموع معطرة.",
 scents:["فانيلا 🍦","قهوة ☕","عود 🤎","عنبر 🤎","لافندر 💜"],
-stock:{status:"out", count:0},
+stock:{status:"available", count:null},
 rating:4.8,
 reviewsCount:39,
 sales:90,
@@ -2838,9 +2838,9 @@ return '<div class="related-box"><h4>مقترحات 👇</h4><div class="related
 }
 
 function cardHTML(p){
-let disabled = p.stock.status === "out" ? "disabled" : "";
-let btnLabel = p.stock.status === "out" ? "نفد" : "أضف للسلة 🛒";
-let buyLabel = p.stock.status === "out" ? "غير متاح" : "اشترِ الآن ⚡";
+let disabled = "";
+let btnLabel = "أضف للسلة 🛒";
+let buyLabel = "اشترِ الآن ⚡";
 
 return '<div class="card reveal active" id="prod-' + p.id + '" data-view-id="' + p.id + '">' +
 (p.badge ? '<span class="badge">' + p.badge + '</span>' : '') +
