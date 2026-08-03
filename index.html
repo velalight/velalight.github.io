@@ -2758,18 +2758,6 @@ VelaLight
 <p>اختار قطعتك المفضلة 🤎</p>
 </div>
 
-<div class="tools-bar">
-<div class="sort-box">
-<select id="sortSelect" aria-label="ترتيب المنتجات">
-<option value="bestselling">الأكثر مبيعًا</option>
-<option value="newest">الأحدث</option>
-<option value="price-asc">السعر الأقل</option>
-<option value="price-desc">السعر الأعلى</option>
-<option value="rating">الأعلى تقييمًا</option>
-</select>
-</div>
-</div>
-
 <div class="grid-products" id="productsGrid"></div>
 
 </div>
@@ -3468,10 +3456,14 @@ if (headerSearch) {
 
 }
 
-document.getElementById("sortSelect").addEventListener("change", function(e){
-currentSort = e.target.value;
-renderProducts();
-});
+const sortSelect = document.getElementById("sortSelect");
+
+if (sortSelect) {
+    sortSelect.addEventListener("change", function(e){
+        currentSort = e.target.value;
+        renderProducts();
+    });
+}
 
 // Event Delegation إصلاح الأزرار والمنتجات
 document.getElementById("productsGrid").addEventListener("click", function(e){
