@@ -682,50 +682,72 @@ font-weight:bold;
 text-decoration:underline;
 }
 
-/* ===== شريط البحث والترتيب ===== */
+/* ===== شريط البحث والترتيب المضغوط ===== */
 .tools-bar{
 display:flex;
 flex-wrap:wrap;
-gap:14px;
-justify-content:center;
+gap:10px;
 align-items:center;
-margin-bottom:35px;
+justify-content:center;
+margin-bottom:20px;
 }
 
 .search-box{
 position:relative;
-flex:1;
-min-width:240px;
-max-width:400px;
+width:260px;
 }
 
 .search-box input{
 width:100%;
-padding:14px 44px 14px 16px;
-border-radius:30px;
+padding:10px 38px 10px 15px;
+border-radius:25px;
 border:1px solid var(--brass);
 background:var(--ivory);
-font-size:15px;
+font-size:14px;
+height:42px;
 }
 
 .search-box i{
 position:absolute;
 top:50%;
-left:16px;
+left:15px;
 transform:translateY(-50%);
 color:var(--brass);
+font-size:14px;
 }
 
 .sort-box select{
-padding:14px 18px;
-border-radius:30px;
+height:42px;
+padding:0 15px;
+border-radius:25px;
 border:1px solid var(--brass);
 background:var(--ivory);
-font-size:15px;
+font-size:14px;
 cursor:pointer;
-min-width:190px;
+min-width:160px;
 }
 
+/* الموبايل */
+@media(max-width:600px){
+
+.tools-bar{
+gap:8px;
+margin-bottom:15px;
+}
+
+.search-box{
+width:100%;
+}
+
+.sort-box{
+width:100%;
+}
+
+.sort-box select{
+width:100%;
+}
+
+}
 .no-results{
 grid-column:1/-1;
 text-align:center;
@@ -2290,9 +2312,14 @@ VelaLight
 <section id="products">
 <div class="wrap">
 
+<div class="section-head">
+<h2>مجموعة شموع VelaLight</h2>
+<p>اختار قطعتك المفضلة 🤎</p>
+</div>
+
 <div class="tools-bar">
 <div class="search-box">
-<input type="text" id="productSearch" placeholder="دوّر على منتج... 🔍" aria-label="البحث عن منتج">
+<input type="text" id="productSearch" placeholder="ابحث عن شمعة... 🔍" aria-label="البحث عن منتج">
 <i class="fa-solid fa-magnifying-glass"></i>
 </div>
 
@@ -2300,15 +2327,17 @@ VelaLight
 <select id="sortSelect" aria-label="ترتيب المنتجات">
 <option value="bestselling">الأكثر مبيعًا</option>
 <option value="newest">الأحدث</option>
-<option value="price-asc">السعر: من الأقل للأعلى</option>
-<option value="price-desc">السعر: من الأعلى للأقل</option>
+<option value="price-asc">السعر الأقل</option>
+<option value="price-desc">السعر الأعلى</option>
 <option value="rating">الأعلى تقييمًا</option>
 </select>
 </div>
 </div>
 
 <div class="grid-products" id="productsGrid"></div>
+
 </div>
+
 <div id="cartOverlay" onclick="closeCart(); closeAccount();"></div>
 </section>
 
