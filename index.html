@@ -2277,14 +2277,64 @@ margin:0;
 flex-shrink:0;
 }
 
-.ticker-item{
-font-size:11.5px;
+}
+/* ===== شريط الإعلانات العلوي المتحرك ===== */
+.top-ticker{
+    background:var(--espresso);
+    color:#fff;
+    overflow:hidden;
+    position:relative;
+    width:100%;
+    height:40px;
+    display:flex;
+    align-items:center;
 }
 
 .ticker-track{
-gap:32px;
+    display:flex;
+    align-items:center;
+    gap:48px;
+    width:max-content;
+    white-space:nowrap;
+    animation:tickerScroll 35s linear infinite;
 }
 
+.ticker-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-shrink:0;
+    color:var(--brass-light);
+    font-size:13px;
+    font-weight:500;
+}
+
+.ticker-item i{
+    color:var(--brass-light);
+    font-size:12px;
+}
+
+.top-ticker:hover .ticker-track{
+    animation-play-state:paused;
+}
+
+@keyframes tickerScroll{
+    from{
+        transform:translateX(0);
+    }
+    to{
+        transform:translateX(-50%);
+    }
+}
+
+@media(max-width:600px){
+    .ticker-item{
+        font-size:11.5px;
+    }
+
+    .ticker-track{
+        gap:32px;
+    }
 }
 /* ===== هيدر: صف علوي + صف بحث ثابت ===== */
 .nav-top-row{
