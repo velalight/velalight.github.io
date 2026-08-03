@@ -3457,13 +3457,23 @@ if(typeof viewTrackObserver !== "undefined"){ viewTrackObserver.observe(card); }
 });
 }
 
-document.getElementById("headerSearch").addEventListener("input", function(e){
-currentQuery = e.target.value;
-renderProducts();
-});
-document.getElementById("headerSearch").addEventListener("focus", function(){
-document.getElementById("products").scrollIntoView({behavior:"smooth", block:"start"});
-});
+const headerSearch = document.getElementById("headerSearch");
+
+if (headerSearch) {
+
+    headerSearch.addEventListener("input", function(e){
+        currentQuery = e.target.value;
+        renderProducts();
+    });
+
+    headerSearch.addEventListener("focus", function(){
+        document.getElementById("products").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    });
+
+}
 
 document.getElementById("sortSelect").addEventListener("change", function(e){
 currentSort = e.target.value;
