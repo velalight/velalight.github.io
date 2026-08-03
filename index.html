@@ -2503,12 +2503,11 @@ text-overflow:ellipsis;
 
 /* ===== 3) Bento Grid حول الهيرو (بدون المساس بالشمعتين والنص) ===== */
 .hero-bento-wrap{
-display:grid;
-grid-template-columns:1fr 2.2fr 1fr;
-gap:16px;
-align-items:stretch;
-max-width:1000px;
-margin:0 auto 6px;
+display:flex;
+justify-content:center;
+align-items:center;
+max-width:900px;
+margin:0 auto;
 }
 
 .bento-promo{
@@ -2696,13 +2695,6 @@ VelaLight
 </button>
 </div>
 </div>
-
-<div class="nav-search-row">
-<div class="header-search">
-<input type="text" id="headerSearch" placeholder="ابحث عن شمعة، عطر، أو مناسبة... 🔍" aria-label="البحث عن منتج">
-<i class="fa-solid fa-magnifying-glass"></i>
-</div>
-</div>
 </div>
 </header>
 
@@ -2719,11 +2711,6 @@ VelaLight
 
 <div class="hero-bento-wrap">
 
-<div class="bento-promo">
-<span class="bp-icon">🚚</span>
-<span class="bp-title">توصيل لكل مصر</span>
-<span class="bp-sub">3-7 أيام عمل</span>
-</div>
 
 <div class="hero-bento-center">
 <div class="hero-grid">
@@ -2756,11 +2743,6 @@ VelaLight
 </div>
 </div>
 
-<div class="bento-promo">
-<span class="bp-icon">🎁</span>
-<span class="bp-title">تغليف فاخر مجانًا</span>
-<span class="bp-sub">مع كل طلب</span>
-</div>
 
 </div>
 </div>
