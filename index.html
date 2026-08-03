@@ -2143,16 +2143,39 @@ display:flex;
 flex-wrap:wrap;
 gap:8px;
 }
-
 .scent-chip{
-background:white;
+background:#fff;
 border:1px solid rgba(184,135,74,.25);
-padding:8px 14px;
-border-radius:20px;
-font-size:13.5px;
-color:var(--cocoa);
-font-weight:500;
+border-radius:18px;
+padding:12px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+min-height:78px;
+width:170px;
+transition:.3s;
 }
+
+.scent-chip:hover{
+transform:translateY(-3px);
+box-shadow:0 8px 18px rgba(0,0,0,.08);
+}
+
+.scent-name{
+font-size:15px;
+font-weight:700;
+color:var(--cocoa);
+margin-bottom:4px;
+}
+
+.scent-desc{
+font-size:11px;
+color:#8a725c;
+line-height:1.4;
+}
+
 
 @media(max-width:600px){
 #info-hub{ padding:22px 0; }
@@ -2920,7 +2943,10 @@ VelaLight
 <div class="scent-chip-group">
 <h4>عطور دافئة وحلوة 🤎</h4>
 <div class="scent-chips">
-<span class="scent-chip">🍦 فانيلا – دفء ناعم ولمسة حلوة</span>
+<div class="scent-chip">
+    <div class="scent-name">🍦 فانيلا</div>
+    <div class="scent-desc">دفء ناعم ولمسة حلوة لا تُقاوم</div>
+</div>
 <span class="scent-chip">☕ موكا – مزيج القهوة والشوكولاتة</span>
 <span class="scent-chip">🍮 كراميل – حلاوة دافئة ومريحة</span>
 <span class="scent-chip">🤎 قرفة – دفء شرقي يملأ المكان</span>
