@@ -2230,7 +2230,7 @@ VelaLight
 <section class="recent-strip-section" id="recentStripSection" style="display:none;">
 <div class="wrap">
 <div class="section-head">
-<h3>👁️ شاهدتيه مؤخرًا وممكن يعجبك تاني</h3>
+<h3>👁️ شاهدته مؤخرًا وممكن يعجبك تاني</h3>
 </div>
 <div class="viewed-mini-row" id="homeRecentStrip"></div>
 </div>
@@ -2276,20 +2276,20 @@ VelaLight
 
 <div id="accountLoggedOutView">
 <p style="color:#6b5140;margin:10px 0 4px;font-size:14px;">
-سجّلي بياناتك مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة، ونعرض ليكي مشترياتك وترشيحاتنا.
+سجّل بياناتك مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة، ونعرض ليك مشترياتك وترشيحاتنا.
 </p>
 <div class="field-label">الاسم بالكامل</div>
-<input id="accName" class="customer-input" placeholder="اكتبي اسمك">
+<input id="accName" class="customer-input" placeholder="اكتب اسمك">
 <div class="field-label">رقم الهاتف</div>
 <input id="accPhone" class="customer-input" placeholder="رقم الهاتف" inputmode="numeric">
-<div class="field-label">العنوان (اختياري دلوقتي)</div>
+<div class="field-label">العنوان (اختيار دلوقتي)</div>
 <textarea id="accAddress" class="customer-input" placeholder="المحافظة - المنطقة - أقرب علامة"></textarea>
 <button class="checkout-btn" onclick="saveAccount()">حفظ بياناتي وتسجيل الدخول ✅</button>
 </div>
 
 <div id="accountLoggedInView" style="display:none;">
 <div class="account-greeting">
-أهلاً بيكي <strong id="accGreetName"></strong> 👋
+أهلاً بيك <strong id="accGreetName"></strong> 👋
 <br>
 <button class="account-logout" onclick="logoutAccount()">تسجيل خروج</button>
 </div>
@@ -2397,7 +2397,7 @@ VelaLight
 </div>
 </div>
 <p style="text-align:center;margin-top:16px;font-size:13.5px;color:#8a725c;">
-كل الـ 19 عطر متاحين تختاري منهم في أي منتج من منتجاتنا 🌸
+كل الـعطور متاحين تختار منهم في أي منتج من منتجاتنا 🌸
 </p>
 </div>
 </div>
@@ -2684,7 +2684,7 @@ images:[
 "https://velalight.github.io/candle5.jpg"
 ],
 price:2850,
-oldPrice:null,
+oldPrice:3600,
 badge:"✨ جديد",
 desc:"مش كل قطعة ديكور بتغير المكان... لكن في قطع بتغير إحساس البيت كله. ✨🤍 الطقم ده معمول علشان يضيف لمسة فخامة هادية تخلي أي ركن في بيتك ينطق بالأناقة. اللون الذهبي بيلفت العين من أول نظرة، وتصميمه الراقي يدي إحساس بالفخامة من غير تكلف، ومع العطر المميز هيملأ المكان بريحة هادية تخلي كل لحظة فيه أهدى وأجمل. لأن بيتك يستحق تفاصيل تعكس ذوقك... والتفاصيل الصغيرة هي اللي بتصنع الفرق الكبير.",
 scents:[
@@ -2745,7 +2745,7 @@ return out;
 
 function stockHTML(p){
 if(p.stock.status === "out"){
-return '<div class="stock-line stock-out">🔴 نفد من المخزون</div>';
+return '<div class="stock-line stock-available">🟢 متوفر الآن</div>';
 }
 if(p.stock.status === "low"){
 return '<div class="stock-line stock-low">🟠 متبقي ' + p.stock.count + ' فقط</div>';
@@ -2784,12 +2784,12 @@ return '<div class="card-slider" id="slider-' + p.id + '">' +
 '<div class="slider-track" id="track-' + p.id + '" style="transform:translateX(0)">' + imgs + '</div>' +
 arrows +
 '<div class="slider-dots">' + dots + '</div>' +
-'<div class="zoom-hint">اضغطي للتكبير 🔍</div>' +
+'<div class="zoom-hint">اضغط للتكبير 🔍</div>' +
 '</div>';
 }
 
 function scentOptionsHTML(p, selected){
-let out = '<option value="">اختاري العطر 🌸 (19 عطر متاح)</option>';
+let out = '<option value="">اختار العطر 🌸 </option>';
 ALL_SCENTS.forEach(function(s){
 out += '<option' + (s===selected ? ' selected' : '') + '>' + s + '</option>';
 });
@@ -2966,7 +2966,7 @@ function buyNow(product){
 let scentSelect = document.getElementById("scent" + product.id);
 let selectedScent = scentSelect ? scentSelect.value : "";
 if(selectedScent === ""){
-showToast("من فضلك اختاري العطر أولاً ⚠️");
+showToast("من فضلك اختار العطر أولاً ⚠️");
 return;
 }
 let qtyInput = document.getElementById("qty" + product.id);
@@ -3060,7 +3060,7 @@ velaUser = { name:name, phone:phone, address:address };
 saveVelaUser();
 renderAccountPanel();
 prefillCheckoutFromAccount();
-showToast("تم تسجيل الدخول، أهلاً بيكي " + name + " 👋");
+showToast("تم تسجيل الدخول، أهلاً بيك " + name + " 👋");
 }
 
 function logoutAccount(){
@@ -3141,7 +3141,7 @@ if(!viewedBox || !recBox) return;
 let viewedItems = velaViewed.map(function(id){ return PRODUCTS.find(function(p){ return p.id === id; }); }).filter(Boolean);
 viewedBox.innerHTML = viewedItems.length > 0
 ? '<div class="viewed-mini-row">' + viewedItems.map(miniCardHTML).join("") + '</div>'
-: '<div class="empty-cart">لسه معملتيش تصفح لحاجة 🕯️</div>';
+: '<div class="empty-cart">لسه معملتش تصفح لحاجة 🕯️</div>';
 
 let recItems = PRODUCTS.filter(function(p){ return velaViewed.indexOf(p.id) === -1; });
 if(recItems.length === 0){ recItems = PRODUCTS.slice(0,4); }
