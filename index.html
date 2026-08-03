@@ -2294,57 +2294,15 @@ font-size:12px;
 .ticker-item{ font-size:11.5px; }
 .ticker-track{ gap:32px; }
 }
+/* ===== الهيدر (بدون مربع البحث) ===== */
 
-/* ===== هيدر: صف علوي + صف بحث ثابت ===== */
 .nav-top-row{
 display:flex;
 align-items:center;
 justify-content:space-between;
 gap:10px;
 flex-wrap:wrap;
-padding:6px 0 4px;
-}
-
-.nav-search-row{
-padding:0 0 10px;
-}
-
-.header-search{
-position:relative;
-width:100%;
-max-width:640px;
-margin:0 auto;
-}
-
-.header-search input{
-width:100%;
-padding:11px 44px 11px 16px;
-border-radius:25px;
-border:1px solid var(--brass);
-background:var(--ivory);
-font-size:14px;
-height:44px;
-}
-
-.header-search i{
-position:absolute;
-top:50%;
-left:16px;
-transform:translateY(-50%);
-color:var(--brass);
-font-size:14px;
-pointer-events:none;
-}
-
-.header-sort-inline{
-height:44px;
-padding:0 14px;
-border-radius:25px;
-border:1px solid var(--brass);
-background:var(--ivory);
-font-size:13.5px;
-cursor:pointer;
-flex-shrink:0;
+padding:10px 0;
 }
 
 .wishlist-open-btn{
@@ -2696,13 +2654,6 @@ VelaLight
 </button>
 </div>
 </div>
-
-<div class="nav-search-row">
-<div class="header-search">
-<input type="text" id="headerSearch" placeholder="ابحث عن شمعة، عطر، أو مناسبة... 🔍" aria-label="البحث عن منتج">
-<i class="fa-solid fa-magnifying-glass"></i>
-</div>
-</div>
 </div>
 </header>
 
@@ -2718,12 +2669,30 @@ VelaLight
 <div class="eyebrow">🕯️ شموع يدوية فاخرة 🕯️</div>
 
 <div class="hero-bento-wrap">
+<!-- ===== 2. HERO (البنر الرئيسي) ===== -->
+<section class="hero">
+<div class="wrap">
+<div class="eyebrow">🕯️ شموع يدوية فاخرة 🕯️</div>
 
-<div class="bento-promo">
-<span class="bp-icon">🚚</span>
-<span class="bp-title">توصيل لكل مصر</span>
-<span class="bp-sub">3-7 أيام عمل</span>
+<div class="hero-bento-wrap">
+
+<div class="hero-bento-center">
+<div class="hero-grid">
+
+<div class="candle-scene" aria-hidden="true">
+<div class="candle-ambient"></div>
+<div class="candle-top">
+<div class="candle-flame"></div>
+<div class="candle-wick"></div>
 </div>
+<div class="candle-body"></div>
+</div>
+
+<div class="hero-center">
+<h1>هنا يبدأ السحر... هنا يبدأ الهدوء</h1>
+<p class="sub">
+شموع يدوية فاخرة مصنوعة من الشمع الطبيعي بعطور مختارة لتحول كل مساحة إلى تجربة دافئة وفريدة.
+</p>
 
 <div class="hero-bento-center">
 <div class="hero-grid">
@@ -2754,12 +2723,6 @@ VelaLight
 </div>
 
 </div>
-</div>
-
-<div class="bento-promo">
-<span class="bp-icon">🎁</span>
-<span class="bp-title">تغليف فاخر مجانًا</span>
-<span class="bp-sub">مع كل طلب</span>
 </div>
 
 </div>
