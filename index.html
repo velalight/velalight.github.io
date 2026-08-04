@@ -2474,12 +2474,11 @@ background:rgba(255,251,243,.6);
 
 .main-nav-scroll{
 display:flex;
-gap:10px;
+align-items:center;
+gap:8px;
 overflow-x:auto;
-padding:10px 16px;
+padding:9px 24px;
 scrollbar-width:none;
--ms-overflow-style:none;
-white-space:nowrap;
 }
 
 .main-nav-scroll::-webkit-scrollbar{
@@ -2487,11 +2486,19 @@ display:none;
 }
 
 .main-nav-link{
-flex:0 0 auto;
-padding:10px 18px;
-border-radius:999px;
-font-size:14px;
+flex-shrink:0;
+background:var(--ivory);
+border:1.5px solid rgba(184,135,74,.3);
+color:var(--espresso);
+font-weight:bold;
+font-size:13px;
+padding:8px 16px;
+border-radius:30px;
+cursor:pointer;
+white-space:nowrap;
+transition:.25s;
 }
+
 .main-nav-link:hover{
 border-color:var(--brass);
 transform:translateY(-2px);
@@ -2854,18 +2861,6 @@ body{
 padding-bottom:64px;
 }
 }
-.hero-candle-image{
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-.hero-candle-image img{
-width:320px;
-max-width:100%;
-height:auto;
-display:block;
-}
 </style>
 </head>
 
@@ -2920,6 +2915,12 @@ VelaLight
 </nav>
 </header>
 
+<!-- ===== شريط الصور المتحرك اللانهائي (فوق الهيرو) ===== -->
+<div class="mini-carousel-wrap">
+<div class="mini-carousel-label">🔥 الأكثر مبيعًا الآن</div>
+<div class="mini-carousel-track" id="miniCarouselTrack"></div>
+</div>
+
 <!-- ===== 2. HERO (البنر الرئيسي) ===== -->
 <section class="hero">
 <div class="hero-bg-photo" id="heroBgPhoto" aria-hidden="true"></div>
@@ -2931,39 +2932,32 @@ VelaLight
 
 <div class="hero-bento-center">
 <div class="hero-grid">
-<!-- ===== 2. HERO (البنر الرئيسي) ===== -->
-<section class="hero">
-<div class="hero-bg-photo" id="heroBgPhoto" aria-hidden="true"></div>
 
-<div class="wrap">
-<div class="eyebrow">🕯️ شموع يدوية فاخرة 🕯️</div>
-
-<div class="hero-bento-wrap">
-
-<div class="hero-bento-center">
-<div class="hero-grid">
-
-<div class="hero-candle-image">
-<img src="images/qqq.jpg" alt="شمعة VelaLight">
+<div class="candle-scene" aria-hidden="true">
+<div class="candle-ambient"></div>
+<div class="candle-top">
+<div class="candle-flame"></div>
+<div class="candle-wick"></div>
+</div>
+<div class="candle-body"></div>
 </div>
 
 <div class="hero-center">
 <h1>هنا يبدأ السحر... هنا يبدأ الهدوء</h1>
-
 <p class="sub">
 شموع يدوية فاخرة مصنوعة من الشمع الطبيعي بعطور مختارة لتحول كل مساحة إلى تجربة دافئة وفريدة.
 </p>
-
 <a href="#products" class="hero-cta-btn">اطلب الآن ⚡</a>
-
 </div>
 
 </div>
 </div>
+
 
 </div>
 </div>
 </section>
+
 <!-- ===== 3. المنتجات ===== -->
 <section id="products">
 <div class="wrap">
