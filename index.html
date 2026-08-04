@@ -1312,4 +1312,1059 @@ updateCartUI();
 </script>
 
 </body>
-</html>
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#4A2E1E">
+
+<title>VelaLight | شموع يدوية فاخرة | Luxury Handmade Candles</title>
+
+<meta name="description" content="VelaLight شموع يدوية فاخرة. شموع معطرة، هدايا مميزة، وتصميمات يدوية تضيف دفء وأناقة لكل مكان. Handcrafted luxury candles delivered across Egypt.">
+<meta name="keywords" content="شموع يدوية, شموع معطرة, هدايا فاخرة, شموع, VelaLight, شموع هاند ميد">
+<meta name="author" content="VelaLight">
+
+<link rel="canonical" href="https://velalight.github.io/">
+
+<meta property="og:site_name" content="VelaLight">
+<meta property="og:title" content="VelaLight | شموع يدوية فاخرة">
+<meta property="og:description" content="شموع مصنوعة بحب وعطور مختارة وهدايا تناسب كل المناسبات">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ar_EG">
+<meta property="og:url" content="https://velalight.github.io/">
+<meta property="og:image" content="https://velalight.github.io/eeeee.jpg">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%95%AF%EF%B8%8F%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+:root{
+--cream:#F6EDE0;
+--ivory:#FFFBF3;
+--cocoa:#2B1B12;
+--espresso:#4A2E1E;
+--brass:#B8874A;
+--brass-light:#D9AE71;
+--line:rgba(43,27,18,.12);
+--gold:#C9A15A;
+--green:#25D366;
+--red:#c0392b;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+overflow-x:hidden;
+width:100%;
+}
+
+body{
+font-family:'Tajawal',sans-serif;
+background:var(--cream);
+color:var(--cocoa);
+line-height:1.9;
+overflow-x:hidden;
+width:100%;
+}
+
+h1,h2,h3,h4{
+font-family:'Amiri',serif;
+font-weight:700;
+}
+
+img{
+max-width:100%;
+display:block;
+}
+
+a{
+color:inherit;
+text-decoration:none;
+}
+
+button{
+font-family:'Tajawal',sans-serif;
+}
+
+.wrap{
+max-width:1120px;
+margin:auto;
+padding:0 24px;
+}
+
+/* ===== HEADER ===== */
+header{
+background:rgba(246,237,224,.95);
+backdrop-filter:blur(10px);
+border-bottom:1px solid rgba(184,135,74,.25);
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+.nav-top-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+padding:12px 0;
+}
+
+.logo{
+font-size:24px;
+font-family:'Amiri',serif;
+font-weight:bold;
+color:var(--espresso);
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.logo small{
+display:block;
+font-family:'Tajawal',sans-serif;
+font-size:8.5px;
+letter-spacing:1.5px;
+font-weight:500;
+opacity:.7;
+}
+
+.flame{
+display:inline-block;
+width:15px;
+height:20px;
+background:var(--brass);
+border-radius:50% 50% 50% 0;
+transform:rotate(-45deg);
+margin:0 5px;
+transform-origin:bottom center;
+animation:flicker 2.4s ease-in-out infinite;
+}
+
+@keyframes flicker{
+0%,100%{ transform:rotate(-45deg) scale(1); }
+25%{ transform:rotate(-38deg) scale(1.06); }
+50%{ transform:rotate(-50deg) scale(.94); }
+75%{ transform:rotate(-40deg) scale(1.03); }
+}
+
+.nav-buttons{
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+.menu-toggle-btn{
+background:var(--ivory);
+border:1px solid rgba(184,135,74,.3);
+width:42px;
+height:42px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+color:var(--espresso);
+cursor:pointer;
+transition:.25s;
+}
+
+.cart-open-btn,
+.account-open-btn{
+position:relative;
+width:42px;
+height:42px;
+border-radius:50%;
+background:var(--ivory);
+border:1px solid rgba(184,135,74,.3);
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+}
+
+#cartCount{
+position:absolute;
+top:-4px;
+left:-4px;
+background:var(--espresso);
+color:white;
+width:20px;
+height:20px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:11px;
+font-weight:bold;
+}
+
+/* الهيدر السفلي (شريط الأقسام السريع) */
+.sub-header-nav{
+background:rgba(74,46,30,.06);
+border-top:1px solid rgba(184,135,74,.15);
+padding:8px 0;
+overflow-x:auto;
+white-space:nowrap;
+}
+
+.sub-header-nav .wrap{
+display:flex;
+gap:15px;
+align-items:center;
+justify-content:center;
+}
+
+.sub-nav-link{
+font-size:14px;
+font-weight:bold;
+color:var(--espresso);
+padding:4px 12px;
+border-radius:15px;
+transition:.2s;
+}
+
+.sub-nav-link:hover{
+background:var(--brass);
+color:white;
+}
+
+/* ===== SIDE MENU ===== */
+.side-menu{
+position:fixed;
+top:0;
+right:-100%;
+width:300px;
+max-width:80%;
+height:100vh;
+background:var(--ivory);
+z-index:9999;
+box-shadow:-5px 0 25px rgba(0,0,0,.2);
+transition:.4s ease;
+padding:25px 20px;
+display:flex;
+flex-direction:column;
+}
+
+.side-menu.active{ right:0; }
+
+.side-menu-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid var(--line);
+padding-bottom:15px;
+margin-bottom:15px;
+}
+
+.close-menu-btn{
+background:var(--espresso);
+color:white;
+border:none;
+width:32px;
+height:32px;
+border-radius:50%;
+cursor:pointer;
+}
+
+.side-menu-links{
+list-style:none;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.side-menu-links a{
+display:block;
+padding:10px 14px;
+border-radius:10px;
+font-weight:bold;
+color:var(--cocoa);
+background:rgba(246,237,224,.5);
+transition:.2s;
+}
+
+.side-menu-links a:hover{
+background:var(--brass);
+color:white;
+}
+
+/* ===== HERO ===== */
+.hero{
+padding:50px 0 40px;
+text-align:center;
+position:relative;
+overflow:hidden;
+background:#22150e;
+color:#ffffff;
+}
+
+.hero-bg-photo{
+position:absolute;
+inset:0;
+z-index:0;
+background-image:url('https://velalight.github.io/eeeee.jpg');
+background-size:cover;
+background-position:center;
+opacity:0.35;
+filter:brightness(0.8) contrast(1.1);
+pointer-events:none;
+}
+
+.hero-bg-photo::after{
+content:"";
+position:absolute;
+inset:0;
+background:radial-gradient(circle at center, rgba(43,27,18,0.4) 0%, rgba(15,10,6,0.85) 100%);
+}
+
+.hero .wrap{ position:relative; z-index:1; }
+
+.eyebrow{
+color:var(--brass-light);
+font-weight:bold;
+font-size:20px;
+margin-bottom:15px;
+text-shadow:0 2px 4px rgba(0,0,0,0.6);
+}
+
+.hero h1{
+font-size:42px;
+line-height:1.3;
+color:#fff;
+text-shadow:0 2px 10px rgba(0,0,0,0.7);
+}
+
+.hero .sub{
+font-size:18px;
+max-width:700px;
+margin:20px auto;
+color:#f0e6d9;
+line-height:1.8;
+}
+
+.hero-cta-btn{
+display:inline-block;
+margin-top:20px;
+background:linear-gradient(135deg,var(--brass),#a9702f);
+color:#fff;
+font-weight:bold;
+font-size:18px;
+padding:14px 42px;
+border-radius:40px;
+box-shadow:0 10px 25px rgba(0,0,0,0.5);
+transition:.3s;
+border:1px solid rgba(255,255,255,0.2);
+}
+
+.hero-cta-btn:hover{
+transform:translateY(-3px);
+background:linear-gradient(135deg,#a9702f,var(--brass));
+}
+
+.candle-scene{
+position:relative;
+width:120px;
+height:180px;
+margin:15px auto;
+}
+
+.candle-ambient{
+position:absolute;
+left:50%; top:8%;
+transform:translateX(-50%);
+width:200%; height:85%;
+background:radial-gradient(circle,rgba(255,190,90,.45) 0%,rgba(255,140,40,.2) 45%,transparent 72%);
+filter:blur(4px);
+animation:ambientBreathe 4.2s ease-in-out infinite;
+}
+
+@keyframes ambientBreathe{
+0%,100%{ opacity:.65; transform:translateX(-50%) scale(1); }
+50%{ opacity:1; transform:translateX(-50%) scale(1.12); }
+}
+
+.candle-body{
+position:absolute;
+left:50%; bottom:0;
+transform:translateX(-50%);
+width:60%; height:62%;
+border-radius:16px 16px 20px 20px;
+background:linear-gradient(90deg,#fffaf0 0%,#f3e3c5 45%,#e9d3aa 75%,#fffaf0 100%);
+box-shadow:inset -12px 0 20px rgba(74,46,30,.16),0 22px 40px rgba(0,0,0,.5);
+}
+
+.candle-top{
+position:absolute;
+left:50%; bottom:62%;
+transform:translateX(-50%);
+display:flex; flex-direction:column; align-items:center; z-index:4;
+}
+
+.candle-wick{ width:4px; height:14px; background:#3a2a1d; }
+
+.candle-flame{
+width:26px; height:40px;
+border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+background:radial-gradient(circle at 50% 68%,#fffceb 0%,#ffe28a 26%,#ffb238 55%,#ff7a1a 82%,#ff5400 100%);
+animation:candleFlicker 3s ease-in-out infinite;
+}
+
+@keyframes candleFlicker{
+0%,100%{ transform:scale(1) rotate(0deg); }
+50%{ transform:scale(1.05) rotate(-2deg); }
+}
+
+/* ===== قسم من نحن (ABOUT US) ===== */
+.about-section{
+background:var(--ivory);
+border-top:1px solid var(--line);
+border-bottom:1px solid var(--line);
+padding:60px 0;
+}
+
+.about-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:40px;
+align-items:center;
+}
+
+.about-text h2{
+font-size:36px;
+color:var(--espresso);
+margin-bottom:15px;
+}
+
+.about-text p{
+font-size:17px;
+color:#5c4333;
+margin-bottom:15px;
+line-height:1.9;
+}
+
+.about-features{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-top:20px;
+}
+
+.about-feat-box{
+background:var(--cream);
+padding:15px;
+border-radius:12px;
+border-right:3px solid var(--brass);
+font-weight:bold;
+font-size:14.5px;
+}
+
+/* ===== قسم أنواع العطور ===== */
+.scents-section{
+padding:50px 0;
+background:rgba(246,237,224,.6);
+}
+
+.scents-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+gap:15px;
+margin-top:25px;
+}
+
+.scent-card{
+background:var(--ivory);
+padding:20px 15px;
+border-radius:15px;
+text-align:center;
+border:1px solid rgba(184,135,74,.2);
+box-shadow:0 4px 12px rgba(0,0,0,.03);
+transition:.3s;
+}
+
+.scent-card:hover{
+transform:translateY(-5px);
+border-color:var(--brass);
+}
+
+.scent-icon{
+font-size:28px;
+margin-bottom:8px;
+display:block;
+}
+
+.scent-title{
+font-weight:bold;
+font-size:16px;
+color:var(--espresso);
+}
+
+.scent-desc{
+font-size:12.5px;
+color:#7a6251;
+margin-top:4px;
+}
+
+/* ===== تصنيفات المنتجات والشبكة ===== */
+section{ padding:50px 0; }
+
+.section-head{ text-align:center; margin-bottom:30px; }
+.section-head h2{ font-size:36px; color:var(--espresso); }
+
+.cat-tabs{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+margin-bottom:30px;
+}
+
+.cat-tab{
+background:var(--ivory);
+border:1.5px solid rgba(184,135,74,.35);
+color:var(--espresso);
+font-weight:bold;
+font-size:13.5px;
+padding:9px 18px;
+border-radius:30px;
+cursor:pointer;
+transition:.25s;
+}
+
+.cat-tab.active{
+background:linear-gradient(135deg,var(--brass),#a9702f);
+color:#fff;
+border-color:transparent;
+}
+
+.grid-products{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+}
+
+.card{
+position:relative;
+background:var(--ivory);
+border-radius:20px;
+overflow:hidden;
+border:1px solid rgba(184,135,74,.2);
+transition:.35s;
+display:flex;
+flex-direction:column;
+}
+
+.card:hover{ transform:translateY(-8px); box-shadow:0 15px 30px rgba(0,0,0,.1); }
+
+.badge{
+position:absolute; top:12px; right:12px;
+background:var(--red); color:white;
+font-size:11px; font-weight:bold; padding:4px 10px; border-radius:15px; z-index:5;
+}
+
+.card-slider{ height:230px; overflow:hidden; cursor:pointer; }
+.card-slider img{ width:100%; height:100%; object-fit:cover; }
+
+.card-body{ padding:18px; display:flex; flex-direction:column; flex:1; }
+.card-body h3{ font-size:19px; color:var(--espresso); }
+
+.price{
+font-size:19px; font-weight:bold; color:var(--brass); margin:6px 0;
+display:flex; align-items:center; gap:8px;
+}
+
+.old-price{ font-size:13px; color:#a08d7c; text-decoration:line-through; font-weight:normal; }
+
+.more-details-toggle{
+background:none; border:none; border-top:1px dashed var(--line);
+color:var(--brass); font-weight:bold; padding:10px 0 0; margin-top:8px; cursor:pointer; font-size:13px; text-align:center;
+}
+
+.more-details-panel{
+display:none; margin-top:8px; font-size:13px; color:#6b5140; background:rgba(246,237,224,.5); padding:10px; border-radius:10px;
+}
+
+.more-details-panel.open{ display:block; }
+
+.order-btn{
+width:100%; padding:11px; border:none; border-radius:25px;
+background:var(--espresso); color:white; cursor:pointer; font-weight:bold; font-size:14px; margin-top:auto; transition:.25s;
+}
+
+.order-btn:hover{ background:var(--brass); color:var(--cocoa); }
+
+/* ===== CART & ACCOUNT ===== */
+.cart-panel{
+position:fixed; top:0; right:-100%; width:400px; max-width:100%; height:100vh;
+background:var(--ivory); z-index:9999; padding:20px; box-shadow:-10px 0 30px rgba(0,0,0,.25); transition:.4s; overflow-y:auto;
+}
+.cart-panel.active{ right:0; }
+
+#cartOverlay{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9998; }
+#cartOverlay.active{ display:block; }
+
+.cart-title{ display:flex; justify-content:space-between; align-items:center; }
+.close-cart{ background:var(--cocoa); color:white; border:none; width:32px; height:32px; border-radius:50%; cursor:pointer; }
+
+.cart-item{ display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); }
+.cart-thumb{ width:60px; height:60px; border-radius:10px; object-fit:cover; }
+
+.customer-input{ width:100%; padding:11px; margin:6px 0; font-size:14px; border-radius:10px; border:1px solid var(--brass); }
+.checkout-btn{ width:100%; padding:13px; border:none; border-radius:12px; background:#25D366; color:white; font-weight:bold; cursor:pointer; margin-top:10px; }
+
+/* ===== FOOTER & SOCIAL ===== */
+.social-links{ display:flex; justify-content:center; flex-wrap:wrap; gap:12px; margin-top:20px; }
+.social-links a{ display:flex; align-items:center; gap:8px; background:var(--espresso); color:white; padding:10px 18px; border-radius:25px; font-weight:bold; }
+.social-links a:hover{ background:var(--brass); }
+
+footer{ background:var(--espresso); color:white; padding:35px 0; text-align:center; margin-top:30px; }
+footer .logo{ color:white; justify-content:center; }
+
+.toast{
+position:fixed; bottom:25px; left:50%; transform:translateX(-50%) translateY(20px);
+background:var(--espresso); color:white; padding:12px 25px; border-radius:25px; font-weight:bold; z-index:10000; opacity:0; transition:.35s; pointer-events:none;
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+@media(max-width:1024px){ .grid-products{ grid-template-columns:repeat(3,1fr); } }
+@media(max-width:768px){
+.grid-products{ grid-template-columns:repeat(2,1fr); gap:12px; }
+.about-grid{ grid-template-columns:1fr; }
+.hero h1{ font-size:28px; }
+.sub-header-nav .wrap{ justify-content:flex-start; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== القائمة الجانبية المنسدلة ===== -->
+<div class="side-menu" id="sideMenu">
+<div class="side-menu-header">
+<h3>القائمة</h3>
+<button class="close-menu-btn" onclick="toggleMenu()">✖</button>
+</div>
+<ul class="side-menu-links">
+<li><a href="#about" onclick="toggleMenu()">من نحن ؟</a></li>
+<li><a href="#scents" onclick="toggleMenu()">أنواع العطور</a></li>
+<li><a href="#products" onclick="filterCat('all'); toggleMenu();">كل الشموع</a></li>
+<li><a href="#products" onclick="filterCat('wood'); toggleMenu();">🪵 شموع خشبية</a></li>
+<li><a href="#products" onclick="filterCat('glass'); toggleMenu();">🫙 شموع زجاجية</a></li>
+<li><a href="#products" onclick="filterCat('crystal'); toggleMenu();">💎 شموع كريستالية</a></li>
+<li><a href="#products" onclick="filterCat('metal'); toggleMenu();">✨ شموع معدنية</a></li>
+<li><a href="#products" onclick="filterCat('massage'); toggleMenu();">💆‍♀️ شموع مساج</a></li>
+<li><a href="#contact" onclick="toggleMenu()">تواصل معنا</a></li>
+</ul>
+</div>
+
+<!-- ===== 1. الهيدر الرئيسية ===== -->
+<header>
+<div class="wrap">
+<div class="nav-top-row">
+<div class="logo">
+<button class="menu-toggle-btn" onclick="toggleMenu()" aria-label="القائمة">☰</button>
+<span class="flame"></span>
+<div>
+VelaLight
+<small>Luxury Candle Studio</small>
+</div>
+</div>
+
+<div class="nav-buttons">
+<button class="account-open-btn" onclick="openAccount()" aria-label="حسابي">👤</button>
+<button class="cart-open-btn" onclick="openCart()" aria-label="فتح السلة">
+🛒 <span id="cartCount">0</span>
+</button>
+</div>
+</div>
+</div>
+
+<!-- الهيدر السفلي (شريط التنقل السريع) -->
+<div class="sub-header-nav">
+<div class="wrap">
+<a href="#about" class="sub-nav-link">من نحن</a>
+<a href="#scents" class="sub-nav-link">العطور</a>
+<a href="#products" onclick="filterCat('all')" class="sub-nav-link">الكل</a>
+<a href="#products" onclick="filterCat('wood')" class="sub-nav-link">🪵 خشبية</a>
+<a href="#products" onclick="filterCat('glass')" class="sub-nav-link">🫙 زجاجية</a>
+<a href="#products" onclick="filterCat('metal')" class="sub-nav-link">✨ معدنية</a>
+<a href="#products" onclick="filterCat('massage')" class="sub-nav-link">💆‍♀️ مساج</a>
+</div>
+</div>
+</header>
+
+<!-- ===== 2. HERO ===== -->
+<section class="hero">
+<div class="hero-bg-photo"></div>
+<div class="wrap">
+<div class="eyebrow">🕯️ شموع يدوية فاخرة 🕯️</div>
+
+<h1>هنا يبدأ السحر... هنا يبدأ الهدوء</h1>
+
+<div class="candle-scene" aria-hidden="true">
+<div class="candle-ambient"></div>
+<div class="candle-top">
+<div class="candle-flame"></div>
+<div class="candle-wick"></div>
+</div>
+<div class="candle-body"></div>
+</div>
+
+<p class="sub">
+شموع يدوية فاخرة مصنوعة من الشمع الطبيعي بعطور مختارة لتحول كل مساحة إلى تجربة دافئة وفريدة.
+</p>
+
+<a href="#products" class="hero-cta-btn">اطلب الان ⚡</a>
+</div>
+</section>
+
+<!-- ===== 3. قسم من نحن (ABOUT US) ===== -->
+<section class="about-section" id="about">
+<div class="wrap">
+<div class="about-grid">
+<div class="about-text">
+<h2>عن VelaLight 🕯️</h2>
+<p>
+في <strong>VelaLight</strong>، نؤمن بأن الشمعة ليست مجرد إضاءة، بل هي تجربة تعيشها وحالة من الهدوء تُضاف ليومك. نقوم بصنع كل قطعة يدوياً بحب واهتمام بالغ للتفاصيل.
+</p>
+<p>
+نستخدم الشمع الطبيعي الصافي الخالي من المواد الضارة، المدموج بأجود الزيوت العطرية العالمية لضمان انتشار الفواحان وثبات العطر لأطول فترة ممكنة.
+</p>
+
+<div class="about-features">
+<div class="about-feat-box">🌿 شمع طبيعي 100%</div>
+<div class="about-feat-box">✨ فواحان يدوم طويلاً</div>
+<div class="about-feat-box">🪵 فتيل خشب طبيعي</div>
+<div class="about-feat-box">🎁 تصاميم هدايا راقية</div>
+</div>
+</div>
+
+<div>
+<img src="https://velalight.github.io/eeeee.jpg" alt="VelaLight Studio" style="border-radius:20px; box-shadow:0 15px 30px rgba(0,0,0,0.15);">
+</div>
+</div>
+</div>
+</section>
+
+<!-- ===== 4. قسم أنواع العطور ===== -->
+<section class="scents-section" id="scents">
+<div class="wrap">
+<div class="section-head">
+<h2>تشكيلة العطور 🌸</h2>
+<p>عطور مختارة بعناية تناسب جميع الأذواق والأوقات</p>
+</div>
+
+<div class="scents-grid">
+<div class="scent-card">
+<span class="scent-icon">☕</span>
+<div class="scent-title">القهوة والفانيليا</div>
+<div class="scent-desc">دفء القهوة مع حلاوة الفانيليا لرائحة مريحة</div>
+</div>
+
+<div class="scent-card">
+<span class="scent-icon">Lavender 🪻</span>
+<div class="scent-title">اللافندر الهادئ</div>
+<div class="scent-desc">لأوقات الاسترخاء ومساعدة على النوم العميق</div>
+</div>
+
+<div class="scent-card">
+<span class="scent-icon">🪵</span>
+<div class="scent-title">الخشب والعود</div>
+<div class="scent-desc">لمسة شرقية فاخرة تناسب المجالس والمناسبات</div>
+</div>
+
+<div class="scent-card">
+<span class="scent-icon">🍓</span>
+<div class="scent-title">الفواكه الاستوائية</div>
+<div class="scent-desc">الانتعاش والحيوية لإضافة طاقة إيجابية للمكان</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ===== 5. المنتجات ===== -->
+<section id="products">
+<div class="wrap">
+
+<div class="section-head">
+<h2>مجموعة الشموع</h2>
+<p>اختر ما يناسب ذوقك وبيتك 🤎</p>
+</div>
+
+<div class="cat-tabs">
+<button class="cat-tab active" onclick="filterCat('all', this)">🕯️ الكل</button>
+<button class="cat-tab" onclick="filterCat('wood', this)">🪵 خشبية</button>
+<button class="cat-tab" onclick="filterCat('glass', this)">🫙 زجاجية</button>
+<button class="cat-tab" onclick="filterCat('crystal', this)">💎 كريستالية</button>
+<button class="cat-tab" onclick="filterCat('metal', this)">✨ معدنية</button>
+<button class="cat-tab" onclick="filterCat('massage', this)">💆‍♀️ مساج</button>
+</div>
+
+<div class="grid-products" id="productsGrid"></div>
+
+</div>
+
+<div id="cartOverlay" onclick="closeCart(); closeAccount(); toggleMenu(false);"></div>
+</section>
+
+<!-- ===== السلة ===== -->
+<div class="cart-panel" id="cartPanel">
+<div class="cart-title">
+<h2>🛒 سلة الشراء</h2>
+<button class="close-cart" onclick="closeCart()">✖</button>
+</div>
+<div id="cartItems"></div>
+<button onclick="clearCart()" style="width:100%;padding:8px;margin-top:10px;background:#8b3a3a;color:white;border:none;border-radius:8px;cursor:pointer;">إفراغ السلة 🗑</button>
+<div style="font-size:20px;font-weight:bold;margin:15px 0;color:var(--espresso);">الإجمالي: <span id="cartTotal">0</span> جنيه</div>
+
+<div style="font-size:13px;font-weight:bold;margin-bottom:5px;">بيانات التوصيل</div>
+<input id="customerName" class="customer-input" placeholder="الاسم بالكامل">
+<input id="customerPhone" class="customer-input" placeholder="رقم الهاتف">
+<textarea id="customerAddress" class="customer-input" placeholder="العنوان بالتفصيل"></textarea>
+
+<button class="checkout-btn" onclick="sendWhatsApp()">إتمام الطلب عبر واتساب 📱</button>
+</div>
+
+<!-- ===== الحساب ===== -->
+<div class="cart-panel" id="accountPanel">
+<div class="cart-title">
+<h2>👤 حسابي</h2>
+<button class="close-cart" onclick="closeAccount()">✖</button>
+</div>
+<div style="padding:15px 0;">
+<input id="accName" class="customer-input" placeholder="الاسم بالكامل">
+<input id="accPhone" class="customer-input" placeholder="رقم الهاتف">
+<button class="checkout-btn" onclick="closeAccount()">حفظ البيانات ✅</button>
+</div>
+</div>
+
+<!-- ===== 6. التواصل والفوتر ===== -->
+<section id="contact">
+<div class="wrap">
+<div class="social-links">
+<a href="https://www.facebook.com/VelaLight/" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a>
+<a href="https://www.instagram.com/velaa_lighttt" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+<a href="https://www.tiktok.com/@vela.light0" target="_blank"><i class="fab fa-tiktok"></i> TikTok</a>
+<a href="https://wa.me/201223526105" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="wrap">
+<div class="logo"><span class="flame"></span> VelaLight</div>
+<p style="margin-top:8px;">شموع تصنع لحظات لا تنسى 🤎</p>
+<p style="font-size:12px;opacity:.7;margin-top:5px;">© 2026 VelaLight — All Rights Reserved</p>
+</div>
+</footer>
+
+<div class="toast" id="toast">تمت الإضافة للسلة ✅</div>
+
+<script>
+const PRODUCTS = [
+{
+id:1,
+name:"شمعة المنديلا",
+category:"glass",
+images:["https://velalight.github.io/2.jpg"],
+price:325,
+oldPrice:null,
+badge:"🔥 الأكثر مبيعًا",
+desc:"الشمعة الأكثر طلبًا، مصنوعة يدويًا بعناية فائقة لتنبعث منها أضواء دافئة وعطور ساحرة مناسبة لكل أركان البيت والاسترخاء."
+},
+{
+id:2,
+name:"الشمعة الفاخرة",
+category:"crystal",
+images:["https://velalight.github.io/eeeee.jpg"],
+price:680,
+oldPrice:850,
+badge:null,
+desc:"تصصميم راقي مخصص للمناسبات الفخمة يغير شكل المكان بالكامل، وتأتي مع فتيل خشب طبيعي يعطي صوتاً هادئاً كالحطب."
+},
+{
+id:3,
+name:"مجموعة نبضين",
+category:"glass",
+images:["https://velalight.github.io/q.jpg"],
+price:650,
+oldPrice:750,
+badge:null,
+desc:"تصميم مميز يجمع بين الجمال والرائحة الفاخرة، تتكون من قطعتين متناسقتين لمسة رقي وجمال لغرف النوم والمعيشة."
+},
+{
+id:4,
+name:"كونتر الخشب الطبيعي",
+category:"wood",
+images:["https://velalight.github.io/RRRRRR.jpg"],
+price:650,
+oldPrice:null,
+badge:null,
+desc:"قطعة فنية من الخشب الطبيعي الخام مع شموع معطرة بعناية من الشمع الطبيعي الصافي لحفظ العطر لأطول فترة ممكنة."
+},
+{
+id:5,
+name:"طقم الشموع الذهبي الفاخر",
+category:"metal",
+images:["https://velalight.github.io/candle.jpg"],
+price:2850,
+oldPrice:3600,
+badge:"✨ جديد",
+desc:"طقم الشموع الذهبي الفاخر (3 قطع) ✨ ثلاث قطع بتصميم ذهبي أنيق تضيف للمكان لمسة فخامة ودفء من أول نظرة."
+}
+];
+
+let cart = JSON.parse(localStorage.getItem('vela_cart') || '[]');
+let currentCat = 'all';
+
+function toggleMenu(show){
+const menu = document.getElementById('sideMenu');
+const overlay = document.getElementById('cartOverlay');
+if(show === undefined){
+menu.classList.toggle('active');
+overlay.classList.toggle('active');
+} else if(show){
+menu.classList.add('active');
+overlay.classList.add('active');
+} else {
+menu.classList.remove('active');
+overlay.classList.remove('active');
+}
+}
+
+function renderProducts(){
+const grid = document.getElementById('productsGrid');
+grid.innerHTML = '';
+
+const filtered = currentCat === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.category === currentCat);
+
+filtered.forEach(p => {
+const card = document.createElement('div');
+card.className = 'card';
+
+card.innerHTML = `
+${p.badge ? `<div class="badge">${p.badge}</div>` : ''}
+<div class="card-slider" onclick="toggleDetails(${p.id})">
+<img src="${p.images[0]}" alt="${p.name}">
+</div>
+<div class="card-body">
+<h3>${p.name}</h3>
+<div class="price">
+<span>${p.price} جنيه</span>
+${p.oldPrice ? `<span class="old-price">${p.oldPrice} جنيه</span>` : ''}
+</div>
+
+<button class="more-details-toggle" onclick="toggleDetails(${p.id})">عرض التفاصيل والوصف 👇</button>
+<div class="more-details-panel" id="desc-${p.id}">${p.desc}</div>
+
+<button class="order-btn" onclick="addToCart(${p.id})">إضافة للسلة 🛒</button>
+</div>
+`;
+grid.appendChild(card);
+});
+}
+
+function toggleDetails(id){
+const panel = document.getElementById(`desc-${id}`);
+if(panel){ panel.classList.toggle('open'); }
+}
+
+function filterCat(cat, btn){
+currentCat = cat;
+if(btn){
+document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+btn.classList.add('active');
+}
+renderProducts();
+}
+
+function addToCart(id){
+const prod = PRODUCTS.find(p => p.id === id);
+const existing = cart.find(item => item.id === id);
+if(existing){ existing.qty++; } else { cart.push({...prod, qty: 1}); }
+saveCart();
+showToast("تمت الإضافة للسلة ✅");
+}
+
+function saveCart(){
+localStorage.setItem('vela_cart', JSON.stringify(cart));
+updateCartUI();
+}
+
+function updateCartUI(){
+document.getElementById('cartCount').innerText = cart.reduce((acc, item) => acc + item.qty, 0);
+const container = document.getElementById('cartItems');
+
+if(cart.length === 0){
+container.innerHTML = '<div style="text-align:center;padding:30px;color:#8a725c;">السلة فارغة حالياً</div>';
+document.getElementById('cartTotal').innerText = '0';
+return;
+}
+
+let total = 0;
+container.innerHTML = cart.map(item => {
+total += item.price * item.qty;
+return `
+<div class="cart-item">
+<img src="${item.images[0]}" class="cart-thumb">
+<div style="flex:1;">
+<h4 style="font-size:14px;">${item.name}</h4>
+<div style="font-size:13px;color:var(--brass);">${item.price} جنيه × ${item.qty}</div>
+</div>
+</div>
+`;
+}).join('');
+
+document.getElementById('cartTotal').innerText = total;
+}
+
+function clearCart(){ cart = []; saveCart(); }
+function openCart(){ document.getElementById('cartPanel').classList.add('active'); document.getElementById('cartOverlay').classList.add('active'); }
+function closeCart(){ document.getElementById('cartPanel').classList.remove('active'); document.getElementById('cartOverlay').classList.remove('active'); }
+function openAccount(){ document.getElementById('accountPanel').classList.add('active'); document.getElementById('cartOverlay').classList.add('active'); }
+function closeAccount(){ document.getElementById('accountPanel').classList.remove('active'); document.getElementById('cartOverlay').classList.remove('active'); }
+
+function showToast(msg){
+const toast = document.getElementById('toast');
+toast.innerText = msg;
+toast.classList.add('show');
+setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+function sendWhatsApp(){
+if(cart.length === 0){ alert("سلتك فارغة!"); return; }
+const name = document.getElementById('customerName').value;
+const phone = document.getElementById('customerPhone').value;
+const address = document.getElementById('customerAddress').value;
+
+if(!name || !phone || !address){ alert("يرجى ملء كافة البيانات"); return; }
+
+let text = `مرحباً VelaLight، أريد تأكيد الطلب التالي:\n\n`;
+cart.forEach(item => { text += `- ${item.name} (${item.qty}) : ${item.price * item.qty} جنيه\n`; });
+text += `\nالإجمالي: ${document.getElementById('cartTotal').innerText} جنيه\n\nالاسم: ${name}\nالهاتف: ${phone}\nالعنوان: ${address}`;
+
+window.open(`https://wa.me/201223526105?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+renderProducts();
+updateCartUI();
+});
+</script>
+
+</body>
+</html></html>
