@@ -639,3 +639,3585 @@ transition:.35s;
 border:none;
 cursor:pointer;
 text-decoration:none;
+box-shadow:0 15px 35px rgba(0,0,0,.25);
+}
+
+.hero-cta:hover{
+transform:translateY(-4px);
+box-shadow:0 22px 45px rgba(0,0,0,.35);
+}
+
+.hero-cta-ghost{
+display:inline-flex;
+align-items:center;
+gap:10px;
+padding:16px 36px;
+border-radius:999px;
+background:transparent;
+color:var(--ivory);
+font-weight:500;
+font-size:15px;
+border:1px solid rgba(255,251,243,.35);
+transition:.35s;
+text-decoration:none;
+}
+
+.hero-cta-ghost:hover{
+background:rgba(255,251,243,.1);
+border-color:var(--brass-light);
+}
+
+/* شمعة واحدة أنيقة في الهيرو */
+.hero-candle-wrap{
+position:absolute;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+z-index:2;
+opacity:.4;
+pointer-events:none;
+}
+
+.candle-scene{
+position:relative;
+width:min(28vw,140px);
+height:min(52vw,260px);
+margin:auto;
+}
+
+.candle-ambient{
+position:absolute;
+left:50%;
+top:8%;
+transform:translateX(-50%);
+width:220%;
+height:85%;
+background:radial-gradient(circle,rgba(255,190,90,.4) 0%,rgba(255,140,40,.14) 45%,transparent 72%);
+filter:blur(4px);
+animation:ambientBreathe 4.2s ease-in-out infinite;
+pointer-events:none;
+z-index:0;
+}
+
+@keyframes ambientBreathe{
+0%,100%{ opacity:.65; transform:translateX(-50%) scale(1); }
+50%{ opacity:1; transform:translateX(-50%) scale(1.12); }
+}
+
+.candle-body{
+position:absolute;
+left:50%;
+bottom:0;
+transform:translateX(-50%);
+width:60%;
+height:62%;
+border-radius:16px 16px 20px 20px;
+background:linear-gradient(90deg,#fffaf0 0%,#f3e3c5 45%,#e9d3aa 75%,#fffaf0 100%);
+box-shadow:inset -12px 0 20px rgba(74,46,30,.16),inset 10px 0 16px rgba(255,255,255,.55),0 22px 40px rgba(43,27,18,.28);
+overflow:hidden;
+z-index:2;
+}
+
+.candle-body::before{
+content:"";
+position:absolute;
+top:0;
+right:18%;
+width:14%;
+height:38%;
+background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,0));
+border-radius:0 0 50% 50%;
+opacity:.8;
+}
+
+.candle-top{
+position:absolute;
+left:50%;
+bottom:62%;
+transform:translateX(-50%);
+display:flex;
+flex-direction:column;
+align-items:center;
+z-index:4;
+}
+
+.candle-wick{
+width:4px;
+height:16px;
+background:linear-gradient(180deg,#3a2a1d,#1c130c);
+border-radius:2px;
+}
+
+.candle-flame{
+position:relative;
+width:clamp(20px,7vw,32px);
+height:clamp(32px,11vw,50px);
+margin-bottom:-4px;
+border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+background:radial-gradient(circle at 50% 68%,#fffceb 0%,#ffe28a 26%,#ffb238 55%,#ff7a1a 82%,#ff5400 100%);
+filter:drop-shadow(0 0 10px rgba(255,180,60,.85)) drop-shadow(0 0 22px rgba(255,120,20,.55)) drop-shadow(0 0 38px rgba(255,90,0,.3));
+transform-origin:50% 100%;
+animation:candleFlicker 3s ease-in-out infinite;
+}
+
+.candle-flame::before{
+content:"";
+position:absolute;
+left:50%;
+bottom:14%;
+transform:translateX(-50%);
+width:32%;
+height:38%;
+border-radius:50%;
+background:radial-gradient(circle,#eaf6ff 0%,#bfe4ff 40%,rgba(191,228,255,0) 80%);
+opacity:.9;
+}
+
+@keyframes candleFlicker{
+0%,100%{ transform:scale(1,1) rotate(0deg); }
+12%{ transform:scale(1.05,.95) rotate(-2deg); }
+27%{ transform:scale(.94,1.06) rotate(2deg); }
+41%{ transform:scale(1.06,.94) rotate(-1deg); }
+56%{ transform:scale(.96,1.04) rotate(3deg); }
+71%{ transform:scale(1.04,.97) rotate(-3deg); }
+86%{ transform:scale(.97,1.05) rotate(1deg); }
+}
+
+@media(max-width:600px){
+.candle-scene{
+width:min(25vw,100px);
+height:min(45vw,180px);
+}
+}
+
+/* ===== الأقسام العامة ===== */
+section{
+padding:80px 0;
+}
+
+.section-head{
+text-align:center;
+margin-bottom:45px;
+}
+
+.section-head .eyebrow{
+color:var(--brass);
+font-size:12px;
+letter-spacing:3px;
+text-transform:uppercase;
+font-weight:600;
+margin-bottom:10px;
+}
+
+.section-head h2{
+font-size:clamp(28px,4vw,44px);
+color:var(--espresso);
+font-weight:500;
+margin-bottom:10px;
+}
+
+.section-head p{
+color:#6b5140;
+font-size:16px;
+}
+
+/* ===== شريط Ticker المتحرك (Infinite Loop صحيح) ===== */
+.top-ticker{
+background:var(--espresso);
+color:#fff;
+overflow:hidden;
+position:relative;
+width:100%;
+height:40px;
+display:flex;
+align-items:center;
+}
+
+.ticker-track{
+display:flex;
+align-items:center;
+gap:48px;
+width:max-content;
+white-space:nowrap;
+animation:tickerScroll 35s linear infinite;
+}
+
+.top-ticker:hover .ticker-track{
+animation-play-state:paused;
+}
+
+.ticker-item{
+display:flex;
+align-items:center;
+gap:8px;
+flex-shrink:0;
+color:var(--brass-light);
+font-size:13px;
+font-weight:500;
+}
+
+.ticker-item i{
+color:var(--brass-light);
+font-size:12px;
+}
+
+@keyframes tickerScroll{
+0%{ transform:translateX(0); }
+100%{ transform:translateX(-50%); }
+}
+
+@media(max-width:600px){
+.ticker-item{
+font-size:11.5px;
+}
+.ticker-track{
+gap:32px;
+}
+}
+
+/* ===== شريط الصور المتحرك اللانهائي (Best Sellers) ===== */
+.mini-carousel-wrap{
+background:var(--ivory);
+border-bottom:1px solid rgba(184,135,74,.2);
+padding:18px 0;
+overflow:hidden;
+}
+
+.mini-carousel-label{
+text-align:center;
+font-size:11px;
+font-weight:700;
+color:var(--brass);
+letter-spacing:3px;
+text-transform:uppercase;
+margin-bottom:12px;
+}
+
+.mini-carousel-track{
+display:flex;
+align-items:center;
+gap:16px;
+width:max-content;
+animation:miniCarouselScroll 40s linear infinite;
+}
+
+.mini-carousel-wrap:hover .mini-carousel-track{
+animation-play-state:paused;
+}
+
+@keyframes miniCarouselScroll{
+0%{ transform:translateX(0); }
+100%{ transform:translateX(-50%); }
+}
+
+.mini-carousel-item{
+flex-shrink:0;
+width:110px;
+cursor:pointer;
+text-align:center;
+}
+
+.mini-carousel-item img{
+width:110px;
+height:110px;
+object-fit:cover;
+border-radius:16px;
+border:2px solid transparent;
+transition:.3s;
+}
+
+.mini-carousel-item:hover img{
+border-color:var(--brass);
+transform:translateY(-4px);
+}
+
+.mini-carousel-item span{
+display:block;
+margin-top:6px;
+font-size:11px;
+color:var(--espresso);
+font-weight:700;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+@media(max-width:600px){
+.mini-carousel-item{ width:80px; }
+.mini-carousel-item img{ width:80px; height:80px; border-radius:12px; }
+.mini-carousel-wrap{ padding:12px 0; }
+}
+
+/* ===== فلتر التصنيفات والعطور ===== */
+.filters-bar{
+display:flex;
+flex-direction:column;
+gap:18px;
+margin-bottom:35px;
+align-items:center;
+}
+
+.filter-group{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+justify-content:center;
+align-items:center;
+}
+
+.filter-label{
+font-size:12px;
+letter-spacing:2px;
+color:var(--espresso);
+font-weight:700;
+text-transform:uppercase;
+margin-left:8px;
+}
+
+.filter-pill{
+padding:10px 20px;
+border-radius:999px;
+border:1px solid rgba(184,135,74,.35);
+background:var(--ivory);
+color:var(--cocoa);
+font-weight:500;
+font-size:13.5px;
+cursor:pointer;
+transition:.3s;
+white-space:nowrap;
+}
+
+.filter-pill:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 18px rgba(184,135,74,.18);
+border-color:var(--brass);
+}
+
+.filter-pill.active{
+background:linear-gradient(135deg,var(--espresso),var(--cocoa));
+color:var(--ivory);
+border-color:var(--espresso);
+box-shadow:0 8px 20px rgba(43,27,18,.2);
+}
+
+/* ===== شريط البحث ===== */
+.tools-bar{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+align-items:center;
+justify-content:center;
+margin-bottom:25px;
+}
+
+.search-box{
+position:relative;
+width:280px;
+}
+
+.search-box input{
+width:100%;
+padding:11px 42px 11px 16px;
+border-radius:25px;
+border:1px solid var(--brass);
+background:var(--ivory);
+font-size:14px;
+height:44px;
+}
+
+.search-box i{
+position:absolute;
+top:50%;
+left:16px;
+transform:translateY(-50%);
+color:var(--brass);
+font-size:14px;
+}
+
+.sort-box select{
+height:44px;
+padding:0 16px;
+border-radius:25px;
+border:1px solid var(--brass);
+background:var(--ivory);
+font-size:14px;
+cursor:pointer;
+min-width:170px;
+}
+
+@media(max-width:600px){
+.tools-bar{
+gap:8px;
+margin-bottom:15px;
+}
+.search-box{
+width:100%;
+}
+.sort-box{
+width:100%;
+}
+.sort-box select{
+width:100%;
+}
+.filter-pill{
+padding:8px 14px;
+font-size:12px;
+}
+}
+
+.no-results{
+grid-column:1/-1;
+text-align:center;
+padding:60px 20px;
+color:#8a725c;
+font-size:18px;
+}
+
+/* ===== شبكة المنتجات ===== */
+.grid-products{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:22px;
+}
+
+/* ===== كارت المنتج (Luxury Minimal) ===== */
+.card{
+position:relative;
+width:100%;
+background:var(--ivory);
+border-radius:22px;
+overflow:hidden;
+border:1px solid rgba(184,135,74,.15);
+transition:.4s cubic-bezier(.4,0,.2,1);
+display:flex;
+flex-direction:column;
+}
+
+.card:hover{
+transform:translateY(-10px);
+box-shadow:0 25px 50px rgba(43,27,18,.15);
+border-color:rgba(184,135,74,.35);
+}
+
+/* البادجز */
+.badge{
+position:absolute;
+top:14px;
+right:14px;
+background:linear-gradient(135deg,#c0392b,#e05a4a);
+color:white;
+font-size:11px;
+font-weight:700;
+padding:5px 12px;
+border-radius:20px;
+z-index:5;
+box-shadow:0 4px 10px rgba(0,0,0,.2);
+letter-spacing:.5px;
+}
+
+.badge-hot{
+position:absolute;
+top:14px;
+right:14px;
+background:linear-gradient(135deg,#c0392b,#e05a4a);
+color:white;
+font-size:11px;
+font-weight:700;
+padding:5px 12px;
+border-radius:20px;
+z-index:5;
+letter-spacing:.5px;
+}
+
+.badge-discount{
+position:absolute;
+top:14px;
+left:14px;
+background:linear-gradient(135deg,#1f8f4d,#33b869);
+color:white;
+font-size:11px;
+font-weight:700;
+padding:5px 12px;
+border-radius:20px;
+z-index:5;
+box-shadow:0 4px 10px rgba(0,0,0,.2);
+letter-spacing:.5px;
+}
+
+.save-badge-inline{
+font-size:11px;
+background:rgba(31,143,77,.12);
+color:#1f8f4d;
+padding:3px 10px;
+border-radius:20px;
+font-weight:700;
+border:1px solid rgba(31,143,77,.25);
+white-space:nowrap;
+}
+
+/* زر المفضلة */
+.wishlist-heart-btn{
+position:absolute;
+top:14px;
+left:14px;
+width:36px;
+height:36px;
+border-radius:50%;
+border:none;
+background:rgba(255,255,255,.92);
+backdrop-filter:blur(6px);
+font-size:15px;
+cursor:pointer;
+z-index:6;
+display:flex;
+align-items:center;
+justify-content:center;
+box-shadow:0 4px 12px rgba(0,0,0,.12);
+transition:.3s;
+}
+
+.wishlist-heart-btn:hover{
+transform:scale(1.15);
+}
+
+.wishlist-heart-btn.active{
+background:#ffe3e3;
+}
+
+/* صورة المنتج */
+.card-slider{
+position:relative;
+height:280px;
+overflow:hidden;
+direction:ltr;
+cursor:zoom-in;
+}
+
+.slider-track{
+display:flex;
+height:100%;
+transition:transform .5s ease;
+direction:ltr;
+}
+
+.slider-track img{
+width:100%;
+height:100%;
+object-fit:cover;
+flex-shrink:0;
+transition:transform .6s ease;
+}
+
+.card:hover .slider-track img{
+transform:scale(1.06);
+}
+
+.slider-arrow{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+width:32px;
+height:32px;
+border-radius:50%;
+border:none;
+background:rgba(43,27,18,.55);
+color:white;
+font-size:14px;
+cursor:pointer;
+z-index:6;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:.25s;
+opacity:0;
+}
+
+.card:hover .slider-arrow{
+opacity:1;
+}
+
+.slider-arrow:hover{
+background:var(--brass);
+}
+
+.slider-arrow.prev{ right:10px; }
+.slider-arrow.next{ left:10px; }
+
+.slider-dots{
+position:absolute;
+bottom:10px;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+gap:5px;
+z-index:6;
+}
+
+.slider-dots span{
+width:6px;
+height:6px;
+border-radius:50%;
+background:rgba(255,255,255,.5);
+transition:.3s;
+}
+
+.slider-dots span.active{
+background:white;
+width:18px;
+border-radius:6px;
+}
+
+/* زر المعاينة السريعة */
+.quickview-trigger{
+position:absolute;
+bottom:14px;
+left:50%;
+transform:translateX(-50%) translateY(10px);
+background:rgba(43,27,18,.75);
+backdrop-filter:blur(8px);
+color:white;
+border:none;
+font-size:12px;
+font-weight:600;
+padding:9px 18px;
+border-radius:999px;
+cursor:pointer;
+z-index:6;
+opacity:0;
+transition:.35s;
+letter-spacing:.5px;
+}
+
+.card:hover .quickview-trigger{
+opacity:1;
+transform:translateX(-50%) translateY(0);
+}
+
+@media(max-width:768px){
+.quickview-trigger{ opacity:1; transform:translateX(-50%) translateY(0); }
+.slider-arrow{ opacity:1; }
+}
+
+/* محتوى الكارت - مبسّط وفاخر */
+.card-body{
+padding:20px 18px;
+display:flex;
+flex-direction:column;
+flex:1;
+gap:10px;
+}
+
+.card-body h3{
+font-size:20px;
+font-weight:500;
+color:var(--espresso);
+line-height:1.35;
+margin-bottom:2px;
+font-family:'Cormorant Garamond','Amiri',serif;
+}
+
+.price-row{
+display:flex;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+margin:4px 0;
+}
+
+.current-price{
+font-size:20px;
+font-weight:700;
+color:var(--espresso);
+}
+
+.old-price{
+font-size:13px;
+color:#a08d7c;
+text-decoration:line-through;
+}
+
+.stock-line{
+font-size:12px;
+font-weight:600;
+display:flex;
+align-items:center;
+gap:5px;
+margin:2px 0;
+}
+
+.stock-available{ color:#1f8f4d; }
+.stock-low{ color:#c07d1c; }
+.stock-hot{ color:var(--red); font-weight:700; }
+.stock-out{ color:var(--red); }
+
+/* اختيار العطر */
+.scent-select-wrap{
+margin-top:4px;
+}
+
+.scent-select-wrap label{
+display:block;
+font-size:11px;
+letter-spacing:1.5px;
+color:#8a725c;
+text-transform:uppercase;
+font-weight:600;
+margin-bottom:5px;
+}
+
+.scent-select{
+width:100%;
+padding:10px 14px;
+border-radius:12px;
+border:1px solid rgba(184,135,74,.3);
+background:white;
+font-size:13.5px;
+color:var(--cocoa);
+font-family:inherit;
+cursor:pointer;
+transition:.25s;
+}
+
+.scent-select:focus{
+border-color:var(--brass);
+outline:none;
+box-shadow:0 0 0 3px rgba(184,135,74,.15);
+}
+
+/* الأزرار */
+.product-actions{
+display:flex;
+gap:8px;
+align-items:center;
+margin-top:auto;
+padding-top:10px;
+}
+
+.product-qty{
+width:55px;
+padding:10px;
+border-radius:12px;
+border:1px solid rgba(184,135,74,.3);
+text-align:center;
+font-size:14px;
+background:white;
+}
+
+.order-btn{
+flex:1;
+padding:12px;
+border:none;
+border-radius:12px;
+background:var(--espresso);
+color:white;
+cursor:pointer;
+font-weight:600;
+font-size:13.5px;
+transition:.3s;
+letter-spacing:.3px;
+}
+
+.order-btn:hover{
+background:var(--brass);
+color:var(--cocoa);
+transform:translateY(-2px);
+box-shadow:0 8px 18px rgba(184,135,74,.3);
+}
+
+.order-btn.added{
+background:#25D366;
+color:white;
+}
+
+.order-btn:disabled,
+.buy-now-btn:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+.more-btn{
+width:100%;
+margin-top:8px;
+padding:10px;
+border:1px solid rgba(62,44,29,.2);
+border-radius:12px;
+background:transparent;
+color:var(--espresso);
+cursor:pointer;
+font-weight:500;
+font-size:13px;
+transition:.25s;
+font-family:inherit;
+}
+
+.more-btn:hover{
+background:rgba(62,44,29,.05);
+border-color:var(--brass);
+}
+
+/* ===== نافذة المعاينة السريعة (Quick View) ===== */
+.quickview-modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(20,14,10,.65);
+backdrop-filter:blur(10px);
+-webkit-backdrop-filter:blur(10px);
+z-index:10002;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.quickview-modal.active{
+display:flex;
+}
+
+.quickview-box{
+background:var(--ivory);
+border-radius:24px;
+max-width:860px;
+width:100%;
+max-height:90vh;
+overflow-y:auto;
+box-shadow:0 30px 60px rgba(0,0,0,.35);
+position:relative;
+}
+
+.quickview-close{
+position:absolute;
+top:14px;
+left:14px;
+width:40px;
+height:40px;
+border-radius:50%;
+border:none;
+background:var(--cocoa);
+color:white;
+font-size:16px;
+cursor:pointer;
+z-index:3;
+transition:.3s;
+}
+
+.quickview-close:hover{
+background:var(--brass);
+transform:rotate(90deg);
+}
+
+.quickview-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:0;
+}
+
+.quickview-media{
+position:relative;
+}
+
+.quickview-media img{
+width:100%;
+height:100%;
+min-height:320px;
+object-fit:cover;
+border-radius:24px 0 0 24px;
+}
+
+.quickview-body{
+padding:30px 28px;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.quickview-body h3{
+font-size:30px;
+color:var(--espresso);
+font-weight:500;
+font-family:'Cormorant Garamond','Amiri',serif;
+}
+
+.qv-price-row{
+display:flex;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+margin:6px 0 12px;
+}
+
+.qv-desc{
+color:#6b5140;
+line-height:1.8;
+font-size:14px;
+margin:10px 0;
+}
+
+.qv-specs{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin:12px 0;
+padding:14px;
+background:rgba(184,135,74,.06);
+border-radius:14px;
+border:1px solid rgba(184,135,74,.15);
+}
+
+.qv-spec{
+display:flex;
+flex-direction:column;
+gap:2px;
+}
+
+.qv-spec-label{
+font-size:10px;
+letter-spacing:1.5px;
+color:#8a725c;
+text-transform:uppercase;
+font-weight:600;
+}
+
+.qv-spec-value{
+font-size:13.5px;
+color:var(--espresso);
+font-weight:600;
+}
+
+.qv-actions{
+display:flex;
+gap:8px;
+align-items:center;
+margin-top:14px;
+}
+
+.qv-buy-now{
+width:100%;
+margin-top:8px;
+padding:13px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,var(--brass),var(--gold));
+color:var(--cocoa);
+cursor:pointer;
+font-weight:700;
+font-size:14px;
+transition:.3s;
+letter-spacing:.5px;
+}
+
+.qv-buy-now:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 22px rgba(184,135,74,.35);
+}
+
+@media(max-width:700px){
+.quickview-grid{ grid-template-columns:1fr; }
+.quickview-media img{ border-radius:24px 24px 0 0; min-height:240px; }
+.quickview-box{ max-height:92vh; }
+}
+
+/* ===== CART ===== */
+.cart-panel{
+position:fixed;
+top:0;
+right:-100%;
+width:440px;
+max-width:100%;
+height:100vh;
+background:var(--ivory);
+z-index:9999;
+padding:24px;
+box-shadow:-10px 0 40px rgba(0,0,0,.25);
+transition:.4s;
+overflow-y:auto;
+}
+
+.cart-panel.active{
+right:0;
+}
+
+#cartOverlay{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.5);
+backdrop-filter:blur(6px);
+z-index:9998;
+}
+
+#cartOverlay.active{
+display:block;
+}
+
+.cart-title{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding-bottom:14px;
+border-bottom:1px solid var(--line);
+margin-bottom:14px;
+}
+
+.close-cart{
+background:var(--cocoa);
+color:white;
+border:none;
+width:38px;
+height:38px;
+border-radius:50%;
+cursor:pointer;
+font-size:15px;
+}
+
+.cart-item{
+display:flex;
+gap:12px;
+padding:14px 0;
+border-bottom:1px solid var(--line);
+}
+
+.cart-thumb{
+width:70px;
+height:70px;
+border-radius:14px;
+object-fit:cover;
+flex-shrink:0;
+}
+
+.cart-item-body{
+flex:1;
+min-width:0;
+}
+
+.cart-item-body h3{
+font-size:15px;
+margin-bottom:3px;
+font-family:'Cormorant Garamond','Amiri',serif;
+font-weight:600;
+}
+
+.cart-item-body p{
+font-size:13px;
+color:#6b5140;
+margin:2px 0;
+}
+
+.empty-cart{
+text-align:center;
+padding:50px 10px;
+color:#8a725c;
+}
+
+.qty-btn{
+background:var(--brass);
+color:var(--cocoa);
+border:none;
+width:32px;
+height:32px;
+border-radius:50%;
+cursor:pointer;
+font-weight:bold;
+font-size:15px;
+margin:3px;
+transition:.2s;
+}
+
+.qty-btn:hover{
+background:var(--espresso);
+color:white;
+}
+
+.cart-total{
+margin:20px 0;
+font-size:22px;
+font-weight:bold;
+color:var(--espresso);
+}
+
+.checkout-btn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+background:#25D366;
+color:white;
+font-weight:bold;
+font-size:16px;
+cursor:pointer;
+transition:.3s;
+letter-spacing:.3px;
+}
+
+.checkout-btn:hover{
+background:#1fa855;
+transform:translateY(-2px);
+}
+
+.field-label{
+font-size:11px;
+color:#8a725c;
+margin:14px 0 -4px;
+font-weight:700;
+letter-spacing:1.5px;
+text-transform:uppercase;
+}
+
+.customer-input{
+width:100%;
+padding:14px 16px;
+margin:8px 0;
+font-size:15px;
+border-radius:12px;
+border:1px solid rgba(184,135,74,.35);
+background:white;
+font-family:inherit;
+}
+
+.cart-panel select{
+width:100%;
+padding:14px;
+margin:8px 0;
+border-radius:12px;
+border:1px solid rgba(184,135,74,.35);
+font-size:15px;
+background:white;
+font-family:inherit;
+}
+
+.cart-panel textarea{
+min-height:90px;
+resize:vertical;
+}
+
+.shipping-note{
+background:rgba(184,135,74,.08);
+border:1px dashed var(--brass);
+border-radius:14px;
+padding:14px;
+margin:14px 0;
+font-size:13px;
+color:var(--espresso);
+line-height:1.7;
+}
+
+.clear-cart-btn{
+width:100%;
+padding:12px;
+margin-top:12px;
+border:none;
+border-radius:12px;
+background:#8b3a3a;
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:.25s;
+}
+
+.clear-cart-btn:hover{
+background:#b34b4b;
+}
+
+/* ===== حساب المستخدم ===== */
+.account-greeting{
+background:white;
+border:1px solid rgba(184,135,74,.25);
+border-radius:14px;
+padding:16px;
+margin-bottom:10px;
+}
+
+.account-greeting strong{
+color:var(--espresso);
+font-size:17px;
+}
+
+.account-logout{
+display:inline-block;
+margin-top:8px;
+font-size:12px;
+color:#8a725c;
+text-decoration:underline;
+cursor:pointer;
+background:none;
+border:none;
+padding:0;
+font-family:inherit;
+}
+
+.account-tabs{
+display:flex;
+gap:8px;
+margin:14px 0 10px;
+}
+
+.account-tab-btn{
+flex:1;
+padding:10px;
+border-radius:12px;
+border:1px solid var(--brass);
+background:var(--ivory);
+color:var(--espresso);
+font-weight:bold;
+font-size:13px;
+cursor:pointer;
+}
+
+.account-tab-btn.active{
+background:linear-gradient(135deg,var(--brass),var(--brass-light));
+}
+
+.account-panel-view{
+display:none;
+}
+
+.account-panel-view.active{
+display:block;
+}
+
+.order-history-item{
+background:white;
+border-radius:12px;
+padding:12px 14px;
+margin-bottom:10px;
+border:1px solid var(--line);
+}
+
+.order-history-item .oh-date{
+font-size:11px;
+color:#8a725c;
+margin-bottom:4px;
+letter-spacing:1px;
+}
+
+.order-history-item .oh-line{
+font-size:13px;
+color:#4a3a2c;
+}
+
+.order-history-item .oh-total{
+margin-top:6px;
+font-weight:bold;
+color:var(--brass);
+}
+
+.viewed-mini-row{
+display:flex;
+gap:10px;
+overflow-x:auto;
+padding-bottom:6px;
+}
+
+.viewed-mini{
+flex-shrink:0;
+width:90px;
+cursor:pointer;
+text-align:center;
+}
+
+.viewed-mini img{
+width:90px;
+height:90px;
+object-fit:cover;
+border-radius:12px;
+border:1px solid var(--line);
+transition:.3s;
+}
+
+.viewed-mini img:hover{
+border-color:var(--brass);
+}
+
+.viewed-mini span{
+display:block;
+font-size:10px;
+margin-top:5px;
+color:#6b5140;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+/* ===== شريط شاهدته مؤخرًا ===== */
+.recent-strip-section{
+padding:40px 0 20px;
+background:var(--ivory);
+border-top:1px solid var(--line);
+}
+
+.recent-strip-section .section-head{
+margin-bottom:14px;
+text-align:right;
+}
+
+.recent-strip-section .section-head h3{
+font-size:22px;
+color:var(--espresso);
+font-family:'Cormorant Garamond','Amiri',serif;
+font-weight:500;
+}
+
+/* ===== آراء العملاء ===== */
+.polaroid-row{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:15px;
+}
+
+.polaroid{
+background:white;
+padding:10px;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+cursor:zoom-in;
+transition:.3s;
+}
+
+.polaroid:hover{
+transform:translateY(-6px);
+box-shadow:0 18px 35px rgba(0,0,0,.15);
+}
+
+.polaroid img{
+width:100%;
+height:200px;
+object-fit:cover;
+border-radius:10px;
+}
+
+.stars-rating{
+margin-top:10px;
+text-align:center;
+font-size:18px;
+color:#FFB100;
+letter-spacing:2px;
+}
+
+/* ===== مركز المعلومات ===== */
+.highlights-toolbar{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+margin:20px auto 0;
+max-width:950px;
+}
+
+.tool-btn{
+padding:11px 18px;
+border-radius:999px;
+border:1px solid rgba(184,135,74,.35);
+background:var(--ivory);
+color:var(--espresso);
+font-weight:600;
+font-size:13px;
+cursor:pointer;
+transition:.3s;
+white-space:nowrap;
+}
+
+.tool-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 18px rgba(184,135,74,.2);
+}
+
+.tool-btn.active{
+background:linear-gradient(135deg,var(--espresso),var(--cocoa));
+color:var(--ivory);
+border-color:var(--espresso);
+}
+
+.highlight-panel{
+background:var(--ivory);
+border:1px solid rgba(184,135,74,.2);
+border-radius:22px;
+padding:32px;
+margin:25px auto 0;
+max-width:900px;
+min-height:60px;
+box-shadow:0 12px 30px rgba(43,27,18,.08);
+text-align:right;
+}
+
+.highlight-text{
+display:none;
+color:#555;
+line-height:2;
+white-space:pre-line;
+font-size:15px;
+}
+
+.highlight-text h3{
+color:var(--espresso);
+font-size:24px;
+margin-bottom:12px;
+text-align:center;
+font-weight:500;
+font-family:'Cormorant Garamond','Amiri',serif;
+}
+
+.highlight-text.active{
+display:block;
+}
+
+.grid-occ{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:16px;
+margin-top:16px;
+}
+
+.occ-card{
+background:white;
+padding:22px 18px;
+border-radius:18px;
+text-align:center;
+transition:.3s;
+border:1px solid rgba(184,135,74,.15);
+}
+
+.occ-card:hover{
+transform:translateY(-5px);
+box-shadow:0 14px 28px rgba(43,27,18,.12);
+border-color:var(--brass);
+}
+
+.occ-card h3{
+font-size:18px;
+color:var(--espresso);
+margin-bottom:8px;
+font-weight:600;
+font-family:'Cormorant Garamond','Amiri',serif;
+}
+
+.occ-card p{
+font-size:13px;
+color:#6b5140;
+line-height:1.7;
+}
+
+/* ===== قسم العطور ===== */
+.scent-chip-group{
+margin-bottom:20px;
+}
+
+.scent-chip-group h4{
+font-size:16px;
+color:var(--espresso);
+margin-bottom:12px;
+font-weight:600;
+font-family:'Cormorant Garamond','Amiri',serif;
+}
+
+.scent-chips{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+}
+
+.scent-chip{
+background:#fff;
+border:1px solid rgba(184,135,74,.25);
+border-radius:999px;
+padding:9px 16px;
+font-size:13px;
+font-weight:600;
+color:var(--cocoa);
+cursor:pointer;
+transition:.25s;
+user-select:none;
+}
+
+.scent-chip:hover{
+background:#f8f3ed;
+border-color:var(--brass);
+transform:translateY(-2px);
+}
+
+.scent-chip.active{
+background:linear-gradient(135deg,#b8874a,#8d6338);
+color:#fff;
+border-color:#b8874a;
+}
+
+.scent-note{
+margin-top:18px;
+text-align:center;
+font-size:13px;
+color:#8a725c;
+}
+
+.scent-description{
+display:none;
+margin-top:18px;
+padding:20px;
+background:#fff;
+border:1px solid rgba(184,135,74,.25);
+border-radius:18px;
+text-align:center;
+line-height:1.8;
+font-size:14px;
+color:var(--cocoa);
+box-shadow:0 10px 25px rgba(0,0,0,.05);
+animation:fadeScent .3s ease;
+}
+
+.scent-description strong{
+display:block;
+font-size:17px;
+margin-bottom:8px;
+color:var(--espresso);
+font-family:'Cormorant Garamond','Amiri',serif;
+}
+
+@keyframes fadeScent{
+from{ opacity:0; transform:translateY(8px); }
+to{ opacity:1; transform:translateY(0); }
+}
+
+/* ===== FAQ ===== */
+.faq-list{
+max-width:800px;
+margin:auto;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.faq-item{
+background:var(--ivory);
+border-radius:14px;
+padding:4px 20px;
+border:1px solid rgba(184,135,74,.2);
+}
+
+.faq-item summary{
+cursor:pointer;
+font-weight:600;
+padding:16px 0;
+font-size:16px;
+color:var(--espresso);
+list-style:none;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.faq-item summary::-webkit-details-marker{ display:none; }
+
+.faq-item summary::after{
+content:"+";
+font-size:22px;
+color:var(--brass);
+transition:.25s;
+}
+
+.faq-item[open] summary::after{
+transform:rotate(45deg);
+}
+
+.faq-item p{
+padding-bottom:16px;
+color:#6b5140;
+}
+
+/* ===== السوشيال والفوتر ===== */
+.social-links{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:12px;
+margin-top:20px;
+}
+
+.social-links a{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+background:var(--espresso);
+color:white;
+padding:12px 20px;
+border-radius:999px;
+font-weight:600;
+transition:.3s;
+font-size:14px;
+}
+
+.social-links a i{
+font-size:18px;
+}
+
+.social-links a:hover{
+background:var(--brass);
+transform:translateY(-3px);
+}
+
+footer{
+background:var(--espresso);
+color:white;
+padding:50px 0 30px;
+text-align:center;
+}
+
+footer .logo{
+color:white;
+justify-content:center;
+}
+
+footer p{
+margin-top:10px;
+opacity:.85;
+font-size:14px;
+}
+
+.footer-links{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:18px;
+margin-top:20px;
+font-size:13px;
+}
+
+.footer-links a{
+opacity:.8;
+text-decoration:underline;
+}
+
+.footer-links a:hover{
+opacity:1;
+color:var(--brass-light);
+}
+
+/* ===== الأزرار العائمة ===== */
+.wa-float{
+font-size:28px;
+font-weight:bold;
+color:white;
+position:fixed;
+bottom:95px;
+left:25px;
+width:58px;
+height:58px;
+border-radius:50%;
+background:#25D366;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:900;
+box-shadow:0 12px 28px rgba(0,0,0,.28);
+overflow:hidden;
+text-indent:-9999px;
+white-space:nowrap;
+transition:.3s;
+}
+
+.wa-float::before{
+content:"";
+position:absolute;
+width:28px;
+height:28px;
+background:white;
+-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-4-10.5-6.7z'/%3E%3C/svg%3E") center/contain no-repeat;
+mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath d='M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-4-10.5-6.7z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.wa-float:hover{
+transform:translateY(-4px);
+box-shadow:0 16px 34px rgba(0,0,0,.35);
+}
+
+/* ===== شريط Sticky للموبايل ===== */
+.mobile-sticky-bar{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:rgba(255,251,243,.96);
+backdrop-filter:blur(16px);
+-webkit-backdrop-filter:blur(16px);
+border-top:1px solid rgba(184,135,74,.25);
+padding:10px 0;
+padding-bottom:calc(10px + env(safe-area-inset-bottom));
+z-index:950;
+display:none;
+box-shadow:0 -8px 20px rgba(0,0,0,.08);
+}
+
+.sticky-items{
+display:flex;
+}
+
+.sticky-item{
+flex:1;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:3px;
+text-decoration:none;
+color:var(--espresso);
+font-size:10.5px;
+font-weight:600;
+letter-spacing:.3px;
+padding:4px 0;
+transition:.2s;
+background:none;
+border:none;
+cursor:pointer;
+font-family:inherit;
+position:relative;
+}
+
+.sticky-item:active{
+transform:scale(.92);
+}
+
+.sticky-icon{
+font-size:20px;
+position:relative;
+}
+
+.sticky-count{
+position:absolute;
+top:-6px;
+left:-10px;
+background:var(--espresso);
+color:white;
+min-width:18px;
+height:18px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:10px;
+font-weight:bold;
+padding:0 4px;
+}
+
+@media(max-width:768px){
+.mobile-sticky-bar{
+display:block;
+}
+body{
+padding-bottom:78px;
+}
+}
+
+/* ===== Toast ===== */
+.toast{
+position:fixed;
+bottom:110px;
+left:50%;
+transform:translateX(-50%) translateY(20px);
+background:var(--espresso);
+color:white;
+padding:14px 28px;
+border-radius:999px;
+font-weight:600;
+z-index:10000;
+opacity:0;
+pointer-events:none;
+transition:.35s;
+box-shadow:0 15px 30px rgba(0,0,0,.3);
+font-size:14px;
+}
+
+.toast.show{
+opacity:1;
+transform:translateX(-50%) translateY(0);
+}
+
+/* ===== Exit Modal ===== */
+.exit-modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(8px);
+z-index:10001;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.exit-modal.active{
+display:flex;
+}
+
+.exit-box{
+background:var(--ivory);
+border-radius:24px;
+padding:35px 28px;
+max-width:400px;
+text-align:center;
+box-shadow:0 30px 60px rgba(0,0,0,.35);
+}
+
+.exit-box h3{
+font-size:26px;
+color:var(--espresso);
+margin-bottom:10px;
+font-weight:500;
+font-family:'Cormorant Garamond','Amiri',serif;
+}
+
+.exit-box p{
+color:#6b5140;
+margin-bottom:22px;
+}
+
+.exit-box button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:999px;
+background:var(--brass);
+color:var(--cocoa);
+font-weight:bold;
+cursor:pointer;
+margin-bottom:10px;
+font-size:14px;
+}
+
+.exit-box .exit-close{
+background:none;
+color:#8a725c;
+text-decoration:underline;
+}
+
+/* ===== معرض الصور ===== */
+#imageViewer{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.92);
+z-index:99999;
+align-items:center;
+justify-content:center;
+}
+
+#imageViewer img{
+max-width:88%;
+max-height:82%;
+border-radius:16px;
+user-select:none;
+}
+
+.viewer-close{
+position:absolute;
+top:20px;
+left:20px;
+width:44px;
+height:44px;
+border-radius:50%;
+border:none;
+background:rgba(255,255,255,.15);
+color:white;
+font-size:20px;
+cursor:pointer;
+z-index:2;
+}
+
+.viewer-arrow{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+width:52px;
+height:52px;
+border-radius:50%;
+border:none;
+background:rgba(255,255,255,.15);
+color:white;
+font-size:22px;
+cursor:pointer;
+z-index:2;
+}
+
+.viewer-arrow:hover,
+.viewer-close:hover{
+background:rgba(255,255,255,.3);
+}
+
+.viewer-arrow.prev{ right:20px; }
+.viewer-arrow.next{ left:20px; }
+
+.viewer-counter{
+position:absolute;
+bottom:24px;
+left:50%;
+transform:translateX(-50%);
+color:white;
+font-size:14px;
+background:rgba(255,255,255,.15);
+padding:6px 16px;
+border-radius:999px;
+}
+
+/* زر الرجوع لأعلى */
+#topBtn{
+display:none;
+position:fixed;
+bottom:25px;
+right:95px;
+width:50px;
+height:50px;
+border:none;
+border-radius:50%;
+background:linear-gradient(135deg,var(--brass),var(--espresso));
+color:white;
+font-size:20px;
+cursor:pointer;
+z-index:900;
+box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+@media(max-width:600px){
+#topBtn{
+width:44px;
+height:44px;
+right:25px;
+bottom:90px;
+}
+}
+
+/* ===== التجاوب ===== */
+@media(max-width:1024px){
+.grid-products{
+grid-template-columns:repeat(3,1fr);
+gap:16px;
+}
+.polaroid-row{
+grid-template-columns:repeat(3,1fr);
+}
+.grid-occ{
+grid-template-columns:repeat(2,1fr);
+}
+}
+
+@media(max-width:768px){
+.grid-products{
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+}
+.polaroid-row{
+grid-template-columns:repeat(2,1fr);
+}
+.hero{
+min-height:70vh;
+}
+section{
+padding:50px 0;
+}
+}
+
+@media(max-width:600px){
+.wrap{
+width:100%;
+padding:0 14px;
+}
+
+section{
+padding:40px 0;
+}
+
+.section-head{
+margin-bottom:24px;
+}
+
+.hero h1{
+font-size:30px;
+}
+
+.hero-sub{
+font-size:14px;
+}
+
+.hero-cta,
+.hero-cta-ghost{
+padding:14px 26px;
+font-size:14px;
+}
+
+.card-slider{
+height:210px;
+}
+
+.card-body{
+padding:14px 12px;
+}
+
+.card-body h3{
+font-size:16px;
+}
+
+.current-price{
+font-size:17px;
+}
+
+.product-qty{
+width:48px;
+padding:9px;
+font-size:12px;
+}
+
+.order-btn{
+padding:10px;
+font-size:12px;
+}
+
+.grid-occ{
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.occ-card{
+padding:14px;
+}
+
+.occ-card h3{
+font-size:15px;
+}
+
+.occ-card p{
+font-size:12px;
+}
+
+.wa-float{
+bottom:88px;
+width:52px;
+height:52px;
+font-size:22px;
+left:14px;
+}
+
+.tools-bar{
+flex-direction:column;
+margin-bottom:18px;
+}
+
+.search-box,
+.sort-box,
+.sort-box select{
+width:100%;
+max-width:100%;
+}
+}
+
+/* Micro-interactions */
+.order-btn,
+.more-btn,
+.buy-now-btn,
+.filter-pill,
+.hero-cta,
+.hero-cta-ghost,
+.nav-cta,
+.btn-glow,
+.checkout-btn,
+.cart-open-btn,
+.floating-cart,
+.wa-float,
+.hamburger-btn{
+transition:transform .2s ease, box-shadow .25s ease, background .25s ease;
+}
+
+.order-btn:active,
+.more-btn:active,
+.buy-now-btn:active,
+.hero-cta:active,
+.hero-cta-ghost:active,
+.nav-cta:active,
+.btn-glow:active,
+.checkout-btn:active,
+.cart-open-btn:active,
+.wa-float:active,
+.hamburger-btn:active{
+transform:scale(.96);
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- ===== شريط Ticker متحرك ===== -->
+<div class="top-ticker" aria-hidden="true">
+<div class="ticker-track">
+<span class="ticker-item"><i class="fa-solid fa-truck-fast"></i> توصيل سريع لكل محافظات مصر خلال 3-7 أيام عمل</span>
+<span class="ticker-item"><i class="fa-solid fa-tags"></i> خصومات تصل إلى 25% على تشكيلة مختارة</span>
+<span class="ticker-item"><i class="fa-solid fa-gift"></i> تغليف هدايا فاخر مجانًا مع كل طلب</span>
+<span class="ticker-item"><i class="fa-solid fa-rotate-left"></i> ضمان استبدال خلال 3 أيام من الاستلام</span>
+<span class="ticker-item"><i class="fa-solid fa-truck-fast"></i> توصيل سريع لكل محافظات مصر خلال 3-7 أيام عمل</span>
+<span class="ticker-item"><i class="fa-solid fa-tags"></i> خصومات تصل إلى 25% على تشكيلة مختارة</span>
+<span class="ticker-item"><i class="fa-solid fa-gift"></i> تغليف هدايا فاخر مجانًا مع كل طلب</span>
+<span class="ticker-item"><i class="fa-solid fa-rotate-left"></i> ضمان استبدال خلال 3 أيام من الاستلام</span>
+</div>
+</div>
+
+<!-- ===== الهيدر ===== -->
+<header>
+<div class="wrap">
+<div class="nav">
+<button class="hamburger-btn" id="hamburgerBtn" aria-label="فتح القائمة">
+<span class="hb-line"></span>
+<span class="hb-line"></span>
+<span class="hb-line"></span>
+</button>
+
+<a href="#" class="logo">
+<span class="flame"></span>
+<div>
+VelaLight
+<small>Luxury Candle Studio</small>
+</div>
+</a>
+
+<div class="nav-buttons">
+<button class="wishlist-open-btn" id="wishlistOpenBtn" onclick="openWishlist()" aria-label="قائمة الأمنيات">
+<span id="wishlistCount">0</span>
+</button>
+<button class="account-open-btn" id="accountOpenBtn" onclick="openAccount()" aria-label="حسابي"></button>
+<button class="cart-open-btn" onclick="openCart()" aria-label="فتح السلة">
+<span id="cartCount">0</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+
+<!-- ===== القائمة الجانبية ===== -->
+<div class="side-menu-overlay" id="sideMenuOverlay" onclick="closeSideMenu()"></div>
+<nav class="side-menu" id="sideMenu" aria-label="القائمة الرئيسية">
+<div class="side-menu-header">
+<div class="logo">
+<span class="flame"></span>
+VelaLight
+</div>
+<button class="close-menu-btn" onclick="closeSideMenu()" aria-label="إغلاق القائمة">✕</button>
+</div>
+
+<div class="menu-category">تسوّقي</div>
+<ul class="menu-links">
+<li><a href="#products" onclick="filterCategory('all'); closeSideMenu();"><i class="fa-solid fa-boxes-stacked"></i> كل المنتجات</a></li>
+<li><a href="#products" onclick="filterCategory('wooden'); closeSideMenu();"><i class="fa-solid fa-tree"></i> شموع خشبية</a></li>
+<li><a href="#products" onclick="filterCategory('glass'); closeSideMenu();"><i class="fa-solid fa-wine-glass"></i> شموع زجاجية</a></li>
+<li><a href="#products" onclick="filterCategory('crystal'); closeSideMenu();"><i class="fa-solid fa-gem"></i> شموع كريستالية</a></li>
+<li><a href="#products" onclick="filterCategory('metal'); closeSideMenu();"><i class="fa-solid fa-ring"></i> شموع معدنية</a></li>
+<li><a href="#products" onclick="filterCategory('massage'); closeSideMenu();"><i class="fa-solid fa-spa"></i> شموع مساج</a></li>
+</ul>
+
+<div class="menu-category">استكشفي</div>
+<ul class="menu-links">
+<li><a href="#reviews-section" onclick="closeSideMenu();"><i class="fa-solid fa-star"></i> آراء عملائنا</a></li>
+<li><a href="#info-hub" onclick="closeSideMenu();"><i class="fa-solid fa-circle-info"></i> تعرفي علينا</a></li>
+<li><a href="#" onclick="openAccount(); closeSideMenu();"><i class="fa-solid fa-user"></i> حسابي</a></li>
+</ul>
+
+<div class="menu-social">
+<a href="https://www.facebook.com/VelaLight/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+<a href="https://www.instagram.com/velaalight/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+<a href="https://www.tiktok.com/@vela.light0" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+<a href="https://wa.me/201223526105" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+</div>
+</nav>
+
+<!-- ===== HERO (الفخامة الحقيقية) ===== -->
+<section class="hero" id="hero">
+<div class="hero-bg"></div>
+<div class="hero-overlay"></div>
+<div class="hero-content">
+<div class="hero-eyebrow">✦ Luxury Handmade Candles ✦</div>
+<h1>هنا يبدأ <span>السحر</span><br>هنا يبدأ <span>الهدوء</span></h1>
+<p class="hero-sub">
+شموع يدوية فاخرة، مصنوعة بحب من الشمع الطبيعي وعطور مختارة بعناية. قطعة ديكور تملأ المكان دفئًا وأناقة.
+</p>
+<div class="hero-cta-row">
+<a href="#products" class="hero-cta">اطلبي الآن <i class="fa-solid fa-arrow-down"></i></a>
+<a href="#info-hub" class="hero-cta-ghost">تعرفي علينا</a>
+</div>
+</div>
+<div class="hero-candle-wrap">
+<div class="candle-scene" aria-hidden="true">
+<div class="candle-ambient"></div>
+<div class="candle-top">
+<div class="candle-flame"></div>
+<div class="candle-wick"></div>
+</div>
+<div class="candle-body"></div>
+</div>
+</div>
+</section>
+
+<!-- ===== شريط الصور المتحرك (الأكثر مبيعًا) ===== -->
+<div class="mini-carousel-wrap">
+<div class="mini-carousel-label">🔥 الأكثر مبيعًا الآن</div>
+<div class="mini-carousel-track" id="miniCarouselTrack"></div>
+</div>
+
+<!-- ===== المنتجات ===== -->
+<section id="products">
+<div class="wrap">
+
+<div class="section-head">
+<div class="eyebrow">✦ Our Collection ✦</div>
+<h2>مجموعة شموع VelaLight</h2>
+<p>اختاري قطعتك المفضلة 🤎</p>
+</div>
+
+<!-- فلتر التصنيفات -->
+<div class="filters-bar">
+<div class="filter-group">
+<span class="filter-label">النوع:</span>
+<button class="filter-pill active" data-category="all" onclick="filterCategory('all')">الكل</button>
+<button class="filter-pill" data-category="wooden" onclick="filterCategory('wooden')">خشبية</button>
+<button class="filter-pill" data-category="glass" onclick="filterCategory('glass')">زجاجية</button>
+<button class="filter-pill" data-category="crystal" onclick="filterCategory('crystal')">كريستالية</button>
+<button class="filter-pill" data-category="metal" onclick="filterCategory('metal')">معدنية</button>
+<button class="filter-pill" data-category="massage" onclick="filterCategory('massage')">شموع مساج</button>
+</div>
+
+<!-- فلتر العطور -->
+<div class="filter-group">
+<span class="filter-label">العطر:</span>
+<button class="filter-pill active" data-scent="all" onclick="filterScent('all')">الكل</button>
+<button class="filter-pill" data-scent="فانيلا 🍦" onclick="filterScent('فانيلا 🍦')">فانيلا</button>
+<button class="filter-pill" data-scent="عود 🤎" onclick="filterScent('عود 🤎')">عود</button>
+<button class="filter-pill" data-scent="عنبر 🤎" onclick="filterScent('عنبر 🤎')">عنبر</button>
+<button class="filter-pill" data-scent="ورد 🌹" onclick="filterScent('ورد 🌹')">ورد</button>
+<button class="filter-pill" data-scent="لافندر 💜" onclick="filterScent('لافندر 💜')">لافندر</button>
+</div>
+
+<!-- البحث والترتيب -->
+<div class="tools-bar">
+<div class="search-box">
+<input id="headerSearch" type="search" placeholder="ابحثي عن شمعتك...">
+<i class="fa-solid fa-magnifying-glass"></i>
+</div>
+<div class="sort-box">
+<select id="sortSelect">
+<option value="bestselling">الأكثر مبيعًا</option>
+<option value="newest">الأحدث</option>
+<option value="price-asc">السعر: من الأقل</option>
+<option value="price-desc">السعر: من الأعلى</option>
+<option value="rating">الأعلى تقييمًا</option>
+</select>
+</div>
+</div>
+</div>
+
+<div class="grid-products" id="productsGrid"></div>
+
+</div>
+</section>
+
+<!-- ===== شاهدته مؤخرًا (قسم منفصل) ===== -->
+<section class="recent-strip-section" id="recentStripSection" style="display:none;">
+<div class="wrap">
+<div class="section-head">
+<h3>👁️ شاهدتيه مؤخرًا</h3>
+</div>
+<div class="viewed-mini-row" id="homeRecentStrip"></div>
+</div>
+</section>
+
+<!-- ===== لوحة السلة ===== -->
+<div class="cart-panel" id="cartPanel" role="dialog" aria-modal="true" aria-label="سلة الشراء">
+<div class="cart-title">
+<h2>🛒 سلة الشراء</h2>
+<button class="close-cart" onclick="closeCart()" aria-label="إغلاق السلة">✖</button>
+</div>
+<div id="cartItems"></div>
+<button class="clear-cart-btn" onclick="clearCart()">إفراغ السلة 🗑</button>
+<div class="cart-total">الإجمالي: <span id="cartTotal">0</span> جنيه</div>
+
+<div class="field-label">بيانات التوصيل</div>
+<input id="customerName" class="customer-input" placeholder="الاسم بالكامل">
+<input id="customerPhone" class="customer-input" placeholder="رقم الهاتف" inputmode="numeric">
+<textarea id="customerAddress" class="customer-input" placeholder="العنوان بالتفصيل (المحافظة - المنطقة - أقرب علامة)"></textarea>
+
+<div class="field-label">طريقة الدفع</div>
+<select id="paymentMethod" class="customer-input">
+<option>تحويل InstaPay</option>
+</select>
+
+<div class="field-label">إضافات اختيارية</div>
+<textarea id="customDetails" class="customer-input" placeholder="تفاصيل خاصة للطلب (اختياري)"></textarea>
+<textarea id="customerNote" class="customer-input" placeholder="ملاحظات إضافية (اختياري)"></textarea>
+
+<div class="shipping-note">
+🚚 <strong>ملحوظة هامة:</strong> قيمة المنتجات بتتحول مقدمًا عبر InstaPay، أما <strong>تكلفة الشحن فتُدفع كاش لمندوب شركة الشحن وقت استلام الأوردر مباشرة</strong>.
+</div>
+
+<button class="checkout-btn" onclick="sendWhatsApp()">إتمام الطلب عبر واتساب 📱</button>
+</div>
+
+<!-- ===== لوحة الحساب ===== -->
+<div class="cart-panel" id="accountPanel" role="dialog" aria-modal="true" aria-label="حسابي">
+<div class="cart-title">
+<h2>👤 حسابي</h2>
+<button class="close-cart" onclick="closeAccount()" aria-label="إغلاق">✖</button>
+</div>
+
+<div id="accountLoggedOutView">
+<p style="color:#6b5140;margin:10px 0 4px;font-size:14px;">
+سجّلي بياناتك مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة، ونعرض ليكي مشترياتك وترشيحاتنا.
+</p>
+<div class="field-label">الاسم بالكامل</div>
+<input id="accName" class="customer-input" placeholder="اكتبي اسمك">
+<div class="field-label">رقم الهاتف</div>
+<input id="accPhone" class="customer-input" placeholder="رقم الهاتف" inputmode="numeric">
+<div class="field-label">العنوان (اختياري)</div>
+<textarea id="accAddress" class="customer-input" placeholder="المحافظة - المنطقة - أقرب علامة"></textarea>
+<button class="checkout-btn" onclick="saveAccount()">حفظ بياناتي وتسجيل الدخول ✅</button>
+</div>
+
+<div id="accountLoggedInView" style="display:none;">
+<div class="account-greeting">
+أهلاً بيكي <strong id="accGreetName"></strong> 👋
+<br>
+<button class="account-logout" onclick="logoutAccount()">تسجيل خروج</button>
+</div>
+
+<div class="account-tabs">
+<button class="account-tab-btn active" data-view="ordersView">🧾 مشترياتي</button>
+<button class="account-tab-btn" data-view="viewedView">👁️ شاهدتيه مؤخرًا</button>
+</div>
+
+<div class="account-panel-view active" id="ordersView">
+<div id="ordersList"></div>
+</div>
+
+<div class="account-panel-view" id="viewedView">
+<div id="viewedList"></div>
+<div style="margin-top:16px;">
+<h4 style="font-size:14px;color:var(--espresso);margin-bottom:8px;">قد يعجبك أيضًا 🤎</h4>
+<div id="recommendList" class="viewed-mini-row"></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ===== لوحة قائمة الأمنيات ===== -->
+<div class="cart-panel" id="wishlistPanel" role="dialog" aria-modal="true" aria-label="قائمة الأمنيات">
+<div class="cart-title">
+<h2>🤍 قائمة الأمنيات</h2>
+<button class="close-cart" onclick="closeWishlist()" aria-label="إغلاق">✖</button>
+</div>
+<div id="wishlistItems"></div>
+</div>
+
+<!-- ===== نافذة المعاينة السريعة ===== -->
+<div class="quickview-modal" id="quickViewModal" role="dialog" aria-modal="true" aria-label="معاينة سريعة">
+<div class="quickview-box">
+<button class="quickview-close" onclick="closeQuickView()" aria-label="إغلاق">✖</button>
+<div class="quickview-grid" id="quickViewContent"></div>
+</div>
+</div>
+
+<!-- ===== آراء العملاء ===== -->
+<section class="testimonials" id="reviews-section">
+<div class="wrap">
+<div class="section-head">
+<div class="eyebrow">✦ Testimonials ✦</div>
+<h2>آراء عملائنا</h2>
+<p>ثقتكم أجمل هدية لنا 🤎</p>
+</div>
+<div class="polaroid-row">
+<div class="polaroid reveal">
+<img src="https://velalight.github.io/review1.jpg" alt="رأي عميل" loading="lazy" onclick="openImageGallery(['https://velalight.github.io/review1.jpg'],0)">
+<div class="stars-rating">★★★★★</div>
+</div>
+<div class="polaroid reveal">
+<img src="https://velalight.github.io/review2.jpg" alt="رأي عميل" loading="lazy" onclick="openImageGallery(['https://velalight.github.io/review2.jpg'],0)">
+<div class="stars-rating">★★★★★</div>
+</div>
+<div class="polaroid reveal">
+<img src="https://velalight.github.io/review3.jpg" alt="رأي عميل" loading="lazy" onclick="openImageGallery(['https://velalight.github.io/review3.jpg'],0)">
+<div class="stars-rating">★★★★★</div>
+</div>
+<div class="polaroid reveal">
+<img src="https://velalight.github.io/review4.jpg" alt="رأي عميل" loading="lazy" onclick="openImageGallery(['https://velalight.github.io/review4.jpg'],0)">
+<div class="stars-rating">★★★★★</div>
+</div>
+<div class="polaroid reveal">
+<img src="https://velalight.github.io/review5.jpg" alt="رأي عميل" loading="lazy" onclick="openImageGallery(['https://velalight.github.io/review5.jpg'],0)">
+<div class="stars-rating">★★★★★</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ===== مركز المعلومات ===== -->
+<section id="info-hub">
+<div class="wrap">
+<div class="section-head">
+<div class="eyebrow">✦ About Us ✦</div>
+<h2>تعرّفي علينا أكتر</h2>
+</div>
+
+<div class="highlights-toolbar" role="tablist" aria-label="معلومات">
+<button class="tool-btn active" type="button" data-target="h-about">🤎 من نحن</button>
+<button class="tool-btn" type="button" data-target="h-events">🎁 المناسبات والهدايا</button>
+<button class="tool-btn" type="button" data-target="h-delivery">🚚 التوصيل</button>
+<button class="tool-btn" type="button" data-target="h-natural">🌿 خامات طبيعية</button>
+<button class="tool-btn" type="button" data-target="h-handmade">✋ صناعة يدوية</button>
+<button class="tool-btn" type="button" data-target="h-wrap">🎁 تغليف فاخر</button>
+<button class="tool-btn" type="button" data-target="h-guarantee">💯 ضمان استبدال</button>
+<button class="tool-btn" type="button" data-target="h-support">💬 دعم دائم</button>
+</div>
+
+<div class="highlight-panel" id="highlightPanel">
+<div class="highlight-text active" id="h-about">
+<h3>🤎 من نحن</h3>
+في VelaLight لا نصنع الشموع فقط، بل نصنع لحظات تستحق أن تُعاش.
+بدأت رحلتنا بشغف تجاه التفاصيل الصغيرة التي تجعل المكان أكثر دفئًا، والبيت أكثر راحة، واللحظات العادية أكثر جمالًا. لذلك نصنع كل شمعة يدويًا بعناية، مستخدمين خامات مختارة وعطورًا فاخرة، لنقدم منتجًا يجمع بين الأناقة والجودة والإحساس الحقيقي.
+نؤمن أن الضوء الخافت قادر على تهدئة الروح، وأن العطر الجميل يستطيع أن يعيد أجمل الذكريات، وأن لمسة بسيطة قد تغيّر شعور يومٍ كامل.
+لأن أجمل اللحظات لا تحتاج إلى الكثير... تحتاج فقط إلى ضوءٍ هادئ، وعطرٍ يلامس القلب. 🤎
+</div>
+
+<div class="highlight-text" id="h-events">
+<h3>🎁 هدية لكل مناسبة</h3>
+<p style="text-align:center; margin-bottom:15px;"> في VelaLight، لا نقدّم شموعًا فحسب، بل نهدي تجربة تلامس الحواس.</p>
+<div class="grid-occ">
+<div class="occ-card">
+<h3>أعياد الميلاد 🎂</h3>
+<p>صُممت لتكون هدية استثنائية تحمل أعمق المشاعر، وتمنح كل لحظة دفئًا يلامس القلب.</p>
+</div>
+<div class="occ-card">
+<h3>الزفاف والخطوبة 💍</h3>
+<p>تفاصيل هي سرّ الجمال، توزيعات رومانسية ولمسات راقية تُضفي على يومك سحرًا استثنائيًا.</p>
+</div>
+<div class="occ-card">
+<h3>ركن المنزل 🏠</h3>
+<p>ركنٌ صغير... لكنه كفيل بأن يغيّر شعور المكان بأكمله؛ دفءٌ يحتضن التفاصيل.</p>
+</div>
+<div class="occ-card">
+<h3>بوكسات الهدايا ✨</h3>
+<p>لأن الهدية الراقية تبدأ من التفاصيل، نُنسّق بوكساتنا بعناية لتجسّد ذوقك.</p>
+</div>
+</div>
+</div>
+
+<div class="highlight-text" id="h-delivery">
+<h3>🚚 توصيل لكل المحافظات</h3>
+بنوصل طلبك أينما كنتِ في مصر، من القاهرة والجيزة للإسكندرية ولحد أبعد نقطة في الصعيد والدلتا، بتغليف آمن يحافظ على شمعتك من الورشة لحد باب بيتك.
+</div>
+
+<div class="highlight-text" id="h-natural">
+<h3>🌿 خامات طبيعية 100%</h3>
+شمع طبيعي نقي وفتائل خشب طبيعي وقطنية آمنة على صحتك وبيتك.
+</div>
+
+<div class="highlight-text" id="h-handmade">
+<h3>✋ صناعة يدوية بعناية</h3>
+خلف كل قطعة ساعاتٌ من العناية والحرفية، حيث تُصنع وتُغلّف يدويًا بكل دقة، لتخرج في أبهى صورة.
+</div>
+
+<div class="highlight-text" id="h-wrap">
+<h3>🎁 تغليف فاخر</h3>
+كل شمعة تُغلّف بعناية في تنسيقٍ راقٍ يعكس جمالها، لتصلك جاهزة للإهداء.
+</div>
+
+<div class="highlight-text" id="h-guarantee">
+<h3>💯 ضمان استبدال</h3>
+واثقين إنك هتقع في حب المنتج من أول لحظة، وإن لم تكن راضيًا تمامًا، فسنحرص على استبداله بسهولة.
+</div>
+
+<div class="highlight-text" id="h-support">
+<h3>💬 دعم دائم لعملائنا</h3>
+محتارة تختاري إيه؟ سيبها علينا. هنرشح لك الهدية والعطر الأنسب للمناسبة دي. 🤎
+</div>
+</div>
+
+<!-- قسم العطور -->
+<div style="margin-top:50px;">
+<div class="section-head">
+<div class="eyebrow">✦ Fragrance Notes ✦</div>
+<h2>عطورنا الفاخرة</h2>
+</div>
+
+<div class="highlight-panel">
+<div class="scent-chip-group">
+<h4>🤎 عطور دافئة وحلوة</h4>
+<div class="scent-chips">
+<span class="scent-chip">🍦 فانيلا</span>
+<span class="scent-chip">☕ موكا</span>
+<span class="scent-chip">🍮 كراميل</span>
+<span class="scent-chip">🤎 قرفة</span>
+<span class="scent-chip">🤎 عنبر</span>
+<span class="scent-chip">🤎 عود</span>
+<span class="scent-chip">☕ قهوة</span>
+</div>
+</div>
+
+<div class="scent-chip-group">
+<h4>🍓 عطور منعشة وفاكهية</h4>
+<div class="scent-chips">
+<span class="scent-chip">🍍 أناناس</span>
+<span class="scent-chip">🥥 كوكونات</span>
+<span class="scent-chip">🌴 كاريبيان فروت</span>
+<span class="scent-chip">🥭 مانجو</span>
+<span class="scent-chip">🍓 توت</span>
+</div>
+</div>
+
+<div class="scent-chip-group" style="margin-bottom:0;">
+<h4>🌸 عطور زهرية وفاخرة</h4>
+<div class="scent-chips">
+<span class="scent-chip">🌹 ورد</span>
+<span class="scent-chip">🌸 ياسمين</span>
+<span class="scent-chip">🌼 فل</span>
+<span class="scent-chip">💜 لافندر</span>
+<span class="scent-chip">🤍 مسك أبيض</span>
+<span class="scent-chip">🌳 ساندال وود</span>
+<span class="scent-chip">🌿 باتشولي</span>
+</div>
+</div>
+
+<div class="scent-note">
+✨ اضغطي على أي عطر لمعرفة وصفه واختياره مع أي منتج.
+</div>
+
+<div id="scentDescription" class="scent-description">
+اختاري أي عطر بالأعلى لعرض وصفه.
+</div>
+</div>
+</div>
+
+<!-- FAQ -->
+<div style="margin-top:50px;">
+<div class="section-head">
+<div class="eyebrow">✦ FAQ ✦</div>
+<h2>الأسئلة الشائعة</h2>
+</div>
+<div class="faq-list">
+<details class="faq-item">
+<summary>كام مدة توصيل الأوردر؟</summary>
+<p>التوصيل داخل القاهرة والجيزة بياخد من 3 إلى 5 أيام عمل، وباقي المحافظات من 5 إلى 7 أيام عمل.</p>
+</details>
+<details class="faq-item">
+<summary>طرق الدفع المتاحة إيه؟</summary>
+<p>قيمة المنتجات تُدفع InstaPay مقدمًا، وتكلفة الشحن فقط تُدفع كاش لمندوب الشحن عند الاستلام.</p>
+</details>
+<details class="faq-item">
+<summary>هل ينفع استبدال المنتج لو مش عاجبني؟</summary>
+<p>أيوه، عندنا سياسة استبدال خلال 3 أيام من الاستلام بشرط أن المنتج لم يُستخدم.</p>
+</details>
+<details class="faq-item">
+<summary>مدة اشتعال الشمعة قد إيه؟</summary>
+<p>حسب حجم الشمعة، بتتراوح بين 72 إلى 96 ساعة اشتعال متواصل.</p>
+</details>
+<details class="faq-item">
+<summary>الشموع آمنة على الأطفال والحيوانات الأليفة؟</summary>
+<p>الشموع مصنوعة من شمع طبيعي وفتيلة خشب طبيعي وفتيلة قطنية، وننصح دائمًا بعدم تركها مشتعلة بدون إشراف.</p>
+</details>
+<details class="faq-item">
+<summary>بتوصلوا لكل المحافظات؟</summary>
+<p>أيوه، بنوصل لكل محافظات مصر عن طريق شركات شحن موثوقة.</p>
+</details>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- ===== السوشيال ميديا ===== -->
+<section style="padding:40px 0;">
+<div class="wrap">
+<div class="social-links">
+<a href="https://www.facebook.com/VelaLight/" target="_blank" rel="noopener noreferrer">
+<i class="fab fa-facebook-f"></i> Facebook
+</a>
+<a href="https://www.instagram.com/velaa_lighttt" target="_blank" rel="noopener noreferrer">
+<i class="fab fa-instagram"></i> Instagram 1
+</a>
+<a href="https://www.instagram.com/velaalight/" target="_blank" rel="noopener noreferrer">
+<i class="fab fa-instagram"></i> Instagram 2
+</a>
+<a href="https://www.tiktok.com/@vela.light0" target="_blank" rel="noopener noreferrer">
+<i class="fab fa-tiktok"></i> TikTok
+</a>
+<a href="https://wa.me/201223526105" target="_blank" rel="noopener noreferrer">
+<i class="fab fa-whatsapp"></i> WhatsApp
+</a>
+</div>
+</div>
+</section>
+
+<!-- ===== الفوتر ===== -->
+<footer>
+<div class="wrap">
+<div class="logo">
+<span class="flame"></span>
+VelaLight
+</div>
+<p>شموع تصنع لحظات لا تنسى 🤎</p>
+<p>شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب</p>
+
+<div class="footer-links">
+<a href="contact.html">اتصل بنا</a>
+<a href="exchange-policy.html">سياسة الاستبدال</a>
+<a href="privacy.html">سياسة الخصوصية</a>
+<a href="terms.html">شروط الاستخدام</a>
+</div>
+
+<p style="margin-top:24px;">© 2026 - 2030 VelaLight — All Rights Reserved</p>
+</div>
+</footer>
+
+<!-- ===== شريط Sticky للموبايل ===== -->
+<div class="mobile-sticky-bar">
+<div class="sticky-items">
+<button class="sticky-item" onclick="openCart()" aria-label="السلة">
+<span class="sticky-icon">🛒<span class="sticky-count" id="mobileCartCount">0</span></span>
+<span>السلة</span>
+</button>
+<a class="sticky-item" href="https://wa.me/201223526105" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
+<span class="sticky-icon">📱</span>
+<span>واتساب</span>
+</a>
+<button class="sticky-item" onclick="openWishlist()" aria-label="المفضلة">
+<span class="sticky-icon">❤️<span class="sticky-count" id="mobileWishlistCount">0</span></span>
+<span>المفضلة</span>
+</button>
+</div>
+</div>
+
+<!-- الأزرار العائمة -->
+<a class="wa-float" href="https://wa.me/201223526105" target="_blank" rel="noopener noreferrer" aria-label="تواصل عبر واتساب">
+WhatsApp
+</a>
+
+<button id="topBtn" onclick="goTop()" aria-label="الرجوع لأعلى الصفحة">↑</button>
+
+<!-- معرض الصور المكبرة -->
+<div id="imageViewer" role="dialog" aria-modal="true" aria-label="عرض الصورة">
+<button class="viewer-close" onclick="closeImage()" aria-label="إغلاق">✖</button>
+<button class="viewer-arrow prev" id="viewerPrev" onclick="viewerNav(1)" aria-label="الصورة السابقة">›</button>
+<img id="bigImage" alt="عرض مكبر">
+<button class="viewer-arrow next" id="viewerNext" onclick="viewerNav(-1)" aria-label="الصورة التالية">‹</button>
+<div class="viewer-counter" id="viewerCounter"></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">تمت الإضافة للسلة ✅</div>
+
+<div class="exit-modal" id="exitModal">
+<div class="exit-box">
+<h3>🎁 لسه فيه منتجات في سلتك!</h3>
+<p>متنسيش تكملي طلبك قبل ما ينفد المخزون</p>
+<button onclick="openCart(); closeExitModal();">اكملي طلبك الآن</button>
+<button class="exit-close" onclick="closeExitModal()">لا شكرًا</button>
+</div>
+</div>
+
+<!-- ===== JavaScript ===== -->
+<script>
+const ALL_SCENTS = ["فانيلا 🍦","موكا ☕","كراميل 🍮","قرفة 🤎","عنبر 🤎","عود 🤎","قهوة ☕","أناناس 🍍","كوكونات 🥥","كاريبيان فروت 🌴","مانجو 🥭","توت 🍓","ورد 🌹","ياسمين 🌸","فل 🌼","لافندر 💜","مسك أبيض 🤍","ساندال وود 🌳","باتشولي 🌿"];
+
+const PRODUCTS = [
+{
+id:1,
+name:"شمعة المنديلا",
+category:"wooden",
+images:["https://velalight.github.io/2.jpg"],
+price:325,
+oldPrice:null,
+badge:null,
+isHot:true,
+desc:"الشمعة الأكثر طلبًا، مناسبة لكل أركان البيت.",
+scents:["فانيلا 🍦","موكا ☕","كراميل 🍮","قرفة 🤎","عنبر 🤎","عود 🤎","لافندر 💜","ورد 🌹"],
+stock:{status:"available", count:null},
+rating:4.9,
+reviewsCount:128,
+sales:320,
+dateAdded:"2025-11-01",
+burnTime:"72 ساعة",
+material:"شمع صويا طبيعي",
+reviews:[
+{name:"سارة", stars:5, text:"الرائحة ثابتة جدًا وبتفضل موجودة ساعات طويلة."},
+{name:"منى", stars:5, text:"شكلها فخم جدًا واتغلفت بشكل راقي."}
+]
+},
+{
+id:2,
+name:"الشمعة الفاخرة",
+category:"glass",
+images:["https://velalight.github.io/eeeee.jpg"],
+price:680,
+oldPrice:850,
+badge:null,
+isHot:false,
+desc:"تصميم راقي يغير شكل المكان بالكامل.",
+scents:["فانيلا 🍦","موكا ☕","كراميل 🍮","قرفة 🤎","عنبر 🤎","عود 🤎","لافندر 💜","ورد 🌹","ياسمين 🌸"],
+stock:{status:"low", count:3},
+rating:5.0,
+reviewsCount:76,
+sales:210,
+dateAdded:"2026-01-15",
+burnTime:"96 ساعة",
+material:"شمع طبيعي + زجاج كريستال",
+reviews:[
+{name:"ندى", stars:5, text:"أحلى هدية قدمتها، الريحة فخمة والحجم كبير."},
+{name:"إيمان", stars:5, text:"استحقت كل جنيه فيها، خامة ممتازة."}
+]
+},
+{
+id:3,
+name:"مجموعة نبضين",
+category:"crystal",
+images:["https://velalight.github.io/q.jpg","https://velalight.github.io/q2.jpg","https://velalight.github.io/q3.jpg"],
+price:650,
+oldPrice:750,
+badge:null,
+isHot:false,
+desc:"تصميم مميز يجمع بين الجمال والرائحة الفاخرة.",
+scents:["فانيلا 🍦","موكا ☕","كراميل 🍮","عنبر 🤎","عود 🤎","ورد 🌹","مسك أبيض 🤍"],
+stock:{status:"available", count:null},
+rating:4.7,
+reviewsCount:54,
+sales:150,
+dateAdded:"2026-03-01",
+burnTime:"80 ساعة",
+material:"شمع طبيعي + كريستال",
+reviews:[
+{name:"هبة", stars:5, text:"شكل المجموعة تحفة والتغليف كان مرتب جدًا."},
+{name:"ريهام", stars:4, text:"جميلة جدًا بس تمنيت العطر يكون أقوى شوية."}
+]
+},
+{
+id:4,
+name:"كونتر الخشب الطبيعي",
+category:"wooden",
+images:["https://velalight.github.io/RRRRRR.jpg","https://velalight.github.io/R2.jpg","https://velalight.github.io/R3.jpg"],
+price:650,
+oldPrice:null,
+badge:null,
+isHot:false,
+desc:"قطعة فنية من الخشب الطبيعي مع شموع معطرة.",
+scents:["فانيلا 🍦","قهوة ☕","عود 🤎","عنبر 🤎","لافندر 💜"],
+stock:{status:"available", count:null},
+rating:4.8,
+reviewsCount:39,
+sales:90,
+dateAdded:"2026-06-01",
+burnTime:"72 ساعة",
+material:"خشب طبيعي + شمع صويا",
+reviews:[
+{name:"داليا", stars:5, text:"من أرقى القطع اللي جربتها، مناسبة جدًا كديكور."}
+]
+},
+{
+id:5,
+name:"طقم الشموع الذهبي الفاخر",
+category:"metal",
+images:[
+"https://velalight.github.io/candle.jpg",
+"https://velalight.github.io/candle1.jpg",
+"https://velalight.github.io/candle2.jpg",
+"https://velalight.github.io/candle3.jpg",
+"https://velalight.github.io/candle4.jpg",
+"https://velalight.github.io/candle5.jpg"
+],
+price:2850,
+oldPrice:3600,
+badge:"✨ جديد",
+isHot:true,
+desc:"طقم الشموع الذهبي الفاخر (3 قطع) ✨🤍 ثلاث قطع بتصميم ذهبي أنيق تضيف للمكان لمسة فخامة ودفء من أول نظرة.",
+scents:["فانيلا 🍦","عود 🤎","عنبر 🤎","مسك أبيض 🤍","لافندر 💜"],
+stock:{status:"low", count:5},
+rating:5.0,
+reviewsCount:0,
+sales:45,
+dateAdded:"2026-08-03",
+burnTime:"96 ساعة لكل شمعة",
+material:"شمع طبيعي + معدن ذهبي",
+reviews:[]
+},
+{
+id:6,
+name:"شمعة المساج الدافئة",
+category:"massage",
+images:["https://velalight.github.io/eeeee.jpg"],
+price:450,
+oldPrice:550,
+badge:null,
+isHot:false,
+desc:"شمعة مساج بزيت طبيعي للعناية بالبشرة والاسترخاء.",
+scents:["فانيلا 🍦","لافندر 💜","ورد 🌹","ياسمين 🌸"],
+stock:{status:"available", count:null},
+rating:4.9,
+reviewsCount:42,
+sales:80,
+dateAdded:"2026-05-01",
+burnTime:"40 ساعة",
+material:"زيت طبيعي + شمع صويا",
+reviews:[
+{name:"مي", stars:5, text:"رائعة جدًا للاسترخاء والعناية بالبشرة."}
+]
+}
+];
+
+let currentQuery = "";
+let currentSort = "bestselling";
+let currentCategory = "all";
+let currentScent = "all";
+const sliderState = {};
+
+function getVisibleProducts(){
+let list = PRODUCTS.slice();
+
+if(currentCategory !== "all"){
+list = list.filter(p => p.category === currentCategory);
+}
+
+if(currentScent !== "all"){
+list = list.filter(p => p.scents && p.scents.includes(currentScent));
+}
+
+if(currentQuery.trim() !== ""){
+let q = currentQuery.trim();
+list = list.filter(p => p.name.indexOf(q) !== -1 || p.desc.indexOf(q) !== -1);
+}
+
+switch(currentSort){
+case "price-asc": list.sort((a,b) => a.price - b.price); break;
+case "price-desc": list.sort((a,b) => b.price - a.price); break;
+case "rating": list.sort((a,b) => b.rating - a.rating); break;
+case "newest": list.sort((a,b) => new Date(b.dateAdded) - new Date(a.dateAdded)); break;
+default: list.sort((a,b) => b.sales - a.sales);
+}
+return list;
+}
+
+function filterCategory(cat){
+currentCategory = cat;
+document.querySelectorAll("[data-category]").forEach(p => {
+p.classList.toggle("active", p.dataset.category === cat);
+});
+renderProducts();
+}
+
+function filterScent(scent){
+currentScent = scent;
+document.querySelectorAll("[data-scent]").forEach(p => {
+p.classList.toggle("active", p.dataset.scent === scent);
+});
+renderProducts();
+}
+
+function starsHTML(rating){
+let full = Math.round(rating);
+let out = "";
+for(let i=0;i<5;i++) out += i < full ? "★" : "☆";
+return out;
+}
+
+function stockHTML(p){
+if(p.stock.status === "out"){
+return '<div class="stock-line stock-out">⚫ نفذت الكمية</div>';
+}
+if(p.stock.status === "low"){
+return '<div class="stock-line stock-low">🔥 متبقي ' + p.stock.count + ' فقط</div>';
+}
+if(p.isHot){
+return '<div class="stock-line stock-hot">🔥 الأكثر طلبًا هذا الأسبوع</div>';
+}
+return '<div class="stock-line stock-available">✓ متوفر</div>';
+}
+
+function priceHTML(p){
+if(p.oldPrice && p.oldPrice > p.price){
+let saved = p.oldPrice - p.price;
+return '<div class="price-row">' +
+'<span class="current-price">' + p.price + ' ج.م</span>' +
+'<span class="old-price">' + p.oldPrice + ' ج.م</span>' +
+'<span class="save-badge-inline">وفّري ' + saved + ' ج.م</span>' +
+'</div>';
+}
+return '<div class="price-row"><span class="current-price">' + p.price + ' ج.م</span></div>';
+}
+
+function sliderHTML(p){
+let imgs = p.images.map((src,i) =>
+'<img src="' + src + '" alt="' + p.name + '" loading="lazy" data-action="zoom" data-id="' + p.id + '" data-idx="' + i + '">'
+).join("");
+
+let dots = p.images.length > 1 ? p.images.map((_,i) =>
+'<span class="' + (i===0 ? "active" : "") + '"></span>'
+).join("") : "";
+
+let arrows = p.images.length > 1 ?
+'<button class="slider-arrow prev" data-action="slide" data-dir="-1" data-id="' + p.id + '" aria-label="الصورة السابقة">›</button>' +
+'<button class="slider-arrow next" data-action="slide" data-dir="1" data-id="' + p.id + '" aria-label="الصورة التالية">‹</button>'
+: "";
+
+return '<div class="card-slider" id="slider-' + p.id + '">' +
+'<div class="slider-track" id="track-' + p.id + '" style="transform:translateX(0)">' + imgs + '</div>' +
+arrows +
+'<div class="slider-dots">' + dots + '</div>' +
+'</div>';
+}
+
+function scentOptionsHTML(p, selected){
+let out = '<option value="">اختاري العطر 🌸</option>';
+p.scents.forEach(s => {
+out += '<option' + (s===selected ? ' selected' : '') + '>' + s + '</option>';
+});
+return out;
+}
+
+function escapeHTML(text){
+return String(text)
+.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function cardHTML(p){
+let isWished = velaWishlist.indexOf(p.id) !== -1;
+
+let badgeHtml = "";
+if(p.badge){
+badgeHtml = '<span class="badge">' + p.badge + '</span>';
+} else if(p.isHot){
+badgeHtml = '<span class="badge-hot">🔥 الأكثر طلبًا</span>';
+}
+if(p.oldPrice && p.oldPrice > p.price){
+badgeHtml += '<span class="badge-discount">خصم</span>';
+}
+
+return '<div class="card reveal active" id="prod-' + p.id + '" data-view-id="' + p.id + '">' +
+badgeHtml +
+'<button class="wishlist-heart-btn' + (isWished ? ' active' : '') + '" data-action="wishlist" data-id="' + p.id + '" aria-label="إضافة لقائمة الأمنيات">' + (isWished ? '❤️' : '🤍') + '</button>' +
+sliderHTML(p) +
+'<button class="quickview-trigger" data-action="quickview" data-id="' + p.id + '">👁️ معاينة سريعة</button>' +
+'<div class="card-body">' +
+'<h3>' + p.name + '</h3>' +
+priceHTML(p) +
+stockHTML(p) +
+'<div class="scent-select-wrap">' +
+'<label for="scent' + p.id + '">العطر</label>' +
+'<select class="scent-select" id="scent' + p.id + '" data-id="' + p.id + '">' + scentOptionsHTML(p,"") + '</select>' +
+'</div>' +
+'<div class="product-actions">' +
+'<input class="product-qty" id="qty' + p.id + '" type="number" min="1" value="1">' +
+'<button class="order-btn" id="btn' + p.id + '" data-action="add" data-id="' + p.id + '">أضيفي للسلة</button>' +
+'</div>' +
+'<button class="more-btn" data-action="quickview" data-id="' + p.id + '">المزيد من التفاصيل</button>' +
+'</div>' +
+'</div>';
+}
+
+function renderProducts(){
+let list = getVisibleProducts();
+let grid = document.getElementById("productsGrid");
+if(!grid) return;
+if(list.length === 0){
+grid.innerHTML = '<div class="no-results">لا توجد منتجات مطابقة 🔍</div>';
+return;
+}
+grid.innerHTML = list.map(cardHTML).join("");
+document.querySelectorAll("#productsGrid .card").forEach(card => {
+if(typeof viewTrackObserver !== "undefined"){ viewTrackObserver.observe(card); }
+});
+}
+
+const headerSearch = document.getElementById("headerSearch");
+if (headerSearch) {
+headerSearch.addEventListener("input", e => {
+currentQuery = e.target.value;
+renderProducts();
+});
+}
+
+const sortSelect = document.getElementById("sortSelect");
+if (sortSelect) {
+sortSelect.addEventListener("change", e => {
+currentSort = e.target.value;
+renderProducts();
+});
+}
+
+document.getElementById("productsGrid").addEventListener("click", e => {
+let el = e.target.closest("[data-action]");
+if(!el) return;
+let action = el.dataset.action;
+let id = parseInt(el.dataset.id);
+let product = PRODUCTS.find(p => p.id === id);
+if(!product) return;
+
+if(action === "add"){ addToCart(product); }
+if(action === "slide"){ slideProduct(product, parseInt(el.dataset.dir)); }
+if(action === "zoom"){ openImageGallery(product.images, parseInt(el.dataset.idx)); }
+if(action === "wishlist"){ toggleWishlist(product, el); }
+if(action === "quickview"){ openQuickView(product); }
+});
+
+function slideProduct(p, dir){
+if(!sliderState[p.id]) sliderState[p.id] = 0;
+let total = p.images.length;
+sliderState[p.id] = (sliderState[p.id] + (dir>0?1:-1) + total) % total;
+let track = document.getElementById("track-" + p.id);
+track.style.transform = "translateX(-" + (sliderState[p.id] * 100) + "%)";
+let dots = document.querySelectorAll("#slider-" + p.id + " .slider-dots span");
+dots.forEach((d,i) => d.classList.toggle("active", i === sliderState[p.id]));
+}
+
+/* السلة */
+let cart = [];
+try{ cart = JSON.parse(localStorage.getItem("velaCart")) || []; }catch(e){ cart = []; }
+
+function saveCart(){
+try{ localStorage.setItem("velaCart", JSON.stringify(cart)); }catch(e){}
+}
+
+function showToast(text){
+let toast = document.getElementById("toast");
+toast.textContent = text;
+toast.classList.add("show");
+setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function addToCart(product){
+let scentSelect = document.getElementById("scent" + product.id);
+let selectedScent = scentSelect ? scentSelect.value : "";
+if(selectedScent === ""){
+showToast("من فضلك اختاري العطر أولاً ⚠️");
+scentSelect.focus();
+return;
+}
+let qtyInput = document.getElementById("qty" + product.id);
+let qty = parseInt(qtyInput.value) || 1;
+
+let existing = cart.find(item => item.id === product.id && item.scent === selectedScent);
+if(existing){ existing.qty += qty; }
+else{
+cart.push({ id:product.id, name:product.name, price:product.price, qty:qty, scent:selectedScent, img:product.images[0] });
+}
+saveCart();
+updateCart();
+showToast("تمت إضافة " + product.name + " للسلة 🛒");
+
+let btn = document.getElementById("btn" + product.id);
+if(btn){
+btn.classList.add("added");
+btn.textContent = "✓ تمت الإضافة";
+setTimeout(() => {
+btn.classList.remove("added");
+btn.textContent = "أضيفي للسلة";
+}, 1800);
+}
+}
+
+function buyNow(product){
+let scentSelect = document.getElementById("scent" + product.id);
+let selectedScent = scentSelect ? scentSelect.value : "";
+if(selectedScent === ""){
+showToast("من فضلك اختاري العطر أولاً ⚠️");
+return;
+}
+let qtyInput = document.getElementById("qty" + product.id);
+let qty = parseInt(qtyInput.value) || 1;
+cart = [{ id:product.id, name:product.name, price:product.price, qty:qty, scent:selectedScent, img:product.images[0] }];
+saveCart();
+updateCart();
+openCart();
+}
+
+function updateCart(){
+let box = document.getElementById("cartItems");
+if(!box) return;
+if(cart.length === 0){
+box.innerHTML = '<div class="empty-cart">السلة فارغة حاليًا 🕯️</div>';
+document.getElementById("cartTotal").innerHTML = 0;
+document.getElementById("cartCount").innerHTML = 0;
+document.getElementById("mobileCartCount").innerHTML = 0;
+saveCart();
+return;
+}
+box.innerHTML = "";
+let total = 0, count = 0;
+cart.forEach((item, index) => {
+let sum = item.price * item.qty;
+total += sum; count += item.qty;
+box.innerHTML += `
+<div class="cart-item">
+<img class="cart-thumb" src="${item.img}" alt="${item.name}">
+<div class="cart-item-body">
+<h3>${item.name}</h3>
+<p>${item.price} ج.م × ${item.qty} = ${sum} ج.م</p>
+<p>العطر: ${item.scent || 'غير محدد'}</p>
+<div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+<button class="qty-btn" onclick="decrease(${index})">-</button>
+<span>${item.qty}</span>
+<button class="qty-btn" onclick="increase(${index})">+</button>
+<button class="qty-btn" onclick="removeProduct(${index})">🗑</button>
+</div>
+</div>
+</div>
+`;
+});
+document.getElementById("cartTotal").innerHTML = total;
+document.getElementById("cartCount").innerHTML = count;
+document.getElementById("mobileCartCount").innerHTML = count;
+saveCart();
+}
+
+function increase(i){ cart[i].qty++; updateCart(); }
+function decrease(i){ cart[i].qty--; if(cart[i].qty<=0) cart.splice(i,1); updateCart(); }
+function removeProduct(i){ cart.splice(i,1); updateCart(); }
+function clearCart(){ if(confirm("إفراغ السلة؟")){ cart = []; updateCart(); } }
+
+function openCart(){
+updateCart();
+prefillCheckoutFromAccount();
+document.getElementById("accountPanel").classList.remove("active");
+document.getElementById("wishlistPanel").classList.remove("active");
+document.getElementById("cartPanel").classList.add("active");
+document.getElementById("cartOverlay").classList.add("active");
+}
+function closeCart(){ document.getElementById("cartPanel").classList.remove("active"); document.getElementById("cartOverlay").classList.remove("active"); }
+
+/* الحساب */
+let velaUser = null;
+try{ velaUser = JSON.parse(localStorage.getItem("velaUser")) || null; }catch(e){ velaUser = null; }
+
+let velaOrders = [];
+try{ velaOrders = JSON.parse(localStorage.getItem("velaOrders")) || []; }catch(e){ velaOrders = []; }
+
+let velaViewed = [];
+try{ velaViewed = JSON.parse(localStorage.getItem("velaViewed")) || []; }catch(e){ velaViewed = []; }
+
+function saveVelaUser(){ try{ localStorage.setItem("velaUser", JSON.stringify(velaUser)); }catch(e){} }
+function saveVelaOrders(){ try{ localStorage.setItem("velaOrders", JSON.stringify(velaOrders)); }catch(e){} }
+function saveVelaViewed(){ try{ localStorage.setItem("velaViewed", JSON.stringify(velaViewed)); }catch(e){} }
+
+/* قائمة الأمنيات */
+let velaWishlist = [];
+try{ velaWishlist = JSON.parse(localStorage.getItem("velaWishlist")) || []; }catch(e){ velaWishlist = []; }
+
+function saveVelaWishlist(){ try{ localStorage.setItem("velaWishlist", JSON.stringify(velaWishlist)); }catch(e){} }
+
+function toggleWishlist(product, btnEl){
+let idx = velaWishlist.indexOf(product.id);
+if(idx === -1){
+velaWishlist.push(product.id);
+showToast("تمت الإضافة لقائمة الأمنيات 🤍");
+}else{
+velaWishlist.splice(idx,1);
+showToast("تمت الإزالة من قائمة الأمنيات");
+}
+saveVelaWishlist();
+updateWishlistCount();
+if(btnEl){
+let wished = velaWishlist.indexOf(product.id) !== -1;
+btnEl.classList.toggle("active", wished);
+btnEl.textContent = wished ? '❤️' : '🤍';
+}
+renderWishlistPanel();
+}
+
+function updateWishlistCount(){
+let countEl = document.getElementById("wishlistCount");
+let btn = document.getElementById("wishlistOpenBtn");
+let mobileCount = document.getElementById("mobileWishlistCount");
+if(countEl){ countEl.textContent = velaWishlist.length; }
+if(btn){ btn.classList.toggle("has-items", velaWishlist.length > 0); }
+if(mobileCount){ mobileCount.textContent = velaWishlist.length; }
+}
+
+function renderWishlistPanel(){
+let box = document.getElementById("wishlistItems");
+if(!box) return;
+let items = velaWishlist.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+if(items.length === 0){
+box.innerHTML = '<div class="empty-cart">قائمة الأمنيات فارغة حاليًا 🤍</div>';
+return;
+}
+box.innerHTML = items.map(item => {
+return '<div class="cart-item">' +
+'<img class="cart-thumb" src="' + item.images[0] + '" alt="' + item.name + '">' +
+'<div class="cart-item-body">' +
+'<h3>' + item.name + '</h3>' +
+'<p>' + item.price + ' ج.م</p>' +
+'<div style="display:flex;gap:8px;margin-top:6px;">' +
+'<button class="qty-btn" style="width:auto;border-radius:20px;padding:0 12px;font-size:12px;" onclick="closeWishlist(); openQuickViewById(' + item.id + ');">معاينة 👁️</button>' +
+'<button class="qty-btn" onclick="removeFromWishlistById(' + item.id + ')">🗑</button>' +
+'</div>' +
+'</div>' +
+'</div>';
+}).join("");
+}
+
+function removeFromWishlistById(id){
+let product = PRODUCTS.find(p => p.id === id);
+if(product){ toggleWishlist(product, document.querySelector('.wishlist-heart-btn[data-id="' + id + '"]')); }
+}
+
+function openWishlist(){
+renderWishlistPanel();
+document.getElementById("cartPanel").classList.remove("active");
+document.getElementById("accountPanel").classList.remove("active");
+document.getElementById("wishlistPanel").classList.add("active");
+document.getElementById("cartOverlay").classList.add("active");
+}
+function closeWishlist(){ document.getElementById("wishlistPanel").classList.remove("active"); document.getElementById("cartOverlay").classList.remove("active"); }
+
+/* المعاينة السريعة */
+function openQuickViewById(id){
+let product = PRODUCTS.find(p => p.id === id);
+if(product){ openQuickView(product); }
+}
+
+function openQuickView(product){
+let box = document.getElementById("quickViewContent");
+let isWished = velaWishlist.indexOf(product.id) !== -1;
+box.innerHTML =
+'<div class="quickview-media"><img src="' + product.images[0] + '" alt="' + product.name + '"></div>' +
+'<div class="quickview-body">' +
+'<h3>' + product.name + '</h3>' +
+'<div style="display:flex;align-items:center;gap:6px;font-size:13px;color:#6b5140;">' +
+'<span style="color:#FFB100;">' + starsHTML(product.rating) + '</span>' +
+'<span>' + product.rating.toFixed(1) + ' (' + product.reviewsCount + ' تقييم)</span>' +
+'</div>' +
+priceHTML(product) +
+stockHTML(product) +
+'<p class="qv-desc">' + product.desc + '</p>' +
+'<div class="qv-specs">' +
+'<div class="qv-spec"><span class="qv-spec-label">مدة الاشتعال</span><span class="qv-spec-value">' + (product.burnTime || "—") + '</span></div>' +
+'<div class="qv-spec"><span class="qv-spec-label">الخامة</span><span class="qv-spec-value">' + (product.material || "شمع طبيعي") + '</span></div>' +
+'<div class="qv-spec"><span class="qv-spec-label">العطور</span><span class="qv-spec-value">' + product.scents.length + ' متاح</span></div>' +
+'<div class="qv-spec"><span class="qv-spec-label">التصنيف</span><span class="qv-spec-value">' + getCategoryName(product.category) + '</span></div>' +
+'</div>' +
+'<div class="scent-select-wrap">' +
+'<label>اختاري العطر</label>' +
+'<select class="scent-select" id="qvScent' + product.id + '">' + scentOptionsHTML(product,"") + '</select>' +
+'</div>' +
+'<div class="qv-actions">' +
+'<input class="product-qty" id="qvQty' + product.id + '" type="number" min="1" value="1">' +
+'<button class="order-btn" onclick="addToCartFromQuickView(' + product.id + ')">أضيفي للسلة 🛒</button>' +
+'</div>' +
+'<button class="qv-buy-now" onclick="buyNowFromQuickView(' + product.id + ')">اشترِ الآن ⚡</button>' +
+'<button class="more-btn" onclick="toggleWishlist(PRODUCTS.find(p=>p.id===' + product.id + ')); closeQuickView();">' + (isWished ? '❤️ إزالة من الأمنيات' : '🤍 إضافة لقائمة الأمنيات') + '</button>' +
+'</div>';
+document.getElementById("quickViewModal").classList.add("active");
+}
+
+function getCategoryName(cat){
+const names = { wooden:"خشبية", glass:"زجاجية", crystal:"كريستالية", metal:"معدنية", massage:"مساج" };
+return names[cat] || cat;
+}
+
+function addToCartFromQuickView(id){
+let scentSelect = document.getElementById("qvScent" + id);
+let qtyInput = document.getElementById("qvQty" + id);
+let product = PRODUCTS.find(p => p.id === id);
+if(scentSelect.value === ""){ showToast("من فضلك اختاري العطر أولاً ⚠️"); return; }
+let qty = parseInt(qtyInput.value) || 1;
+let existing = cart.find(item => item.id === product.id && item.scent === scentSelect.value);
+if(existing){ existing.qty += qty; }
+else{ cart.push({ id:product.id, name:product.name, price:product.price, qty:qty, scent:scentSelect.value, img:product.images[0] }); }
+saveCart(); updateCart();
+showToast("تمت إضافة " + product.name + " للسلة 🛒");
+closeQuickView();
+}
+
+function buyNowFromQuickView(id){
+let scentSelect = document.getElementById("qvScent" + id);
+let qtyInput = document.getElementById("qvQty" + id);
+let product = PRODUCTS.find(p => p.id === id);
+if(scentSelect.value === ""){ showToast("من فضلك اختاري العطر أولاً ⚠️"); return; }
+let qty = parseInt(qtyInput.value) || 1;
+cart = [{ id:product.id, name:product.name, price:product.price, qty:qty, scent:scentSelect.value, img:product.images[0] }];
+saveCart(); updateCart();
+closeQuickView();
+openCart();
+}
+
+function closeQuickView(){ document.getElementById("quickViewModal").classList.remove("active"); }
+
+/* Ticker متحرك */
+function renderMiniCarousel(){
+let track = document.getElementById("miniCarouselTrack");
+if(!track) return;
+let best = PRODUCTS.slice().sort((a,b) => b.sales - a.sales);
+let doubled = best.concat(best);
+track.innerHTML = doubled.map(p => {
+return '<div class="mini-carousel-item" data-action="goto" data-id="' + p.id + '">' +
+'<img src="' + p.images[0] + '" alt="' + p.name + '" loading="lazy">' +
+'<span>' + p.name + '</span>' +
+'</div>';
+}).join("");
+}
+
+/* القائمة الجانبية */
+function openSideMenu(){
+document.getElementById("sideMenu").classList.add("active");
+document.getElementById("sideMenuOverlay").classList.add("active");
+document.body.style.overflow = "hidden";
+}
+
+function closeSideMenu(){
+document.getElementById("sideMenu").classList.remove("active");
+document.getElementById("sideMenuOverlay").classList.remove("active");
+document.body.style.overflow = "";
+}
+
+document.getElementById("hamburgerBtn").addEventListener("click", openSideMenu);
+
+document.addEventListener("keydown", e => {
+if(e.key === "Escape"){
+closeSideMenu();
+closeQuickView();
+}
+});
+
+function openAccount(){
+renderAccountPanel();
+document.getElementById("cartPanel").classList.remove("active");
+document.getElementById("wishlistPanel").classList.remove("active");
+document.getElementById("accountPanel").classList.add("active");
+document.getElementById("cartOverlay").classList.add("active");
+}
+function closeAccount(){ document.getElementById("accountPanel").classList.remove("active"); document.getElementById("cartOverlay").classList.remove("active"); }
+
+function saveAccount(){
+let name = document.getElementById("accName").value.trim();
+let phone = document.getElementById("accPhone").value.trim();
+let address = document.getElementById("accAddress").value.trim();
+if(!name || !phone){ showToast("من فضلك اكتبي الاسم ورقم الهاتف ✏️"); return; }
+velaUser = { name:name, phone:phone, address:address };
+saveVelaUser();
+renderAccountPanel();
+prefillCheckoutFromAccount();
+showToast("تم تسجيل الدخول، أهلاً بيكي " + name + " 👋");
+}
+
+function logoutAccount(){
+if(!confirm("تسجيل الخروج من الحساب؟")) return;
+velaUser = null;
+saveVelaUser();
+renderAccountPanel();
+}
+
+function renderAccountPanel(){
+let outView = document.getElementById("accountLoggedOutView");
+let inView = document.getElementById("accountLoggedInView");
+let btn = document.getElementById("accountOpenBtn");
+if(velaUser){
+outView.style.display = "none";
+inView.style.display = "block";
+document.getElementById("accGreetName").textContent = velaUser.name;
+btn.classList.add("logged-in");
+renderOrderHistory();
+renderViewedInAccount();
+}else{
+outView.style.display = "block";
+inView.style.display = "none";
+btn.classList.remove("logged-in");
+}
+}
+
+function renderOrderHistory(){
+let box = document.getElementById("ordersList");
+if(!velaUser){ box.innerHTML = ""; return; }
+let myOrders = velaOrders.filter(o => o.phone === velaUser.phone).slice().reverse();
+if(myOrders.length === 0){
+box.innerHTML = '<div class="empty-cart">لسه مفيش طلبات سابقة 🕯️</div>';
+return;
+}
+box.innerHTML = myOrders.map(o => {
+let lines = o.items.map(it => it.name + " (" + it.scent + ") × " + it.qty).join("<br>");
+return '<div class="order-history-item">' +
+'<div class="oh-date">' + o.date + '</div>' +
+'<div class="oh-line">' + lines + '</div>' +
+'<div class="oh-total">الإجمالي: ' + o.total + ' ج.م</div>' +
+'</div>';
+}).join("");
+}
+
+function trackView(id){
+velaViewed = velaViewed.filter(v => v !== id);
+velaViewed.unshift(id);
+velaViewed = velaViewed.slice(0,12);
+saveVelaViewed();
+renderRecentStrip();
+if(velaUser){ renderViewedInAccount(); }
+}
+
+function miniCardHTML(p){
+return '<div class="viewed-mini" data-action="goto" data-id="' + p.id + '">' +
+'<img src="' + p.images[0] + '" alt="' + p.name + '" loading="lazy">' +
+'<span>' + p.name + '</span>' +
+'</div>';
+}
+
+function renderRecentStrip(){
+let section = document.getElementById("recentStripSection");
+let row = document.getElementById("homeRecentStrip");
+if(velaViewed.length === 0){ section.style.display = "none"; return; }
+let items = velaViewed.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+if(items.length === 0){ section.style.display = "none"; return; }
+section.style.display = "block";
+row.innerHTML = items.map(miniCardHTML).join("");
+}
+
+function renderViewedInAccount(){
+let viewedBox = document.getElementById("viewedList");
+let recBox = document.getElementById("recommendList");
+if(!viewedBox || !recBox) return;
+let viewedItems = velaViewed.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+viewedBox.innerHTML = viewedItems.length > 0
+? '<div class="viewed-mini-row">' + viewedItems.map(miniCardHTML).join("") + '</div>'
+: '<div class="empty-cart">لسه معملتيش تصفح لحاجة 🕯️</div>';
+
+let recItems = PRODUCTS.filter(p => velaViewed.indexOf(p.id) === -1);
+if(recItems.length === 0){ recItems = PRODUCTS.slice(0,4); }
+recBox.innerHTML = recItems.slice(0,4).map(miniCardHTML).join("");
+}
+
+function prefillCheckoutFromAccount(){
+if(!velaUser) return;
+let nameEl = document.getElementById("customerName");
+let phoneEl = document.getElementById("customerPhone");
+let addrEl = document.getElementById("customerAddress");
+if(nameEl && !nameEl.value) nameEl.value = velaUser.name;
+if(phoneEl && !phoneEl.value) phoneEl.value = velaUser.phone;
+if(addrEl && !addrEl.value && velaUser.address) addrEl.value = velaUser.address;
+}
+
+document.querySelectorAll(".account-tab-btn").forEach(btn => {
+btn.addEventListener("click", function(){
+document.querySelectorAll(".account-tab-btn").forEach(b => b.classList.remove("active"));
+document.querySelectorAll(".account-panel-view").forEach(v => v.classList.remove("active"));
+this.classList.add("active");
+document.getElementById(this.dataset.view).classList.add("active");
+});
+});
+
+const viewTrackObserver = new IntersectionObserver(entries => {
+entries.forEach(entry => {
+if(entry.isIntersecting){
+trackView(parseInt(entry.target.dataset.viewId));
+}
+});
+},{threshold:0.5});
+
+/* معرض الصور */
+let viewerImages = [], viewerIndex = 0;
+function openImageGallery(images, index){
+viewerImages = images; viewerIndex = index || 0; renderViewer();
+document.getElementById("imageViewer").style.display = "flex";
+}
+function renderViewer(){
+document.getElementById("bigImage").src = viewerImages[viewerIndex];
+let multi = viewerImages.length > 1;
+document.getElementById("viewerPrev").style.display = multi ? "flex" : "none";
+document.getElementById("viewerNext").style.display = multi ? "flex" : "none";
+document.getElementById("viewerCounter").textContent = (viewerIndex+1) + " / " + viewerImages.length;
+}
+function viewerNav(dir){
+let total = viewerImages.length;
+viewerIndex = (viewerIndex + (dir>0?1:-1) + total) % total;
+renderViewer();
+}
+function closeImage(){ document.getElementById("imageViewer").style.display = "none"; }
+
+/* واتساب */
+function sendWhatsApp(){
+if(cart.length===0){ showToast("السلة فارغة 🛒"); return; }
+let name = document.getElementById("customerName").value.trim();
+let phone = document.getElementById("customerPhone").value.trim();
+let address = document.getElementById("customerAddress").value.trim();
+
+if(!name || !phone || !address){ showToast("برجاء استكمال بيانات التوصيل ✏️"); return; }
+
+let msg = `🕯️ *طلب جديد من VelaLight*\n\n👤 الاسم: ${name}\n📞 الهاتف: ${phone}\n📍 العنوان: ${address}\n\n🛒 *المنتجات:*\n`;
+let total = 0;
+let orderItems = [];
+cart.forEach(item => {
+let sum = item.price * item.qty;
+total += sum;
+msg += `- ${item.name} (${item.scent}) | العدد: ${item.qty} | السعر: ${sum} ج.م\n`;
+orderItems.push({ name:item.name, scent:item.scent, qty:item.qty, price:item.price });
+});
+msg += `\n💰 *إجمالي المنتجات (يُدفع InstaPay مقدمًا):* ${total} ج.م`;
+msg += `\n🚚 *ملحوظة:* تكلفة الشحن تُدفع كاش لمندوب شركة الشحن عند الاستلام (مش شاملة الإجمالي أعلاه).`;
+
+window.open("https://wa.me/201223526105?text="+encodeURIComponent(msg), "_blank");
+
+velaOrders.push({
+date: new Date().toLocaleDateString("ar-EG"),
+phone: phone,
+name: name,
+items: orderItems,
+total: total
+});
+saveVelaOrders();
+if(velaUser && velaUser.phone === phone){ renderOrderHistory(); }
+
+cart = []; saveCart(); updateCart(); closeCart();
+}
+
+/* التنقل من كروت شاهدته مؤخرًا */
+document.addEventListener("click", e => {
+let el = e.target.closest(".viewed-mini[data-action='goto'], .mini-carousel-item[data-action='goto']");
+if(!el) return;
+let id = parseInt(el.dataset.id);
+closeCart(); closeAccount(); closeWishlist();
+setTimeout(() => {
+let target = document.getElementById("prod-" + id);
+if(target){
+target.scrollIntoView({behavior:"smooth", block:"center"});
+target.classList.add("flash");
+setTimeout(() => target.classList.remove("flash"), 1000);
+}
+},250);
+});
+
+/* تبديل التبويبات */
+document.querySelectorAll(".tool-btn").forEach(btn => {
+btn.addEventListener("click", function(){
+document.querySelectorAll(".tool-btn").forEach(b => b.classList.remove("active"));
+document.querySelectorAll(".highlight-text").forEach(t => t.classList.remove("active"));
+this.classList.add("active");
+let target = document.getElementById(this.dataset.target);
+if(target){ target.classList.add("active"); }
+});
+});
+
+window.addEventListener("scroll", function(){
+document.getElementById("topBtn").style.display = document.documentElement.scrollTop > 400 ? "flex" : "none";
+});
+function goTop(){ window.scrollTo({ top:0, behavior:"smooth" }); }
+
+document.addEventListener("DOMContentLoaded", function(){
+let observer = new IntersectionObserver(entries => {
+entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add("active"); });
+},{threshold:0.1});
+document.querySelectorAll(".reveal").forEach(item => observer.observe(item));
+
+renderProducts();
+updateCart();
+renderAccountPanel();
+renderRecentStrip();
+renderMiniCarousel();
+updateWishlistCount();
+
+/* Exit Intent Modal */
+let exitShown = false;
+document.addEventListener("mouseleave", e => {
+if(e.clientY < 5 && !exitShown && cart.length > 0){
+document.getElementById("exitModal").classList.add("active");
+exitShown = true;
+}
+});
+});
+
+function closeExitModal(){ document.getElementById("exitModal").classList.remove("active"); }
+
+/* وصف العطور */
+const scentDescriptions = {
+"🍦 فانيلا":"دفء ناعم ولمسة حلوة لا تُقاوم، مثالية للأجواء الهادئة والرومانسية.",
+"☕ موكا":"مزيج فاخر من القهوة والشوك
