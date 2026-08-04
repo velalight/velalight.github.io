@@ -3937,19 +3937,6 @@ openCart();
 
 function closeQuickView(){ document.getElementById("quickViewModal").classList.remove("active"); }
 
-/* ===== شريط الصور المتحرك اللانهائي فوق الهيرو ===== */
-function renderMiniCarousel(){
-let track = document.getElementById("miniCarouselTrack");
-if(!track) return;
-let best = PRODUCTS.slice().sort(function(a,b){ return b.sales - a.sales; });
-let doubled = best.concat(best);
-track.innerHTML = doubled.map(function(p){
-return '<div class="mini-carousel-item" data-action="goto" data-id="' + p.id + '">' +
-'<img src="' + p.images[0] + '" alt="' + p.name + '" loading="lazy">' +
-'<span>' + p.name + '</span>' +
-'</div>';
-}).join("");
-}
 
 function openAccount(){
 renderAccountPanel();
