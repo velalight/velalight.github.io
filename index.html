@@ -114,7 +114,6 @@ margin:auto;
 padding:0 24px;
 }
 
-/* ===== HEADER ===== */
 header{
 background:rgba(246,237,224,.95);
 backdrop-filter:blur(10px);
@@ -195,15 +194,8 @@ justify-content:center;
 color:var(--espresso);
 }
 
-.cart-open-btn::before{
-content:"🛒";
-font-size:19px;
-}
-
-.account-open-btn::before{
-content:"👤";
-font-size:18px;
-}
+.cart-open-btn::before{ content:"🛒"; font-size:19px; }
+.account-open-btn::before{ content:"👤"; font-size:18px; }
 
 #cartCount{
 position:absolute;
@@ -221,7 +213,6 @@ font-size:11px;
 font-weight:bold;
 }
 
-/* ===== NAV MENU ===== */
 .nav-drawer{
 position:fixed;
 top:0;
@@ -238,9 +229,7 @@ flex-direction:column;
 gap:15px;
 }
 
-.nav-drawer.active{
-right:0;
-}
+.nav-drawer.active{ right:0; }
 
 .nav-drawer-header{
 display:flex;
@@ -275,22 +264,18 @@ background:var(--brass);
 color:white;
 }
 
-/* ===== HERO ===== */
 .hero{
 padding:50px 0;
 text-align:center;
 position:relative;
 overflow:hidden;
-background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://velalight.github.io/eeeee.jpg');
+background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://velalight.github.io/eeeee.jpg');
 background-size: cover;
 background-position: center;
 color: #ffffff;
 }
 
-.hero .wrap{
-position:relative;
-z-index:1;
-}
+.hero .wrap{ position:relative; z-index:1; }
 
 .eyebrow{
 color:var(--brass-light);
@@ -303,7 +288,7 @@ margin-bottom:15px;
 font-size:36px;
 line-height:1.3;
 color:#ffffff;
-text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+text-shadow:0 2px 4px rgba(0,0,0,0.5);
 }
 
 .hero .sub{
@@ -311,7 +296,7 @@ font-size:18px;
 max-width:700px;
 margin:20px auto;
 color:#f0f0f0;
-text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+text-shadow:0 1px 3px rgba(0,0,0,0.5);
 }
 
 .hero-cta-btn{
@@ -333,7 +318,6 @@ transform:translateY(-3px);
 box-shadow:0 14px 28px rgba(0,0,0,.4);
 }
 
-/* الشمعة المتحركة */
 .candle-scene{
 position:relative;
 width:100px;
@@ -363,11 +347,7 @@ flex-direction:column;
 align-items:center;
 }
 
-.candle-wick{
-width:3px;
-height:12px;
-background:#1c130c;
-}
+.candle-wick{ width:3px; height:12px; background:#1c130c; }
 
 .candle-flame{
 width:20px;
@@ -382,18 +362,10 @@ animation:candleFlicker 3s ease-in-out infinite;
 50%{ transform:scale(1.05,.95) rotate(-2deg); }
 }
 
-/* ===== PRODUCTS GRID ===== */
 section{ padding:50px 0; }
 
-.section-head{
-text-align:center;
-margin-bottom:30px;
-}
-
-.section-head h2{
-font-size:36px;
-color:var(--espresso);
-}
+.section-head{ text-align:center; margin-bottom:30px; }
+.section-head h2{ font-size:36px; color:var(--espresso); }
 
 .cat-tabs{
 display:flex;
@@ -455,9 +427,7 @@ object-fit:cover;
 transition:.3s;
 }
 
-.card-img-wrap:hover img{
-transform:scale(1.05);
-}
+.card-img-wrap:hover img{ transform:scale(1.05); }
 
 .card-body{
 padding:15px;
@@ -466,10 +436,7 @@ flex-direction:column;
 flex:1;
 }
 
-.card-body h3{
-font-size:18px;
-color:var(--espresso);
-}
+.card-body h3{ font-size:18px; color:var(--espresso); }
 
 .price{
 font-size:18px;
@@ -502,9 +469,7 @@ border-radius:8px;
 border-right:3px solid var(--brass);
 }
 
-.desc-detailed.open{
-display:block;
-}
+.desc-detailed.open{ display:block; }
 
 .order-btn{
 width:100%;
@@ -519,11 +484,8 @@ cursor:pointer;
 transition:.2s;
 }
 
-.order-btn:hover{
-background:var(--brass);
-}
+.order-btn:hover{ background:var(--brass); }
 
-/* ===== ABOUT SECTION ===== */
 .about-section{
 background:var(--ivory);
 border-top:1px solid var(--line);
@@ -531,24 +493,9 @@ border-bottom:1px solid var(--line);
 padding:60px 0;
 }
 
-.about-box{
-max-width:800px;
-margin:0 auto;
-text-align:center;
-}
-
-.about-box h2{
-font-size:32px;
-color:var(--espresso);
-margin-bottom:15px;
-}
-
-.about-box p{
-font-size:16px;
-color:#555;
-line-height:1.8;
-margin-bottom:20px;
-}
+.about-box{ max-width:800px; margin:0 auto; text-align:center; }
+.about-box h2{ font-size:32px; color:var(--espresso); margin-bottom:15px; }
+.about-box p{ font-size:16px; color:#555; line-height:1.8; margin-bottom:20px; }
 
 .features-grid{
 display:grid;
@@ -567,19 +514,9 @@ border:1px solid rgba(184,135,74,.2);
 text-align:center;
 }
 
-.feature-card i{
-font-size:28px;
-color:var(--brass);
-margin-bottom:10px;
-}
+.feature-card i{ font-size:28px; color:var(--brass); margin-bottom:10px; }
+.feature-card h3{ font-size:18px; color:var(--espresso); margin-bottom:5px; }
 
-.feature-card h3{
-font-size:18px;
-color:var(--espresso);
-margin-bottom:5px;
-}
-
-/* ===== PANELS ===== */
 .cart-panel{
 position:fixed;
 top:0;
@@ -652,7 +589,6 @@ justify-content:center;
 gap:8px;
 }
 
-/* ===== FOOTER ===== */
 footer{
 background:var(--espresso);
 color:white;
@@ -685,10 +621,8 @@ transform:translateY(-3px);
 }
 </style>
 </head>
-
 <body>
 
-<!-- ===== 1. Header ===== -->
 <header>
 <div class="wrap">
 <div class="nav-top-row">
@@ -712,7 +646,6 @@ VelaLight
 </div>
 </header>
 
-<!-- ===== Side Drawer Menu ===== -->
 <div class="nav-drawer" id="navDrawer">
 <div class="nav-drawer-header">
 <span>القائمة</span>
@@ -729,7 +662,6 @@ VelaLight
 </div>
 </div>
 
-<!-- ===== 2. HERO ===== -->
 <section class="hero">
 <div class="wrap">
 <div class="eyebrow">🕯️ شموع يدوية فاخرة 🕯️</div>
@@ -750,7 +682,6 @@ VelaLight
 </div>
 </section>
 
-<!-- ===== 3. PRODUCTS ===== -->
 <section id="products">
 <div class="wrap">
 
@@ -759,12 +690,12 @@ VelaLight
 </div>
 
 <div class="cat-tabs" id="catTabs">
-<button class="cat-tab active" onclick="filterByCat('all')">🕯️ الكل</button>
-<button class="cat-tab" onclick="filterByCat('wood')">🪵 شموع خشبية</button>
-<button class="cat-tab" onclick="filterByCat('glass')">🫙 شموع زجاجية</button>
-<button class="cat-tab" onclick="filterByCat('crystal')">💎 شموع كريستالية</button>
-<button class="cat-tab" onclick="filterByCat('metal')">✨ شموع معدنية</button>
-<button class="cat-tab" onclick="filterByCat('massage')">💆‍♀️ شمعة المساج</button>
+<button class="cat-tab active" onclick="filterByCat('all', event)">🕯️ الكل</button>
+<button class="cat-tab" onclick="filterByCat('wood', event)">🪵 شموع خشبية</button>
+<button class="cat-tab" onclick="filterByCat('glass', event)">🫙 شموع زجاجية</button>
+<button class="cat-tab" onclick="filterByCat('crystal', event)">💎 شموع كريستالية</button>
+<button class="cat-tab" onclick="filterByCat('metal', event)">✨ شموع معدنية</button>
+<button class="cat-tab" onclick="filterByCat('massage', event)">💆‍♀️ شمعة المساج</button>
 </div>
 
 <div class="grid-products" id="productsGrid"></div>
@@ -772,7 +703,6 @@ VelaLight
 </div>
 </section>
 
-<!-- ===== 4. ABOUT US SECTION ===== -->
 <section id="about" class="about-section">
 <div class="wrap">
 <div class="about-box">
@@ -802,10 +732,8 @@ VelaLight
 </div>
 </section>
 
-<!-- ===== OVERLAY ===== -->
 <div id="cartOverlay" onclick="closeAllPanels()"></div>
 
-<!-- ===== CART PANEL ===== -->
 <div class="cart-panel" id="cartPanel">
 <div class="cart-title">
 <h2>🛒 سلة الشراء</h2>
@@ -820,7 +748,7 @@ VelaLight
 <h3 style="font-size:16px; margin-bottom:10px;">بيانات التوصيل:</h3>
 <input id="customerName" class="customer-input" type="text" placeholder="الاسم بالكامل">
 <input id="customerPhone" class="customer-input" type="tel" placeholder="رقم الهاتف">
-<textarea id="customerAddress" class="customer-input" rows="3" placeholder="العنوان بالتفصيل (المحافظة / المدينة / الشارع)"></textarea>
+<textarea id="customerAddress" class="customer-input" rows="3" placeholder="العنوان بالتفصيل"></textarea>
 
 <button class="checkout-btn" onclick="sendWhatsApp()">
 <i class="fa-brands fa-whatsapp"></i> إتمام الطلب عبر واتساب
@@ -828,7 +756,6 @@ VelaLight
 </div>
 </div>
 
-<!-- ===== ACCOUNT PANEL ===== -->
 <div class="cart-panel" id="accountPanel">
 <div class="cart-title">
 <h2>👤 حسابي</h2>
@@ -841,7 +768,6 @@ VelaLight
 </div>
 </div>
 
-<!-- ===== FOOTER ===== -->
 <footer>
 <div class="wrap">
 <div class="footer-socials">
@@ -853,7 +779,6 @@ VelaLight
 </div>
 </footer>
 
-<!-- ===== JAVASCRIPT LOGIC ===== -->
 <script>
 const PRODUCTS = [
 {
@@ -936,28 +861,21 @@ grid.appendChild(card);
 
 function toggleDesc(id){
 const descEl = document.getElementById(`desc-${id}`);
-if(descEl){
-descEl.classList.toggle('open');
-}
+if(descEl){ descEl.classList.toggle('open'); }
 }
 
-function filterByCat(cat){
+function filterByCat(cat, e){
 currentCategory = cat;
 const buttons = document.querySelectorAll('.cat-tab');
 buttons.forEach(btn => btn.classList.remove('active'));
-
-// تحديد الزر المفعل
-event.target.classList.add('active');
-
+if(e && e.target){ e.target.classList.add('active'); }
 renderProducts();
 closeAllPanels();
 }
 
 function toggleMenu(){
-const drawer = document.getElementById('navDrawer');
-const overlay = document.getElementById('cartOverlay');
-drawer.classList.toggle('active');
-overlay.classList.toggle('active');
+document.getElementById('navDrawer').classList.toggle('active');
+document.getElementById('cartOverlay').classList.toggle('active');
 }
 
 function openCart(){
@@ -1063,7 +981,6 @@ msg += `📍 *العنوان:* ${address}\n`;
 window.open(`https://wa.me/201223526105?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
-// التشغيل الأولي عند التحميل
 renderProducts();
 </script>
 
