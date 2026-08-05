@@ -499,7 +499,7 @@ z-index:0;
 background-size:cover;
 background-position:center 30%;
 opacity:1;
-filter:saturate(1.15);
+filter:saturate(1.1);
 pointer-events:none;
 }
 
@@ -507,7 +507,7 @@ pointer-events:none;
 content:"";
 position:absolute;
 inset:0;
-background:linear-gradient(180deg,rgba(250,244,235,.15) 0%,rgba(250,244,235,.05) 40%,rgba(250,244,235,.05) 60%,var(--ivory) 100%);
+background:radial-gradient(circle at center,rgba(250,244,235,.35) 0%,var(--ivory) 78%),linear-gradient(180deg,var(--ivory) 0%,rgba(250,244,235,.25) 35%,rgba(250,244,235,.25) 65%,var(--ivory) 100%);
 }
 
 .hero .wrap{
@@ -548,7 +548,6 @@ margin-bottom:20px;
 .hero h1{
 font-size:40px;
 line-height:1.3;
-text-shadow:0 2px 18px rgba(255,251,243,.85),0 0 40px rgba(255,251,243,.6);
 }
 
 .hero .sub{
@@ -556,7 +555,6 @@ font-size:20px;
 max-width:700px;
 margin:25px auto;
 color:var(--espresso);
-text-shadow:0 2px 14px rgba(255,251,243,.85);
 }
 
 .hero-grid{
@@ -2734,7 +2732,7 @@ cursor:pointer;
 flex-shrink:0;
 }
 
-/* شارة الأكثر مبيعًا فوق الصورة لو مفيش خصم/باج تاني */
+/* شارة  فوق الصورة لو مفيش خصم/باج تاني */
 .badge-hot{
 position:absolute;
 top:14px;
@@ -3087,12 +3085,34 @@ VelaLight
 </div>
 </div>
 
+<nav class="main-nav" id="mainNav" aria-label="التصنيفات الرئيسية">
+<div class="wrap main-nav-scroll">
+<button class="main-nav-link" type="button" data-nav="about"><span class="ar-only inline">🤎 من نحن</span><span class="en-only inline">🤎 About Us</span></button>
+<button class="main-nav-link active" type="button" data-nav="cat" data-cat="all"><span class="ar-only inline">🕯️ كل الشموع</span><span class="en-only inline">🕯️ All Candles</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="wood"><span class="ar-only inline">🪵 شموع خشبية</span><span class="en-only inline">🪵 Wooden Candles</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="glass"><span class="ar-only inline">🫙 شموع زجاجية</span><span class="en-only inline">🫙 Glass Candles</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="metal"><span class="ar-only inline">✨ شموع معدنية</span><span class="en-only inline">✨ Metal Candles</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="massage"><span class="ar-only inline">💆‍♀️ شموع مساج</span><span class="en-only inline">💆‍♀️ Massage Candles</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="bride"><span class="ar-only inline">👰 بوكس العروسة</span><span class="en-only inline">👰 Bride Box</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="gifts"><span class="ar-only inline">🎁 هدايا مختارة</span><span class="en-only inline">🎁 Gift Picks</span></button>
+<button class="main-nav-link" type="button" data-nav="faq"><span class="ar-only inline">❓ الأسئلة الشائعة</span><span class="en-only inline">❓ FAQs</span></button>
+</div>
+</nav>
 </header>
+
+<!-- ===== شريط الصور المتحرك اللانهائي (فوق الهيرو) ===== -->
+<div class="mini-carousel-wrap">
+<div class="mini-carousel-label">🔥  الآن</div>
+<div class="mini-carousel-track" id="miniCarouselTrack"></div>
+</div>
 
 <!-- ===== 2. HERO (البنر الرئيسي) ===== -->
 <section class="hero">
 <div class="hero-bg-photo" id="heroBgPhoto" aria-hidden="true"></div>
 <div class="wrap">
+<div class="eyebrow ar-only">🕯️ شموع </div>
+<div class="eyebrow en-only">🕯️ Luxury Handmade Candles 🕯️</div>
+
 <div class="hero-bento-wrap">
 
 
@@ -3100,10 +3120,10 @@ VelaLight
 <div class="hero-grid">
 
 <div class="hero-center">
-<h1 class="ar-only">هنا يبدأ السحر... هنا يبدأ الهدوء</h1>
+<h1 class="ar-only"></h1>
 <h1 class="en-only">Where the magic begins... where calm begins</h1>
 <p class="sub ar-only">
-شموع يدوية فاخرة مصنوعة من الشمع الطبيعي بعطور مختارة لتحول كل مساحة إلى تجربة دافئة وفريدة.
+
 </p>
 <p class="sub en-only">
 Luxury handmade candles crafted from natural wax with hand-picked fragrances, turning every space into a warm, unique experience.
@@ -3664,7 +3684,7 @@ category:"glass",
 images:["https://velalight.github.io/2.jpg"],
 price:325,
 oldPrice:null,
-badge:"🔥 الأكثر مبيعًا",
+badge:"🔥 ",
 desc:"الشمعة الأكثر طلبًا، مناسبة لكل أركان البيت.",
 scents:["فانيلا 🍦","موكا ☕","كراميل 🍮","قرفة 🤎","عنبر 🤎","عود 🤎","لافندر 💜","ورد 🌹"],
 stock:{status:"available", count:null},
@@ -4554,7 +4574,7 @@ el.style.backgroundImage = "url('" + best.images[0] + "')";
 }
 }
 
-/* ===== إصلاح توقف شريط "الأكثر مبيعًا" المتحرك بعد رجوع التاب للواجهة ===== */
+/* ===== إصلاح توقف شريط "" المتحرك بعد رجوع التاب للواجهة ===== */
 function restartMiniCarouselAnimation(){
 let track = document.getElementById("miniCarouselTrack");
 if(!track) return;
