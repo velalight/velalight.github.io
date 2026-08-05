@@ -495,6 +495,36 @@ background-position:center 30%;
 opacity:1;
 filter:saturate(1.15);
 pointer-events:none;
+
+/* الحركة الجديدة */
+animation:
+heroFloat 7s ease-in-out infinite,
+heroGlow 4.5s ease-in-out infinite;
+will-change:transform,filter;
+}
+
+@keyframes heroFloat{
+0%,100%{
+transform:translateY(0) scale(1);
+}
+25%{
+transform:translateY(-3px) scale(1.005);
+}
+50%{
+transform:translateY(-6px) scale(1.01);
+}
+75%{
+transform:translateY(-3px) scale(1.005);
+}
+}
+
+@keyframes heroGlow{
+0%,100%{
+filter:saturate(1.15) brightness(1);
+}
+50%{
+filter:saturate(1.2) brightness(1.05);
+}
 }
 
 .sr-only{
@@ -691,7 +721,6 @@ height:min(52vw,180px);
 margin:10px auto 10px;
 }
 }
-
 /* ===== الأقسام العامة ===== */
 section{
 padding:52px 0;
