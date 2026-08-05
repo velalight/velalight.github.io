@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#4A2E1E">
 
-<title>VelaLight | شموع يدوية فاخرة | Luxury Handmade Candles</title>
+<title>VelaLight | تفاصيل المنتج | Product Details</title>
 
 <meta name="description" content="VelaLight شموع يدوية فاخرة. شموع معطرة، هدايا مميزة، وتصميمات يدوية تضيف دفء وأناقة لكل مكان. Handcrafted luxury candles delivered across Egypt.">
 <meta name="keywords" content="شموع يدوية, شموع معطرة, هدايا فاخرة, شموع, VelaLight, شموع هاند ميد">
@@ -3071,6 +3071,55 @@ body{
 padding-bottom:64px;
 }
 }
+/* ===== صفحة تفاصيل المنتج ===== */
+.back-to-all{
+display:inline-block;
+font-weight:bold;
+color:var(--brass);
+padding:8px 4px;
+}
+.back-to-all:hover{ color:var(--espresso); }
+
+.detail-mode{
+display:block;
+max-width:1000px;
+margin:0 auto;
+}
+.detail-card{
+flex-direction:row;
+flex-wrap:wrap;
+align-items:flex-start;
+gap:0;
+}
+.detail-card .card-slider{
+width:46%;
+flex-shrink:0;
+}
+.detail-card .card-body{
+flex:1;
+min-width:280px;
+padding:26px 30px;
+}
+.detail-title{
+font-size:28px;
+margin-bottom:10px;
+color:var(--espresso);
+}
+.detail-desc{
+margin:14px 0;
+color:#5a4433;
+line-height:1.9;
+}
+.detail-reviews-title{
+margin-top:22px;
+margin-bottom:8px;
+color:var(--espresso);
+}
+@media(max-width:760px){
+.detail-card{ flex-direction:column; }
+.detail-card .card-slider{ width:100%; }
+}
+
 </style>
 </head>
 
@@ -3125,63 +3174,35 @@ VelaLight
 </nav>
 </header>
 
-<!-- ===== 2. HERO (البنر الرئيسي) ===== -->
-<section class="hero">
-<div class="hero-bg-photo" id="heroBgPhoto" aria-hidden="true"></div>
-<div class="wrap">
-<div class="hero-bento-wrap">
-
-
-<div class="hero-bento-center">
-<div class="hero-grid">
-
-<div class="hero-center">
-<h1 class="ar-only">هنا يبدأ السحر... هنا يبدأ الهدوء</h1>
-<h1 class="en-only">Where the magic begins... where calm begins</h1>
-<p class="sub ar-only">
-شموع يدوية فاخرة مصنوعة من الشمع الطبيعي بعطور مختارة لتحول كل مساحة إلى تجربة دافئة وفريدة.
-</p>
-<p class="sub en-only">
-Luxury handmade candles crafted from natural wax with hand-picked fragrances, turning every space into a warm, unique experience.
-</p>
-<a href="#products" class="hero-cta-btn ar-only inline">اطلب الآن ⚡</a>
-<a href="#products" class="hero-cta-btn en-only inline">Shop Now ⚡</a>
-</div>
-
-</div>
-</div>
-
-
-</div>
-</div>
-</section>
-
-<!-- ===== 3. المنتجات ===== -->
-<section id="products">
+<!-- ===== صفحة تفاصيل المنتج ===== -->
+<section id="product-detail-section" style="padding-top:34px;">
 <div class="wrap">
 
-<div class="section-head">
-<h2>مجموعة شموع VelaLight</h2>
-<p>اختار قطعتك المفضلة 🤎</p>
+<div class="back-link-row" style="margin-bottom:18px;">
+<a href="index.html#products" class="ar-only inline back-to-all">→ كل المنتجات</a>
+<a href="index.html#products" class="en-only inline back-to-all">← All Products</a>
 </div>
 
-<div class="cat-tabs" id="catTabs" role="tablist" aria-label="تصنيفات المنتجات">
-<button class="cat-tab active" type="button" data-cat="all">🕯️ الكل</button>
-<button class="cat-tab" type="button" data-cat="wood">🪵 شموع خشبية</button>
-<button class="cat-tab" type="button" data-cat="glass">🫙 شموع زجاجية</button>
-<button class="cat-tab" type="button" data-cat="crystal">💎 شموع كريستالية</button>
-<button class="cat-tab" type="button" data-cat="metal">✨ شموع معدنية</button>
-<button class="cat-tab" type="button" data-cat="massage">💆‍♀️ شمعة المساج</button>
-</div>
-
-<div class="grid-products" id="productsGrid"></div>
+<div class="grid-products detail-mode" id="productDetailGrid"></div>
 
 </div>
 
 <div id="cartOverlay" onclick="closeCart(); closeAccount();"></div>
 </section>
 
+<!-- ===== منتجات هتعجبك ===== -->
+<section id="related-products-section">
+<div class="wrap">
+<div class="section-head">
+<h2 class="ar-only">قد يعجبك أيضًا 🤎</h2>
+<h2 class="en-only">You Might Also Like 🤎</h2>
+</div>
+<div class="grid-products" id="relatedProductsGrid"></div>
+</div>
+</section>
+
 <!-- شريط مضغوط: شاهدته مؤخرًا + مقترحات شراء -->
+<div id="products" style="display:none;"></div>
 <section class="recent-strip-section" id="recentStripSection" style="display:none;">
 <div class="wrap">
 <div class="section-head">
@@ -4523,14 +4544,65 @@ let observer = new IntersectionObserver(entries => {
 entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add("active"); });
 },{threshold:0.1});
 document.querySelectorAll(".reveal").forEach(item => observer.observe(item));
-renderProducts();
+renderProductDetail();
 updateCart();
 renderAccountPanel();
 renderRecentStrip();
-renderMiniCarousel();
 setHeroBgPhoto();
 initCarouselWatchdog();
 });
+
+/* ===== صفحة تفاصيل منتج واحد ===== */
+function getProductIdFromURL(){
+let params = new URLSearchParams(window.location.search);
+return parseInt(params.get("id"));
+}
+
+function fullDetailHTML(p){
+let reviewsInner = p.reviews.map(function(r){
+return '<div class="review-item"><div class="stars">' + starsHTML(r.stars) + '</div><p>"' + escapeHTML(r.text) + '"</p><div class="rname">- ' + escapeHTML(r.name) + '</div></div>';
+}).join("");
+
+return '<div class="card detail-card reveal active" id="prod-' + p.id + '" data-view-id="' + p.id + '">' +
+(p.badge ? '<span class="badge">' + p.badge + '</span>' : '') +
+(p.oldPrice && p.oldPrice > p.price ? '<span class="badge-discount">خصم</span>' : '') +
+sliderHTML(p) +
+'<div class="card-body">' +
+'<h1 class="detail-title">' + p.name + '</h1>' +
+'<div class="rating-row"><span class="stars">' + starsHTML(p.rating) + '</span><span>' + p.rating.toFixed(1) + ' (' + p.reviewsCount + ' <span class="ar-only inline">تقييم</span><span class="en-only inline">reviews</span>)</span></div>' +
+priceHTML(p) +
+stockHTML(p) +
+'<p class="desc detail-desc">' + p.desc + '</p>' +
+'<select class="customer-input scent-select" id="scent' + p.id + '" data-id="' + p.id + '">' + scentOptionsHTML(p,"") + '</select>' +
+'<div class="product-actions">' +
+'<input class="product-qty" id="qty' + p.id + '" type="number" min="1" value="1">' +
+'<button class="order-btn" data-action="add" data-id="' + p.id + '"><span class="ar-only inline">أضف للسلة 🛒</span><span class="en-only inline">Add to Cart 🛒</span></button>' +
+'</div>' +
+'<button class="buy-now-btn" data-action="buy-now" data-id="' + p.id + '"><span class="ar-only inline">اشترِ الآن ⚡</span><span class="en-only inline">Buy Now ⚡</span></button>' +
+'<h4 class="detail-reviews-title ar-only">آراء العملاء</h4>' +
+'<h4 class="detail-reviews-title en-only">Customer Reviews</h4>' +
+'<div class="reviews-list open">' + reviewsInner + '</div>' +
+'</div>' +
+'</div>';
+}
+
+function renderProductDetail(){
+let id = getProductIdFromURL();
+let product = PRODUCTS.find(function(p){ return p.id === id; }) || PRODUCTS[0];
+let grid = document.getElementById("productDetailGrid");
+if(!grid || !product) return;
+grid.innerHTML = fullDetailHTML(product);
+document.title = product.name + " | VelaLight";
+if(typeof trackView === "function"){ trackView(product.id); }
+renderRelatedProducts(product);
+}
+
+function renderRelatedProducts(current){
+let grid = document.getElementById("relatedProductsGrid");
+if(!grid) return;
+let others = PRODUCTS.filter(function(p){ return p.id !== current.id; }).slice(0,4);
+grid.innerHTML = others.map(cardHTML).join("");
+}
 
 /* ===== ربط صورة الخلفية في الهيرو بصورة من المنتجات ===== */
 function setHeroBgPhoto(){
