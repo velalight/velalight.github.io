@@ -1632,6 +1632,185 @@ background:var(--brass);
 transform:translateY(-3px);
 }
 
+/* ===== شمعة اللوجو المصغّرة ===== */
+.logo-candle{
+position:relative;
+width:20px;
+height:34px;
+flex-shrink:0;
+margin-inline-end:2px;
+}
+.logo-candle .lc-body{
+position:absolute;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+width:15px;
+height:19px;
+border-radius:4px 4px 6px 6px;
+background:linear-gradient(90deg,#fffaf0 0%,#f3e3c5 45%,#e9d3aa 75%,#fffaf0 100%);
+box-shadow:0 4px 8px rgba(43,27,18,.25);
+}
+.logo-candle .lc-wick{
+position:absolute;
+bottom:19px;
+left:50%;
+transform:translateX(-50%);
+width:2px;
+height:5px;
+background:linear-gradient(180deg,#3a2a1d,#1c130c);
+border-radius:1px;
+}
+.logo-candle .lc-flame{
+position:absolute;
+bottom:23px;
+left:50%;
+transform:translateX(-50%);
+width:9px;
+height:14px;
+border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+background:radial-gradient(circle at 50% 68%,#fffceb 0%,#ffe28a 26%,#ffb238 55%,#ff7a1a 82%,#ff5400 100%);
+filter:drop-shadow(0 0 6px rgba(255,150,50,.75));
+transform-origin:50% 100%;
+animation:candleFlicker 3s ease-in-out infinite;
+}
+
+/* ===== مبدّل اللغة ===== */
+.lang-switch{
+display:flex;
+align-items:center;
+gap:0;
+border:1px solid rgba(184,135,74,.4);
+border-radius:20px;
+overflow:hidden;
+height:34px;
+flex-shrink:0;
+}
+.lang-switch button{
+border:none;
+background:transparent;
+padding:0 12px;
+height:100%;
+font-size:12.5px;
+font-weight:bold;
+color:var(--espresso);
+cursor:pointer;
+transition:.25s;
+}
+.lang-switch button.active{
+background:linear-gradient(135deg,var(--brass),var(--brass-light));
+color:#fff;
+}
+
+/* اخفاء/اظهار حسب اللغة المختارة */
+.en-only{ display:none; }
+body.lang-en .ar-only{ display:none; }
+body.lang-en .en-only{ display:block; }
+body.lang-en .en-only.inline{ display:inline; }
+body.lang-en .en-only.flex{ display:flex; }
+body.lang-en{ direction:ltr; }
+body.lang-en .wrap{ text-align:left; }
+body.lang-en h1, body.lang-en h2, body.lang-en h3, body.lang-en h4{ font-family:'Amiri',serif; }
+
+/* ===== قسم: تسوق حسب الفئة ===== */
+.cat-showcase{
+padding:55px 0 15px;
+}
+.cat-showcase-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:22px;
+}
+.cat-showcase-card{
+position:relative;
+border-radius:18px;
+overflow:hidden;
+height:260px;
+cursor:pointer;
+box-shadow:0 12px 30px rgba(43,27,18,.14);
+transition:.35s;
+border:1px solid var(--line);
+}
+.cat-showcase-card:hover{
+transform:translateY(-6px);
+box-shadow:0 18px 40px rgba(43,27,18,.22);
+}
+.cat-showcase-card img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:.5s;
+}
+.cat-showcase-card:hover img{
+transform:scale(1.08);
+}
+.cat-showcase-overlay{
+position:absolute;
+inset:0;
+background:linear-gradient(180deg,rgba(43,27,18,0) 40%,rgba(43,27,18,.78) 100%);
+display:flex;
+flex-direction:column;
+justify-content:flex-end;
+padding:22px;
+color:#fff;
+}
+.cat-showcase-overlay span{
+font-size:12.5px;
+opacity:.85;
+letter-spacing:.5px;
+}
+.cat-showcase-overlay h3{
+color:#fff;
+font-size:22px;
+margin-top:4px;
+}
+@media(max-width:760px){
+.cat-showcase-grid{ grid-template-columns:1fr; }
+.cat-showcase-card{ height:200px; }
+}
+
+/* ===== قسم: من نحن (مستقل) ===== */
+.about-us-section{
+padding:70px 0;
+background:var(--ivory);
+border-top:1px solid var(--line);
+border-bottom:1px solid var(--line);
+}
+.about-us-grid{
+display:grid;
+grid-template-columns:.9fr 1.1fr;
+gap:48px;
+align-items:center;
+}
+.about-us-grid img{
+width:100%;
+border-radius:20px;
+box-shadow:0 20px 45px rgba(43,27,18,.2);
+}
+.about-us-text h2{
+font-size:30px;
+margin-bottom:18px;
+color:var(--espresso);
+}
+.about-us-text p{
+color:#5a4433;
+margin-bottom:14px;
+font-size:16px;
+}
+.about-us-text .hero-cta-btn{ margin-top:10px; }
+@media(max-width:820px){
+.about-us-grid{ grid-template-columns:1fr; }
+}
+
+/* ===== قسم: الأسئلة الشائعة (مستقل) ===== */
+.faq-standalone{
+padding:70px 0;
+}
+.faq-standalone .faq-list{
+max-width:820px;
+margin:0 auto;
+}
+
 footer{
 background:var(--espresso);
 color:white;
@@ -2567,6 +2746,78 @@ border-radius:20px;
 z-index:5;
 }
 
+/* ===== 2) شريط الصور المتحرك اللانهائي (Infinite Product Carousel) ===== */
+.mini-carousel-wrap{
+background:var(--ivory);
+border-bottom:1px solid rgba(184,135,74,.2);
+padding:14px 0;
+overflow:hidden;
+}
+
+.mini-carousel-label{
+text-align:center;
+font-size:12.5px;
+font-weight:bold;
+color:var(--brass);
+margin-bottom:8px;
+letter-spacing:.3px;
+}
+
+.mini-carousel-track{
+display:flex;
+align-items:center;
+gap:16px;
+width:max-content;
+animation:miniCarouselScroll 32s linear infinite;
+}
+
+.mini-carousel-wrap:hover .mini-carousel-track{
+animation-play-state:paused;
+}
+
+@keyframes miniCarouselScroll{
+0%{ transform:translateX(0); }
+100%{ transform:translateX(-50%); }
+}
+
+.mini-carousel-item{
+flex-shrink:0;
+width:110px;
+cursor:pointer;
+text-align:center;
+}
+
+.mini-carousel-item img{
+width:110px;
+height:110px;
+object-fit:cover;
+border-radius:16px;
+border:2px solid transparent;
+transition:.25s;
+}
+
+.mini-carousel-item:hover img{
+border-color:var(--brass);
+transform:translateY(-4px);
+}
+
+.mini-carousel-item span{
+display:block;
+margin-top:6px;
+font-size:11.5px;
+color:var(--espresso);
+font-weight:bold;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+@media(max-width:600px){
+.mini-carousel-item{ width:80px; }
+.mini-carousel-item img{ width:80px; height:80px; border-radius:12px; }
+.mini-carousel-wrap{ padding:10px 0; }
+}
+
 /* ===== 3) Bento Grid حول الهيرو (بدون المساس بالشمعتين والنص) ===== */
 .hero-bento-wrap{
 display:flex;
@@ -2813,14 +3064,19 @@ padding-bottom:64px;
 <div class="wrap">
 <div class="nav-top-row">
 <div class="logo">
-<span class="flame"></span>
+<span class="logo-candle" aria-hidden="true"><span class="lc-flame"></span><span class="lc-wick"></span><span class="lc-body"></span></span>
 <div>
 VelaLight
-<small>Luxury Candle Studio</small>
+<small class="ar-only">Luxury Candle Studio</small>
+<small class="en-only">Luxury Candle Studio</small>
 </div>
 </div>
 
 <div class="nav-buttons">
+<div class="lang-switch" role="group" aria-label="Language / اللغة">
+<button type="button" class="lang-btn active" data-lang="ar" onclick="setSiteLang('ar')">AR</button>
+<button type="button" class="lang-btn" data-lang="en" onclick="setSiteLang('en')">EN</button>
+</div>
 <button class="account-open-btn" id="accountOpenBtn" onclick="openAccount()" aria-label="حسابي"></button>
 <button class="cart-open-btn" onclick="openCart()" aria-label="فتح السلة">
 <span id="cartCount">0</span>
@@ -2831,23 +3087,31 @@ VelaLight
 
 <nav class="main-nav" id="mainNav" aria-label="التصنيفات الرئيسية">
 <div class="wrap main-nav-scroll">
-<button class="main-nav-link" type="button" data-nav="about">🤎 من نحن</button>
-<button class="main-nav-link active" type="button" data-nav="cat" data-cat="all">🕯️ كل الشموع</button>
-<button class="main-nav-link" type="button" data-nav="cat" data-cat="wood">🪵 شموع خشبية</button>
-<button class="main-nav-link" type="button" data-nav="cat" data-cat="glass">🫙 شموع زجاجية</button>
-<button class="main-nav-link" type="button" data-nav="cat" data-cat="metal">✨ شموع معدنية</button>
-<button class="main-nav-link" type="button" data-nav="cat" data-cat="massage">💆‍♀️ شموع مساج</button>
-<button class="main-nav-link" type="button" data-nav="cat" data-cat="bride">👰 بوكس العروسة</button>
-<button class="main-nav-link" type="button" data-nav="cat" data-cat="gifts">🎁 هدايا مختارة</button>
+<button class="main-nav-link" type="button" data-nav="about"><span class="ar-only inline">🤎 من نحن</span><span class="en-only inline">🤎 About Us</span></button>
+<button class="main-nav-link active" type="button" data-nav="cat" data-cat="all"><span class="ar-only inline">🕯️ كل الشموع</span><span class="en-only inline">🕯️ All Candles</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="wood"><span class="ar-only inline">🪵 شموع خشبية</span><span class="en-only inline">🪵 Wooden Candles</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="glass"><span class="ar-only inline">🫙 شموع زجاجية</span><span class="en-only inline">🫙 Glass Candles</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="metal"><span class="ar-only inline">✨ شموع معدنية</span><span class="en-only inline">✨ Metal Candles</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="massage"><span class="ar-only inline">💆‍♀️ شموع مساج</span><span class="en-only inline">💆‍♀️ Massage Candles</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="bride"><span class="ar-only inline">👰 بوكس العروسة</span><span class="en-only inline">👰 Bride Box</span></button>
+<button class="main-nav-link" type="button" data-nav="cat" data-cat="gifts"><span class="ar-only inline">🎁 هدايا مختارة</span><span class="en-only inline">🎁 Gift Picks</span></button>
+<button class="main-nav-link" type="button" data-nav="faq"><span class="ar-only inline">❓ الأسئلة الشائعة</span><span class="en-only inline">❓ FAQs</span></button>
 </div>
 </nav>
 </header>
+
+<!-- ===== شريط الصور المتحرك اللانهائي (فوق الهيرو) ===== -->
+<div class="mini-carousel-wrap">
+<div class="mini-carousel-label">🔥 الأكثر مبيعًا الآن</div>
+<div class="mini-carousel-track" id="miniCarouselTrack"></div>
+</div>
 
 <!-- ===== 2. HERO (البنر الرئيسي) ===== -->
 <section class="hero">
 <div class="hero-bg-photo" id="heroBgPhoto" aria-hidden="true"></div>
 <div class="wrap">
-<div class="eyebrow">🕯️ شموع يدوية فاخرة 🕯️</div>
+<div class="eyebrow ar-only">🕯️ شموع يدوية فاخرة 🕯️</div>
+<div class="eyebrow en-only">🕯️ Luxury Handmade Candles 🕯️</div>
 
 <div class="hero-bento-wrap">
 
@@ -2855,27 +3119,59 @@ VelaLight
 <div class="hero-bento-center">
 <div class="hero-grid">
 
-<div class="candle-scene" aria-hidden="true">
-<div class="candle-ambient"></div>
-<div class="candle-top">
-<div class="candle-flame"></div>
-<div class="candle-wick"></div>
-</div>
-<div class="candle-body"></div>
-</div>
-
 <div class="hero-center">
-<h1>هنا يبدأ السحر... هنا يبدأ الهدوء</h1>
-<p class="sub">
+<h1 class="ar-only">هنا يبدأ السحر... هنا يبدأ الهدوء</h1>
+<h1 class="en-only">Where the magic begins... where calm begins</h1>
+<p class="sub ar-only">
 شموع يدوية فاخرة مصنوعة من الشمع الطبيعي بعطور مختارة لتحول كل مساحة إلى تجربة دافئة وفريدة.
 </p>
-<a href="#products" class="hero-cta-btn">اطلب الآن ⚡</a>
+<p class="sub en-only">
+Luxury handmade candles crafted from natural wax with hand-picked fragrances, turning every space into a warm, unique experience.
+</p>
+<a href="#products" class="hero-cta-btn ar-only inline">اطلب الآن ⚡</a>
+<a href="#products" class="hero-cta-btn en-only inline">Shop Now ⚡</a>
 </div>
 
 </div>
 </div>
 
 
+</div>
+</div>
+</section>
+
+<!-- ===== تسوق حسب الفئة ===== -->
+<section class="cat-showcase">
+<div class="wrap">
+<div class="section-head">
+<h2 class="ar-only">🛍️ تسوق حسب الفئة</h2>
+<h2 class="en-only">🛍️ Shop by Category</h2>
+</div>
+<div class="cat-showcase-grid">
+<div class="cat-showcase-card" onclick="selectCategory('wood')">
+<img src="https://velalight.github.io/RRRRRR.jpg" alt="شموع خشبية - Wooden Candles" loading="lazy">
+<div class="cat-showcase-overlay">
+<span class="ar-only">مجموعة</span><span class="en-only">Collection</span>
+<h3 class="ar-only">🪵 شموع خشبية</h3>
+<h3 class="en-only">🪵 Wooden Candles</h3>
+</div>
+</div>
+<div class="cat-showcase-card" onclick="selectCategory('glass')">
+<img src="https://velalight.github.io/2.jpg" alt="شموع زجاجية - Glass Candles" loading="lazy">
+<div class="cat-showcase-overlay">
+<span class="ar-only">مجموعة</span><span class="en-only">Collection</span>
+<h3 class="ar-only">🫙 شموع زجاجية</h3>
+<h3 class="en-only">🫙 Glass Candles</h3>
+</div>
+</div>
+<div class="cat-showcase-card" onclick="selectCategory('metal')">
+<img src="https://velalight.github.io/candle.jpg" alt="شموع معدنية - Metal Candles" loading="lazy">
+<div class="cat-showcase-overlay">
+<span class="ar-only">مجموعة</span><span class="en-only">Collection</span>
+<h3 class="ar-only">✨ شموع معدنية</h3>
+<h3 class="en-only">✨ Metal Candles</h3>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -3028,6 +3324,78 @@ VelaLight
 <img src="https://velalight.github.io/review5.jpg" alt="رأي عميل" loading="lazy" tabindex="0" role="button" aria-label="تكبير صورة رأي العميلة" onclick="openImageGallery(['https://velalight.github.io/review5.jpg'],0)">
 <div class="stars-rating">★★★★★</div>
 </div>
+</div>
+</div>
+</section>
+
+<!-- ===== من نحن (قسم مستقل) ===== -->
+<section class="about-us-section" id="about-us">
+<div class="wrap">
+<div class="about-us-grid">
+<img src="https://velalight.github.io/eeeee.jpg" alt="VelaLight - من نحن" loading="lazy">
+<div class="about-us-text">
+<h2 class="ar-only">🤎 من نحن</h2>
+<h2 class="en-only">🤎 About Us</h2>
+
+<p class="ar-only">في VelaLight لا نصنع الشموع فقط، بل نصنع لحظات تستحق أن تُعاش. بدأت رحلتنا بشغف تجاه التفاصيل الصغيرة التي تجعل المكان أكثر دفئًا، والبيت أكثر راحة، واللحظات العادية أكثر جمالًا.</p>
+<p class="ar-only">نصنع كل شمعة يدويًا بعناية، مستخدمين خامات مختارة وعطورًا فاخرة، لنقدم منتجًا يجمع بين الأناقة والجودة والإحساس الحقيقي. نؤمن أن الضوء الخافت قادر على تهدئة الروح، وأن العطر الجميل يستطيع أن يعيد أجمل الذكريات.</p>
+<p class="ar-only">لهذا صُممت شموع VelaLight لتكون أكثر من مجرد قطعة ديكور؛ بل رفيقًا لأوقات الاسترخاء، وهدية تعبّر عن الاهتمام، وتفصيلة صغيرة تملأ المكان دفئًا، ورقيًا، وسكينة. 🤎</p>
+
+<p class="en-only">At VelaLight, we don't just make candles — we craft moments worth living. Our journey began with a passion for the small details that make a place feel warmer, a home more comfortable, and ordinary moments more beautiful.</p>
+<p class="en-only">Every candle is handmade with care, using carefully chosen materials and luxury fragrances, to deliver a product that blends elegance, quality, and genuine feeling. We believe soft light can calm the soul, and a beautiful scent can bring back the fondest memories.</p>
+<p class="en-only">That's why VelaLight candles are designed to be more than décor — a companion for relaxing moments, a gift that shows you care, and a small detail that fills a space with warmth, elegance, and peace. 🤎</p>
+
+<a href="#products" class="hero-cta-btn ar-only inline">اكتشف المجموعة ⚡</a>
+<a href="#products" class="hero-cta-btn en-only inline">Discover the Collection ⚡</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ===== الأسئلة الشائعة (قسم مستقل) ===== -->
+<section class="faq-standalone" id="faq-section">
+<div class="wrap">
+<div class="section-head">
+<h2 class="ar-only">❓ الأسئلة الشائعة</h2>
+<h2 class="en-only">❓ Frequently Asked Questions</h2>
+</div>
+<div class="faq-list">
+<details class="faq-item" open>
+<summary class="ar-only">كام مدة توصيل الأوردر؟</summary>
+<summary class="en-only">How long does delivery take?</summary>
+<p class="ar-only">التوصيل داخل القاهرة والجيزة بياخد من 3 إلى 5 أيام عمل، وباقي المحافظات من 5 إلى 7 أيام عمل.</p>
+<p class="en-only">Delivery within Cairo and Giza takes 3-5 business days, and 5-7 business days for other governorates.</p>
+</details>
+<details class="faq-item">
+<summary class="ar-only">طرق الدفع المتاحة إيه؟</summary>
+<summary class="en-only">What payment methods are available?</summary>
+<p class="ar-only">قيمة المنتجات تُدفع InstaPay مقدمًا، وتكلفة الشحن فقط تُدفع كاش لمندوب الشحن عند الاستلام.</p>
+<p class="en-only">Product value is paid in advance via InstaPay; shipping cost only is paid cash to the courier on delivery.</p>
+</details>
+<details class="faq-item">
+<summary class="ar-only">هل ينفع استبدال المنتج لو مش عاجبني؟</summary>
+<summary class="en-only">Can I exchange the product if I don't like it?</summary>
+<p class="ar-only">أيوه، عندنا سياسة استبدال خلال 3 أيام من الاستلام بشرط أن المنتج لم يُستخدم.</p>
+<p class="en-only">Yes, we offer a 3-day exchange policy from the date of receipt, provided the product is unused.</p>
+</details>
+<details class="faq-item">
+<summary class="ar-only">مدة اشتعال الشمعة قد إيه؟</summary>
+<summary class="en-only">How long does a candle burn?</summary>
+<p class="ar-only">حسب حجم الشمعة، بتتراوح بين 72 إلى 96 ساعة اشتعال متواصل.</p>
+<p class="en-only">Depending on candle size, burn time ranges from 72 to 96 continuous hours.</p>
+</details>
+<details class="faq-item">
+<summary class="ar-only">الشموع آمنة على الأطفال والحيوانات الأليفة؟</summary>
+<summary class="en-only">Are the candles safe around children and pets?</summary>
+<p class="ar-only">الشموع مصنوعة من شمع طبيعي وفتيلة خشب طبيعي وفتيلة قطنية، وننصح دائمًا بعدم تركها مشتعلة بدون إشراف.</p>
+<p class="en-only">Our candles are made from natural wax with wood or cotton wicks. We always recommend never leaving a lit candle unattended.</p>
+</details>
+<details class="faq-item">
+<summary class="ar-only">بتوصلوا لكل المحافظات؟</summary>
+<summary class="en-only">Do you deliver to all governorates?</summary>
+<p class="ar-only">أيوه، بنوصل لكل محافظات مصر عن طريق شركات شحن موثوقة.</p>
+<p class="en-only">Yes, we deliver to every governorate in Egypt through trusted shipping companies.</p>
+</details>
 </div>
 </div>
 </section>
@@ -3233,17 +3601,27 @@ VelaLight
 <footer>
 <div class="wrap">
 <div class="logo">
-<span class="flame"></span>
+<span class="logo-candle" aria-hidden="true"><span class="lc-flame"></span><span class="lc-wick"></span><span class="lc-body"></span></span>
 VelaLight
 </div>
-<p>شموع تصنع لحظات لا تنسى 🤎</p>
-<p>شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب</p>
+<p class="ar-only">شموع تصنع لحظات لا تنسى 🤎</p>
+<p class="en-only">Candles that craft unforgettable moments 🤎</p>
+<p class="ar-only">شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب</p>
+<p class="en-only">Luxury handmade candles - Signature scents - Custom gifts</p>
 
 <div class="footer-links">
-<a href="contact.html">اتصل بنا</a>
-<a href="exchange-policy.html">سياسة الاستبدال</a>
-<a href="privacy.html">سياسة الخصوصية</a>
-<a href="terms.html">شروط الاستخدام</a>
+<a href="contact.html" class="ar-only inline">اتصل بنا</a>
+<a href="contact.html" class="en-only inline">Contact Us</a>
+<a href="exchange-policy.html" class="ar-only inline">سياسة الاستبدال</a>
+<a href="exchange-policy.html" class="en-only inline">Exchange Policy</a>
+<a href="privacy.html" class="ar-only inline">سياسة الخصوصية</a>
+<a href="privacy.html" class="en-only inline">Privacy Policy</a>
+<a href="terms.html" class="ar-only inline">شروط الاستخدام</a>
+<a href="terms.html" class="en-only inline">Terms of Use</a>
+<a href="#about-us" class="ar-only inline">من نحن</a>
+<a href="#about-us" class="en-only inline">About Us</a>
+<a href="#faq-section" class="ar-only inline">الأسئلة الشائعة</a>
+<a href="#faq-section" class="en-only inline">FAQs</a>
 </div>
 
 <p>© 2026 - 2030 VelaLight — All Rights Reserved</p>
@@ -3302,7 +3680,7 @@ const PRODUCTS = [
 {
 id:1,
 name:"شمعة المنديلا",
-category:"metal",
+category:"glass",
 images:["https://velalight.github.io/2.jpg"],
 price:325,
 oldPrice:null,
@@ -3322,7 +3700,7 @@ reviews:[
 {
 id:2,
 name:"الشمعة الفاخرة",
-category:"glass",
+category:"crystal",
 images:["https://velalight.github.io/eeeee.jpg"],
 price:680,
 oldPrice:850,
@@ -3342,7 +3720,7 @@ reviews:[
 {
 id:3,
 name:"مجموعة نبضين",
-category:"wood",
+category:"glass",
 images:["https://velalight.github.io/q.jpg","https://velalight.github.io/q2.jpg","https://velalight.github.io/q3.jpg"],
 price:650,
 oldPrice:750,
@@ -3378,10 +3756,11 @@ reviews:[
 {name:"داليا", stars:5, text:"من أرقى القطع اللي جربتها، مناسبة جدًا كديكور."}
 ]
 },
+
 {
 id:5,
 name:"طقم الشموع الذهبي الفاخر",
-category:"glass",
+category:"metal",
 images:[
 "https://velalight.github.io/candle.jpg",
 "https://velalight.github.io/candle1.jpg",
@@ -3393,7 +3772,7 @@ images:[
 price:2850,
 oldPrice:3600,
 badge:"✨ جديد",
-desc:"طقم الشموع الذهبي الفاخر (3 قطع) ✨🤍 ثلاث قطع بتصميم ذهبي أنيق تضيف للمكان لمسة فخامة ودفء من أول نظرة. تناغم رائع بين الشكل الراقي والعطر الهادئ ليمنح بيتك أجواء مميزة ويحوّل أي ركن إلى مساحة أكثر جمالًا وراحة.",
+desc:"طقم الشموع الذهبي الفاخر (3 قطع) ✨🤍 ثلاث قطع بتصميم ذهبي أنيق تضيف للمكان لمسة فخامة ودفء من أول نظرة. تناغم رائع بين الشكل الراقي والعطر الهادئ ليمنح بيتك أجواء مميزة ويحوّل أي ركن إلى مساحة أكثر جمالًا وراحة. لأن التفاصيل الصغيرة هي التي تصنع الإحساس الكبير، اختار قطعة تعكس ذوقك وتضيف لبيتك لمسة من الرقي.",
 scents:[
 "فانيلا 🍦",
 "عود 🤎",
@@ -3407,39 +3786,8 @@ reviewsCount:0,
 sales:0,
 dateAdded:"2026-08-03",
 reviews:[]
-},
-
-{
-id:6,
-name:"طقم الشموع الفاخر",
-category:"glass",
-images:[
-"https://velalight.github.io/icoffee1.jpg",
-"https://velalight.github.io/icoffee2.jpg",
-"https://velalight.github.io/icoffee3.jpg",
-"https://velalight.github.io/icoffee4.jpg"
-],
-price:425,
-oldPrice:525,
-badge:"🤎 جديد",
-desc:"شمعه الايس كوفي الشهيره اقتنيها الان بخامات طبيعيه ورائحه تشبه رائحه فنجانك المميز من القهوه تعطيك احساس بالدفء .",
-scents:[
-"فانيلا 🍦",
-"عنبر 🤎",
-"عود 🤎",
-"مسك أبيض 🤍",
-"لافندر 💜",
-"ورد 🌹"
-],
-stock:{status:"available", count:null},
-rating:5.0,
-reviewsCount:0,
-sales:0,
-dateAdded:"2026-08-04",
-reviews:[]
 }
 ];
-
 let currentQuery = "";
 let currentSort = "bestselling";
 let currentCategory = "all";
@@ -3660,11 +4008,13 @@ btn.addEventListener("click", function(){
 if(this.dataset.nav === "about"){
 document.querySelectorAll(".main-nav-link").forEach(function(b){ b.classList.remove("active"); });
 this.classList.add("active");
-document.getElementById("info-hub").scrollIntoView({behavior:"smooth", block:"start"});
-let mainTabBtn = document.querySelector('.info-main-tab-btn[data-main-target="view-why"]');
-if(mainTabBtn){ mainTabBtn.click(); }
-let aboutBtn = document.querySelector('.tool-btn[data-target="h-about"]');
-if(aboutBtn){ aboutBtn.click(); }
+document.getElementById("about-us").scrollIntoView({behavior:"smooth", block:"start"});
+return;
+}
+if(this.dataset.nav === "faq"){
+document.querySelectorAll(".main-nav-link").forEach(function(b){ b.classList.remove("active"); });
+this.classList.add("active");
+document.getElementById("faq-section").scrollIntoView({behavior:"smooth", block:"start"});
 return;
 }
 document.querySelectorAll(".main-nav-link").forEach(function(b){ b.classList.remove("active"); });
@@ -3672,6 +4022,22 @@ this.classList.add("active");
 selectCategory(this.dataset.cat);
 });
 });
+
+/* ===== تبديل اللغة عربي / انجليزي ===== */
+function setSiteLang(lang){
+document.body.classList.toggle("lang-en", lang === "en");
+document.documentElement.setAttribute("lang", lang);
+document.documentElement.setAttribute("dir", lang === "en" ? "ltr" : "rtl");
+document.querySelectorAll(".lang-btn").forEach(function(b){
+b.classList.toggle("active", b.dataset.lang === lang);
+});
+try{ localStorage.setItem("velaLang", lang); }catch(e){}
+}
+(function(){
+let saved = "ar";
+try{ saved = localStorage.getItem("velaLang") || "ar"; }catch(e){}
+if(saved === "en"){ setSiteLang("en"); }
+})();
 
 const headerSearch = document.getElementById("headerSearch");
 
@@ -3937,6 +4303,19 @@ openCart();
 
 function closeQuickView(){ document.getElementById("quickViewModal").classList.remove("active"); }
 
+/* ===== شريط الصور المتحرك اللانهائي فوق الهيرو ===== */
+function renderMiniCarousel(){
+let track = document.getElementById("miniCarouselTrack");
+if(!track) return;
+let best = PRODUCTS.slice().sort(function(a,b){ return b.sales - a.sales; });
+let doubled = best.concat(best);
+track.innerHTML = doubled.map(function(p){
+return '<div class="mini-carousel-item" data-action="goto" data-id="' + p.id + '">' +
+'<img src="' + p.images[0] + '" alt="' + p.name + '" loading="lazy">' +
+'<span>' + p.name + '</span>' +
+'</div>';
+}).join("");
+}
 
 function openAccount(){
 renderAccountPanel();
