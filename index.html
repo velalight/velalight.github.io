@@ -3,22 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VelaLight | شموع يدوية فاخرة - Luxury Handmade Candles</title>
-<meta name="description" content="VelaLight - شموع يدوية فاخرة بعطور مميزة، شموع خشبية وزجاجية ومعدنية، شموع مساج، بوكس العروسة وهدايا حسب الطلب. شحن لجميع المحافظات.">
+<title>VelaLight | شموع يدوية فاخرة بعطور مميزة - Luxury Handmade Candles</title>
+<meta name="description" content="VelaLight - شموع يدوية فاخرة بعطور مميزة: شموع خشبية، زجاجية، كريستالية، معدنية، شموع مساج، بوكس العروسة وهدايا حسب الطلب. اختر عطرك المفضل من 19 عطر فاخر. شحن لجميع محافظات مصر.">
+<meta name="keywords" content="شموع, شموع يدوية, شموع فاخرة, شموع معطرة, شموع خشبية, شموع زجاجية, شموع كريستالية, شموع مساج, بوكس العروسة, هدايا, شموع مصر, VelaLight, candles, luxury candles, handmade candles, scented candles">
+<meta name="author" content="VelaLight">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://velalight.github.io/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="VelaLight | شموع يدوية فاخرة">
-<meta property="og:description" content="شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب">
+<meta property="og:site_name" content="VelaLight">
+<meta property="og:title" content="VelaLight | شموع يدوية فاخرة بعطور مميزة">
+<meta property="og:description" content="شموع يدوية فاخرة - اختر عطرك من 19 عطر فاخر - هدايا حسب الطلب - شحن لكل مصر">
 <meta property="og:url" content="https://velalight.github.io/">
-<meta property="og:image" content="https://velalight.github.io/candle1.jpg">
+<meta property="og:image" content="https://velalight.github.io/mandle.jpg">
 <meta property="og:locale" content="ar_EG">
+<meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="manifest" href="manifest.json">
+<meta name="twitter:title" content="VelaLight | شموع يدوية فاخرة">
+<meta name="twitter:description" content="شموع يدوية فاخرة بعطور مميزة - هدايا حسب الطلب">
+<meta name="twitter:image" content="https://velalight.github.io/mandle.jpg">
 <meta name="theme-color" content="#4A2E1E">
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<!-- ===== بيانات منظمة لجوجل (Schema) ===== -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"VelaLight","url":"https://velalight.github.io/","logo":"https://velalight.github.io/eeeee.jpg","description":"شموع يدوية فاخرة بعطور مميزة - هدايا حسب الطلب","sameAs":["https://www.facebook.com/VelaLight/","https://www.instagram.com/velaa_lighttt","https://www.tiktok.com/@vela.light0"],"contactPoint":{"@type":"ContactPoint","telephone":"+201223526105","contactType":"customer service","availableLanguage":["Arabic","English"]}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"VelaLight","url":"https://velalight.github.io/","inLanguage":["ar","en"],"potentialAction":{"@type":"SearchAction","target":"https://velalight.github.io/?q={search_term_string}","query-input":"required name=search_term_string"}}
+</script>
 
 <style>
 :root{
@@ -53,8 +68,6 @@ input,select,textarea{font-family:inherit;font-size:1rem}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 30px;border-radius:999px;font-weight:700;font-size:.92rem;transition:.35s var(--ease)}
 .btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:#fff;box-shadow:0 6px 18px rgba(176,141,87,.35)}
 .btn-gold:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(176,141,87,.45)}
-.btn-ghost{border:1.5px solid var(--gold);color:var(--gold-deep);background:transparent}
-.btn-ghost:hover{background:var(--gold);color:#fff;transform:translateY(-3px)}
 .btn-dark{background:var(--ink);color:#fff}
 .btn-dark:hover{background:var(--gold-deep);transform:translateY(-2px)}
 #loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .6s var(--ease),visibility .6s}
@@ -94,13 +107,13 @@ header.scrolled .header-in{height:70px}
 #cartCount{position:absolute;top:2px;inset-inline-end:0;background:var(--gold);color:#fff;font-size:.66rem;font-weight:800;min-width:18px;height:18px;border-radius:999px;display:grid;place-items:center;padding-inline:4px;transform:scale(0);transition:.3s var(--ease)}
 #cartCount.show{transform:scale(1)}
 #burger{display:none}
-.mobile-menu{position:fixed;inset-block:0;inset-inline-start:0;width:min(320px,84%);background:var(--white);z-index:1200;padding:28px;transform:translateX(var(--mx,105%));transition:transform .45s var(--ease);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.mobile-menu{position:fixed;inset-block:0;inset-inline-start:0;width:min(320px,84%);background:var(--white);z-index:1200;padding:26px 22px;transform:translateX(var(--mx,105%));transition:transform .45s var(--ease);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;gap:1px;overflow-y:auto}
 html[dir="ltr"] .mobile-menu{--mx:-105%}
 .mobile-menu.open{transform:translateX(0)!important}
-.mobile-menu .logo{font-size:1.7rem;margin-bottom:18px}
-.mobile-menu a{padding:12px 10px;border-bottom:1px solid var(--line);font-weight:500}
+.mobile-menu .logo{font-size:1.7rem;margin-bottom:16px}
+.mobile-menu a{padding:11px 10px;border-bottom:1px solid var(--line);font-weight:500;font-size:.95rem}
 .mobile-menu a:hover{color:var(--gold-deep);padding-inline-start:16px;transition:.3s}
-.mobile-menu .mm-label{font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);font-weight:800;padding:14px 10px 6px;border:none}
+.mobile-menu .mm-label{font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);font-weight:800;padding:16px 10px 5px;border:none}
 #menuOverlay{position:fixed;inset:0;background:rgba(28,26,23,.45);backdrop-filter:blur(3px);z-index:1100;opacity:0;visibility:hidden;transition:.4s}
 #menuOverlay.show{opacity:1;visibility:visible}
 .search-overlay{position:fixed;inset:0;background:rgba(250,247,242,.97);backdrop-filter:blur(16px);z-index:1300;display:flex;align-items:flex-start;justify-content:center;padding-top:14vh;opacity:0;visibility:hidden;transition:.4s var(--ease)}
@@ -114,26 +127,23 @@ html[dir="ltr"] .mobile-menu{--mx:-105%}
 #searchClose:hover{color:var(--gold);transform:rotate(90deg)}
 .search-hint{margin-top:14px;font-size:.82rem;color:var(--ink-soft)}
 
-/* ===== Hero جديد: صورة + عنوان بس ===== */
-.hero{position:relative;display:flex;align-items:center;text-align:center;overflow:hidden;background:radial-gradient(ellipse at 50% -10%,#efe4cf 0%,var(--bg) 55%);padding-block:52px 64px}
-.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 80%,rgba(176,141,87,.12),transparent 40%),radial-gradient(circle at 85% 25%,rgba(176,141,87,.10),transparent 45%)}
-.hero-flame{position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(212,185,140,.35),transparent 70%);top:8%;inset-inline-start:6%;animation:float 7s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
-.hero-in{position:relative;z-index:2}
-.hero-img-wrap{display:flex;justify-content:center;margin-bottom:30px}
-.hero-img{width:min(300px,72vw);height:min(340px,60vw);object-fit:cover;border-radius:26px;box-shadow:var(--shadow-lg)}
-.hero h1{font-family:var(--serif);font-size:clamp(2.2rem,6vw,4rem);font-weight:600;line-height:1.25;max-width:760px;margin:0 auto}
-.hero h1 em{font-style:italic;color:var(--gold-deep)}
+/* ===== الهيرو الجديد: بانر المانديلا بعرض الصفحة ===== */
+.hero{position:relative;width:100%;height:min(76vh,640px);min-height:420px;overflow:hidden;display:flex;align-items:flex-end}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,16,12,.80) 0%,rgba(20,16,12,.38) 45%,rgba(20,16,12,.10) 100%)}
+.hero-content{position:relative;z-index:2;width:100%;text-align:center;padding-bottom:58px}
+.hero-kicker{display:inline-block;font-size:.72rem;letter-spacing:.5em;text-transform:uppercase;color:var(--gold-2);font-weight:800;margin-bottom:12px}
+.hero h1{font-family:var(--serif);font-size:clamp(2.3rem,6vw,4.2rem);color:#fff;font-weight:600;line-height:1.25;max-width:820px;margin:0 auto;text-shadow:0 2px 20px rgba(0,0,0,.4)}
+.hero h1 em{font-style:italic;color:var(--gold-2)}
+.hero-line{margin-top:18px}
+@media (max-width:768px){.hero{height:min(62vh,520px);min-height:360px}.hero-content{padding-bottom:46px}}
 
 .results-info{text-align:center;color:var(--ink-soft);font-size:.9rem;margin-bottom:18px;min-height:1.4em}
 .results-info button{color:var(--gold-deep);font-weight:700;text-decoration:underline;text-underline-offset:3px}
-
-/* ===== شبكة منتجات ريسبونسيف: 4 / 3 / 2 ===== */
 .grid{display:grid;gap:26px;grid-template-columns:repeat(4,1fr)}
 .row-strip{display:grid;gap:20px;grid-template-columns:repeat(4,1fr);margin-top:24px}
 @media (max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}.row-strip{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:768px){.grid{grid-template-columns:repeat(2,1fr);gap:14px}.row-strip{grid-template-columns:repeat(2,1fr);gap:14px}}
-
 .card{background:var(--white);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm);transition:.45s var(--ease);display:flex;flex-direction:column}
 .card:hover{transform:translateY(-8px);box-shadow:var(--shadow-lg)}
 .card-media{position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--bg-2)}
@@ -144,7 +154,7 @@ html[dir="ltr"] .mobile-menu{--mx:-105%}
 .badge.gold{background:linear-gradient(135deg,var(--gold),var(--gold-deep))}
 .card-actions{position:absolute;inset-inline:0;bottom:0;display:flex;gap:8px;justify-content:center;padding:14px;transform:translateY(110%);transition:.45s var(--ease);background:linear-gradient(transparent,rgba(28,26,23,.28))}
 .card:hover .card-actions{transform:translateY(0)}
-.card-actions button{background:#fff;border-radius:999px;padding:9px 18px;font-size:.8rem;font-weight:700;box-shadow:var(--shadow-sm);transition:.3s}
+.card-actions button{background:#fff;border-radius:999px;padding:9px 22px;font-size:.8rem;font-weight:700;box-shadow:var(--shadow-sm);transition:.3s}
 .card-actions button:hover{background:var(--gold);color:#fff}
 .card-body{padding:18px 20px 22px;display:flex;flex-direction:column;flex:1}
 .card-cat{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:800}
@@ -224,8 +234,10 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
 .ci{display:flex;gap:12px;background:var(--bg);border-radius:var(--r-md);padding:10px;box-shadow:var(--shadow-sm)}
 .ci img{width:74px;height:74px;border-radius:var(--r-sm);object-fit:cover}
 .ci-info{flex:1;min-width:0}
-.ci-info h4{font-size:.9rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ci-info .p{color:var(--gold-deep);font-weight:800;font-size:.85rem;margin-top:3px}
+.ci-info h4{font-size:.9rem;font-weight:700}
+.ci-scent{margin-top:6px;display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--ink-soft)}
+.ci-scent select{padding:5px 8px;border:1px solid var(--line);border-radius:8px;font-size:.78rem;background:#fff;font-family:inherit;max-width:180px;cursor:pointer}
+.ci-info .p{color:var(--gold-deep);font-weight:800;font-size:.85rem;margin-top:5px}
 .ci-qty{display:flex;align-items:center;gap:10px;margin-top:8px}
 .ci-qty button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-weight:800;transition:.25s}
 .ci-qty button:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
@@ -249,12 +261,12 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
 .modal-bg{position:absolute;inset:0;background:rgba(28,26,23,.55);backdrop-filter:blur(4px)}
 .modal-card{position:relative;background:var(--white);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);width:min(480px,100%);max-height:90vh;overflow-y:auto;padding:30px;transform:translateY(24px) scale(.97);transition:.45s var(--ease)}
 .modal.show .modal-card{transform:translateY(0) scale(1)}
-.modal-x{position:absolute;top:14px;inset-inline-end:14px;width:36px;height:36px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:1.1rem;transition:.3s;z-index:6}
+.modal-x{position:absolute;top:14px;inset-inline-end:14px;width:38px;height:38px;border-radius:50%;background:rgba(250,247,242,.95);display:grid;place-items:center;font-size:1.1rem;transition:.3s;z-index:8;box-shadow:var(--shadow-sm)}
 .modal-x:hover{background:var(--gold);color:#fff;transform:rotate(90deg)}
 .modal-card h3{font-family:var(--serif);font-size:1.7rem;margin-bottom:6px}
 .modal-card .m-sub{color:var(--ink-soft);font-size:.85rem;margin-bottom:18px}
 
-/* ===== صفحة تفاصيل المنتج: التفاصيل الأول والصور بعدين ===== */
+/* ===== صفحة تفاصيل المنتج ===== */
 .qv .modal-card{width:min(1000px,100%);padding:0;overflow:hidden}
 .qv-grid{display:grid;grid-template-columns:1fr 1fr}
 .qv-gallery{order:1;background:var(--bg-2);padding:22px;display:flex;flex-direction:column;gap:14px}
@@ -279,29 +291,38 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
 .qv-price{font-size:1.6rem;font-weight:800;margin:14px 0 4px;color:var(--ink)}
 .qv-price s{font-size:1rem;color:#b8a894;font-weight:400;margin-inline-start:10px}
 .qv-desc{color:var(--ink-soft);font-size:.92rem;margin:10px 0 16px;line-height:1.9}
+.scent-select-wrap{margin:16px 0}
+.scent-select-wrap label{display:block;font-size:.88rem;font-weight:800;color:var(--ink);margin-bottom:8px}
+.scent-select-wrap .req{color:#b0655f}
+.scent-select{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-family:inherit;font-size:.9rem;color:var(--ink);outline:none;transition:.3s;cursor:pointer}
+.scent-select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,141,87,.15)}
+.scent-select.error{border-color:#b0655f;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .spec-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:18px}
 .spec-table td{padding:9px 4px;border-bottom:1px solid var(--line)}
 .spec-table td:first-child{color:var(--ink-soft);width:42%}
 .spec-table td:last-child{font-weight:700}
-.qv-qty{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.qv-share{display:flex;align-items:center;gap:10px;margin:6px 0 14px;font-size:.82rem;color:var(--ink-soft)}
+.qv-share button{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:.3s;font-size:.95rem}
+.qv-share button:hover{background:var(--gold);color:#fff;border-color:var(--gold);transform:translateY(-3px)}
+.qv-qty{display:flex;align-items:center;gap:14px;margin-bottom:14px}
 .qv-qty .stepper{display:flex;align-items:center;gap:14px;border:1.5px solid var(--line);border-radius:999px;padding:6px 14px}
 .qv-qty .stepper button{font-size:1.15rem;font-weight:800;width:26px;transition:.25s}
 .qv-qty .stepper button:hover{color:var(--gold)}
 .qv-qty b{min-width:24px;text-align:center}
 .qv-btns{display:flex;gap:10px;flex-wrap:wrap}
 .qv-btns .btn{flex:1;min-width:150px}
-.qv-share{display:flex;align-items:center;gap:10px;margin-top:18px;font-size:.82rem;color:var(--ink-soft)}
-.qv-share button{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:.3s;font-size:.95rem}
-.qv-share button:hover{background:var(--gold);color:#fff;border-color:var(--gold);transform:translateY(-3px)}
 @media (max-width:1024px){
   .qv-grid{grid-template-columns:1fr}
-  .qv-info{order:1;max-height:none}   /* التفاصيل الأول في الموبايل والتابلت */
-  .qv-gallery{order:2}                /* الصور الطبقة التانية */
+  .qv-gallery{order:1}
+  .qv-info{order:2;max-height:none;overflow:visible}
   .foot-grid{grid-template-columns:1fr 1fr}
   .about-grid{grid-template-columns:1fr;gap:26px}
 }
 @media (max-width:768px){
-  .qv .modal-card{width:100%;max-width:100%;height:100vh;max-height:100vh;border-radius:0}
+  .qv{padding:0}
+  .qv .modal-card{width:100vw;max-width:100vw;height:100vh;height:100dvh;max-height:100vh;max-height:100dvh;border-radius:0}
+  .qv-cta{position:sticky;bottom:0;background:#fff;padding:14px 0 12px;z-index:6;box-shadow:0 -6px 16px rgba(28,26,23,.08);margin-top:6px;border-top:1px solid var(--line)}
 }
 .lightbox{position:fixed;inset:0;background:rgba(10,9,8,.94);z-index:2000;display:grid;place-items:center;opacity:0;visibility:hidden;transition:.4s}
 .lightbox.show{opacity:1;visibility:visible}
@@ -330,7 +351,6 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
   .card-body{padding:13px 13px 16px}
   .card-name{font-size:1.02rem}
   .card-actions{transform:none;background:none;padding:10px}
-  .card-actions .qv-open{display:none}
   .foot-grid{grid-template-columns:1fr;gap:26px;padding-block:40px 28px}
   .stats{grid-template-columns:repeat(3,1fr);gap:8px}
 }
@@ -343,7 +363,7 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
   <div class="l-bar"></div>
 </div>
 
-<div class="topbar"><span data-i18n="topbar">شحن لجميع المحافظات خلال 3-7 أيام عمل • خصومات تصل إلى 25% • تغليف هدايا فاخر مجانًا • ضمان استبدال خلال 3 أيام</span></div>
+<div class="topbar"><span data-i18n="topbar">توصيل سريع لكل محافظات مصر خلال 3-7 أيام عمل • خصومات تصل إلى 25% • تغليف هدايا فاخر مجانًا • ضمان استبدال خلال 3 أيام</span></div>
 
 <header id="header">
   <div class="container header-in">
@@ -389,7 +409,7 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
   <div class="logo">VelaLight</div>
   <a href="index.html" data-i18n="nav_home">الرئيسية</a>
-  <div class="mm-label" data-i18n="mm_cats">تصنيفات الشموع</div>
+  <div class="mm-label" data-i18n="mm_cats">🕯️ تصنيفات الشموع</div>
   <a href="#products" data-catlink="all" data-i18n="cat_all">كل الشموع</a>
   <a href="#products" data-catlink="wood" data-i18n="cat_wood">شموع خشبية</a>
   <a href="#products" data-catlink="glass" data-i18n="cat_glass">شموع زجاجية</a>
@@ -398,11 +418,17 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
   <a href="#products" data-catlink="massage" data-i18n="cat_massage">شموع المساج</a>
   <a href="#products" data-catlink="gift" data-i18n="cat_gift">الهدايا</a>
   <a href="#products" data-catlink="bride" data-i18n="cat_bride">بوكس العروسة</a>
-  <div class="mm-label" data-i18n="mm_more">المزيد</div>
+  <div class="mm-label" data-i18n="mm_explore">✨ اكتشف</div>
   <a href="#about-us" data-i18n="nav_about">من نحن</a>
+  <a href="#scents" data-i18n="mm_scents">العطور الفاخرة</a>
+  <a href="#occasions" data-i18n="mm_occasions">المناسبات والهدايا</a>
+  <a href="#features" data-i18n="mm_features">لماذا VelaLight؟</a>
   <a href="#faq-section" data-i18n="nav_faqs">الأسئلة الشائعة</a>
+  <a href="#reviews" data-i18n="mm_reviews">آراء عملائنا</a>
+  <div class="mm-label" data-i18n="mm_contact">📞 تواصل</div>
   <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
   <a href="exchange-policy.html" data-i18n="f_exchange">سياسة الاستبدال</a>
+  <a href="privacy.html" data-i18n="f_privacy">سياسة الخصوصية</a>
 </nav>
 
 <div class="search-overlay" id="searchOverlay">
@@ -415,16 +441,14 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
   </div>
 </div>
 
-<!-- ===== الهيرو الجديد: صورة الشمعة + العنوان بس ===== -->
+<!-- ===== الهيرو: بانر المانديلا بعرض الصفحة ===== -->
 <section class="hero">
-  <div class="hero-flame"></div>
-  <div class="container hero-in reveal">
-    <div class="hero-img-wrap">
-      <!-- 👇 غيّر اسم الصورة دي لو عايز شمعة تانية في الهيرو -->
-      <img src="https://velalight.github.io/candle1.jpg" alt="شموع VelaLight الفاخرة" class="hero-img" loading="eager">
-    </div>
+  <img src="https://velalight.github.io/mandle.jpg" alt="شمعة المانديلا الفاخرة من VelaLight - شموع يدوية معطرة" class="hero-bg" loading="eager">
+  <div class="hero-overlay"></div>
+  <div class="hero-content container">
+    <div class="hero-kicker">VelaLight</div>
     <h1 data-i18n-html="hero_title">ضوء يُحكى… <em>وبريق يليق بكِ</em></h1>
-    <div class="gold-line"></div>
+    <div class="gold-line hero-line"></div>
   </div>
 </section>
 
@@ -455,7 +479,7 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
         <div class="stat"><b>100%</b><span data-i18n="stat_3">صناعة يدوية</span></div>
       </div>
     </div>
-    <div class="about-visual reveal" role="img" aria-label="VelaLight"></div>
+    <div class="about-visual reveal" role="img" aria-label="شموع VelaLight اليدوية"></div>
   </div>
 </section>
 
@@ -490,7 +514,7 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
   </div>
 </section>
 
-<section class="section" style="background:var(--bg-2)">
+<section class="section" id="occasions" style="background:var(--bg-2)">
   <div class="container">
     <div class="section-head reveal">
       <div class="kicker">Gifts & Occasions</div>
@@ -506,7 +530,7 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
   </div>
 </section>
 
-<section class="section">
+<section class="section" id="features">
   <div class="container">
     <div class="section-head reveal">
       <div class="kicker">Why VelaLight?</div>
@@ -535,7 +559,7 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
   </div>
 </section>
 
-<section class="section">
+<section class="section" id="reviews">
   <div class="container">
     <div class="section-head reveal">
       <div class="kicker">Testimonials</div>
@@ -544,11 +568,11 @@ html[dir="rtl"] .cart-drawer{--dx:-110%}
       <p class="sub" data-i18n="rev_sub">ثقتكم أجمل هدية لنا 🤎</p>
     </div>
     <div class="reviews-strip reveal">
-      <div class="review-card"><img src="https://velalight.github.io/review1.jpg" alt="Review 1" loading="lazy"><div class="stars">★★★★★</div></div>
-      <div class="review-card"><img src="https://velalight.github.io/review2.jpg" alt="Review 2" loading="lazy"><div class="stars">★★★★★</div></div>
-      <div class="review-card"><img src="https://velalight.github.io/review3.jpg" alt="Review 3" loading="lazy"><div class="stars">★★★★★</div></div>
-      <div class="review-card"><img src="https://velalight.github.io/review4.jpg" alt="Review 4" loading="lazy"><div class="stars">★★★★★</div></div>
-      <div class="review-card"><img src="https://velalight.github.io/review5.jpg" alt="Review 5" loading="lazy"><div class="stars">★★★★★</div></div>
+      <div class="review-card"><img src="https://velalight.github.io/review1.jpg" alt="رأي عميلة VelaLight 1" loading="lazy"><div class="stars">★★★★★</div></div>
+      <div class="review-card"><img src="https://velalight.github.io/review2.jpg" alt="رأي عميلة VelaLight 2" loading="lazy"><div class="stars">★★★★★</div></div>
+      <div class="review-card"><img src="https://velalight.github.io/review3.jpg" alt="رأي عميلة VelaLight 3" loading="lazy"><div class="stars">★★★★★</div></div>
+      <div class="review-card"><img src="https://velalight.github.io/review4.jpg" alt="رأي عميلة VelaLight 4" loading="lazy"><div class="stars">★★★★★</div></div>
+      <div class="review-card"><img src="https://velalight.github.io/review5.jpg" alt="رأي عميلة VelaLight 5" loading="lazy"><div class="stars">★★★★★</div></div>
     </div>
   </div>
 </section>
@@ -678,49 +702,30 @@ const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const LS={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
 const IMG='https://velalight.github.io/';
 
+/* ===== قائمة العطور (19 عطر) ===== */
+const SCENTS=[
+ {ar:'فانيلا',en:'Vanilla',g:'warm'},{ar:'موكا',en:'Mocha',g:'warm'},{ar:'كراميل',en:'Caramel',g:'warm'},
+ {ar:'قرفة',en:'Cinnamon',g:'warm'},{ar:'عنبر',en:'Amber',g:'warm'},{ar:'عود',en:'Oud',g:'warm'},{ar:'قهوة',en:'Coffee',g:'warm'},
+ {ar:'أناناس',en:'Pineapple',g:'fresh'},{ar:'كوكونات',en:'Coconut',g:'fresh'},{ar:'كاريبيان فروت',en:'Caribbean Fruit',g:'fresh'},
+ {ar:'مانجو',en:'Mango',g:'fresh'},{ar:'توت',en:'Berry',g:'fresh'},
+ {ar:'ورد',en:'Rose',g:'floral'},{ar:'ياسمين',en:'Jasmine',g:'floral'},{ar:'فل',en:'Arabian Jasmine',g:'floral'},
+ {ar:'لافندر',en:'Lavender',g:'floral'},{ar:'مسك أبيض',en:'White Musk',g:'floral'},{ar:'ساندال وود',en:'Sandalwood',g:'floral'},{ar:'باتشولي',en:'Patchouli',g:'floral'}
+];
+const SCENT_GROUPS={warm:{ar:'عطور دافئة وحلوة 🤎',en:'Warm & Sweet 🤎'},fresh:{ar:'عطور منعشة وفاكهية 🍓',en:'Fresh & Fruity 🍓'},floral:{ar:'عطور زهرية وفاخرة 🌸',en:'Floral & Luxury 🌸'}};
+
 const PRODUCTS=[
-  {id:1,cat:'wood',price:650,old:750,
-   name_ar:'الشمعة الفاخرة (مجموعة 3 شموع)',name_en:'Luxury Candle Set (3 Candles)',
-   images:['RRRR.jpg','RRRRR.jpg','RRRRRR.jpg','RR.jpg','RRR.jpg'],
-   captions:['المجموعة الكاملة في صندوقها الفاخر','الشمعة الأولى - عطر العود الأصيل','الشمعة الثانية - لمسة الفانيليا الدافئة','الشمعة الثالثة - مسك شرقي فاخر','تفاصيل التغليف الملكي'],
-   desc_ar:'ثلاث شموع فاخرة في مجموعة واحدة، صُممت لتتناغم معًا كسيمفونية من الضوء والعطر. كل شمعة تحمل طابعًا خاصًا، ومعًا يملأن المكان بدفءٍ لا يُقاوم وأناقةٍ تليق بأجمل اللحظات. هدية متكاملة لمن يستحق الاستثنائي.',
-   desc_en:'Three luxury candles in one curated set, designed to harmonize as a symphony of light and scent. Each candle carries its own character, yet together they fill the space with irresistible warmth and elegance worthy of your most precious moments.'},
-  {id:2,cat:'wood',price:650,old:750,
-   name_ar:'شمعة نبضين',name_en:'Two Heartbeats Candle',
-   images:['heart2.jpg','heart3.jpg','heart1.jpg'],
-   captions:['ليست مجرد شمعة... بل قطعة تُحاكي المشاعر.','شمعة فاخرة من الخشب الطبيعي بتصميم قلب أنيق، مع إمكانية نقش اسمك أو اسم من تحب، لتصبح ذكرى تدوم وهدية تحمل معنى.','بعطرها الآسر ووهجها الدافئ، تضيف إلى منزلك لمسة من الأناقة والسكينة، وتحوّل أبسط اللحظات إلى أجمل الذكريات.'],
-   desc_ar:'ليست مجرد شمعة... بل قطعة تُحاكي المشاعر. شمعة نبضين من الخشب الطبيعي الفاخر بتصميم قلب أنيق، مع إمكانية نقش اسمك أو اسم من تحب لتصبح ذكرى تدوم وهدية تحمل معنى. خشب طبيعي فاخر، نقش الأسماء حسب الطلب، وعطر خلاب يدوم طويلًا.',
-   desc_en:'More than a candle — a piece that echoes emotions. A premium natural wood candle with an elegant heart design, personalized with your name or the name of your loved one, making it a lasting memory and a gift full of meaning.'},
-  {id:3,cat:'glass',price:2850,old:3600,
-   name_ar:'جولدن كاندل',name_en:'Golden Candle Set',
-   images:['candle1.jpg','candle2.jpg','candle3.jpg','candle4.jpg','candle5.jpg'],
-   captions:['هناك تفاصيل لا تكتفي بتزيين المكان... بل تمنحه روحًا.','مجموعة من ثلاث شموع في أوانٍ زجاجية فاخرة، صُممت لتنسج مشهدًا من الدفء والأناقة في كل زاوية من منزلك.','ومع عبيرها الراقي وضوئها الهادئ، تتحول اللحظات العادية إلى لحظات تستحق أن تُعاش.','كل شمعة تحمل جمالها الخاص، ومعًا يصنعن لوحة متكاملة من الفخامة الهادئة التي لا تحتاج إلى مبالغة لتلفت الأنظار.','يمكنك اقتناء شمعة واحدة، أو اختيار المجموعة الكاملة لتكتمل الحكاية، وتكتمل معها أناقة المكان.'],
-   desc_ar:'هناك تفاصيل لا تكتفي بتزيين المكان... بل تمنحه روحًا. مجموعة من ثلاث شموع في أوانٍ زجاجية فاخرة، صُممت لتنسج مشهدًا من الدفء والأناقة في كل زاوية من منزلك. ومع عبيرها الراقي وضوئها الهادئ، تتحول اللحظات العادية إلى لحظات تستحق أن تُعاش.',
-   desc_en:'Some details do not just decorate a place — they give it a soul. A set of three candles in luxurious glass vessels, designed to weave a scene of warmth and elegance in every corner of your home.'},
-  {id:4,cat:'glass',price:425,old:550,
-   name_ar:'شمعة الأيس كوفي',name_en:'Iced Coffee Candle',
-   images:['iccoffe1.jpg','iccoffe2.jpg','iccoffe3.jpg','iccoffe4.jpg'],
-   captions:['ليست رائحة قهوة... بل مزاجٌ كامل يُضاء.','شمعة آيس كوفي صُنعت لتأخذك إلى هدوء المقاهي الراقية، حيث تمتزج نفحات القهوة الغنية بعبيرٍ ناعم يملأ المكان دفئًا وطمأنينة.','وهجها الهادئ، وعطرها الآسر، وأناقة حضورها تجعلها أكثر من شمعة؛ إنها تفصيلة تمنح منزلك إحساسًا بالفخامة، وتمنح لحظاتك طابعًا لا يُنسى.','لأن بعض الروائح لا تُعطر المكان فقط... بل تترك أثرًا في القلب.'],
-   desc_ar:'ليست رائحة قهوة... بل مزاجٌ كامل يُضاء. شمعة آيس كوفي صُنعت لتأخذك إلى هدوء المقاهي الراقية، حيث تمتزج نفحات القهوة الغنية بعبيرٍ ناعم يملأ المكان دفئًا وطمأنينة.',
-   desc_en:'Not just the scent of coffee — a whole mood, illuminated. The Iced Coffee candle takes you to the calm of upscale cafés, where rich coffee notes blend with a soft fragrance.'},
-  {id:5,cat:'metal',price:325,badge:'best',
-   name_ar:'شمعة المانديلا',name_en:'Mandala Candle',
-   images:['mandle.jpg'],
-   captions:['الأكثر مبيعًا... والأقرب إلى كل بيت يعشق التفاصيل الراقية.'],
-   desc_ar:'الأكثر مبيعًا... والأقرب إلى كل بيت يعشق التفاصيل الراقية. شمعة المنديلا ليست مجرد قطعة ديكور، بل حضور يملأ المكان دفئًا وأناقة.',
-   desc_en:'The best-seller — and the closest to every home that loves refined details. The Mandala candle is not just a décor piece, but a presence that fills the space with warmth and elegance.'},
-  {id:6,cat:'metal',price:325,
-   name_ar:'شمعة المساج',name_en:'Massage Candle',
-   images:['gift1.jpg','gift2.jpg','gift3.jpg','gift4.jpg','gift5.jpg','gift6.jpg','gift7.jpg'],
-   captions:['كل امرأة تستحق لحظة تُدلل فيها نفسها...','شمعة المساج ليست مجرد شمعة، بل تجربة عناية فاخرة تبدأ بوهجٍ هادئ وتنتهي ببشرة أكثر نعومة ولمسة من العطر الآسر.','صُنعت من مكونات طبيعية مختارة بعناية، لتذوب إلى زيت دافئ يمنح البشرة ترطيبًا غنيًا وإحساسًا بالراحة والاسترخاء.','استمتعي بنعومة تُشعرين بها، ورائحة أنثوية راقية تبقى برفق على بشرتك، واجعلي كل لحظة عناية بنفسك طقسًا من الدلال والفخامة.','لأن الأنوثة الحقيقية... تبدأ من التفاصيل التي تهدينها لنفسك.','زيت دافئ يذوب بلطف على بشرتك، يمنحها ترطيبًا عميقًا ونعومة حريرية تدوم.','اجعلي كل مساء طقسًا من الاسترخاء والدلال... لأنك تستحقين الأجمل دائمًا.'],
-   desc_ar:'كل امرأة تستحق لحظة تُدلل فيها نفسها. شمعة المساج ليست مجرد شمعة، بل تجربة عناية فاخرة تبدأ بوهجٍ هادئ وتنتهي ببشرة أكثر نعومة ولمسة من العطر الآسر.',
-   desc_en:'Every woman deserves a moment to pamper herself. The massage candle is not just a candle, but a luxurious care experience that begins with a calm glow and ends with softer skin.'},
-  {id:7,cat:'crystal',price:750,old:900,img:'candle13.jpg',name_ar:'شمعة كريستال ذهبية',name_en:'Crystal Gold Candle',desc_ar:'قطعة استثنائية في إناء كريستال فاخر يعكس ضوء الشمعة بشكل ساحر.',desc_en:'An exceptional piece in a luxury crystal vessel that reflects the flame magically.'},
-  {id:8,cat:'crystal',price:720,img:'candle14.jpg',name_ar:'بلو كريستال',name_en:'Blue Crystal',desc_ar:'شمعة كريستالية بلون أزرق أنيق، تصميم عصري يضيف لمسة من الرقي.',desc_en:'A crystal candle with elegant blue color, modern design.'},
-  {id:9,cat:'glass',price:430,img:'candle9.jpg',name_ar:'لافندر (جلاس)',name_en:'Lavender (Glass)',desc_ar:'شمعة زجاجية بعطر اللافندر الفرنسي المهدئ، مثالية للاسترخاء.',desc_en:'A glass candle with calming French lavender scent, perfect for relaxation.'},
-  {id:10,cat:'glass',price:440,img:'candle10.jpg',name_ar:'ياسمين (جلاس)',name_en:'Jasmine (Glass)',desc_ar:'شمعة زجاجية بعطر الياسمين النقي، رائحة زهرية منعشة.',desc_en:'A glass candle with pure jasmine scent, a fresh floral fragrance.'},
-  {id:11,cat:'glass',price:400,img:'candle11.jpg',name_ar:'فانيليا (جلاس)',name_en:'Vanilla (Glass)',desc_ar:'شمعة زجاجية بعطر الفانيلا الكلاسيكي، رائحة دافئة محببة للجميع.',desc_en:'A glass candle with classic vanilla scent, a warm fragrance loved by everyone.'},
-  {id:12,cat:'massage',price:380,img:'candle19.jpg',name_ar:'شمعة مساج ريلاكس',name_en:'Relax Massage Candle',desc_ar:'شمعة مساج بعطر اللافندر والخزامى المهدئ، يمنحك استرخاءً عميقًا.',desc_en:'A massage candle with calming lavender scent, gives you deep relaxation.'},
+  {id:1,cat:'wood',price:650,old:750,name_ar:'الشمعة الفاخرة (مجموعة 3 شموع)',name_en:'Luxury Candle Set (3 Candles)',images:['RRRR.jpg','RRRRR.jpg','RRRRRR.jpg','RR.jpg','RRR.jpg'],captions:['المجموعة الكاملة في صندوقها الفاخر','الشمعة الأولى - عطر العود الأصيل','الشمعة الثانية - لمسة الفانيليا الدافئة','الشمعة الثالثة - مسك شرقي فاخر','تفاصيل التغليف الملكي'],desc_ar:'ثلاث شموع فاخرة في مجموعة واحدة، صُممت لتتناغم معًا كسيمفونية من الضوء والعطر. كل شمعة تحمل طابعًا خاصًا، ومعًا يملأن المكان بدفءٍ لا يُقاوم وأناقةٍ تليق بأجمل اللحظات.',desc_en:'Three luxury candles in one curated set, designed to harmonize as a symphony of light and scent. Each candle carries its own character, yet together they fill the space with irresistible warmth.'},
+  {id:2,cat:'wood',price:650,old:750,name_ar:'شمعة نبضين',name_en:'Two Heartbeats Candle',images:['heart2.jpg','heart3.jpg','heart1.jpg'],captions:['ليست مجرد شمعة... بل قطعة تُحاكي المشاعر.','شمعة فاخرة من الخشب الطبيعي بتصميم قلب أنيق، مع إمكانية نقش اسمك أو اسم من تحب.','بعطرها الآسر ووهجها الدافئ، تضيف إلى منزلك لمسة من الأناقة والسكينة.'],desc_ar:'ليست مجرد شمعة... بل قطعة تُحاكي المشاعر. شمعة نبضين من الخشب الطبيعي الفاخر بتصميم قلب أنيق، مع إمكانية نقش اسمك أو اسم من تحب لتصبح ذكرى تدوم وهدية تحمل معنى.',desc_en:'More than a candle — a piece that echoes emotions. A premium natural wood candle with an elegant heart design, personalized with your name or the name of your loved one.'},
+  {id:3,cat:'glass',price:2850,old:3600,name_ar:'جولدن كاندل',name_en:'Golden Candle Set',images:['candle1.jpg','candle2.jpg','candle3.jpg','candle4.jpg','candle5.jpg'],captions:['هناك تفاصيل لا تكتفي بتزيين المكان... بل تمنحه روحًا.','مجموعة من ثلاث شموع في أوانٍ زجاجية فاخرة.','ومع عبيرها الراقي وضوئها الهادئ، تتحول اللحظات العادية إلى لحظات تستحق أن تُعاش.','كل شمعة تحمل جمالها الخاص، ومعًا يصنعن لوحة متكاملة من الفخامة الهادئة.','يمكنك اقتناء شمعة واحدة، أو اختيار المجموعة الكاملة لتكتمل الحكاية.'],desc_ar:'هناك تفاصيل لا تكتفي بتزيين المكان... بل تمنحه روحًا. مجموعة من ثلاث شموع في أوانٍ زجاجية فاخرة، صُممت لتنسج مشهدًا من الدفء والأناقة في كل زاوية من منزلك.',desc_en:'Some details do not just decorate a place — they give it a soul. A set of three candles in luxurious glass vessels, designed to weave warmth and elegance in every corner.'},
+  {id:4,cat:'glass',price:425,old:550,name_ar:'شمعة الأيس كوفي',name_en:'Iced Coffee Candle',images:['iccoffe1.jpg','iccoffe2.jpg','iccoffe3.jpg','iccoffe4.jpg'],captions:['ليست رائحة قهوة... بل مزاجٌ كامل يُضاء.','شمعة آيس كوفي صُنعت لتأخذك إلى هدوء المقاهي الراقية.','وهجها الهادئ وعطرها الآسر يمنحان منزلك إحساسًا بالفخامة.','لأن بعض الروائح لا تُعطر المكان فقط... بل تترك أثرًا في القلب.'],desc_ar:'ليست رائحة قهوة... بل مزاجٌ كامل يُضاء. شمعة آيس كوفي صُنعت لتأخذك إلى هدوء المقاهي الراقية، حيث تمتزج نفحات القهوة الغنية بعبيرٍ ناعم.',desc_en:'Not just the scent of coffee — a whole mood, illuminated. The Iced Coffee candle takes you to the calm of upscale cafés.'},
+  {id:5,cat:'metal',price:325,badge:'best',name_ar:'شمعة المانديلا',name_en:'Mandala Candle',images:['mandle.jpg'],captions:['الأكثر مبيعًا... والأقرب إلى كل بيت يعشق التفاصيل الراقية.'],desc_ar:'الأكثر مبيعًا... والأقرب إلى كل بيت يعشق التفاصيل الراقية. شمعة المنديلا ليست مجرد قطعة ديكور، بل حضور يملأ المكان دفئًا وأناقة.',desc_en:'The best-seller — and the closest to every home that loves refined details. The Mandala candle is a presence that fills the space with warmth and elegance.'},
+  {id:6,cat:'metal',price:325,name_ar:'شمعة المساج',name_en:'Massage Candle',images:['gift1.jpg','gift2.jpg','gift3.jpg','gift4.jpg','gift5.jpg','gift6.jpg','gift7.jpg'],captions:['كل امرأة تستحق لحظة تُدلل فيها نفسها...','تجربة عناية فاخرة تبدأ بوهجٍ هادئ وتنتهي ببشرة أكثر نعومة.','صُنعت من مكونات طبيعية لتذوب إلى زيت دافئ يمنح البشرة ترطيبًا غنيًا.','استمتعي بنعومة تُشعرين بها، ورائحة أنثوية راقية.','لأن الأنوثة الحقيقية... تبدأ من التفاصيل التي تهدينها لنفسك.','زيت دافئ يذوب بلطف على بشرتك، يمنحها ترطيبًا عميقًا.','اجعلي كل مساء طقسًا من الاسترخاء والدلال.'],desc_ar:'كل امرأة تستحق لحظة تُدلل فيها نفسها. شمعة المساج ليست مجرد شمعة، بل تجربة عناية فاخرة تبدأ بوهجٍ هادئ وتنتهي ببشرة أكثر نعومة.',desc_en:'Every woman deserves a moment to pamper herself. The massage candle melts into a warm oil that gives the skin rich hydration.'},
+  {id:7,cat:'crystal',price:750,old:900,img:'candle13.jpg',name_ar:'شمعة كريستال ذهبية',name_en:'Crystal Gold Candle',desc_ar:'قطعة استثنائية في إناء كريستال فاخر يعكس ضوء الشمعة بشكل ساحر.',desc_en:'An exceptional piece in a luxury crystal vessel.'},
+  {id:8,cat:'crystal',price:720,img:'candle14.jpg',name_ar:'بلو كريستال',name_en:'Blue Crystal',desc_ar:'شمعة كريستالية بلون أزرق أنيق، تصميم عصري يضيف لمسة من الرقي.',desc_en:'A crystal candle with elegant blue color.'},
+  {id:9,cat:'glass',price:430,img:'candle9.jpg',name_ar:'لافندر (جلاس)',name_en:'Lavender (Glass)',desc_ar:'شمعة زجاجية بعطر اللافندر الفرنسي المهدئ، مثالية للاسترخاء.',desc_en:'A glass candle with calming French lavender scent.'},
+  {id:10,cat:'glass',price:440,img:'candle10.jpg',name_ar:'ياسمين (جلاس)',name_en:'Jasmine (Glass)',desc_ar:'شمعة زجاجية بعطر الياسمين النقي، رائحة زهرية منعشة.',desc_en:'A glass candle with pure jasmine scent.'},
+  {id:11,cat:'glass',price:400,img:'candle11.jpg',name_ar:'فانيليا (جلاس)',name_en:'Vanilla (Glass)',desc_ar:'شمعة زجاجية بعطر الفانيلا الكلاسيكي، رائحة دافئة محببة للجميع.',desc_en:'A glass candle with classic vanilla scent.'},
+  {id:12,cat:'massage',price:380,img:'candle19.jpg',name_ar:'شمعة مساج ريلاكس',name_en:'Relax Massage Candle',desc_ar:'شمعة مساج بعطر اللافندر والخزامى المهدئ، يمنحك استرخاءً عميقًا.',desc_en:'A massage candle with calming lavender scent.'},
   {id:13,cat:'gift',price:850,img:'gifta.jpg',name_ar:'بوكس هدية فاخر',name_en:'Luxury Gift Box',desc_ar:'بوكس هدايا فاخر بتغليف ملكي، يحتوي على شمعة مختارة وإكسسوارات.',desc_en:'A luxury gift box with royal wrapping.'},
   {id:14,cat:'bride',price:1500,img:'box1.jpg',name_ar:'بوكس العروسة',name_en:'Bride Box',desc_ar:'أفخم بوكس عروسة: شموع مساج + شموع ديكور + معطرات وتغليف وردي ملكي.',desc_en:'The most luxurious bride box with royal pink wrapping.'}
 ];
@@ -732,16 +737,17 @@ PRODUCTS.forEach(p=>{
 
 const I18N={
 ar:{
- topbar:'شحن لجميع المحافظات خلال 3-7 أيام عمل • خصومات تصل إلى 25% • تغليف هدايا فاخر مجانًا • ضمان استبدال خلال 3 أيام',
+ topbar:'توصيل سريع لكل محافظات مصر خلال 3-7 أيام عمل • خصومات تصل إلى 25% • تغليف هدايا فاخر مجانًا • ضمان استبدال خلال 3 أيام',
  nav_home:'الرئيسية',nav_shop:'تسوق',nav_about:'من نحن',nav_faqs:'الأسئلة الشائعة',nav_contact:'تواصل معنا',
- mm_cats:'تصنيفات الشموع',mm_more:'المزيد',
+ mm_cats:'🕯️ تصنيفات الشموع',mm_explore:'✨ اكتشف',mm_contact:'📞 تواصل',mm_scents:'العطور الفاخرة',mm_occasions:'المناسبات والهدايا',mm_features:'لماذا VelaLight؟',mm_reviews:'آراء عملائنا',
  cat_all:'كل الشموع',cat_wood:'شموع خشبية',cat_glass:'شموع زجاجية',cat_crystal:'شموع كريستالية',cat_metal:'شموع معدنية',cat_massage:'شموع المساج',cat_gift:'الهدايا',cat_bride:'بوكس العروسة',
  hero_title:'ضوء يُحكى… <em>وبريق يليق بكِ</em>',
  p_kicker:'الكولكشن',sec_products:'اختار قطعتك المفضلة',
  search_ph:'ابحثي عن شمع، عطر، مناسبة...',search_hint:'البحث يشمل: اسم المنتج، الوصف، الكاتيجوري — بالعربي والإنجليزي.',
  results_for:(n,q)=>`نتائج البحث عن "${q}" : ${n} منتج`,no_results:'مفيش نتائج مطابقة — جربي كلمة تانية 💛',clear:'مسح البحث',
  showing:(n)=>`عرض ${n} منتج`,
- add_cart:'أضيفي للسلة',buy_now:'اشتري دلوقتي',quick_view:'عرض سريع',share:'مشاركة:',
+ view_product:'عرض المنتج',add_cart:'أضيفي للسلة',buy_now:'اشتري دلوقتي',share:'مشاركة:',
+ choose_scent:'اختار العطر',scent_word:'العطر',select_scent_first:'من فضلك اختار العطر الأول 🌸',
  spec_burn:'مدة الاشتعال',spec_weight:'الوزن',spec_cat:'الكاتيجوري',hours:'ساعة',
  about_title:'من نحن',about_p1:'في VelaLight لا نصنع الشموع فقط، بل نصنع لحظات تستحق أن تُعاش. بدأت رحلتنا بشغف تجاه التفاصيل الصغيرة التي تجعل المكان أكثر دفئًا، والبيت أكثر راحة، واللحظات العادية أكثر جمالًا.',about_p2:'نصنع كل شمعة يدويًا بعناية، مستخدمين خامات مختارة وعطورًا فاخرة، لنقدم منتجًا يجمع بين الأناقة والجودة والإحساس الحقيقي. نؤمن أن الضوء الخافت قادر على تهدئة الروح، وأن العطر الجميل يستطيع أن يعيد أجمل الذكريات.',
  stat_1:'عميلة سعيدة',stat_2:'عطر مميز',stat_3:'صناعة يدوية',
@@ -766,23 +772,24 @@ ar:{
  badge_sale:'خصم',badge_best:'الأكثر مبيعًا',
  wa_order:lines=>`🕯️ طلب جديد من VelaLight\n━━━━━━━━━━━━\n${lines}\n━━━━━━━━━━━━\nإجمالي المنتجات: {sub}\nالإضافات: {add}\nالإجمالي للتحويل (InstaPay): {tot}\n\nالاسم: {name}\nالهاتف: {phone}\nالعنوان: {addr}\n\n(تكلفة الشحن تُدفع كاش عند الاستلام)`},
 en:{
- topbar:'Nationwide shipping 3-7 business days • Up to 25% off • Free luxury gift wrapping • 3-day exchange guarantee',
+ topbar:'Fast delivery across Egypt in 3-7 business days • Up to 25% off • Free luxury gift wrapping • 3-day exchange guarantee',
  nav_home:'Home',nav_shop:'Shop',nav_about:'About Us',nav_faqs:'FAQs',nav_contact:'Contact Us',
- mm_cats:'Candle Categories',mm_more:'More',
+ mm_cats:'🕯️ Candle Categories',mm_explore:'✨ Explore',mm_contact:'📞 Contact',mm_scents:'Luxury Scents',mm_occasions:'Occasions & Gifts',mm_features:'Why VelaLight?',mm_reviews:'Client Reviews',
  cat_all:'All Candles',cat_wood:'Wood Candles',cat_glass:'Glass Candles',cat_crystal:'Crystal Candles',cat_metal:'Metal Candles',cat_massage:'Massage Candles',cat_gift:'Gifts',cat_bride:'Bride Box',
  hero_title:'A light that tells a story… <em>a glow that suits you</em>',
  p_kicker:'The Collection',sec_products:'Choose Your Favorite Piece',
  search_ph:'Search candles, scents, occasions...',search_hint:'Search covers: product name, description, category — in Arabic & English.',
  results_for:(n,q)=>`Results for "${q}": ${n} product(s)`,no_results:'No matching results — try another word 💛',clear:'Clear search',
  showing:(n)=>`Showing ${n} product(s)`,
- add_cart:'Add to Cart',buy_now:'Buy Now',quick_view:'Quick View',share:'Share:',
+ view_product:'View Product',add_cart:'Add to Cart',buy_now:'Buy Now',share:'Share:',
+ choose_scent:'Choose Scent',scent_word:'Scent',select_scent_first:'Please choose a scent first 🌸',
  spec_burn:'Burn Time',spec_weight:'Weight',spec_cat:'Category',hours:'hrs',
- about_title:'About Us',about_p1:'At VelaLight, we do not just make candles — we craft moments worth living. Our journey began with a passion for the small details that make a place feel warmer, a home more comfortable, and ordinary moments more beautiful.',about_p2:'Every candle is handmade with care, using carefully chosen materials and luxury fragrances, to deliver a product that blends elegance, quality, and genuine feeling.',
+ about_title:'About Us',about_p1:'At VelaLight, we do not just make candles — we craft moments worth living. Our journey began with a passion for the small details that make a place feel warmer and ordinary moments more beautiful.',about_p2:'Every candle is handmade with care, using carefully chosen materials and luxury fragrances, to deliver a product that blends elegance, quality, and genuine feeling.',
  stat_1:'Happy Clients',stat_2:'Signature Scents',stat_3:'Handmade',
  scents_title:'Luxury Scents',scents_sub:'All scents are available to choose from in any of our products',
  sg_warm:'Warm & Sweet Scents 🤎',sg_fresh:'Fresh & Fruity Scents 🍓',sg_floral:'Floral & Luxury Scents 🌸',
- occ_title:'A Gift for Every Occasion 🎁',occ_1:'Birthdays',occ_1_t:'Designed to be an exceptional gift carrying the deepest emotions, giving every moment warmth that touches the heart.',occ_2:'Weddings, Engagements & Births',occ_2_t:'Because details are the secret of beauty, we created romantic arrangements and elegant touches that add exceptional magic to your day.',occ_3:'Home Corner',occ_3_t:'A small corner... yet capable of changing the feeling of the entire space; warmth that embraces details, and scent that refreshes the soul.',occ_4:'Gift Boxes',occ_4_t:'Because an elegant gift starts with details, we carefully arrange our boxes to embody your taste.',
- feat_title:'Why VelaLight?',f1:'Delivery to All Governorates',f1_t:'We deliver your order wherever you are in Egypt, with safe wrapping that protects your candle.',f2:'100% Natural Ingredients',f2_t:'Pure natural wax and natural wood and cotton wicks, safe for your health and home.',f3:'Handmade with Care',f3_t:'Behind every piece are hours of care and craftsmanship, handmade and wrapped with precision.',f4:'Luxury Wrapping',f4_t:'Every candle is carefully wrapped in an elegant arrangement reflecting its beauty, arriving ready for gifting.',f5:'Exchange Guarantee',f5_t:'We are confident you will fall in love with the product. If not fully satisfied, we will exchange it.',f6:'Ongoing Customer Support',f6_t:'Confused about what to choose? Leave it to us. We will recommend the perfect gift and scent.',
+ occ_title:'A Gift for Every Occasion 🎁',occ_1:'Birthdays',occ_1_t:'Designed to be an exceptional gift carrying the deepest emotions, giving every moment warmth that touches the heart.',occ_2:'Weddings, Engagements & Births',occ_2_t:'Because details are the secret of beauty, we created romantic arrangements that add exceptional magic to your day.',occ_3:'Home Corner',occ_3_t:'A small corner... yet capable of changing the feeling of the entire space; warmth that embraces details.',occ_4:'Gift Boxes',occ_4_t:'Because an elegant gift starts with details, we carefully arrange our boxes to embody your taste.',
+ feat_title:'Why VelaLight?',f1:'Delivery to All Governorates',f1_t:'We deliver your order wherever you are in Egypt, with safe wrapping that protects your candle.',f2:'100% Natural Ingredients',f2_t:'Pure natural wax and natural wood and cotton wicks, safe for your health and home.',f3:'Handmade with Care',f3_t:'Behind every piece are hours of care and craftsmanship, handmade and wrapped with precision.',f4:'Luxury Wrapping',f4_t:'Every candle is carefully wrapped in an elegant arrangement, arriving ready for gifting.',f5:'Exchange Guarantee',f5_t:'We are confident you will fall in love with the product. If not fully satisfied, we will exchange it.',f6:'Ongoing Customer Support',f6_t:'Confused about what to choose? Leave it to us. We will recommend the perfect gift and scent.',
  faq_title:'Frequently Asked Questions',rev_title:'Client Reviews',rev_sub:'Your trust is our most beautiful gift 🤎',
  footer_tag:'Luxury handmade candles - Signature scents - Custom gifts',f_links:'Quick Links',f_cats:'Candle Categories',f_pay:'Payment & Shipping',
  f_pay_note:'Important note: product value is prepaid via InstaPay, while shipping fees are paid in cash to the courier upon receiving your order.',
@@ -805,22 +812,33 @@ const FAQ=[
  {q:{ar:'طرق الدفع المتاحة إيه؟',en:'What payment methods are available?'},a:{ar:'قيمة المنتجات تُدفع InstaPay مقدمًا، وتكلفة الشحن فقط تُدفع كاش لمندوب الشحن عند الاستلام.',en:'Product value is paid in advance via InstaPay; shipping cost only is paid cash to the courier on delivery.'}},
  {q:{ar:'هل ينفع استبدال المنتج لو مش عاجبني؟',en:'Can I exchange the product?'},a:{ar:'أيوه، عندنا سياسة استبدال خلال 3 أيام من الاستلام بشرط أن المنتج لم يُستخدم.',en:'Yes, we offer a 3-day exchange policy from the date of receipt, provided the product is unused.'}},
  {q:{ar:'مدة اشتعال الشمعة قد إيه؟',en:'How long does a candle burn?'},a:{ar:'حسب حجم الشمعة، بتتراوح بين 72 إلى 96 ساعة اشتعال متواصل.',en:'Depending on candle size, burn time ranges from 72 to 96 continuous hours.'}},
- {q:{ar:'الشموع آمنة على الأطفال والحيوانات الأليفة؟',en:'Are the candles safe around children and pets?'},a:{ar:'الشموع مصنوعة من شمع طبيعي وفتيلة خشب طبيعي وفتيلة قطنية، وننصح دائمًا بعدم تركها مشتعلة بدون إشراف.',en:'Our candles are made from natural wax with wood or cotton wicks. We always recommend never leaving a lit candle unattended.'}},
+ {q:{ar:'الشموع آمنة على الأطفال والحيوانات الأليفة؟',en:'Are the candles safe around children and pets?'},a:{ar:'الشموع مصنوعة من شمع طبيعي وفتيلة خشب طبيعي وفتيلة قطنية، وننصح دائمًا بعدم تركها مشتعلة بدون إشراف.',en:'Our candles are made from natural wax with wood or cotton wicks. Never leave a lit candle unattended.'}},
  {q:{ar:'بتوصلوا لكل المحافظات؟',en:'Do you deliver to all governorates?'},a:{ar:'أيوه، بنوصل لكل محافظات مصر عن طريق شركات شحن موثوقة.',en:'Yes, we deliver to every governorate in Egypt through trusted shipping companies.'}}];
 
 let lang=LS.get('vl_lang','ar');
 let cart=LS.get('vl_cart',[]);
 let user=LS.get('vl_user',null);
-let activeCat='all',searchQ='',qvId=null,gvIndex=0;
+let activeCat='all',searchQ='',qvId=null,gvIndex=0,qvScent=-1;
 const t=k=>I18N[lang][k];
 const P=id=>PRODUCTS.find(p=>p.id===id);
 const catName=c=>t('cat_'+c);
 const L=(p,f)=>lang==='ar'?p[f+'_ar']:p[f+'_en'];
+const scentName=i=>{const s=SCENTS[i];return s?(lang==='ar'?s.ar:s.en):'';};
+
+function scentOptions(selected,placeholder=true){
+  let html=placeholder?`<option value="" disabled ${selected==null||selected<0?'selected':''}>${lang==='ar'?'— اختار العطر 🌸 —':'— Choose a scent 🌸 —'}</option>`:'';
+  for(const g in SCENT_GROUPS){
+    html+=`<optgroup label="${SCENT_GROUPS[g][lang]}">`;
+    SCENTS.forEach((s,i)=>{if(s.g===g)html+=`<option value="${i}" ${selected===i?'selected':''}>${lang==='ar'?s.ar:s.en}</option>`;});
+    html+='</optgroup>';
+  }
+  return html;
+}
 
 function applyLang(){
   document.documentElement.lang=lang==='ar'?'ar':'en';
   document.documentElement.dir=lang==='ar'?'rtl':'ltr';
-  document.title=lang==='ar'?'VelaLight | شموع يدوية فاخرة':'VelaLight | Luxury Handmade Candles';
+  document.title=lang==='ar'?'VelaLight | شموع يدوية فاخرة بعطور مميزة':'VelaLight | Luxury Handmade Candles';
   $$('[data-i18n]').forEach(el=>{const v=t(el.dataset.i18n);if(typeof v==='string')el.innerHTML=v;});
   $$('[data-i18n-html]').forEach(el=>el.innerHTML=t(el.dataset.i18nHtml));
   $$('[data-i18n-ph]').forEach(el=>el.placeholder=t(el.dataset.i18nPh));
@@ -847,18 +865,15 @@ function cardHTML(p){
   return `<article class="card reveal in" data-id="${p.id}">
     <div class="card-media">
       ${badge}
-      <img loading="lazy" src="${p.images[0]}" alt="${L(p,'name')} - VelaLight" data-qv="${p.id}">
-      <div class="card-actions">
-        <button class="qv-open" data-qv="${p.id}">${t('quick_view')}</button>
-        <button data-buy="${p.id}">${t('buy_now')}</button>
-      </div>
+      <img loading="lazy" src="${p.images[0]}" alt="${L(p,'name')} - شمعة يدوية فاخرة من VelaLight" data-qv="${p.id}">
+      <div class="card-actions"><button data-qv="${p.id}">${t('view_product')}</button></div>
     </div>
     <div class="card-body">
       <span class="card-cat">${catName(p.cat)}</span>
       <h3 class="card-name" data-qv="${p.id}">${L(p,'name')}</h3>
       <div class="card-foot">
         <div class="price">${t('cur')(p.price)}${p.old?`<s>${t('cur')(p.old)}</s>`:''}</div>
-        <button class="btn-add" data-add="${p.id}" aria-label="${t('add_cart')}"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button class="btn-add" data-qv="${p.id}" aria-label="${t('view_product')}"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
       </div>
     </div>
   </article>`;
@@ -875,11 +890,22 @@ function renderProducts(){
 function renderFAQ(){
   $('#faqList').innerHTML=FAQ.map(f=>`<div class="faq-item"><button class="faq-q" aria-expanded="false"><span>${f.q[lang]}</span><span class="pl">+</span></button><div class="faq-a"><p>${f.a[lang]}</p></div></div>`).join('');
 }
+
+/* ===== السلة مع العطر ===== */
 function saveCart(){LS.set('vl_cart',cart);updateCartUI();}
-function addToCart(id,qty=1){
-  const it=cart.find(i=>i.id===id);
-  it?it.qty+=qty:cart.push({id,qty});
+function addToCart(id,qty=1,scent){
+  if(scent==null||scent<0){toast(t('select_scent_first'));return;}
+  const existing=cart.find(i=>i.id===id && i.scent===scent);
+  if(existing)existing.qty+=qty;
+  else cart.push({id,qty,scent});
   saveCart();toast(t('toast_add'));
+}
+function changeCartScent(idx,newScent){
+  const item=cart[idx];if(!item)return;
+  const dup=cart.findIndex((i,ix)=>ix!==idx && i.id===item.id && i.scent===newScent);
+  if(dup>-1){cart[dup].qty+=item.qty;cart.splice(idx,1);}
+  else item.scent=newScent;
+  saveCart();
 }
 function updateCartUI(){
   const n=cart.reduce((s,i)=>s+i.qty,0);
@@ -888,14 +914,15 @@ function updateCartUI(){
   if(!cart.length){
     box.innerHTML=`<div class="cart-empty"><div class="big">🕯️</div><b>${t('cart_empty')}</b><p style="font-size:.85rem;margin:6px 0 16px">${t('cart_empty_sub')}</p><a href="#products" class="btn btn-gold" data-closecart>${t('cart_shop')}</a></div>`;
   }else{
-    box.innerHTML=cart.map(i=>{const p=P(i.id);return `
+    box.innerHTML=cart.map((item,idx)=>{const p=P(item.id);return `
       <div class="ci">
         <img src="${p.images[0]}" alt="${L(p,'name')}">
         <div class="ci-info">
           <h4>${L(p,'name')}</h4>
-          <div class="p">${t('cur')(p.price*i.qty)}</div>
-          <div class="ci-qty"><button data-dec="${i.id}">−</button><b>${i.qty}</b><button data-inc="${i.id}">+</button></div>
-          <button class="ci-rm" data-rm="${i.id}">${lang==='ar'?'حذف':'Remove'}</button>
+          <div class="ci-scent">🌸 <select data-cs="${idx}" aria-label="${t('choose_scent')}">${scentOptions(item.scent,false)}</select></div>
+          <div class="p">${t('cur')(p.price*item.qty)}</div>
+          <div class="ci-qty"><button data-dec="${idx}">−</button><b>${item.qty}</b><button data-inc="${idx}">+</button></div>
+          <button class="ci-rm" data-rm="${idx}">${lang==='ar'?'حذف':'Remove'}</button>
         </div>
       </div>`;}).join('');
   }
@@ -910,9 +937,10 @@ function openCart(){$('#cartDrawer').classList.add('open');$('#cartOverlay').cla
 function closeCart(){$('#cartDrawer').classList.remove('open');$('#cartOverlay').classList.remove('show');document.body.style.overflow='';}
 function checkout(){
   if(!cart.length)return;
+  for(const item of cart){if(item.scent==null||item.scent<0){toast(t('select_scent_first'));return;}}
   const sub=cart.reduce((s,i)=>s+P(i.id).price*i.qty,0);
   const add=($('#addWrap').checked?50:0)+($('#addCard').checked?25:0);
-  const lines=cart.map(i=>{const p=P(i.id);return `• ${L(p,'name')} × ${i.qty} — ${t('cur')(p.price*i.qty)}`;}).join('\n');
+  const lines=cart.map(item=>{const p=P(item.id);return `• ${L(p,'name')}\n   ${t('scent_word')}: ${scentName(item.scent)} × ${item.qty} — ${t('cur')(p.price*item.qty)}`;}).join('\n');
   let msg=t('wa_order')(lines).replace('{sub}',t('cur')(sub)).replace('{add}',t('cur')(add)).replace('{tot}',t('cur')(sub+add))
     .replace('{name}',$('#cName').value||'-').replace('{phone}',$('#cPhone').value||'-').replace('{addr}',$('#cAddr').value||'-');
   if($('#addWrap').checked)msg+='\n+ '+(lang==='ar'?'تغليف هدايا فاخر':'Luxury gift wrapping');
@@ -921,53 +949,67 @@ function checkout(){
   user=Object.assign({},user,{orders:(user?.orders||0)+1});LS.set('vl_user',user);
   toast(t('toast_wa'));
 }
-function buyNow(id){
-  const p=P(id);
-  const msg=(lang==='ar'?`🕯️ عايزة أطلب من VelaLight:\n• ${p.name_ar} — ${t('cur')(p.price)}`:`🕯️ I would like to order from VelaLight:\n• ${p.name_en} — ${t('cur')(p.price)}`);
+function buyNowScent(p,qty,scent){
+  const msg=lang==='ar'
+    ?`🕯️ عايزة أطلب من VelaLight:\n• ${p.name_ar}\n🌸 ${t('scent_word')}: ${scentName(scent)}\nالكمية: ${qty}\nالسعر: ${t('cur')(p.price*qty)}`
+    :`🕯️ I'd like to order from VelaLight:\n• ${p.name_en}\n🌸 ${t('scent_word')}: ${scentName(scent)}\nQty: ${qty}\nPrice: ${t('cur')(p.price*qty)}`;
   window.open('https://wa.me/201223526105?text='+encodeURIComponent(msg),'_blank');
 }
+
+/* ===== صفحة تفاصيل المنتج ===== */
 function renderQuick(id,keep=false){
   const p=P(id);if(!p)return;qvId=id;
-  if(!keep)gvIndex=0;
+  if(!keep){gvIndex=0;qvScent=-1;}
   $('#qvContent').innerHTML=`
-   <div class="qv-info">
-     <span class="qv-cat">${catName(p.cat)}</span>
-     <h2 class="qv-name">${L(p,'name')}</h2>
-     <div class="qv-price">${t('cur')(p.price)}${p.old?`<s>${t('cur')(p.old)}</s>`:''}</div>
-     <p class="qv-desc">${L(p,'desc')}</p>
-     <table class="spec-table">
-       <tr><td>${t('spec_burn')}</td><td>72-96 ${t('hours')}</td></tr>
-       <tr><td>${t('spec_weight')}</td><td>300 ${lang==='ar'?'جم':'g'}</td></tr>
-       <tr><td>${t('spec_cat')}</td><td>${catName(p.cat)}</td></tr>
-     </table>
-     <div class="qv-qty">
-       <div class="stepper"><button id="qvDec">−</button><b id="qvQty">1</b><button id="qvInc">+</button></div>
-     </div>
-     <div class="qv-btns">
-       <button class="btn btn-dark" id="qvAdd">${t('add_cart')}</button>
-       <button class="btn btn-gold" id="qvBuy">${t('buy_now')}</button>
-     </div>
-     <div class="qv-share"><span>${t('share')}</span>
-       <button data-share="wa" aria-label="WhatsApp">💬</button>
-       <button data-share="fb" aria-label="Facebook">ⓕ</button>
-       <button data-share="copy" aria-label="Copy link">🔗</button>
-     </div>
-   </div>
    <div class="qv-gallery" dir="ltr">
      <div class="gv-viewport" id="gvViewport">
-       <div class="gv-track" id="gvTrack">${p.images.map((s,i)=>`<div class="gv-slide"><img src="${s}" alt="${L(p,'name')} — ${i+1}" draggable="false"></div>`).join('')}</div>
+       <div class="gv-track" id="gvTrack">${p.images.map((s,i)=>`<div class="gv-slide"><img src="${s}" alt="${L(p,'name')} - صورة ${i+1}" draggable="false"></div>`).join('')}</div>
        ${p.images.length>1?`<button class="gv-nav gv-prev" id="gvPrev" aria-label="Previous">‹</button><button class="gv-nav gv-next" id="gvNext" aria-label="Next">›</button>`:''}
        ${p.images.length>1?`<div class="gv-count" id="gvCount"></div>`:''}
        <div class="gv-caption" id="gvCaption"></div>
      </div>
      ${p.images.length>1?`<div class="gv-thumbs" id="gvThumbs">${p.images.map((s,i)=>`<button data-th="${i}" class="${i===0?'active':''}"><img src="${s}" alt="thumb ${i+1}"></button>`).join('')}</div>`:''}
+   </div>
+   <div class="qv-info">
+     <span class="qv-cat">${catName(p.cat)}</span>
+     <h2 class="qv-name">${L(p,'name')}</h2>
+     <div class="qv-price">${t('cur')(p.price)}${p.old?`<s>${t('cur')(p.old)}</s>`:''}</div>
+     <p class="qv-desc">${L(p,'desc')}</p>
+     <div class="scent-select-wrap">
+       <label for="qvScent">🌸 ${t('choose_scent')} <span class="req">*</span></label>
+       <select id="qvScent" class="scent-select">${scentOptions(qvScent,true)}</select>
+     </div>
+     <table class="spec-table">
+       <tr><td>${t('spec_burn')}</td><td>72-96 ${t('hours')}</td></tr>
+       <tr><td>${t('spec_weight')}</td><td>300 ${lang==='ar'?'جم':'g'}</td></tr>
+       <tr><td>${t('spec_cat')}</td><td>${catName(p.cat)}</td></tr>
+     </table>
+     <div class="qv-share"><span>${t('share')}</span>
+       <button data-share="wa" aria-label="WhatsApp">💬</button>
+       <button data-share="fb" aria-label="Facebook">ⓕ</button>
+       <button data-share="copy" aria-label="Copy link">🔗</button>
+     </div>
+     <div class="qv-cta">
+       <div class="qv-qty"><div class="stepper"><button id="qvDec">−</button><b id="qvQty">1</b><button id="qvInc">+</button></div></div>
+       <div class="qv-btns">
+         <button class="btn btn-dark" id="qvAdd">${t('add_cart')}</button>
+         <button class="btn btn-gold" id="qvBuy">${t('buy_now')}</button>
+       </div>
+     </div>
    </div>`;
   bindGallery(p);
   let qty=1;
   $('#qvInc').onclick=()=>{qty++;$('#qvQty').textContent=qty;};
   $('#qvDec').onclick=()=>{qty=Math.max(1,--qty);$('#qvQty').textContent=qty;};
-  $('#qvAdd').onclick=()=>addToCart(p.id,qty);
-  $('#qvBuy').onclick=()=>buyNow(p.id);
+  $('#qvScent').onchange=e=>{qvScent=parseInt(e.target.value);e.target.classList.remove('error');};
+  $('#qvAdd').onclick=()=>{
+    if(qvScent<0){const s=$('#qvScent');s.classList.add('error');s.focus();toast(t('select_scent_first'));return;}
+    addToCart(p.id,qty,qvScent);
+  };
+  $('#qvBuy').onclick=()=>{
+    if(qvScent<0){const s=$('#qvScent');s.classList.add('error');s.focus();toast(t('select_scent_first'));return;}
+    buyNowScent(p,qty,qvScent);
+  };
   $$('[data-share]').forEach(b=>b.onclick=()=>{
     const u=location.href.split('#')[0]+`?product=${p.id}`;
     const txt=encodeURIComponent(`${L(p,'name')} — VelaLight 🕯️`);
@@ -1018,14 +1060,12 @@ let toastT;
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2400);}
 
 document.addEventListener('click',e=>{
-  const el=e.target.closest('[data-add],[data-qv],[data-buy],[data-inc],[data-dec],[data-rm],[data-cat],[data-catlink],[data-close],[data-closecart],.faq-q,[data-bride]');
+  const el=e.target.closest('[data-qv],[data-inc],[data-dec],[data-rm],[data-catlink],[data-close],[data-closecart],.faq-q');
   if(!el)return;
-  if(el.dataset.add)addToCart(+el.dataset.add,1);
   if(el.dataset.qv)openQuick(+el.dataset.qv);
-  if(el.dataset.buy)buyNow(+el.dataset.buy);
-  if(el.dataset.inc){const it=cart.find(i=>i.id===+el.dataset.inc);if(it){it.qty++;saveCart();}}
-  if(el.dataset.dec){const it=cart.find(i=>i.id===+el.dataset.dec);if(it){it.qty>1?it.qty--:cart=cart.filter(i=>i!==it);saveCart();}}
-  if(el.dataset.rm){cart=cart.filter(i=>i.id!==+el.dataset.rm);saveCart();toast(t('toast_rm'));}
+  if(el.dataset.inc){cart[+el.dataset.inc].qty++;saveCart();}
+  if(el.dataset.dec){const it=cart[+el.dataset.dec];it.qty>1?it.qty--:cart.splice(+el.dataset.dec,1);saveCart();}
+  if(el.dataset.rm){cart.splice(+el.dataset.rm,1);saveCart();toast(t('toast_rm'));}
   if(el.dataset.catlink){activeCat=el.dataset.catlink;searchQ='';$('#searchInput').value='';renderProducts();}
   if(el.hasAttribute('data-close'))closeModals();
   if(el.hasAttribute('data-closecart'))closeCart();
@@ -1034,6 +1074,9 @@ document.addEventListener('click',e=>{
     $$('.faq-item').forEach(f=>{f.classList.remove('open');f.querySelector('.faq-a').style.maxHeight=null;});
     if(!open){item.classList.add('open');const a=item.querySelector('.faq-a');a.style.maxHeight=a.scrollHeight+'px';}
   }
+});
+document.addEventListener('change',e=>{
+  if(e.target.matches('[data-cs]'))changeCartScent(+e.target.dataset.cs,parseInt(e.target.value));
 });
 
 $('#btnSearch').onclick=()=>{$('#searchOverlay').classList.add('open');setTimeout(()=>$('#searchInput').focus(),120);};
@@ -1079,6 +1122,16 @@ window.addEventListener('scroll',()=>{
 $('#backTop').onclick=()=>scrollTo({top:0,behavior:'smooth'});
 const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}}),{threshold:.12});
 function observeReveals(){$$('.reveal:not(.in)').forEach(el=>io.observe(el));}
+
+/* ===== SEO: بيانات منظمة إضافية لجوجل ===== */
+function injectSEO(){
+  try{
+    const add=o=>{const s=document.createElement('script');s.type='application/ld+json';s.textContent=JSON.stringify(o);document.head.appendChild(s);};
+    add({"@context":"https://schema.org","@type":"FAQPage","mainEntity":FAQ.map(f=>({"@type":"Question","name":f.q.ar,"acceptedAnswer":{"@type":"Answer","text":f.a.ar}}))});
+    add({"@context":"https://schema.org","@type":"ItemList","itemListElement":PRODUCTS.map((p,i)=>({"@type":"ListItem","position":i+1,"name":p.name_ar,"image":p.images[0],"url":location.href.split('#')[0]+'?product='+p.id}))});
+  }catch(e){}
+}
+injectSEO();
 applyLang();
 observeReveals();
 updateCartUI();
