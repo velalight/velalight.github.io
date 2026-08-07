@@ -4,11 +4,52 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <meta name="theme-color" content="#a07d4a">
-<title>VelaLight | شموع يدوية فاخرة بعطور مميزة</title>
-<meta name="description" content="VelaLight — شموع يدوية فاخرة بعطور مميزة، هدايا حسب الطلب، توصيل لكل مصر.">
+<title id="pageTitle">VelaLight | شموع يدوية فاخرة بعطور مميزة وهدايا فخمة | توصيل لكل مصر</title>
+<meta id="metaDesc" name="description" content="VelaLight — شموع يدوية فاخرة بعطور فرنسية مميزة، بوكسات هدايا للعروسة والمناسبات، خامات طبيعية 100%، صناعة يدوية بعناية، وتوصيل سريع لكل محافظات مصر.">
+<meta id="metaKeywords" name="keywords" content="شموع فاخرة, شموع يدوية, شموع معطرة, هدايا مصر, بوكس عروسة, شموع مساج, VelaLight, luxury candles Egypt, handmade candles, scented candles, wedding gifts">
+<meta name="author" content="VelaLight">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://velalight.github.io/">
+<link rel="alternate" hreflang="ar" href="https://velalight.github.io/">
+<link rel="alternate" hreflang="en" href="https://velalight.github.io/">
+<link rel="alternate" hreflang="x-default" href="https://velalight.github.io/">
+<link rel="icon" href="https://velalight.github.io/favicon.ico">
+
+<!-- Open Graph -->
+<meta id="ogTitle" property="og:title" content="VelaLight | شموع يدوية فاخرة بعطور مميزة">
+<meta id="ogDesc" property="og:description" content="شموع يدوية فاخرة بعطور فرنسية مميزة، بوكسات هدايا للعروسة والمناسبات، وتوصيل سريع لكل محافظات مصر.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://velalight.github.io/">
+<meta property="og:image" content="https://velalight.github.io/RR.jpg">
+<meta id="ogLocale" property="og:locale" content="ar_EG">
+<meta property="og:site_name" content="VelaLight">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta id="twTitle" name="twitter:title" content="VelaLight | شموع يدوية فاخرة">
+<meta id="twDesc" name="twitter:description" content="شموع يدوية فاخرة بعطور مميزة وهدايا حسب الطلب — توصيل لكل مصر.">
+<meta name="twitter:image" content="https://velalight.github.io/RR.jpg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Amiri:wght@400;700&family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Store",
+  "name":"VelaLight",
+  "description":"شموع يدوية فاخرة بعطور مميزة، هدايا حسب الطلب، توصيل لكل محافظات مصر.",
+  "url":"https://velalight.github.io/",
+  "image":"https://velalight.github.io/RR.jpg",
+  "priceRange":"250-1500 EGP",
+  "areaServed":{"@type":"Country","name":"Egypt"},
+  "sameAs":[
+    "https://www.facebook.com/VelaLight/",
+    "https://www.instagram.com/velaa_lighttt",
+    "https://www.tiktok.com/@vela.light0"
+  ]
+}
+</script>
 <style>
 /* ============================================================
    VelaLight — Luxury Design System v2
@@ -148,6 +189,36 @@ html[dir="ltr"] .mobile-menu{--mx:-105%}
   .hero{height:min(64vh,520px);min-height:380px}
   .hero-content{padding-bottom:48px}
 }
+
+/* ===== Hero Magic Candle ===== */
+.hero-candle{position:absolute;z-index:2;pointer-events:none;left:50%;bottom:clamp(18px,4vw,40px);transform:translateX(-50%);width:clamp(58px,7vw,86px);filter:drop-shadow(0 10px 26px rgba(0,0,0,.35))}
+.hero-candle svg{width:100%;height:auto;overflow:visible}
+.hc-glow{animation:hcGlowPulse 2.6s ease-in-out infinite}
+@keyframes hcGlowPulse{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.85;transform:scale(1.12)}}
+.hc-flame-outer{transform-origin:50% 100%;animation:hcFlicker 2.4s ease-in-out infinite}
+.hc-flame-inner{transform-origin:50% 100%;animation:hcFlicker 2.4s ease-in-out infinite .15s}
+@keyframes hcFlicker{
+  0%,100%{transform:scaleY(1) scaleX(1) rotate(0deg)}
+  20%{transform:scaleY(1.06) scaleX(.96) rotate(-1.5deg)}
+  40%{transform:scaleY(.94) scaleX(1.04) rotate(1.2deg)}
+  60%{transform:scaleY(1.08) scaleX(.94) rotate(-1deg)}
+  80%{transform:scaleY(.97) scaleX(1.02) rotate(1.6deg)}
+}
+.hc-spark{opacity:0;animation:hcSpark 3.2s ease-in infinite}
+.hc-spark:nth-child(1){animation-delay:.2s}
+.hc-spark:nth-child(2){animation-delay:1.3s}
+.hc-spark:nth-child(3){animation-delay:2.2s}
+.hc-spark:nth-child(4){animation-delay:.8s}
+@keyframes hcSpark{
+  0%{opacity:0;transform:translate(0,0) scale(.4)}
+  12%{opacity:1}
+  75%{opacity:.5}
+  100%{opacity:0;transform:translate(var(--sx,10px),-70px) scale(1)}
+}
+@media (prefers-reduced-motion:reduce){
+  .hc-glow,.hc-flame-outer,.hc-flame-inner,.hc-spark{animation:none!important}
+}
+@media (max-width:768px){.hero-candle{display:none}}
 
 /* ===== Products grid ===== */
 .results-info{text-align:center;color:var(--ink-faint);font-size:.9rem;margin-bottom:20px;min-height:1.4em;font-weight:300}
@@ -463,12 +534,6 @@ html,body{overflow-x:hidden!important;width:100%}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 @keyframes pulse{50%{transform:translate(-50%,-4px) scale(1.08)}}
 </style>
-<script>
-document.addEventListener('DOMContentLoaded',()=>{
-let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documentElement.lang==='ar'?'مساعدك الذكي':'AI Assistant';
-});
-</script>
-
 </head>
 <body>
 
@@ -478,32 +543,32 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
 </div>
 
 <div class="topbar">
-  <div class="topbar-track">
-    <span>توصيل سريع لكل محافظات مصر خلال 3-7 أيام عمل • خصومات تصل إلى <b>25%</b> على تشكيلة مختارة • تغليف هدايا فاخر مجانًا مع كل طلب • ضمان استبدال خلال 3 أيام من الاستلام</span>
-    <span>توصيل سريع لكل محافظات مصر خلال 3-7 أيام عمل • خصومات تصل إلى <b>25%</b> على تشكيلة مختارة • تغليف هدايا فاخر مجانًا مع كل طلب • ضمان استبدال خلال 3 أيام من الاستلام</span>
+  <div class="topbar-track" id="topbarTrack">
+    <span data-i18n-html="topbar_msg">توصيل سريع لكل محافظات مصر خلال 3-7 أيام عمل • خصومات تصل إلى <b>25%</b> على تشكيلة مختارة • تغليف هدايا فاخر مجانًا مع كل طلب • ضمان استبدال خلال 3 أيام من الاستلام</span>
+    <span data-i18n-html="topbar_msg" aria-hidden="true">توصيل سريع لكل محافظات مصر خلال 3-7 أيام عمل • خصومات تصل إلى <b>25%</b> على تشكيلة مختارة • تغليف هدايا فاخر مجانًا مع كل طلب • ضمان استبدال خلال 3 أيام من الاستلام</span>
   </div>
 </div>
 
 <header id="header">
   <div class="container header-in">
     <nav class="main-nav" aria-label="Main">
-      <a href="index.html">الرئيسية</a>
+      <a href="index.html" data-i18n="nav_home">الرئيسية</a>
       <div class="nav-drop">
-        <a href="#products">تسوق <span class="caret">▾</span></a>
+        <a href="#products"><span data-i18n="nav_shop">تسوق</span> <span class="caret">▾</span></a>
         <div class="nav-drop-menu">
-          <a href="#products" data-catlink="all">كل الشموع</a>
-          <a href="#products" data-catlink="wood">شموع خشبية</a>
-          <a href="#products" data-catlink="glass">شموع زجاجية</a>
-          <a href="#products" data-catlink="crystal">شموع كريستالية</a>
-          <a href="#products" data-catlink="metal">شموع معدنية</a>
-          <a href="#products" data-catlink="massage">شموع المساج</a>
-          <a href="#products" data-catlink="gift">الهدايا</a>
-          <a href="#products" data-catlink="bride">بوكس العروسة</a>
+          <a href="#products" data-catlink="all" data-i18n="cat_all">كل الشموع</a>
+          <a href="#products" data-catlink="wood" data-i18n="cat_wood">شموع خشبية</a>
+          <a href="#products" data-catlink="glass" data-i18n="cat_glass">شموع زجاجية</a>
+          <a href="#products" data-catlink="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
+          <a href="#products" data-catlink="metal" data-i18n="cat_metal">شموع معدنية</a>
+          <a href="#products" data-catlink="massage" data-i18n="cat_massage">شموع المساج</a>
+          <a href="#products" data-catlink="gift" data-i18n="cat_gift">الهدايا</a>
+          <a href="#products" data-catlink="bride" data-i18n="cat_bride">بوكس العروسة</a>
         </div>
       </div>
-      <a href="#about-us">من نحن</a>
-      <a href="#faq-section">الأسئلة الشائعة</a>
-      <a href="contact.html">تواصل معنا</a>
+      <a href="#about-us" data-i18n="nav_about">من نحن</a>
+      <a href="#faq-section" data-i18n="nav_faq">الأسئلة الشائعة</a>
+      <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
     </nav>
     <div class="logo-wrap">
       <a href="index.html" aria-label="VelaLight">
@@ -512,14 +577,14 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
       </a>
     </div>
     <div class="header-icons">
-      <button class="icon-btn" id="btnSearch" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+      <button class="icon-btn" id="btnSearch" data-i18n-aria="aria_search" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
       <button class="icon-btn" id="btnLang" aria-label="Language">EN</button>
-      <button class="icon-btn" id="btnAccount" aria-label="Account"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg></button>
-      <button class="icon-btn" id="btnCart" aria-label="Cart">
+      <button class="icon-btn" id="btnAccount" data-i18n-aria="aria_account" aria-label="Account"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg></button>
+      <button class="icon-btn" id="btnCart" data-i18n-aria="aria_cart" aria-label="Cart">
         <svg viewBox="0 0 24 24"><path d="M6 7h12l1.5 12.5a1 1 0 0 1-1 1.1H5.5a1 1 0 0 1-1-1.1L6 7Z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
         <span id="cartCount">0</span>
       </button>
-      <button class="icon-btn" id="burger" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <button class="icon-btn" id="burger" data-i18n-aria="aria_menu" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
   </div>
 </header>
@@ -527,57 +592,92 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
 <div id="menuOverlay"></div>
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
   <div class="logo">VelaLight</div>
-  <a href="index.html">الرئيسية</a>
-  <div class="mm-label">تصنيفات الشموع</div>
-  <a href="#products" data-catlink="all">كل الشموع</a>
-  <a href="#products" data-catlink="wood">شموع خشبية</a>
-  <a href="#products" data-catlink="glass">شموع زجاجية</a>
-  <a href="#products" data-catlink="crystal">شموع كريستالية</a>
-  <a href="#products" data-catlink="metal">شموع معدنية</a>
-  <a href="#products" data-catlink="massage">شموع المساج</a>
-  <a href="#products" data-catlink="gift">الهدايا</a>
-  <a href="#products" data-catlink="bride">بوكس العروسة</a>
-  <div class="mm-label">اكتشف</div>
-  <a href="#about-us">من نحن</a>
-  <a href="#scents">العطور الفاخرة</a>
-  <a href="#occasions">المناسبات والهدايا</a>
-  <a href="#features">لماذا VelaLight؟</a>
-  <a href="#faq-section">الأسئلة الشائعة</a>
-  <a href="#reviews">آراء عملائنا</a>
-  <div class="mm-label">تواصل</div>
-  <a href="contact.html">تواصل معنا</a>
-  <a href="exchange-policy.html">سياسة الاستبدال</a>
-  <a href="privacy.html">سياسة الخصوصية</a>
+  <a href="index.html" data-i18n="nav_home">الرئيسية</a>
+  <div class="mm-label" data-i18n="mm_categories">تصنيفات الشموع</div>
+  <a href="#products" data-catlink="all" data-i18n="cat_all">كل الشموع</a>
+  <a href="#products" data-catlink="wood" data-i18n="cat_wood">شموع خشبية</a>
+  <a href="#products" data-catlink="glass" data-i18n="cat_glass">شموع زجاجية</a>
+  <a href="#products" data-catlink="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
+  <a href="#products" data-catlink="metal" data-i18n="cat_metal">شموع معدنية</a>
+  <a href="#products" data-catlink="massage" data-i18n="cat_massage">شموع المساج</a>
+  <a href="#products" data-catlink="gift" data-i18n="cat_gift">الهدايا</a>
+  <a href="#products" data-catlink="bride" data-i18n="cat_bride">بوكس العروسة</a>
+  <div class="mm-label" data-i18n="mm_discover">اكتشف</div>
+  <a href="#about-us" data-i18n="nav_about">من نحن</a>
+  <a href="#scents" data-i18n="nav_scents">العطور الفاخرة</a>
+  <a href="#occasions" data-i18n="nav_occasions">المناسبات والهدايا</a>
+  <a href="#features" data-i18n="nav_features">لماذا VelaLight؟</a>
+  <a href="#faq-section" data-i18n="nav_faq">الأسئلة الشائعة</a>
+  <a href="#reviews" data-i18n="nav_reviews">آراء عملائنا</a>
+  <div class="mm-label" data-i18n="mm_contact">تواصل</div>
+  <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
+  <a href="exchange-policy.html" data-i18n="nav_exchange">سياسة الاستبدال</a>
+  <a href="privacy.html" data-i18n="nav_privacy">سياسة الخصوصية</a>
 </nav>
 
 <div class="search-overlay" id="searchOverlay">
   <div class="search-box">
     <div class="search-field">
-      <input type="search" id="searchInput" placeholder="ابحثي عن شمع، عطر، مناسبة..." autocomplete="off">
-      <button id="searchClose" aria-label="Close">✕</button>
+      <input type="search" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="ابحثي عن شمع، عطر، مناسبة..." autocomplete="off">
+      <button id="searchClose" data-i18n-aria="aria_close" aria-label="Close">✕</button>
     </div>
-    <p class="search-hint">البحث يشمل: اسم المنتج، الوصف، الكاتيجوري — بالعربي والإنجليزي.</p>
+    <p class="search-hint" data-i18n="search_hint">البحث يشمل: اسم المنتج، الوصف، الكاتيجوري — بالعربي والإنجليزي.</p>
   </div>
 </div>
 
 <!-- ===== Hero: RR.jpg ===== -->
 <section class="hero">
-  <img src="https://velalight.github.io/RR.jpg" alt="مجموعة شموع VelaLight الفاخرة" class="hero-bg" loading="eager">
+  <img src="https://velalight.github.io/RR.jpg" data-i18n-alt="hero_img_alt" alt="مجموعة شموع VelaLight الفاخرة" class="hero-bg" loading="eager">
   <div class="hero-overlay"></div>
+  <div class="hero-candle" aria-hidden="true">
+    <svg viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="hcGlowGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffdca3" stop-opacity=".85"/>
+          <stop offset="55%" stop-color="#e8b45f" stop-opacity=".3"/>
+          <stop offset="100%" stop-color="#e8b45f" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="hcFlameOuter" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="#ff8a3d"/>
+          <stop offset="45%" stop-color="#ffb347"/>
+          <stop offset="100%" stop-color="#fff3c4"/>
+        </linearGradient>
+        <linearGradient id="hcFlameInner" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="#fff3c4"/>
+          <stop offset="100%" stop-color="#ffffff"/>
+        </linearGradient>
+        <linearGradient id="hcWax" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#f3e6c9"/>
+          <stop offset="50%" stop-color="#fffaf0"/>
+          <stop offset="100%" stop-color="#e6d3a8"/>
+        </linearGradient>
+      </defs>
+      <ellipse class="hc-spark" cx="50" cy="60" r="2.2" fill="#ffdca3" style="--sx:14px"/>
+      <ellipse class="hc-spark" cx="50" cy="58" r="1.6" fill="#fff3c4" style="--sx:-16px"/>
+      <ellipse class="hc-spark" cx="50" cy="62" r="1.8" fill="#ffb347" style="--sx:6px"/>
+      <ellipse class="hc-spark" cx="50" cy="59" r="1.3" fill="#ffdca3" style="--sx:-8px"/>
+      <circle class="hc-glow" cx="50" cy="52" r="34" fill="url(#hcGlowGrad)"/>
+      <rect x="34" y="78" width="32" height="98" rx="6" fill="url(#hcWax)"/>
+      <ellipse cx="50" cy="78" rx="16" ry="5" fill="#fdf6e6"/>
+      <line x1="50" y1="70" x2="50" y2="80" stroke="#3a2e1f" stroke-width="1.6" stroke-linecap="round"/>
+      <path class="hc-flame-outer" d="M50 34c8 12 11 20 8 29-1.8 5.6-6.6 9-8 9s-6.2-3.4-8-9c-3-9 0-17 8-29z" fill="url(#hcFlameOuter)"/>
+      <path class="hc-flame-inner" d="M50 46c4 7 5.4 11.5 4 16.5-1 3.3-3 5-4 5s-3-1.7-4-5c-1.4-5 0-9.5 4-16.5z" fill="url(#hcFlameInner)"/>
+    </svg>
+  </div>
   <div class="hero-content container">
     <div class="hero-kicker">VelaLight</div>
-    <h1>ضوء يُحكى… <em>وبريق يليق بكِ</em></h1>
+    <h1 data-i18n-html="hero_title">ضوء يُحكى… <em>وبريق يليق بكِ</em></h1>
     <div class="gold-line hero-line"></div>
   </div>
-  <div class="hero-scroll">اكتشفي</div>
+  <div class="hero-scroll" data-i18n="hero_scroll">اكتشفي</div>
 </section>
 
 <!-- ===== Products (مرفوع) ===== -->
 <section class="section" id="products" style="padding-top:clamp(40px,6vw,64px)">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">The Collection</span>
-      <h2>اختار قطعتك المفضلة</h2>
+      <span class="kicker" data-i18n="kicker_collection">The Collection</span>
+      <h2 data-i18n="products_title">اختار قطعتك المفضلة</h2>
       <div class="gold-line"></div>
     </div>
     <div class="results-info" id="resultsInfo" aria-live="polite"></div>
@@ -590,19 +690,19 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
   <div class="container about-grid">
     <div class="about-txt reveal">
       <div class="section-head" style="text-align:start;margin-bottom:18px">
-        <span class="kicker">Our Story</span>
-        <h2>من نحن</h2>
+        <span class="kicker" data-i18n="kicker_story">Our Story</span>
+        <h2 data-i18n="about_title">من نحن</h2>
       </div>
-      <p>في VelaLight لا نصنع الشموع فقط، بل نصنع لحظات تستحق أن تُعاش. بدأت رحلتنا بشغف تجاه التفاصيل الصغيرة التي تجعل المكان أكثر دفئًا، والبيت أكثر راحة، واللحظات العادية أكثر جمالًا.</p>
-      <p>نصنع كل شمعة يدويًا بعناية، مستخدمين خامات مختارة وعطورًا فاخرة، لنقدم منتجًا يجمع بين الأناقة والجودة والإحساس الحقيقي. نؤمن أن الضوء الخافت قادر على تهدئة الروح، وأن العطر الجميل يستطيع أن يعيد أجمل الذكريات.</p>
+      <p data-i18n="about_p1">في VelaLight لا نصنع الشموع فقط، بل نصنع لحظات تستحق أن تُعاش. بدأت رحلتنا بشغف تجاه التفاصيل الصغيرة التي تجعل المكان أكثر دفئًا، والبيت أكثر راحة، واللحظات العادية أكثر جمالًا.</p>
+      <p data-i18n="about_p2">نصنع كل شمعة يدويًا بعناية، مستخدمين خامات مختارة وعطورًا فاخرة، لنقدم منتجًا يجمع بين الأناقة والجودة والإحساس الحقيقي. نؤمن أن الضوء الخافت قادر على تهدئة الروح، وأن العطر الجميل يستطيع أن يعيد أجمل الذكريات.</p>
       <div class="stats">
-        <div class="stat"><b>+500</b><span>عميلة سعيدة</span></div>
-        <div class="stat"><b>19</b><span>عطر مميز</span></div>
-        <div class="stat"><b>100%</b><span>صناعة يدوية</span></div>
+        <div class="stat"><b>+500</b><span data-i18n="stat_customers">عميلة سعيدة</span></div>
+        <div class="stat"><b>19</b><span data-i18n="stat_scents">عطر مميز</span></div>
+        <div class="stat"><b>100%</b><span data-i18n="stat_handmade">صناعة يدوية</span></div>
       </div>
     </div>
     <div class="about-visual reveal">
-      <img src="https://velalight.github.io/heart2.jpg" alt="شمعة نبضين من VelaLight" loading="lazy">
+      <img src="https://velalight.github.io/heart2.jpg" data-i18n-alt="about_img_alt" alt="شمعة نبضين من VelaLight" loading="lazy">
     </div>
   </div>
 </section>
@@ -611,10 +711,10 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
 <section class="section" id="scents">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">Signature Scents</span>
-      <h2>العطور الفاخرة</h2>
+      <span class="kicker" data-i18n="kicker_scents">Signature Scents</span>
+      <h2 data-i18n="scents_title">العطور الفاخرة</h2>
       <div class="gold-line"></div>
-      <p class="sub">كل العطور متاحة تختار منهم في أي منتج من منتجاتنا</p>
+      <p class="sub" data-i18n="scents_sub">كل العطور متاحة تختار منهم في أي منتج من منتجاتنا</p>
     </div>
     <div class="scent-groups reveal" id="scentGroups"></div>
   </div>
@@ -624,15 +724,15 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
 <section class="section" id="occasions" style="background:var(--bg-2)">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">Gifts &amp; Occasions</span>
-      <h2>هدية لكل مناسبة</h2>
+      <span class="kicker" data-i18n="kicker_occasions">Gifts &amp; Occasions</span>
+      <h2 data-i18n="occasions_title">هدية لكل مناسبة</h2>
       <div class="gold-line"></div>
     </div>
     <div class="occasions-grid reveal">
-      <div class="occasion-card"><div class="occasion-num">01</div><h3>أعياد الميلاد</h3><p>صُممت لتكون هدية استثنائية تحمل أعمق المشاعر، وتمنح كل لحظة دفئًا يلامس القلب.</p></div>
-      <div class="occasion-card"><div class="occasion-num">02</div><h3>الزفاف والخطوبة والولادة</h3><p>لأن التفاصيل هي سرّ الجمال، ابتكرنا توزيعات رومانسية ولمسات راقية تُضفي على يومك سحرًا استثنائيًا.</p></div>
-      <div class="occasion-card"><div class="occasion-num">03</div><h3>ركن المنزل</h3><p>ركنٌ صغير... لكنه كفيل بأن يغيّر شعور المكان بأكمله؛ دفءٌ يحتضن التفاصيل، وعطرٌ ينعش الروح.</p></div>
-      <div class="occasion-card"><div class="occasion-num">04</div><h3>بوكسات الهدايا</h3><p>لأن الهدية الراقية تبدأ من التفاصيل، نُنسّق بوكساتنا بعناية لتجسّد ذوقك.</p></div>
+      <div class="occasion-card"><div class="occasion-num">01</div><h3 data-i18n="occ1_h">أعياد الميلاد</h3><p data-i18n="occ1_p">صُممت لتكون هدية استثنائية تحمل أعمق المشاعر، وتمنح كل لحظة دفئًا يلامس القلب.</p></div>
+      <div class="occasion-card"><div class="occasion-num">02</div><h3 data-i18n="occ2_h">الزفاف والخطوبة والولادة</h3><p data-i18n="occ2_p">لأن التفاصيل هي سرّ الجمال، ابتكرنا توزيعات رومانسية ولمسات راقية تُضفي على يومك سحرًا استثنائيًا.</p></div>
+      <div class="occasion-card"><div class="occasion-num">03</div><h3 data-i18n="occ3_h">ركن المنزل</h3><p data-i18n="occ3_p">ركنٌ صغير... لكنه كفيل بأن يغيّر شعور المكان بأكمله؛ دفءٌ يحتضن التفاصيل، وعطرٌ ينعش الروح.</p></div>
+      <div class="occasion-card"><div class="occasion-num">04</div><h3 data-i18n="occ4_h">بوكسات الهدايا</h3><p data-i18n="occ4_p">لأن الهدية الراقية تبدأ من التفاصيل، نُنسّق بوكساتنا بعناية لتجسّد ذوقك.</p></div>
     </div>
   </div>
 </section>
@@ -641,17 +741,17 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
 <section class="section" id="features">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">Why VelaLight?</span>
-      <h2>لماذا VelaLight؟</h2>
+      <span class="kicker" data-i18n="kicker_why">Why VelaLight?</span>
+      <h2 data-i18n="features_title">لماذا VelaLight؟</h2>
       <div class="gold-line"></div>
     </div>
     <div class="features-grid reveal">
-      <div class="feature"><div class="feature-num">01</div><div><h4>توصيل لكل المحافظات</h4><p>بنوصل طلبك أينما كنتِ في مصر، بتغليف آمن يحافظ على شمعتك من الورشة لحد باب بيتك.</p></div></div>
-      <div class="feature"><div class="feature-num">02</div><div><h4>خامات طبيعية 100%</h4><p>شمع طبيعي نقي وفتائل خشب طبيعي وقطنية آمنة على صحتك وبيتك.</p></div></div>
-      <div class="feature"><div class="feature-num">03</div><div><h4>صناعة يدوية بعناية</h4><p>خلف كل قطعة ساعاتٌ من العناية والحرفية، حيث تُصنع وتُغلّف يدويًا بكل دقة.</p></div></div>
-      <div class="feature"><div class="feature-num">04</div><div><h4>تغليف فاخر</h4><p>كل شمعة تُغلّف بعناية في تنسيقٍ راقٍ يعكس جمالها، لتصلك جاهزة للإهداء.</p></div></div>
-      <div class="feature"><div class="feature-num">05</div><div><h4>ضمان استبدال</h4><p>واثقين انك هتقع فى حب المنتج من اول لحظه وإن لم تكن راضيًا تمامًا، فسنحرص على استبداله.</p></div></div>
-      <div class="feature"><div class="feature-num">06</div><div><h4>دعم دائم لعملائنا</h4><p>محتار تختار إيه؟ سيبها علينا. هنسمع فكرتك ونرشح لك الهدية والعطر الأنسب.</p></div></div>
+      <div class="feature"><div class="feature-num">01</div><div><h4 data-i18n="f1_h">توصيل لكل المحافظات</h4><p data-i18n="f1_p">بنوصل طلبك أينما كنتِ في مصر، بتغليف آمن يحافظ على شمعتك من الورشة لحد باب بيتك.</p></div></div>
+      <div class="feature"><div class="feature-num">02</div><div><h4 data-i18n="f2_h">خامات طبيعية 100%</h4><p data-i18n="f2_p">شمع طبيعي نقي وفتائل خشب طبيعي وقطنية آمنة على صحتك وبيتك.</p></div></div>
+      <div class="feature"><div class="feature-num">03</div><div><h4 data-i18n="f3_h">صناعة يدوية بعناية</h4><p data-i18n="f3_p">خلف كل قطعة ساعاتٌ من العناية والحرفية، حيث تُصنع وتُغلّف يدويًا بكل دقة.</p></div></div>
+      <div class="feature"><div class="feature-num">04</div><div><h4 data-i18n="f4_h">تغليف فاخر</h4><p data-i18n="f4_p">كل شمعة تُغلّف بعناية في تنسيقٍ راقٍ يعكس جمالها، لتصلك جاهزة للإهداء.</p></div></div>
+      <div class="feature"><div class="feature-num">05</div><div><h4 data-i18n="f5_h">ضمان استبدال</h4><p data-i18n="f5_p">واثقين انك هتقع فى حب المنتج من اول لحظه وإن لم تكن راضيًا تمامًا، فسنحرص على استبداله.</p></div></div>
+      <div class="feature"><div class="feature-num">06</div><div><h4 data-i18n="f6_h">دعم دائم لعملائنا</h4><p data-i18n="f6_p">محتار تختار إيه؟ سيبها علينا. هنسمع فكرتك ونرشح لك الهدية والعطر الأنسب.</p></div></div>
     </div>
   </div>
 </section>
@@ -660,8 +760,8 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
 <section class="section" id="faq-section" style="background:var(--bg-2)">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">FAQs</span>
-      <h2>الأسئلة الشائعة</h2>
+      <span class="kicker" data-i18n="kicker_faq">FAQs</span>
+      <h2 data-i18n="nav_faq">الأسئلة الشائعة</h2>
       <div class="gold-line"></div>
     </div>
     <div class="faq-wrap reveal" id="faqList"></div>
@@ -672,17 +772,17 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
 <section class="section" id="reviews">
   <div class="container">
     <div class="section-head reveal">
-      <span class="kicker">Testimonials</span>
-      <h2>آراء عملائنا</h2>
+      <span class="kicker" data-i18n="kicker_testimonials">Testimonials</span>
+      <h2 data-i18n="nav_reviews">آراء عملائنا</h2>
       <div class="gold-line"></div>
-      <p class="sub">ثقتكم أجمل هدية لنا</p>
+      <p class="sub" data-i18n="reviews_sub">ثقتكم أجمل هدية لنا</p>
     </div>
     <div class="reviews-strip reveal">
-      <div class="review-card"><img src="https://velalight.github.io/review1.jpg" alt="رأي عميلة 1" loading="lazy"><div class="stars">★★★★★</div></div>
-      <div class="review-card"><img src="https://velalight.github.io/review2.jpg" alt="رأي عميلة 2" loading="lazy"><div class="stars">★★★★★</div></div>
-      <div class="review-card"><img src="https://velalight.github.io/review3.jpg" alt="رأي عميلة 3" loading="lazy"><div class="stars">★★★★★</div></div>
-      <div class="review-card"><img src="https://velalight.github.io/review4.jpg" alt="رأي عميلة 4" loading="lazy"><div class="stars">★★★★★</div></div>
-      <div class="review-card"><img src="https://velalight.github.io/review5.jpg" alt="رأي عميلة 5" loading="lazy"><div class="stars">★★★★★</div></div>
+      <div class="review-card"><img src="https://velalight.github.io/review1.jpg" data-i18n-alt="review_alt" alt="رأي عميلة 1" loading="lazy"><div class="stars">★★★★★</div></div>
+      <div class="review-card"><img src="https://velalight.github.io/review2.jpg" data-i18n-alt="review_alt" alt="رأي عميلة 2" loading="lazy"><div class="stars">★★★★★</div></div>
+      <div class="review-card"><img src="https://velalight.github.io/review3.jpg" data-i18n-alt="review_alt" alt="رأي عميلة 3" loading="lazy"><div class="stars">★★★★★</div></div>
+      <div class="review-card"><img src="https://velalight.github.io/review4.jpg" data-i18n-alt="review_alt" alt="رأي عميلة 4" loading="lazy"><div class="stars">★★★★★</div></div>
+      <div class="review-card"><img src="https://velalight.github.io/review5.jpg" data-i18n-alt="review_alt" alt="رأي عميلة 5" loading="lazy"><div class="stars">★★★★★</div></div>
     </div>
   </div>
 </section>
@@ -691,7 +791,7 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
   <div class="container foot-grid">
     <div>
       <div class="foot-logo">VelaLight</div>
-      <p class="foot-tag">شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب<br>Luxury handmade candles - Signature scents - Custom gifts</p>
+      <p class="foot-tag" data-i18n-html="foot_tag">شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب<br>Luxury handmade candles - Signature scents - Custom gifts</p>
       <div class="socials">
         <a href="https://www.facebook.com/VelaLight/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
         <a href="https://www.instagram.com/velaa_lighttt" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.3-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zm0 3.6a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-10.5a1.4 1.4 0 1 0 0-2.9 1.4 1.4 0 0 0 0 2.9z"/></svg></a>
@@ -700,38 +800,38 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
       </div>
     </div>
     <div>
-      <div class="foot-h">روابط سريعة</div>
+      <div class="foot-h" data-i18n="foot_quick_links">روابط سريعة</div>
       <ul>
-        <li><a href="index.html">الرئيسية</a></li>
-        <li><a href="#products">تسوق</a></li>
-        <li><a href="#about-us">من نحن</a></li>
-        <li><a href="#faq-section">الأسئلة الشائعة</a></li>
-        <li><a href="contact.html">تواصل معنا</a></li>
+        <li><a href="index.html" data-i18n="nav_home">الرئيسية</a></li>
+        <li><a href="#products" data-i18n="nav_shop">تسوق</a></li>
+        <li><a href="#about-us" data-i18n="nav_about">من نحن</a></li>
+        <li><a href="#faq-section" data-i18n="nav_faq">الأسئلة الشائعة</a></li>
+        <li><a href="contact.html" data-i18n="nav_contact">تواصل معنا</a></li>
       </ul>
     </div>
     <div>
-      <div class="foot-h">تصنيفات الشموع</div>
+      <div class="foot-h" data-i18n="mm_categories">تصنيفات الشموع</div>
       <ul>
-        <li><a href="#products" data-catlink="wood">شموع خشبية</a></li>
-        <li><a href="#products" data-catlink="glass">شموع زجاجية</a></li>
-        <li><a href="#products" data-catlink="crystal">شموع كريستالية</a></li>
-        <li><a href="#products" data-catlink="metal">شموع معدنية</a></li>
-        <li><a href="#products" data-catlink="massage">شموع المساج</a></li>
-        <li><a href="#products" data-catlink="bride">بوكس العروسة</a></li>
-        <li><a href="#products" data-catlink="gift">الهدايا</a></li>
+        <li><a href="#products" data-catlink="wood" data-i18n="cat_wood">شموع خشبية</a></li>
+        <li><a href="#products" data-catlink="glass" data-i18n="cat_glass">شموع زجاجية</a></li>
+        <li><a href="#products" data-catlink="crystal" data-i18n="cat_crystal">شموع كريستالية</a></li>
+        <li><a href="#products" data-catlink="metal" data-i18n="cat_metal">شموع معدنية</a></li>
+        <li><a href="#products" data-catlink="massage" data-i18n="cat_massage">شموع المساج</a></li>
+        <li><a href="#products" data-catlink="bride" data-i18n="cat_bride">بوكس العروسة</a></li>
+        <li><a href="#products" data-catlink="gift" data-i18n="cat_gift">الهدايا</a></li>
       </ul>
     </div>
     <div>
-      <div class="foot-h">الدفع والشحن</div>
-      <div class="foot-note">ملحوظة هامة: قيمة المنتجات بتتحول مقدمًا عبر InstaPay، أما تكلفة الشحن فتُدفع كاش لمندوب شركة الشحن وقت استلام الأوردر مباشرة.</div>
+      <div class="foot-h" data-i18n="foot_payment">الدفع والشحن</div>
+      <div class="foot-note" data-i18n="payment_note">ملحوظة هامة: قيمة المنتجات بتتحول مقدمًا عبر InstaPay، أما تكلفة الشحن فتُدفع كاش لمندوب شركة الشحن وقت استلام الأوردر مباشرة.</div>
     </div>
   </div>
   <div class="container foot-bottom">
-    <span>© 2026 - 2030 VelaLight — All Rights Reserved</span>
+    <span data-i18n="foot_rights">© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</span>
     <div class="policies">
-      <a href="exchange-policy.html">سياسة الاستبدال</a>
-      <a href="privacy.html">سياسة الخصوصية</a>
-      <a href="terms.html">شروط الاستخدام</a>
+      <a href="exchange-policy.html" data-i18n="nav_exchange">سياسة الاستبدال</a>
+      <a href="privacy.html" data-i18n="nav_privacy">سياسة الخصوصية</a>
+      <a href="terms.html" data-i18n="nav_terms">شروط الاستخدام</a>
     </div>
   </div>
 </footer>
@@ -740,23 +840,23 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
 <div class="drawer-overlay" id="cartOverlay"></div>
 <aside class="cart-drawer" id="cartDrawer" aria-label="Cart">
   <div class="cart-head">
-    <h3>سلة الشراء</h3>
-    <button class="icon-btn" id="cartClose" aria-label="Close">✕</button>
+    <h3 data-i18n="cart_title">سلة الشراء</h3>
+    <button class="icon-btn" id="cartClose" data-i18n-aria="aria_close" aria-label="Close">✕</button>
   </div>
   <div class="cart-items" id="cartItems"></div>
   <div class="cart-form">
-    <h5>بيانات التوصيل</h5>
-    <input class="f-in" id="cName" placeholder="الاسم بالكامل">
-    <input class="f-in" id="cPhone" type="tel" placeholder="رقم الهاتف">
-    <input class="f-in" id="cAddr" placeholder="العنوان">
-    <h5>طريقة الدفع</h5>
-    <span class="pay-pill">InstaPay — تحويل مقدم</span>
-    <div class="important-note">ملحوظة هامة: قيمة المنتجات بتتحول مقدمًا عبر InstaPay، أما تكلفة الشحن فتُدفع كاش لمندوب شركة الشحن وقت استلام الأوردر مباشرة.</div>
+    <h5 data-i18n="delivery_info">بيانات التوصيل</h5>
+    <input class="f-in" id="cName" data-i18n-placeholder="ph_fullname" placeholder="الاسم بالكامل">
+    <input class="f-in" id="cPhone" type="tel" data-i18n-placeholder="ph_phone" placeholder="رقم الهاتف">
+    <input class="f-in" id="cAddr" data-i18n-placeholder="ph_address" placeholder="العنوان">
+    <h5 data-i18n="payment_method">طريقة الدفع</h5>
+    <span class="pay-pill" data-i18n="pay_pill">InstaPay — تحويل مقدم</span>
+    <div class="important-note" data-i18n="payment_note">ملحوظة هامة: قيمة المنتجات بتتحول مقدمًا عبر InstaPay، أما تكلفة الشحن فتُدفع كاش لمندوب شركة الشحن وقت استلام الأوردر مباشرة.</div>
     <div style="margin-top:14px">
-      <div class="cart-totals"><span>الإجمالي</span><b id="grandTotal">0</b></div>
+      <div class="cart-totals"><span data-i18n="total_label">الإجمالي</span><b id="grandTotal">0</b></div>
     </div>
-    <button class="btn btn-wa" id="btnCheckout">إتمام الطلب عبر واتساب</button>
-    <button class="btn-clear" id="btnClearCart">إفراغ السلة</button>
+    <button class="btn btn-wa" id="btnCheckout" data-i18n="checkout_btn">إتمام الطلب عبر واتساب</button>
+    <button class="btn-clear" id="btnClearCart" data-i18n="clear_cart">إفراغ السلة</button>
   </div>
 </aside>
 
@@ -764,17 +864,17 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
 <div class="modal" id="accountModal">
   <div class="modal-bg" data-close></div>
   <div class="modal-card">
-    <button class="modal-x" data-close aria-label="Close">✕</button>
-    <h3>حسابي</h3>
-    <p class="m-sub">سجّل بياناتك مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة.</p>
-    <input class="f-in" id="accName" placeholder="الاسم بالكامل">
-    <input class="f-in" id="accPhone" type="tel" placeholder="رقم الهاتف">
-    <input class="f-in" id="accAddr" placeholder="العنوان (اختيار دلوقتي)">
-    <button class="btn btn-gold" id="btnAccSave" style="width:100%;margin-top:8px">حفظ بياناتي وتسجيل الدخول</button>
+    <button class="modal-x" data-close data-i18n-aria="aria_close" aria-label="Close">✕</button>
+    <h3 data-i18n="account_title">حسابي</h3>
+    <p class="m-sub" data-i18n="account_sub">سجّل بياناتك مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة.</p>
+    <input class="f-in" id="accName" data-i18n-placeholder="ph_fullname" placeholder="الاسم بالكامل">
+    <input class="f-in" id="accPhone" type="tel" data-i18n-placeholder="ph_phone" placeholder="رقم الهاتف">
+    <input class="f-in" id="accAddr" data-i18n-placeholder="ph_address_opt" placeholder="العنوان (اختيار دلوقتي)">
+    <button class="btn btn-gold" id="btnAccSave" style="width:100%;margin-top:8px" data-i18n="account_save">حفظ بياناتي وتسجيل الدخول</button>
     <div id="accWelcomeBox" style="display:none;margin-top:16px;text-align:center">
       <p style="font-weight:800;font-size:1.05rem" id="accWelcome"></p>
-      <p style="font-size:.84rem;color:var(--ink-faint);margin:6px 0 14px">عدد طلباتك: <b id="accOrders">0</b></p>
-      <button class="btn btn-ghost" id="btnLogout">تسجيل خروج</button>
+      <p style="font-size:.84rem;color:var(--ink-faint);margin:6px 0 14px"><span data-i18n="orders_count">عدد طلباتك:</span> <b id="accOrders">0</b></p>
+      <button class="btn btn-ghost" id="btnLogout" data-i18n="logout_btn">تسجيل خروج</button>
     </div>
   </div>
 </div>
@@ -790,38 +890,38 @@ let h=document.querySelector('.ai-head h4'); if(h)h.textContent=document.documen
 
 <!-- ===== Lightbox ===== -->
 <div class="lightbox" id="lightbox">
-  <button id="lbClose" aria-label="Close">✕</button>
-  <button class="lb-btn" id="lbPrev" aria-label="Previous">‹</button>
+  <button id="lbClose" data-i18n-aria="aria_close" aria-label="Close">✕</button>
+  <button class="lb-btn" id="lbPrev" data-i18n-aria="aria_prev" aria-label="Previous">‹</button>
   <img id="lbImg" src="" alt="">
-  <button class="lb-btn" id="lbNext" aria-label="Next">›</button>
+  <button class="lb-btn" id="lbNext" data-i18n-aria="aria_next" aria-label="Next">›</button>
 </div>
 
 <!-- ===== Back to top ===== -->
-<button id="backTop" aria-label="Back to top">
+<button id="backTop" data-i18n-aria="aria_backtop" aria-label="Back to top">
   <svg viewBox="0 0 24 24"><path d="M12 19V5m-7 7 7-7 7 7"/></svg>
 </button>
 
 <!-- ===== AI Assistant ===== -->
-<button id="aiFab" aria-label="مساعد VelaLight">
+<button id="aiFab" data-i18n-aria="aria_ai_fab" aria-label="مساعد VelaLight">
   <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 3-2 5-4 6l-1 3h-4l-1-3c-2-1-4-3-4-6a7 7 0 0 1 7-7z"/><path d="M9 21h6"/></svg>
 </button>
 <div id="aiPanel">
   <div class="ai-head">
     <div class="ai-avatar">✦</div>
-    <div><h4>مساعد VelaLight</h4><p>دليلك الشخصي لاختيار الشمعة المثالية</p></div>
-    <button class="ai-close" id="aiClose" aria-label="Close">✕</button>
+    <div><h4 data-i18n="ai_name">مساعد VelaLight</h4><p data-i18n="ai_tagline">دليلك الشخصي لاختيار الشمعة المثالية</p></div>
+    <button class="ai-close" id="aiClose" data-i18n-aria="aria_close" aria-label="Close">✕</button>
   </div>
   <div class="ai-body" id="aiBody"></div>
   <div class="ai-quick" id="aiQuick">
-    <button data-ai="gift">اقترحلي هدية</button>
-    <button data-ai="relax">عايزة حاجة للاسترخاء</button>
-    <button data-ai="scents">إيه العطور المتاحة؟</button>
-    <button data-ai="delivery">سؤال عن التوصيل</button>
-    <button data-ai="bride">بوكس عروسة</button>
+    <button data-ai="gift" data-i18n="ai_q_gift">اقترحلي هدية</button>
+    <button data-ai="relax" data-i18n="ai_q_relax">عايزة حاجة للاسترخاء</button>
+    <button data-ai="scents" data-i18n="ai_q_scents">إيه العطور المتاحة؟</button>
+    <button data-ai="delivery" data-i18n="ai_q_delivery">سؤال عن التوصيل</button>
+    <button data-ai="bride" data-i18n="ai_q_bride">بوكس عروسة</button>
   </div>
   <div class="ai-input">
-    <input type="text" id="aiInput" placeholder="اكتبي سؤالك هنا...">
-    <button id="aiSend" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+    <input type="text" id="aiInput" data-i18n-placeholder="ai_input_ph" placeholder="اكتبي سؤالك هنا...">
+    <button id="aiSend" data-i18n-aria="aria_send" aria-label="Send"><svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
   </div>
 </div>
 
@@ -899,20 +999,122 @@ const scentName=i=>{const s=SCENTS[i];return s?(lang==='ar'?s.ar:s.en):'';};
 const scentFeel=i=>{const s=SCENTS[i];return s?s.feel:'';};
 
 const I18N={
-ar:{cat_all:'كل الشموع',cat_wood:'شموع خشبية',cat_glass:'شموع زجاجية',cat_crystal:'شموع كريستالية',cat_metal:'شموع معدنية',cat_massage:'شموع المساج',cat_gift:'الهدايا',cat_bride:'بوكس العروسة',
+ar:{
+ /* categories */
+ cat_all:'كل الشموع',cat_wood:'شموع خشبية',cat_glass:'شموع زجاجية',cat_crystal:'شموع كريستالية',cat_metal:'شموع معدنية',cat_massage:'شموع المساج',cat_gift:'الهدايا',cat_bride:'بوكس العروسة',
+ /* nav */
+ nav_home:'الرئيسية',nav_shop:'تسوق',nav_about:'من نحن',nav_faq:'الأسئلة الشائعة',nav_contact:'تواصل معنا',nav_scents:'العطور الفاخرة',nav_occasions:'المناسبات والهدايا',nav_features:'لماذا VelaLight؟',nav_reviews:'آراء عملائنا',nav_exchange:'سياسة الاستبدال',nav_privacy:'سياسة الخصوصية',nav_terms:'شروط الاستخدام',
+ mm_categories:'تصنيفات الشموع',mm_discover:'اكتشف',mm_contact:'تواصل',
+ /* aria */
+ aria_search:'بحث',aria_account:'حسابي',aria_cart:'سلة الشراء',aria_menu:'القائمة',aria_close:'إغلاق',aria_prev:'السابق',aria_next:'التالي',aria_backtop:'العودة لأعلى الصفحة',aria_ai_fab:'مساعد VelaLight',aria_send:'إرسال',
+ /* search */
+ search_placeholder:'ابحثي عن شمع، عطر، مناسبة...',search_hint:'البحث يشمل: اسم المنتج، الوصف، الكاتيجوري — بالعربي والإنجليزي.',
+ /* hero */
+ hero_title:'ضوء يُحكى… <em>وبريق يليق بكِ</em>',hero_scroll:'اكتشفي',hero_img_alt:'مجموعة شموع VelaLight الفاخرة اليدوية بعطور مميزة',
+ /* topbar */
+ topbar_msg:'توصيل سريع لكل محافظات مصر خلال 3-7 أيام عمل • خصومات تصل إلى <b>25%</b> على تشكيلة مختارة • تغليف هدايا فاخر مجانًا مع كل طلب • ضمان استبدال خلال 3 أيام من الاستلام',
+ /* section kickers & titles */
+ kicker_collection:'المجموعة',products_title:'اختار قطعتك المفضلة',
+ kicker_story:'قصتنا',about_title:'من نحن',
+ about_p1:'في VelaLight لا نصنع الشموع فقط، بل نصنع لحظات تستحق أن تُعاش. بدأت رحلتنا بشغف تجاه التفاصيل الصغيرة التي تجعل المكان أكثر دفئًا، والبيت أكثر راحة، واللحظات العادية أكثر جمالًا.',
+ about_p2:'نصنع كل شمعة يدويًا بعناية، مستخدمين خامات مختارة وعطورًا فاخرة، لنقدم منتجًا يجمع بين الأناقة والجودة والإحساس الحقيقي. نؤمن أن الضوء الخافت قادر على تهدئة الروح، وأن العطر الجميل يستطيع أن يعيد أجمل الذكريات.',
+ stat_customers:'عميلة سعيدة',stat_scents:'عطر مميز',stat_handmade:'صناعة يدوية',about_img_alt:'شمعة نبضين الخشبية الفاخرة من VelaLight',
+ kicker_scents:'عطورنا المميزة',scents_title:'العطور الفاخرة',scents_sub:'كل العطور متاحة تختار منهم في أي منتج من منتجاتنا',
+ kicker_occasions:'هدايا ومناسبات',occasions_title:'هدية لكل مناسبة',
+ occ1_h:'أعياد الميلاد',occ1_p:'صُممت لتكون هدية استثنائية تحمل أعمق المشاعر، وتمنح كل لحظة دفئًا يلامس القلب.',
+ occ2_h:'الزفاف والخطوبة والولادة',occ2_p:'لأن التفاصيل هي سرّ الجمال، ابتكرنا توزيعات رومانسية ولمسات راقية تُضفي على يومك سحرًا استثنائيًا.',
+ occ3_h:'ركن المنزل',occ3_p:'ركنٌ صغير... لكنه كفيل بأن يغيّر شعور المكان بأكمله؛ دفءٌ يحتضن التفاصيل، وعطرٌ ينعش الروح.',
+ occ4_h:'بوكسات الهدايا',occ4_p:'لأن الهدية الراقية تبدأ من التفاصيل، نُنسّق بوكساتنا بعناية لتجسّد ذوقك.',
+ kicker_why:'مين احنا',features_title:'لماذا VelaLight؟',
+ f1_h:'توصيل لكل المحافظات',f1_p:'بنوصل طلبك أينما كنتِ في مصر، بتغليف آمن يحافظ على شمعتك من الورشة لحد باب بيتك.',
+ f2_h:'خامات طبيعية 100%',f2_p:'شمع طبيعي نقي وفتائل خشب طبيعي وقطنية آمنة على صحتك وبيتك.',
+ f3_h:'صناعة يدوية بعناية',f3_p:'خلف كل قطعة ساعاتٌ من العناية والحرفية، حيث تُصنع وتُغلّف يدويًا بكل دقة.',
+ f4_h:'تغليف فاخر',f4_p:'كل شمعة تُغلّف بعناية في تنسيقٍ راقٍ يعكس جمالها، لتصلك جاهزة للإهداء.',
+ f5_h:'ضمان استبدال',f5_p:'واثقين انك هتقع فى حب المنتج من اول لحظه وإن لم تكن راضيًا تمامًا، فسنحرص على استبداله.',
+ f6_h:'دعم دائم لعملائنا',f6_p:'محتار تختار إيه؟ سيبها علينا. هنسمع فكرتك ونرشح لك الهدية والعطر الأنسب.',
+ kicker_faq:'أسئلة شائعة',kicker_testimonials:'آراء العملاء',reviews_sub:'ثقتكم أجمل هدية لنا',review_alt:'رأي إحدى عميلات VelaLight السعيدات',
+ /* products */
  view_product:'عرض المنتج',add_cart:'أضيفي للسلة',buy_now:'اشتري دلوقتي',share:'مشاركة:',
- choose_scent:'اختار العطر',scent_word:'العطر',select_scent_first:'من فضلك اختار العطر الأول',
- toast_add:'تمت الإضافة للسلة',toast_rm:'تم الحذف من السلة',toast_save:'تم حفظ بياناتك',toast_wa:'تم فتح واتساب لإتمام الطلب',
+ choose_scent:'اختار العطر',scent_word:'العطر',select_scent_first:'من فضلك اختار العطر الأول',choose_scent_placeholder:'— اختار العطر —',scent_feel_prefix:'إحساس العطر: ',
+ no_results:'مفيش نتائج مطابقة، جربي كلمة بحث تانية',search_results:n=>`نتائج البحث: ${n} منتج`,clear_search:'مسح البحث',showing_results:n=>`عرض ${n} منتج`,
+ /* toasts */
+ toast_add:'تمت الإضافة للسلة',toast_rm:'تم الحذف من السلة',toast_save:'تم حفظ بياناتك',toast_wa:'تم فتح واتساب لإتمام الطلب',toast_link:'تم نسخ الرابط',toast_fill_fields:'من فضلك اكتب اسمك ورقم هاتفك',
  cur:n=>`${n.toLocaleString('en-US')} ج.م`,badge_sale:'خصم',badge_best:'الأكثر مبيعًا',
  acc_welcome:n=>`أهلاً بيك يا ${n}`,
- wa_order:lines=>`طلب جديد من VelaLight\n━━━━━━━━━━━━\n${lines}\n━━━━━━━━━━━━\nالإجمالي: {tot}\n\nالاسم: {name}\nالهاتف: {phone}\nالعنوان: {addr}\n\n(تكلفة الشحن تُدفع كاش عند الاستلام)`},
-en:{cat_all:'All Candles',cat_wood:'Wood Candles',cat_glass:'Glass Candles',cat_crystal:'Crystal Candles',cat_metal:'Metal Candles',cat_massage:'Massage Candles',cat_gift:'Gifts',cat_bride:'Bride Box',
+ /* cart & account */
+ cart_title:'سلة الشراء',delivery_info:'بيانات التوصيل',ph_fullname:'الاسم بالكامل',ph_phone:'رقم الهاتف',ph_address:'العنوان',ph_address_opt:'العنوان (اختيار دلوقتي)',
+ payment_method:'طريقة الدفع',pay_pill:'InstaPay — تحويل مقدم',payment_note:'ملحوظة هامة: قيمة المنتجات بتتحول مقدمًا عبر InstaPay، أما تكلفة الشحن فتُدفع كاش لمندوب شركة الشحن وقت استلام الأوردر مباشرة.',
+ total_label:'الإجمالي',checkout_btn:'إتمام الطلب عبر واتساب',clear_cart:'إفراغ السلة',
+ cart_empty_title:'سلتك لسه فاضية',cart_empty_sub:'اكتشفي شموعنا الفاخرة وضيفي اللي يعجبك',cart_empty_cta:'تسوقي الآن',remove_item:'حذف',
+ account_title:'حسابي',account_sub:'سجّل بياناتك مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة.',account_save:'حفظ بياناتي وتسجيل الدخول',orders_count:'عدد طلباتك:',logout_btn:'تسجيل خروج',
+ /* footer */
+ foot_tag:'شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب<br>Luxury handmade candles - Signature scents - Custom gifts',
+ foot_quick_links:'روابط سريعة',foot_payment:'الدفع والشحن',foot_rights:'© 2026 - 2030 VelaLight — جميع الحقوق محفوظة',
+ /* AI assistant */
+ ai_name:'مساعد VelaLight',ai_tagline:'دليلك الشخصي لاختيار الشمعة المثالية',ai_input_ph:'اكتبي سؤالك هنا...',
+ ai_q_gift:'اقترحلي هدية',ai_q_relax:'عايزة حاجة للاسترخاء',ai_q_scents:'إيه العطور المتاحة؟',ai_q_delivery:'سؤال عن التوصيل',ai_q_bride:'بوكس عروسة',
+ ai_greeting:'أهلاً بيكِ في VelaLight! أنا مساعدك الشخصي. إزاي أقدر أساعدك النهارده؟',
+ ai_gift:'أكيد أساعدك! قولي الأول:\n• المناسبة إيه؟ (عيد ميلاد، زفاف، تخرج...)\n• الميزانية تقريبًا كام؟\n• بتحبي العطور الدافية ولا المنعشة؟\n\nوأنا هقترح عليكِ أنسب اختيار.',
+ ai_relax:'للاسترخاء بنرشحلك:\n• شموع المساج — بتدوب لزيت دافئ يريح الجسم\n• عطر لافندر أو ساندال وود — بيهدوا الأعصاب\n\nجرّبي شمعة المساج ريلاكس، هتغير يومك كله.',
+ ai_scents:'عندنا 19 عطر فاخر مقسمين 3 مجموعات:\n\n• دافئة وحلوة: فانيلا، موكا، كراميل، قرفة، عنبر، عود، قهوة\n• منعشة وفاكهية: أناناس، كوكونات، كاريبيان فروت، مانجو، توت\n• زهرية وفاخرة: ورد، ياسمين، فل، لافندر، مسك أبيض، ساندال وود، باتشولي\n\nكل عطر وليه إحساسه الخاص.',
+ ai_delivery:'التوصيل:\n• القاهرة والجيزة: 3-5 أيام عمل\n• باقي المحافظات: 5-7 أيام عمل\n\nالدفع: قيمة المنتجات InstaPay مقدمًا، والشحن كاش عند الاستلام.',
+ ai_bride:'بوكس العروسة عندنا مصمم مخصوص عشان يخلي اليوم مش ناسي!\n\nفيه:\n• شموع مساج للعناية\n• شموع ديكور فاخرة\n• معطرات وتغليف وردي ملكي\n\nعايزة تفاصيل أكتر؟ كلمينا على واتساب وهنجهزلك عرض خاص.',
+ ai_default:'أنا هنا أساعدك! ممكن تسأليني عن:\n• اقتراح هدية لمناسبة\n• العطور المتاحة\n• التوصيل والدفع\n• بوكسات العروسة\n\nأو اكتبي سؤالك وأنا هجاوبك.',
+ wa_order:lines=>`طلب جديد من VelaLight\n━━━━━━━━━━━━\n${lines}\n━━━━━━━━━━━━\nالإجمالي: {tot}\n\nالاسم: {name}\nالهاتف: {phone}\nالعنوان: {addr}\n\n(تكلفة الشحن تُدفع كاش عند الاستلام)`,
+ title:'VelaLight | شموع يدوية فاخرة بعطور مميزة وهدايا فخمة | توصيل لكل مصر',
+ metaDesc:'VelaLight — شموع يدوية فاخرة بعطور فرنسية مميزة، بوكسات هدايا للعروسة والمناسبات، خامات طبيعية 100%، صناعة يدوية بعناية، وتوصيل سريع لكل محافظات مصر.'},
+en:{
+ cat_all:'All Candles',cat_wood:'Wood Candles',cat_glass:'Glass Candles',cat_crystal:'Crystal Candles',cat_metal:'Metal Candles',cat_massage:'Massage Candles',cat_gift:'Gifts',cat_bride:'Bride Box',
+ nav_home:'Home',nav_shop:'Shop',nav_about:'About Us',nav_faq:'FAQs',nav_contact:'Contact Us',nav_scents:'Signature Scents',nav_occasions:'Occasions & Gifts',nav_features:'Why VelaLight?',nav_reviews:'Testimonials',nav_exchange:'Exchange Policy',nav_privacy:'Privacy Policy',nav_terms:'Terms of Use',
+ mm_categories:'Candle Categories',mm_discover:'Discover',mm_contact:'Contact',
+ aria_search:'Search',aria_account:'Account',aria_cart:'Shopping Cart',aria_menu:'Menu',aria_close:'Close',aria_prev:'Previous',aria_next:'Next',aria_backtop:'Back to top',aria_ai_fab:'VelaLight Assistant',aria_send:'Send',
+ search_placeholder:'Search for a candle, scent, occasion...',search_hint:'Search covers: product name, description, category — in Arabic and English.',
+ hero_title:'A light that speaks… <em>a glow that suits you</em>',hero_scroll:'Discover',hero_img_alt:'VelaLight luxury handmade candle collection with signature scents',
+ topbar_msg:'Fast delivery to every governorate in Egypt within 3-7 business days • Discounts up to <b>25%</b> on selected pieces • Free luxury gift wrapping with every order • 3-day exchange guarantee from delivery',
+ kicker_collection:'The Collection',products_title:'Pick Your Favorite Piece',
+ kicker_story:'Our Story',about_title:'About Us',
+ about_p1:'At VelaLight, we don\'t just make candles — we craft moments worth living. Our journey began with a passion for the small details that make a place warmer, a home cozier, and ordinary moments more beautiful.',
+ about_p2:'Every candle is handmade with care, using selected materials and luxury fragrances, to offer a product that blends elegance, quality, and genuine feeling. We believe soft light can calm the soul, and a beautiful scent can bring back the fondest memories.',
+ stat_customers:'Happy Customers',stat_scents:'Signature Scents',stat_handmade:'Handmade',about_img_alt:'VelaLight luxury wooden Two Heartbeats candle',
+ kicker_scents:'Signature Scents',scents_title:'Luxury Fragrances',scents_sub:'All scents are available to choose from on any of our products',
+ kicker_occasions:'Gifts & Occasions',occasions_title:'A Gift for Every Occasion',
+ occ1_h:'Birthdays',occ1_p:'Designed to be an exceptional gift carrying the deepest emotions, giving every moment a warmth that touches the heart.',
+ occ2_h:'Weddings, Engagements & Newborns',occ2_p:'Because details are the secret to beauty, we craft romantic arrangements and elegant touches that add exceptional magic to your day.',
+ occ3_h:'Home Corner',occ3_p:'A small corner... capable of changing the entire feel of a space; warmth that embraces the details, and a scent that refreshes the soul.',
+ occ4_h:'Gift Boxes',occ4_p:'Because a refined gift starts with the details, we curate our boxes with care to reflect your taste.',
+ kicker_why:'Why Us',features_title:'Why VelaLight?',
+ f1_h:'Delivery Nationwide',f1_p:'We deliver your order wherever you are in Egypt, with safe packaging that protects your candle from our workshop to your door.',
+ f2_h:'100% Natural Materials',f2_p:'Pure natural wax, natural wood wicks, and cotton wicks that are safe for your health and home.',
+ f3_h:'Careful Handmade Craft',f3_p:'Behind every piece are hours of care and craftsmanship, handmade and hand-wrapped with precision.',
+ f4_h:'Luxury Packaging',f4_p:'Every candle is carefully wrapped in an elegant presentation reflecting its beauty, ready to be gifted.',
+ f5_h:'Exchange Guarantee',f5_p:'We\'re confident you\'ll fall in love with the product from the first moment — if you\'re not fully satisfied, we\'ll make sure to exchange it.',
+ f6_h:'Ongoing Customer Support',f6_p:'Not sure what to pick? Leave it to us. We\'ll hear your idea and recommend the perfect gift and scent.',
+ kicker_faq:'FAQs',kicker_testimonials:'Testimonials',reviews_sub:'Your trust is our favorite gift',review_alt:'A happy VelaLight customer review',
  view_product:'View Product',add_cart:'Add to Cart',buy_now:'Buy Now',share:'Share:',
- choose_scent:'Choose Scent',scent_word:'Scent',select_scent_first:'Please choose a scent first',
- toast_add:'Added to cart',toast_rm:'Removed from cart',toast_save:'Your info is saved',toast_wa:'Opening WhatsApp to complete your order',
+ choose_scent:'Choose Scent',scent_word:'Scent',select_scent_first:'Please choose a scent first',choose_scent_placeholder:'— Choose a scent —',scent_feel_prefix:'Scent feel: ',
+ no_results:'No matching results, try a different search',search_results:n=>`Search results: ${n} products`,clear_search:'Clear search',showing_results:n=>`Showing ${n} products`,
+ toast_add:'Added to cart',toast_rm:'Removed from cart',toast_save:'Your info is saved',toast_wa:'Opening WhatsApp to complete your order',toast_link:'Link copied',toast_fill_fields:'Please enter your name and phone number',
  cur:n=>`${n.toLocaleString('en-US')} EGP`,badge_sale:'SALE',badge_best:'Best Seller',
  acc_welcome:n=>`Welcome, ${n}`,
- wa_order:lines=>`New order from VelaLight\n━━━━━━━━━━━━\n${lines}\n━━━━━━━━━━━━\nTotal: {tot}\n\nName: {name}\nPhone: {phone}\nAddress: {addr}\n\n(Shipping cash on delivery)`}};
+ cart_title:'Shopping Cart',delivery_info:'Delivery Details',ph_fullname:'Full name',ph_phone:'Phone number',ph_address:'Address',ph_address_opt:'Address (optional for now)',
+ payment_method:'Payment Method',pay_pill:'InstaPay — Prepaid transfer',payment_note:'Important note: The product value is transferred in advance via InstaPay, while the shipping cost is paid in cash to the courier upon delivery.',
+ total_label:'Total',checkout_btn:'Checkout via WhatsApp',clear_cart:'Clear Cart',
+ cart_empty_title:'Your cart is still empty',cart_empty_sub:'Discover our luxury candles and add your favorites',cart_empty_cta:'Shop Now',remove_item:'Remove',
+ account_title:'My Account',account_sub:'Save your details once and we\'ll remember them for you on every visit.',account_save:'Save My Info & Sign In',orders_count:'Your orders:',logout_btn:'Sign Out',
+ foot_tag:'Luxury handmade candles - Signature scents - Custom gifts<br>شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب',
+ foot_quick_links:'Quick Links',foot_payment:'Payment & Shipping',foot_rights:'© 2026 - 2030 VelaLight — All Rights Reserved',
+ ai_name:'VelaLight Assistant',ai_tagline:'Your personal guide to the perfect candle',ai_input_ph:'Type your question here...',
+ ai_q_gift:'Suggest a gift',ai_q_relax:'Something for relaxation',ai_q_scents:'What scents are available?',ai_q_delivery:'Delivery question',ai_q_bride:'Bride box',
+ ai_greeting:'Welcome to VelaLight! I\'m your personal assistant. How can I help you today?',
+ ai_gift:'Sure, happy to help! First tell me:\n• What\'s the occasion? (birthday, wedding, graduation...)\n• Roughly what\'s your budget?\n• Do you prefer warm or fresh scents?\n\nAnd I\'ll suggest the best pick for you.',
+ ai_relax:'For relaxation, we recommend:\n• Massage candles — melt into a warm oil that soothes the body\n• Lavender or sandalwood scent — calms the nerves\n\nTry the Relax massage candle, it\'ll change your whole day.',
+ ai_scents:'We have 19 luxury scents in 3 groups:\n\n• Warm & sweet: vanilla, mocha, caramel, cinnamon, amber, oud, coffee\n• Fresh & fruity: pineapple, coconut, caribbean fruit, mango, berry\n• Floral & luxurious: rose, jasmine, arabian jasmine, lavender, white musk, sandalwood, patchouli\n\nEach scent has its own feel.',
+ ai_delivery:'Delivery:\n• Cairo & Giza: 3-5 business days\n• Other governorates: 5-7 business days\n\nPayment: product value via InstaPay in advance, shipping cash on delivery.',
+ ai_bride:'Our bride box is custom-designed to make the day unforgettable!\n\nIt includes:\n• Massage candles for pampering\n• Luxury decor candles\n• Fragrances and royal pink wrapping\n\nWant more details? Message us on WhatsApp and we\'ll prepare a special offer for you.',
+ ai_default:'I\'m here to help! You can ask me about:\n• Gift suggestions for an occasion\n• Available scents\n• Delivery and payment\n• Bride boxes\n\nOr type your question and I\'ll answer.',
+ wa_order:lines=>`New order from VelaLight\n━━━━━━━━━━━━\n${lines}\n━━━━━━━━━━━━\nTotal: {tot}\n\nName: {name}\nPhone: {phone}\nAddress: {addr}\n\n(Shipping cash on delivery)`,
+ title:'VelaLight | Luxury Handmade Candles, Signature Scents & Premium Gifts | Egypt Delivery',
+ metaDesc:'VelaLight — luxury handmade candles with signature French-inspired scents, bridal & occasion gift boxes, 100% natural materials, carefully handcrafted, fast delivery across Egypt.'}};
 
 /* ===== Render scents with feel ===== */
 function renderScentGroups(){
@@ -929,7 +1131,7 @@ function renderScentGroups(){
 }
 
 function scentOptions(selected,placeholder=true){
-  let html=placeholder?`<option value="" disabled ${selected==null||selected<0?'selected':''}>— اختار العطر —</option>`:'';
+  let html=placeholder?`<option value="" disabled ${selected==null||selected<0?'selected':''}>${t('choose_scent_placeholder')}</option>`:'';
   for(const g in SCENT_GROUPS){
     html+=`<optgroup label="${SCENT_GROUPS[g]}">`;
     SCENTS.forEach((s,i)=>{if(s.g===g)html+=`<option value="${i}" ${selected===i?'selected':''}>${lang==='ar'?s.ar:s.en} — ${s.feel}</option>`;});
@@ -938,9 +1140,30 @@ function scentOptions(selected,placeholder=true){
   return html;
 }
 
+function applyStaticI18n(){
+  const dict=I18N[lang];
+  $$('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(dict[k]!=null)el.textContent=dict[k];});
+  $$('[data-i18n-html]').forEach(el=>{const k=el.dataset.i18nHtml;if(dict[k]!=null)el.innerHTML=dict[k];});
+  $$('[data-i18n-placeholder]').forEach(el=>{const k=el.dataset.i18nPlaceholder;if(dict[k]!=null)el.placeholder=dict[k];});
+  $$('[data-i18n-aria]').forEach(el=>{const k=el.dataset.i18nAria;if(dict[k]!=null)el.setAttribute('aria-label',dict[k]);});
+  $$('[data-i18n-alt]').forEach(el=>{const k=el.dataset.i18nAlt;if(dict[k]!=null)el.alt=dict[k];});
+}
+function applySeoMeta(){
+  const dict=I18N[lang];
+  document.title=dict.title;
+  const set=(id,attr,val)=>{const el=$(id);if(el)el.setAttribute(attr,val);};
+  set('#metaDesc','content',dict.metaDesc);
+  set('#ogTitle','content',dict.title);
+  set('#ogDesc','content',dict.metaDesc);
+  set('#twTitle','content',dict.title);
+  set('#twDesc','content',dict.metaDesc);
+  set('#ogLocale','content',lang==='ar'?'ar_EG':'en_US');
+}
 function applyLang(){
   document.documentElement.lang=lang==='ar'?'ar':'en';
   document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  applyStaticI18n();
+  applySeoMeta();
   renderProducts();renderScentGroups();renderFAQ();updateCartUI();
   $('#btnLang').textContent=lang==='ar'?'EN':'عربي';
   if(qvId)renderQuick(qvId,true);
@@ -979,10 +1202,10 @@ function cardHTML(p){
 }
 function renderProducts(){
   const list=getFiltered();
-  $('#productsGrid').innerHTML=list.length?list.map(cardHTML).join(''):`<p style="grid-column:1/-1;text-align:center;color:var(--ink-faint);padding:40px 0">مفيش نتائج مطابقة</p>`;
+  $('#productsGrid').innerHTML=list.length?list.map(cardHTML).join(''):`<p style="grid-column:1/-1;text-align:center;color:var(--ink-faint);padding:40px 0">${t('no_results')}</p>`;
   const info=$('#resultsInfo');
-  if(searchQ)info.innerHTML=`نتائج البحث: ${list.length} منتج — <button id="clearSearch">مسح البحث</button>`;
-  else if(activeCat!=='all')info.textContent=`عرض ${list.length} منتج`;
+  if(searchQ)info.innerHTML=`${t('search_results')(list.length)} — <button id="clearSearch">${t('clear_search')}</button>`;
+  else if(activeCat!=='all')info.textContent=t('showing_results')(list.length);
   else info.textContent='';
   const cs=$('#clearSearch');if(cs)cs.onclick=()=>{searchQ='';$('#searchInput').value='';renderProducts();};
   observeCards();
@@ -1010,7 +1233,7 @@ function updateCartUI(){
   const cc=$('#cartCount');cc.textContent=n;cc.classList.toggle('show',n>0);
   const box=$('#cartItems');
   if(!cart.length){
-    box.innerHTML=`<div class="cart-empty"><div class="big">✦</div><b>سلتك لسه فاضية</b><p style="font-size:.86rem;margin:8px 0 18px">اكتشفي شموعنا الفاخرة وضيفي اللي يعجبك</p><a href="#products" class="btn btn-gold" data-closecart>تسوقي الآن</a></div>`;
+    box.innerHTML=`<div class="cart-empty"><div class="big">✦</div><b>${t('cart_empty_title')}</b><p style="font-size:.86rem;margin:8px 0 18px">${t('cart_empty_sub')}</p><a href="#products" class="btn btn-gold" data-closecart>${t('cart_empty_cta')}</a></div>`;
   }else{
     box.innerHTML=cart.map((item,idx)=>{const p=P(item.id);return `
       <div class="ci">
@@ -1024,7 +1247,7 @@ function updateCartUI(){
           <div class="ci-scent feel">${scentFeel(item.scent)}</div>
           <div class="p">${t('cur')(p.price*item.qty)}</div>
           <div class="ci-qty"><button data-dec="${idx}">−</button><b>${item.qty}</b><button data-inc="${idx}">+</button></div>
-          <button class="ci-rm" data-rm="${idx}">حذف</button>
+          <button class="ci-rm" data-rm="${idx}">${t('remove_item')}</button>
         </div>
       </div>`;}).join('');
   }
@@ -1038,7 +1261,7 @@ function checkout(){
   if(!cart.length)return;
   for(const item of cart){if(item.scent==null||item.scent<0){toast(t('select_scent_first'));return;}}
   const sub=cart.reduce((s,i)=>s+P(i.id).price*i.qty,0);
-  const lines=cart.map(item=>{const p=P(item.id);return `• ${L(p,'name')}\n   العطر: ${scentName(item.scent)} (${scentFeel(item.scent)}) × ${item.qty} — ${t('cur')(p.price*item.qty)}`;}).join('\n');
+  const lines=cart.map(item=>{const p=P(item.id);return `• ${L(p,'name')}\n   ${t('scent_word')}: ${scentName(item.scent)} (${scentFeel(item.scent)}) × ${item.qty} — ${t('cur')(p.price*item.qty)}`;}).join('\n');
   let msg=t('wa_order')(lines).replace('{tot}',t('cur')(sub))
     .replace('{name}',$('#cName').value||'-').replace('{phone}',$('#cPhone').value||'-').replace('{addr}',$('#cAddr').value||'-');
   window.open('https://wa.me/201223526105?text='+encodeURIComponent(msg),'_blank');
@@ -1046,7 +1269,10 @@ function checkout(){
   toast(t('toast_wa'));
 }
 function buyNowScent(p,qty,scent){
-  const msg=`عايزة أطلب من VelaLight:\n• ${p.name_ar}\nالعطر: ${scentName(scent)} (${scentFeel(scent)})\nالكمية: ${qty}\nالسعر: ${t('cur')(p.price*qty)}`;
+  const intro=lang==='ar'?'عايزة أطلب من VelaLight:':'I\'d like to order from VelaLight:';
+  const qtyLbl=lang==='ar'?'الكمية':'Quantity';
+  const priceLbl=lang==='ar'?'السعر':'Price';
+  const msg=`${intro}\n• ${L(p,'name')}\n${t('scent_word')}: ${scentName(scent)} (${scentFeel(scent)})\n${qtyLbl}: ${qty}\n${priceLbl}: ${t('cur')(p.price*qty)}`;
   window.open('https://wa.me/201223526105?text='+encodeURIComponent(msg),'_blank');
 }
 function renderQuick(id,keep=false){
@@ -1091,7 +1317,7 @@ function renderQuick(id,keep=false){
   sc.onchange=e=>{
     qvScent=parseInt(e.target.value);
     e.target.classList.remove('error');
-    $('#scentPreview').textContent=qvScent>=0?('إحساس العطر: '+scentFeel(qvScent)):'';
+    $('#scentPreview').textContent=qvScent>=0?(t('scent_feel_prefix')+scentFeel(qvScent)):'';
   };
   $('#qvAdd').onclick=()=>{
     if(qvScent<0){sc.classList.add('error');sc.focus();toast(t('select_scent_first'));return;}
@@ -1104,7 +1330,7 @@ function renderQuick(id,keep=false){
   $$('[data-share]').forEach(b=>b.onclick=()=>{
     const u=location.href.split('#')[0]+`?product=${p.id}`;
     if(b.dataset.share==='wa')window.open(`https://wa.me/?text=${encodeURIComponent(L(p,'name')+' — VelaLight')}%20${encodeURIComponent(u)}`,'_blank');
-    if(b.dataset.share==='copy'){navigator.clipboard?.writeText(u);toast('تم نسخ الرابط');}
+    if(b.dataset.share==='copy'){navigator.clipboard?.writeText(u);toast(t('toast_link'));}
   });
 }
 function gvGo(p,i){
@@ -1144,14 +1370,7 @@ let toastT;
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),2400);}
 
 /* ===== AI Assistant ===== */
-const AI_RESPONSES={
- gift:'أكيد أساعدك! 🎁 قولي الأول:\n• المناسبة إيه؟ (عيد ميلاد، زفاف، تخرج...)\n• الميزانية تقريبًا كام؟\n• بتحبي العطور الدافية ولا المنعشة؟\n\nوأنا هقترح عليكِ أنسب اختيار.',
- relax:'للاسترخاء بنرشحلك:\n• شموع المساج — بتدوب لزيت دافئ يريح الجسم\n• عطر لافندر أو ساندال وود — بيهدوا الأعصاب\n\nجرّبي شمعة المساج ريلاكس، هتغير يومك كله.',
- scents:'عندنا 19 عطر فاخر مقسمين 3 مجموعات:\n\n• دافئة وحلوة: فانيلا، موكا، كراميل، قرفة، عنبر، عود، قهوة\n• منعشة وفاكهية: أناناس، كوكونات، كاريبيان فروت، مانجو، توت\n• زهرية وفاخرة: ورد، ياسمين، فل، لافندر، مسك أبيض، ساندال وود، باتشولي\n\nكل عطر وليه إحساسه الخاص.',
- delivery:'التوصيل:\n• القاهرة والجيزة: 3-5 أيام عمل\n• باقي المحافظات: 5-7 أيام عمل\n\nالدفع: قيمة المنتجات InstaPay مقدمًا، والشحن كاش عند الاستلام.',
- bride:'بوكس العروسة عندنا مصمم مخصوص عشان يخلي اليوم مش ناسي! 🌸\n\nفيه:\n• شموع مساج للعناية\n• شموع ديكور فاخرة\n• معطرات وتغليف وردي ملكي\n\nعايزة تفاصيل أكتر؟ كلمينا على واتساب وهنجهزلك عرض خاص.',
- default:'أنا هنا أساعدك! ممكن تسأليني عن:\n• اقتراح هدية لمناسبة\n• العطور المتاحة\n• التوصيل والدفع\n• بوكسات العروسة\n\nأو اكتبي سؤالك وأنا هجاوبك.'
-};
+/* ===== AI Assistant (bilingual) ===== */
 function aiAdd(msg,type){
   const body=$('#aiBody');
   const div=document.createElement('div');
@@ -1162,18 +1381,18 @@ function aiAdd(msg,type){
 }
 function aiRespond(input){
   const q=input.toLowerCase();
-  let resp=AI_RESPONSES.default;
-  if(q.includes('هدي')||q.includes('gift')||q.includes('مناسب'))resp=AI_RESPONSES.gift;
-  else if(q.includes('استرخ')||q.includes('هدوء')||q.includes('relax')||q.includes('مساج'))resp=AI_RESPONSES.relax;
-  else if(q.includes('عطر')||q.includes('عطور')||q.includes('scent')||q.includes('ريح'))resp=AI_RESPONSES.scents;
-  else if(q.includes('توصيل')||q.includes('شحن')||q.includes('دفع')||q.includes('delivery')||q.includes('كام يوم'))resp=AI_RESPONSES.delivery;
-  else if(q.includes('عروس')||q.includes('bride')||q.includes('زفاف')||q.includes('خطوب'))resp=AI_RESPONSES.bride;
-  aiAdd(resp,'bot');
+  let key='ai_default';
+  if(q.includes('هدي')||q.includes('gift')||q.includes('مناسب')||q.includes('occasion'))key='ai_gift';
+  else if(q.includes('استرخ')||q.includes('هدوء')||q.includes('relax')||q.includes('مساج')||q.includes('massage')||q.includes('calm'))key='ai_relax';
+  else if(q.includes('عطر')||q.includes('عطور')||q.includes('scent')||q.includes('ريح')||q.includes('fragrance')||q.includes('smell'))key='ai_scents';
+  else if(q.includes('توصيل')||q.includes('شحن')||q.includes('دفع')||q.includes('delivery')||q.includes('shipping')||q.includes('payment')||q.includes('كام يوم'))key='ai_delivery';
+  else if(q.includes('عروس')||q.includes('bride')||q.includes('زفاف')||q.includes('خطوب')||q.includes('wedding'))key='ai_bride';
+  aiAdd(t(key),'bot');
 }
 $('#aiFab').onclick=()=>{
   $('#aiPanel').classList.toggle('open');
   if($('#aiPanel').classList.contains('open') && !$('#aiBody').children.length){
-    aiAdd('أهلاً بيكِ في VelaLight! أنا مساعدك الشخصي. إزاي أقدر أساعدك النهارده؟','bot');
+    aiAdd(t('ai_greeting'),'bot');
   }
 };
 $('#aiClose').onclick=()=>$('#aiPanel').classList.remove('open');
@@ -1186,9 +1405,9 @@ $('#aiSend').onclick=()=>{
 };
 $('#aiInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('#aiSend').click();});
 $$('[data-ai]').forEach(b=>b.onclick=()=>{
-  const key=b.dataset.ai;
+  const key='ai_'+b.dataset.ai;
   aiAdd(b.textContent,'user');
-  setTimeout(()=>aiAdd(AI_RESPONSES[key]||AI_RESPONSES.default,'bot'),400);
+  setTimeout(()=>aiAdd(t(key)||t('ai_default'),'bot'),400);
 });
 
 /* ===== Events ===== */
@@ -1231,7 +1450,7 @@ $('#btnAccount').onclick=()=>{
 };
 $('#btnAccSave').onclick=()=>{
   const name=$('#accName').value.trim(),phone=$('#accPhone').value.trim();
-  if(!name||!phone)return toast('اكتب اسمك ورقم هاتفك');
+  if(!name||!phone)return toast(t('toast_fill_fields'));
   user={name,phone,addr:$('#accAddr').value.trim(),orders:user?.orders||0};
   LS.set('vl_user',user);toast(t('toast_save'));updateCartUI();
   $('#accWelcomeBox').style.display='';$('#accWelcome').textContent=t('acc_welcome')(name.split(' ')[0]);
