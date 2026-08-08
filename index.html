@@ -33,9 +33,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Amiri:wght@400;700&family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -1572,40 +1569,79 @@ setTimeout(()=>$('#loader').classList.add('hide'),2500);
 
 
 
-<!-- تحميل Firebase كـ Module -->
-
-<!-- كود جلب المنتجات من Firebase وتحديث الموقع -->
+<!-- Firebase realtime products -->
 <script>
-(function(){
-  if(typeof firebase==='undefined') return;
-  const firebaseConfig={apiKey:"AIzaSyDTX0J7Fvccv2oLvpGYYZXHiteGuiE8y8o",authDomain:"velalight.firebaseapp.com",projectId:"velalight",storageBucket:"velalight.firebasestorage.app",messagingSenderId:"1095485535268",appId:"1:1095485535268:web:4d17ee9de6f5acdacbd4b1"};
-  try{
-    if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const db=firebase.firestore();
-    db.collection("products").get().then(snapshot=>{
-      if(snapshot.empty) return;
-      const mapped=[];
-      snapshot.forEach(doc=>{
-        const p=doc.data()||{};
-        let images=p.images||p.imgs||(p.img?[p.img]:[]);
-        images=images.map(img=>String(img).startsWith('http')?img:IMG+img);
-        mapped.push({
-          id:typeof p.id==='string'?(parseInt(p.id)||p.id):(p.id??doc.id),
-          cat:p.cat||'all',price:Number(p.price)||0,old:p.old?Number(p.old):null,
-          name_ar:p.name_ar||p.name||'',name_en:p.name_en||p.nameEn||'',
-          images,desc_ar:p.desc_ar||p.desc||'',desc_en:p.desc_en||p.descEn||'',
-          badge:p.badge||null,captions:p.captions||[],scents:p.scents||[]
-        });
+window.addEventListener('fb-ready', function () {
+  console.log('🔥 Firebase realtime listener started');
+
+  if (!window.FB || typeof window.FB.watch !== 'function') {
+    console.error('Firebase realtime API is unavailable');
+    return;
+  }
+
+  window.FB.watch('products', function (fbProducts) {
+    try {
+      const mapped = fbProducts.map(function (p) {
+        let images = p.images || p.imgs || (p.img ? [p.img] : []);
+
+        if (!Array.isArray(images)) images = [images];
+
+        images = images
+          .filter(Boolean)
+          .map(function (img) {
+            const value = String(img);
+            return value.startsWith('http') ? value : IMG + value;
+          });
+
+        return {
+          id: typeof p.id === 'string'
+            ? (parseInt(p.id) || p.id)
+            : (p.id ?? null),
+
+          cat: p.cat || 'all',
+          price: Number(p.price) || 0,
+          old: p.old ? Number(p.old) : null,
+
+          name_ar: p.name_ar || p.name || '',
+          name_en: p.name_en || p.nameEn || '',
+
+          images: images,
+
+          desc_ar: p.desc_ar || p.desc || '',
+          desc_en: p.desc_en || p.descEn || '',
+
+          badge: p.badge || null,
+          captions: Array.isArray(p.captions) ? p.captions : [],
+          scents: Array.isArray(p.scents) ? p.scents : []
+        };
       });
-      if(mapped.length){
-        PRODUCTS.length=0;
-        mapped.forEach(x=>PRODUCTS.push(x));
-        renderProducts();
-        if(qvId) renderQuick(qvId,true);
+
+      // Firebase becomes the single source of truth.
+      PRODUCTS.length = 0;
+      mapped.forEach(function (product) {
+        PRODUCTS.push(product);
+      });
+
+      renderProducts();
+
+      // If a product is currently open, refresh its details too.
+      if (qvId != null) {
+        const current = PRODUCTS.find(function (p) {
+          return String(p.id) === String(qvId);
+        });
+
+        if (current) renderQuick(current.id, true);
+        else closeModals();
       }
-    }).catch(err=>console.warn('Firebase products unavailable:',err));
-  }catch(err){console.warn('Firebase unavailable:',err);}
-})();
+
+      console.log('🔥 Firebase products synced:', mapped.length);
+    } catch (error) {
+      console.error('Firebase product rendering error:', error);
+    }
+  });
+});
 </script>
+
+<script type="module" src="firebase.js"></script>
 </body>
 </html>
