@@ -60,7 +60,7 @@ const CATS={ar:{all:"كل الشموع",wood:"شموع خشبية",glass:"شمو
 const cat=k=>CATS[LANG][k]||k;
 
 /* العطور الـ19 (عربي/إنجليزي) */
-const SCENTS=[["عود كمبودي","Cambodian Oud"],["مسك أبيض","White Musk"],["فانيليا مدغشقر","Madagascar Vanilla"],["لافندر فرنسي","French Lavender"],["ياسمين مصري","Egyptian Jasmine"],["ورد طائفي","Taif Rose"],["عنبر شرقي","Oriental Amber"],["خشب الصندل","Sandalwood"],["برغموت إيطالي","Italian Bergamot"],["قهوة عربية","Arabic Coffee"],["كراميل مملح","Salted Caramel"],["جوز الهند","Coconut"],["نعناع بارد","Cool Mint"],["توت بري","Wild Berry"],["زهر البرتقال","Orange Blossom"],["باتشولي","Patchouli"],["خشب الأرز","Cedarwood"],["ليمون وفيربينا","Lemon Verbena"],["مسك الليل","Night Musk"]];
+const SCENTS=[["فانيليا","Vanilla"],["موكا","Mocha"],["كراميل","Caramel"],["قرفة","Cinnamon"],["عنبر","Amber"],["عود","Oud"],["قهوة","Coffee"],["أناناس","Pineapple"],["كوكونات","Coconut"],["كاريبيان فروت","Caribbean Fruit"],["مانجو","Mango"],["توت","Berry"],["ورد","Rose"],["ياسمين","Jasmine"],["فل","Arabian Jasmine"],["لافندر","Lavender"],["مسك أبيض","White Musk"],["ساندال وود","Sandalwood"],["باتشولي","Patchouli"]];
 const scentTr=n=>{const f=SCENTS.find(s=>s[0]===n||s[1]===n);return f?(LANG==="en"?f[1]:f[0]):n};
 
 const GOVS=["القاهرة","الجيزة","الإسكندرية","القليوبية","الدقهلية","الشرقية","الغربية","المنوفية","البحيرة","كفر الشيخ","دمياط","بورسعيد","الإسماعيلية","السويس","شمال سيناء","جنوب سيناء","البحر الأحمر","الفيوم","بني سويف","المنيا","أسيوط","سوهاج","قنا","الأقصر","أسوان","الوادي الجديد","مطروح"];
@@ -69,57 +69,63 @@ const GOVS_EN=["Cairo","Giza","Alexandria","Qalyubia","Dakahlia","Sharqia","Ghar
 /* حالات الطلب */
 const STATUS=["قيد المراجعة","جاري التجهيز","تم الشحن","تم التسليم","ملغي"];
 
+const D=864e5,NOW=Date.now();
 /* ════════════════════════════════════════════════════════════
    ★★★ PRODUCTS — حطّي منتجاتك الحقيقية هنا ★★★
    img: حطي اسم الصورة الموجودة في الريبو (زي "p1.jpg")
    أو رابط كامل. لو سيبتيها فاضية هتتولد صورة أنيقة تلقائيًا.
    ▸ لصور WebP الأسرع: حوّلي صورك لـ .webp وارفعيها واستخدمي الاسم هنا
 ════════════════════════════════════════════════════════════ */
-const D=864e5,NOW=Date.now();
-const PRODUCTS=[{id:"test-123",name:"منتج اختبار مؤقت",nameEn:"Temp Test Product",cat:"glass",price:100,old:0,badge:"اختبار",badgeEn:"Test",hours:"10 ساعات اشتعال",hoursEn:"10h burn time",scents:["مسك أبيض"],img:"",sold:0,createdAt:Date.now(),desc:"منتج اختبار مؤقت — هيتشال",descEn:"Temporary test product"},
- {id:"royal-sandalwood",name:"شمعة خشب الصندل الملكية",nameEn:"Royal Sandalwood Candle",cat:"wood",price:480,old:600,badge:"الأكثر مبيعًا",badgeEn:"Best Seller",hours:"55 ساعة اشتعال",hoursEn:"55h burn time",scents:["خشب الصندل","عود كمبودي","عنبر شرقي"],img:"",sold:340,createdAt:NOW-40*D,
-  desc:"قطعتنا الأشهر — شمع طبيعي بعبق خشب الصندل الدافئ مع لمسة عود كمبودي فاخرة، في قاعدة خشبية مصقولة يدويًا.",
-  descEn:"Our most famous piece — natural wax with warm sandalwood and luxurious Cambodian oud, in a hand-polished wooden base."},
- {id:"cambodian-oud",name:"شمعة العود الكمبودي",nameEn:"Cambodian Oud Candle",cat:"wood",price:520,old:0,badge:"",badgeEn:"",hours:"50 ساعة اشتعال",hoursEn:"50h burn time",scents:["عود كمبودي","مسك الليل","باتشولي"],img:"",sold:210,createdAt:NOW-35*D,
-  desc:"لعشّاق الفخامة الشرقية: عطر عود كمبودي أصيل يفوح في المكان لساعات، مع فتيل خشبي بصوت فرقعة هادية.",
-  descEn:"Authentic Cambodian oud that fills the room for hours, with a crackling wooden wick."},
- {id:"white-musk-jar",name:"شمعة المسك الأبيض",nameEn:"White Musk Jar",cat:"glass",price:380,old:450,badge:"خصم خاص",badgeEn:"Special Offer",hours:"45 ساعة اشتعال",hoursEn:"45h burn time",scents:["مسك أبيض","ياسمين مصري","فانيليا مدغشقر"],img:"",sold:185,createdAt:NOW-30*D,
-  desc:"نقاء المسك الأبيض في برطمان زجاجي أنيق — عطر ناعم يحوّل أوضتك لمساحة سبا فاخرة.",
-  descEn:"Pure white musk in an elegant glass jar — turns your room into a luxury spa."},
- {id:"madagascar-vanilla",name:"شمعة فانيليا مدغشقر",nameEn:"Madagascar Vanilla",cat:"glass",price:350,old:0,badge:"",badgeEn:"",hours:"45 ساعة اشتعال",hoursEn:"45h burn time",scents:["فانيليا مدغشقر","كراميل مملح","جوز الهند"],img:"",sold:260,createdAt:NOW-28*D,
-  desc:"حلاوة الفانيليا الطبيعية بلمسة كراميل — ريحة بتحضن المكان وبتدي إحساس فوري بالراحة.",
-  descEn:"Natural vanilla sweetness with a caramel touch — instantly feels like home."},
- {id:"golden-crystal",name:"الكريستالة الذهبية",nameEn:"The Golden Crystal",cat:"crystal",price:650,old:780,badge:"إصدار محدود",badgeEn:"Limited Edition",hours:"60 ساعة اشتعال",hoursEn:"60h burn time",scents:["عنبر شرقي","ورد طائفي","مسك أبيض"],img:"",sold:95,createdAt:NOW-25*D,
-  desc:"تحفة كريستالية مصبوبة يدويًا بلمسات ذهبية، بعد ما الشمعة تخلص بتفضل قطعة ديكور فخمة.",
-  descEn:"A hand-cast crystal masterpiece with golden touches — stays a luxury décor piece."},
- {id:"crystal-frost",name:"ثلجة الكريستال",nameEn:"Crystal Frost",cat:"crystal",price:590,old:0,badge:"",badgeEn:"",hours:"55 ساعة اشتعال",hoursEn:"55h burn time",scents:["نعناع بارد","ليمون وفيربينا","برغموت إيطالي"],img:"",sold:70,createdAt:NOW-22*D,
-  desc:"انتعاش بارد في تصميم كريستالي ثلجي — عطر نعناع وفيربينا بينعش الروح في حر الصيف.",
-  descEn:"Cool freshness in a frosty crystal design — mint & verbena for summer days."},
- {id:"royal-brass",name:"شمعة النحاس الملكية",nameEn:"Royal Brass Candle",cat:"metal",price:540,old:0,badge:"",badgeEn:"",hours:"50 ساعة اشتعال",hoursEn:"50h burn time",scents:["قهوة عربية","خشب الأرز","عنبر شرقي"],img:"",sold:120,createdAt:NOW-20*D,
-  desc:"قاعدة نحاسية مطروقة يدويًا بروح التراث، مع عطر قهوة عربية محوّجة يملأ المكان دفء.",
-  descEn:"Hand-hammered brass base with the warmth of spiced Arabic coffee."},
- {id:"gold-lantern",name:"لانترن الذهب",nameEn:"Golden Lantern",cat:"metal",price:620,old:700,badge:"خصم خاص",badgeEn:"Special Offer",hours:"60 ساعة اشتعال",hoursEn:"60h burn time",scents:["ورد طائفي","زهر البرتقال","مسك الليل"],img:"",sold:140,createdAt:NOW-18*D,
-  desc:"فانوس ذهبي بتصميم شرقي مفرّغ يرسم ظلال ضوء ساحرة على الحيطان — هدية تليق بأغلى الناس.",
-  descEn:"A golden lantern casting magical light shadows — a gift worthy of your dearest."},
- {id:"spa-massage-candle",name:"شمعة المساج للاسترخاء",en:"Spa Massage Candle",nameEn:"Spa Massage Candle",cat:"massage",price:420,old:0,badge:"جديد",badgeEn:"New",hours:"40 ساعة + زيت مساج",hoursEn:"40h + massage oil",scents:["لافندر فرنسي","ياسمين مصري","جوز الهند"],img:"",sold:175,createdAt:NOW-15*D,
-  desc:"شمعة بتتحول لزيت مساج دافي بيرطّب الجسم — شمع طبيعي 100% آمن على البشرة مع لافندر مهدّي.",
-  descEn:"Melts into warm massage oil — 100% natural skin-safe wax with calming lavender."},
- {id:"warm-massage-oil",name:"زيت المساج الدافئ بالكراميل",nameEn:"Warm Caramel Massage",cat:"massage",price:390,old:0,badge:"",badgeEn:"",hours:"—",hoursEn:"—",scents:["كراميل مملح","فانيليا مدغشقر","جوز الهند"],img:"",sold:88,createdAt:NOW-12*D,
-  desc:"تجربة سبا كاملة في البيت: زيت دافي بعطر الكراميل بيذوب التوتر وبيخلي البشرة ناعمة كالحرير.",
-  descEn:"A full spa experience at home: warm caramel oil that melts tension away."},
- {id:"bride-royal-box",name:"بوكس العروسة الملكي",nameEn:"The Royal Bride Box",cat:"bride",price:1250,old:1500,badge:"الأكثر طلبًا",badgeEn:"Most Requested",hours:"3 شموع × 45 ساعة",hoursEn:"3 candles × 45h",scents:["ورد طائفي","ياسمين مصري","مسك أبيض","فانيليا مدغشقر"],img:"",sold:205,createdAt:NOW-10*D,
-  desc:"البوكس اللي كل عروسة بتحلم بيه: 3 شموع فاخرة بعطور رومانسية + تغليف ملكي أبيض وذهبي + كارت إهداء باسم العروسة.",
-  descEn:"The box every bride dreams of: 3 luxury candles, royal white & gold wrapping + dedication card."},
- {id:"layali-gift-box",name:"بوكس هدية ليالي",nameEn:"Layali Gift Box",cat:"gift",price:850,old:0,badge:"",badgeEn:"",hours:"2 شمعة × 45 ساعة",hoursEn:"2 candles × 45h",scents:["عنبر شرقي","عود كمبودي","مسك الليل"],img:"",sold:130,createdAt:NOW-6*D,
-  desc:"بوكس هدية منسّق بعناية: شموعتين بعطور شرقية + مطفأة نحاس + كارت معايدة — جاهز يتقدم في أي مناسبة.",
-  descEn:"A curated gift box: 2 oriental candles + brass tray + greeting card — ready for any occasion."}
+const PRODUCTS=[
+{id:"1",name:"الشمعة الفاخرة (مجموعة 3 شموع)",nameEn:"Luxury Candle Set (3 Candles)",cat:"wood",price:650,old:750,badge:"خصم",badgeEn:"Sale",hours:"3 شموع × 72 ساعة",hoursEn:"3 candles × 72h",scents:["عود","فانيليا","مسك أبيض"],img:"RRRR.jpg",imgs:["RRRR.jpg","RRRRR.jpg","RRRRRR.jpg","RR.jpg","RRR.jpg"],sold:0,createdAt:NOW-1*D,
+desc:"ثلاث شموع فاخرة في مجموعة واحدة، صُممت لتتناغم معًا كسيمفونية من الضوء والعطر. كل شمعة تحمل طابعًا خاصًا، ومعًا يملأن المكان بدفءٍ لا يُقاوم وأناقةٍ تليق بأجمل اللحظات.",
+descEn:"Three luxury candles in one curated set, designed to harmonize as a symphony of light and scent."},
+{id:"2",name:"شمعة نبضين",nameEn:"Two Heartbeats Candle",cat:"wood",price:650,old:750,badge:"خصم",badgeEn:"Sale",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["ورد","فانيليا","مسك أبيض"],img:"heart2.jpg",imgs:["heart2.jpg","heart3.jpg","heart1.jpg"],sold:0,createdAt:NOW-2*D,
+desc:"ليست مجرد شمعة... بل قطعة تُحاكي المشاعر. شمعة نبضين من الخشب الطبيعي الفاخر بتصميم قلب أنيق، مع إمكانية نقش اسمك أو اسم من تحب لتصبح ذكرى تدوم وهدية تحمل معنى.",
+descEn:"More than a candle — a piece that echoes emotions. A premium natural wood candle with an elegant heart design."},
+{id:"3",name:"جولدن كاندل",nameEn:"Golden Candle Set",cat:"glass",price:2850,old:3600,badge:"خصم",badgeEn:"Sale",hours:"3 شموع × 96 ساعة",hoursEn:"3 candles × 96h",scents:["عنبر","عود","كراميل"],img:"candle1.jpg",imgs:["candle1.jpg","candle2.jpg","candle3.jpg","candle4.jpg","candle5.jpg"],sold:0,createdAt:NOW-3*D,
+desc:"هناك تفاصيل لا تكتفي بتزيين المكان... بل تمنحه روحًا. مجموعة من ثلاث شموع في أوانٍ زجاجية فاخرة، صُممت لتنسج مشهدًا من الدفء والأناقة في كل زاوية من منزلك.",
+descEn:"Some details do not just decorate a place — they give it a soul. A set of three candles in luxurious glass vessels."},
+{id:"4",name:"شمعة الأيس كوفي",nameEn:"Iced Coffee Candle",cat:"glass",price:425,old:550,badge:"خصم",badgeEn:"Sale",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["قهوة","موكا","فانيليا"],img:"iccoffe1.jpg",imgs:["iccoffe1.jpg","iccoffe2.jpg","iccoffe3.jpg","iccoffe4.jpg"],sold:0,createdAt:NOW-4*D,
+desc:"ليست رائحة قهوة... بل مزاجٌ كامل يُضاء. شمعة آيس كوفي صُنعت لتأخذك إلى هدوء المقاهي الراقية.",
+descEn:"Not just the scent of coffee — a whole mood, illuminated."},
+{id:"5",name:"شمعة المانديلا",nameEn:"Mandala Candle",cat:"metal",price:325,old:0,badge:"الأكثر مبيعًا",badgeEn:"Best Seller",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["عود","عنبر","قرفة"],img:"mandle.jpg",imgs:["mandle.jpg"],sold:0,createdAt:NOW-5*D,
+desc:"الأكثر مبيعًا... والأقرب إلى كل بيت يعشق التفاصيل الراقية. شمعة المانديلا ليست مجرد قطعة ديكور، بل حضور يملأ المكان دفئًا وأناقة.",
+descEn:"The best-seller — the Mandala candle is a presence that fills the space with warmth and elegance."},
+{id:"6",name:"شمعة المساج",nameEn:"Massage Candle",cat:"metal",price:325,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["لافندر","ياسمين","كوكونات"],img:"gift1.jpg",imgs:["gift1.jpg","gift2.jpg","gift3.jpg","gift4.jpg","gift5.jpg","gift6.jpg","gift7.jpg"],sold:0,createdAt:NOW-6*D,
+desc:"كل امرأة تستحق لحظة تُدلل فيها نفسها. شمعة المساج ليست مجرد شمعة، بل تجربة عناية فاخرة تبدأ بوهجٍ هادئ وتنتهي ببشرة أكثر نعومة.",
+descEn:"Every woman deserves a moment to pamper herself."},
+{id:"7",name:"شمعة كريستال ذهبية",nameEn:"Crystal Gold Candle",cat:"crystal",price:750,old:900,badge:"خصم",badgeEn:"Sale",hours:"96 ساعة اشتعال",hoursEn:"96h burn time",scents:["عنبر","ورد","مسك أبيض"],img:"candle13.jpg",imgs:["candle13.jpg"],sold:0,createdAt:NOW-7*D,
+desc:"قطعة استثنائية في إناء كريستال فاخر يعكس ضوء الشمعة بشكل ساحر.",
+descEn:"An exceptional piece in a luxury crystal vessel."},
+{id:"8",name:"بلو كريستال",nameEn:"Blue Crystal",cat:"crystal",price:720,old:0,badge:"",badgeEn:"",hours:"96 ساعة اشتعال",hoursEn:"96h burn time",scents:["توت","أناناس","لافندر"],img:"candle14.jpg",imgs:["candle14.jpg"],sold:0,createdAt:NOW-8*D,
+desc:"شمعة كريستالية بلون أزرق أنيق، تصميم عصري يضيف لمسة من الرقي.",
+descEn:"A crystal candle with elegant blue color."},
+{id:"9",name:"لافندر (جلاس)",nameEn:"Lavender (Glass)",cat:"glass",price:430,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["لافندر","باتشولي","مسك أبيض"],img:"candle9.jpg",imgs:["candle9.jpg"],sold:0,createdAt:NOW-9*D,
+desc:"شمعة زجاجية بعطر اللافندر الفرنسي المهدئ، مثالية للاسترخاء.",
+descEn:"A glass candle with calming French lavender scent."},
+{id:"10",name:"ياسمين (جلاس)",nameEn:"Jasmine (Glass)",cat:"glass",price:440,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["ياسمين","فل","ورد"],img:"candle10.jpg",imgs:["candle10.jpg"],sold:0,createdAt:NOW-10*D,
+desc:"شمعة زجاجية بعطر الياسمين النقي، رائحة زهرية منعشة.",
+descEn:"A glass candle with pure jasmine scent."},
+{id:"11",name:"فانيليا (جلاس)",nameEn:"Vanilla (Glass)",cat:"glass",price:400,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["فانيليا","كراميل","موكا"],img:"candle11.jpg",imgs:["candle11.jpg"],sold:0,createdAt:NOW-11*D,
+desc:"شمعة زجاجية بعطر الفانيلا الكلاسيكي، رائحة دافئة محببة للجميع.",
+descEn:"A glass candle with classic vanilla scent."},
+{id:"12",name:"شمعة مساج ريلاكس",nameEn:"Relax Massage Candle",cat:"massage",price:380,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["لافندر","فل","مسك أبيض"],img:"candle19.jpg",imgs:["candle19.jpg"],sold:0,createdAt:NOW-12*D,
+desc:"شمعة مساج بعطر اللافندر والخزامى المهدئ، يمنحك استرخاءً عميقًا.",
+descEn:"A massage candle with calming lavender scent."},
+{id:"13",name:"بوكس هدية فاخر",nameEn:"Luxury Gift Box",cat:"gift",price:850,old:0,badge:"",badgeEn:"",hours:"شمعة + إكسسوارات",hoursEn:"Candle + accessories",scents:["عود","عنبر","ورد"],img:"gifta.jpg",imgs:["gifta.jpg"],sold:0,createdAt:NOW-13*D,
+desc:"بوكس هدايا فاخر بتغليف ملكي، يحتوي على شمعة مختارة وإكسسوارات.",
+descEn:"A luxury gift box with royal wrapping."},
+{id:"14",name:"بوكس العروسة",nameEn:"Bride Box",cat:"bride",price:1500,old:0,badge:"الأكثر طلبًا",badgeEn:"Most Requested",hours:"بوكس متكامل",hoursEn:"Complete box",scents:["ورد","ياسمين","مسك أبيض","فانيليا"],img:"box1.jpg",imgs:["box1.jpg"],sold:0,createdAt:NOW-14*D,
+desc:"أفخم بوكس عروسة: شموع مساج + شموع ديكور + معطرات وتغليف وردي ملكي.",
+descEn:"The most luxurious bride box with royal pink wrapping."}
 ];
-
 /* صورة بديلة أنيقة للمنتج اللي ملوش صورة */
 function ph(p){const T={wood:["#3a2417","#8a5a33"],glass:["#1c2a36","#7fa6c4"],crystal:["#33290f","#e2c078"],metal:["#2b2118","#c09a5e"],massage:["#2a2233","#a98cc9"],gift:["#331d1d","#d98a7e"],bride:["#33242e","#e3b7c8"]}[p.cat]||["#2b2118","#c09a5e"];
  const s=`<svg xmlns='http://www.w3.org/2000/svg' width='900' height='900'><defs><radialGradient id='g' cx='50%' cy='36%' r='78%'><stop offset='0%' stop-color='${T[1]}' stop-opacity='.5'/><stop offset='58%' stop-color='${T[0]}'/><stop offset='100%' stop-color='#120d0a'/></radialGradient><linearGradient id='j' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='${T[1]}' stop-opacity='.92'/><stop offset='1' stop-color='${T[0]}'/></linearGradient></defs><rect width='900' height='900' fill='url(#g)'/><ellipse cx='450' cy='320' rx='150' ry='170' fill='#ffb757' opacity='.10'/><ellipse cx='450' cy='340' rx='75' ry='95' fill='#ffcf7d' opacity='.13'/><path d='M450 296 q28 36 0 66 q-28 -30 0 -66' fill='#ffcf7d'/><rect x='445' y='360' width='10' height='32' rx='4' fill='#241610'/><rect x='328' y='392' width='244' height='292' rx='28' fill='url(#j)'/><rect x='328' y='392' width='244' height='292' rx='28' fill='#fff' opacity='.05'/><rect x='352' y='474' width='196' height='122' rx='12' fill='#0f0a08' opacity='.58'/><text x='450' y='528' font-family='Georgia' font-size='34' fill='#e9c87a' text-anchor='middle'>VelaLight</text><text x='450' y='566' font-family='Georgia' font-size='16' fill='#cbb287' text-anchor='middle'>Luxury Candle</text></svg>`;
  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s)}
-const imgOf=p=>p.img?CDN(p.img):ph(p);
+const imgsOf=p=>{if(p.imgs&&p.imgs.length)return p.imgs;const raw=p.img||"";return String(raw).split(",").map(s=>s.trim()).filter(Boolean)};
+const imgOf=p=>{const a=imgsOf(p);return a.length?CDN(a[0]):ph(p)};
 const pname=p=>LANG==="en"?(p.nameEn||p.en||p.name):p.name;
 const pdesc=p=>LANG==="en"?(p.descEn||p.desc||""):(p.desc||"");
 const phours=p=>LANG==="en"?(p.hoursEn||p.hours||"40–60 hours"):(p.hours||"40–60 ساعة");
@@ -159,7 +165,7 @@ const prodReviews=s=>ALL_REVIEWS.filter(r=>(r.productSlug||r.pid)===s&&r.approve
 const ratingOf=s=>{const r=prodReviews(s);if(!r.length)return null;return{avg:+(r.reduce((a,b)=>a+(+b.rating||5),0)/r.length).toFixed(1),count:r.length}};
 
 /* مراجعات تجريبية — هتتحذف تلقائيًا لما الريفيوهات الحقيقية تيجي */
-const SEED_REVIEWS=[
+const SEED_REVIEWS=[];
  {id:"s1",productSlug:"royal-sandalwood",name:"مريم أ.",rating:5,text:"أحلى شمعة جربتها! ريحة العود والصندل فاضت في البيت كله والتغليف تحفة 🤍",approved:true,createdAt:1769900000000},
  {id:"s2",productSlug:"bride-royal-box",name:"سارة م.",rating:5,text:"جبته هدية لأختي العروسة، عيطت من الفرحة! التغليف الملكي يستاهل كل جنيه.",approved:true,createdAt:1770100000000},
  {id:"s3",productSlug:"spa-massage-candle",name:"نور ا.",rating:5,text:"شمعة المساج غير طبيعية، الزيت دافي وريحته بتريح الأعصاب.",approved:true,createdAt:1770300000000}
@@ -212,13 +218,15 @@ ar:{
  feat5t:"ضمان استبدال",feat5d:"واثقين انك هتقع فى حب المنتج من اول لحظه وإن لم تكن راضيًا تمامًا، فسنحرص على استبداله.",
  feat6t:"دعم دائم لعملائنا",feat6d:"محتار تختار إيه؟ سيبها علينا. هنسمع فكرتك ونرشح لك الهدية والعطر الأنسب.",
  faq_h2:"الأسئلة الشائعة",
- faq1q:"كام مدة التوصيل؟",faq1a:"بنوصل لكل محافظات مصر خلال 3–7 أيام عمل، بتغليف آمن يحافظ على شمعتك من الورشة لحد باب بيتك.",
- faq2q:"إزاي بيتم الدفع؟",faq2a:"قيمة المنتجات بتتحول مقدمًا عبر InstaPay، أما تكلفة الشحن فتُدفع كاش لمندوب شركة الشحن وقت استلام الأوردر مباشرة.",
- faq3q:"أقدر أستبدل المنتج؟",faq3a:"نعم، ضمان استبدال خلال 3 أيام من الاستلام. تفاصيل أكتر في ",
- faq4q:"الخامات طبيعية؟",faq4a:"100% شمع طبيعي نقي وفتائل خشب طبيعي وقطنية آمنة على صحتك وبيتك.",
- faq5q:"الشمعة تعيش قد إيه؟",faq5a:"متوسط مدة الاشتعال من 40 إلى 60 ساعة حسب الموديل والحجم.",
- faq6q:"أقدر أختار العطر لأي منتج؟",faq6a:"طبعًا! كل العطور الـ19 المميزة متاحة لأي منتج، وتغليف الهدايا الفاخر مجاني مع كل طلب.",
- rev_h2:"آراء عملائنا",rev_sub:"ثقتكم أجمل هدية لنا",rev_verified:"عميلة موثّقة",
+
+faq1q:"كام مدة توصيل الأوردر؟",faq1a:"التوصيل داخل القاهرة والجيزة بياخد من 3 إلى 5 أيام عمل، وباقي المحافظات من 5 إلى 7 أيام عمل.",
+faq2q:"طرق الدفع المتاحة إيه؟",faq2a:"قيمة المنتجات تُدفع InstaPay مقدمًا، وتكلفة الشحن فقط تُدفع كاش لمندوب الشحن عند الاستلام.",
+faq3q:"هل ينفع استبدال المنتج لو مش عاجبني؟",faq3a:"أيوه، عندنا سياسة استبدال خلال 3 أيام من الاستلام بشرط أن المنتج لم يُستخدم.",
+faq4q:"مدة اشتعال الشمعة قد إيه؟",faq4a:"حسب حجم الشمعة، بتتراوح بين 72 إلى 96 ساعة اشتعال متواصل.",
+faq5q:"الشموع آمنة على الأطفال والحيوانات الأليفة؟",faq5a:"الشموع مصنوعة من شمع طبيعي وفتيلة خشب طبيعي وفتيلة قطنية، وننصح دائمًا بعدم تركها مشتعلة بدون إشراف.",
+faq6q:"بتوصلوا لكل المحافظات؟",faq6a:"أيوه، بنوصل لكل محافظات مصر عن طريق شركات شحن موثوقة.",
+
+rev_h2:"آراء عملائنا",rev_sub:"ثقتكم أجمل هدية لنا",rev_verified:"عميلة موثّقة",
  foot_tag1:"شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب",foot_tag2:"Luxury handmade candles - Signature scents - Custom gifts",
  foot_quick:"روابط سريعة",foot_shop:"تسوق",foot_admin:"لوحة التحكم",foot_pay_h:"الدفع والشحن",
  pay_title:"InstaPay — تحويل مقدم",
@@ -291,13 +299,13 @@ en:{
  feat5t:"Replacement Guarantee",feat5d:"We're confident you'll fall in love with the product from the first moment; if not fully satisfied, we'll replace it.",
  feat6t:"Always Here for You",feat6d:"Can't decide? Leave it to us. We'll listen to your idea and recommend the perfect gift and scent.",
  faq_h2:"Frequently Asked Questions",
- faq1q:"How long does delivery take?",faq1a:"We deliver to all Egyptian governorates within 3–7 business days, with safe packaging that protects your candle.",
- faq2q:"How does payment work?",faq2a:"Product value is paid upfront via InstaPay, while shipping is paid in cash to the courier upon delivery.",
- faq3q:"Can I exchange a product?",faq3a:"Yes, a 3-day replacement guarantee from delivery. More details in the ",
- faq4q:"Are the ingredients natural?",faq4a:"100% pure natural wax with natural wooden and cotton wicks, safe for your health and home.",
- faq5q:"How long does a candle last?",faq5a:"Average burn time is 40 to 60 hours depending on model and size.",
- faq6q:"Can I choose the scent for any product?",faq6a:"Of course! All 19 signature scents are available for any product, and luxury gift wrapping is free with every order.",
- rev_h2:"Our Clients' Reviews",rev_sub:"Your trust is our most beautiful gift",rev_verified:"Verified Customer",
+faq1q:"How long does delivery take?",faq1a:"Delivery within Cairo and Giza takes 3-5 business days, and 5-7 for other governorates.",
+faq2q:"What payment methods are available?",faq2a:"Product value via InstaPay; shipping cash on delivery.",
+faq3q:"Can I exchange the product?",faq3a:"Yes, 3-day exchange policy if unused.",
+faq4q:"How long does a candle burn?",faq4a:"72-96 continuous hours.",
+faq5q:"Are candles safe around children and pets?",faq5a:"Natural wax; never leave unattended.",
+faq6q:"Do you deliver to all governorates?",faq6a:"Yes, all over Egypt.",
+rev_h2:"Our Clients' Reviews",rev_sub:"Your trust is our most beautiful gift",rev_verified:"Verified Customer",
  foot_tag1:"Luxury handmade candles - Signature scents - Custom gifts",foot_tag2:"شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب",
  foot_quick:"Quick Links",foot_shop:"Shop",foot_admin:"Admin Panel",foot_pay_h:"Payment & Shipping",
  pay_title:"InstaPay — Upfront Transfer",
