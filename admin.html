@@ -114,10 +114,10 @@ async function render(){
   <td><button class="btn ghost sm" data-edit="${p.id}">✏️</button></td>
  </tr>`).join("");
  $$("#productsBody [data-tgl]").forEach(c=>c.onchange=async()=>{
-  const slug=c.dataset.tgl,doc_=dbProductsCache.find(d=>(d.id_||d.slug||d.pid)===slug);
+  const slug=c.dataset.tgl,doc_=dbProductsCache.find(d=>String(d.id_||d.slug||d.pid||"")===String(slug));
   try{doc_?await DB.update("products",doc_.id,{active:c.checked}):await DB.add("products",{slug,active:c.checked});await loadAll();toast("👌 تم")}catch(e){toast("خطأ")}
  });
- $$("#productsBody [data-edit]").forEach(b=>b.onclick=()=>openForm(ALL_PRODUCTS.find(p=>p.id===b.dataset.edit)));
+ $$("#productsBody [data-edit]").forEach(b=>b.onclick=()=>openForm(ALL_PRODUCTS.find(p=>String(p.id)===String(b.dataset.edit))));
  /* المراجعات */
  const dr=ALL_REVIEWS.filter(r=>!String(r.id).startsWith("s"));
  $("#reviewsBody").innerHTML=dr.length?dr.map(r=>`<div class="rv-item" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
@@ -145,7 +145,7 @@ async function saveProd(){
  const slug=editSlug||($("#pfEn").value.trim().toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"product-"+Date.now().toString(36));
  const data={slug,name,nameEn:$("#pfEn").value.trim(),price,old:+$("#pfOld").value||0,cat:$("#pfCat").value,img:$("#pfImg").value.trim(),badge:$("#pfBadge").value.trim(),hours:$("#pfHours").value.trim(),desc:$("#pfDesc").value.trim(),descEn:$("#pfDescEn").value.trim(),active:true,
   scents:$$("#pfScents .chip.on").map(c=>c.dataset.sc),createdAt:Date.now(),updatedAt:Date.now()};
- const doc_=dbProductsCache.find(d=>(d.id_||d.slug||d.pid)===slug);
+ const doc_=dbProductsCache.find(d=>String(d.id_||d.slug||d.pid||"")===String(slug));
  try{
   doc_?await DB.update("products",doc_.id,data):await DB.add("products",data);
   $("#prodForm").classList.add("hidden");render();
@@ -153,7 +153,12 @@ async function saveProd(){
  }catch(e){toast("خطأ: "+e.message)}
 }
 document.addEventListener("DOMContentLoaded",()=>{
- if(sessionStorage.vl_admin==="1")enter();else gate();
+ if(CLOUD && sessionStorage.vl_admin==="1")enter();else gate();
+
+ window.addEventListener("fb-ready",()=>{
+  if(!$("#admPanel").classList.contains("hidden"))return;
+  gate();
+ });
  $$(".adm-tabs .chip").forEach(b=>b.onclick=()=>{
   $$(".adm-tabs .chip").forEach(x=>x.classList.remove("on"));b.classList.add("on");
   ["orders","products","reviews"].forEach(x=>$("#admTab-"+x).classList.toggle("hidden",x!==b.dataset.atab));

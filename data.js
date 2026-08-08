@@ -5,7 +5,7 @@ SHIPPING:60,
 ADMIN_PIN:"2846",
 REPO:"velalight/velalight.github.io@main",
 FIREBASE:{
-apiKey:"AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",
+apiKey:"AIzaSyDTX0J7Fvccv2oLvpGYYZXHiteGuiE8y8o",
 authDomain:"velalight.firebaseapp.com",
 projectId:"velalight",
 storageBucket:"velalight.firebasestorage.app",

@@ -16,6 +16,13 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+.pd-gallery{display:flex;flex-direction:column;gap:.8rem}
+.pd-thumbs{display:flex;gap:.55rem;overflow-x:auto;padding:.15rem}
+.pd-thumbs button{flex:0 0 72px;width:72px;height:72px;border:1px solid var(--line);border-radius:10px;overflow:hidden;padding:0;background:transparent}
+.pd-thumbs button.on{border-color:var(--gold);box-shadow:0 0 0 2px rgba(217,171,95,.15)}
+.pd-thumbs img{width:100%;height:100%;object-fit:cover}
+</style>
 </head>
 <body>
 
@@ -76,7 +83,10 @@ function render(){
  $("#pdWrap").innerHTML=`
   <div class="crumb"><a href="index.html">${t("crumb_home")}</a> ‹ <a href="index.html#products">${cat(P.cat)}</a> ‹ <span style="color:var(--gold2)">${pname(P)}</span></div>
   <div class="pd-grid">
-   <div class="pd-img"><img src="${imgOf(P)}" alt="${pname(P)}" width="800" height="800"></div>
+   <div class="pd-gallery">
+     <div class="pd-img"><img id="pdMainImg" src="${imgOf(P)}" alt="${pname(P)}" width="800" height="800"></div>
+     ${imgsOf(P).length>1?`<div class="pd-thumbs">${imgsOf(P).map((s,i)=>`<button type="button" data-pimg="${i}" class="${i===0?"on":""}"><img src="${CDN(s)}" alt="${pname(P)} — ${i+1}" loading="lazy"></button>`).join("")}</div>`:""}
+   </div>
    <div class="pd-info">
     <span class="kick">${cat(P.cat)}</span>
     <h1>${pname(P)} ${pbadge(P)?`<span class="p-badge" style="position:static;display:inline-block;vertical-align:middle;font-size:.65rem">${pbadge(P)}</span>`:""}</h1>
@@ -124,6 +134,12 @@ function render(){
   </div>
   ${rel.length?`<div class="sec" style="padding:3rem 0 0"><div class="sec-head"><span class="kick">You may also like</span><h2 style="font-size:1.5rem">${t("pd_rel_h2")}</h2></div><div class="rel-grid">${rel.map(cardMini).join("")}</div></div>`:""}`;
 
+ const galleryImages=imgsOf(P);
+ $$("#pdWrap [data-pimg]").forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.pimg,main=$("#pdMainImg");
+  if(main)main.src=CDN(galleryImages[i]);
+  $$("#pdWrap [data-pimg]").forEach(x=>x.classList.toggle("on",x===b));
+ });
  let sel=sc[0],qty=1;
  $$("#pdScents .chip").forEach(c=>c.onclick=()=>{$$("#pdScents .chip").forEach(x=>x.classList.remove("on"));c.classList.add("on");sel=c.dataset.s});
  $("#pdMinus").onclick=()=>{qty=Math.max(1,qty-1);$("#pdQty").textContent=qty};
@@ -146,7 +162,7 @@ function cardMini(p){const b=pbadge(p);return `<article class="p-card rv on"><a 
 document.addEventListener("click",e=>{const a=e.target.closest("[data-add]");if(a){const p=ALL_PRODUCTS.find(x=>x.id===a.dataset.add);p&&addToCart(p)}});
 $("#langBtn").onclick=()=>{LANG=LANG==="ar"?"en":"ar";localStorage.setItem("vl_lang",LANG);location.reload()};
 document.addEventListener("DOMContentLoaded",()=>{cartBadge();init()});
-window.addEventListener("data-refresh",()=>{if(P)init()});
+window.addEventListener("data-refresh",()=>{init()});
 </script>
 </body>
 </html>
