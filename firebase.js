@@ -5,6 +5,7 @@ import {
 import {
   getFirestore,
   collection,
+  getDocs,
   onSnapshot,
   addDoc,
   updateDoc,
@@ -19,112 +20,184 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
-const C = (window.CFG || {}).FIREBASE || {};
+/* ===== VelaLight Firebase Configuration ===== */
 
-if (C.apiKey && !C.apiKey.startsWith("YOUR_")) {
+const firebaseConfig = {
+  apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXHiteGuiE8y8o",
+  authDomain: "velalight.firebaseapp.com",
+  projectId: "velalight",
+  storageBucket: "velalight.firebasestorage.app",
+  messagingSenderId: "1095485535268",
+  appId: "1:1095485535268:web:4d17ee9de6f5acdacbd4b1"
+};
+
+
+try {
+
+  const app = initializeApp(firebaseConfig);
+
+  const db = getFirestore(app);
+
+  const auth = getAuth(app);
+
+
+  /* تسجيل دخول مجهول */
 
   try {
 
-    const app = initializeApp(C);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-
-    try {
-      await signInAnonymously(auth);
-    } catch (e) {
-      console.warn("Anonymous auth:", e.message);
-    }
-
-
-    window.FB = {
-
-      // قراءة مرة واحدة عند الحاجة
-      list: async (collectionName) => {
-        const snapshot = await import(
-          "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
-        ).then(({ getDocs }) =>
-          getDocs(collection(db, collectionName))
-        );
-
-        return snapshot.docs.map(d => ({
-          id: d.id,
-          ...d.data()
-        }));
-      },
-
-
-      // مراقبة مباشرة للتغييرات
-      watch: (collectionName, callback) => {
-
-        return onSnapshot(
-          collection(db, collectionName),
-
-          snapshot => {
-
-            const products = snapshot.docs.map(d => ({
-              id: d.id,
-              ...d.data()
-            }));
-
-            callback(products);
-
-          },
-
-          error => {
-            console.error(
-              `Firebase realtime error [${collectionName}]:`,
-              error
-            );
-          }
-        );
-
-      },
-
-
-      add: (collectionName, data) =>
-        addDoc(
-          collection(db, collectionName),
-          data
-        ),
-
-
-      update: (collectionName, id, data) =>
-        updateDoc(
-          doc(db, collectionName, id),
-          data
-        ),
-
-
-      remove: (collectionName, id) =>
-        deleteDoc(
-          doc(db, collectionName, id)
-        ),
-
-
-      admin: (email, password) =>
-        signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        )
-
-    };
-
-
-    window.dispatchEvent(
-      new Event("fb-ready")
-    );
-
-
-    console.log("🔥 Firebase connected successfully");
+    await signInAnonymously(auth);
 
   } catch (e) {
 
-    console.error(
-      "Firebase initialization failed:",
-      e
+    console.warn(
+      "Firebase anonymous auth:",
+      e.message
     );
 
   }
+
+
+  /* ===== Firebase API ===== */
+
+  window.FB = {
+
+
+    /* قراءة المنتجات مرة واحدة */
+
+    list: async function(collectionName) {
+
+      const snapshot = await getDocs(
+        collection(db, collectionName)
+      );
+
+      return snapshot.docs.map(function(d) {
+
+        return {
+          id: d.id,
+          ...d.data()
+        };
+
+      });
+
+    },
+
+
+    /* ===== REALTIME LISTENER ===== */
+
+    watch: function(collectionName, callback) {
+
+      return onSnapshot(
+
+        collection(db, collectionName),
+
+        function(snapshot) {
+
+          const products =
+            snapshot.docs.map(function(d) {
+
+              return {
+                id: d.id,
+                ...d.data()
+              };
+
+            });
+
+
+          callback(products);
+
+        },
+
+        function(error) {
+
+          console.error(
+            "Firebase realtime error [" +
+            collectionName +
+            "]:",
+            error
+          );
+
+        }
+
+      );
+
+    },
+
+
+    /* إضافة منتج */
+
+    add: function(collectionName, data) {
+
+      return addDoc(
+        collection(db, collectionName),
+        data
+      );
+
+    },
+
+
+    /* تعديل منتج */
+
+    update: function(collectionName, id, data) {
+
+      return updateDoc(
+        doc(db, collectionName, id),
+        data
+      );
+
+    },
+
+
+    /* حذف منتج */
+
+    remove: function(collectionName, id) {
+
+      return deleteDoc(
+        doc(db, collectionName, id)
+      );
+
+    },
+
+
+    /* دخول الأدمن */
+
+    admin: function(email, password) {
+
+      return signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    }
+
+  };
+
+
+  /* Firebase أصبح جاهزًا */
+
+  window.dispatchEvent(
+    new Event("fb-ready")
+  );
+
+
+  console.log(
+    "🔥 Firebase connected — realtime products enabled"
+  );
+
+
+} catch (error) {
+
+
+  console.error(
+    "Firebase initialization failed:",
+    error
+  );
+
+
+  window.dispatchEvent(
+    new CustomEvent("fb-error", {
+      detail: error
+    })
+  );
 
 }
