@@ -11,15 +11,15 @@ const CFG={
  SHIPPING:60,                    // ← الشحن
  ADMIN_PIN:"2468",               // ← PIN مؤقت قبل Firebase Auth
  REPO:"velalight/velalight.github.io@main",
- FIREBASE:{
-  apiKey:"YOUR_API_KEY",
-  authDomain:"YOUR_PROJECT.firebaseapp.com",
-  projectId:"YOUR_PROJECT_ID",
-  storageBucket:"YOUR_PROJECT.appspot.com",
-  messagingSenderId:"YOUR_SENDER_ID",
-  appId:"YOUR_APP_ID"
- },
- GA4_ID:"G-XXXXXXXXXX",
+FIREBASE:{
+apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",
+authDomain: "velalight.firebaseapp.com",
+projectId: "velalight",
+storageBucket: "velalight.firebasestorage.app",
+messagingSenderId: "1095485535268",
+appId: "1:1095485535268:web:4d17ee9de6f5acdacbd4b1"
+},
+GA4_ID:"G-XXXXXXXXXX",
  META_PIXEL_ID:"YOUR_META_PIXEL_ID",
  TIKTOK_PIXEL_ID:"YOUR_TIKTOK_PIXEL_ID"
 };
