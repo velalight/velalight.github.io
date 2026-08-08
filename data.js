@@ -76,7 +76,7 @@ const STATUS=["قيد المراجعة","جاري التجهيز","تم الشح
    ▸ لصور WebP الأسرع: حوّلي صورك لـ .webp وارفعيها واستخدمي الاسم هنا
 ════════════════════════════════════════════════════════════ */
 const D=864e5,NOW=Date.now();
-const PRODUCTS=[
+const PRODUCTS=[{id:"test-123",name:"منتج اختبار مؤقت",nameEn:"Temp Test Product",cat:"glass",price:100,old:0,badge:"اختبار",badgeEn:"Test",hours:"10 ساعات اشتعال",hoursEn:"10h burn time",scents:["مسك أبيض"],img:"",sold:0,createdAt:Date.now(),desc:"منتج اختبار مؤقت — هيتشال",descEn:"Temporary test product"},
  {id:"royal-sandalwood",name:"شمعة خشب الصندل الملكية",nameEn:"Royal Sandalwood Candle",cat:"wood",price:480,old:600,badge:"الأكثر مبيعًا",badgeEn:"Best Seller",hours:"55 ساعة اشتعال",hoursEn:"55h burn time",scents:["خشب الصندل","عود كمبودي","عنبر شرقي"],img:"",sold:340,createdAt:NOW-40*D,
   desc:"قطعتنا الأشهر — شمع طبيعي بعبق خشب الصندل الدافئ مع لمسة عود كمبودي فاخرة، في قاعدة خشبية مصقولة يدويًا.",
   descEn:"Our most famous piece — natural wax with warm sandalwood and luxurious Cambodian oud, in a hand-polished wooden base."},
