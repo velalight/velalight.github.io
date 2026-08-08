@@ -1569,5 +1569,54 @@ if (typeof firebase !== 'undefined') {
     }
   });
 </script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",
+  authDomain: "velalight.firebaseapp.com",
+  projectId: "velalight",
+  storageBucket: "velalight.firebasestorage.app",
+  messagingSenderId: "1095485535268",
+  appId: "1:1095485535268:web:4d17ee9de6f5acdacbd4b1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+try { await signInAnonymously(auth); } catch(e) {}
+
+const snap = await getDocs(collection(db, "products"));
+if (!snap.empty) {
+  const fbProducts = snap.docs.map(d => {
+    const p = { id: d.id, ...d.data() };
+    // توحيد الأسماء مع موقعك
+    p.name_ar = p.name_ar || p.name || "";
+    p.name_en = p.name_en || p.nameEn || "";
+    p.desc_ar = p.desc_ar || p.desc || "";
+    p.desc_en = p.desc_en || p.descEn || "";
+    if (p.img && !p.images) {
+      p.images = [p.img.startsWith("http") ? p.img : "https://velalight.github.io/" + p.img];
+    }
+    if (p.imgs && !p.images) {
+      p.images = p.imgs.map(im => im.startsWith("http") ? im : "https://velalight.github.io/" + im);
+    }
+    return p;
+  });
+  
+  // تفريغ المصفوفة القديمة ووضع منتجات Firebase مكانها
+  window.PRODUCTS.length = 0;
+  fbProducts.forEach(p => window.PRODUCTS.push(p));
+  
+  // إعادة رسم المنتجات في الصفحة
+  if (typeof window.renderProducts === "function") {
+    window.renderProducts();
+  }
+  console.log("✅ تم تحميل", fbProducts.length, "منتج من Firebase");
+}
+</script>
 </body>
 </html>
