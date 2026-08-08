@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تتبع الطلب | VelaLight</title>
+<meta name="description" content="تابعي حالة طلبك من VelaLight خطوة بخطوة حتى باب بيتك.">
+<link rel="canonical" href="https://velalight.github.io/track.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="wrap hrow">
+ <a class="logo" href="index.html"><span class="flame"></span><span><b>VelaLight</b><small>Luxury Candle Studio</small></span></a>
+ <div class="hact"><button class="langbtn" id="langBtn">EN</button></div>
+</div></header>
+
+<main><div class="wrap" style="padding:3rem 0">
+ <div class="track-card rv on">
+  <span class="kick">Order Tracking</span>
+  <h2 class="fd" style="margin:.3rem 0 1.4rem" id="tkH">📦 تتبع طلبك</h2>
+  <div class="co-form">
+   <input id="trkId" placeholder="رقم الطلب — مثال: VL-123456" dir="ltr">
+   <input id="trkPhone" placeholder="رقم الموبايل المستخدم في الطلب" dir="ltr">
+   <button class="btn" id="trkBtn">تتبع الطلب</button>
+  </div>
+  <div id="trkResult" style="margin-top:1.4rem"></div>
+ </div>
+</div></main>
+
+<footer style="margin-top:0"><div class="wrap fbot"><span>© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</span><span><a href="index.html">الرئيسية</a></span></div></footer>
+<div id="toasts"></div>
+
+<script src="data.js"></script>
+<script type="module" src="firebase.js"></script>
+<script>
+const STK=["st1","st2","st3","st4"];
+async function doTrack(){
+ const id=$("#trkId").value.trim().toUpperCase(),ph=$("#trkPhone").value.replace(/\D/g,"");
+ if(!id||!ph)return toast(t("t_trkwarn"));
+ $("#trkResult").innerHTML=`<div class="empty">${t("trk_searching")}</div>`;
+ let orders=[];try{orders=await DB.list("orders")}catch(e){}
+ const o=orders.find(x=>(x.orderId||"").toUpperCase()===id&&(x.phone||"").replace(/\D/g,"").slice(-10)===ph.slice(-10));
+ if(!o)return $("#trkResult").innerHTML=`<div class="empty">${t("trk_notfound")}</div>`;
+ const idx=o.status==="ملغي"?-1:STATUS.indexOf(o.status);
+ $("#trkResult").innerHTML=`
+  <div style="background:rgba(217,171,95,.06);border:1px solid var(--line);border-radius:16px;padding:1.2rem">
+   <b class="fd" style="color:var(--gold2)">${t("trk_order")} ${o.orderId}</b> <small>— ${new Date(o.createdAt||0).toLocaleDateString(LANG==="en"?"en-EG":"ar-EG")}</small>
+   ${idx===-1?`<div style="color:var(--bad);margin-top:.6rem">${t("trk_cancelled")}</div>`:`
+   <div class="steps"><div class="fill" style="width:${Math.max(0,idx)/3*100}%"></div>
+    ${STK.map((s,i)=>`<div class="step ${i<=idx?"done":""}"><i>${i<=idx?"✓":"•"}</i>${t(s)}</div>`).join("")}
+   </div>`}
+   ${(o.items||[]).map(i=>`<div class="tl-row"><span>${i.name} (${scentTr(i.scent)}) × ${i.qty}</span><b>${money(i.price*i.qty)}</b></div>`).join("")}
+   <div class="tl-row" style="border:0"><span style="font-weight:800">${t("trk_total")}</span><b style="color:var(--gold2)">${money(o.total)}</b></div>
+  </div>`;
+}
+document.addEventListener("DOMContentLoaded",()=>{
+ const last=JSON.parse(localStorage.getItem("vl_lastOrder")||"null");
+ if(last){$("#trkId").value=last.orderId;$("#trkPhone").value=last.phone}
+ $("#trkBtn").onclick=doTrack;
+ $("#langBtn").onclick=()=>{LANG=LANG==="ar"?"en":"ar";localStorage.setItem("vl_lang",LANG);location.reload()};
+ document.documentElement.lang=LANG;document.documentElement.dir=LANG==="en"?"ltr":"rtl";
+ $("#langBtn").textContent=LANG==="en"?"عربي":"EN";
+ $("#tkH").textContent=t("trk_h2");$("#trkBtn").textContent=t("trk_btn");
+ $("#trkId").placeholder=t("trk_id_ph");$("#trkPhone").placeholder=t("trk_phone_ph");
+});
+</script>
+</body>
+</html>

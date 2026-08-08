@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم | VelaLight</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="wrap hrow">
+ <a class="logo" href="index.html"><span class="flame"></span><span><b>VelaLight</b><small>Admin Panel</small></span></a>
+</div></header>
+
+<main><div class="wrap" style="padding:2.5rem 0">
+ <!-- بوابة الدخول -->
+ <div id="admGate" class="track-card rv on">
+  <span class="kick">Admin Panel</span>
+  <h2 class="fd" style="margin:.3rem 0 .4rem">🔐 لوحة تحكم VelaLight</h2>
+  <p style="font-size:.82rem;color:var(--dim);margin-bottom:1.2rem" id="admModeNote"></p>
+  <div class="co-form" id="admLoginWrap"></div>
+ </div>
+ <!-- اللوحة -->
+ <div id="admPanel" class="hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.4rem">
+   <h2 class="fd">⚙️ لوحة التحكم <small id="dbModeTag" style="font-size:.7rem"></small></h2>
+   <div style="display:flex;gap:.6rem">
+    <a class="btn ghost sm" href="index.html">↩ المتجر</a>
+    <button class="btn danger sm" id="admLogout">تسجيل خروج</button>
+   </div>
+  </div>
+  <div class="adm-head" id="admStats"></div>
+  <div class="adm-tabs">
+   <button class="chip on" data-atab="orders">📦 الطلبات</button>
+   <button class="chip" data-atab="products">🕯️ المنتجات</button>
+   <button class="chip" data-atab="reviews">⭐ المراجعات</button>
+  </div>
+  <div id="admTab-orders"><div style="overflow-x:auto"><table class="adm"><thead><tr><th>رقم الطلب</th><th>التاريخ</th><th>العميل</th><th>الموبايل</th><th>الإجمالي</th><th>الحالة</th></tr></thead><tbody id="ordersBody"></tbody></table></div></div>
+  <div id="admTab-products" class="hidden">
+   <button class="btn sm" id="showProdForm" style="margin-bottom:1rem">➕ إضافة / تعديل منتج (بدون تعديل كود)</button>
+   <div class="pform hidden" id="prodForm">
+    <b class="fd" style="color:var(--gold2)" id="pfTitle">منتج جديد</b>
+    <div class="g">
+     <div><label>اسم المنتج (عربي) *</label><input id="pfName"></div>
+     <div><label>الاسم الإنجليزي (للرابط/SEO) *</label><input id="pfEn" dir="ltr" placeholder="Royal Oud Candle"></div>
+     <div><label>السعر (ج.م) *</label><input id="pfPrice" type="number"></div>
+     <div><label>السعر قبل الخصم</label><input id="pfOld" type="number"></div>
+     <div><label>التصنيف</label><select id="pfCat"></select></div>
+     <div><label>الصورة (اسم الملف في الريبو أو رابط)</label><input id="pfImg" dir="ltr" placeholder="p1.webp أو https://..."></div>
+     <div><label>بادج عربي (اختياري)</label><input id="pfBadge" placeholder="الأكثر مبيعًا"></div>
+     <div><label>مدة الاشتعال</label><input id="pfHours" placeholder="50 ساعة"></div>
+    </div>
+    <label>الوصف العربي</label><textarea id="pfDesc" rows="2"></textarea>
+    <label>الوصف الإنجليزي</label><textarea id="pfDescEn" rows="2"></textarea>
+    <label>العطور المتاحة</label><div class="chips" id="pfScents" style="margin-bottom:1rem"></div>
+    <div style="display:flex;gap:.6rem">
+     <button class="btn sm" id="pfSave">💾 حفظ المنتج</button>
+     <button class="btn ghost sm" id="pfCancel">إلغاء</button>
+    </div>
+   </div>
+   <div style="overflow-x:auto"><table class="adm"><thead><tr><th></th><th>المنتج</th><th>التصنيف</th><th>السعر</th><th>ظهور</th><th>إجراءات</th></tr></thead><tbody id="productsBody"></tbody></table></div>
+  </div>
+  <div id="admTab-reviews" class="hidden"><div id="reviewsBody"></div></div>
+ </div>
+</div></main>
+<div id="toasts"></div>
+
+<script src="data.js"></script>
+<script type="module" src="firebase.js"></script>
+<script>
+let editSlug=null;
+function gate(){
+ $("#admModeNote").textContent=CLOUD?"الوضع: ☁️ Firebase متصل — سجّلي بإيميل الأدمن":"الوضع: 💾 محلي مؤقت — فعّلي Firebase للحفظ الدائم، واستخدمي PIN";
+ $("#admLoginWrap").innerHTML=CLOUD
+  ?'<input id="admEmail" placeholder="الإيميل" dir="ltr"><input id="admPass" type="password" placeholder="كلمة السر" dir="ltr"><button class="btn" id="admGo">دخول</button>'
+  :'<input id="admPinIn" type="password" placeholder="الرقم السري PIN" dir="ltr"><button class="btn" id="admGo">دخول</button>';
+ $("#admGo").onclick=async()=>{
+  if(CLOUD){try{await FB.admin($("#admEmail").value.trim(),$("#admPass").value);sessionStorage.vl_admin="1";enter()}catch(e){toast("❌ بيانات دخول غلط")}}
+  else if($("#admPinIn").value===CFG.ADMIN_PIN){sessionStorage.vl_admin="1";enter()}
+  else toast("❌ الرقم السري غلط");
+ };
+}
+function enter(){$("#admGate").classList.add("hidden");$("#admPanel").classList.remove("hidden");render()}
+async function render(){
+ await loadAll();
+ let orders=[];try{orders=await DB.list("orders")}catch(e){}
+ orders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+ const rev=orders.filter(o=>o.status!=="ملغي").reduce((a,o)=>a+(o.total||0),0);
+ const pend=ALL_REVIEWS.filter(r=>r.approved===false).length;
+ $("#admStats").innerHTML=`<div class="adm-stat"><b>${orders.length}</b><span>إجمالي الطلبات</span></div>
+  <div class="adm-stat"><b>${rev.toLocaleString()} ج.م</b><span>الإيراد</span></div>
+  <div class="adm-stat"><b>${ALL_PRODUCTS.length}</b><span>منتج نشط</span></div>
+  <div class="adm-stat"><b>${pend}</b><span>مراجعات بانتظار الموافقة</span></div>`;
+ /* الطلبات + تغيير الحالة */
+ $("#ordersBody").innerHTML=orders.length?orders.map(o=>`<tr>
+  <td><b dir="ltr">${o.orderId||""}</b></td>
+  <td>${new Date(o.createdAt||0).toLocaleDateString("ar-EG")}</td>
+  <td>${o.name||""}<br><small>${o.city||""}</small></td>
+  <td dir="ltr">${o.phone||""}</td>
+  <td><b style="color:var(--gold2)">${o.total} ج.م</b></td>
+  <td><select data-oid="${o.id}" data-onum="${o.orderId}">${STATUS.map(s=>`<option ${s===o.status?"selected":""}>${s}</option>`).join("")}</select></td>
+ </tr>`).join(""):'<tr><td colspan="6"><div class="empty">لسه مفيش طلبات 📦</div></td></tr>';
+ $$("#ordersBody select").forEach(sl=>sl.onchange=async()=>{
+  try{await DB.update("orders",sl.dataset.oid,{status:sl.value});toast(`✅ ${sl.dataset.onum} → ${sl.value}`)}catch(e){toast("خطأ")}
+ });
+ /* المنتجات */
+ $("#productsBody").innerHTML=ALL_PRODUCTS.map(p=>`<tr>
+  <td><img class="adm-thumb" src="${imgOf(p)}"></td>
+  <td><b>${p.name}</b><br><small dir="ltr">${p.nameEn||p.id}</small></td>
+  <td>${CATS.ar[p.cat]||""}</td>
+  <td>${p.price} ج.م</td>
+  <td><input type="checkbox" data-tgl="${p.id}" ${p.active!==false?"checked":""} style="width:auto"></td>
+  <td><button class="btn ghost sm" data-edit="${p.id}">✏️</button></td>
+ </tr>`).join("");
+ $$("#productsBody [data-tgl]").forEach(c=>c.onchange=async()=>{
+  const slug=c.dataset.tgl,doc_=dbProductsCache.find(d=>(d.id_||d.slug||d.pid)===slug);
+  try{doc_?await DB.update("products",doc_.id,{active:c.checked}):await DB.add("products",{slug,active:c.checked});await loadAll();toast("👌 تم")}catch(e){toast("خطأ")}
+ });
+ $$("#productsBody [data-edit]").forEach(b=>b.onclick=()=>openForm(ALL_PRODUCTS.find(p=>p.id===b.dataset.edit)));
+ /* المراجعات */
+ const dr=ALL_REVIEWS.filter(r=>!String(r.id).startsWith("s"));
+ $("#reviewsBody").innerHTML=dr.length?dr.map(r=>`<div class="rv-item" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
+  <div style="flex:1"><b>${r.name}</b> <span class="stars">${"★".repeat(r.rating||0)}</span> <small>→ ${ALL_PRODUCTS.find(p=>p.id===(r.productSlug||r.pid))?.name||r.productSlug||""}</small>
+  <p style="color:var(--mut);font-size:.85rem">${r.text}</p>${r.photo?`<img class="rv-photo" src="${r.photo}" style="max-width:90px">`:""}</div>
+  <button class="btn sm ${r.approved?"ghost":""}" data-apr="${r.id}" data-v="${r.approved?0:1}">${r.approved?"إخفاء":"✔ موافقة"}</button>
+  <button class="btn danger sm" data-del="${r.id}">🗑</button></div>`).join(""):'<div class="empty">مفيش مراجعات لسه ⭐</div>';
+ $$("[data-apr]").forEach(b=>b.onclick=async()=>{try{await DB.update("reviews",b.dataset.apr,{approved:b.dataset.v==="1"});render();toast("👌")}catch(e){toast("خطأ")}});
+ $$("[data-del]").forEach(b=>b.onclick=async()=>{if(confirm(t("t_confirm_del"))){try{await DB.remove("reviews",b.dataset.del);render();toast("🗑")}catch(e){toast("خطأ")}}});
+}
+function openForm(p){
+ editSlug=p?p.id:null;
+ $("#pfTitle").textContent=p?("✏️ تعديل: "+p.name):"🕯️ منتج جديد";
+ $("#pfName").value=p?.name||"";$("#pfEn").value=p?.nameEn||p?.en||"";$("#pfPrice").value=p?.price||"";$("#pfOld").value=p?.old||"";
+ $("#pfImg").value=p?.img||"";$("#pfBadge").value=p?.badge||"";$("#pfHours").value=p?.hours||"";
+ $("#pfDesc").value=p?.desc||"";$("#pfDescEn").value=p?.descEn||"";
+ $("#pfCat").innerHTML=Object.entries(CATS.ar).filter(([k])=>k!=="all").map(([k,v])=>`<option value="${k}" ${p?.cat===k?"selected":""}>${v}</option>`).join("");
+ $("#pfScents").innerHTML=SCENTS.map(s=>`<button class="chip ${p?.scents?.includes(s[0])?"on":""}" data-sc="${s[0]}">${s[0]}</button>`).join("");
+ $$("#pfScents .chip").forEach(c=>c.onclick=()=>c.classList.toggle("on"));
+ $("#prodForm").classList.remove("hidden");$("#prodForm").scrollIntoView({behavior:"smooth"});
+}
+async function saveProd(){
+ const name=$("#pfName").value.trim(),price=+$("#pfPrice").value;
+ if(!name||!price)return toast("⚠️ الاسم والسعر مطلوبين");
+ const slug=editSlug||($("#pfEn").value.trim().toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"product-"+Date.now().toString(36));
+ const data={slug,name,nameEn:$("#pfEn").value.trim(),price,old:+$("#pfOld").value||0,cat:$("#pfCat").value,img:$("#pfImg").value.trim(),badge:$("#pfBadge").value.trim(),hours:$("#pfHours").value.trim(),desc:$("#pfDesc").value.trim(),descEn:$("#pfDescEn").value.trim(),active:true,
+  scents:$$("#pfScents .chip.on").map(c=>c.dataset.sc),createdAt:Date.now(),updatedAt:Date.now()};
+ const doc_=dbProductsCache.find(d=>(d.id_||d.slug||d.pid)===slug);
+ try{
+  doc_?await DB.update("products",doc_.id,data):await DB.add("products",data);
+  $("#prodForm").classList.add("hidden");render();
+  toast(`✅ تم حفظ "${name}" — ظهر فورًا في المتجر وفي product.html?id=${slug}`);
+ }catch(e){toast("خطأ: "+e.message)}
+}
+document.addEventListener("DOMContentLoaded",()=>{
+ if(sessionStorage.vl_admin==="1")enter();else gate();
+ $$(".adm-tabs .chip").forEach(b=>b.onclick=()=>{
+  $$(".adm-tabs .chip").forEach(x=>x.classList.remove("on"));b.classList.add("on");
+  ["orders","products","reviews"].forEach(x=>$("#admTab-"+x).classList.toggle("hidden",x!==b.dataset.atab));
+ });
+ $("#showProdForm").onclick=()=>openForm(null);
+ $("#pfSave").onclick=saveProd;
+ $("#pfCancel").onclick=()=>$("#prodForm").classList.add("hidden");
+ $("#admLogout").onclick=()=>{sessionStorage.removeItem("vl_admin");location.reload()};
+ window.addEventListener("data-refresh",()=>{if(!$("#admPanel").classList.contains("hidden"))render()});
+});
+</script>
+</body>
+</html>
