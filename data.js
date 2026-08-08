@@ -6,9 +6,9 @@
 ════════════════════════════════════════════════════════════ */
 
 const CFG={
- WHATSAPP:"201000000000",        // ← رقم واتساب الاستقبال
+ WHATSAPP:"201223526105",        // ← رقم واتساب الاستقبال
  INSTAPAY:"velalight@instapay",  // ← عنوان InstaPay
- SHIPPING:60,                    // ← الشحن
+ SHIPPING:,                    // ← الشحن
  ADMIN_PIN:"2846",               // ← PIN مؤقت قبل Firebase Auth
  REPO:"velalight/velalight.github.io@main",
 FIREBASE:{
