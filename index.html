@@ -1525,5 +1525,49 @@ if (typeof firebase !== 'undefined') {
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<!-- تحميل Firebase كـ Module -->
+<script type="module" src="firebase.js"></script>
+
+<!-- كود جلب المنتجات من Firebase وتحديث الموقع -->
+<script type="module">
+  window.addEventListener('fb-ready', async () => {
+    try {
+      const fbProducts = await window.FB.list('products');
+      if (fbProducts && fbProducts.length > 0) {
+        // تحويل بيانات Firebase لتتناسب مع تصميم موقعك
+        const mapped = fbProducts.map(p => {
+          let images = p.images || p.imgs || (p.img ? [p.img] : []);
+          images = images.map(img => img.startsWith('http') ? img : 'https://velalight.github.io/' + img);
+          
+          return {
+            id: typeof p.id === 'string' ? (parseInt(p.id) || p.id) : p.id,
+            cat: p.cat,
+            price: Number(p.price),
+            old: p.old ? Number(p.old) : null,
+            name_ar: p.name_ar || p.name || '',
+            name_en: p.name_en || p.nameEn || '',
+            images: images,
+            desc_ar: p.desc_ar || p.desc || '',
+            desc_en: p.desc_en || p.descEn || '',
+            badge: p.badge || null,
+            scents: p.scents || []
+          };
+        });
+        
+        // تفريغ المصفوفة القديمة ووضع منتجات Firebase مكانها
+        window.PRODUCTS.length = 0;
+        mapped.forEach(p => window.PRODUCTS.push(p));
+        
+        // إعادة رسم المنتجات في الصفحة
+        if (typeof window.renderProducts === 'function') {
+          window.renderProducts();
+        }
+        console.log("✅ تم تحديث المنتجات من Firebase بنجاح");
+      }
+    } catch (e) {
+      console.error("Firebase fetch error:", e);
+    }
+  });
+</script>
 </body>
 </html>
