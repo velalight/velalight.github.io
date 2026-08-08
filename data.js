@@ -166,10 +166,6 @@ const ratingOf=s=>{const r=prodReviews(s);if(!r.length)return null;return{avg:+(
 
 /* مراجعات تجريبية — هتتحذف تلقائيًا لما الريفيوهات الحقيقية تيجي */
 const SEED_REVIEWS=[];
- {id:"s1",productSlug:"royal-sandalwood",name:"مريم أ.",rating:5,text:"أحلى شمعة جربتها! ريحة العود والصندل فاضت في البيت كله والتغليف تحفة 🤍",approved:true,createdAt:1769900000000},
- {id:"s2",productSlug:"bride-royal-box",name:"سارة م.",rating:5,text:"جبته هدية لأختي العروسة، عيطت من الفرحة! التغليف الملكي يستاهل كل جنيه.",approved:true,createdAt:1770100000000},
- {id:"s3",productSlug:"spa-massage-candle",name:"نور ا.",rating:5,text:"شمعة المساج غير طبيعية، الزيت دافي وريحته بتريح الأعصاب.",approved:true,createdAt:1770300000000}
-];
 
 /* ═══════ السلة (مشتركة بين كل الصفحات) ═══════ */
 const getCart=()=>JSON.parse(localStorage.getItem("vl_cart")||"[]");
