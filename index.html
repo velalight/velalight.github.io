@@ -1477,6 +1477,53 @@ observeReveals();
 updateCartUI();
 window.addEventListener('load',()=>setTimeout(()=>$('#loader').classList.add('hide'),350));
 setTimeout(()=>$('#loader').classList.add('hide'),2500);
+/* ===== جلب المنتجات من Firebase ===== */
+if (typeof firebase !== 'undefined') {
+  const firebaseConfig = {
+    apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",
+    authDomain: "velalight.firebaseapp.com",
+    projectId: "velalight",
+    storageBucket: "velalight.firebasestorage.app",
+    messagingSenderId: "1095485535268",
+    appId: "1:1095485535268:web:4d17ee9de6f5acdacbd4b1"
+  };
+
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
+    db.collection("products").get().then((snapshot) => {
+      if (!snapshot.empty) {
+        const fbProducts = [];
+        snapshot.forEach((doc) => {
+          let p = doc.data();
+          // توحيد الأسماء مع موقعك
+          if (p.name && !p.name_ar) p.name_ar = p.name;
+          if (p.nameEn && !p.name_en) p.name_en = p.nameEn;
+          if (p.desc && !p.desc_ar) p.desc_ar = p.desc;
+          if (p.descEn && !p.desc_en) p.desc_en = p.descEn;
+          if (p.img && !p.images) p.images = [p.img.startsWith('http') ? p.img : 'https://velalight.github.io/' + p.img];
+          if (!p.id) p.id = doc.id;
+          
+          fbProducts.push(p);
+        });
+        
+        // استبدال المنتجات المحلية بمنتجات Firebase
+        PRODUCTS.length = 0;
+        fbProducts.forEach(p => PRODUCTS.push(p));
+        
+        // إعادة رسم المنتجات في الصفحة
+        renderProducts();
+        console.log("✅ تم تحديث المنتجات من Firebase");
+      }
+    }).catch(err => console.error("Firebase read error:", err));
+  } catch(e) {
+    console.error("Firebase init error:", e);
+  }
+}
 </script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </body>
 </html>
