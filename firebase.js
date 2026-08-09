@@ -18,13 +18,6 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
 const clean = (value) => String(value || "").trim();
 
 const rawConfig = (window.CFG && window.CFG.FIREBASE) || {
@@ -49,12 +42,10 @@ try {
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   const auth = getAuth(app);
-  const storage = getStorage(app);
 
   window.FB = {
     db,
     auth,
-    storage,
 
     list: async (collectionName) => {
       const snapshot = await getDocs(collection(db, collectionName));
@@ -68,7 +59,7 @@ try {
           callback(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
         },
         (error) => {
-          console.error(`Firebase realtime error [${collectionName}]:`, error);
+          console.error("Firebase realtime error [" + collectionName + "]:", error);
           if (typeof onError === "function") onError(error);
         }
       );
@@ -89,22 +80,7 @@ try {
 
     authUser: () => auth.currentUser,
 
-    onAuthStateChanged: (callback) => onAuthStateChanged(auth, callback),
-
-    uploadImage: async (file, path) => {
-      if (!file) throw new Error("No file selected");
-
-      const safeName = `${Date.now()}_${String(file.name).replace(
-        /[^a-zA-Z0-9._-]+/g,
-        "_"
-      )}`;
-
-      const storagePath = path || `products/${safeName}`;
-      const storageRef = ref(storage, storagePath);
-
-      await uploadBytes(storageRef, file);
-      return getDownloadURL(storageRef);
-    }
+    onAuthStateChanged: (callback) => onAuthStateChanged(auth, callback)
   };
 
   window.dispatchEvent(new Event("fb-ready"));
