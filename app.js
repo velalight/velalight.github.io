@@ -175,7 +175,7 @@ $("#smQMinus")?.addEventListener("click",()=>{if(quickAddQty>1)quickAddQty--;$("
 $("#smQPlus")?.addEventListener("click",()=>{quickAddQty++;$("#smQVal").textContent=quickAddQty});
 $("#scentModalAdd")?.addEventListener("click",()=>{
 if(!quickAddProduct)return;
-if((quickAddProduct.scents||[]).length&&!quickAddScent){toast(t("t_scentwarn"));return}
+if(!quickAddScent){toast(t("t_scentwarn"));return}
 if(addToCart(quickAddProduct,{scent:quickAddScent,qty:quickAddQty}))closeModal("scentOv");
 });
 }
@@ -186,10 +186,9 @@ const title=$("#scentModalTitle");
 if(title)title.textContent=pname(p);
 const qv=$("#smQVal");
 if(qv)qv.textContent="1";
-const sc=p.scents||[];
 const w=$("#scentModalScents");
 if(!w)return;
-w.innerHTML=sc.map(s=>`<button class="chip" data-s="${s}">${scentTr(s)}</button>`).join("");
+w.innerHTML=SCENTS.map(s=>`<button class="chip" data-s="${s[0]}">${scentTr(s[0])}</button>`).join("");
 w.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
 w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
 b.classList.add("on");

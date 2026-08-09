@@ -198,10 +198,8 @@ im.classList.add("on");
 
 function renderScents(){
 const w=$("#pdScents");
-const sc=P.scents||[];
 selScent="";
-if(!sc.length){w.innerHTML="";return}
-w.innerHTML=sc.map(s=>`<button class="chip" data-s="${s}">${scentTr(s)}</button>`).join("");
+w.innerHTML=SCENTS.map(s=>`<button class="chip" data-s="${s[0]}">${scentTr(s[0])}</button>`).join("");
 w.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
 w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
 b.classList.add("on");
@@ -214,12 +212,12 @@ $("#qMinus").addEventListener("click",()=>{if(qty>1)qty--;$("#qVal").textContent
 $("#qPlus").addEventListener("click",()=>{qty++;$("#qVal").textContent=qty});
 
 $("#addBtn").addEventListener("click",()=>{
-if((P.scents||[]).length&&!selScent){toast(t("t_scentwarn"));return}
+if(!selScent){toast(t("t_scentwarn"));return}
 addToCart(P,{scent:selScent,qty});
 });
 
 $("#buyBtn").addEventListener("click",()=>{
-if((P.scents||[]).length&&!selScent){toast(t("t_scentwarn"));return}
+if(!selScent){toast(t("t_scentwarn"));return}
 if(addToCart(P,{scent:selScent,qty}))location.href="index.html?cart=1";
 });
 

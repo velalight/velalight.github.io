@@ -100,12 +100,11 @@ const getCart=()=>JSON.parse(localStorage.getItem("vl_cart")||"[]");
 const saveCart=c=>{localStorage.setItem("vl_cart",JSON.stringify(c));cartBadge()};
 function cartBadge(){const b=$("#cartCount");if(!b)return;const n=getCart().reduce((a,i)=>a+i.qty,0);b.textContent=n}
 function addToCart(p,opt={}){
-const hasScents=(p.scents||[]).length>0;
-if(hasScents&&!opt.scent){
+if(!opt.scent){
 toast(t("t_scentwarn"));
 return false;
 }
-const c=getCart(),scent=opt.scent||(hasScents?"":"—");
+const c=getCart(),scent=opt.scent;
 const ex=c.find(i=>i.id===p.id&&i.scent===scent);
 if(ex)ex.qty+=opt.qty||1;else c.push({id:p.id,name:p.name,nameEn:p.nameEn,price:p.price,qty:opt.qty||1,scent,img:imgOf(p)});
 saveCart(c);toast(t("t_added"));
