@@ -273,3 +273,10 @@ nav.mainnav{display:none}
 .adm{display:block;overflow-x:auto}
 }
 #scentModalScents .chip.on{background:linear-gradient(135deg,var(--gold),#b8863f);color:#241503;font-weight:800;border-color:transparent}
+/* ═══════ Checkout / cart enhancements ═══════ */
+.co-form label{font-size:.78rem;color:var(--mut);font-weight:700;margin-top:.15rem}
+.co-form input,.co-form select,.co-form textarea{margin-top:-.25rem}
+.paybox{margin-top:.7rem}
+.paybox p{color:var(--mut)}
+.citem .cs strong{color:var(--gold2)}
+.cart-item-price{color:var(--gold2);font-weight:800}

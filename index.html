@@ -263,10 +263,15 @@
 <div class="dfoot">
 <h4 style="color:var(--gold2);font-size:.9rem;margin-bottom:.3rem" data-i18n="delivery_h">بيانات التوصيل</h4>
 <div class="co-form">
-<input id="coName" data-i18n-ph="ph_name" placeholder="الاسم بالكامل *">
-<input id="coPhone" type="tel" data-i18n-ph="ph_phone" placeholder="رقم الموبايل *">
+<label for="coName" data-i18n="field_name">الاسم بالكامل *</label>
+<input id="coName" data-i18n-ph="ph_name" placeholder="الاسم بالكامل *" autocomplete="name" required>
+<label for="coPhone" data-i18n="field_phone">رقم الموبايل *</label>
+<input id="coPhone" type="tel" data-i18n-ph="ph_phone" placeholder="رقم الموبايل *" autocomplete="tel" required>
+<label for="coCity" data-i18n="field_city">المحافظة</label>
 <select id="coCity"></select>
-<input id="coAddr" data-i18n-ph="ph_addr" placeholder="العنوان بالتفصيل *">
+<label for="coAddr" data-i18n="field_addr">العنوان بالتفصيل *</label>
+<input id="coAddr" data-i18n-ph="ph_addr" placeholder="العنوان بالتفصيل *" autocomplete="street-address" required>
+<label for="coNotes" data-i18n="field_notes">ملاحظات / طلبات إضافية</label>
 <textarea id="coNotes" rows="2" data-i18n-ph="ph_notes" placeholder="ملاحظات / طلبات إضافية"></textarea>
 </div>
 <div class="trow" style="margin-top:.8rem"><span data-i18n="subtotal">المجموع</span><b id="cartSub">0</b></div>

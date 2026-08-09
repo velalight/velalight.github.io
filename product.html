@@ -199,7 +199,8 @@ im.classList.add("on");
 function renderScents(){
 const w=$("#pdScents");
 selScent="";
-w.innerHTML=SCENTS.map(s=>`<button class="chip" data-s="${s[0]}">${scentTr(s[0])}</button>`).join("");
+const availableScents=(P.scents||[]).map(s=>[s,scentTr(s)]);
+w.innerHTML=availableScents.map(s=>`<button class="chip" data-s="${s[0]}">${s[1]}</button>`).join("");
 w.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
 w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
 b.classList.add("on");

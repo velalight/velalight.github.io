@@ -188,7 +188,8 @@ const qv=$("#smQVal");
 if(qv)qv.textContent="1";
 const w=$("#scentModalScents");
 if(!w)return;
-w.innerHTML=SCENTS.map(s=>`<button class="chip" data-s="${s[0]}">${scentTr(s[0])}</button>`).join("");
+const availableScents=(p.scents||[]).map(s=>[s,scentTr(s)]);
+w.innerHTML=availableScents.map(s=>`<button class="chip" data-s="${s[0]}">${s[1]}</button>`).join("");
 w.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
 w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
 b.classList.add("on");
@@ -306,81 +307,151 @@ if($("#cartTotal"))$("#cartTotal").textContent=money(sub);
 }
 
 /* ═══════ بيانات العميل داخل السلة ═══════ */
-function fillCartForm(){
-const u=JSON.parse(localStorage.getItem("vl_user")||"{}");
-if($("#coName"))$("#coName").value=u.name||"";
-if($("#coPhone"))$("#coPhone").value=u.phone||"";
-if($("#coCity"))$("#coCity").value=u.city||"";
-if($("#coAddr"))$("#coAddr").value=u.addr||"";
+function readStoredUser(){
+  try{return JSON.parse(localStorage.getItem("vl_user")||"{}")||{}}
+  catch(e){return{}}
 }
 
-function saveUserFromCart(name,phone,city,addr){
-const old=JSON.parse(localStorage.getItem("vl_user")||"{}");
-const u={name,phone,city,addr,orders:old.orders||0};
-localStorage.setItem("vl_user",JSON.stringify(u));
-if($("#accName"))$("#accName").value=name;
-if($("#accPhone"))$("#accPhone").value=phone;
-if($("#accCity"))$("#accCity").value=city;
-if($("#accAddr"))$("#accAddr").value=addr;
+function fillCartForm(){
+  const u=readStoredUser();
+  if($("#coName"))$("#coName").value=u.name||"";
+  if($("#coPhone"))$("#coPhone").value=u.phone||"";
+  if($("#coCity")){
+    fillCitySelect($("#coCity"));
+    $("#coCity").value=u.city||"";
+  }
+  if($("#coAddr"))$("#coAddr").value=u.addr||"";
+  if($("#coNotes"))$("#coNotes").value=u.notes||"";
+}
+
+function saveUserFromCart(name,phone,city,addr,notes=""){
+  const old=readStoredUser();
+  const u={...old,name,phone,city,addr,notes,orders:Number(old.orders||0)};
+  localStorage.setItem("vl_user",JSON.stringify(u));
+  if($("#accName"))$("#accName").value=name||"";
+  if($("#accPhone"))$("#accPhone").value=phone||"";
+  if($("#accCity"))$("#accCity").value=city||"";
+  if($("#accAddr"))$("#accAddr").value=addr||"";
+}
+
+function syncCartCustomerField(){
+  const old=readStoredUser();
+  const u={
+    ...old,
+    name:$("#coName")?.value.trim()||"",
+    phone:$("#coPhone")?.value.trim()||"",
+    city:$("#coCity")?.value||"",
+    addr:$("#coAddr")?.value.trim()||"",
+    notes:$("#coNotes")?.value.trim()||""
+  };
+  localStorage.setItem("vl_user",JSON.stringify(u));
+}
+
+function bindCartCustomerPersistence(){
+  ["coName","coPhone","coCity","coAddr","coNotes"].forEach(id=>{
+    const el=$("#"+id);
+    if(!el)return;
+    el.addEventListener("input",syncCartCustomerField);
+    el.addEventListener("change",syncCartCustomerField);
+  });
 }
 
 function genOrderId(){
-const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-let s="";
-for(let i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];
-return "VL-"+s;
+  const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let s="";
+  for(let i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];
+  return "VL-"+s;
 }
 
-function checkout(){
-const c=getCart();
-if(!c.length){toast(t("t_empty"));return}
+async function checkout(){
+  const c=getCart();
+  if(!c.length){toast(t("t_empty"));return}
 
-const missingScent=c.some(it=>!it.scent);
-if(missingScent){toast(t("t_scentwarn"));return}
+  if(c.some(it=>!it.scent)){
+    toast(t("t_scentwarn"));
+    return;
+  }
 
-const name=$("#coName")?.value.trim()||"";
-const phone=$("#coPhone")?.value.trim()||"";
-const city=$("#coCity")?.value||"";
-const addr=$("#coAddr")?.value.trim()||"";
-const notes=$("#coNotes")?.value.trim()||"";
+  const name=$("#coName")?.value.trim()||"";
+  const phone=$("#coPhone")?.value.trim()||"";
+  const city=$("#coCity")?.value||"";
+  const addr=$("#coAddr")?.value.trim()||"";
+  const notes=$("#coNotes")?.value.trim()||"";
 
-if(!name||!phone||!addr){toast(t("t_fill"));return}
+  if(!name||!phone||!addr){
+    toast(t("t_fill"));
+    return;
+  }
 
-saveUserFromCart(name,phone,city,addr);
+  saveUserFromCart(name,phone,city,addr,notes);
 
-const orderId=genOrderId();
-const sub=c.reduce((a,i)=>a+i.price*i.qty,0);
-const total=sub;
+  const orderId=genOrderId();
+  const items=c.map(it=>({
+    productId:it.id,
+    name:it.name,
+    nameEn:it.nameEn||"",
+    scent:it.scent,
+    scentName:scentTr(it.scent),
+    quantity:Number(it.qty||1),
+    unitPrice:Number(it.price||0),
+    lineTotal:Number(it.price||0)*Number(it.qty||1),
+    image:it.img||""
+  }));
+  const total=items.reduce((sum,it)=>sum+it.lineTotal,0);
 
-let msg=`${t("wa_head")}\n${t("wa_order")} ${orderId}\n\n`;
-c.forEach(it=>{
-msg+=`${t("wa_item")} ${pname({name:it.name,nameEn:it.nameEn})}\n`;
-msg+=`${t("wa_scent")}: ${scentTr(it.scent)} | ×${it.qty} = ${money(it.price*it.qty)}\n\n`;
-});
-msg+=`${t("wa_total")} ${money(total)}\n`;
-msg+=`${t("pay_products_note")}\n`;
-msg+=`${t("wa_insta")} ${CFG.INSTAPAY}\n`;
-msg+=`${t("ship_note")}\n\n`;
-msg+=`${t("wa_name")} ${name}\n${t("wa_phone")} ${phone}\n`;
-if(city)msg+=`${t("wa_city")} ${city}\n`;
-msg+=`${t("wa_addr")} ${addr}\n`;
-if(notes)msg+=`${t("wa_notes")} ${notes}\n`;
+  let msg=`${t("wa_head")}\n${t("wa_order")} ${orderId}\n\n`;
+  items.forEach(it=>{
+    const itemName=LANG==="en"?(it.nameEn||it.name):it.name;
+    msg+=`${t("wa_item")} ${itemName}\n`;
+    msg+=`${t("wa_scent")} ${scentTr(it.scent)}\n`;
+    msg+=`${t("wa_qty")} ${it.quantity}\n`;
+    msg+=`${t("wa_unit")} ${money(it.unitPrice)}\n`;
+    msg+=`${t("wa_line")} ${money(it.lineTotal)}\n\n`;
+  });
+  msg+=`${t("wa_total")} ${money(total)}\n`;
+  msg+=`${t("pay_products_note")}\n`;
+  msg+=`${t("wa_insta")} ${CFG.INSTAPAY}\n`;
+  msg+=`${t("ship_note")}\n\n`;
+  msg+=`${t("wa_name")} ${name}\n`;
+  msg+=`${t("wa_phone")} ${phone}\n`;
+  if(city)msg+=`${t("wa_city")} ${city}\n`;
+  msg+=`${t("wa_addr")} ${addr}\n`;
+  if(notes)msg+=`${t("wa_notes")} ${notes}\n`;
 
-DB.add("orders",{
-id:orderId,items:c,name,phone,city,address:addr,notes,
-total,paymentMethod:"instapay",status:0,
-createdAt:Date.now()
-}).catch(e=>console.warn(e));
+  const order={
+    orderId,
+    customer:{name,phone,city,address:addr},
+    items,
+    total,
+    paymentMethod:"InstaPay",
+    paymentAccount:CFG.INSTAPAY,
+    shipping:{separate:true,payment:"cash_on_delivery"},
+    shippingNote:t("ship_note"),
+    notes,
+    status:"قيد المراجعة",
+    createdAt:Date.now()
+  };
 
-saveCart([]);renderCart();cartBadge();
-toast(t("t_order"));
+  try{
+    await DB.add("orders",order);
+  }catch(e){
+    console.warn(e);
+    toast(t("t_orderfail"));
+    return;
+  }
 
-const u=JSON.parse(localStorage.getItem("vl_user")||"{}");
-u.orders=(u.orders||0)+1;
-localStorage.setItem("vl_user",JSON.stringify(u));
-const oc=$("#ordCount");if(oc)oc.textContent=u.orders;
+  saveCart([]);
+  renderCart();
+  cartBadge();
 
-window.open("https://wa.me/"+CFG.WHATSAPP+"?text="+encodeURIComponent(msg),"_blank");
+  const u=readStoredUser();
+  u.orders=Number(u.orders||0)+1;
+  localStorage.setItem("vl_user",JSON.stringify(u));
+  const oc=$("#ordCount");
+  if(oc)oc.textContent=u.orders;
+
+  toast(t("t_order"));
+  window.open("https://wa.me/"+CFG.WHATSAPP+"?text="+encodeURIComponent(msg),"_blank");
 }
 
 /* ═══════ حساب المستخدم ═══════ */
@@ -406,7 +477,7 @@ const city=$("#accCity").value;
 const addr=$("#accAddr").value.trim();
 if(!name||!phone){toast(t("t_fill"));return}
 const old=JSON.parse(localStorage.getItem("vl_user")||"{}");
-localStorage.setItem("vl_user",JSON.stringify({name,phone,city,addr,orders:old.orders||0}));
+localStorage.setItem("vl_user",JSON.stringify({...old,name,phone,city,addr,orders:Number(old.orders||0)}));
 fillCartForm();
 toast(t("t_saved"));
 closeModal("accOv");

@@ -1,7 +1,6 @@
 const CFG={
 WHATSAPP:"201223526105",
 INSTAPAY:"velalight@instapay",
-SHIPPING:60,
 ADMIN_PIN:"2846",
 REPO:"velalight/velalight.github.io@main",
 FIREBASE:{
@@ -100,13 +99,14 @@ const getCart=()=>JSON.parse(localStorage.getItem("vl_cart")||"[]");
 const saveCart=c=>{localStorage.setItem("vl_cart",JSON.stringify(c));cartBadge()};
 function cartBadge(){const b=$("#cartCount");if(!b)return;const n=getCart().reduce((a,i)=>a+i.qty,0);b.textContent=n}
 function addToCart(p,opt={}){
-if(!opt.scent){
+const scent=String(opt.scent||"").trim();
+if(!scent||!(p.scents||[]).includes(scent)){
 toast(t("t_scentwarn"));
 return false;
 }
-const c=getCart(),scent=opt.scent;
+const c=getCart();
 const ex=c.find(i=>i.id===p.id&&i.scent===scent);
-if(ex)ex.qty+=opt.qty||1;else c.push({id:p.id,name:p.name,nameEn:p.nameEn,price:p.price,qty:opt.qty||1,scent,img:imgOf(p)});
+if(ex)ex.qty+=opt.qty||1;else c.push({id:p.id,name:p.name,nameEn:p.nameEn,price:Number(p.price||0),qty:Math.max(1,Number(opt.qty||1)),scent,img:imgOf(p)});
 saveCart(c);toast(t("t_added"));
 track("add_to_cart",{items:[{item_id:p.id,item_name:p.name,price:p.price}]});
 return true;
@@ -158,7 +158,7 @@ foot_rights:"© 2026 - 2030 VelaLight — جميع الحقوق محفوظة",
 foot_exchange:"سياسة الاستبدال",foot_privacy:"سياسة الخصوصية",foot_terms:"شروط الاستخدام",
 shipping:"الشحن",ship_all:"— لكل المحافظات",egp:"ج.م",subtotal:"المجموع",total:"الإجمالي",
 cart_title:"🛍️ سلة الشراء",delivery_h:"بيانات التوصيل",
-ph_name:"الاسم بالكامل *",ph_phone:"رقم الموبايل *",ph_phone2:"رقم الموبايل",ph_city:"اختاري المحافظة",ph_addr:"العنوان بالتفصيل *",ph_addr2:"العنوان",ph_notes:"ملاحظات",
+field_name:"الاسم بالكامل *",field_phone:"رقم الموبايل *",field_city:"المحافظة",field_addr:"العنوان بالتفصيل *",field_notes:"ملاحظات / طلبات إضافية",ph_name:"الاسم بالكامل *",ph_phone:"رقم الموبايل *",ph_phone2:"رقم الموبايل",ph_city:"اختاري المحافظة",ph_addr:"العنوان بالتفصيل *",ph_addr2:"العنوان",ph_notes:"ملاحظات",
 paymethod_h:"طريقة الدفع: InstaPay",
 paymethod_d:"InstaPay مقدمًا، والشحن كاش عند الاستلام.",
 pay_products_note:"💳 قيمة المنتجات تُدفع مقدمًا عبر InstaPay.",
@@ -186,10 +186,10 @@ a_scents:"عندنا 19 عطر 🌸",
 a_ship:"🚚 بنوصل لكل مصر خلال 3–7 أيام.",
 a_bride:"عقبال فرحك! 👰",
 t_added:"🕯️ تم الإضافة",t_fill:"⚠️ كمّلي البيانات",t_empty:"السلة فاضية 🕯️",t_scentwarn:"⚠️ من فضلك اختاري العطر أولًا",
-t_order:"✅ تم تسجيل طلبك",t_revok:"💛 شكرًا!",t_revwarn:"⚠️ اكتبي اسمك ومراجعتك",
+t_order:"✅ تم تسجيل طلبك",t_orderfail:"⚠️ حصلت مشكلة أثناء تسجيل الطلب، حاولي مرة أخرى.",t_revok:"💛 شكرًا!",t_revwarn:"⚠️ اكتبي اسمك ومراجعتك",
 t_trkwarn:"⚠️ دخّلي رقم الطلب",t_saved:"💾 تم الحفظ",t_lang_ar:"تم التحويل للعربية",t_lang_en:"English",
 t_confirm_empty:"هتفضّي السلة؟",t_confirm_del:"متأكدة؟",t_go_cart:"🛍️ اذهبي للسلة",
-wa_head:"🕯️ طلب جديد",wa_order:"🧾 رقم الطلب:",wa_scent:"العطر",wa_total:"💰 الإجمالي:",wa_ship:"🚚 الشحن:",wa_cod:"(كاش)",wa_insta:"💳 InstaPay:",wa_name:"👤 الاسم:",wa_phone:"📱 الموبايل:",wa_city:"🏙️ المحافظة:",wa_addr:"📍 العنوان:",wa_notes:"📝 ملاحظات:",wa_item:"🕯️ المنتج:"
+wa_head:"🕯️ طلب جديد",wa_order:"🧾 رقم الطلب:",wa_scent:"العطر:",wa_qty:"الكمية:",wa_unit:"سعر الوحدة:",wa_line:"إجمالي المنتج:",wa_total:"💰 إجمالي المنتجات:",wa_ship:"🚚 الشحن:",wa_cod:"(كاش)",wa_insta:"💳 InstaPay:",wa_name:"👤 الاسم:",wa_phone:"📱 الموبايل:",wa_city:"🏙️ المحافظة:",wa_addr:"📍 العنوان:",wa_notes:"📝 ملاحظات:",wa_item:"🕯️ المنتج:"
 },
 en:{
 docTitle:"VelaLight | Luxury Candles",docDesc:"Luxury handmade candles.",
@@ -234,8 +234,8 @@ foot_rights:"© 2026 - 2030 VelaLight",
 foot_exchange:"Exchange",foot_privacy:"Privacy",foot_terms:"Terms",
 shipping:"Shipping",ship_all:"all governorates",egp:"EGP",subtotal:"Subtotal",total:"Total",
 cart_title:"🛍️ Cart",delivery_h:"Delivery Details",
-ph_name:"Full name *",ph_phone:"Mobile *",ph_phone2:"Mobile",ph_city:"Governorate",ph_addr:"Address *",ph_addr2:"Address",ph_notes:"Notes",
-paymethod_h:"Payment: InstaPay",paymethod_d:"InstaPay upfront, shipping cash.",
+field_name:"Full name *",field_phone:"Mobile *",field_city:"Governorate",field_addr:"Detailed address *",field_notes:"Notes / additional requests",ph_name:"Full name *",ph_phone:"Mobile *",ph_phone2:"Mobile",ph_city:"Governorate",ph_addr:"Address *",ph_addr2:"Address",ph_notes:"Notes",
+paymethod_h:"Payment: InstaPay",paymethod_d:"Products are paid upfront via InstaPay.",
 pay_products_note:"💳 Product value is paid upfront via InstaPay.",
 ship_note:"🚚 Shipping: paid in cash to the courier upon delivery.",
 checkout_wa:"✅ Order via WhatsApp",empty_cart:"🗑️ Empty",
@@ -261,9 +261,9 @@ a_scents:"19 scents 🌸",
 a_ship:"🚚 3-7 days.",
 a_bride:"Congratulations! 👰",
 t_added:"🕯️ Added",t_fill:"⚠️ Complete details",t_empty:"Cart empty 🕯️",t_scentwarn:"⚠️ Please choose a scent first",
-t_order:"✅ Order registered",t_revok:"💛 Thank you!",t_revwarn:"⚠️ Write review",
+t_order:"✅ Order registered",t_orderfail:"⚠️ There was a problem registering the order. Please try again.",t_revok:"💛 Thank you!",t_revwarn:"⚠️ Write review",
 t_trkwarn:"⚠️ Enter ID",t_saved:"💾 Saved",t_lang_ar:"العربية",t_lang_en:"English",
 t_confirm_empty:"Empty cart?",t_confirm_del:"Are you sure?",t_go_cart:"🛍️ Go to cart",
-wa_head:"🕯️ New order",wa_order:"🧾 Order ID:",wa_scent:"Scent",wa_total:"💰 Total:",wa_ship:"🚚 Shipping:",wa_cod:"(cash)",wa_insta:"💳 InstaPay:",wa_name:"👤 Name:",wa_phone:"📱 Phone:",wa_city:"🏙️ Governorate:",wa_addr:"📍 Address:",wa_notes:"📝 Notes:",wa_item:"🕯️ Product:"
+wa_head:"🕯️ New order",wa_order:"🧾 Order ID:",wa_scent:"Scent:",wa_qty:"Quantity:",wa_unit:"Unit price:",wa_line:"Item total:",wa_total:"💰 Products total:",wa_ship:"🚚 Shipping:",wa_cod:"(cash)",wa_insta:"💳 InstaPay:",wa_name:"👤 Name:",wa_phone:"📱 Phone:",wa_city:"🏙️ Governorate:",wa_addr:"📍 Address:",wa_notes:"📝 Notes:",wa_item:"🕯️ Product:"
 }};
 const t=k=>(I18N[LANG]&&I18N[LANG][k])||I18N.ar[k]||k;
