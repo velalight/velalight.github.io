@@ -261,13 +261,42 @@
 <div class="dhead"><h3 data-i18n="cart_title">🛍️ سلة الشراء</h3><button class="icobtn" id="closeCart">✕</button></div>
 <div class="dbody" id="cartItems"></div>
 <div class="dfoot">
-<div class="trow"><span data-i18n="subtotal">المجموع</span><b id="cartSub">0</b></div>
-<div class="trow"><span data-i18n="shipping">الشحن</span><b id="cartShip">60</b></div>
+<h4 style="color:var(--gold2);font-size:.9rem;margin-bottom:.3rem" data-i18n="delivery_h">بيانات التوصيل</h4>
+<div class="co-form">
+<input id="coName" data-i18n-ph="ph_name" placeholder="الاسم بالكامل *">
+<input id="coPhone" type="tel" data-i18n-ph="ph_phone" placeholder="رقم الموبايل *">
+<select id="coCity"></select>
+<input id="coAddr" data-i18n-ph="ph_addr" placeholder="العنوان بالتفصيل *">
+<textarea id="coNotes" rows="2" data-i18n-ph="ph_notes" placeholder="ملاحظات / طلبات إضافية"></textarea>
+</div>
+<div class="trow" style="margin-top:.8rem"><span data-i18n="subtotal">المجموع</span><b id="cartSub">0</b></div>
 <div class="trow total"><span data-i18n="total">الإجمالي</span><b id="cartTotal">0</b></div>
+<p style="color:var(--mut);font-size:.78rem;margin:.6rem 0;padding:.6rem .8rem;background:rgba(217,171,95,.06);border:1px solid var(--line);border-radius:10px" data-i18n="ship_note">🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.</p>
+<div class="paybox">
+<b data-i18n="paymethod_h">طريقة الدفع: InstaPay</b>
+<p style="margin-top:.4rem" data-i18n="pay_products_note">💳 قيمة المنتجات تُدفع مقدمًا عبر InstaPay.</p>
+<p style="margin-top:.4rem;color:var(--gold2);font-weight:700">velalight@instapay</p>
+</div>
 <button class="btn wa" id="checkoutBtn" style="width:100%;margin-top:.8rem" data-i18n="checkout_wa">✅ إتمام الطلب عبر واتساب</button>
 <button class="btn ghost sm" id="emptyCartBtn" style="width:100%;margin-top:.5rem" data-i18n="empty_cart">🗑️ إفراغ السلة</button>
 </div>
 </aside>
+
+<div class="modal" id="scentOv">
+<div class="mpanel">
+<button class="icobtn" id="closeScent" style="float:left">✕</button>
+<h3 class="fd" style="color:var(--gold2)" id="scentModalTitle"></h3>
+<div class="opt-t" data-i18n="pd_scent_t">🌸 اختاري العطر:</div>
+<div class="scents-pick" id="scentModalScents"></div>
+<div class="opt-t" data-i18n="pd_qty_t">الكمية:</div>
+<div class="qty">
+<button id="smQMinus">−</button>
+<b id="smQVal">1</b>
+<button id="smQPlus">+</button>
+</div>
+<button class="btn" id="scentModalAdd" style="width:100%;margin-top:1.2rem" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
+</div>
+</div>
 
 <div class="modal" id="accOv">
 <div class="mpanel">

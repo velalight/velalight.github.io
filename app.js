@@ -1,6 +1,9 @@
 (function(){
 "use strict";
 
+/* ═══════ حالة إضافة سريعة (اختيار العطر) ═══════ */
+let quickAddProduct=null,quickAddScent="",quickAddQty=1;
+
 /* ═══════ تهيئة الصفحة ═══════ */
 document.addEventListener("DOMContentLoaded",()=>{
 initLang();
@@ -18,6 +21,7 @@ initAccount();
 initSearch();
 initChat();
 initNav();
+initQuickAdd();
 });
 
 window.addEventListener("data-refresh",()=>{
@@ -40,6 +44,9 @@ renderChips();
 renderProducts();
 renderScents();
 renderFAQ();
+fillCitySelect($("#accCity"));
+fillCitySelect($("#coCity"));
+fillCartForm();
 initChatWelcome();
 toast(t(LANG==="ar"?"t_lang_ar":"t_lang_en"));
 });
@@ -156,8 +163,39 @@ ${r?`<span class="stars">${"★".repeat(Math.round(r.avg))}</span>`:""}
 
 grid.querySelectorAll(".p-add").forEach(b=>b.addEventListener("click",()=>{
 const p=ALL_PRODUCTS.find(x=>x.id===b.dataset.id);
-if(p)addToCart(p);
+if(p)openQuickAdd(p);
 }));
+}
+
+/* ═══════ نافذة اختيار العطر عند الإضافة السريعة ═══════ */
+function initQuickAdd(){
+$("#closeScent")?.addEventListener("click",()=>closeModal("scentOv"));
+$("#scentOv")?.addEventListener("click",e=>{if(e.target.id==="scentOv")closeModal("scentOv")});
+$("#smQMinus")?.addEventListener("click",()=>{if(quickAddQty>1)quickAddQty--;$("#smQVal").textContent=quickAddQty});
+$("#smQPlus")?.addEventListener("click",()=>{quickAddQty++;$("#smQVal").textContent=quickAddQty});
+$("#scentModalAdd")?.addEventListener("click",()=>{
+if(!quickAddProduct)return;
+if((quickAddProduct.scents||[]).length&&!quickAddScent){toast(t("t_scentwarn"));return}
+if(addToCart(quickAddProduct,{scent:quickAddScent,qty:quickAddQty}))closeModal("scentOv");
+});
+}
+
+function openQuickAdd(p){
+quickAddProduct=p;quickAddScent="";quickAddQty=1;
+const title=$("#scentModalTitle");
+if(title)title.textContent=pname(p);
+const qv=$("#smQVal");
+if(qv)qv.textContent="1";
+const sc=p.scents||[];
+const w=$("#scentModalScents");
+if(!w)return;
+w.innerHTML=sc.map(s=>`<button class="chip" data-s="${s}">${scentTr(s)}</button>`).join("");
+w.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
+b.classList.add("on");
+quickAddScent=b.dataset.s;
+}));
+openDrawer("scentOv");
 }
 
 /* ═══════ فلاتر السعر والترتيب ═══════ */
@@ -193,10 +231,20 @@ if(!was){item.classList.add("open");const a=item.querySelector(".faq-a");a.style
 /* ═══════ السلة ═══════ */
 function initCart(){
 cartBadge();
-$("#cartBtn")?.addEventListener("click",()=>openDrawer("cartDrawer","cartOv"));
+fillCitySelect($("#coCity"));
+fillCartForm();
+$("#cartBtn")?.addEventListener("click",()=>{
+fillCartForm();
+openDrawer("cartDrawer","cartOv");
+});
 $("#closeCart")?.addEventListener("click",closeDrawers);
 $("#cartOv")?.addEventListener("click",closeDrawers);
 renderCart();
+
+if(new URLSearchParams(location.search).get("cart")==="1"){
+fillCartForm();
+openDrawer("cartDrawer","cartOv");
+}
 
 $("#emptyCartBtn")?.addEventListener("click",()=>{
 if(!confirm(t("t_confirm_empty")))return;
@@ -222,7 +270,12 @@ w.innerHTML=c.map((it,i)=>`<div class="citem">
 <div style="flex:1">
 <h5>${pname({name:it.name,nameEn:it.nameEn})}</h5>
 <div class="cs">${t("scent_lbl")} ${scentTr(it.scent)}</div>
-<div class="cs">${money(it.price)} × ${it.qty}</div>
+<div class="cs">${money(it.price)}</div>
+<div class="qty">
+<button class="cq-minus" data-i="${i}">−</button>
+<b>${it.qty}</b>
+<button class="cq-plus" data-i="${i}">+</button>
+</div>
 </div>
 <button class="rm" data-i="${i}">✕</button>
 </div>`).join("");
@@ -231,31 +284,74 @@ w.querySelectorAll(".rm").forEach(b=>b.addEventListener("click",()=>{
 c.splice(+b.dataset.i,1);saveCart(c);renderCart();
 }));
 
+w.querySelectorAll(".cq-plus").forEach(b=>b.addEventListener("click",()=>{
+const idx=+b.dataset.i;
+c[idx].qty++;
+saveCart(c);renderCart();
+}));
+
+w.querySelectorAll(".cq-minus").forEach(b=>b.addEventListener("click",()=>{
+const idx=+b.dataset.i;
+c[idx].qty--;
+if(c[idx].qty<=0)c.splice(idx,1);
+saveCart(c);renderCart();
+}));
+
 updateTotals(c);
 }
 
 function updateTotals(c){
 const sub=c.reduce((a,i)=>a+i.price*i.qty,0);
-const ship=c.length?CFG.SHIPPING:0;
 if($("#cartSub"))$("#cartSub").textContent=money(sub);
-if($("#cartShip"))$("#cartShip").textContent=money(ship);
-if($("#cartTotal"))$("#cartTotal").textContent=money(sub+ship);
+if($("#cartTotal"))$("#cartTotal").textContent=money(sub);
+}
+
+/* ═══════ بيانات العميل داخل السلة ═══════ */
+function fillCartForm(){
+const u=JSON.parse(localStorage.getItem("vl_user")||"{}");
+if($("#coName"))$("#coName").value=u.name||"";
+if($("#coPhone"))$("#coPhone").value=u.phone||"";
+if($("#coCity"))$("#coCity").value=u.city||"";
+if($("#coAddr"))$("#coAddr").value=u.addr||"";
+}
+
+function saveUserFromCart(name,phone,city,addr){
+const old=JSON.parse(localStorage.getItem("vl_user")||"{}");
+const u={name,phone,city,addr,orders:old.orders||0};
+localStorage.setItem("vl_user",JSON.stringify(u));
+if($("#accName"))$("#accName").value=name;
+if($("#accPhone"))$("#accPhone").value=phone;
+if($("#accCity"))$("#accCity").value=city;
+if($("#accAddr"))$("#accAddr").value=addr;
+}
+
+function genOrderId(){
+const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+let s="";
+for(let i=0;i<6;i++)s+=chars[Math.floor(Math.random()*chars.length)];
+return "VL-"+s;
 }
 
 function checkout(){
 const c=getCart();
 if(!c.length){toast(t("t_empty"));return}
 
-const name=prompt(t("ph_name"));
-if(!name){toast(t("t_fill"));return}
-const phone=prompt(t("ph_phone"));
-if(!phone){toast(t("t_fill"));return}
-const addr=prompt(t("ph_addr"));
-if(!addr){toast(t("t_fill"));return}
+const missingScent=c.some(it=>!it.scent);
+if(missingScent){toast(t("t_scentwarn"));return}
 
-const orderId="VL-"+Date.now().toString(36).toUpperCase();
+const name=$("#coName")?.value.trim()||"";
+const phone=$("#coPhone")?.value.trim()||"";
+const city=$("#coCity")?.value||"";
+const addr=$("#coAddr")?.value.trim()||"";
+const notes=$("#coNotes")?.value.trim()||"";
+
+if(!name||!phone||!addr){toast(t("t_fill"));return}
+
+saveUserFromCart(name,phone,city,addr);
+
+const orderId=genOrderId();
 const sub=c.reduce((a,i)=>a+i.price*i.qty,0);
-const total=sub+CFG.SHIPPING;
+const total=sub;
 
 let msg=`${t("wa_head")}\n${t("wa_order")} ${orderId}\n\n`;
 c.forEach(it=>{
@@ -263,14 +359,18 @@ msg+=`${t("wa_item")} ${pname({name:it.name,nameEn:it.nameEn})}\n`;
 msg+=`${t("wa_scent")}: ${scentTr(it.scent)} | ×${it.qty} = ${money(it.price*it.qty)}\n\n`;
 });
 msg+=`${t("wa_total")} ${money(total)}\n`;
-msg+=`${t("wa_ship")} ${money(CFG.SHIPPING)} ${t("wa_cod")}\n\n`;
-msg+=`${t("wa_name")} ${name}\n${t("wa_phone")} ${phone}\n${t("wa_addr")} ${addr}\n`;
+msg+=`${t("pay_products_note")}\n`;
+msg+=`${t("wa_insta")} ${CFG.INSTAPAY}\n`;
+msg+=`${t("ship_note")}\n\n`;
+msg+=`${t("wa_name")} ${name}\n${t("wa_phone")} ${phone}\n`;
+if(city)msg+=`${t("wa_city")} ${city}\n`;
+msg+=`${t("wa_addr")} ${addr}\n`;
+if(notes)msg+=`${t("wa_notes")} ${notes}\n`;
 
 DB.add("orders",{
-id:orderId,items:c,name,phone,address:addr,
-total,shipping:CFG.SHIPPING,status:0,
-createdAt:Date.now(),
-phone2:"",city:"",notes:""
+id:orderId,items:c,name,phone,city,address:addr,notes,
+total,paymentMethod:"instapay",status:0,
+createdAt:Date.now()
 }).catch(e=>console.warn(e));
 
 saveCart([]);renderCart();cartBadge();
@@ -308,6 +408,7 @@ const addr=$("#accAddr").value.trim();
 if(!name||!phone){toast(t("t_fill"));return}
 const old=JSON.parse(localStorage.getItem("vl_user")||"{}");
 localStorage.setItem("vl_user",JSON.stringify({name,phone,city,addr,orders:old.orders||0}));
+fillCartForm();
 toast(t("t_saved"));
 closeModal("accOv");
 });

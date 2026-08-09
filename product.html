@@ -199,9 +199,9 @@ im.classList.add("on");
 function renderScents(){
 const w=$("#pdScents");
 const sc=P.scents||[];
+selScent="";
 if(!sc.length){w.innerHTML="";return}
-selScent=sc[0];
-w.innerHTML=sc.map((s,i)=>`<button class="chip${i===0?' on':''}" data-s="${s}">${scentTr(s)}</button>`).join("");
+w.innerHTML=sc.map(s=>`<button class="chip" data-s="${s}">${scentTr(s)}</button>`).join("");
 w.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
 w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
 b.classList.add("on");
@@ -214,12 +214,13 @@ $("#qMinus").addEventListener("click",()=>{if(qty>1)qty--;$("#qVal").textContent
 $("#qPlus").addEventListener("click",()=>{qty++;$("#qVal").textContent=qty});
 
 $("#addBtn").addEventListener("click",()=>{
+if((P.scents||[]).length&&!selScent){toast(t("t_scentwarn"));return}
 addToCart(P,{scent:selScent,qty});
 });
 
 $("#buyBtn").addEventListener("click",()=>{
-const msg=`${t("wa_head")}\n${t("wa_item")} ${pname(P)}\n${t("wa_scent")}: ${scentTr(selScent)}\n${t("pd_qty_t")} ${qty}\n${t("wa_total")} ${money(P.price*qty)}\n${t("wa_ship")} ${money(CFG.SHIPPING)} ${t("wa_cod")}`;
-window.open("https://wa.me/"+CFG.WHATSAPP+"?text="+encodeURIComponent(msg),"_blank");
+if((P.scents||[]).length&&!selScent){toast(t("t_scentwarn"));return}
+if(addToCart(P,{scent:selScent,qty}))location.href="index.html?cart=1";
 });
 
 $("#rvSubmit").addEventListener("click",()=>{

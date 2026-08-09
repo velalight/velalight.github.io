@@ -100,11 +100,17 @@ const getCart=()=>JSON.parse(localStorage.getItem("vl_cart")||"[]");
 const saveCart=c=>{localStorage.setItem("vl_cart",JSON.stringify(c));cartBadge()};
 function cartBadge(){const b=$("#cartCount");if(!b)return;const n=getCart().reduce((a,i)=>a+i.qty,0);b.textContent=n}
 function addToCart(p,opt={}){
-const c=getCart(),scent=opt.scent||((p.scents||[])[0]||"—");
+const hasScents=(p.scents||[]).length>0;
+if(hasScents&&!opt.scent){
+toast(t("t_scentwarn"));
+return false;
+}
+const c=getCart(),scent=opt.scent||(hasScents?"":"—");
 const ex=c.find(i=>i.id===p.id&&i.scent===scent);
 if(ex)ex.qty+=opt.qty||1;else c.push({id:p.id,name:p.name,nameEn:p.nameEn,price:p.price,qty:opt.qty||1,scent,img:imgOf(p)});
 saveCart(c);toast(t("t_added"));
 track("add_to_cart",{items:[{item_id:p.id,item_name:p.name,price:p.price}]});
+return true;
 }
 const I18N={
 ar:{
@@ -156,6 +162,8 @@ cart_title:"🛍️ سلة الشراء",delivery_h:"بيانات التوصيل
 ph_name:"الاسم بالكامل *",ph_phone:"رقم الموبايل *",ph_phone2:"رقم الموبايل",ph_city:"اختاري المحافظة",ph_addr:"العنوان بالتفصيل *",ph_addr2:"العنوان",ph_notes:"ملاحظات",
 paymethod_h:"طريقة الدفع: InstaPay",
 paymethod_d:"InstaPay مقدمًا، والشحن كاش عند الاستلام.",
+pay_products_note:"💳 قيمة المنتجات تُدفع مقدمًا عبر InstaPay.",
+ship_note:"🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
 checkout_wa:"✅ إتمام الطلب عبر واتساب",empty_cart:"🗑️ إفراغ السلة",
 cart_empty:"سلتك فاضية 🕯️",cart_empty_sub:"اكتشفي The Collection",scent_lbl:"العطر:",
 acc_title:"حسابي 👤",acc_sub:"سجّل بياناتك.",save_acc:"حفظ",orders_count:"عدد طلباتك:",logout:"تسجيل خروج",
@@ -178,7 +186,7 @@ a_relax:"للاسترخاء بنرشح شموع المساج 🧖‍♀️",
 a_scents:"عندنا 19 عطر 🌸",
 a_ship:"🚚 بنوصل لكل مصر خلال 3–7 أيام.",
 a_bride:"عقبال فرحك! 👰",
-t_added:"🕯️ تم الإضافة",t_fill:"⚠️ كمّلي البيانات",t_empty:"السلة فاضية 🕯️",
+t_added:"🕯️ تم الإضافة",t_fill:"⚠️ كمّلي البيانات",t_empty:"السلة فاضية 🕯️",t_scentwarn:"⚠️ من فضلك اختاري العطر أولًا",
 t_order:"✅ تم تسجيل طلبك",t_revok:"💛 شكرًا!",t_revwarn:"⚠️ اكتبي اسمك ومراجعتك",
 t_trkwarn:"⚠️ دخّلي رقم الطلب",t_saved:"💾 تم الحفظ",t_lang_ar:"تم التحويل للعربية",t_lang_en:"English",
 t_confirm_empty:"هتفضّي السلة؟",t_confirm_del:"متأكدة؟",t_go_cart:"🛍️ اذهبي للسلة",
@@ -229,6 +237,8 @@ shipping:"Shipping",ship_all:"all governorates",egp:"EGP",subtotal:"Subtotal",to
 cart_title:"🛍️ Cart",delivery_h:"Delivery Details",
 ph_name:"Full name *",ph_phone:"Mobile *",ph_phone2:"Mobile",ph_city:"Governorate",ph_addr:"Address *",ph_addr2:"Address",ph_notes:"Notes",
 paymethod_h:"Payment: InstaPay",paymethod_d:"InstaPay upfront, shipping cash.",
+pay_products_note:"💳 Product value is paid upfront via InstaPay.",
+ship_note:"🚚 Shipping: paid in cash to the courier upon delivery.",
 checkout_wa:"✅ Order via WhatsApp",empty_cart:"🗑️ Empty",
 cart_empty:"Cart empty 🕯️",cart_empty_sub:"Discover the collection",scent_lbl:"Scent:",
 acc_title:"My Account 👤",acc_sub:"Save your info.",save_acc:"Save",orders_count:"Your orders:",logout:"Sign Out",
@@ -251,7 +261,7 @@ a_relax:"Massage candles 🧖‍♀️",
 a_scents:"19 scents 🌸",
 a_ship:"🚚 3-7 days.",
 a_bride:"Congratulations! 👰",
-t_added:"🕯️ Added",t_fill:"⚠️ Complete details",t_empty:"Cart empty 🕯️",
+t_added:"🕯️ Added",t_fill:"⚠️ Complete details",t_empty:"Cart empty 🕯️",t_scentwarn:"⚠️ Please choose a scent first",
 t_order:"✅ Order registered",t_revok:"💛 Thank you!",t_revwarn:"⚠️ Write review",
 t_trkwarn:"⚠️ Enter ID",t_saved:"💾 Saved",t_lang_ar:"العربية",t_lang_en:"English",
 t_confirm_empty:"Empty cart?",t_confirm_del:"Are you sure?",t_go_cart:"🛍️ Go to cart",

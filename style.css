@@ -272,3 +272,4 @@ nav.mainnav{display:none}
 .fc2{inset-inline-end:0}
 .adm{display:block;overflow-x:auto}
 }
+#scentModalScents .chip.on{background:linear-gradient(135deg,var(--gold),#b8863f);color:#241503;font-weight:800;border-color:transparent}
