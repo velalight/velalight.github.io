@@ -1,45 +1,138 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>تتبع الطلب | VelaLight</title>
-  <meta name="description" content="تتبع طلبك من VelaLight - شموع يدوية فاخرة">
-
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تتبع الطلب | VelaLight</title>
+<meta name="description" content="تتبع حالة طلبك في VelaLight">
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-  <main class="wrap sec">
-    <div style="max-width:600px;margin-inline:auto;">
-      <a href="index.html" style="color:var(--gold2);display:inline-block;margin-bottom:18px;">
-        → الرجوع للصفحة الرئيسية
-      </a>
+<header>
+<div class="wrap hrow">
+<a class="logo" href="index.html"><span class="flame"></span><div><b>VelaLight</b><small>Luxury Candle Studio</small></div></a>
+<div class="hact">
+<a class="icobtn" href="index.html?cart=1">🛍️<span class="badge" id="cartCount">0</span></a>
+</div>
+</div>
+</header>
 
-      <div class="track-card" style="text-align:center;">
-        <h1 class="fd" style="margin-bottom:10px;">📦 تتبع الطلب</h1>
+<div class="wrap" style="padding:3rem 0 4rem">
+<a href="index.html" style="color:var(--gold);font-size:.85rem">→ الرجوع للصفحة الرئيسية</a>
 
-        <p style="color:var(--mut);margin-bottom:18px;">
-          خدمة تتبع الطلبات إلكترونيًا هتكون متاحة قريبًا.
-        </p>
+<div class="track-card" style="margin-top:2rem">
+<h2 class="fd" style="color:var(--gold2);margin-bottom:1.5rem" data-i18n="trk_h2">📦 تتبع طلبك</h2>
 
-        <p style="color:var(--mut);margin-bottom:22px;">
-          لو عايزة تعرفي حالة طلبك، تواصلي معنا عبر واتساب برقم الطلب ورقم الموبايل، وهنرد عليكِ في أسرع وقت.
-        </p>
+<div class="co-form">
+<input id="trkId" data-i18n-ph="trk_id_ph" placeholder="رقم الطلب">
+<input id="trkPhone" type="tel" data-i18n-ph="trk_phone_ph" placeholder="رقم الموبايل">
+<button class="btn" id="trkBtn" data-i18n="trk_btn">تتبع الطلب</button>
+</div>
 
-        <a class="btn wa" href="https://wa.me/201223526105" target="_blank" rel="noopener">
-          💬 تواصلي عبر واتساب
-        </a>
-      </div>
-    </div>
-  </main>
+<div id="trkResult" style="margin-top:1.5rem"></div>
+</div>
+</div>
 
+<footer>
+<div class="wrap">
+<div class="fbot">
+<span data-i18n="foot_rights">© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</span>
+<div>
+<a href="exchange-policy.html" data-i18n="foot_exchange">سياسة الاستبدال</a> ·
+<a href="privacy.html" data-i18n="foot_privacy">سياسة الخصوصية</a>
+</div>
+</div>
+</div>
+</footer>
+
+<div id="toasts"></div>
+
+<script src="data.js"></script>
+<script type="module" src="firebase.js"></script>
+<script>
+(function(){
+"use strict";
+
+document.addEventListener("DOMContentLoaded",()=>{
+applyI18n();
+cartBadge();
+
+$("#trkBtn")?.addEventListener("click",doTrack);
+$("#trkPhone")?.addEventListener("keydown",e=>{if(e.key==="Enter")doTrack()});
+});
+
+window.addEventListener("fb-ready",()=>{});
+
+function applyI18n(){
+$$("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
+$$("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
+}
+
+function doTrack(){
+const id=$("#trkId").value.trim();
+const phone=$("#trkPhone").value.trim();
+const w=$("#trkResult");
+
+if(!id){toast(t("t_trkwarn"));return}
+
+w.innerHTML=`<p style="color:var(--dim);text-align:center;padding:1rem">${t("trk_searching")}</p>`;
+
+const trySearch=()=>{
+if(!window.FB||!window.FB.list){
+setTimeout(trySearch,500);
+return;
+}
+window.FB.list("orders").then(orders=>{
+const found=orders.find(o=>{
+const matchId=o.id&&o.id.toLowerCase()===id.toLowerCase();
+const matchPhone=!phone||!o.phone||String(o.phone).replace(/\D/g,"").endsWith(String(phone).replace(/\D/g,"").slice(-8));
+return matchId&&matchPhone;
+});
+
+if(!found){
+w.innerHTML=`<p style="color:var(--bad);text-align:center;padding:1rem">${t("trk_notfound")}</p>`;
+return;
+}
+
+if(found.status===4){
+w.innerHTML=`<p style="color:var(--bad);text-align:center;padding:1rem">${t("trk_cancelled")}</p>`;
+return;
+}
+
+const st=+found.status||0;
+const steps=STATUS.map((s,i)=>`
+<div class="step${i<=st?" done":""}">
+<i>${i<=st?"✓":i+1}</i>
+${s}
+</div>`).join("");
+
+const fillPct=st/(STATUS.length-1)*100;
+
+w.innerHTML=`
+<p style="color:var(--gold2);font-weight:700;margin-bottom:1rem">${t("trk_order")} ${found.id}</p>
+<div class="steps">
+<div class="fill" style="width:${fillPct}%"></div>
+${steps}
+</div>
+<div style="margin-top:1.5rem">
+<div class="tl-row"><span>${t("trk_total")}</span><b style="color:var(--gold2)">${money(found.total||0)}</b></div>
+${found.name?`<div class="tl-row"><span>${t("wa_name")}</span><b>${found.name}</b></div>`:""}
+${found.createdAt?`<div class="tl-row"><span>📅</span><b>${new Date(found.createdAt).toLocaleDateString("ar-EG")}</b></div>`:""}
+</div>`;
+}).catch(e=>{
+console.warn(e);
+w.innerHTML=`<p style="color:var(--bad);text-align:center;padding:1rem">${t("trk_notfound")}</p>`;
+});
+};
+
+trySearch();
+}
+
+})();
+</script>
 </body>
 </html>
