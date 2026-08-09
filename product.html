@@ -58,14 +58,6 @@
 <button class="btn wa" id="buyBtn" data-i18n="pd_buy">اطلبي عبر واتساب</button>
 </div>
 
-<div class="pd-meta">
-<div><span data-i18n="pd_hours">مدة الاشتعال:</span> <b id="pdHours"></b></div>
-<div><span data-i18n="pd_materials">الخامات:</span> <b data-i18n="pd_materials_v">شمع طبيعي 100%</b></div>
-<div><span data-i18n="pd_ship">التوصيل:</span> <b data-i18n="pd_ship_v">3–7 أيام</b></div>
-<div><span data-i18n="pd_gift">تغليف هدايا مجاني</span> <b data-i18n="pd_gift_v">مع كل طلب</b></div>
-<div><span data-i18n="pd_exchange">ضمان استبدال</span> <b data-i18n="pd_exchange_v">خلال 3 أيام</b></div>
-</div>
-
 <p style="color:var(--mut);margin-top:1rem;line-height:1.9" id="pdDesc"></p>
 
 <div class="share-row" id="shareRow"></div>
@@ -172,7 +164,6 @@ $("#pdBadge").innerHTML=badge?`<span class="p-badge" style="position:static;disp
 $("#pdPrice").textContent=money(P.price);
 $("#pdOld").textContent=P.old>P.price?money(P.old):"";
 $("#pdOld").style.display=P.old>P.price?"inline":"none";
-$("#pdHours").textContent=phours(P);
 
 if(P.sold)$("#pdSold").textContent=`${t("pd_sold")} ${P.sold} ${t("pd_times")}`;
 
@@ -199,8 +190,7 @@ im.classList.add("on");
 function renderScents(){
 const w=$("#pdScents");
 selScent="";
-const availableScents=(P.scents||[]).map(s=>[s,scentTr(s)]);
-w.innerHTML=availableScents.map(s=>`<button class="chip" data-s="${s[0]}">${s[1]}</button>`).join("");
+w.innerHTML=SCENTS.map(s=>`<button class="chip" data-s="${s[0]}">${scentTr(s[0])}</button>`).join("");
 w.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
 w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
 b.classList.add("on");
