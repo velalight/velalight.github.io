@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>لوحة التحكم | VelaLight</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    .admin-login {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+    }
+
+    .admin-login .mpanel {
+      width: min(420px, 96vw);
+    }
+
+    .adm-tabs button {
+      border: 1px solid var(--line);
+      border-radius: 99px;
+      padding: .5rem 1.2rem;
+      font-size: .85rem;
+      color: var(--mut);
+      transition: .25s;
+    }
+
+    .adm-tabs button:hover {
+      border-color: var(--gold);
+      color: var(--gold2);
+    }
+
+    .adm-tabs button.on {
+      background: linear-gradient(135deg, var(--gold), #b8863f);
+      color: #241503;
+      font-weight: 800;
+      border-color: transparent;
+    }
+
+    .adm-actions {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+    }
+
+    .adm-actions button {
+      font-size: .72rem;
+      padding: .3rem .7rem;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      color: var(--mut);
+      transition: .2s;
+    }
+
+    .adm-actions button:hover {
+      border-color: var(--gold);
+      color: var(--gold2);
+    }
+
+    .adm-actions button.del:hover {
+      border-color: var(--bad);
+      color: var(--bad);
+    }
+
+    #adminPanel {
+      display: none;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: .2rem .7rem;
+      border-radius: 99px;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .status-0 { background: rgba(217,171,95,.15); color: var(--gold2); }
+    .status-1 { background: rgba(125,201,143,.15); color: var(--ok); }
+    .status-2 { background: rgba(100,149,237,.15); color: #7db4ee; }
+    .status-3 { background: rgba(125,201,143,.25); color: var(--ok); }
+    .status-4 { background: rgba(224,122,106,.15); color: var(--bad); }
+  </style>
+</head>
+
+<body>
+
+  <!-- ═══ شاشة تسجيل الدخول ═══ -->
+  <div class="admin-login" id="loginScreen">
+    <div class="mpanel" style="background:var(--bg2);border:1px solid var(--line);border-radius:22px;padding:2rem;">
+      <div style="text-align:center;margin-bottom:1.5rem;">
+        <span class="flame" style="display:inline-block;margin-bottom:8px;"></span>
+        <h1 class="fd" style="color:var(--gold2);font-size:1.5rem;">🔐 لوحة تحكم VelaLight</h1>
+        <small>سجّل دخول بحساب الأدمن</small>
+      </div>
+
+      <div class="co-form">
+        <input id="loginEmail" type="email" placeholder="الإيميل">
+        <input id="loginPass" type="password" placeholder="كلمة المرور">
+
+        <button class="btn" id="loginBtn" type="button" style="width:100%;">
+          تسجيل الدخول
+        </button>
+
+        <div id="loginError" style="color:var(--bad);font-size:.82rem;text-align:center;" class="hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ لوحة التحكم ═══ -->
+  <div id="adminPanel">
+    <header>
+      <div class="wrap hrow">
+        <a class="logo" href="index.html">
+          <span class="flame"></span>
+          <div>
+            <b>VelaLight</b>
+            <small>Admin Panel</small>
+          </div>
+        </a>
+
+        <div class="hact">
+          <span id="dbModeTag" style="font-size:.75rem;color:var(--dim);">⏳</span>
+          <a class="btn ghost sm" href="index.html">↩ المتجر</a>
+          <button class="btn danger sm" id="logoutBtn" type="button">تسجيل خروج</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap sec">
+
+      <!-- إحصائيات -->
+      <div class="adm-head" id="statsRow">
+        <div class="adm-stat">
+          <b id="statOrders">0</b>
+          <span>📦 الطلبات</span>
+        </div>
+        <div class="adm-stat">
+          <b id="statProducts">0</b>
+          <span>🕯️ المنتجات</span>
+        </div>
+        <div class="adm-stat">
+          <b id="statRevenue">0</b>
+          <span>💰 الإيرادات</span>
+        </div>
+        <div class="adm-stat">
+          <b id="statReviews">0</b>
+          <span>⭐ المراجعات</span>
+        </div>
+      </div>
+
+      <!-- التبويبات -->
+      <div class="adm-tabs">
+        <button class="on" data-tab="orders" type="button">📦 الطلبات</button>
+        <button data-tab="products" type="button">🕯️ المنتجات</button>
+        <button data-tab="reviews" type="button">⭐ المراجعات</button>
+      </div>
+
+      <!-- ═══ تبويب الطلبات ═══ -->
+      <div id="tab-orders">
+        <div style="overflow-x:auto;">
+          <table class="adm">
+            <thead>
+              <tr>
+                <th>رقم الطلب</th>
+                <th>التاريخ</th>
+                <th>العميل</th>
+                <th>الموبايل</th>
+                <th>الإجمالي</th>
+                <th>الحالة</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody">
+              <tr>
+                <td colspan="6" class="empty">⏳ جاري التحميل...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ تبويب المنتجات ═══ -->
+      <div id="tab-products" class="hidden">
+
+        <div style="margin-bottom:1rem;">
+          <button class="btn sm" id="newProductBtn" type="button">
+            ➕ إضافة / تعديل منتج
+          </button>
+        </div>
+
+        <!-- فورم المنتج -->
+        <div class="pform hidden" id="productForm">
+          <h3 class="fd" style="color:var(--gold2);margin-bottom:12px;" id="formTitle">
+            منتج جديد
+          </h3>
+
+          <input type="hidden" id="pf_id">
+
+          <div class="g">
+            <div>
+              <label>اسم المنتج (عربي) *</label>
+              <input id="pf_name" type="text" placeholder="اسم المنتج بالعربي">
+            </div>
+            <div>
+              <label>الاسم الإنجليزي *</label>
+              <input id="pf_nameEn" type="text" placeholder="Product name in English">
+            </div>
+          </div>
+
+          <div class="g">
+            <div>
+              <label>السعر (ج.م) *</label>
+              <input id="pf_price" type="number" min="0" placeholder="0">
+            </div>
+            <div>
+              <label>السعر قبل الخصم</label>
+              <input id="pf_old" type="number" min="0" placeholder="0">
+            </div>
+          </div>
+
+          <div class="g">
+            <div>
+              <label>التصنيف</label>
+              <select id="pf_cat">
+                <option value="wood">شموع خشبية</option>
+                <option value="glass">شموع زجاجية</option>
+                <option value="crystal">شموع كريستالية</option>
+                <option value="metal">شموع معدنية</option>
+                <option value="massage">شموع المساج</option>
+                <option value="gift">الهدايا</option>
+                <option value="bride">بوكس العروسة</option>
+              </select>
+            </div>
+            <div>
+              <label>الصورة (اسم الملف أو رابط كامل)</label>
+              <input id="pf_img" type="text" placeholder="image.jpg أو https://...">
+            </div>
+          </div>
+
+          <div class="g">
+            <div>
+              <label>بادج عربي (اختياري)</label>
+              <input id="pf_badge" type="text" placeholder="خصم / الأكثر مبيعًا">
+            </div>
+            <div>
+              <label>مدة الاشتعال</label>
+              <input id="pf_hours" type="text" placeholder="72 ساعة اشتعال">
+            </div>
+          </div>
+
+          <label>الوصف العربي</label>
+          <textarea id="pf_desc" rows="3" placeholder="وصف المنتج بالعربي"></textarea>
+
+          <label>الوصف الإنجليزي</label>
+          <textarea id="pf_descEn" rows="2" placeholder="Product description in English"></textarea>
+
+          <label>العطور المتاحة (افصل بفاصلة)</label>
+          <input id="pf_scents" type="text" placeholder="عود, فانيليا, مسك أبيض">
+
+          <label>الظهور</label>
+          <select id="pf_active">
+            <option value="true">✅ ظاهر</option>
+            <option value="false">❌ مخفي</option>
+          </select>
+
+          <div style="display:flex;gap:.6rem;margin-top:1.2rem;">
+            <button class="btn sm" id="saveProductBtn" type="button">
+              💾 حفظ المنتج
+            </button>
+            <button class="btn ghost sm" id="cancelProductBtn" type="button">
+              إلغاء
+            </button>
+          </div>
+        </div>
+
+        <!-- جدول المنتجات -->
+        <div style="overflow-x:auto;">
+          <table class="adm">
+            <thead>
+              <tr>
+                <th></th>
+                <th>المنتج</th>
+                <th>التصنيف</th>
+                <th>السعر</th>
+                <th>ظهور</th>
+                <th>إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="productsBody">
+              <tr>
+                <td colspan="6" class="empty">⏳ جاري التحميل...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ تبويب المراجعات ═══ -->
+      <div id="tab-reviews" class="hidden">
+        <div style="overflow-x:auto;">
+          <table class="adm">
+            <thead>
+              <tr>
+                <th>الاسم</th>
+                <th>المنتج</th>
+                <th>التقييم</th>
+                <th>المراجعة</th>
+                <th>الحالة</th>
+                <th>إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="reviewsBody">
+              <tr>
+                <td colspan="6" class="empty">⏳ جاري التحميل...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="toasts"></div>
+
+  <script src="data.js"></script>
+  <script type="module" src="firebase.js"></script>
+
+  <script>
+    (function () {
+      const $s = (s) => document.querySelector(s);
+      const $a = (s) => Array.from(document.querySelectorAll(s));
+
+      const esc = (s) =>
+        String(s ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+
+      const toastSafe = (msg) => {
+        if (typeof toast === "function") toast(msg);
+        else alert(msg);
+      };
+
+      const STATUS_LIST =
+        typeof STATUS !== "undefined"
+          ? STATUS
+          : ["قيد المراجعة", "جاري التجهيز", "تم الشحن", "تم التسليم", "ملغي"];
+
+      const CATS_AR = {
+        wood: "شموع خشبية",
+        glass: "شموع زجاجية",
+        crystal: "شموع كريستالية",
+        metal: "شموع معدنية",
+        massage: "شموع المساج",
+        gift: "الهدايا",
+        bride: "بوكس العروسة"
+      };
+
+      let allOrders = [];
+      let allReviewsAdmin = [];
+      let productsCache = [];
+
+      /* ═══ تسجيل الدخول ═══ */
+
+      function showLogin() {
+        $s("#loginScreen").style.display = "grid";
+        $s("#adminPanel").style.display = "none";
+      }
+
+      function showPanel() {
+        $s("#loginScreen").style.display = "none";
+        $s("#adminPanel").style.display = "block";
+      }
+
+      $s("#loginBtn").addEventListener("click", async () => {
+        const email = $s("#loginEmail").value.trim();
+        const pass = $s("#loginPass").value;
+        const errEl = $s("#loginError");
+
+        if (!email || !pass) {
+          errEl.textContent = "⚠️ اكتب الإيميل والباسورد";
+          errEl.classList.remove("hidden");
+          return;
+        }
+
+        try {
+          errEl.classList.add("hidden");
+
+          if (window.FB && typeof window.FB.admin === "function") {
+            await window.FB.admin(email, pass);
+            sessionStorage.setItem("vl_admin_logged", "1");
+            showPanel();
+            initAdmin();
+          } else {
+            errEl.textContent = "⚠️ Firebase لم يتم تحميله بعد، جرب تاني";
+            errEl.classList.remove("hidden");
+          }
+        } catch (e) {
+          console.error("Login error:", e);
+          errEl.textContent = "❌ الإيميل أو الباسورد غير صحيح";
+          errEl.classList.remove("hidden");
+        }
+      });
+
+      $s("#loginPass").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") $s("#loginBtn").click();
+      });
+
+      $s("#logoutBtn").addEventListener("click", () => {
+        sessionStorage.removeItem("vl_admin_logged");
+        if (window.FB && window.FB.auth) {
+          window.FB.auth.signOut?.();
+        }
+        showLogin();
+      });
+
+      /* ═══ التبويبات ═══ */
+
+      $a(".adm-tabs button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          $a(".adm-tabs button").forEach((b) => b.classList.remove("on"));
+          btn.classList.add("on");
+
+          const tab = btn.dataset.tab;
+
+          $s("#tab-orders").classList.toggle("hidden", tab !== "orders");
+          $s("#tab-products").classList.toggle("hidden", tab !== "products");
+          $s("#tab-reviews").classList.toggle("hidden", tab !== "reviews");
+        });
+      });
+
+      /* ═══ الطلبات ═══ */
+
+      function renderOrders(orders) {
+        allOrders = orders || [];
+        const body = $s("#ordersBody");
+        if (!body) return;
+
+        $s("#statOrders").textContent = allOrders.length;
+
+        const revenue = allOrders.reduce(
+          (a, o) => a + Number(o.total || 0),
+          0
+        );
+        $s("#statRevenue").textContent =
+          revenue.toLocaleString("en-US") + " ج.م";
+
+        if (!allOrders.length) {
+          body.innerHTML =
+            '<tr><td colspan="6" class="empty">لا توجد طلبات بعد</td></tr>';
+          return;
+        }
+
+        const sorted = [...allOrders].sort(
+          (a, b) => Number(b.createdAt || 0) - Number(a.createdAt || 0)
+        );
+
+        body.innerHTML = sorted
+          .map((o) => {
+            const date = o.createdAt
+              ? new Date(o.createdAt).toLocaleDateString("ar-EG")
+              : "-";
+
+            const st = Number(o.status || 0);
+
+            const statusOptions = STATUS_LIST.map((s, i) => {
+              return `<option value="${i}" ${i === st ? "selected" : ""}>${esc(s)}</option>`;
+            }).join("");
+
+            return `
+              <tr>
+                <td style="direction:ltr;font-size:.78rem;">${esc(o.id || "-")}</td>
+                <td>${esc(date)}</td>
+                <td>${esc(o.name || "-")}</td>
+                <td style="direction:ltr;">${esc(o.phone || "-")}</td>
+                <td>${Number(o.total || 0).toLocaleString("en-US")} ج.م</td>
+                <td>
+                  <select data-order-id="${esc(o._fid || o.id)}" data-status-change>
+                    ${statusOptions}
+                  </select>
+                </td>
+              </tr>
+            `;
+          })
+          .join("");
+      }
+
+      document.addEventListener("change", async (e) => {
+        const sel = e.target.closest("[data-status-change]");
+        if (!sel) return;
+
+        const orderId = sel.dataset.orderId;
+        const newStatus = Number(sel.value);
+
+        try {
+          if (window.FB && typeof window.FB.update === "function") {
+            await window.FB.update("orders", orderId, {
+              status: newStatus,
+              statusText: STATUS_LIST[newStatus] || ""
+            });
+            toastSafe("✅ تم تحديث حالة الطلب");
+          }
+        } catch (err) {
+          console.error("Status update error:", err);
+          toastSafe("⚠️ فشل تحديث الحالة");
+        }
+      });
+
+      /* ═══ المنتجات ═══ */
+
+      function productsList() {
+        if (
+          typeof ALL_PRODUCTS !== "undefined" &&
+          Array.isArray(ALL_PRODUCTS) &&
+          ALL_PRODUCTS.length
+        ) {
+          return ALL_PRODUCTS;
+        }
+        if (typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)) {
+          return PRODUCTS;
+        }
+        return [];
+      }
+
+      function renderProducts() {
+        const list = productsList();
+        productsCache = list;
+
+        const body = $s("#productsBody");
+        if (!body) return;
+
+        $s("#statProducts").textContent = list.length;
+
+        if (!list.length) {
+          body.innerHTML =
+            '<tr><td colspan="6" class="empty">لا توجد منتجات</td></tr>';
+          return;
+        }
+
+        body.innerHTML = list
+          .map((p) => {
+            const imgSrc =
+              typeof imgOf === "function" ? imgOf(p) : "";
+
+            const activeLabel =
+              p.active === false ? "❌ مخفي" : "✅ ظاهر";
+
+            return `
+              <tr>
+                <td>
+                  <img class="adm-thumb" src="${imgSrc}" alt="">
+                </td>
+                <td>
+                  <b>${esc(p.name || "")}</b>
+                  <br>
+                  <small style="color:var(--dim);font-size:.7rem;">
+                    ID: ${esc(p.id || "")}
+                  </small>
+                </td>
+                <td>${esc(CATS_AR[p.cat] || p.cat || "")}</td>
+                <td>${Number(p.price || 0).toLocaleString("en-US")} ج.م</td>
+                <td>${activeLabel}</td>
+                <td>
+                  <div class="adm-actions">
+                    <button type="button" data-edit-product="${esc(p.id)}">✏️ تعديل</button>
+                    <button type="button" data-toggle-product="${esc(p.id)}">
+                      ${p.active === false ? "👁️ إظهار" : "🙈 إخفاء"}
+                    </button>
+                    <button type="button" class="del" data-delete-product="${esc(p.id)}">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          })
+          .join("");
+      }
+
+      /* فورم المنتج */
+
+      function openProductForm(product) {
+        const form = $s("#productForm");
+        form.classList.remove("hidden");
+
+        if (product) {
+          $s("#formTitle").textContent = "تعديل: " + (product.name || "");
+          $s("#pf_id").value = product.id || "";
+          $s("#pf_name").value = product.name || "";
+          $s("#pf_nameEn").value = product.nameEn || "";
+          $s("#pf_price").value = product.price || "";
+          $s("#pf_old").value = product.old || "";
+          $s("#pf_cat").value = product.cat || "wood";
+          $s("#pf_img").value = product.img || "";
+          $s("#pf_badge").value = product.badge || "";
+          $s("#pf_hours").value = product.hours || "";
+          $s("#pf_desc").value = product.desc || "";
+          $s("#pf_descEn").value = product.descEn || "";
+          $s("#pf_scents").value = (product.scents || []).join(", ");
+          $s("#pf_active").value =
+            product.active === false ? "false" : "true";
+        } else {
+          $s("#formTitle").textContent = "منتج جديد";
+          $s("#pf_id").value = "";
+          $s("#pf_name").value = "";
+          $s("#pf_nameEn").value = "";
+          $s("#pf_price").value = "";
+          $s("#pf_old").value = "";
+          $s("#pf_cat").value = "wood";
+          $s("#pf_img").value = "";
+          $s("#pf_badge").value = "";
+          $s("#pf_hours").value = "72 ساعة اشتعال";
+          $s("#pf_desc").value = "";
+          $s("#pf_descEn").value = "";
+          $s("#pf_scents").value = "";
+          $s("#pf_active").value = "true";
+        }
+
+        form.scrollIntoView({ behavior: "smooth" });
+      }
+
+      function closeProductForm() {
+        $s("#productForm").classList.add("hidden");
+      }
+
+      $s("#newProductBtn").addEventListener("click", () => {
+        openProductForm(null);
+      });
+
+      $s("#cancelProductBtn").addEventListener("click", () => {
+        closeProductForm();
+      });
+
+      $s("#saveProductBtn").addEventListener("click", async () => {
+        const name = $s("#pf_name").value.trim();
+        const nameEn = $s("#pf_nameEn").value.trim();
+        const price = Number($s("#pf_price").value || 0);
+
+        if (!name || !nameEn || price <= 0) {
+          toastSafe("⚠️ كمّل الحقول المطلوبة (*)");
+          return;
+        }
+
+        const existingId = $s("#pf_id").value.trim();
+
+        const scentsRaw = $s("#pf_scents").value;
+        const scents = scentsRaw
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+
+        const productData = {
+          name,
+          nameEn,
+          price,
+          old: Number($s("#pf_old").value || 0),
+          cat: $s("#pf_cat").value,
+          img: $s("#pf_img").value.trim(),
+          badge: $s("#pf_badge").value.trim(),
+          badgeEn: $s("#pf_badge").value.trim(),
+          hours: $s("#pf_hours").value.trim(),
+          hoursEn: $s("#pf_hours").value.trim(),
+          desc: $s("#pf_desc").value.trim(),
+          descEn: $s("#pf_descEn").value.trim(),
+          scents,
+          active: $s("#pf_active").value !== "false"
+        };
+
+        try {
+          if (window.FB && typeof window.FB.set === "function") {
+            if (existingId) {
+              productData.id_ = existingId;
+              await window.FB.set("products", existingId, productData);
+            } else {
+              const newId =
+                "p" + Date.now().toString(36) +
+                Math.random().toString(16).slice(2, 5);
+
+              productData.id_ = newId;
+              productData.createdAt = Date.now();
+              productData.sold = 0;
+
+              await window.FB.set("products", newId, productData);
+            }
+
+            toastSafe("💾 تم حفظ المنتج");
+            closeProductForm();
+
+            setTimeout(() => renderProducts(), 800);
+          } else {
+            toastSafe("⚠️ Firebase غير متاح");
+          }
+        } catch (e) {
+          console.error("Product save error:", e);
+          toastSafe("⚠️ فشل حفظ المنتج — راجع Firestore Rules");
+        }
+      });
+
+      /* أزرار المنتجات */
+
+      document.addEventListener("click", (e) => {
+        const editBtn = e.target.closest("[data-edit-product]");
+        const toggleBtn = e.target.closest("[data-toggle-product]");
+        const deleteBtn = e.target.closest("[data-delete-product]");
+
+        if (editBtn) {
+          const id = editBtn.dataset.editProduct;
+          const product = productsCache.find(
+            (p) => String(p.id) === String(id)
+          );
+          if (product) openProductForm(product);
+        }
+
+        if (toggleBtn) {
+          const id = toggleBtn.dataset.toggleProduct;
+          const product = productsCache.find(
+            (p) => String(p.id) === String(id)
+          );
+
+          if (product && window.FB && typeof window.FB.set === "function") {
+            const newActive = product.active === false ? true : false;
+
+            window.FB
+              .set("products", String(id), {
+                id_: String(id),
+                active: newActive
+              })
+              .then(() => {
+                toastSafe(newActive ? "👁️ تم إظهار المنتج" : "🙈 تم إخفاء المنتج");
+                setTimeout(() => renderProducts(), 800);
+              })
+              .catch((err) => {
+                console.error(err);
+                toastSafe("⚠️ فشل التغيير");
+              });
+          }
+        }
+
+        if (deleteBtn) {
+          const id = deleteBtn.dataset.deleteProduct;
+
+          if (!confirm("متأكدة إنك عايزة تحذفي المنتج ده؟")) return;
+
+          if (window.FB && typeof window.FB.set === "function") {
+            window.FB
+              .set("products", String(id), {
+                id_: String(id),
+                active: false
+              })
+              .then(() => {
+                toastSafe("🗑️ تم إخفاء المنتج");
+                setTimeout(() => renderProducts(), 800);
+              })
+              .catch((err) => {
+                console.error(err);
+                toastSafe("⚠️ فشل الحذف");
+              });
+          }
+        }
+      });
+
+      /* ═══ المراجعات ═══ */
+
+      function renderReviews(reviews) {
+        allReviewsAdmin = reviews || [];
+        const body = $s("#reviewsBody");
+        if (!body) return;
+
+        $s("#statReviews").textContent = allReviewsAdmin.length;
+
+        if (!allReviewsAdmin.length) {
+          body.innerHTML =
+            '<tr><td colspan="6" class="empty">لا توجد مراجعات</td></tr>';
+          return;
+        }
+
+        body.innerHTML = allReviewsAdmin
+          .map((r) => {
+            const approved = r.approved === true;
+
+            return `
+              <tr>
+                <td>${esc(r.name || "-")}</td>
+                <td>${esc(r.productSlug || r.pid || "-")}</td>
+                <td>${"★".repeat(Number(r.rating || 5))}</td>
+                <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">
+                  ${esc(r.text || "")}
+                </td>
+                <td>
+                  ${
+                    approved
+                      ? '<span style="color:var(--ok);">✅ موافق عليها</span>'
+                      : '<span style="color:var(--gold);">⏳ في الانتظار</span>'
+                  }
+                </td>
+                <td>
+                  <div class="adm-actions">
+                    ${
+                      !approved
+                        ? `<button type="button" data-approve-review="${esc(r._fid || r.id)}">✅ موافقة</button>`
+                        : ""
+                    }
+                    <button type="button" class="del" data-delete-review="${esc(r._fid || r.id)}">🗑️</button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          })
+          .join("");
+      }
+
+      document.addEventListener("click", (e) => {
+        const approveBtn = e.target.closest("[data-approve-review]");
+        const deleteReviewBtn = e.target.closest("[data-delete-review]");
+
+        if (approveBtn) {
+          const id = approveBtn.dataset.approveReview;
+
+          if (window.FB && typeof window.FB.update === "function") {
+            window.FB
+              .update("reviews", id, { approved: true })
+              .then(() => {
+                toastSafe("✅ تم الموافقة على المراجعة");
+                setTimeout(loadReviews, 600);
+              })
+              .catch((err) => {
+                console.error(err);
+                toastSafe("⚠️ فشل الموافقة");
+              });
+          }
+        }
+
+        if (deleteReviewBtn) {
+          const id = deleteReviewBtn.dataset.deleteReview;
+
+          if (!confirm("حذف المراجعة؟")) return;
+
+          if (window.FB && typeof window.FB.remove === "function") {
+            window.FB
+              .remove("reviews", id)
+              .then(() => {
+                toastSafe("🗑️ تم حذف المراجعة");
+                setTimeout(loadReviews, 600);
+              })
+              .catch((err) => {
+                console.error(err);
+                toastSafe("⚠️ فشل الحذف");
+              });
+          }
+        }
+      });
+
+      /* ═══ تحميل البيانات ═══ */
+
+      async function loadOrders() {
+        try {
+          if (window.FB && typeof window.FB.watch === "function") {
+            window.FB.watch("orders", renderOrders, (err) => {
+              console.error("Orders watch error:", err);
+            });
+          } else if (window.FB && typeof window.FB.list === "function") {
+            const orders = await window.FB.list("orders");
+            renderOrders(orders);
+          }
+        } catch (e) {
+          console.error("Load orders error:", e);
+        }
+      }
+
+      async function loadReviews() {
+        try {
+          if (window.FB && typeof window.FB.list === "function") {
+            const reviews = await window.FB.list("reviews");
+
+            const withFid = reviews.map((r) => ({
+              ...r,
+              _fid: r.id
+            }));
+
+            renderReviews(withFid);
+          }
+        } catch (e) {
+          console.error("Load reviews error:", e);
+        }
+      }
+
+      function initAdmin() {
+        const tg = $s("#dbModeTag");
+        if (tg) tg.textContent = "☁️ Firestore";
+
+        loadOrders();
+        loadReviews();
+        renderProducts();
+
+        if (typeof window.FB !== "undefined" && window.FB) {
+          window.FB.onAuthStateChanged?.((user) => {
+            if (!user) {
+              showLogin();
+            }
+          });
+        }
+      }
+
+      /* ═══ بدء التشغيل ═══ */
+
+      function boot() {
+        const isLoggedIn =
+          sessionStorage.getItem("vl_admin_logged") === "1";
+
+        if (isLoggedIn && window.FB) {
+          showPanel();
+          initAdmin();
+        } else {
+          showLogin();
+        }
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => {
+          setTimeout(boot, 500);
+        });
+      } else {
+        setTimeout(boot, 500);
+      }
+    })();
+  </script>
+
+</body>
+</html>

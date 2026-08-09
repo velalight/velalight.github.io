@@ -1,0 +1,21 @@
+{
+  "name": "VelaLight - شموع يدوية فاخرة",
+  "short_name": "VelaLight",
+  "description": "شموع يدوية فاخرة بعطور مميزة - هدايا حسب الطلب - Luxury handmade candles",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F6EDE0",
+  "theme_color": "#4A2E1E",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "https://velalight.github.io/eeeee.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

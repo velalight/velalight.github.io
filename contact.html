@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>اتصلي بنا | VelaLight</title>
+  <meta name="description" content="تواصلي مع VelaLight - شموع يدوية فاخرة">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    .contact-grid {
+      display: grid;
+      gap: 12px;
+      margin: 22px 0;
+    }
+
+    .contact-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 15px 16px;
+      color: var(--mut);
+      transition: .25s;
+    }
+
+    .contact-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .contact-card span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .92rem;
+    }
+
+    .contact-card b {
+      color: var(--gold2);
+      font-size: .92rem;
+      direction: ltr;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="wrap sec">
+    <div style="max-width:680px;margin-inline:auto;">
+      <a href="index.html" style="color:var(--gold2);display:inline-block;margin-bottom:18px;">
+        → الرجوع للصفحة الرئيسية
+      </a>
+
+      <h1 class="fd" style="margin-bottom:10px;">
+        اتصلي بنا 🤎
+      </h1>
+
+      <p style="color:var(--mut);margin-bottom:10px;">
+        فريق VelaLight في خدمتك لأي استفسار عن الطلبات أو المنتجات أو الهدايا الخاصة.
+      </p>
+
+      <div class="contact-grid">
+        <a class="contact-card" href="https://wa.me/201223526105" target="_blank" rel="noopener">
+          <span>💬 واتساب</span>
+          <b>01223526105</b>
+        </a>
+
+        <a class="contact-card" href="https://www.facebook.com/VelaLight" target="_blank" rel="noopener">
+          <span>📘 فيسبوك</span>
+          <b>VelaLight</b>
+        </a>
+
+        <a class="contact-card" href="https://www.instagram.com/velaalight" target="_blank" rel="noopener">
+          <span>📷 إنستجرام</span>
+          <b>velaalight</b>
+        </a>
+
+        <a class="contact-card" href="https://www.tiktok.com/@vela.light0" target="_blank" rel="noopener">
+          <span>🎵 تيك توك</span>
+          <b>vela.light0</b>
+        </a>
+      </div>
+
+      <a class="btn wa" href="https://wa.me/201223526105?text=عايزة%20أسأل%20عن%20منتج" target="_blank" rel="noopener">
+        💬 راسلينا الآن على واتساب
+      </a>
+    </div>
+  </main>
+
+</body>
+</html>

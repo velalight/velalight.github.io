@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>VelaLight | شموع يدوية فاخرة بعطور مميزة وهدايا فخمة | توصيل لكل مصر</title>
+  <meta name="description" content="VelaLight — شموع يدوية فاخرة بعطور مميزة، هدايا حسب الطلب، وتوصيل لكل محافظات مصر.">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="topbar">
+    <div class="mq-track" id="mqTrack">
+      <span>🚚 توصيل سريع لكل محافظات مصر خلال 3-7 أيام عمل • 🏷️ خصومات تصل إلى 25% على تشكيلة مختارة • 🎁 تغليف هدايا فاخر مجانًا مع كل طلب • ✨ ضمان استبدال خلال 3 أيام من الاستلام •</span>
+      <span>🚚 توصيل سريع لكل محافظات مصر خلال 3-7 أيام عمل • 🏷️ خصومات تصل إلى 25% على تشكيلة مختارة • 🎁 تغليف هدايا فاخر مجانًا مع كل طلب • ✨ ضمان استبدال خلال 3 أيام من الاستلام •</span>
+    </div>
+  </div>
+
+  <header>
+    <div class="wrap hrow">
+      <a class="logo" href="index.html">
+        <span class="flame"></span>
+        <div>
+          <b>VelaLight</b>
+          <small>Luxury Candle Studio</small>
+        </div>
+      </a>
+
+      <nav class="mainnav">
+        <div><a href="index.html">الرئيسية</a></div>
+
+        <div>
+          <a href="#products">تسوق ▾</a>
+          <div class="dd">
+            <a href="#products" data-cat="all">كل الشموع</a>
+            <a href="#products" data-cat="wood">شموع خشبية</a>
+            <a href="#products" data-cat="glass">شموع زجاجية</a>
+            <a href="#products" data-cat="crystal">شموع كريستالية</a>
+            <a href="#products" data-cat="metal">شموع معدنية</a>
+            <a href="#products" data-cat="massage">شموع المساج</a>
+            <a href="#products" data-cat="gift">الهدايا</a>
+            <a href="#products" data-cat="bride">بوكس العروسة</a>
+          </div>
+        </div>
+
+        <div><a href="#about-us">من نحن</a></div>
+        <div><a href="#faq-section">الأسئلة الشائعة</a></div>
+        <div><a href="contact.html">تواصل معنا</a></div>
+      </nav>
+
+      <div class="hact">
+        <button class="langbtn" id="langBtn" type="button">EN</button>
+
+        <button class="icobtn" id="searchBtn" type="button" aria-label="بحث">🔍</button>
+
+        <button class="icobtn" id="accBtn" type="button" aria-label="حسابي">👤</button>
+
+        <button class="icobtn" id="cartBtn" type="button" aria-label="السلة">
+          🛍️
+          <span class="badge" id="cartCount">0</span>
+        </button>
+
+        <button class="icobtn" id="navToggle" type="button" aria-label="القائمة">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="mnav" id="mnav">
+    <h5>تصنيفات الشموع</h5>
+    <a href="#products" data-cat="all">كل الشموع</a>
+    <a href="#products" data-cat="wood">شموع خشبية</a>
+    <a href="#products" data-cat="glass">شموع زجاجية</a>
+    <a href="#products" data-cat="crystal">شموع كريستالية</a>
+    <a href="#products" data-cat="metal">شموع معدنية</a>
+    <a href="#products" data-cat="massage">شموع المساج</a>
+    <a href="#products" data-cat="gift">الهدايا</a>
+    <a href="#products" data-cat="bride">بوكس العروسة</a>
+
+    <h5>اكتشف</h5>
+    <a href="#about-us">من نحن</a>
+    <a href="#scents">العطور الفاخرة</a>
+    <a href="#occasions">المناسبات والهدايا</a>
+    <a href="#features">لماذا VelaLight؟</a>
+    <a href="#faq-section">الأسئلة الشائعة</a>
+    <a href="#reviews">آراء عملائنا</a>
+
+    <h5>تواصل</h5>
+    <a href="contact.html">تواصل معنا</a>
+    <a href="exchange-policy.html">سياسة الاستبدال</a>
+    <a href="privacy.html">سياسة الخصوصية</a>
+  </nav>
+
+  <div class="ovl" id="ovl"></div>
+
+  <main>
+
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <div class="kick">✦ شموع يدوية فاخرة · صناعة مصرية</div>
+
+          <h1>
+            ضوء يُحكى…
+            <br>
+            <em>وبريق يليق بكِ</em>
+          </h1>
+
+          <p class="lead">
+            في VelaLight كل شمعة اتصنعت يدويًا بعناية، خامات مختارة، عطور فاخرة، وتفاصيل صغيرة بتفرق.
+          </p>
+
+          <div class="hctas">
+            <a class="btn" href="#products">اكتشفي The Collection ✨</a>
+            <a class="btn ghost" href="#about-us">Our Story</a>
+          </div>
+
+          <div class="trust">
+            <span>🚚 توصيل لكل مصر</span>
+            <span>🤲 100% صناعة يدوية</span>
+            <span>🎁 تغليف هدايا مجاني</span>
+            <span>🔁 استبدال خلال 3 أيام</span>
+          </div>
+        </div>
+
+        <div class="hvisual">
+          <div class="frame">
+            <img src="RR.jpg" alt="VelaLight">
+          </div>
+
+          <div class="float-card fc1">
+            <b>+500</b>
+            عميلة سعيدة
+          </div>
+
+          <div class="float-card fc2">
+            <b>19</b>
+            عطر مميز
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="products" class="sec">
+      <div class="wrap">
+        <div class="sec-head rv">
+          <div class="kick">The Collection</div>
+          <h2>اختار قطعتك المفضلة</h2>
+          <p>كل الشموع مصنوعة يدويًا، ويمكنك اختيار العطر المفضل لأي منتج.</p>
+        </div>
+
+        <div class="chips rv" id="chips">
+          <button class="chip on" data-cat="all" type="button">كل الشموع</button>
+          <button class="chip" data-cat="wood" type="button">شموع خشبية</button>
+          <button class="chip" data-cat="glass" type="button">شموع زجاجية</button>
+          <button class="chip" data-cat="crystal" type="button">شموع كريستالية</button>
+          <button class="chip" data-cat="metal" type="button">شموع معدنية</button>
+          <button class="chip" data-cat="massage" type="button">شموع المساج</button>
+          <button class="chip" data-cat="gift" type="button">الهدايا</button>
+          <button class="chip" data-cat="bride" type="button">بوكس العروسة</button>
+        </div>
+
+        <div class="toolbar rv">
+          <div class="tb-group">
+            <span>💰 السعر:</span>
+            <input type="number" id="minPrice" min="0" placeholder="من">
+            <input type="number" id="maxPrice" min="0" placeholder="إلى">
+          </div>
+
+          <div class="tb-group">
+            <span>ترتيب:</span>
+            <select id="sortSel">
+              <option value="new">الأحدث</option>
+              <option value="asc">الأرخص أولًا</option>
+              <option value="desc">الأغلى أولًا</option>
+              <option value="rating">الأعلى تقييمًا</option>
+              <option value="best">الأكثر مبيعًا</option>
+              <option value="disc">أكبر خصم</option>
+            </select>
+          </div>
+
+          <div class="tb-group">
+            <span id="pcount"></span>
+          </div>
+        </div>
+
+        <div class="pgrid" id="pgrid"></div>
+
+        <div class="empty hidden" id="noProducts">
+          🕯️ مفيش منتجات مطابقة
+        </div>
+      </div>
+    </section>
+
+    <section id="about-us" class="about sec">
+      <div class="wrap">
+        <div class="rv">
+          <div class="kick">Our Story</div>
+          <h2 class="fd">من نحن</h2>
+
+          <p>
+            في VelaLight لا نصنع الشموع فقط، بل نصنع لحظات تستحق أن تُعاش. بدأت رحلتنا بشغف تجاه التفاصيل الصغيرة التي تجعل المكان أكثر دفئًا، والبيت أكثر راحة، واللحظات العادية أكثر جمالًا.
+          </p>
+
+          <p>
+            نصنع كل شمعة يدويًا بعناية، مستخدمين خامات مختارة وعطورًا فاخرة، لنقدم منتجًا يجمع بين الأناقة والجودة والإحساس الحقيقي. نؤمن أن الضوء الخافت قادر على تهدئة الروح، وأن العطر الجميل يستطيع أن يعيد أجمل الذكريات.
+          </p>
+
+          <div class="stats">
+            <div class="stat">
+              <b>+500</b>
+              <span>عميلة سعيدة</span>
+            </div>
+
+            <div class="stat">
+              <b>19</b>
+              <span>عطر مميز</span>
+            </div>
+
+            <div class="stat">
+              <b>100%</b>
+              <span>صناعة يدوية</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rv">
+          <img src="heart2.jpg" alt="VelaLight About">
+        </div>
+      </div>
+    </section>
+
+    <section id="scents" class="sec">
+      <div class="wrap">
+        <div class="sec-head rv">
+          <div class="kick">Signature Scents</div>
+          <h2>العطور الفاخرة</h2>
+          <p>كل العطور متاحة، تختار منها في أي منتج من منتجاتنا.</p>
+        </div>
+
+        <div class="scent-grid rv" id="scentGrid"></div>
+      </div>
+    </section>
+
+    <section id="occasions" class="sec">
+      <div class="wrap">
+        <div class="sec-head rv">
+          <div class="kick">Gifts & Occasions</div>
+          <h2>هدية لكل مناسبة</h2>
+        </div>
+
+        <div class="occ-grid rv">
+          <div class="occ">
+            <span class="num">01</span>
+            <h3>أعياد الميلاد</h3>
+            <p>
+              صُممت لتكون هدية استثنائية تحمل أعمق المشاعر، وتمنح كل لحظة دفئًا يلامس القلب.
+            </p>
+          </div>
+
+          <div class="occ">
+            <span class="num">02</span>
+            <h3>الزفاف والخطوبة والولادة</h3>
+            <p>
+              لأن التفاصيل هي سرّ الجمال، ابتكرنا توزيعات رومانسية ولمسات راقية تُضفي على يومك سحرًا استثنائيًا.
+            </p>
+          </div>
+
+          <div class="occ">
+            <span class="num">03</span>
+            <h3>ركن المنزل</h3>
+            <p>
+              ركنٌ صغير... لكنه كفيل بأن يغيّر شعور المكان بأكمله؛ دفءٌ يحتضن التفاصيل، وعطرٌ ينعش الروح.
+            </p>
+          </div>
+
+          <div class="occ">
+            <span class="num">04</span>
+            <h3>بوكسات الهدايا</h3>
+            <p>
+              لأن الهدية الراقية تبدأ من التفاصيل، نُنسّق بوكساتنا بعناية لتجسّد ذوقك.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="sec">
+      <div class="wrap">
+        <div class="sec-head rv">
+          <div class="kick">Why VelaLight?</div>
+          <h2>لماذا VelaLight؟</h2>
+        </div>
+
+        <div class="feat-grid rv">
+          <div class="feat">
+            <div class="fi">🚚</div>
+            <div>
+              <h4>توصيل لكل المحافظات</h4>
+              <p>بنوصل طلبك أينما كنتِ في مصر، بتغليف آمن يحافظ على شمعتك من الورشة لحد باب بيتك.</p>
+            </div>
+            <span class="n">01</span>
+          </div>
+
+          <div class="feat">
+            <div class="fi">🌿</div>
+            <div>
+              <h4>خامات طبيعية 100%</h4>
+              <p>شمع طبيعي نقي وفتائل خشب طبيعي وقطنية آمنة على صحتك وبيتك.</p>
+            </div>
+            <span class="n">02</span>
+          </div>
+
+          <div class="feat">
+            <div class="fi">🤲</div>
+            <div>
+              <h4>صناعة يدوية بعناية</h4>
+              <p>خلف كل قطعة ساعاتٌ من العناية والحرفية، حيث تُصنع وتُغلّف يدويًا بكل دقة.</p>
+            </div>
+            <span class="n">03</span>
+          </div>
+
+          <div class="feat">
+            <div class="fi">🎁</div>
+            <div>
+              <h4>تغليف فاخر</h4>
+              <p>كل شمعة تُغلّف بعناية في تنسيقٍ راقٍ يعكس جمالها، لتصلك جاهزة للإهداء.</p>
+            </div>
+            <span class="n">04</span>
+          </div>
+
+          <div class="feat">
+            <div class="fi">🔁</div>
+            <div>
+              <h4>ضمان استبدال</h4>
+              <p>واثقين إنك هتقع في حب المنتج من أول لحظة، وإن لم تكن راضيًا تمامًا، فسنحرص على استبداله.</p>
+            </div>
+            <span class="n">05</span>
+          </div>
+
+          <div class="feat">
+            <div class="fi">💬</div>
+            <div>
+              <h4>دعم دائم لعملائنا</h4>
+              <p>محتار تختار إيه؟ سيبها علينا. هنسمع فكرتك ونرشح لك الهدية والعطر الأنسب.</p>
+            </div>
+            <span class="n">06</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq-section" class="sec">
+      <div class="wrap">
+        <div class="sec-head rv" style="text-align:center;">
+          <div class="kick">FAQs</div>
+          <h2>الأسئلة الشائعة</h2>
+        </div>
+
+        <div class="faq rv">
+          <div class="faq-item">
+            <button class="faq-q" type="button">
+              <span>كام مدة التوصيل؟</span>
+              <span>+</span>
+            </button>
+            <div class="faq-a">
+              <div>3–7 أيام عمل.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" type="button">
+              <span>إزاي بيتم الدفع؟</span>
+              <span>+</span>
+            </button>
+            <div class="faq-a">
+              <div>InstaPay مقدمًا، والشحن كاش عند الاستلام.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" type="button">
+              <span>أقدر أستبدل المنتج؟</span>
+              <span>+</span>
+            </button>
+            <div class="faq-a">
+              <div>نعم، خلال 3 أيام من الاستلام.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" type="button">
+              <span>الخامات طبيعية؟</span>
+              <span>+</span>
+            </button>
+            <div class="faq-a">
+              <div>100% شمع طبيعي.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" type="button">
+              <span>الشمعة تعيش قد إيه؟</span>
+              <span>+</span>
+            </button>
+            <div class="faq-a">
+              <div>من 72 إلى 96 ساعة اشتعال.</div>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" type="button">
+              <span>أقدر أختار العطر؟</span>
+              <span>+</span>
+            </button>
+            <div class="faq-a">
+              <div>طبعًا! كل العطور متاحة.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews" class="sec">
+      <div class="wrap">
+        <div class="sec-head rv">
+          <div class="kick">Testimonials</div>
+          <h2>آراء عملائنا</h2>
+          <p>ثقتكم أجمل هدية لنا.</p>
+        </div>
+
+        <div class="rev-row rv">
+          <div class="rev-card">
+            <img src="review1.jpg" alt="Review 1">
+            <div class="rb">
+              <div>
+                <b>عميلة موثّقة</b>
+                <small>VelaLight</small>
+              </div>
+              <div class="stars">★★★★★</div>
+            </div>
+          </div>
+
+          <div class="rev-card">
+            <img src="review2.jpg" alt="Review 2">
+            <div class="rb">
+              <div>
+                <b>عميلة موثّقة</b>
+                <small>VelaLight</small>
+              </div>
+              <div class="stars">★★★★★</div>
+            </div>
+          </div>
+
+          <div class="rev-card">
+            <img src="review3.jpg" alt="Review 3">
+            <div class="rb">
+              <div>
+                <b>عميلة موثّقة</b>
+                <small>VelaLight</small>
+              </div>
+              <div class="stars">★★★★★</div>
+            </div>
+          </div>
+
+          <div class="rev-card">
+            <img src="review4.jpg" alt="Review 4">
+            <div class="rb">
+              <div>
+                <b>عميلة موثّقة</b>
+                <small>VelaLight</small>
+              </div>
+              <div class="stars">★★★★★</div>
+            </div>
+          </div>
+
+          <div class="rev-card">
+            <img src="review5.jpg" alt="Review 5">
+            <div class="rb">
+              <div>
+                <b>عميلة موثّقة</b>
+                <small>VelaLight</small>
+              </div>
+              <div class="stars">★★★★★</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="fgrid">
+        <div>
+          <a class="logo" href="index.html">
+            <span class="flame"></span>
+            <div>
+              <b>VelaLight</b>
+              <small>Luxury Candle Studio</small>
+            </div>
+          </a>
+
+          <p style="color:var(--mut);margin-top:1rem;font-size:.9rem;">
+            شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب
+            <br>
+            Luxury handmade candles - Signature scents - Custom gifts
+          </p>
+        </div>
+
+        <div>
+          <h4>روابط سريعة</h4>
+          <a href="index.html">الرئيسية</a>
+          <a href="#products">تسوق</a>
+          <a href="#about-us">من نحن</a>
+          <a href="#faq-section">الأسئلة الشائعة</a>
+          <a href="contact.html">تواصل معنا</a>
+        </div>
+
+        <div>
+          <h4>تصنيفات الشموع</h4>
+          <a href="#products" data-cat="wood">شموع خشبية</a>
+          <a href="#products" data-cat="glass">شموع زجاجية</a>
+          <a href="#products" data-cat="crystal">شموع كريستالية</a>
+          <a href="#products" data-cat="metal">شموع معدنية</a>
+          <a href="#products" data-cat="massage">شموع المساج</a>
+          <a href="#products" data-cat="bride">بوكس العروسة</a>
+          <a href="#products" data-cat="gift">الهدايا</a>
+        </div>
+
+        <div>
+          <h4>الدفع والشحن</h4>
+          <div class="paybox">
+            <b>InstaPay — تحويل مقدم</b>
+            <br><br>
+            ملحوظة هامة: قيمة المنتجات بتتحول مقدمًا عبر InstaPay، أما تكلفة الشحن فتُدفع كاش لمندوب شركة الشحن وقت استلام الأوردر مباشرة.
+          </div>
+        </div>
+      </div>
+
+      <div class="fbot">
+        <div>© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</div>
+
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="exchange-policy.html">سياسة الاستبدال</a>
+          <a href="privacy.html">سياسة الخصوصية</a>
+          <a href="terms.html">شروط الاستخدام</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="ovl" id="cartOv"></div>
+
+  <aside class="drawer" id="cartDrawer">
+    <div class="dhead">
+      <h3>🛍️ سلة الشراء</h3>
+      <button class="icobtn" id="closeCart" type="button">✕</button>
+    </div>
+
+    <div class="dbody">
+      <div id="cartItems"></div>
+
+      <div class="co-form">
+        <h4 class="fd" style="color:var(--gold2);margin-top:10px;">بيانات التوصيل</h4>
+
+        <input id="coName" type="text" placeholder="الاسم بالكامل *">
+        <input id="coPhone" type="tel" placeholder="رقم الموبايل *">
+
+        <select id="coCity"></select>
+
+        <input id="coAddr" type="text" placeholder="العنوان بالتفصيل *">
+        <textarea id="coNotes" rows="3" placeholder="ملاحظات"></textarea>
+      </div>
+    </div>
+
+    <div class="dfoot">
+      <div class="trow">
+        <span>المجموع</span>
+        <b id="subtotal">0 ج.م</b>
+      </div>
+
+      <div class="trow">
+        <span>الشحن</span>
+        <b id="shipping">60 ج.م</b>
+      </div>
+
+      <div class="trow total">
+        <span>الإجمالي</span>
+        <b id="total">0 ج.م</b>
+      </div>
+
+      <button class="btn wa" id="checkoutBtn" type="button" style="width:100%;margin-top:10px;">
+        ✅ إتمام الطلب عبر واتساب
+      </button>
+
+      <button class="btn ghost sm" id="emptyCart" type="button" style="width:100%;margin-top:8px;">
+        🗑️ إفراغ السلة
+      </button>
+    </div>
+  </aside>
+
+  <div class="modal" id="accOv">
+    <div class="mpanel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 class="fd" style="color:var(--gold2);">حسابي 👤</h3>
+        <button class="icobtn" id="closeAcc" type="button">✕</button>
+      </div>
+
+      <p style="color:var(--mut);font-size:.88rem;">
+        سجّل بياناتك مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة.
+      </p>
+
+      <div class="co-form">
+        <input id="accName" type="text" placeholder="الاسم بالكامل">
+        <input id="accPhone" type="tel" placeholder="رقم الموبايل">
+        <select id="accCity"></select>
+        <input id="accAddr" type="text" placeholder="العنوان">
+
+        <button class="btn sm" id="saveAcc" type="button">
+          💾 حفظ بياناتي
+        </button>
+
+        <div style="color:var(--mut);font-size:.85rem;" id="orderCount">
+          عدد طلباتك: 0
+        </div>
+
+        <button class="btn danger sm" id="logoutBtn" type="button">
+          تسجيل خروج
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="searchOv">
+    <div class="mpanel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h3 class="fd" style="color:var(--gold2);">البحث 🔍</h3>
+        <button class="icobtn" id="closeSearch" type="button">✕</button>
+      </div>
+
+      <div class="co-form">
+        <input id="searchInput" type="text" placeholder="ابحثي عن شمعة...">
+        <small>البحث يشمل: اسم المنتج، الوصف، الكاتيجوري — بالعربي والإنجليزي.</small>
+        <div id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+
+  <button id="chatFab" type="button" aria-label="مساعد VelaLight">✨</button>
+
+  <div id="chatOv">
+    <div class="chat-h">
+      <div>
+        <b>مساعد VelaLight</b>
+        <small>دليلك الشخصي لاختيار الشمعة المثالية</small>
+      </div>
+      <button class="icobtn" id="closeChat" type="button">✕</button>
+    </div>
+
+    <div id="chatMsgs"></div>
+
+    <div class="chat-q">
+      <button type="button" data-q="gift">اقترح لي هدية</button>
+      <button type="button" data-q="relax">عايزة حاجة للاسترخاء</button>
+      <button type="button" data-q="scents">إيه العطور المتاحة؟</button>
+      <button type="button" data-q="ship">سؤال عن التوصيل</button>
+      <button type="button" data-q="bride">بوكس عروسة</button>
+    </div>
+  </div>
+
+  <div id="toasts"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script type="module" src="firebase.js"></script>
+</body>
+</html>

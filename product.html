@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>منتج | VelaLight</title>
+  <meta name="description" content="منتج من VelaLight - شموع يدوية فاخرة">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    .pd-thumbs {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-top: .8rem;
+    }
+
+    .pd-thumbs img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      cursor: pointer;
+      transition: .25s;
+    }
+
+    .pd-thumbs img:hover,
+    .pd-thumbs img.on {
+      border-color: var(--gold);
+    }
+
+    .starpick {
+      display: flex;
+      gap: .2rem;
+      direction: ltr;
+    }
+
+    .starpick button {
+      font-size: 1.5rem;
+      color: var(--dim);
+      transition: .2s;
+    }
+
+    .starpick button.lit {
+      color: var(--gold);
+      text-shadow: 0 0 12px rgba(217, 171, 95, .6);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="wrap hrow">
+      <a class="logo" href="index.html">
+        <span class="flame"></span>
+        <div>
+          <b>VelaLight</b>
+          <small>Luxury Candle Studio</small>
+        </div>
+      </a>
+
+      <div class="hact">
+        <button class="langbtn" id="langBtn" type="button">EN</button>
+
+        <a class="icobtn" href="index.html?cart=1" aria-label="السلة">
+          🛍️
+          <span class="badge" id="cartCount">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap sec">
+
+    <div class="crumb">
+      <a href="index.html">الرئيسية</a>
+      /
+      <span id="crumbName">...</span>
+    </div>
+
+    <div id="pdLoading">⏳ ...</div>
+
+    <div id="pdNotFound" class="empty hidden">
+      😕 المنتج مش موجود
+    </div>
+
+    <div id="pdWrap" class="pd-grid hidden">
+
+      <div>
+        <div class="pd-img">
+          <img id="pdImg" src="" alt="">
+        </div>
+
+        <div class="pd-thumbs" id="pdThumbs"></div>
+      </div>
+
+      <div class="pd-info">
+        <div class="p-cat" id="pdCat"></div>
+
+        <h1 id="pdName"></h1>
+
+        <div class="stars" id="pdRating"></div>
+
+        <div class="pd-price">
+          <span id="pdPrice"></span>
+          <del id="pdOld"></del>
+        </div>
+
+        <p id="pdDesc" style="color:var(--mut);margin-bottom:10px;"></p>
+
+        <div class="opt-t" id="scentTitle">🌸 اختاري العطر:</div>
+        <div class="scents-pick" id="pdScents"></div>
+
+        <div class="opt-t">الكمية:</div>
+
+        <div class="qty">
+          <button type="button" id="qtyMinus">−</button>
+          <b id="qtyVal">1</b>
+          <button type="button" id="qtyPlus">+</button>
+        </div>
+
+        <div class="pd-actions">
+          <button class="btn" id="addBtn" type="button">
+            🛍️ أضيفي للسلة
+          </button>
+
+          <button class="btn wa" id="buyBtn" type="button">
+            💬 اطلبي عبر واتساب
+          </button>
+        </div>
+
+        <div class="pd-meta" id="pdMeta"></div>
+
+        <div class="share-row" id="shareRow"></div>
+      </div>
+
+    </div>
+
+    <section class="sec" id="reviewsSec">
+      <div class="sec-head">
+        <h2 class="fd">مراجعات المنتج</h2>
+      </div>
+
+      <div id="revList"></div>
+
+      <div class="rv-form">
+        <h3 class="fd" style="color:var(--gold2);margin-bottom:10px;">
+          ضيفي مراجعتك ⭐
+        </h3>
+
+        <div class="row">
+          <input id="rvName" type="text" placeholder="اسمك">
+          <div class="starpick" id="starPick"></div>
+        </div>
+
+        <textarea id="rvText" rows="4" placeholder="اكتبي رأيك..."></textarea>
+
+        <input id="rvPhoto" type="text" placeholder="رابط صورة (اختياري)">
+
+        <button class="btn sm" id="rvSubmit" type="button">
+          إرسال
+        </button>
+
+        <small style="display:block;margin-top:8px;">
+          المراجعة بتظهر بعد الموافقة
+        </small>
+      </div>
+    </section>
+
+    <section class="sec" id="relatedSec">
+      <div class="sec-head">
+        <h2 class="fd">منتجات هتعجبك</h2>
+      </div>
+
+      <div class="rel-grid" id="relGrid"></div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="fbot">
+        <div>© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</div>
+
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="track.html">📦 تتبع الطلب</a>
+          <a href="exchange-policy.html">سياسة الاستبدال</a>
+          <a href="privacy.html">سياسة الخصوصية</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toasts"></div>
+
+  <script src="data.js"></script>
+  <script type="module" src="firebase.js"></script>
+
+  <script>
+    (function () {
+      const qs = new URLSearchParams(location.search);
+      const pid = String(qs.get("p") || "").trim();
+
+      let currentProduct = null;
+      let selectedScent = "";
+      let qty = 1;
+      let rating = 5;
+
+      const $sel = (s) => document.querySelector(s);
+      const $$sel = (s) => Array.from(document.querySelectorAll(s));
+
+      const esc = (s) =>
+        String(s ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+
+      const tt = (key, fallback) =>
+        typeof t === "function" ? t(key) : fallback;
+
+      const toastSafe = (msg) => {
+        if (typeof toast === "function") toast(msg);
+        else console.log(msg);
+      };
+
+      const safeMoney = (n) =>
+        typeof money === "function" ? money(n) : `${Number(n || 0)} ج.م`;
+
+      const safeImg = (p) =>
+        typeof imgOf === "function" ? imgOf(p) : "";
+
+      const safeName = (p) =>
+        typeof pname === "function" ? pname(p) : (p.name || "");
+
+      const safeDesc = (p) =>
+        typeof pdesc === "function" ? pdesc(p) : (p.desc || "");
+
+      const safeHours = (p) =>
+        typeof phours === "function" ? phours(p) : (p.hours || "");
+
+      const safeCat = (k) =>
+        typeof cat === "function" ? cat(k) : k;
+
+      const safeScent = (s) =>
+        typeof scentTr === "function" ? scentTr(s) : s;
+
+      const productsList = () => {
+        if (
+          typeof ALL_PRODUCTS !== "undefined" &&
+          Array.isArray(ALL_PRODUCTS) &&
+          ALL_PRODUCTS.length
+        ) {
+          return ALL_PRODUCTS;
+        }
+
+        if (typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)) {
+          return PRODUCTS;
+        }
+
+        return [];
+      };
+
+      function findProduct() {
+        return (
+          productsList().find((p) => String(p.id) === String(pid)) ||
+          productsList().find((p) => String(p.slug || "") === String(pid))
+        );
+      }
+
+      function showNotFound() {
+        $sel("#pdLoading")?.classList.add("hidden");
+        $sel("#pdWrap")?.classList.add("hidden");
+        $sel("#pdNotFound")?.classList.remove("hidden");
+      }
+
+      function setMainImage(src) {
+        const img = $sel("#pdImg");
+        if (!img) return;
+
+        img.src = src || "";
+        img.alt = currentProduct ? safeName(currentProduct) : "";
+      }
+
+      function renderThumbs(p) {
+        const wrap = $sel("#pdThumbs");
+        if (!wrap) return;
+
+        const imgs =
+          typeof imgsOf === "function"
+            ? imgsOf(p)
+            : (p.imgs || []);
+
+        if (!imgs.length) {
+          wrap.innerHTML = "";
+          return;
+        }
+
+        wrap.innerHTML = imgs
+          .map((img, i) => {
+            const src =
+              typeof CDN === "function" ? CDN(img) : img;
+
+            return `
+              <img
+                src="${src}"
+                data-img="${esc(src)}"
+                class="${i === 0 ? "on" : ""}"
+                alt="${esc(safeName(p))}"
+              >
+            `;
+          })
+          .join("");
+      }
+
+      function renderScents(p) {
+        const wrap = $sel("#pdScents");
+        const title = $sel("#scentTitle");
+        if (!wrap || !title) return;
+
+        const scents = p.scents || [];
+
+        if (!scents.length) {
+          title.classList.add("hidden");
+          wrap.innerHTML = "";
+          selectedScent = "";
+          return;
+        }
+
+        title.classList.remove("hidden");
+        selectedScent = scents[0];
+
+        wrap.innerHTML = scents
+          .map((s, i) => {
+            return `
+              <button
+                type="button"
+                class="chip ${i === 0 ? "on" : ""}"
+                data-scent="${esc(s)}"
+              >
+                ${esc(safeScent(s))}
+              </button>
+            `;
+          })
+          .join("");
+      }
+
+      function renderRating(p) {
+        const el = $sel("#pdRating");
+        if (!el) return;
+
+        const r =
+          typeof ratingOf === "function"
+            ? ratingOf(p.id)
+            : null;
+
+        if (!r) {
+          el.innerHTML = "";
+          return;
+        }
+
+        el.innerHTML = `★★★★★ ${r.avg} (${r.count})`;
+      }
+
+      function renderMeta(p) {
+        const el = $sel("#pdMeta");
+        if (!el) return;
+
+        el.innerHTML = `
+          <div>${tt("pd_hours", "مدة الاشتعال:")} <b>${esc(safeHours(p))}</b></div>
+          <div>${tt("pd_materials", "الخامات:")} <b>${tt("pd_materials_v", "شمع طبيعي 100%")}</b></div>
+          <div>${tt("pd_ship", "التوصيل:")} <b>${tt("pd_ship_v", "3–7 أيام")}</b></div>
+          <div>${tt("pd_gift", "تغليف هدايا مجاني")} <b>${tt("pd_gift_v", "مع كل طلب")}</b></div>
+          <div>${tt("pd_exchange", "ضمان استبدال")} <b>${tt("pd_exchange_v", "خلال 3 أيام")}</b></div>
+        `;
+      }
+
+      function renderRelated(p) {
+        const wrap = $sel("#relGrid");
+        if (!wrap) return;
+
+        const related = productsList()
+          .filter(
+            (x) =>
+              x.cat === p.cat &&
+              String(x.id) !== String(p.id)
+          )
+          .slice(0, 4);
+
+        if (!related.length) {
+          wrap.innerHTML = "";
+          return;
+        }
+
+        wrap.innerHTML = related
+          .map((x) => {
+            return `
+              <a class="p-card" href="product.html?p=${encodeURIComponent(x.id)}">
+                <div class="p-media">
+                  <img src="${safeImg(x)}" alt="${esc(safeName(x))}" loading="lazy">
+                </div>
+
+                <div class="p-body">
+                  <h3>${esc(safeName(x))}</h3>
+                  <div class="p-price">${safeMoney(x.price)}</div>
+                </div>
+              </a>
+            `;
+          })
+          .join("");
+      }
+
+      function renderReviews() {
+        const wrap = $sel("#revList");
+        if (!wrap) return;
+
+        const list =
+          typeof prodReviews === "function"
+            ? prodReviews(pid)
+            : [];
+
+        if (!list.length) {
+          wrap.innerHTML = `
+            <div class="empty">
+              ${tt("pd_first", "كوني أول من يراجع هذا المنتج")}
+            </div>
+          `;
+          return;
+        }
+
+        wrap.innerHTML = list
+          .map((r) => {
+            const stars = Number(r.rating || 5);
+            const full = "★".repeat(stars);
+            const empty = "☆".repeat(Math.max(0, 5 - stars));
+
+            return `
+              <div class="rv-item">
+                <b>${esc(r.name || "عميل")}</b>
+                <div class="stars">${full}${empty}</div>
+                <p style="color:var(--mut);margin-top:6px;">
+                  ${esc(r.text || "")}
+                </p>
+
+                ${
+                  r.photo
+                    ? `<img class="rv-photo" src="${esc(r.photo)}" alt="Review photo">`
+                    : ""
+                }
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      function renderShare() {
+        const wrap = $sel("#shareRow");
+        if (!wrap) return;
+
+        const url = location.href;
+        const text = currentProduct
+          ? `${safeName(currentProduct)} | VelaLight`
+          : "VelaLight";
+
+        wrap.innerHTML = `
+          <a href="https://wa.me/?text=${encodeURIComponent(text + " " + url)}" target="_blank" rel="noopener">
+            واتساب
+          </a>
+
+          <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener">
+            فيسبوك
+          </a>
+
+          <button type="button" id="copyLinkBtn">
+            نسخ الرابط
+          </button>
+        `;
+
+        const copyBtn = $sel("#copyLinkBtn");
+        if (copyBtn) {
+          copyBtn.addEventListener("click", async () => {
+            try {
+              await navigator.clipboard.writeText(url);
+              toastSafe("💾 تم نسخ الرابط");
+            } catch (e) {
+              toastSafe("⚠️ لم يتم نسخ الرابط");
+            }
+          });
+        }
+      }
+
+      function renderStars() {
+        const wrap = $sel("#starPick");
+        if (!wrap) return;
+
+        wrap.innerHTML = [1, 2, 3, 4, 5]
+          .map((n) => {
+            return `
+              <button type="button" data-star="${n}" class="${n <= rating ? "lit" : ""}">
+                ★
+              </button>
+            `;
+          })
+          .join("");
+
+        wrap.addEventListener("click", (e) => {
+          const btn = e.target.closest("[data-star]");
+          if (!btn) return;
+
+          rating = Number(btn.dataset.star);
+
+          $$("#starPick button").forEach((b) => {
+            b.classList.toggle(
+              "lit",
+              Number(b.dataset.star) <= rating
+            );
+          });
+        });
+      }
+
+      function render() {
+        if (!pid) {
+          showNotFound();
+          return;
+        }
+
+        const p = findProduct();
+
+        if (!p) {
+          showNotFound();
+          return;
+        }
+
+        currentProduct = p;
+        qty = 1;
+
+        const qtyVal = $sel("#qtyVal");
+        if (qtyVal) qtyVal.textContent = "1";
+
+        $sel("#pdLoading")?.classList.add("hidden");
+        $sel("#pdNotFound")?.classList.add("hidden");
+        $sel("#pdWrap")?.classList.remove("hidden");
+
+        const name = safeName(p);
+
+        const crumbName = $sel("#crumbName");
+        if (crumbName) crumbName.textContent = name;
+
+        document.title = `${name} | VelaLight`;
+
+        const pdCat = $sel("#pdCat");
+        if (pdCat) pdCat.textContent = safeCat(p.cat);
+
+        const pdName = $sel("#pdName");
+        if (pdName) pdName.textContent = name;
+
+        const pdDesc = $sel("#pdDesc");
+        if (pdDesc) pdDesc.textContent = safeDesc(p);
+
+        const pdPrice = $sel("#pdPrice");
+        if (pdPrice) pdPrice.textContent = safeMoney(p.price);
+
+        const pdOld = $sel("#pdOld");
+        if (pdOld) {
+          pdOld.textContent =
+            Number(p.old || 0) > Number(p.price || 0)
+              ? safeMoney(p.old)
+              : "";
+        }
+
+        setMainImage(safeImg(p));
+        renderThumbs(p);
+        renderScents(p);
+        renderRating(p);
+        renderMeta(p);
+        renderRelated(p);
+        renderReviews();
+        renderShare();
+
+        if (typeof cartBadge === "function") cartBadge();
+      }
+
+      function bindEvents() {
+        const qtyMinus = $sel("#qtyMinus");
+        const qtyPlus = $sel("#qtyPlus");
+        const qtyVal = $sel("#qtyVal");
+
+        if (qtyMinus && qtyPlus && qtyVal) {
+          qtyMinus.addEventListener("click", () => {
+            qty = Math.max(1, qty - 1);
+            qtyVal.textContent = String(qty);
+          });
+
+          qtyPlus.addEventListener("click", () => {
+            qty = qty + 1;
+            qtyVal.textContent = String(qty);
+          });
+        }
+
+        const pdScents = $sel("#pdScents");
+        if (pdScents) {
+          pdScents.addEventListener("click", (e) => {
+            const btn = e.target.closest("[data-scent]");
+            if (!btn) return;
+
+            selectedScent = btn.dataset.scent;
+
+            $$("#pdScents .chip").forEach((c) => {
+              c.classList.toggle("on", c === btn);
+            });
+          });
+        }
+
+        const pdThumbs = $sel("#pdThumbs");
+        if (pdThumbs) {
+          pdThumbs.addEventListener("click", (e) => {
+            const img = e.target.closest("img[data-img]");
+            if (!img) return;
+
+            setMainImage(img.dataset.img);
+
+            $$("#pdThumbs img").forEach((x) => {
+              x.classList.toggle("on", x === img);
+            });
+          });
+        }
+
+        const addBtn = $sel("#addBtn");
+        if (addBtn) {
+          addBtn
