@@ -1,391 +1,2171 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>لوحة التحكم | VelaLight</title>
 <meta name="robots" content="noindex,nofollow">
+
 <link rel="stylesheet" href="style.css">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
-.login-box{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:2.5rem;width:min(400px,92vw);text-align:center}
-.login-box h2{font-family:var(--fd);color:var(--gold2);margin-bottom:1.5rem}
-.login-box input{margin-bottom:1rem;text-align:center}
-.adm-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 0;flex-wrap:wrap}
-.adm-top h1{font-family:var(--fd);color:var(--gold2);font-size:1.4rem}
-.adm-nav{display:flex;gap:.5rem;flex-wrap:wrap}
+.login-wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+}
+
+.login-box{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:2.5rem;
+  width:min(400px,92vw);
+  text-align:center;
+}
+
+.login-box h2{
+  font-family:var(--fd);
+  color:var(--gold2);
+  margin-bottom:1.5rem;
+}
+
+.login-box input{
+  margin-bottom:1rem;
+  text-align:center;
+}
+
+.login-box button{
+  transition:.2s ease;
+}
+
+.login-box button:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+}
+
+.login-status{
+  min-height:20px;
+}
+
+.adm-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  padding:1rem 0;
+  flex-wrap:wrap;
+}
+
+.adm-top h1{
+  font-family:var(--fd);
+  color:var(--gold2);
+  font-size:1.4rem;
+}
+
+.adm-nav{
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+}
 </style>
+
 </head>
+
 <body>
 
+<!-- ================= LOGIN ================= -->
+
 <div id="loginScreen" class="login-wrap">
-<div class="login-box">
+
+  <div class="login-box">
+
+```
 <h2>🔐 لوحة تحكم VelaLight</h2>
-<input id="loginEmail" type="email" placeholder="الإيميل">
-<input id="loginPass" type="password" placeholder="كلمة المرور">
-<button class="btn" id="loginBtn" style="width:100%">تسجيل الدخول</button>
-<p id="loginErr" style="color:var(--bad);font-size:.82rem;margin-top:.8rem"></p>
+
+<input
+  id="loginEmail"
+  type="email"
+  autocomplete="username"
+  placeholder="الإيميل"
+>
+
+<input
+  id="loginPass"
+  type="password"
+  autocomplete="current-password"
+  placeholder="كلمة المرور"
+>
+
+<button
+  class="btn"
+  id="loginBtn"
+  style="width:100%"
+  type="button"
+>
+  تسجيل الدخول
+</button>
+
+<p
+  id="loginErr"
+  class="login-status"
+  style="color:var(--bad);font-size:.82rem;margin-top:.8rem"
+></p>
+```
+
+  </div>
+
 </div>
-</div>
+
+<!-- ================= ADMIN ================= -->
 
 <div id="adminScreen" class="hidden">
-<div class="wrap">
 
+  <div class="wrap">
+
+```
 <div class="adm-top">
-<h1>⚙️ لوحة التحكم</h1>
-<div class="adm-nav">
-<a class="btn ghost sm" href="index.html">↩ المتجر</a>
-<button class="btn danger sm" id="logoutBtn">تسجيل خروج</button>
+
+  <h1>⚙️ لوحة التحكم</h1>
+
+  <div class="adm-nav">
+
+    <a
+      class="btn ghost sm"
+      href="index.html"
+    >
+      ↩ المتجر
+    </a>
+
+    <button
+      class="btn danger sm"
+      id="logoutBtn"
+      type="button"
+    >
+      تسجيل خروج
+    </button>
+
+  </div>
+
 </div>
-</div>
+
+
+<!-- ================= STATS ================= -->
 
 <div class="adm-head" id="statsRow">
-<div class="adm-stat"><b id="stOrders">0</b><span>📦 الطلبات</span></div>
-<div class="adm-stat"><b id="stProducts">0</b><span>🕯️ المنتجات</span></div>
-<div class="adm-stat"><b id="stReviews">0</b><span>⭐ المراجعات</span></div>
-<div class="adm-stat"><b id="stRevenue">0</b><span>💰 الإيرادات</span></div>
+
+  <div class="adm-stat">
+    <b id="stOrders">0</b>
+    <span>📦 الطلبات</span>
+  </div>
+
+  <div class="adm-stat">
+    <b id="stProducts">0</b>
+    <span>🕯️ المنتجات</span>
+  </div>
+
+  <div class="adm-stat">
+    <b id="stReviews">0</b>
+    <span>⭐ المراجعات</span>
+  </div>
+
+  <div class="adm-stat">
+    <b id="stRevenue">0</b>
+    <span>💰 الإيرادات</span>
+  </div>
+
 </div>
+
+
+<!-- ================= TABS ================= -->
 
 <div class="adm-tabs">
-<button class="btn sm" data-tab="orders">📦 الطلبات</button>
-<button class="btn sm ghost" data-tab="products">🕯️ المنتجات</button>
-<button class="btn sm ghost" data-tab="reviews">⭐ المراجعات</button>
+
+  <button
+    class="btn sm"
+    data-tab="orders"
+    type="button"
+  >
+    📦 الطلبات
+  </button>
+
+  <button
+    class="btn sm ghost"
+    data-tab="products"
+    type="button"
+  >
+    🕯️ المنتجات
+  </button>
+
+  <button
+    class="btn sm ghost"
+    data-tab="reviews"
+    type="button"
+  >
+    ⭐ المراجعات
+  </button>
+
 </div>
+
+
+<!-- ================= ORDERS ================= -->
 
 <div id="tab-orders">
-<table class="adm">
-<thead><tr><th>رقم الطلب</th><th>التاريخ</th><th>العميل</th><th>الموبايل</th><th>الإجمالي</th><th>الحالة</th></tr></thead>
-<tbody id="ordersBody"></tbody>
-</table>
+
+  <table class="adm">
+
+    <thead>
+      <tr>
+        <th>رقم الطلب</th>
+        <th>التاريخ</th>
+        <th>العميل</th>
+        <th>الموبايل</th>
+        <th>الإجمالي</th>
+        <th>الحالة</th>
+      </tr>
+    </thead>
+
+    <tbody id="ordersBody"></tbody>
+
+  </table>
+
 </div>
+
+
+<!-- ================= PRODUCTS ================= -->
 
 <div id="tab-products" class="hidden">
-<button class="btn sm" id="addProductBtn" style="margin-bottom:1rem">➕ إضافة / تعديل منتج (بدون تعديل كود)</button>
 
-<div class="pform hidden" id="productForm">
-<h3 style="color:var(--gold2);margin-bottom:1rem" id="formTitle">منتج جديد</h3>
-<div class="g">
-<div><label>اسم المنتج (عربي) *</label><input id="pf_name"></div>
-<div><label>الاسم الإنجليزي (للرابط/SEO) *</label><input id="pf_nameEn"></div>
-</div>
-<div class="g">
-<div><label>السعر (ج.م) *</label><input id="pf_price" type="number"></div>
-<div><label>السعر قبل الخصم</label><input id="pf_old" type="number"></div>
-</div>
-<div class="g">
-<div><label>التصنيف</label>
-<select id="pf_cat">
-<option value="wood">شموع خشبية</option>
-<option value="glass">شموع زجاجية</option>
-<option value="crystal">شموع كريستالية</option>
-<option value="metal">شموع معدنية</option>
-<option value="massage">شموع المساج</option>
-<option value="gift">الهدايا</option>
-<option value="bride">بوكس العروسة</option>
-</select>
-</div>
-<div><label>الصورة (اسم الملف في الريبو أو رابط)</label><input id="pf_img"></div>
-</div>
-<div class="g">
-<div><label>بادج عربي (اختياري)</label><input id="pf_badge" placeholder="خصم / الأكثر مبيعًا"></div>
-<div><label>مدة الاشتعال</label><input id="pf_hours" placeholder="72 ساعة اشتعال"></div>
-</div>
-<label>الوصف العربي</label><textarea id="pf_desc" rows="3"></textarea>
-<label>الوصف الإنجليزي</label><textarea id="pf_descEn" rows="2"></textarea>
-<label>العطور المتاحة (افصل بفاصلة)</label><input id="pf_scents" placeholder="عود, فانيليا, مسك أبيض">
-<div style="display:flex;gap:.6rem;margin-top:1rem">
-<button class="btn sm" id="saveProductBtn">💾 حفظ المنتج</button>
-<button class="btn ghost sm" id="cancelProductBtn">إلغاء</button>
-</div>
+  <button
+    class="btn sm"
+    id="addProductBtn"
+    style="margin-bottom:1rem"
+    type="button"
+  >
+    ➕ إضافة / تعديل منتج (بدون تعديل كود)
+  </button>
+
+
+  <div
+    class="pform hidden"
+    id="productForm"
+  >
+
+    <h3
+      style="color:var(--gold2);margin-bottom:1rem"
+      id="formTitle"
+    >
+      منتج جديد
+    </h3>
+
+
+    <div class="g">
+
+      <div>
+        <label>اسم المنتج (عربي) *</label>
+        <input id="pf_name">
+      </div>
+
+      <div>
+        <label>الاسم الإنجليزي (للرابط/SEO) *</label>
+        <input id="pf_nameEn">
+      </div>
+
+    </div>
+
+
+    <div class="g">
+
+      <div>
+        <label>السعر (ج.م) *</label>
+        <input
+          id="pf_price"
+          type="number"
+        >
+      </div>
+
+      <div>
+        <label>السعر قبل الخصم</label>
+        <input
+          id="pf_old"
+          type="number"
+        >
+      </div>
+
+    </div>
+
+
+    <div class="g">
+
+      <div>
+
+        <label>التصنيف</label>
+
+        <select id="pf_cat">
+
+          <option value="wood">
+            شموع خشبية
+          </option>
+
+          <option value="glass">
+            شموع زجاجية
+          </option>
+
+          <option value="crystal">
+            شموع كريستالية
+          </option>
+
+          <option value="metal">
+            شموع معدنية
+          </option>
+
+          <option value="massage">
+            شموع المساج
+          </option>
+
+          <option value="gift">
+            الهدايا
+          </option>
+
+          <option value="bride">
+            بوكس العروسة
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div>
+
+        <label>
+          الصورة (اسم الملف في الريبو أو رابط)
+        </label>
+
+        <input id="pf_img">
+
+      </div>
+
+    </div>
+
+
+    <div class="g">
+
+      <div>
+
+        <label>بادج عربي (اختياري)</label>
+
+        <input
+          id="pf_badge"
+          placeholder="خصم / الأكثر مبيعًا"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>مدة الاشتعال</label>
+
+        <input
+          id="pf_hours"
+          placeholder="72 ساعة اشتعال"
+        >
+
+      </div>
+
+    </div>
+
+
+    <label>الوصف العربي</label>
+
+    <textarea
+      id="pf_desc"
+      rows="3"
+    ></textarea>
+
+
+    <label>الوصف الإنجليزي</label>
+
+    <textarea
+      id="pf_descEn"
+      rows="2"
+    ></textarea>
+
+
+    <label>العطور المتاحة (افصل بفاصلة)</label>
+
+    <input
+      id="pf_scents"
+      placeholder="عود, فانيليا, مسك أبيض"
+    >
+
+
+    <div
+      style="display:flex;gap:.6rem;margin-top:1rem"
+    >
+
+      <button
+        class="btn sm"
+        id="saveProductBtn"
+        type="button"
+      >
+        💾 حفظ المنتج
+      </button>
+
+      <button
+        class="btn ghost sm"
+        id="cancelProductBtn"
+        type="button"
+      >
+        إلغاء
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <table class="adm">
+
+    <thead>
+
+      <tr>
+        <th></th>
+        <th>المنتج</th>
+        <th>التصنيف</th>
+        <th>السعر</th>
+        <th>ظهور</th>
+        <th>إجراءات</th>
+      </tr>
+
+    </thead>
+
+    <tbody id="productsBody"></tbody>
+
+  </table>
+
 </div>
 
-<table class="adm">
-<thead><tr><th></th><th>المنتج</th><th>التصنيف</th><th>السعر</th><th>ظهور</th><th>إجراءات</th></tr></thead>
-<tbody id="productsBody"></tbody>
-</table>
-</div>
+
+<!-- ================= REVIEWS ================= -->
 
 <div id="tab-reviews" class="hidden">
-<table class="adm">
-<thead><tr><th>الاسم</th><th>المنتج</th><th>التقييم</th><th>المراجعة</th><th>إجراءات</th></tr></thead>
-<tbody id="reviewsBody"></tbody>
-</table>
-</div>
+
+  <table class="adm">
+
+    <thead>
+
+      <tr>
+        <th>الاسم</th>
+        <th>المنتج</th>
+        <th>التقييم</th>
+        <th>المراجعة</th>
+        <th>إجراءات</th>
+      </tr>
+
+    </thead>
+
+    <tbody id="reviewsBody"></tbody>
+
+  </table>
 
 </div>
+```
+
+  </div>
+
 </div>
 
 <div id="toasts"></div>
 
+<!-- ================= DATA ================= -->
+
 <script src="data.js"></script>
-<script type="module" src="firebase.js"></script>
+
+<script
+  type="module"
+  src="firebase.js"
+></script>
+
+<!-- ================= ADMIN SCRIPT ================= -->
+
 <script>
+
 (function(){
+
 "use strict";
 
-let loggedIn=false;
 
-document.addEventListener("DOMContentLoaded",()=>{
-checkAuth();
-initTabs();
-initProductForm();
+let loggedIn = false;
+
+
+/* =========================================================
+   DOM READY
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  initTabs();
+
+  initProductForm();
+
 });
 
-window.addEventListener("fb-ready",()=>{
-if(sessionStorage.getItem("vl_admin")==="1"){
-showAdmin();
-}
+
+/* =========================================================
+   FIREBASE READY
+========================================================= */
+
+window.addEventListener("fb-ready", () => {
+
+  console.log("FB READY");
+
+  checkAuth();
+
 });
+
+
+/* =========================================================
+   FIREBASE ERROR
+========================================================= */
+
+window.addEventListener("fb-error", (event) => {
+
+  console.error(
+    "Firebase ERROR:",
+    event.detail
+  );
+
+  const errorBox = document.getElementById("loginErr");
+
+  if(errorBox){
+
+    errorBox.textContent =
+      "⚠️ تعذر تشغيل Firebase. راجع Console.";
+
+  }
+
+});
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+window.addEventListener("fb-auth-state", (event) => {
+
+  const user = event.detail;
+
+  console.log(
+    "AUTH STATE:",
+    user ? user.email : "NOT LOGGED IN"
+  );
+
+  if(user){
+
+    showAdmin();
+
+  }else{
+
+    showLogin();
+
+  }
+
+});
+
+
+/* =========================================================
+   CHECK AUTH
+========================================================= */
 
 function checkAuth(){
-if(window.FB&&window.FB.authUser()){
-loggedIn=true;
-showAdmin();
+
+  if(
+    window.FB &&
+    typeof window.FB.authUser === "function"
+  ){
+
+    const user = window.FB.authUser();
+
+    if(user){
+
+      showAdmin();
+
+    }else{
+
+      showLogin();
+
+    }
+
+  }
+
 }
+
+
+/* =========================================================
+   SHOW LOGIN
+========================================================= */
+
+function showLogin(){
+
+  loggedIn = false;
+
+  const loginScreen =
+    document.getElementById("loginScreen");
+
+  const adminScreen =
+    document.getElementById("adminScreen");
+
+  if(loginScreen){
+
+    loginScreen.classList.remove("hidden");
+
+  }
+
+  if(adminScreen){
+
+    adminScreen.classList.add("hidden");
+
+  }
+
 }
+
+
+/* =========================================================
+   SHOW ADMIN
+========================================================= */
 
 function showAdmin(){
-loggedIn=true;
-sessionStorage.setItem("vl_admin","1");
-$("#loginScreen").classList.add("hidden");
-$("#adminScreen").classList.remove("hidden");
-loadOrders();
-loadProducts();
-loadReviews();
+
+  if(loggedIn){
+
+    return;
+
+  }
+
+  if(
+    !window.FB ||
+    typeof window.FB.authUser !== "function"
+  ){
+
+    return;
+
+  }
+
+  if(!window.FB.authUser()){
+
+    return;
+
+  }
+
+  loggedIn = true;
+
+  document
+    .getElementById("loginScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("adminScreen")
+    .classList.remove("hidden");
+
+
+  loadOrders();
+
+  loadProducts();
+
+  loadReviews();
+
 }
 
-/* ═══ تسجيل الدخول ═══ */
-document.addEventListener("click",e=>{
-if(e.target.id==="loginBtn"){
-const email=$("#loginEmail").value.trim();
-const pass=$("#loginPass").value;
-if(!email||!pass){$("#loginErr").textContent="⚠️ اكتب الإيميل والباسورد";return}
-$("#loginErr").textContent="";
-$("#loginBtn").textContent="⏳ جاري الدخول...";
 
-if(window.FB&&window.FB.admin){
-window.FB.admin(email,pass).then(()=>{
-showAdmin();
-}).catch(err=>{
-$("#loginErr").textContent="❌ الإيميل أو الباسورد غير صحيح";
-$("#loginBtn").textContent="تسجيل الدخول";
+/* =========================================================
+   LOGIN
+========================================================= */
+
+document.addEventListener("click", async (event) => {
+
+  if(event.target.id !== "loginBtn"){
+
+    return;
+
+  }
+
+
+  const emailInput =
+    document.getElementById("loginEmail");
+
+  const passInput =
+    document.getElementById("loginPass");
+
+  const loginBtn =
+    document.getElementById("loginBtn");
+
+  const loginErr =
+    document.getElementById("loginErr");
+
+
+  const email =
+    emailInput.value.trim();
+
+  const pass =
+    passInput.value;
+
+
+  if(!email || !pass){
+
+    loginErr.textContent =
+      "⚠️ اكتب الإيميل وكلمة المرور";
+
+    return;
+
+  }
+
+
+  if(
+    !window.FB ||
+    typeof window.FB.admin !== "function"
+  ){
+
+    loginErr.textContent =
+      "⚠️ Firebase لم يتم تحميله بعد. أعد تحميل الصفحة.";
+
+    return;
+
+  }
+
+
+  loginErr.textContent = "";
+
+  loginBtn.disabled = true;
+
+  loginBtn.textContent =
+    "⏳ جاري الدخول...";
+
+
+  try{
+
+    const result =
+      await window.FB.admin(
+        email,
+        pass
+      );
+
+
+    console.log(
+      "LOGIN SUCCESS:",
+      result.user.email
+    );
+
+
+    loggedIn = false;
+
+    showAdmin();
+
+
+  }catch(error){
+
+    console.error(
+      "LOGIN ERROR:",
+      error
+    );
+
+
+    let message =
+      "❌ حدث خطأ أثناء تسجيل الدخول";
+
+
+    switch(error.code){
+
+      case "auth/invalid-credential":
+
+        message =
+          "❌ الإيميل أو كلمة المرور غير صحيحة";
+
+        break;
+
+
+      case "auth/invalid-email":
+
+        message =
+          "❌ صيغة الإيميل غير صحيحة";
+
+        break;
+
+
+      case "auth/user-disabled":
+
+        message =
+          "❌ هذا الحساب متوقف في Firebase";
+
+        break;
+
+
+      case "auth/user-not-found":
+
+        message =
+          "❌ هذا الإيميل غير موجود في Firebase";
+
+        break;
+
+
+      case "auth/wrong-password":
+
+        message =
+          "❌ كلمة المرور غير صحيحة";
+
+        break;
+
+
+      case "auth/too-many-requests":
+
+        message =
+          "⏳ تم إجراء محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى";
+
+        break;
+
+
+      case "auth/network-request-failed":
+
+        message =
+          "🌐 توجد مشكلة في الاتصال بـ Firebase";
+
+        break;
+
+
+      case "auth/operation-not-allowed":
+
+        message =
+          "⚠️ تسجيل الدخول بالإيميل غير مفعّل في Firebase";
+
+        break;
+
+
+      case "auth/api-key-not-valid":
+
+        message =
+          "⚠️ مفتاح Firebase غير صحيح";
+
+        break;
+
+
+      case "auth/invalid-api-key":
+
+        message =
+          "⚠️ Firebase API Key غير صحيح";
+
+        break;
+
+
+      case "auth/app-deleted":
+
+        message =
+          "⚠️ اتصال Firebase غير صحيح";
+
+        break;
+
+
+      default:
+
+        message =
+          "❌ Firebase: " +
+          (
+            error.code ||
+            error.message ||
+            "خطأ غير معروف"
+          );
+
+    }
+
+
+    loginErr.textContent = message;
+
+
+  }finally{
+
+    loginBtn.disabled = false;
+
+    loginBtn.textContent =
+      "تسجيل الدخول";
+
+  }
+
 });
-}else{
-$("#loginErr").textContent="⚠️ Firebase لم يتم تحميله بعد، جرب تاني";
-$("#loginBtn").textContent="تسجيل الدخول";
-}
-}
-if(e.target.id==="logoutBtn"){
-sessionStorage.removeItem("vl_admin");
-if(window.FB&&window.FB.auth)window.FB.auth.signOut();
-location.reload();
-}
+
+
+/* =========================================================
+   ENTER KEY LOGIN
+========================================================= */
+
+document.addEventListener("keydown", (event) => {
+
+  if(
+    event.key === "Enter" &&
+    (
+      event.target.id === "loginEmail" ||
+      event.target.id === "loginPass"
+    )
+  ){
+
+    document
+      .getElementById("loginBtn")
+      .click();
+
+  }
+
 });
 
-/* ═══ التبويبات ═══ */
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+document.addEventListener("click", async (event) => {
+
+  if(event.target.id !== "logoutBtn"){
+
+    return;
+
+  }
+
+
+  try{
+
+    if(
+      window.FB &&
+      typeof window.FB.signOut === "function"
+    ){
+
+      await window.FB.signOut();
+
+    }else if(
+      window.FB &&
+      window.FB.auth &&
+      typeof window.FB.auth.signOut === "function"
+    ){
+
+      await window.FB.auth.signOut();
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "LOGOUT ERROR:",
+      error
+    );
+
+  }
+
+
+  loggedIn = false;
+
+  showLogin();
+
+});
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
 function initTabs(){
-$$(".adm-tabs button").forEach(b=>b.addEventListener("click",()=>{
-$$(".adm-tabs button").forEach(x=>{x.classList.remove("on");x.classList.add("ghost")});
-b.classList.add("on");b.classList.remove("ghost");
-const tab=b.dataset.tab;
-$("#tab-orders").classList.toggle("hidden",tab!=="orders");
-$("#tab-products").classList.toggle("hidden",tab!=="products");
-$("#tab-reviews").classList.toggle("hidden",tab!=="reviews");
-}));
+
+  $$(".adm-tabs button")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          $$(".adm-tabs button")
+            .forEach(other => {
+
+              other.classList.remove("on");
+
+              other.classList.add("ghost");
+
+            });
+
+
+          button.classList.add("on");
+
+          button.classList.remove("ghost");
+
+
+          const tab =
+            button.dataset.tab;
+
+
+          $("#tab-orders")
+            .classList.toggle(
+              "hidden",
+              tab !== "orders"
+            );
+
+
+          $("#tab-products")
+            .classList.toggle(
+              "hidden",
+              tab !== "products"
+            );
+
+
+          $("#tab-reviews")
+            .classList.toggle(
+              "hidden",
+              tab !== "reviews"
+            );
+
+        }
+      );
+
+    });
+
 }
 
-/* ═══ الطلبات ═══ */
+
+/* =========================================================
+   ORDERS
+========================================================= */
+
 function loadOrders(){
-if(!window.FB)return;
-window.FB.watch("orders",orders=>{
-orders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-$("#stOrders").textContent=orders.length;
-const rev=orders.reduce((a,o)=>a+(o.total||0),0);
-$("#stRevenue").textContent=money(rev);
 
-$("#ordersBody").innerHTML=orders.map(o=>{
-const d=o.createdAt?new Date(o.createdAt).toLocaleDateString("ar-EG"):"-";
-const stOpts=STATUS.map((s,i)=>`<option value="${i}"${o.status===i?" selected":""}>${s}</option>`).join("");
-return `<tr>
-<td style="direction:ltr;font-size:.78rem">${o.id||"-"}</td>
-<td>${d}</td>
-<td>${o.name||"-"}</td>
-<td style="direction:ltr">${o.phone||"-"}</td>
-<td>${money(o.total||0)}</td>
-<td><select data-oid="${o._fid||o.id}">${stOpts}</select></td>
-</tr>`;
-}).join("");
+  if(
+    !window.FB ||
+    typeof window.FB.watch !== "function"
+  ){
 
-$$("#ordersBody select").forEach(s=>s.addEventListener("change",()=>{
-window.FB.update("orders",s.dataset.oid,{status:+s.value}).then(()=>toast("✅ تم تحديث الحالة")).catch(()=>toast("⚠️ فشل التحديث"));
-}));
-});
+    return;
+
+  }
+
+
+  window.FB.watch(
+    "orders",
+    orders => {
+
+      orders.sort(
+        (a,b) =>
+          (b.createdAt || 0) -
+          (a.createdAt || 0)
+      );
+
+
+      $("#stOrders").textContent =
+        orders.length;
+
+
+      const revenue =
+        orders.reduce(
+          (total, order) =>
+            total +
+            Number(order.total || 0),
+          0
+        );
+
+
+      $("#stRevenue").textContent =
+        money(revenue);
+
+
+      $("#ordersBody").innerHTML =
+        orders.map(order => {
+
+          const date =
+            order.createdAt
+              ? new Date(
+                  order.createdAt
+                ).toLocaleDateString("ar-EG")
+              : "-";
+
+
+          const statusOptions =
+            STATUS
+              .map(
+                (status,index) =>
+                  `<option value="${index}"${
+                    order.status === index
+                      ? " selected"
+                      : ""
+                  }>${status}</option>`
+              )
+              .join("");
+
+
+          return `
+            <tr>
+
+              <td style="direction:ltr;font-size:.78rem">
+                ${order.id || "-"}
+              </td>
+
+              <td>
+                ${date}
+              </td>
+
+              <td>
+                ${order.name || "-"}
+              </td>
+
+              <td style="direction:ltr">
+                ${order.phone || "-"}
+              </td>
+
+              <td>
+                ${money(order.total || 0)}
+              </td>
+
+              <td>
+
+                <select
+                  data-oid="${order._fid || order.id}"
+                >
+                  ${statusOptions}
+                </select>
+
+              </td>
+
+            </tr>
+          `;
+
+        })
+        .join("");
+
+
+      $$("#ordersBody select")
+        .forEach(select => {
+
+          select.addEventListener(
+            "change",
+            () => {
+
+              window.FB
+                .update(
+                  "orders",
+                  select.dataset.oid,
+                  {
+                    status:
+                      Number(select.value)
+                  }
+                )
+                .then(
+                  () =>
+                    toast(
+                      "✅ تم تحديث الحالة"
+                    )
+                )
+                .catch(
+                  error => {
+
+                    console.error(error);
+
+                    toast(
+                      "⚠️ فشل تحديث الحالة"
+                    );
+
+                  }
+                );
+
+            }
+          );
+
+        });
+
+    },
+
+    error => {
+
+      console.error(
+        "Orders error:",
+        error
+      );
+
+    }
+
+  );
+
 }
 
-/* ═══ المنتجات ═══ */
+
+/* =========================================================
+   PRODUCTS
+========================================================= */
+
 function loadProducts(){
-if(!window.FB)return;
-window.FB.list("products").then(cloud=>{
-const map=new Map(PRODUCTS.map(p=>[p.id,{...p,_fid:null}]));
-(cloud||[]).forEach(d=>{
-const slug=d.id_||d.slug||d.pid;
-if(!slug)return;
-if(d.active===false){map.delete(slug);return}
-map.set(slug,{...(map.get(slug)||{}),...d,id:slug,_fid:d.id});
-});
-const list=[...map.values()];
-$("#stProducts").textContent=list.length;
 
-$("#productsBody").innerHTML=list.map(p=>`<tr>
-<td><img class="adm-thumb" src="${imgOf(p)}" alt=""></td>
-<td><b>${p.name||""}</b><br><small style="color:var(--dim);font-size:.7rem">ID: ${p.id}</small></td>
-<td>${CATS.ar[p.cat]||p.cat||""}</td>
-<td>${money(p.price||0)}</td>
-<td>${p.active===false?"❌ مخفي":"✅ ظاهر"}</td>
-<td style="display:flex;gap:.3rem;flex-wrap:wrap">
-<button class="btn sm ghost" data-edit="${p.id}">✏️ تعديل</button>
-<button class="btn sm ghost" data-toggle="${p.id}" data-fid="${p._fid||""}" data-active="${p.active!==false}">${p.active===false?"👁️ إظهار":"🙈 إخفاء"}</button>
-<button class="btn sm danger" data-del="${p.id}" data-fid="${p._fid||""}">🗑️</button>
-</td>
-</tr>`).join("");
+  if(
+    !window.FB ||
+    typeof window.FB.list !== "function"
+  ){
 
-bindProductActions(list);
-}).catch(e=>console.warn(e));
+    return;
+
+  }
+
+
+  window.FB
+    .list("products")
+    .then(cloud => {
+
+      const map =
+        new Map(
+          PRODUCTS.map(
+            product => [
+              product.id,
+              {
+                ...product,
+                _fid:null
+              }
+            ]
+          )
+        );
+
+
+      (cloud || [])
+        .forEach(data => {
+
+          const slug =
+            data.id_ ||
+            data.slug ||
+            data.pid;
+
+
+          if(!slug){
+
+            return;
+
+          }
+
+
+          if(data.active === false){
+
+            map.delete(slug);
+
+            return;
+
+          }
+
+
+          map.set(
+            slug,
+            {
+              ...(map.get(slug) || {}),
+              ...data,
+              id:slug,
+              _fid:data.id
+            }
+          );
+
+        });
+
+
+      const list =
+        [...map.values()];
+
+
+      $("#stProducts").textContent =
+        list.length;
+
+
+      $("#productsBody").innerHTML =
+        list.map(product => `
+
+          <tr>
+
+            <td>
+
+              <img
+                class="adm-thumb"
+                src="${imgOf(product)}"
+                alt=""
+              >
+
+            </td>
+
+
+            <td>
+
+              <b>
+                ${product.name || ""}
+              </b>
+
+              <br>
+
+              <small
+                style="color:var(--dim);font-size:.7rem"
+              >
+                ID: ${product.id}
+              </small>
+
+            </td>
+
+
+            <td>
+              ${
+                CATS.ar[product.cat] ||
+                product.cat ||
+                ""
+              }
+            </td>
+
+
+            <td>
+              ${money(product.price || 0)}
+            </td>
+
+
+            <td>
+              ${
+                product.active === false
+                  ? "❌ مخفي"
+                  : "✅ ظاهر"
+              }
+            </td>
+
+
+            <td
+              style="
+                display:flex;
+                gap:.3rem;
+                flex-wrap:wrap
+              "
+            >
+
+              <button
+                class="btn sm ghost"
+                data-edit="${product.id}"
+                type="button"
+              >
+                ✏️ تعديل
+              </button>
+
+
+              <button
+                class="btn sm ghost"
+                data-toggle="${product.id}"
+                data-fid="${product._fid || ""}"
+                data-active="${
+                  product.active !== false
+                }"
+                type="button"
+              >
+                ${
+                  product.active === false
+                    ? "👁️ إظهار"
+                    : "🙈 إخفاء"
+                }
+              </button>
+
+
+              <button
+                class="btn sm danger"
+                data-del="${product.id}"
+                data-fid="${product._fid || ""}"
+                type="button"
+              >
+                🗑️
+              </button>
+
+            </td>
+
+          </tr>
+
+        `).join("");
+
+
+      bindProductActions(list);
+
+    })
+    .catch(error => {
+
+      console.error(
+        "Products error:",
+        error
+      );
+
+      toast(
+        "⚠️ تعذر تحميل المنتجات"
+      );
+
+    });
+
 }
+
+
+/* =========================================================
+   PRODUCT ACTIONS
+========================================================= */
 
 function bindProductActions(list){
-$$("#productsBody [data-edit]").forEach(b=>b.addEventListener("click",()=>{
-const p=list.find(x=>x.id===b.dataset.edit);
-if(p)openProductForm(p);
-}));
-$$("#productsBody [data-toggle]").forEach(b=>b.addEventListener("click",()=>{
-const fid=b.dataset.fid;
-const id=b.dataset.toggle;
-const newActive=b.dataset.active!=="true";
-if(fid){
-window.FB.update("products",fid,{active:newActive}).then(()=>{toast(newActive?"👁️ تم الإظهار":"🙈 تم الإخفاء");loadProducts()}).catch(()=>toast("⚠️ فشل"));
-}else{
-window.FB.set("products",id,{id_:id,active:newActive}).then(()=>{toast(newActive?"👁️ تم الإظهار":"🙈 تم الإخفاء");loadProducts()}).catch(()=>toast("⚠️ فشل"));
-}
-}));
-$$("#productsBody [data-del]").forEach(b=>b.addEventListener("click",()=>{
-if(!confirm("متأكدة إنك عايزة تحذفي/تخفي المنتج ده؟"))return;
-const fid=b.dataset.fid;
-const id=b.dataset.del;
-if(fid){
-window.FB.update("products",fid,{active:false}).then(()=>{toast("🗑️ تم الإخفاء");loadProducts()}).catch(()=>toast("⚠️ فشل"));
-}else{
-window.FB.set("products",id,{id_:id,active:false}).then(()=>{toast("🗑️ تم الإخفاء");loadProducts()}).catch(()=>toast("⚠️ فشل"));
-}
-}));
+
+
+  $$("#productsBody [data-edit]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const product =
+            list.find(
+              item =>
+                item.id ===
+                button.dataset.edit
+            );
+
+
+          if(product){
+
+            openProductForm(product);
+
+          }
+
+        }
+      );
+
+    });
+
+
+  $$("#productsBody [data-toggle]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const fid =
+            button.dataset.fid;
+
+          const id =
+            button.dataset.toggle;
+
+          const newActive =
+            button.dataset.active !== "true";
+
+
+          if(fid){
+
+            window.FB
+              .update(
+                "products",
+                fid,
+                {
+                  active:newActive
+                }
+              )
+              .then(() => {
+
+                toast(
+                  newActive
+                    ? "👁️ تم الإظهار"
+                    : "🙈 تم الإخفاء"
+                );
+
+                loadProducts();
+
+              })
+              .catch(error => {
+
+                console.error(error);
+
+                toast(
+                  "⚠️ فشل تحديث المنتج"
+                );
+
+              });
+
+          }else{
+
+            window.FB
+              .set(
+                "products",
+                id,
+                {
+                  id_:id,
+                  active:newActive
+                }
+              )
+              .then(() => {
+
+                toast(
+                  newActive
+                    ? "👁️ تم الإظهار"
+                    : "🙈 تم الإخفاء"
+                );
+
+                loadProducts();
+
+              })
+              .catch(error => {
+
+                console.error(error);
+
+                toast(
+                  "⚠️ فشل تحديث المنتج"
+                );
+
+              });
+
+          }
+
+        }
+      );
+
+    });
+
+
+  $$("#productsBody [data-del]")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          if(
+            !confirm(
+              "متأكد إنك عايز تحذف/تخفي المنتج ده؟"
+            )
+          ){
+
+            return;
+
+          }
+
+
+          const fid =
+            button.dataset.fid;
+
+          const id =
+            button.dataset.del;
+
+
+          if(fid){
+
+            window.FB
+              .update(
+                "products",
+                fid,
+                {
+                  active:false
+                }
+              )
+              .then(() => {
+
+                toast(
+                  "🗑️ تم إخفاء المنتج"
+                );
+
+                loadProducts();
+
+              })
+              .catch(error => {
+
+                console.error(error);
+
+                toast(
+                  "⚠️ فشل إخفاء المنتج"
+                );
+
+              });
+
+          }else{
+
+            window.FB
+              .set(
+                "products",
+                id,
+                {
+                  id_:id,
+                  active:false
+                }
+              )
+              .then(() => {
+
+                toast(
+                  "🗑️ تم إخفاء المنتج"
+                );
+
+                loadProducts();
+
+              })
+              .catch(error => {
+
+                console.error(error);
+
+                toast(
+                  "⚠️ فشل إخفاء المنتج"
+                );
+
+              });
+
+          }
+
+        }
+      );
+
+    });
+
 }
 
-/* ═══ فورم المنتج ═══ */
+
+/* =========================================================
+   PRODUCT FORM
+========================================================= */
+
 function initProductForm(){
-$("#addProductBtn")?.addEventListener("click",()=>openProductForm(null));
-$("#cancelProductBtn")?.addEventListener("click",()=>$("#productForm").classList.add("hidden"));
 
-$("#saveProductBtn")?.addEventListener("click",()=>{
-const name=$("#pf_name").value.trim();
-const nameEn=$("#pf_nameEn").value.trim();
-const price=+($("#pf_price").value||0);
-if(!name||!nameEn||price<=0){toast("⚠️ كمّل الحقول المطلوبة (*)");return}
 
-const existingId=$("#productForm").dataset.editId||"";
-const scents=$("#pf_scents").value.split(",").map(s=>s.trim()).filter(Boolean);
+  $("#addProductBtn")
+    ?.addEventListener(
+      "click",
+      () => openProductForm(null)
+    );
 
-const data={
-name,nameEn,price,
-old:+($("#pf_old").value||0),
-cat:$("#pf_cat").value,
-img:$("#pf_img").value.trim(),
-badge:$("#pf_badge").value.trim(),
-badgeEn:$("#pf_badge").value.trim(),
-hours:$("#pf_hours").value.trim(),
-hoursEn:$("#pf_hours").value.trim(),
-desc:$("#pf_desc").value.trim(),
-descEn:$("#pf_descEn").value.trim(),
-scents,
-active:true
-};
 
-if(existingId){
-data.id_=existingId;
-window.FB.set("products",existingId,data).then(()=>{
-toast("💾 تم حفظ المنتج");
-$("#productForm").classList.add("hidden");
-loadProducts();
-}).catch(e=>{console.error(e);toast("⚠️ فشل الحفظ — راجع Firestore Rules")});
-}else{
-const newId="p"+Date.now().toString(36)+Math.random().toString(16).slice(2,5);
-data.id_=newId;
-data.createdAt=Date.now();
-data.sold=0;
-window.FB.set("products",newId,data).then(()=>{
-toast("💾 تم حفظ المنتج");
-$("#productForm").classList.add("hidden");
-loadProducts();
-}).catch(e=>{console.error(e);toast("⚠️ فشل الحفظ — راجع Firestore Rules")});
+  $("#cancelProductBtn")
+    ?.addEventListener(
+      "click",
+      () => {
+
+        $("#productForm")
+          .classList
+          .add("hidden");
+
+      }
+    );
+
+
+  $("#saveProductBtn")
+    ?.addEventListener(
+      "click",
+      () => {
+
+        const name =
+          $("#pf_name")
+            .value
+            .trim();
+
+
+        const nameEn =
+          $("#pf_nameEn")
+            .value
+            .trim();
+
+
+        const price =
+          Number(
+            $("#pf_price").value || 0
+          );
+
+
+        if(
+          !name ||
+          !nameEn ||
+          price <= 0
+        ){
+
+          toast(
+            "⚠️ كمّل الحقول المطلوبة (*)"
+          );
+
+          return;
+
+        }
+
+
+        const existingId =
+          $("#productForm")
+            .dataset
+            .editId || "";
+
+
+        const scents =
+          $("#pf_scents")
+            .value
+            .split(",")
+            .map(
+              scent => scent.trim()
+            )
+            .filter(Boolean);
+
+
+        const data = {
+
+          name,
+
+          nameEn,
+
+          price,
+
+          old:
+            Number(
+              $("#pf_old").value || 0
+            ),
+
+          cat:
+            $("#pf_cat").value,
+
+          img:
+            $("#pf_img").value.trim(),
+
+          badge:
+            $("#pf_badge").value.trim(),
+
+          badgeEn:
+            $("#pf_badge").value.trim(),
+
+          hours:
+            $("#pf_hours").value.trim(),
+
+          hoursEn:
+            $("#pf_hours").value.trim(),
+
+          desc:
+            $("#pf_desc").value.trim(),
+
+          descEn:
+            $("#pf_descEn").value.trim(),
+
+          scents,
+
+          active:true
+
+        };
+
+
+        if(existingId){
+
+          data.id_ =
+            existingId;
+
+
+          window.FB
+            .set(
+              "products",
+              existingId,
+              data
+            )
+            .then(() => {
+
+              toast(
+                "💾 تم حفظ المنتج"
+              );
+
+              $("#productForm")
+                .classList
+                .add("hidden");
+
+              loadProducts();
+
+            })
+            .catch(error => {
+
+              console.error(
+                "Product update error:",
+                error
+              );
+
+              toast(
+                "⚠️ فشل الحفظ — راجع Firestore Rules"
+              );
+
+            });
+
+        }else{
+
+          const newId =
+            "p" +
+            Date.now().toString(36) +
+            Math.random()
+              .toString(16)
+              .slice(2,5);
+
+
+          data.id_ =
+            newId;
+
+
+          data.createdAt =
+            Date.now();
+
+
+          data.sold =
+            0;
+
+
+          window.FB
+            .set(
+              "products",
+              newId,
+              data
+            )
+            .then(() => {
+
+              toast(
+                "💾 تم حفظ المنتج"
+              );
+
+              $("#productForm")
+                .classList
+                .add("hidden");
+
+              loadProducts();
+
+            })
+            .catch(error => {
+
+              console.error(
+                "Product create error:",
+                error
+              );
+
+              toast(
+                "⚠️ فشل الحفظ — راجع Firestore Rules"
+              );
+
+            });
+
+        }
+
+      }
+    );
+
 }
-});
+
+
+/* =========================================================
+   OPEN PRODUCT FORM
+========================================================= */
+
+function openProductForm(product){
+
+  const form =
+    $("#productForm");
+
+
+  form.classList.remove(
+    "hidden"
+  );
+
+
+  if(product){
+
+    form.dataset.editId =
+      product.id;
+
+
+    $("#formTitle")
+      .textContent =
+      "تعديل: " +
+      (product.name || "");
+
+
+    $("#pf_name").value =
+      product.name || "";
+
+
+    $("#pf_nameEn").value =
+      product.nameEn || "";
+
+
+    $("#pf_price").value =
+      product.price || "";
+
+
+    $("#pf_old").value =
+      product.old || "";
+
+
+    $("#pf_cat").value =
+      product.cat || "wood";
+
+
+    $("#pf_img").value =
+      product.img || "";
+
+
+    $("#pf_badge").value =
+      product.badge || "";
+
+
+    $("#pf_hours").value =
+      product.hours || "";
+
+
+    $("#pf_desc").value =
+      product.desc || "";
+
+
+    $("#pf_descEn").value =
+      product.descEn || "";
+
+
+    $("#pf_scents").value =
+      (product.scents || [])
+        .join(", ");
+
+  }else{
+
+    form.dataset.editId =
+      "";
+
+
+    $("#formTitle")
+      .textContent =
+      "منتج جديد";
+
+
+    [
+      "pf_name",
+      "pf_nameEn",
+      "pf_price",
+      "pf_old",
+      "pf_img",
+      "pf_badge",
+      "pf_hours",
+      "pf_desc",
+      "pf_descEn",
+      "pf_scents"
+    ]
+    .forEach(id => {
+
+      $("#" + id).value = "";
+
+    });
+
+
+    $("#pf_cat").value =
+      "wood";
+
+  }
+
+
+  form.scrollIntoView({
+    behavior:"smooth"
+  });
+
 }
 
-function openProductForm(p){
-const f=$("#productForm");
-f.classList.remove("hidden");
-if(p){
-f.dataset.editId=p.id;
-$("#formTitle").textContent="تعديل: "+(p.name||"");
-$("#pf_name").value=p.name||"";
-$("#pf_nameEn").value=p.nameEn||"";
-$("#pf_price").value=p.price||"";
-$("#pf_old").value=p.old||"";
-$("#pf_cat").value=p.cat||"wood";
-$("#pf_img").value=p.img||"";
-$("#pf_badge").value=p.badge||"";
-$("#pf_hours").value=p.hours||"";
-$("#pf_desc").value=p.desc||"";
-$("#pf_descEn").value=p.descEn||"";
-$("#pf_scents").value=(p.scents||[]).join(", ");
-}else{
-f.dataset.editId="";
-$("#formTitle").textContent="منتج جديد";
-["pf_name","pf_nameEn","pf_price","pf_old","pf_img","pf_badge","pf_hours","pf_desc","pf_descEn","pf_scents"].forEach(id=>$("#"+id).value="");
-$("#pf_cat").value="wood";
-}
-f.scrollIntoView({behavior:"smooth"});
-}
 
-/* ═══ المراجعات ═══ */
+/* =========================================================
+   REVIEWS
+========================================================= */
+
 function loadReviews(){
-if(!window.FB)return;
-window.FB.list("reviews").then(revs=>{
-$("#stReviews").textContent=revs.length;
-$("#reviewsBody").innerHTML=revs.map(r=>`<tr>
-<td>${r.name||"-"}</td>
-<td>${r.productSlug||r.pid||"-"}</td>
-<td>${"★".repeat(r.rating||5)}</td>
-<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${r.text||""}</td>
-<td style="display:flex;gap:.3rem">
-${r.approved!==true?`<button class="btn sm" data-approve="${r.id}">✅ موافقة</button>`:"<span style='color:var(--ok)'>✅</span>"}
-<button class="btn sm danger" data-delrev="${r.id}">🗑️</button>
-</td>
-</tr>`).join("");
 
-$$("#reviewsBody [data-approve]").forEach(b=>b.addEventListener("click",()=>{
-window.FB.update("reviews",b.dataset.approve,{approved:true}).then(()=>{toast("✅ تم الموافقة");loadReviews()}).catch(()=>toast("⚠️ فشل"));
-}));
-$$("#reviewsBody [data-delrev]").forEach(b=>b.addEventListener("click",()=>{
-if(!confirm("حذف المراجعة؟"))return;
-window.FB.remove("reviews",b.dataset.delrev).then(()=>{toast("🗑️ تم الحذف");loadReviews()}).catch(()=>toast("⚠️ فشل"));
-}));
-}).catch(e=>console.warn(e));
+  if(
+    !window.FB ||
+    typeof window.FB.list !== "function"
+  ){
+
+    return;
+
+  }
+
+
+  window.FB
+    .list("reviews")
+    .then(reviews => {
+
+      $("#stReviews").textContent =
+        reviews.length;
+
+
+      $("#reviewsBody").innerHTML =
+        reviews
+          .map(review => `
+
+            <tr>
+
+              <td>
+                ${review.name || "-"}
+              </td>
+
+              <td>
+                ${
+                  review.productSlug ||
+                  review.pid ||
+                  "-"
+                }
+              </td>
+
+              <td>
+                ${"★".repeat(
+                  Number(review.rating || 5)
+                )}
+              </td>
+
+              <td
+                style="
+                  max-width:200px;
+                  overflow:hidden;
+                  text-overflow:ellipsis
+                "
+              >
+                ${review.text || ""}
+              </td>
+
+              <td
+                style="
+                  display:flex;
+                  gap:.3rem
+                "
+              >
+
+                ${
+                  review.approved !== true
+
+                    ? `
+                      <button
+                        class="btn sm"
+                        data-approve="${review.id}"
+                        type="button"
+                      >
+                        ✅ موافقة
+                      </button>
+                    `
+
+                    : `
+                      <span
+                        style="color:var(--ok)"
+                      >
+                        ✅
+                      </span>
+                    `
+                }
+
+
+                <button
+                  class="btn sm danger"
+                  data-delrev="${review.id}"
+                  type="button"
+                >
+                  🗑️
+                </button>
+
+              </td>
+
+            </tr>
+
+          `)
+          .join("");
+
+
+      $$("#reviewsBody [data-approve]")
+        .forEach(button => {
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              window.FB
+                .update(
+                  "reviews",
+                  button.dataset.approve,
+                  {
+                    approved:true
+                  }
+                )
+                .then(() => {
+
+                  toast(
+                    "✅ تمت الموافقة"
+                  );
+
+                  loadReviews();
+
+                })
+                .catch(error => {
+
+                  console.error(error);
+
+                  toast(
+                    "⚠️ فشل تحديث المراجعة"
+                  );
+
+                });
+
+            }
+          );
+
+        });
+
+
+      $$("#reviewsBody [data-delrev]")
+        .forEach(button => {
+
+          button.addEventListener(
+            "click",
+            () => {
+
+              if(
+                !confirm(
+                  "حذف المراجعة؟"
+                )
+              ){
+
+                return;
+
+              }
+
+
+              window.FB
+                .remove(
+                  "reviews",
+                  button.dataset.delrev
+                )
+                .then(() => {
+
+                  toast(
+                    "🗑️ تم الحذف"
+                  );
+
+                  loadReviews();
+
+                })
+                .catch(error => {
+
+                  console.error(error);
+
+                  toast(
+                    "⚠️ فشل الحذف"
+                  );
+
+                });
+
+            }
+          );
+
+        });
+
+    })
+    .catch(error => {
+
+      console.error(
+        "Reviews error:",
+        error
+      );
+
+      toast(
+        "⚠️ تعذر تحميل المراجعات"
+      );
+
+    });
+
 }
+
 
 })();
+
 </script>
+
 </body>
 </html>
