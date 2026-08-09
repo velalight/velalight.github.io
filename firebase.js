@@ -16,52 +16,45 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  browserLocalPersistence,
-  setPersistence,
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
-const clean = (value) => String(value || "").trim();
-
+/* =========================================================
+   VelaLight Firebase Configuration
+   ========================================================= */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXHiteGuiE8y8o",
+  apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",
   authDomain: "velalight.firebaseapp.com",
   projectId: "velalight",
   storageBucket: "velalight.firebasestorage.app",
   messagingSenderId: "1095485535268",
-  appId: "1:1095485535268:web:4d17ee9de6f5acdacbd4b1"
+  appId: "1:1095485535268:web:4d17ee9de6f5acdacbd4b1",
+  measurementId: "G-BWBD8ZZD23"
 };
 
 
+/* =========================================================
+   Initialize Firebase
+   ========================================================= */
+
+let app;
+let db;
+let auth;
+
 try {
 
-  const app = initializeApp({
-    apiKey: clean(firebaseConfig.apiKey),
-    authDomain: clean(firebaseConfig.authDomain),
-    projectId: clean(firebaseConfig.projectId),
-    storageBucket: clean(firebaseConfig.storageBucket),
-    messagingSenderId: clean(firebaseConfig.messagingSenderId),
-    appId: clean(firebaseConfig.appId)
-  });
+  app = initializeApp(firebaseConfig);
 
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+  db = getFirestore(app);
+
+  auth = getAuth(app);
 
 
-  /*
-   * نخلي Firebase يحتفظ بتسجيل الدخول
-   * حتى بعد إغلاق الصفحة.
-   */
-  const authReady = setPersistence(auth, browserLocalPersistence)
-    .then(() => {
-      console.log("Firebase Auth persistence enabled");
-    })
-    .catch((error) => {
-      console.error("Firebase persistence error:", error);
-    });
-
+  /* =======================================================
+     Firebase Interface
+     ======================================================= */
 
   window.FB = {
 
@@ -69,6 +62,10 @@ try {
 
     auth,
 
+
+    /* =========================
+       FIRESTORE - LIST
+       ========================= */
 
     list: async (collectionName) => {
 
@@ -80,22 +77,28 @@ try {
         id: d.id,
         ...d.data()
       }));
+
     },
 
+
+    /* =========================
+       FIRESTORE - REALTIME
+       ========================= */
 
     watch: (collectionName, callback, onError) => {
 
       return onSnapshot(
+
         collection(db, collectionName),
 
         (snapshot) => {
 
-          callback(
-            snapshot.docs.map((d) => ({
-              id: d.id,
-              ...d.data()
-            }))
-          );
+          const data = snapshot.docs.map((d) => ({
+            id: d.id,
+            ...d.data()
+          }));
+
+          callback(data);
 
         },
 
@@ -111,101 +114,162 @@ try {
           if (typeof onError === "function") {
             onError(error);
           }
+
         }
+
       );
+
     },
 
 
-    add: (collectionName, data) =>
-      addDoc(
+    /* =========================
+       FIRESTORE - ADD
+       ========================= */
+
+    add: (collectionName, data) => {
+
+      return addDoc(
         collection(db, collectionName),
         data
-      ),
+      );
+
+    },
 
 
-    set: (collectionName, id, data) =>
-      setDoc(
+    /* =========================
+       FIRESTORE - SET
+       ========================= */
+
+    set: (collectionName, id, data) => {
+
+      return setDoc(
         doc(db, collectionName, id),
         data,
         { merge: true }
-      ),
-
-
-    update: (collectionName, id, data) =>
-      updateDoc(
-        doc(db, collectionName, id),
-        data
-      ),
-
-
-    remove: (collectionName, id) =>
-      deleteDoc(
-        doc(db, collectionName, id)
-      ),
-
-
-    /*
-     * تسجيل الدخول
-     */
-    admin: async (email, password) => {
-
-      await authReady;
-
-      return signInWithEmailAndPassword(
-        auth,
-        clean(email),
-        password
       );
+
     },
 
 
-    authUser: () => auth.currentUser,
+    /* =========================
+       FIRESTORE - UPDATE
+       ========================= */
+
+    update: (collectionName, id, data) => {
+
+      return updateDoc(
+        doc(db, collectionName, id),
+        data
+      );
+
+    },
 
 
-    signOut: () => signOut(auth),
+    /* =========================
+       FIRESTORE - DELETE
+       ========================= */
+
+    remove: (collectionName, id) => {
+
+      return deleteDoc(
+        doc(db, collectionName, id)
+      );
+
+    },
 
 
-    onAuthStateChanged: (callback) =>
-      onAuthStateChanged(auth, callback)
+    /* =========================
+       AUTH - LOGIN
+       ========================= */
+
+    admin: (email, password) => {
+
+      return signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    },
+
+
+    /* =========================
+       AUTH - CURRENT USER
+       ========================= */
+
+    authUser: () => {
+
+      return auth.currentUser;
+
+    },
+
+
+    /* =========================
+       AUTH - STATE
+       ========================= */
+
+    onAuthStateChanged: (callback) => {
+
+      return onAuthStateChanged(
+        auth,
+        callback
+      );
+
+    },
+
+
+    /* =========================
+       AUTH - LOGOUT
+       ========================= */
+
+    logout: () => {
+
+      return signOut(auth);
+
+    }
+
   };
 
 
-  /*
-   * نراقب حالة تسجيل الدخول بشكل دائم.
-   */
+  /* =======================================================
+     AUTH STATE MONITOR
+     ======================================================= */
+
   onAuthStateChanged(auth, (user) => {
 
     console.log(
-      "Firebase auth state:",
-      user ? user.email : "NOT LOGGED IN"
+      "Firebase Auth State:",
+      user ? user.email : "No user"
     );
 
     window.dispatchEvent(
       new CustomEvent("fb-auth-state", {
-        detail: user
+        detail: {
+          user: user || null
+        }
       })
     );
 
   });
 
 
-  /*
-   * Firebase أصبح جاهزًا.
-   */
+  /* =======================================================
+     FIREBASE READY
+     ======================================================= */
+
+  console.log(
+    "✅ Firebase connected successfully"
+  );
+
   window.dispatchEvent(
     new Event("fb-ready")
   );
 
 
-  console.log(
-    "Firebase connected successfully — VelaLight"
-  );
-
-}
-catch (error) {
+} catch (error) {
 
   console.error(
-    "Firebase initialization failed:",
+    "❌ Firebase initialization failed:",
     error
   );
 
