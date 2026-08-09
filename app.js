@@ -1,11 +1,21 @@
 (function(){
 "use strict";
 
-/* ═══════ حالة إضافة سريعة (اختيار العطر) ═══════ */
-let quickAddProduct=null,quickAddScent="",quickAddQty=1;
+/* ═══════════════════════════════════════
+   QUICK ADD
+   ═══════════════════════════════════════ */
 
-/* ═══════ تهيئة الصفحة ═══════ */
+let quickAddProduct=null;
+let quickAddScent="";
+let quickAddQty=1;
+
+
+/* ═══════════════════════════════════════
+   INITIALIZATION
+   ═══════════════════════════════════════ */
+
 document.addEventListener("DOMContentLoaded",()=>{
+
   initLang();
   initMarquee();
   initEmbers();
@@ -24,23 +34,38 @@ document.addEventListener("DOMContentLoaded",()=>{
   initChat();
   initNav();
   initQuickAdd();
+
 });
 
-window.addEventListener("data-refresh",()=>{
-  renderProducts();
-});
 
-/* ═══════ اللغة ═══════ */
+window.addEventListener(
+  "data-refresh",
+  ()=>{
+    renderProducts();
+  }
+);
+
+
+/* ═══════════════════════════════════════
+   LANGUAGE
+   ═══════════════════════════════════════ */
+
 function initLang(){
+
   const btn=$("#langBtn");
+
   if(!btn)return;
 
   updateLangBtn();
 
   btn.addEventListener("click",()=>{
+
     LANG=LANG==="ar"?"en":"ar";
 
-    localStorage.setItem("vl_lang",LANG);
+    localStorage.setItem(
+      "vl_lang",
+      LANG
+    );
 
     document.documentElement.dir=
       LANG==="ar"?"rtl":"ltr";
@@ -48,6 +73,7 @@ function initLang(){
     document.documentElement.lang=LANG;
 
     applyI18n();
+
     updateLangBtn();
 
     renderChips();
@@ -57,7 +83,9 @@ function initLang(){
 
     fillCitySelect($("#accCity"));
     fillCitySelect($("#coCity"));
+
     fillCartForm();
+
     initChatWelcome();
 
     toast(
@@ -67,51 +95,83 @@ function initLang(){
         :"t_lang_en"
       )
     );
+
   });
 
   applyI18n();
+
 }
 
+
 function updateLangBtn(){
+
   const btn=$("#langBtn");
 
   if(btn){
+
     btn.textContent=
       LANG==="ar"
       ?"EN"
       :"ع";
+
   }
+
 }
 
+
 function applyI18n(){
+
   document.title=t("docTitle");
 
   $$("[data-i18n]").forEach(el=>{
-    el.textContent=t(el.dataset.i18n);
+
+    el.textContent=
+      t(el.dataset.i18n);
+
   });
 
+
   $$("[data-i18n-ph]").forEach(el=>{
-    el.placeholder=t(el.dataset.i18nPh);
+
+    el.placeholder=
+      t(el.dataset.i18nPh);
+
   });
+
 
   const mq=$("#mqTrack");
 
   if(mq){
+
     const txt=t("mq");
 
     mq.innerHTML=
-      `<span>${txt}</span><span>${txt}</span>`;
+      `<span>${txt}</span>
+       <span>${txt}</span>`;
+
   }
+
 }
 
-/* ═══════ الشريط المتحرك ═══════ */
+
+/* ═══════════════════════════════════════
+   MARQUEE
+   ═══════════════════════════════════════ */
+
 function initMarquee(){}
 
-/* ═══════ شرارات الهيرو ═══════ */
+
+/* ═══════════════════════════════════════
+   HERO EMBERS
+   ═══════════════════════════════════════ */
+
 function initEmbers(){
+
   const w=$("#embers");
 
   if(!w)return;
+
+  w.innerHTML="";
 
   for(let i=0;i<12;i++){
 
@@ -128,36 +188,47 @@ function initEmbers(){
       (5+Math.random()*5)+"s";
 
     w.appendChild(s);
+
   }
+
 }
 
-/* ═══════ ظهور العناصر ═══════ */
+
+/* ═══════════════════════════════════════
+   REVEAL
+   ═══════════════════════════════════════ */
+
 function initReveal(){
 
   const io=
     new IntersectionObserver(
-      es=>es.forEach(e=>{
+      es=>{
+        es.forEach(e=>{
 
-        if(e.isIntersecting){
+          if(e.isIntersecting){
 
-          e.target.classList.add("on");
+            e.target.classList.add("on");
 
-          io.unobserve(e.target);
+            io.unobserve(e.target);
 
-        }
+          }
 
-      }),
-      {
-        threshold:.12
-      }
+        });
+      },
+      {threshold:.12}
     );
 
-  $$(".rv").forEach(el=>{
-    io.observe(el);
-  });
+  $$(".rv").forEach(
+    el=>io.observe(el)
+  );
+
 }
 
-/* ═══════ التصنيفات ═══════ */
+
+/* ═══════════════════════════════════════
+   CATEGORIES
+   ═══════════════════════════════════════ */
+
 function renderChips(){
 
   const w=$("#chips");
@@ -187,14 +258,15 @@ function renderChips(){
     ).join("");
 
   w.querySelectorAll(".chip")
-    .forEach(b=>
+    .forEach(b=>{
+
       b.addEventListener(
         "click",
         ()=>{
 
           w.querySelectorAll(".chip")
-            .forEach(x=>
-              x.classList.remove("on")
+            .forEach(
+              x=>x.classList.remove("on")
             );
 
           b.classList.add("on");
@@ -202,9 +274,12 @@ function renderChips(){
           renderProducts();
 
         }
-      )
-    );
+      );
+
+    });
+
 }
+
 
 function activeCat(){
 
@@ -214,17 +289,21 @@ function activeCat(){
   return c
     ?c.dataset.cat
     :"all";
+
 }
 
-/* ═══════ عرض المنتجات ═══════ */
+
+/* ═══════════════════════════════════════
+   PRODUCTS
+   ═══════════════════════════════════════ */
+
 function renderProducts(){
 
   const grid=$("#pgrid");
 
   if(!grid)return;
 
-  const catF=
-    activeCat();
+  const catF=activeCat();
 
   const min=
     +($("#priceMin")?.value||0);
@@ -234,6 +313,7 @@ function renderProducts(){
 
   const sort=
     $("#sortSel")?.value||"new";
+
 
   let list=
     ALL_PRODUCTS.filter(p=>{
@@ -263,63 +343,90 @@ function renderProducts(){
 
     });
 
+
   switch(sort){
 
     case "asc":
+
       list.sort(
-        (a,b)=>a.price-b.price
+        (a,b)=>
+          a.price-b.price
       );
+
       break;
+
 
     case "desc":
+
       list.sort(
-        (a,b)=>b.price-a.price
+        (a,b)=>
+          b.price-a.price
       );
+
       break;
+
 
     case "rating":
+
       list.sort(
         (a,b)=>
-          (ratingOf(b.id)?.avg||0) -
+          (ratingOf(b.id)?.avg||0)-
           (ratingOf(a.id)?.avg||0)
       );
+
       break;
+
 
     case "best":
+
       list.sort(
         (a,b)=>
-          (b.sold||0) -
+          (b.sold||0)-
           (a.sold||0)
       );
+
       break;
+
 
     case "disc":
+
       list.sort(
         (a,b)=>
-          ((b.old-b.price)/
-            Math.max(b.old,1)) -
-          ((a.old-a.price)/
-            Math.max(a.old,1))
+          (
+            (b.old-b.price)/
+            Math.max(b.old,1)
+          )-
+          (
+            (a.old-a.price)/
+            Math.max(a.old,1)
+          )
       );
+
       break;
 
+
     default:
+
       list.sort(
         (a,b)=>
-          (b.createdAt||0) -
+          (b.createdAt||0)-
           (a.createdAt||0)
       );
 
   }
 
+
   const cnt=$("#prodCount");
 
   if(cnt){
+
     cnt.textContent=
       list.length+
       " "+
       t("prod_word");
+
   }
+
 
   if(!list.length){
 
@@ -329,7 +436,9 @@ function renderProducts(){
       </div>`;
 
     return;
+
   }
+
 
   grid.innerHTML=
     list.map(p=>{
@@ -342,8 +451,9 @@ function renderProducts(){
 
       const sc=
         (p.scents||[])
-        .map(s=>scentTr(s))
-        .join(" · ");
+          .map(s=>scentTr(s))
+          .join(" · ");
+
 
       return `
         <article class="p-card">
@@ -361,12 +471,12 @@ function renderProducts(){
 
             ${
               badge
-              ?
-              `<span class="p-badge">
-                ${badge}
-              </span>`
-              :
-              ""
+              ?`
+                <span class="p-badge">
+                  ${badge}
+                </span>
+              `
+              :""
             }
 
             <span class="p-quick">
@@ -374,6 +484,7 @@ function renderProducts(){
             </span>
 
           </a>
+
 
           <div class="p-body">
 
@@ -389,35 +500,39 @@ function renderProducts(){
 
             ${
               r
-              ?
-              `<span class="stars">
-                ${"★".repeat(
-                  Math.round(r.avg)
-                )}
-              </span>`
-              :
-              ""
+              ?`
+                <span class="stars">
+                  ${"★".repeat(
+                    Math.round(r.avg)
+                  )}
+                </span>
+              `
+              :""
             }
 
             <div class="p-scents">
               🌸 ${sc}
             </div>
 
+
             <div class="p-foot">
 
               <div class="p-price">
+
                 ${money(p.price)}
 
                 ${
                   p.old>p.price
-                  ?
-                  `<del>
-                    ${money(p.old)}
-                  </del>`
-                  :
-                  ""
+                  ?`
+                    <del>
+                      ${money(p.old)}
+                    </del>
+                  `
+                  :""
                 }
+
               </div>
+
 
               <button
                 class="p-add"
@@ -435,26 +550,37 @@ function renderProducts(){
 
     }).join("");
 
-  grid
-    .querySelectorAll(".p-add")
-    .forEach(b=>
+
+  grid.querySelectorAll(".p-add")
+    .forEach(b=>{
+
       b.addEventListener(
         "click",
         ()=>{
+
           const p=
             ALL_PRODUCTS.find(
               x=>x.id===b.dataset.id
             );
 
           if(p){
+
             openQuickAdd(p);
+
           }
+
         }
-      )
-    );
+      );
+
+    });
+
 }
 
-/* ═══════ نافذة اختيار العطر عند الإضافة السريعة ═══════ */
+
+/* ═══════════════════════════════════════
+   QUICK ADD / SCENT SELECTOR
+   ═══════════════════════════════════════ */
+
 function initQuickAdd(){
 
   $("#closeScent")?.addEventListener(
@@ -462,110 +588,159 @@ function initQuickAdd(){
     ()=>closeModal("scentOv")
   );
 
+
   $("#scentOv")?.addEventListener(
     "click",
     e=>{
-      if(e.target.id==="scentOv"){
-        closeModal("scentOv");
-      }
-    }
-  );
-
-  $("#smQMinus")?.addEventListener(
-    "click",
-    ()=>{
-      if(quickAddQty>1){
-        quickAddQty--;
-      }
-
-      $("#smQVal").textContent=
-        quickAddQty;
-    }
-  );
-
-  $("#smQPlus")?.addEventListener(
-    "click",
-    ()=>{
-      quickAddQty++;
-
-      $("#smQVal").textContent=
-        quickAddQty;
-    }
-  );
-
-  $("#scentModalAdd")?.addEventListener(
-    "click",
-    ()=>{
-      if(!quickAddProduct)return;
-
-      if(!quickAddScent){
-
-        toast(t("t_scentwarn"));
-
-        return;
-      }
-
       if(
-        addToCart(
-          quickAddProduct,
-          {
-            scent:quickAddScent,
-            qty:quickAddQty
-          }
-        )
+        e.target.id==="scentOv"
       ){
         closeModal("scentOv");
       }
     }
   );
+
+
+  $("#smQMinus")?.addEventListener(
+    "click",
+    ()=>{
+
+      if(quickAddQty>1){
+
+        quickAddQty--;
+
+      }
+
+      $("#smQVal").textContent=
+        quickAddQty;
+
+    }
+  );
+
+
+  $("#smQPlus")?.addEventListener(
+    "click",
+    ()=>{
+
+      quickAddQty++;
+
+      $("#smQVal").textContent=
+        quickAddQty;
+
+    }
+  );
+
+
+  $("#scentModalAdd")
+    ?.addEventListener(
+      "click",
+      ()=>{
+
+        if(!quickAddProduct){
+          return;
+        }
+
+
+        if(!quickAddScent){
+
+          toast(
+            t("t_scentwarn")
+          );
+
+          return;
+
+        }
+
+
+        if(
+          addToCart(
+            quickAddProduct,
+            {
+              scent:quickAddScent,
+              qty:quickAddQty
+            }
+          )
+        ){
+
+          closeModal(
+            "scentOv"
+          );
+
+        }
+
+      }
+    );
+
 }
+
 
 function openQuickAdd(p){
 
   quickAddProduct=p;
+
   quickAddScent="";
+
   quickAddQty=1;
+
 
   const title=
     $("#scentModalTitle");
 
   if(title){
+
     title.textContent=
       pname(p);
+
   }
+
 
   const qv=
     $("#smQVal");
 
   if(qv){
+
     qv.textContent="1";
+
   }
+
 
   const w=
     $("#scentModalScents");
 
   if(!w)return;
 
+
+  /*
+    مهم:
+    لا يوجد عطر مختار تلقائيًا.
+    العميل لازم يضغط بنفسه.
+  */
+
   w.innerHTML=
     SCENTS.map(
       s=>
-      `<button
-        class="chip"
-        data-s="${s[0]}"
-      >
-        ${scentTr(s[0])}
-      </button>`
+      `
+        <button
+          class="chip"
+          type="button"
+          data-s="${s[0]}"
+        >
+          ${scentTr(s[0])}
+        </button>
+      `
     ).join("");
 
+
   w.querySelectorAll(".chip")
-    .forEach(b=>
+    .forEach(b=>{
+
       b.addEventListener(
         "click",
         ()=>{
 
           w.querySelectorAll(".chip")
-            .forEach(x=>
-              x.classList.remove("on")
+            .forEach(
+              x=>x.classList.remove("on")
             );
 
           b.classList.add("on");
@@ -574,39 +749,61 @@ function openQuickAdd(p){
             b.dataset.s;
 
         }
-      )
-    );
+      );
 
-  openDrawer("scentOv");
+    });
+
+
+  openDrawer(
+    "scentOv"
+  );
+
 }
 
-/* ═══════ فلاتر السعر والترتيب ═══════ */
+
+/* ═══════════════════════════════════════
+   FILTERS
+   ═══════════════════════════════════════ */
+
 document.addEventListener(
   "change",
   e=>{
+
     if(
       e.target.id==="priceMin" ||
       e.target.id==="priceMax" ||
       e.target.id==="sortSel"
     ){
+
       renderProducts();
+
     }
+
   }
 );
+
 
 document.addEventListener(
   "input",
   e=>{
+
     if(
       e.target.id==="priceMin" ||
       e.target.id==="priceMax"
     ){
+
       renderProducts();
+
     }
+
   }
 );
 
-/* ═══════ العطور ═══════ */
+
+/* ═══════════════════════════════════════
+   SCENTS
+   ═══════════════════════════════════════ */
+
 function renderScents(){
 
   const w=$("#scentGrid");
@@ -616,40 +813,48 @@ function renderScents(){
   w.innerHTML=
     SCENTS.map(
       (s,i)=>
-      `<div class="scent">
+      `
+        <div class="scent">
 
-        <i>${i+1}</i>
+          <i>${i+1}</i>
 
-        <div>
+          <div>
 
-          <b>
-            ${
-              LANG==="en"
-              ?s[1]
-              :s[0]
-            }
-          </b>
+            <b>
+              ${
+                LANG==="en"
+                ?s[1]
+                :s[0]
+              }
+            </b>
 
-          <small>
-            ${
-              LANG==="en"
-              ?s[0]
-              :s[1]
-            }
-          </small>
+            <small>
+              ${
+                LANG==="en"
+                ?s[0]
+                :s[1]
+              }
+            </small>
+
+          </div>
 
         </div>
-
-      </div>`
+      `
     ).join("");
+
 }
 
-/* ═══════ الأسئلة الشائعة ═══════ */
+
+/* ═══════════════════════════════════════
+   FAQ
+   ═══════════════════════════════════════ */
+
 function renderFAQ(){
 
   const w=$("#faqWrap");
 
   if(!w)return;
+
 
   const items=[
     [t("faq1q"),t("faq1a")],
@@ -660,29 +865,37 @@ function renderFAQ(){
     [t("faq6q"),t("faq6a")]
   ];
 
+
   w.innerHTML=
     items.map(
       q=>
-      `<div class="faq-item">
+      `
+        <div class="faq-item">
 
-        <button class="faq-q">
+          <button class="faq-q">
 
-          <span>
-            ${q[0]}
-          </span>
+            <span>
+              ${q[0]}
+            </span>
 
-          <span>+</span>
+            <span>
+              +
+            </span>
 
-        </button>
+          </button>
 
-        <div class="faq-a">
-          <div>
-            ${q[1]}
+          <div class="faq-a">
+
+            <div>
+              ${q[1]}
+            </div>
+
           </div>
-        </div>
 
-      </div>`
+        </div>
+      `
     ).join("");
+
 
   w.querySelectorAll(".faq-item")
     .forEach(item=>{
@@ -694,26 +907,40 @@ function renderFAQ(){
           ()=>{
 
             const was=
-              item.classList.contains("open");
+              item.classList.contains(
+                "open"
+              );
 
-            w.querySelectorAll(".faq-item")
-              .forEach(x=>{
-                x.classList.remove("open");
 
-                x.querySelector(
-                  ".faq-a"
-                ).style.maxHeight=null;
-              });
+            w.querySelectorAll(
+              ".faq-item"
+            ).forEach(x=>{
+
+              x.classList.remove(
+                "open"
+              );
+
+              x.querySelector(
+                ".faq-a"
+              ).style.maxHeight=null;
+
+            });
+
 
             if(!was){
 
-              item.classList.add("open");
+              item.classList.add(
+                "open"
+              );
 
               const a=
-                item.querySelector(".faq-a");
+                item.querySelector(
+                  ".faq-a"
+                );
 
               a.style.maxHeight=
-                a.scrollHeight+"px";
+                a.scrollHeight+
+                "px";
 
             }
 
@@ -721,9 +948,14 @@ function renderFAQ(){
         );
 
     });
+
 }
 
-/* ═══════ السلة ═══════ */
+
+/* ═══════════════════════════════════════
+   CART INITIALIZATION
+   ═══════════════════════════════════════ */
+
 function initCart(){
 
   cartBadge();
@@ -734,29 +966,38 @@ function initCart(){
 
   fillCartForm();
 
+
   $("#cartBtn")?.addEventListener(
     "click",
     ()=>{
+
       fillCartForm();
+
+      renderCart();
 
       openDrawer(
         "cartDrawer",
         "cartOv"
       );
+
     }
   );
+
 
   $("#closeCart")?.addEventListener(
     "click",
     closeDrawers
   );
 
+
   $("#cartOv")?.addEventListener(
     "click",
     closeDrawers
   );
 
+
   renderCart();
+
 
   if(
     new URLSearchParams(
@@ -766,34 +1007,99 @@ function initCart(){
 
     fillCartForm();
 
+    renderCart();
+
     openDrawer(
       "cartDrawer",
       "cartOv"
     );
+
   }
 
-  $("#emptyCartBtn")?.addEventListener(
-    "click",
-    ()=>{
-      if(
-        !confirm(
-          t("t_confirm_empty")
-        )
-      ){
-        return;
+
+  $("#emptyCartBtn")
+    ?.addEventListener(
+      "click",
+      ()=>{
+
+        if(
+          !confirm(
+            t("t_confirm_empty")
+          )
+        ){
+
+          return;
+
+        }
+
+
+        saveCart([]);
+
+        renderCart();
+
       }
+    );
 
-      saveCart([]);
 
-      renderCart();
-    }
-  );
+  $("#checkoutBtn")
+    ?.addEventListener(
+      "click",
+      checkout
+    );
 
-  $("#checkoutBtn")?.addEventListener(
-    "click",
-    checkout
-  );
+
+  /*
+    حفظ بيانات العميل مباشرة
+    أثناء الكتابة.
+  */
+
+  [
+    "#coName",
+    "#coPhone",
+    "#coCity",
+    "#coAddr",
+    "#coNotes"
+  ].forEach(selector=>{
+
+    document.addEventListener(
+      "input",
+      e=>{
+
+        if(
+          e.target.matches(selector)
+        ){
+
+          saveCartCustomer();
+
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      "change",
+      e=>{
+
+        if(
+          e.target.matches(selector)
+        ){
+
+          saveCartCustomer();
+
+        }
+
+      }
+    );
+
+  });
+
 }
+
+
+/* ═══════════════════════════════════════
+   CART RENDER
+   ═══════════════════════════════════════ */
 
 function renderCart(){
 
@@ -803,276 +1109,399 @@ function renderCart(){
 
   if(!w)return;
 
+
   if(!c.length){
 
     w.innerHTML=
-      `<div
-        class="empty"
-        style="padding:2rem 0"
-      >
-        ${t("cart_empty")}
-        <br>
-        <small>
-          ${t("cart_empty_sub")}
-        </small>
-      </div>`;
+      `
+        <div
+          class="empty"
+          style="padding:2rem 0"
+        >
+
+          ${t("cart_empty")}
+
+          <br>
+
+          <small>
+            ${t("cart_empty_sub")}
+          </small>
+
+        </div>
+      `;
 
     updateTotals(c);
 
     return;
+
   }
+
 
   w.innerHTML=
     c.map(
-      (it,i)=>
-      `<div class="citem">
+      (it,i)=>{
 
-        <img
-          src="${it.img||""}"
-          alt=""
-        >
+        const lineTotal=
+          Number(it.price||0)*
+          Number(it.qty||1);
 
-        <div style="flex:1">
 
-          <h5>
-            ${pname({
-              name:it.name,
-              nameEn:it.nameEn
-            })}
-          </h5>
+        return `
+          <div class="citem">
 
-          <div class="cs">
-            ${t("scent_lbl")}
-            ${scentTr(it.scent)}
-          </div>
+            <div class="citem-media">
 
-          <div class="cs">
-            ${money(it.price)}
-          </div>
+              <img
+                src="${it.img||""}"
+                alt="${pname({
+                  name:it.name,
+                  nameEn:it.nameEn
+                })}"
+                loading="lazy"
+              >
 
-          <div class="qty">
+            </div>
+
+
+            <div class="citem-info">
+
+              <h5>
+                ${pname({
+                  name:it.name,
+                  nameEn:it.nameEn
+                })}
+              </h5>
+
+
+              <div class="cs scent-line">
+
+                <span>
+                  🌸 ${t("scent_lbl")}
+                </span>
+
+                <strong>
+                  ${scentTr(it.scent)}
+                </strong>
+
+              </div>
+
+
+              <div class="cs">
+
+                ${t("price_lbl")}
+
+                <strong>
+                  ${money(it.price)}
+                </strong>
+
+              </div>
+
+
+              <div class="cart-line-total">
+
+                <span>
+                  ${LANG==="en"
+                    ?"Item total:"
+                    :"إجمالي الصنف:"
+                  }
+                </span>
+
+                <strong>
+                  ${money(lineTotal)}
+                </strong>
+
+              </div>
+
+
+              <div class="qty">
+
+                <button
+                  class="cq-minus"
+                  type="button"
+                  data-i="${i}"
+                  aria-label="minus"
+                >
+                  −
+                </button>
+
+                <b>
+                  ${it.qty}
+                </b>
+
+                <button
+                  class="cq-plus"
+                  type="button"
+                  data-i="${i}"
+                  aria-label="plus"
+                >
+                  +
+                </button>
+
+              </div>
+
+            </div>
+
 
             <button
-              class="cq-minus"
+              class="rm"
+              type="button"
               data-i="${i}"
+              aria-label="remove"
             >
-              −
-            </button>
-
-            <b>
-              ${it.qty}
-            </b>
-
-            <button
-              class="cq-plus"
-              data-i="${i}"
-            >
-              +
+              ✕
             </button>
 
           </div>
+        `;
 
-        </div>
-
-        <button
-          class="rm"
-          data-i="${i}"
-        >
-          ✕
-        </button>
-
-      </div>`
+      }
     ).join("");
 
+
   w.querySelectorAll(".rm")
-    .forEach(b=>
+    .forEach(b=>{
+
       b.addEventListener(
         "click",
         ()=>{
+
           c.splice(
             +b.dataset.i,
             1
           );
 
           saveCart(c);
+
           renderCart();
+
         }
-      )
-    );
+      );
+
+    });
+
 
   w.querySelectorAll(".cq-plus")
-    .forEach(b=>
+    .forEach(b=>{
+
       b.addEventListener(
         "click",
         ()=>{
+
           const idx=
             +b.dataset.i;
 
-          c[idx].qty++;
+          c[idx].qty=
+            Number(c[idx].qty||1)+1;
 
           saveCart(c);
+
           renderCart();
+
         }
-      )
-    );
+      );
+
+    });
+
 
   w.querySelectorAll(".cq-minus")
-    .forEach(b=>
+    .forEach(b=>{
+
       b.addEventListener(
         "click",
         ()=>{
+
           const idx=
             +b.dataset.i;
 
-          c[idx].qty--;
+          c[idx].qty=
+            Number(c[idx].qty||1)-1;
+
 
           if(c[idx].qty<=0){
+
             c.splice(idx,1);
+
           }
 
+
           saveCart(c);
+
           renderCart();
+
         }
-      )
-    );
+      );
+
+    });
+
 
   updateTotals(c);
+
 }
+
+
+/* ═══════════════════════════════════════
+   TOTALS
+   PRODUCTS ONLY
+   ═══════════════════════════════════════ */
 
 function updateTotals(c){
 
   const sub=
     c.reduce(
       (a,i)=>
-        a+i.price*i.qty,
+        a+
+        (
+          Number(i.price||0)*
+          Number(i.qty||1)
+        ),
       0
     );
 
+
   if($("#cartSub")){
+
     $("#cartSub").textContent=
       money(sub);
+
   }
+
 
   if($("#cartTotal")){
+
     $("#cartTotal").textContent=
       money(sub);
+
   }
+
+
+  /*
+    مهم:
+    لا يوجد SHIPPING هنا.
+    لا يوجد +60.
+  */
+
 }
 
-/* ═══════ بيانات العميل داخل السلة ═══════ */
-function fillCartForm(){
 
-  const u=
-    JSON.parse(
+/* ═══════════════════════════════════════
+   CUSTOMER DATA
+   ═══════════════════════════════════════ */
+
+function getSavedUser(){
+
+  try{
+
+    return JSON.parse(
       localStorage.getItem(
         "vl_user"
       )||"{}"
     );
 
-  if($("#coName"))
+  }catch(e){
+
+    return {};
+
+  }
+
+}
+
+
+function fillCartForm(){
+
+  const u=
+    getSavedUser();
+
+
+  if($("#coName")){
+
     $("#coName").value=
       u.name||"";
 
-  if($("#coPhone"))
+  }
+
+
+  if($("#coPhone")){
+
     $("#coPhone").value=
       u.phone||"";
 
-  if($("#coCity"))
+  }
+
+
+  if($("#coCity")){
+
     $("#coCity").value=
       u.city||"";
 
-  if($("#coAddr"))
+  }
+
+
+  if($("#coAddr")){
+
     $("#coAddr").value=
       u.addr||"";
+
+  }
+
+
+  if($("#coNotes")){
+
+    $("#coNotes").value=
+      u.notes||"";
+
+  }
+
 }
+
 
 function saveUserFromCart(
   name,
   phone,
   city,
-  addr
+  addr,
+  notes=""
 ){
 
   const old=
-    JSON.parse(
-      localStorage.getItem(
-        "vl_user"
-      )||"{}"
-    );
+    getSavedUser();
+
 
   const u={
+    ...old,
     name,
     phone,
     city,
     addr,
+    notes,
     orders:old.orders||0
   };
+
 
   localStorage.setItem(
     "vl_user",
     JSON.stringify(u)
   );
 
+
   if($("#accName"))
     $("#accName").value=name;
+
 
   if($("#accPhone"))
     $("#accPhone").value=phone;
 
+
   if($("#accCity"))
     $("#accCity").value=city;
 
+
   if($("#accAddr"))
     $("#accAddr").value=addr;
+
 }
 
-function genOrderId(){
 
-  const chars=
-    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
-  let s="";
-
-  for(let i=0;i<6;i++){
-
-    s+=
-      chars[
-        Math.floor(
-          Math.random()*
-          chars.length
-        )
-      ];
-
-  }
-
-  return "VL-"+s;
-}
-
-/* ═══════ إتمام الطلب ═══════ */
-function checkout(){
-
-  const c=getCart();
-
-  if(!c.length){
-
-    toast(t("t_empty"));
-
-    return;
-  }
-
-  const missingScent=
-    c.some(
-      it=>!it.scent
-    );
-
-  if(missingScent){
-
-    toast(
-      t("t_scentwarn")
-    );
-
-    return;
-  }
+function saveCartCustomer(){
 
   const name=
     $("#coName")?.value.trim()||"";
@@ -1089,74 +1518,294 @@ function checkout(){
   const notes=
     $("#coNotes")?.value.trim()||"";
 
-  if(!name||!phone||!addr){
 
-    toast(t("t_fill"));
+  const old=
+    getSavedUser();
+
+
+  localStorage.setItem(
+    "vl_user",
+    JSON.stringify({
+      ...old,
+      name,
+      phone,
+      city,
+      addr,
+      notes,
+      orders:old.orders||0
+    })
+  );
+
+}
+
+
+/* ═══════════════════════════════════════
+   ORDER ID
+   ═══════════════════════════════════════ */
+
+function genOrderId(){
+
+  const chars=
+    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+  let s="";
+
+
+  for(
+    let i=0;
+    i<6;
+    i++
+  ){
+
+    s+=
+      chars[
+        Math.floor(
+          Math.random()*
+          chars.length
+        )
+      ];
+
+  }
+
+
+  return "VL-"+s;
+
+}
+
+
+/* ═══════════════════════════════════════
+   CHECKOUT
+   ═══════════════════════════════════════ */
+
+async function checkout(){
+
+  const c=getCart();
+
+
+  /* 1 — PRODUCTS */
+
+  if(!c.length){
+
+    toast(
+      t("t_empty")
+    );
 
     return;
+
   }
+
+
+  /* 2 — SCENTS */
+
+  const missingScent=
+    c.some(
+      it=>
+        !it.scent ||
+        !String(it.scent).trim()
+    );
+
+
+  if(missingScent){
+
+    toast(
+      t("t_scentwarn")
+    );
+
+    return;
+
+  }
+
+
+  /* 3 — CUSTOMER */
+
+  const name=
+    $("#coName")?.value.trim()||"";
+
+  const phone=
+    $("#coPhone")?.value.trim()||"";
+
+  const city=
+    $("#coCity")?.value||"";
+
+  const addr=
+    $("#coAddr")?.value.trim()||"";
+
+  const notes=
+    $("#coNotes")?.value.trim()||"";
+
+
+  if(!name){
+
+    toast(
+      LANG==="en"
+      ?"⚠️ Please enter your full name."
+      :"⚠️ من فضلك اكتبي الاسم بالكامل."
+    );
+
+    $("#coName")?.focus();
+
+    return;
+
+  }
+
+
+  if(!phone){
+
+    toast(
+      LANG==="en"
+      ?"⚠️ Please enter your mobile number."
+      :"⚠️ من فضلك اكتبي رقم الموبايل."
+    );
+
+    $("#coPhone")?.focus();
+
+    return;
+
+  }
+
+
+  if(!addr){
+
+    toast(
+      LANG==="en"
+      ?"⚠️ Please enter the detailed address."
+      :"⚠️ من فضلك اكتبي العنوان بالتفصيل."
+    );
+
+    $("#coAddr")?.focus();
+
+    return;
+
+  }
+
+
+  /* SAVE CUSTOMER */
 
   saveUserFromCart(
     name,
     phone,
     city,
-    addr
+    addr,
+    notes
   );
+
+
+  /* ORDER ID */
 
   const orderId=
     genOrderId();
 
-  const sub=
+
+  /* PRODUCTS TOTAL ONLY */
+
+  const total=
     c.reduce(
       (a,i)=>
-        a+i.price*i.qty,
+        a+
+        (
+          Number(i.price||0)*
+          Number(i.qty||1)
+        ),
       0
     );
 
-  const total=sub;
+
+  /*
+    WhatsApp message
+    No shipping price.
+  */
 
   let msg=
-    `${t("wa_head")}\n`+
-    `${t("wa_order")} ${orderId}\n\n`;
+    `${t("wa_head")}\n`;
+
+  msg+=
+    `${t("wa_order")} ${orderId}\n`;
+
+  msg+=
+    `━━━━━━━━━━━━━━━━━━━━\n\n`;
+
 
   c.forEach(it=>{
 
+    const qty=
+      Number(it.qty||1);
+
+    const unitPrice=
+      Number(it.price||0);
+
+    const itemTotal=
+      unitPrice*qty;
+
+
     msg+=
-      `${t("wa_item")} `+
-      `${pname({
+      `${t("wa_item")} ${pname({
         name:it.name,
         nameEn:it.nameEn
       })}\n`;
 
     msg+=
-      `${t("wa_scent")}: `+
-      `${scentTr(it.scent)} | `+
-      `×${it.qty} = `+
-      `${money(
-        it.price*it.qty
-      )}\n\n`;
+      `${t("wa_scent")}: ${scentTr(
+        it.scent
+      )}\n`;
+
+    msg+=
+      `${LANG==="en"
+        ?"Quantity:"
+        :"الكمية:"
+      } ${qty}\n`;
+
+    msg+=
+      `${LANG==="en"
+        ?"Unit price:"
+        :"سعر الوحدة:"
+      } ${money(unitPrice)}\n`;
+
+    msg+=
+      `${LANG==="en"
+        ?"Item total:"
+        :"إجمالي الصنف:"
+      } ${money(itemTotal)}\n\n`;
 
   });
 
+
   msg+=
-    `${t("wa_total")} `+
-    `${money(total)}\n`;
+    `━━━━━━━━━━━━━━━━━━━━\n`;
+
+  msg+=
+    `${waTotalLabel()} ${money(total)}\n`;
 
   msg+=
     `${t("pay_products_note")}\n`;
 
-  msg+=
-    `${t("wa_insta")} `+
-    `${CFG.INSTAPAY}\n`;
+
+  /*
+    Only include InstaPay account
+    if it was actually configured.
+  */
+
+  if(
+    CFG &&
+    CFG.INSTAPAY &&
+    String(CFG.INSTAPAY).trim()
+  ){
+
+    msg+=
+      `${t("wa_insta")} ${CFG.INSTAPAY}\n`;
+
+  }
+
 
   msg+=
     `${t("ship_note")}\n\n`;
+
 
   msg+=
     `${t("wa_name")} ${name}\n`;
 
   msg+=
     `${t("wa_phone")} ${phone}\n`;
+
 
   if(city){
 
@@ -1165,8 +1814,10 @@ function checkout(){
 
   }
 
+
   msg+=
     `${t("wa_addr")} ${addr}\n`;
+
 
   if(notes){
 
@@ -1175,24 +1826,136 @@ function checkout(){
 
   }
 
-  DB.add(
-    "orders",
-    {
-      id:orderId,
-      items:c,
+
+  /*
+    Firestore
+  */
+
+  const orderData={
+
+    orderId,
+
+    customer:{
       name,
       phone,
       city,
-      address:addr,
-      notes,
-      total,
-      paymentMethod:"instapay",
-      status:0,
-      createdAt:Date.now()
-    }
-  ).catch(
-    e=>console.warn(e)
+      address:addr
+    },
+
+    name,
+    phone,
+    city,
+    address:addr,
+
+    notes,
+
+    products:c.map(it=>({
+
+      id:it.id,
+
+      name:it.name,
+
+      nameEn:it.nameEn||"",
+
+      scent:it.scent,
+
+      scentName:
+        scentTr(it.scent),
+
+      quantity:
+        Number(it.qty||1),
+
+      price:
+        Number(it.price||0),
+
+      total:
+        Number(it.price||0)*
+        Number(it.qty||1),
+
+      img:it.img||""
+
+    })),
+
+    items:c,
+
+    total,
+
+    productsTotal:total,
+
+    paymentMethod:"InstaPay",
+
+    shippingPayment:
+      "Cash to courier",
+
+    shippingIncluded:false,
+
+    status:"قيد المراجعة",
+
+    statusEn:"Under Review",
+
+    createdAt:Date.now(),
+
+    orderDate:
+      new Date().toISOString()
+
+  };
+
+
+  try{
+
+    await DB.add(
+      "orders",
+      orderData
+    );
+
+  }catch(e){
+
+    console.warn(
+      "Order save warning:",
+      e
+    );
+
+  }
+
+
+  /*
+    Increase orders count.
+  */
+
+  const u=
+    getSavedUser();
+
+  u.orders=
+    (u.orders||0)+1;
+
+  u.name=name;
+  u.phone=phone;
+  u.city=city;
+  u.addr=addr;
+  u.notes=notes;
+
+
+  localStorage.setItem(
+    "vl_user",
+    JSON.stringify(u)
   );
+
+
+  const oc=
+    $("#ordCount");
+
+  if(oc){
+
+    oc.textContent=
+      u.orders;
+
+  }
+
+
+  /*
+    Clear cart ONLY after order data
+    was prepared/sent to Firestore.
+  */
 
   saveCart([]);
 
@@ -1200,170 +1963,264 @@ function checkout(){
 
   cartBadge();
 
-  toast(t("t_order"));
-
-  const u=
-    JSON.parse(
-      localStorage.getItem(
-        "vl_user"
-      )||"{}"
-    );
-
-  u.orders=
-    (u.orders||0)+1;
-
-  localStorage.setItem(
-    "vl_user",
-    JSON.stringify(u)
+  toast(
+    t("t_order")
   );
 
-  const oc=$("#ordCount");
 
-  if(oc){
-    oc.textContent=
-      u.orders;
-  }
+  /*
+    Open WhatsApp
+  */
 
-  window.open(
+  const wa=
     "https://wa.me/"+
     CFG.WHATSAPP+
     "?text="+
-    encodeURIComponent(msg),
+    encodeURIComponent(msg);
+
+
+  window.open(
+    wa,
     "_blank"
   );
+
 }
 
-/* ═══════ حساب المستخدم ═══════ */
+
+/* ═══════════════════════════════════════
+   WHATSAPP TOTAL LABEL
+   ═══════════════════════════════════════ */
+
+function waTotalLabel(){
+
+  if(
+    I18N &&
+    I18N[LANG] &&
+    I18N[LANG].wa_total
+  ){
+
+    return I18N[LANG].wa_total;
+
+  }
+
+  return LANG==="en"
+    ?"💰 Products Total:"
+    :"💰 إجمالي المنتجات:";
+
+}
+
+
+/* ═══════════════════════════════════════
+   ACCOUNT
+   ═══════════════════════════════════════ */
+
 function initAccount(){
 
   fillCitySelect(
     $("#accCity")
   );
 
-  const u=
-    JSON.parse(
-      localStorage.getItem(
-        "vl_user"
-      )||"{}"
-    );
 
-  if(u.name)
+  const u=
+    getSavedUser();
+
+
+  if(u.name){
+
     $("#accName").value=
       u.name;
 
-  if(u.phone)
+  }
+
+
+  if(u.phone){
+
     $("#accPhone").value=
       u.phone;
 
-  if(u.city)
+  }
+
+
+  if(u.city){
+
     $("#accCity").value=
       u.city;
 
-  if(u.addr)
+  }
+
+
+  if(u.addr){
+
     $("#accAddr").value=
       u.addr;
 
-  if(u.orders)
+  }
+
+
+  if(u.orders){
+
     $("#ordCount").textContent=
       u.orders;
 
-  $("#accBtn")?.addEventListener(
-    "click",
-    ()=>{
-      openDrawer("accOv");
-    }
-  );
+  }
 
-  $("#closeAcc")?.addEventListener(
-    "click",
-    ()=>closeModal("accOv")
-  );
 
-  $("#accOv")?.addEventListener(
-    "click",
-    e=>{
-      if(e.target.id==="accOv"){
-        closeModal("accOv");
+  $("#accBtn")
+    ?.addEventListener(
+      "click",
+      ()=>{
+        openDrawer("accOv");
       }
-    }
-  );
+    );
 
-  $("#saveAccBtn")?.addEventListener(
-    "click",
-    ()=>{
 
-      const name=
-        $("#accName")
-          .value
-          .trim();
+  $("#closeAcc")
+    ?.addEventListener(
+      "click",
+      ()=>closeModal("accOv")
+    );
 
-      const phone=
-        $("#accPhone")
-          .value
-          .trim();
 
-      const city=
-        $("#accCity")
-          .value;
+  $("#accOv")
+    ?.addEventListener(
+      "click",
+      e=>{
 
-      const addr=
-        $("#accAddr")
-          .value
-          .trim();
+        if(
+          e.target.id==="accOv"
+        ){
 
-      if(!name||!phone){
+          closeModal(
+            "accOv"
+          );
 
-        toast(t("t_fill"));
+        }
 
-        return;
       }
+    );
 
-      const old=
-        JSON.parse(
-          localStorage.getItem(
-            "vl_user"
-          )||"{}"
+
+  $("#saveAccBtn")
+    ?.addEventListener(
+      "click",
+      ()=>{
+
+        const name=
+          $("#accName")
+            .value
+            .trim();
+
+        const phone=
+          $("#accPhone")
+            .value
+            .trim();
+
+        const city=
+          $("#accCity").value;
+
+        const addr=
+          $("#accAddr")
+            .value
+            .trim();
+
+
+        if(!name){
+
+          toast(
+            LANG==="en"
+            ?"⚠️ Enter your name."
+            :"⚠️ اكتبي الاسم."
+          );
+
+          return;
+
+        }
+
+
+        if(!phone){
+
+          toast(
+            LANG==="en"
+            ?"⚠️ Enter your phone."
+            :"⚠️ اكتبي رقم الموبايل."
+          );
+
+          return;
+
+        }
+
+
+        const old=
+          getSavedUser();
+
+
+        localStorage.setItem(
+          "vl_user",
+          JSON.stringify({
+
+            ...old,
+
+            name,
+            phone,
+            city,
+            addr,
+
+            orders:
+              old.orders||0
+
+          })
         );
 
-      localStorage.setItem(
-        "vl_user",
-        JSON.stringify({
-          name,
-          phone,
-          city,
-          addr,
-          orders:old.orders||0
-        })
-      );
 
-      fillCartForm();
+        fillCartForm();
 
-      toast(t("t_saved"));
+        toast(
+          t("t_saved")
+        );
 
-      closeModal("accOv");
+        closeModal(
+          "accOv"
+        );
 
-    }
-  );
+      }
+    );
 
-  $("#logoutBtn")?.addEventListener(
-    "click",
-    ()=>{
 
-      localStorage.removeItem(
-        "vl_user"
-      );
+  $("#logoutBtn")
+    ?.addEventListener(
+      "click",
+      ()=>{
 
-      $("#accName").value="";
-      $("#accPhone").value="";
-      $("#accAddr").value="";
+        localStorage.removeItem(
+          "vl_user"
+        );
 
-      $("#ordCount").textContent="0";
 
-      toast(t("t_saved"));
+        $("#accName").value="";
+        $("#accPhone").value="";
+        $("#accAddr").value="";
 
-    }
-  );
+
+        if($("#accCity")){
+
+          $("#accCity").value="";
+
+        }
+
+
+        $("#ordCount").textContent=
+          "0";
+
+
+        toast(
+          t("t_saved")
+        );
+
+      }
+    );
+
 }
+
 
 function fillCitySelect(sel){
 
@@ -1374,158 +2231,211 @@ function fillCitySelect(sel){
     ?GOVS_EN
     :GOVS;
 
+
   sel.innerHTML=
     `<option value="">
       ${t("ph_city")}
     </option>`+
     arr.map(
       g=>
-      `<option>${g}</option>`
+      `<option value="${g}">
+        ${g}
+      </option>`
     ).join("");
+
 }
 
-/* ═══════ البحث ═══════ */
+
+/* ═══════════════════════════════════════
+   SEARCH
+   ═══════════════════════════════════════ */
+
 function initSearch(){
 
-  $("#searchBtn")?.addEventListener(
-    "click",
-    ()=>{
-      openDrawer("searchOv");
+  $("#searchBtn")
+    ?.addEventListener(
+      "click",
+      ()=>{
 
-      setTimeout(
-        ()=>
-          $("#searchInput")?.focus(),
-        200
-      );
-    }
-  );
+        openDrawer(
+          "searchOv"
+        );
 
-  $("#closeSearch")?.addEventListener(
-    "click",
-    ()=>closeModal("searchOv")
-  );
+        setTimeout(
+          ()=>{
+            $("#searchInput")
+              ?.focus();
+          },
+          200
+        );
 
-  $("#searchOv")?.addEventListener(
-    "click",
-    e=>{
-      if(e.target.id==="searchOv"){
-        closeModal("searchOv");
       }
-    }
-  );
+    );
 
-  $("#searchInput")?.addEventListener(
-    "input",
-    e=>{
 
-      const q=
-        e.target.value
-          .trim()
-          .toLowerCase();
+  $("#closeSearch")
+    ?.addEventListener(
+      "click",
+      ()=>closeModal("searchOv")
+    );
 
-      const w=
-        $("#searchResults");
 
-      if(!w)return;
+  $("#searchOv")
+    ?.addEventListener(
+      "click",
+      e=>{
 
-      if(!q){
+        if(
+          e.target.id==="searchOv"
+        ){
 
-        w.innerHTML="";
+          closeModal(
+            "searchOv"
+          );
 
-        return;
+        }
+
       }
+    );
 
-      const res=
-        ALL_PRODUCTS
-          .filter(p=>{
 
-            const hay=
-              (
-                p.name+
-                " "+
-                (p.nameEn||"")+
-                " "+
-                (p.desc||"")+
-                " "+
-                (p.descEn||"")+
-                " "+
-                cat(p.cat)
-              ).toLowerCase();
+  $("#searchInput")
+    ?.addEventListener(
+      "input",
+      e=>{
 
-            return hay.includes(q);
+        const q=
+          e.target.value
+            .trim()
+            .toLowerCase();
 
-          })
-          .slice(0,8);
 
-      w.innerHTML=
-        res.map(
-          p=>
-          `<div
-            class="sr-item"
-            data-id="${p.id}"
-          >
+        const w=
+          $("#searchResults");
 
-            <img
-              src="${imgOf(p)}"
-              alt=""
-            >
+        if(!w)return;
 
-            <div>
 
-              <b>
-                ${pname(p)}
-              </b>
+        if(!q){
 
-              <br>
+          w.innerHTML="";
 
-              <small>
-                ${money(p.price)}
-              </small>
+          return;
 
-            </div>
+        }
 
-          </div>`
-        ).join("");
 
-      w.querySelectorAll(".sr-item")
-        .forEach(
-          it=>
+        const res=
+          ALL_PRODUCTS
+            .filter(p=>{
+
+              const hay=
+                (
+                  p.name+
+                  " "+
+                  (p.nameEn||"")+
+                  " "+
+                  (p.desc||"")+
+                  " "+
+                  (p.descEn||"")+
+                  " "+
+                  cat(p.cat)
+                )
+                .toLowerCase();
+
+
+              return hay.includes(q);
+
+            })
+            .slice(0,8);
+
+
+        w.innerHTML=
+          res.map(
+            p=>
+            `
+              <div
+                class="sr-item"
+                data-id="${p.id}"
+              >
+
+                <img
+                  src="${imgOf(p)}"
+                  alt=""
+                >
+
+                <div>
+
+                  <b>
+                    ${pname(p)}
+                  </b>
+
+                  <br>
+
+                  <small>
+                    ${money(p.price)}
+                  </small>
+
+                </div>
+
+              </div>
+            `
+          ).join("");
+
+
+        w.querySelectorAll(
+          ".sr-item"
+        ).forEach(it=>{
+
           it.addEventListener(
             "click",
             ()=>{
+
               location.href=
                 "product.html?p="+
                 it.dataset.id;
-            }
-          )
-        );
 
-    }
-  );
+            }
+          );
+
+        });
+
+      }
+    );
+
 }
 
-/* ═══════ الشات المساعد ═══════ */
+
+/* ═══════════════════════════════════════
+   CHAT
+   ═══════════════════════════════════════ */
+
 function initChat(){
 
-  $("#chatFab")?.addEventListener(
-    "click",
-    ()=>{
-      $("#chatOv")?.classList.toggle(
-        "open"
-      );
-    }
-  );
+  $("#chatFab")
+    ?.addEventListener(
+      "click",
+      ()=>{
+        $("#chatOv")
+          ?.classList
+          .toggle("open");
+      }
+    );
 
-  $("#closeChat")?.addEventListener(
-    "click",
-    ()=>{
-      $("#chatOv")?.classList.remove(
-        "open"
-      );
-    }
-  );
+
+  $("#closeChat")
+    ?.addEventListener(
+      "click",
+      ()=>{
+        $("#chatOv")
+          ?.classList
+          .remove("open");
+      }
+    );
+
 
   initChatWelcome();
+
 
   const quick=[
     [t("q_gift"),"a_gift"],
@@ -1535,173 +2445,234 @@ function initChat(){
     [t("q_bride"),"a_bride"]
   ];
 
+
   const qw=
     $("#chatQuick");
+
 
   if(qw){
 
     qw.innerHTML=
       quick.map(
         q=>
-        `<button
-          data-a="${q[1]}"
-        >
-          ${q[0]}
-        </button>`
+        `
+          <button
+            type="button"
+            data-a="${q[1]}"
+          >
+            ${q[0]}
+          </button>
+        `
       ).join("");
 
-    qw.querySelectorAll("button")
-      .forEach(
-        b=>
-        b.addEventListener(
-          "click",
-          ()=>{
 
-            addMsg(
-              b.textContent,
-              "user"
-            );
+    qw.querySelectorAll(
+      "button"
+    ).forEach(b=>{
 
-            setTimeout(
-              ()=>
-                addMsg(
-                  t(b.dataset.a),
-                  "bot"
-                ),
-              400
-            );
+      b.addEventListener(
+        "click",
+        ()=>{
 
-          }
-        )
+          addMsg(
+            b.textContent,
+            "user"
+          );
+
+
+          setTimeout(
+            ()=>{
+              addMsg(
+                t(b.dataset.a),
+                "bot"
+              );
+            },
+            400
+          );
+
+        }
       );
+
+    });
+
   }
+
 }
+
 
 function initChatWelcome(){
 
   const w=
     $("#chatMsgs");
 
+
   if(
     w &&
     !w.children.length
   ){
+
     addMsg(
       t("chat_welcome"),
       "bot"
     );
+
   }
+
 }
 
-function addMsg(txt,who){
+
+function addMsg(
+  txt,
+  who
+){
 
   const w=
     $("#chatMsgs");
 
   if(!w)return;
 
+
   const d=
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   d.className=
-    "msg "+who;
+    "msg "+
+    who;
 
-  d.textContent=txt;
+
+  d.textContent=
+    txt;
+
 
   w.appendChild(d);
 
+
   w.scrollTop=
     w.scrollHeight;
+
 }
 
-/* ═══════ القائمة والمودالات ═══════ */
+
+/* ═══════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════ */
+
 function initNav(){
 
-  $("#navToggle")?.addEventListener(
-    "click",
-    ()=>{
-      $("#mnav")?.classList.toggle(
-        "open"
-      );
+  $("#navToggle")
+    ?.addEventListener(
+      "click",
+      ()=>{
 
-      $("#ovl")?.classList.toggle(
-        "open"
-      );
-    }
-  );
+        $("#mnav")
+          ?.classList
+          .toggle("open");
 
-  $("#ovl")?.addEventListener(
-    "click",
-    closeDrawers
-  );
-
-  $$(".mnav a")
-    .forEach(
-      a=>
-      a.addEventListener(
-        "click",
-        ()=>{
-          $("#mnav")?.classList.remove(
-            "open"
-          );
-
-          $("#ovl")?.classList.remove(
-            "open"
-          );
-        }
-      )
-    );
-
-  $$("[data-cat]")
-    .forEach(
-      a=>{
-
-        if(
-          a.closest(".mnav") ||
-          a.closest(".mainnav") ||
-          a.closest("footer")
-        ){
-
-          a.addEventListener(
-            "click",
-            ()=>{
-              setTimeout(
-                ()=>{
-                  const chip=
-                    $(
-                      `#chips .chip[data-cat="${a.dataset.cat}"]`
-                    );
-
-                  if(chip){
-                    chip.click();
-                  }
-                },
-                100
-              );
-            }
-          );
-
-        }
+        $("#ovl")
+          ?.classList
+          .toggle("open");
 
       }
     );
+
+
+  $("#ovl")
+    ?.addEventListener(
+      "click",
+      closeDrawers
+    );
+
+
+  $$(".mnav a")
+    .forEach(a=>{
+
+      a.addEventListener(
+        "click",
+        ()=>{
+
+          $("#mnav")
+            ?.classList
+            .remove("open");
+
+          $("#ovl")
+            ?.classList
+            .remove("open");
+
+        }
+      );
+
+    });
+
+
+  $$("[data-cat]")
+    .forEach(a=>{
+
+      if(
+        a.closest(".mnav")||
+        a.closest(".mainnav")||
+        a.closest("footer")
+      ){
+
+        a.addEventListener(
+          "click",
+          ()=>{
+
+            setTimeout(
+              ()=>{
+
+                const chip=
+                  $(
+                    `#chips .chip[data-cat="${a.dataset.cat}"]`
+                  );
+
+
+                if(chip){
+
+                  chip.click();
+
+                }
+
+              },
+              100
+            );
+
+          }
+        );
+
+      }
+
+    });
+
 }
+
+
+/* ═══════════════════════════════════════
+   DRAWERS / MODALS
+   ═══════════════════════════════════════ */
 
 function openDrawer(
   id,
   ovlId
 ){
 
-  $("#"+id)?.classList.add(
-    "open"
-  );
+  $("#"+id)
+    ?.classList
+    .add("open");
+
 
   if(ovlId){
-    $("#"+ovlId)?.classList.add(
-      "open"
-    );
+
+    $("#"+ovlId)
+      ?.classList
+      .add("open");
+
   }
+
 }
+
 
 function closeDrawers(){
 
@@ -1712,13 +2683,17 @@ function closeDrawers(){
           "open"
         )
     );
+
 }
+
 
 function closeModal(id){
 
-  $("#"+id)?.classList.remove(
-    "open"
-  );
+  $("#"+id)
+    ?.classList
+    .remove("open");
+
 }
+
 
 })();
