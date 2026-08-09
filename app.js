@@ -265,19 +265,19 @@ updateTotals(c);
 return;
 }
 
-w.innerHTML=c.map((it,i)=>`<div class="citem">
-<img src="${it.img||""}" alt="">
-<div style="flex:1">
+w.innerHTML=`<div class="cart-products-head"><strong>${t("cart_title")}</strong><span>${c.reduce((n,it)=>n+Number(it.qty||0),0)} ${LANG==="ar"?"قطعة":"items"}</span></div>` + c.map((it,i)=>`<div class="citem">
+<img src="${it.img||""}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy">
+<div class="cinfo">
 <h5>${pname({name:it.name,nameEn:it.nameEn})}</h5>
-<div class="cs">${t("scent_lbl")} ${scentTr(it.scent)}</div>
-<div class="cs">${money(it.price)}</div>
+<div class="cs scent-value">🌸 ${scentTr(it.scent)}</div>
+<div class="item-price">${money(it.price)} × ${it.qty} = ${money(it.price*it.qty)}</div>
 <div class="qty">
-<button class="cq-minus" data-i="${i}">−</button>
+<button class="cq-minus" data-i="${i}" aria-label="minus">−</button>
 <b>${it.qty}</b>
-<button class="cq-plus" data-i="${i}">+</button>
+<button class="cq-plus" data-i="${i}" aria-label="plus">+</button>
 </div>
 </div>
-<button class="rm" data-i="${i}">✕</button>
+<button class="rm" data-i="${i}" aria-label="remove">✕</button>
 </div>`).join("");
 
 w.querySelectorAll(".rm").forEach(b=>b.addEventListener("click",()=>{
