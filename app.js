@@ -2,16 +2,13 @@
 "use strict";
 
 /* ═══════ حالة إضافة سريعة (اختيار العطر) ═══════ */
-let quickAddProduct=null,
-    quickAddScent="",
-    quickAddQty=1;
+let quickAddProduct=null,quickAddScent="",quickAddQty=1;
 
 /* ═══════ تهيئة الصفحة ═══════ */
 document.addEventListener("DOMContentLoaded",()=>{
   initLang();
   initMarquee();
   initEmbers();
-  initHeroSlider();
   initReveal();
 
   loadAll().then(()=>{
@@ -34,7 +31,6 @@ window.addEventListener("data-refresh",()=>{
 });
 
 /* ═══════ اللغة ═══════ */
-
 function initLang(){
   const btn=$("#langBtn");
   if(!btn)return;
@@ -61,9 +57,7 @@ function initLang(){
 
     fillCitySelect($("#accCity"));
     fillCitySelect($("#coCity"));
-
     fillCartForm();
-
     initChatWelcome();
 
     toast(
@@ -80,6 +74,7 @@ function initLang(){
 
 function updateLangBtn(){
   const btn=$("#langBtn");
+
   if(btn){
     btn.textContent=
       LANG==="ar"
@@ -110,11 +105,9 @@ function applyI18n(){
 }
 
 /* ═══════ الشريط المتحرك ═══════ */
-
 function initMarquee(){}
 
 /* ═══════ شرارات الهيرو ═══════ */
-
 function initEmbers(){
   const w=$("#embers");
 
@@ -122,7 +115,8 @@ function initEmbers(){
 
   for(let i=0;i<12;i++){
 
-    const s=document.createElement("span");
+    const s=
+      document.createElement("span");
 
     s.style.left=
       Math.random()*100+"%";
@@ -137,259 +131,7 @@ function initEmbers(){
   }
 }
 
-/* ═══════ HERO SLIDER ═══════ */
-
-function initHeroSlider(){
-
-  const hero=
-    document.querySelector(".hero");
-
-  if(!hero)return;
-
-  /*
-    الصور مأخوذة من صور المنتجات الموجودة
-    داخل الموقع نفسه.
-  */
-
-  const images=[
-    "RR.jpg",
-    "heart2.jpg",
-    "candle1.jpg",
-    "iccoffe1.jpg",
-    "mandle.jpg",
-    "gift1.jpg",
-    "candle13.jpg",
-    "candle14.jpg",
-    "candle9.jpg",
-    "candle10.jpg"
-  ];
-
-  /*
-    نحاول العثور على عنصر الصورة
-    الموجود أصلًا داخل الهيرو.
-  */
-
-  const frame=
-    hero.querySelector(".frame");
-
-  if(!frame)return;
-
-  const oldImg=
-    frame.querySelector("img");
-
-  /*
-    نخلي الـHero نفسه يحتوي على
-    صورة واحدة فقط.
-  */
-
-  frame.innerHTML="";
-
-  const slider=
-    document.createElement("div");
-
-  slider.className="hero-slider";
-
-  const slides=[];
-
-  images.forEach((src,index)=>{
-
-    const slide=
-      document.createElement("div");
-
-    slide.className=
-      "hero-slide"+
-      (index===0?" active":"");
-
-    const img=
-      document.createElement("img");
-
-    img.src=src;
-
-    img.alt=
-      LANG==="ar"
-      ?"VelaLight"
-      :"VelaLight Candles";
-
-    img.loading=
-      index===0
-      ?"eager"
-      :"lazy";
-
-    slide.appendChild(img);
-
-    slider.appendChild(slide);
-
-    slides.push(slide);
-  });
-
-  frame.appendChild(slider);
-
-  /*
-    نقاط التنقل
-  */
-
-  const dots=
-    document.createElement("div");
-
-  dots.className=
-    "hero-dots";
-
-  images.forEach((_,index)=>{
-
-    const dot=
-      document.createElement("button");
-
-    dot.type="button";
-
-    dot.className=
-      "hero-dot"+
-      (index===0?" active":"");
-
-    dot.setAttribute(
-      "aria-label",
-      `Slide ${index+1}`
-    );
-
-    dot.addEventListener(
-      "click",
-      ()=>{
-        showHeroSlide(index);
-        restartHeroTimer();
-      }
-    );
-
-    dots.appendChild(dot);
-  });
-
-  frame.appendChild(dots);
-
-  let current=0;
-  let timer=null;
-  let paused=false;
-
-  function showHeroSlide(index){
-
-    if(!slides.length)return;
-
-    current=
-      (index+slides.length)
-      %slides.length;
-
-    slides.forEach((slide,i)=>{
-
-      slide.classList.toggle(
-        "active",
-        i===current
-      );
-    });
-
-    dots
-      .querySelectorAll(".hero-dot")
-      .forEach((dot,i)=>{
-
-        dot.classList.toggle(
-          "active",
-          i===current
-        );
-
-      });
-  }
-
-  function startHeroTimer(){
-
-    clearInterval(timer);
-
-    timer=setInterval(()=>{
-
-      if(paused)return;
-
-      showHeroSlide(
-        current+1
-      );
-
-    },3800);
-  }
-
-  function restartHeroTimer(){
-
-    clearInterval(timer);
-
-    startHeroTimer();
-  }
-
-  /*
-    إيقاف الحركة أثناء وضع الماوس
-    على الصورة.
-  */
-
-  frame.addEventListener(
-    "mouseenter",
-    ()=>{
-      paused=true;
-    }
-  );
-
-  frame.addEventListener(
-    "mouseleave",
-    ()=>{
-      paused=false;
-    }
-  );
-
-  /*
-    دعم اللمس على الموبايل:
-    Swipe يمين/شمال
-  */
-
-  let touchStartX=0;
-  let touchEndX=0;
-
-  frame.addEventListener(
-    "touchstart",
-    e=>{
-      if(!e.touches.length)return;
-
-      touchStartX=
-        e.touches[0].clientX;
-    },
-    {passive:true}
-  );
-
-  frame.addEventListener(
-    "touchend",
-    e=>{
-
-      if(!e.changedTouches.length)return;
-
-      touchEndX=
-        e.changedTouches[0].clientX;
-
-      const diff=
-        touchEndX-touchStartX;
-
-      if(Math.abs(diff)<40)return;
-
-      if(diff<0){
-        showHeroSlide(
-          current+1
-        );
-      }else{
-        showHeroSlide(
-          current-1
-        );
-      }
-
-      restartHeroTimer();
-
-    },
-    {passive:true}
-  );
-
-  startHeroTimer();
-}
-
 /* ═══════ ظهور العناصر ═══════ */
-
 function initReveal(){
 
   const io=
@@ -401,6 +143,7 @@ function initReveal(){
           e.target.classList.add("on");
 
           io.unobserve(e.target);
+
         }
 
       }),
@@ -415,7 +158,6 @@ function initReveal(){
 }
 
 /* ═══════ التصنيفات ═══════ */
-
 function renderChips(){
 
   const w=$("#chips");
@@ -434,18 +176,18 @@ function renderChips(){
   ];
 
   w.innerHTML=
-    keys.map(k=>
-      `<button class="chip${
-        k==="all"?" on":""
-      }"
-      data-cat="${k}">
-      ${cat(k)}
+    keys.map(
+      k=>
+      `<button
+        class="chip${k==="all"?" on":""}"
+        data-cat="${k}"
+      >
+        ${cat(k)}
       </button>`
     ).join("");
 
   w.querySelectorAll(".chip")
-    .forEach(b=>{
-
+    .forEach(b=>
       b.addEventListener(
         "click",
         ()=>{
@@ -460,9 +202,8 @@ function renderChips(){
           renderProducts();
 
         }
-      );
-
-    });
+      )
+    );
 }
 
 function activeCat(){
@@ -475,33 +216,114 @@ function activeCat(){
     :"all";
 }
 
-/* ═══════ المنتجات ═══════ */
-
+/* ═══════ عرض المنتجات ═══════ */
 function renderProducts(){
 
-  const w=
-    $("#productsGrid");
+  const grid=$("#pgrid");
 
-  if(!w)return;
+  if(!grid)return;
 
-  const catKey=
+  const catF=
     activeCat();
 
+  const min=
+    +($("#priceMin")?.value||0);
+
+  const max=
+    +($("#priceMax")?.value||0);
+
+  const sort=
+    $("#sortSel")?.value||"new";
+
   let list=
-    ALL_PRODUCTS||[];
+    ALL_PRODUCTS.filter(p=>{
 
-  if(catKey!=="all"){
+      if(
+        catF!=="all" &&
+        p.cat!==catF
+      ){
+        return false;
+      }
 
-    list=
-      list.filter(
-        p=>p.cat===catKey
+      if(
+        min &&
+        p.price<min
+      ){
+        return false;
+      }
+
+      if(
+        max &&
+        p.price>max
+      ){
+        return false;
+      }
+
+      return true;
+
+    });
+
+  switch(sort){
+
+    case "asc":
+      list.sort(
+        (a,b)=>a.price-b.price
+      );
+      break;
+
+    case "desc":
+      list.sort(
+        (a,b)=>b.price-a.price
+      );
+      break;
+
+    case "rating":
+      list.sort(
+        (a,b)=>
+          (ratingOf(b.id)?.avg||0) -
+          (ratingOf(a.id)?.avg||0)
+      );
+      break;
+
+    case "best":
+      list.sort(
+        (a,b)=>
+          (b.sold||0) -
+          (a.sold||0)
+      );
+      break;
+
+    case "disc":
+      list.sort(
+        (a,b)=>
+          ((b.old-b.price)/
+            Math.max(b.old,1)) -
+          ((a.old-a.price)/
+            Math.max(a.old,1))
+      );
+      break;
+
+    default:
+      list.sort(
+        (a,b)=>
+          (b.createdAt||0) -
+          (a.createdAt||0)
       );
 
   }
 
+  const cnt=$("#prodCount");
+
+  if(cnt){
+    cnt.textContent=
+      list.length+
+      " "+
+      t("prod_word");
+  }
+
   if(!list.length){
 
-    w.innerHTML=
+    grid.innerHTML=
       `<div class="empty">
         ${t("no_products")}
       </div>`;
@@ -509,259 +331,191 @@ function renderProducts(){
     return;
   }
 
-  w.innerHTML=
-    list.map(
-      productCard
-    ).join("");
+  grid.innerHTML=
+    list.map(p=>{
 
-  w.querySelectorAll(
-    "[data-add]"
-  ).forEach(btn=>{
+      const r=
+        ratingOf(p.id);
 
-    btn.addEventListener(
-      "click",
-      ()=>{
+      const badge=
+        pbadge(p);
 
-        const id=
-          btn.dataset.add;
+      const sc=
+        (p.scents||[])
+        .map(s=>scentTr(s))
+        .join(" · ");
 
-        const p=
-          ALL_PRODUCTS.find(
-            x=>String(x.id)===String(id)
-          );
+      return `
+        <article class="p-card">
 
-        if(p){
-          openQuickAdd(p);
-        }
+          <a
+            class="p-media"
+            href="product.html?p=${p.id}"
+          >
 
-      }
-    );
+            <img
+              src="${imgOf(p)}"
+              alt="${pname(p)}"
+              loading="lazy"
+            >
 
-  });
-
-  w.querySelectorAll(
-    "[data-product]"
-  ).forEach(card=>{
-
-    card.addEventListener(
-      "click",
-      e=>{
-
-        if(
-          e.target.closest("[data-add]")
-        )return;
-
-        const id=
-          card.dataset.product;
-
-        location.href=
-          `product.html?id=${encodeURIComponent(id)}`;
-
-      }
-    );
-
-  });
-}
-
-/* ═══════ كارت المنتج ═══════ */
-
-function productCard(p){
-
-  const img=
-    typeof imgOf==="function"
-    ?imgOf(p)
-    :"";
-
-  const price=
-    money(p.price);
-
-  const old=
-    p.old>p.price
-    ?money(p.old)
-    :"";
-
-  return `
-    <article
-      class="product-card rv"
-      data-product="${p.id}"
-    >
-
-      <div class="product-image">
-
-        <img
-          src="${img}"
-          alt="${
-            LANG==="ar"
-            ?p.name
-            :p.nameEn
-          }"
-          loading="lazy"
-        >
-
-        ${
-          p.badge
-          ?
-          `<span class="badge">
             ${
-              LANG==="ar"
-              ?p.badge
-              :p.badgeEn||p.badge
+              badge
+              ?
+              `<span class="p-badge">
+                ${badge}
+              </span>`
+              :
+              ""
             }
-          </span>`
-          :""
-        }
 
-      </div>
+            <span class="p-quick">
+              ${t("view_details")}
+            </span>
 
-      <div class="product-info">
+          </a>
 
-        <h3>
-          ${
-            LANG==="ar"
-            ?p.name
-            :p.nameEn
-          }
-        </h3>
+          <div class="p-body">
 
-        <div class="product-price">
+            <span class="p-cat">
+              ${cat(p.cat)}
+            </span>
 
-          <b>${price}</b>
+            <h3>
+              <a href="product.html?p=${p.id}">
+                ${pname(p)}
+              </a>
+            </h3>
 
-          ${
-            old
-            ?
-            `<del>${old}</del>`
-            :""
-          }
-
-        </div>
-
-        <button
-          class="btn"
-          type="button"
-          data-add="${p.id}"
-        >
-          ${t("cta_add")}
-        </button>
-
-      </div>
-
-    </article>
-  `;
-}
-
-/* ═══════ العطور ═══════ */
-
-function renderScents(){
-
-  const w=
-    $("#scentsGrid");
-
-  if(!w)return;
-
-  const list=
-    typeof SCENTS!=="undefined"
-    ?SCENTS
-    :[];
-
-  w.innerHTML=
-    list.map(
-      s=>{
-
-        const ar=
-          Array.isArray(s)
-          ?s[0]
-          :s;
-
-        const en=
-          Array.isArray(s)
-          ?s[1]
-          :s;
-
-        return `
-          <div class="scent-item">
             ${
-              LANG==="ar"
-              ?ar
-              :en
+              r
+              ?
+              `<span class="stars">
+                ${"★".repeat(
+                  Math.round(r.avg)
+                )}
+              </span>`
+              :
+              ""
             }
-          </div>
-        `;
 
-      }
-    ).join("");
-}
+            <div class="p-scents">
+              🌸 ${sc}
+            </div>
 
-/* ═══════ الأسئلة الشائعة ═══════ */
+            <div class="p-foot">
 
-function renderFAQ(){
+              <div class="p-price">
+                ${money(p.price)}
 
-  const w=
-    $("#faq");
+                ${
+                  p.old>p.price
+                  ?
+                  `<del>
+                    ${money(p.old)}
+                  </del>`
+                  :
+                  ""
+                }
+              </div>
 
-  if(!w)return;
+              <button
+                class="p-add"
+                data-id="${p.id}"
+              >
+                ${t("add_cart")}
+              </button>
 
-  if(typeof FAQ==="undefined")return;
+            </div>
 
-  w.innerHTML=
-    FAQ.map(
-      item=>`
-
-        <details class="faq-item">
-
-          <summary>
-            ${
-              LANG==="ar"
-              ?item.q
-              :item.qEn
-            }
-          </summary>
-
-          <div>
-            ${
-              LANG==="ar"
-              ?item.a
-              :item.aEn
-            }
           </div>
 
-        </details>
+        </article>
+      `;
 
-      `
-    ).join("");
+    }).join("");
+
+  grid
+    .querySelectorAll(".p-add")
+    .forEach(b=>
+      b.addEventListener(
+        "click",
+        ()=>{
+          const p=
+            ALL_PRODUCTS.find(
+              x=>x.id===b.dataset.id
+            );
+
+          if(p){
+            openQuickAdd(p);
+          }
+        }
+      )
+    );
 }
 
-/* ═══════ الإضافة السريعة ═══════ */
-
+/* ═══════ نافذة اختيار العطر عند الإضافة السريعة ═══════ */
 function initQuickAdd(){
 
-  const modal=
-    $("#quickAddModal");
+  $("#closeScent")?.addEventListener(
+    "click",
+    ()=>closeModal("scentOv")
+  );
 
-  if(!modal)return;
-
-  const close=
-    modal.querySelector(
-      "[data-close]"
-    );
-
-  if(close){
-
-    close.addEventListener(
-      "click",
-      closeQuickAdd
-    );
-
-  }
-
-  modal.addEventListener(
+  $("#scentOv")?.addEventListener(
     "click",
     e=>{
+      if(e.target.id==="scentOv"){
+        closeModal("scentOv");
+      }
+    }
+  );
 
-      if(e.target===modal){
-        closeQuickAdd();
+  $("#smQMinus")?.addEventListener(
+    "click",
+    ()=>{
+      if(quickAddQty>1){
+        quickAddQty--;
       }
 
+      $("#smQVal").textContent=
+        quickAddQty;
+    }
+  );
+
+  $("#smQPlus")?.addEventListener(
+    "click",
+    ()=>{
+      quickAddQty++;
+
+      $("#smQVal").textContent=
+        quickAddQty;
+    }
+  );
+
+  $("#scentModalAdd")?.addEventListener(
+    "click",
+    ()=>{
+      if(!quickAddProduct)return;
+
+      if(!quickAddScent){
+
+        toast(t("t_scentwarn"));
+
+        return;
+      }
+
+      if(
+        addToCart(
+          quickAddProduct,
+          {
+            scent:quickAddScent,
+            qty:quickAddQty
+          }
+        )
+      ){
+        closeModal("scentOv");
+      }
     }
   );
 }
@@ -772,232 +526,1199 @@ function openQuickAdd(p){
   quickAddScent="";
   quickAddQty=1;
 
-  const modal=
-    $("#quickAddModal");
-
-  if(!modal)return;
-
   const title=
-    modal.querySelector(
-      "[data-qa-title]"
-    );
+    $("#scentModalTitle");
 
   if(title){
-
     title.textContent=
-      LANG==="ar"
-      ?p.name
-      :p.nameEn;
-
+      pname(p);
   }
 
-  const scents=
-    modal.querySelector(
-      "[data-qa-scents]"
-    );
+  const qv=
+    $("#smQVal");
 
-  if(scents){
+  if(qv){
+    qv.textContent="1";
+  }
 
-    const list=
-      typeof SCENTS!=="undefined"
-      ?SCENTS
-      :[];
+  const w=
+    $("#scentModalScents");
 
-    scents.innerHTML=
-      list.map(
-        s=>{
+  if(!w)return;
 
-          const ar=
-            Array.isArray(s)
-            ?s[0]
-            :s;
+  w.innerHTML=
+    SCENTS.map(
+      s=>
+      `<button
+        class="chip"
+        data-s="${s[0]}"
+      >
+        ${scentTr(s[0])}
+      </button>`
+    ).join("");
 
-          const en=
-            Array.isArray(s)
-            ?s[1]
-            :s;
+  w.querySelectorAll(".chip")
+    .forEach(b=>
+      b.addEventListener(
+        "click",
+        ()=>{
 
-          return `
-            <button
-              type="button"
-              class="scent-option"
-              data-scent="${ar}"
-            >
-              ${
-                LANG==="ar"
-                ?ar
-                :en
-              }
-            </button>
-          `;
+          w.querySelectorAll(".chip")
+            .forEach(x=>
+              x.classList.remove("on")
+            );
+
+          b.classList.add("on");
+
+          quickAddScent=
+            b.dataset.s;
 
         }
-      ).join("");
-
-    scents
-      .querySelectorAll(
-        "[data-scent]"
       )
-      .forEach(btn=>{
+    );
 
-        btn.addEventListener(
+  openDrawer("scentOv");
+}
+
+/* ═══════ فلاتر السعر والترتيب ═══════ */
+document.addEventListener(
+  "change",
+  e=>{
+    if(
+      e.target.id==="priceMin" ||
+      e.target.id==="priceMax" ||
+      e.target.id==="sortSel"
+    ){
+      renderProducts();
+    }
+  }
+);
+
+document.addEventListener(
+  "input",
+  e=>{
+    if(
+      e.target.id==="priceMin" ||
+      e.target.id==="priceMax"
+    ){
+      renderProducts();
+    }
+  }
+);
+
+/* ═══════ العطور ═══════ */
+function renderScents(){
+
+  const w=$("#scentGrid");
+
+  if(!w)return;
+
+  w.innerHTML=
+    SCENTS.map(
+      (s,i)=>
+      `<div class="scent">
+
+        <i>${i+1}</i>
+
+        <div>
+
+          <b>
+            ${
+              LANG==="en"
+              ?s[1]
+              :s[0]
+            }
+          </b>
+
+          <small>
+            ${
+              LANG==="en"
+              ?s[0]
+              :s[1]
+            }
+          </small>
+
+        </div>
+
+      </div>`
+    ).join("");
+}
+
+/* ═══════ الأسئلة الشائعة ═══════ */
+function renderFAQ(){
+
+  const w=$("#faqWrap");
+
+  if(!w)return;
+
+  const items=[
+    [t("faq1q"),t("faq1a")],
+    [t("faq2q"),t("faq2a")],
+    [t("faq3q"),t("faq3a")],
+    [t("faq4q"),t("faq4a")],
+    [t("faq5q"),t("faq5a")],
+    [t("faq6q"),t("faq6a")]
+  ];
+
+  w.innerHTML=
+    items.map(
+      q=>
+      `<div class="faq-item">
+
+        <button class="faq-q">
+
+          <span>
+            ${q[0]}
+          </span>
+
+          <span>+</span>
+
+        </button>
+
+        <div class="faq-a">
+          <div>
+            ${q[1]}
+          </div>
+        </div>
+
+      </div>`
+    ).join("");
+
+  w.querySelectorAll(".faq-item")
+    .forEach(item=>{
+
+      item
+        .querySelector(".faq-q")
+        .addEventListener(
           "click",
           ()=>{
 
-            scents
-              .querySelectorAll(
-                ".scent-option"
-              )
-              .forEach(x=>
-                x.classList.remove("on")
-              );
+            const was=
+              item.classList.contains("open");
 
-            btn.classList.add("on");
+            w.querySelectorAll(".faq-item")
+              .forEach(x=>{
+                x.classList.remove("open");
 
-            quickAddScent=
-              btn.dataset.scent;
+                x.querySelector(
+                  ".faq-a"
+                ).style.maxHeight=null;
+              });
+
+            if(!was){
+
+              item.classList.add("open");
+
+              const a=
+                item.querySelector(".faq-a");
+
+              a.style.maxHeight=
+                a.scrollHeight+"px";
+
+            }
 
           }
         );
 
-      });
+    });
+}
+
+/* ═══════ السلة ═══════ */
+function initCart(){
+
+  cartBadge();
+
+  fillCitySelect(
+    $("#coCity")
+  );
+
+  fillCartForm();
+
+  $("#cartBtn")?.addEventListener(
+    "click",
+    ()=>{
+      fillCartForm();
+
+      openDrawer(
+        "cartDrawer",
+        "cartOv"
+      );
+    }
+  );
+
+  $("#closeCart")?.addEventListener(
+    "click",
+    closeDrawers
+  );
+
+  $("#cartOv")?.addEventListener(
+    "click",
+    closeDrawers
+  );
+
+  renderCart();
+
+  if(
+    new URLSearchParams(
+      location.search
+    ).get("cart")==="1"
+  ){
+
+    fillCartForm();
+
+    openDrawer(
+      "cartDrawer",
+      "cartOv"
+    );
+  }
+
+  $("#emptyCartBtn")?.addEventListener(
+    "click",
+    ()=>{
+      if(
+        !confirm(
+          t("t_confirm_empty")
+        )
+      ){
+        return;
+      }
+
+      saveCart([]);
+
+      renderCart();
+    }
+  );
+
+  $("#checkoutBtn")?.addEventListener(
+    "click",
+    checkout
+  );
+}
+
+function renderCart(){
+
+  const c=getCart();
+
+  const w=$("#cartItems");
+
+  if(!w)return;
+
+  if(!c.length){
+
+    w.innerHTML=
+      `<div
+        class="empty"
+        style="padding:2rem 0"
+      >
+        ${t("cart_empty")}
+        <br>
+        <small>
+          ${t("cart_empty_sub")}
+        </small>
+      </div>`;
+
+    updateTotals(c);
+
+    return;
+  }
+
+  w.innerHTML=
+    c.map(
+      (it,i)=>
+      `<div class="citem">
+
+        <img
+          src="${it.img||""}"
+          alt=""
+        >
+
+        <div style="flex:1">
+
+          <h5>
+            ${pname({
+              name:it.name,
+              nameEn:it.nameEn
+            })}
+          </h5>
+
+          <div class="cs">
+            ${t("scent_lbl")}
+            ${scentTr(it.scent)}
+          </div>
+
+          <div class="cs">
+            ${money(it.price)}
+          </div>
+
+          <div class="qty">
+
+            <button
+              class="cq-minus"
+              data-i="${i}"
+            >
+              −
+            </button>
+
+            <b>
+              ${it.qty}
+            </b>
+
+            <button
+              class="cq-plus"
+              data-i="${i}"
+            >
+              +
+            </button>
+
+          </div>
+
+        </div>
+
+        <button
+          class="rm"
+          data-i="${i}"
+        >
+          ✕
+        </button>
+
+      </div>`
+    ).join("");
+
+  w.querySelectorAll(".rm")
+    .forEach(b=>
+      b.addEventListener(
+        "click",
+        ()=>{
+          c.splice(
+            +b.dataset.i,
+            1
+          );
+
+          saveCart(c);
+          renderCart();
+        }
+      )
+    );
+
+  w.querySelectorAll(".cq-plus")
+    .forEach(b=>
+      b.addEventListener(
+        "click",
+        ()=>{
+          const idx=
+            +b.dataset.i;
+
+          c[idx].qty++;
+
+          saveCart(c);
+          renderCart();
+        }
+      )
+    );
+
+  w.querySelectorAll(".cq-minus")
+    .forEach(b=>
+      b.addEventListener(
+        "click",
+        ()=>{
+          const idx=
+            +b.dataset.i;
+
+          c[idx].qty--;
+
+          if(c[idx].qty<=0){
+            c.splice(idx,1);
+          }
+
+          saveCart(c);
+          renderCart();
+        }
+      )
+    );
+
+  updateTotals(c);
+}
+
+function updateTotals(c){
+
+  const sub=
+    c.reduce(
+      (a,i)=>
+        a+i.price*i.qty,
+      0
+    );
+
+  if($("#cartSub")){
+    $("#cartSub").textContent=
+      money(sub);
+  }
+
+  if($("#cartTotal")){
+    $("#cartTotal").textContent=
+      money(sub);
+  }
+}
+
+/* ═══════ بيانات العميل داخل السلة ═══════ */
+function fillCartForm(){
+
+  const u=
+    JSON.parse(
+      localStorage.getItem(
+        "vl_user"
+      )||"{}"
+    );
+
+  if($("#coName"))
+    $("#coName").value=
+      u.name||"";
+
+  if($("#coPhone"))
+    $("#coPhone").value=
+      u.phone||"";
+
+  if($("#coCity"))
+    $("#coCity").value=
+      u.city||"";
+
+  if($("#coAddr"))
+    $("#coAddr").value=
+      u.addr||"";
+}
+
+function saveUserFromCart(
+  name,
+  phone,
+  city,
+  addr
+){
+
+  const old=
+    JSON.parse(
+      localStorage.getItem(
+        "vl_user"
+      )||"{}"
+    );
+
+  const u={
+    name,
+    phone,
+    city,
+    addr,
+    orders:old.orders||0
+  };
+
+  localStorage.setItem(
+    "vl_user",
+    JSON.stringify(u)
+  );
+
+  if($("#accName"))
+    $("#accName").value=name;
+
+  if($("#accPhone"))
+    $("#accPhone").value=phone;
+
+  if($("#accCity"))
+    $("#accCity").value=city;
+
+  if($("#accAddr"))
+    $("#accAddr").value=addr;
+}
+
+function genOrderId(){
+
+  const chars=
+    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+  let s="";
+
+  for(let i=0;i<6;i++){
+
+    s+=
+      chars[
+        Math.floor(
+          Math.random()*
+          chars.length
+        )
+      ];
 
   }
 
-  modal.classList.add("open");
+  return "VL-"+s;
 }
 
-function closeQuickAdd(){
+/* ═══════ إتمام الطلب ═══════ */
+function checkout(){
 
-  const modal=
-    $("#quickAddModal");
+  const c=getCart();
 
-  if(modal){
-    modal.classList.remove("open");
+  if(!c.length){
+
+    toast(t("t_empty"));
+
+    return;
   }
 
-  quickAddProduct=null;
-  quickAddScent="";
-  quickAddQty=1;
+  const missingScent=
+    c.some(
+      it=>!it.scent
+    );
+
+  if(missingScent){
+
+    toast(
+      t("t_scentwarn")
+    );
+
+    return;
+  }
+
+  const name=
+    $("#coName")?.value.trim()||"";
+
+  const phone=
+    $("#coPhone")?.value.trim()||"";
+
+  const city=
+    $("#coCity")?.value||"";
+
+  const addr=
+    $("#coAddr")?.value.trim()||"";
+
+  const notes=
+    $("#coNotes")?.value.trim()||"";
+
+  if(!name||!phone||!addr){
+
+    toast(t("t_fill"));
+
+    return;
+  }
+
+  saveUserFromCart(
+    name,
+    phone,
+    city,
+    addr
+  );
+
+  const orderId=
+    genOrderId();
+
+  const sub=
+    c.reduce(
+      (a,i)=>
+        a+i.price*i.qty,
+      0
+    );
+
+  const total=sub;
+
+  let msg=
+    `${t("wa_head")}\n`+
+    `${t("wa_order")} ${orderId}\n\n`;
+
+  c.forEach(it=>{
+
+    msg+=
+      `${t("wa_item")} `+
+      `${pname({
+        name:it.name,
+        nameEn:it.nameEn
+      })}\n`;
+
+    msg+=
+      `${t("wa_scent")}: `+
+      `${scentTr(it.scent)} | `+
+      `×${it.qty} = `+
+      `${money(
+        it.price*it.qty
+      )}\n\n`;
+
+  });
+
+  msg+=
+    `${t("wa_total")} `+
+    `${money(total)}\n`;
+
+  msg+=
+    `${t("pay_products_note")}\n`;
+
+  msg+=
+    `${t("wa_insta")} `+
+    `${CFG.INSTAPAY}\n`;
+
+  msg+=
+    `${t("ship_note")}\n\n`;
+
+  msg+=
+    `${t("wa_name")} ${name}\n`;
+
+  msg+=
+    `${t("wa_phone")} ${phone}\n`;
+
+  if(city){
+
+    msg+=
+      `${t("wa_city")} ${city}\n`;
+
+  }
+
+  msg+=
+    `${t("wa_addr")} ${addr}\n`;
+
+  if(notes){
+
+    msg+=
+      `${t("wa_notes")} ${notes}\n`;
+
+  }
+
+  DB.add(
+    "orders",
+    {
+      id:orderId,
+      items:c,
+      name,
+      phone,
+      city,
+      address:addr,
+      notes,
+      total,
+      paymentMethod:"instapay",
+      status:0,
+      createdAt:Date.now()
+    }
+  ).catch(
+    e=>console.warn(e)
+  );
+
+  saveCart([]);
+
+  renderCart();
+
+  cartBadge();
+
+  toast(t("t_order"));
+
+  const u=
+    JSON.parse(
+      localStorage.getItem(
+        "vl_user"
+      )||"{}"
+    );
+
+  u.orders=
+    (u.orders||0)+1;
+
+  localStorage.setItem(
+    "vl_user",
+    JSON.stringify(u)
+  );
+
+  const oc=$("#ordCount");
+
+  if(oc){
+    oc.textContent=
+      u.orders;
+  }
+
+  window.open(
+    "https://wa.me/"+
+    CFG.WHATSAPP+
+    "?text="+
+    encodeURIComponent(msg),
+    "_blank"
+  );
 }
 
-/* ═══════ البحث ═══════ */
+/* ═══════ حساب المستخدم ═══════ */
+function initAccount(){
 
-function initSearch(){
+  fillCitySelect(
+    $("#accCity")
+  );
 
-  const input=
-    $("#searchInput");
+  const u=
+    JSON.parse(
+      localStorage.getItem(
+        "vl_user"
+      )||"{}"
+    );
 
-  if(!input)return;
+  if(u.name)
+    $("#accName").value=
+      u.name;
 
-  input.addEventListener(
-    "input",
+  if(u.phone)
+    $("#accPhone").value=
+      u.phone;
+
+  if(u.city)
+    $("#accCity").value=
+      u.city;
+
+  if(u.addr)
+    $("#accAddr").value=
+      u.addr;
+
+  if(u.orders)
+    $("#ordCount").textContent=
+      u.orders;
+
+  $("#accBtn")?.addEventListener(
+    "click",
+    ()=>{
+      openDrawer("accOv");
+    }
+  );
+
+  $("#closeAcc")?.addEventListener(
+    "click",
+    ()=>closeModal("accOv")
+  );
+
+  $("#accOv")?.addEventListener(
+    "click",
+    e=>{
+      if(e.target.id==="accOv"){
+        closeModal("accOv");
+      }
+    }
+  );
+
+  $("#saveAccBtn")?.addEventListener(
+    "click",
     ()=>{
 
-      const q=
-        input.value
-          .trim()
-          .toLowerCase();
+      const name=
+        $("#accName")
+          .value
+          .trim();
 
-      if(!q){
+      const phone=
+        $("#accPhone")
+          .value
+          .trim();
 
-        renderProducts();
+      const city=
+        $("#accCity")
+          .value;
+
+      const addr=
+        $("#accAddr")
+          .value
+          .trim();
+
+      if(!name||!phone){
+
+        toast(t("t_fill"));
 
         return;
       }
 
+      const old=
+        JSON.parse(
+          localStorage.getItem(
+            "vl_user"
+          )||"{}"
+        );
+
+      localStorage.setItem(
+        "vl_user",
+        JSON.stringify({
+          name,
+          phone,
+          city,
+          addr,
+          orders:old.orders||0
+        })
+      );
+
+      fillCartForm();
+
+      toast(t("t_saved"));
+
+      closeModal("accOv");
+
+    }
+  );
+
+  $("#logoutBtn")?.addEventListener(
+    "click",
+    ()=>{
+
+      localStorage.removeItem(
+        "vl_user"
+      );
+
+      $("#accName").value="";
+      $("#accPhone").value="";
+      $("#accAddr").value="";
+
+      $("#ordCount").textContent="0";
+
+      toast(t("t_saved"));
+
+    }
+  );
+}
+
+function fillCitySelect(sel){
+
+  if(!sel)return;
+
+  const arr=
+    LANG==="en"
+    ?GOVS_EN
+    :GOVS;
+
+  sel.innerHTML=
+    `<option value="">
+      ${t("ph_city")}
+    </option>`+
+    arr.map(
+      g=>
+      `<option>${g}</option>`
+    ).join("");
+}
+
+/* ═══════ البحث ═══════ */
+function initSearch(){
+
+  $("#searchBtn")?.addEventListener(
+    "click",
+    ()=>{
+      openDrawer("searchOv");
+
+      setTimeout(
+        ()=>
+          $("#searchInput")?.focus(),
+        200
+      );
+    }
+  );
+
+  $("#closeSearch")?.addEventListener(
+    "click",
+    ()=>closeModal("searchOv")
+  );
+
+  $("#searchOv")?.addEventListener(
+    "click",
+    e=>{
+      if(e.target.id==="searchOv"){
+        closeModal("searchOv");
+      }
+    }
+  );
+
+  $("#searchInput")?.addEventListener(
+    "input",
+    e=>{
+
+      const q=
+        e.target.value
+          .trim()
+          .toLowerCase();
+
       const w=
-        $("#productsGrid");
+        $("#searchResults");
 
       if(!w)return;
 
-      const list=
-        (ALL_PRODUCTS||[])
-        .filter(p=>{
+      if(!q){
 
-          const ar=
-            String(p.name||"")
-              .toLowerCase();
+        w.innerHTML="";
 
-          const en=
-            String(p.nameEn||"")
-              .toLowerCase();
+        return;
+      }
 
-          return(
-            ar.includes(q)||
-            en.includes(q)
-          );
+      const res=
+        ALL_PRODUCTS
+          .filter(p=>{
 
-        });
+            const hay=
+              (
+                p.name+
+                " "+
+                (p.nameEn||"")+
+                " "+
+                (p.desc||"")+
+                " "+
+                (p.descEn||"")+
+                " "+
+                cat(p.cat)
+              ).toLowerCase();
+
+            return hay.includes(q);
+
+          })
+          .slice(0,8);
 
       w.innerHTML=
-        list.map(
-          productCard
+        res.map(
+          p=>
+          `<div
+            class="sr-item"
+            data-id="${p.id}"
+          >
+
+            <img
+              src="${imgOf(p)}"
+              alt=""
+            >
+
+            <div>
+
+              <b>
+                ${pname(p)}
+              </b>
+
+              <br>
+
+              <small>
+                ${money(p.price)}
+              </small>
+
+            </div>
+
+          </div>`
         ).join("");
+
+      w.querySelectorAll(".sr-item")
+        .forEach(
+          it=>
+          it.addEventListener(
+            "click",
+            ()=>{
+              location.href=
+                "product.html?p="+
+                it.dataset.id;
+            }
+          )
+        );
 
     }
   );
 }
 
-/* ═══════ القائمة ═══════ */
+/* ═══════ الشات المساعد ═══════ */
+function initChat(){
 
-function initNav(){
-
-  const btn=
-    $("#menuBtn");
-
-  const nav=
-    $("#mobileNav");
-
-  if(!btn||!nav)return;
-
-  btn.addEventListener(
+  $("#chatFab")?.addEventListener(
     "click",
     ()=>{
-      nav.classList.toggle("open");
+      $("#chatOv")?.classList.toggle(
+        "open"
+      );
     }
   );
 
-  nav.querySelectorAll("a")
-    .forEach(a=>{
+  $("#closeChat")?.addEventListener(
+    "click",
+    ()=>{
+      $("#chatOv")?.classList.remove(
+        "open"
+      );
+    }
+  );
 
+  initChatWelcome();
+
+  const quick=[
+    [t("q_gift"),"a_gift"],
+    [t("q_relax"),"a_relax"],
+    [t("q_scents"),"a_scents"],
+    [t("q_ship"),"a_ship"],
+    [t("q_bride"),"a_bride"]
+  ];
+
+  const qw=
+    $("#chatQuick");
+
+  if(qw){
+
+    qw.innerHTML=
+      quick.map(
+        q=>
+        `<button
+          data-a="${q[1]}"
+        >
+          ${q[0]}
+        </button>`
+      ).join("");
+
+    qw.querySelectorAll("button")
+      .forEach(
+        b=>
+        b.addEventListener(
+          "click",
+          ()=>{
+
+            addMsg(
+              b.textContent,
+              "user"
+            );
+
+            setTimeout(
+              ()=>
+                addMsg(
+                  t(b.dataset.a),
+                  "bot"
+                ),
+              400
+            );
+
+          }
+        )
+      );
+  }
+}
+
+function initChatWelcome(){
+
+  const w=
+    $("#chatMsgs");
+
+  if(
+    w &&
+    !w.children.length
+  ){
+    addMsg(
+      t("chat_welcome"),
+      "bot"
+    );
+  }
+}
+
+function addMsg(txt,who){
+
+  const w=
+    $("#chatMsgs");
+
+  if(!w)return;
+
+  const d=
+    document.createElement("div");
+
+  d.className=
+    "msg "+who;
+
+  d.textContent=txt;
+
+  w.appendChild(d);
+
+  w.scrollTop=
+    w.scrollHeight;
+}
+
+/* ═══════ القائمة والمودالات ═══════ */
+function initNav(){
+
+  $("#navToggle")?.addEventListener(
+    "click",
+    ()=>{
+      $("#mnav")?.classList.toggle(
+        "open"
+      );
+
+      $("#ovl")?.classList.toggle(
+        "open"
+      );
+    }
+  );
+
+  $("#ovl")?.addEventListener(
+    "click",
+    closeDrawers
+  );
+
+  $$(".mnav a")
+    .forEach(
+      a=>
       a.addEventListener(
         "click",
         ()=>{
-          nav.classList.remove("open");
-        }
-      );
+          $("#mnav")?.classList.remove(
+            "open"
+          );
 
-    });
+          $("#ovl")?.classList.remove(
+            "open"
+          );
+        }
+      )
+    );
+
+  $$("[data-cat]")
+    .forEach(
+      a=>{
+
+        if(
+          a.closest(".mnav") ||
+          a.closest(".mainnav") ||
+          a.closest("footer")
+        ){
+
+          a.addEventListener(
+            "click",
+            ()=>{
+              setTimeout(
+                ()=>{
+                  const chip=
+                    $(
+                      `#chips .chip[data-cat="${a.dataset.cat}"]`
+                    );
+
+                  if(chip){
+                    chip.click();
+                  }
+                },
+                100
+              );
+            }
+          );
+
+        }
+
+      }
+    );
 }
 
-/* ═══════ باقي وظائف الموقع ═══════ */
+function openDrawer(
+  id,
+  ovlId
+){
 
-/*
-  يتم الاعتماد هنا على الدوال الموجودة
-  أصلًا في ملفات المشروع:
-  
-  initCart
-  initAccount
-  initChat
-  loadAll
-  fillCitySelect
-  fillCartForm
-  toast
-  track
-  money
-  imgOf
-  cat
-  t
-  $
-  $$
-  ALL_PRODUCTS
-  SCENTS
-  LANG
-  FAQ
+  $("#"+id)?.classList.add(
+    "open"
+  );
 
-  وعدم إعادة تعريفها هنا مهم حتى لا
-  يحصل تعارض مع data.js / ملفات المشروع.
-*/
+  if(ovlId){
+    $("#"+ovlId)?.classList.add(
+      "open"
+    );
+  }
+}
+
+function closeDrawers(){
+
+  $$(".drawer,.ovl")
+    .forEach(
+      el=>
+        el.classList.remove(
+          "open"
+        )
+    );
+}
+
+function closeModal(id){
+
+  $("#"+id)?.classList.remove(
+    "open"
+  );
+}
 
 })();
