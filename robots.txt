@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://velalight.github.io/sitemap.xml
