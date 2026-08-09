@@ -70,10 +70,22 @@
 </nav>
 <div class="ovl" id="ovl"></div>
 
-<section class="hero">
-<div class="embers" id="embers"></div>
-<div class="wrap">
-<div class="hcontent">
+<section class="hero hero-slider" aria-label="VelaLight Hero">
+<div class="hero-slides" id="heroSlides" aria-hidden="true">
+<div class="hero-slide is-active"><img src="RR.jpg" alt="VelaLight candles"></div>
+<div class="hero-slide"><img src="heart2.jpg" alt="VelaLight candles"></div>
+<div class="hero-slide"><img src="candle1.jpg" alt="VelaLight candles"></div>
+<div class="hero-slide"><img src="iccoffe1.jpg" alt="VelaLight candles"></div>
+<div class="hero-slide"><img src="mandle.jpg" alt="VelaLight candles"></div>
+<div class="hero-slide"><img src="gift1.jpg" alt="VelaLight candles"></div>
+<div class="hero-slide"><img src="candle13.jpg" alt="VelaLight candles"></div>
+<div class="hero-slide"><img src="candle14.jpg" alt="VelaLight candles"></div>
+<div class="hero-slide"><img src="candle9.jpg" alt="VelaLight candles"></div>
+<div class="hero-slide"><img src="candle10.jpg" alt="VelaLight candles"></div>
+</div>
+<div class="hero-shade"></div>
+<div class="hero-content">
+<div class="hero-copy">
 <div class="kick" data-i18n="hero_kick">✦ شموع يدوية فاخرة · صناعة مصرية</div>
 <h1><span data-i18n="hero_a">ضوء يُحكى…</span><br><em data-i18n="hero_b">وبريق يليق بكِ</em></h1>
 <p class="lead" data-i18n="hero_lead">في VelaLight كل شمعة اتصنعت يدويًا بعناية.</p>
@@ -81,19 +93,9 @@
 <a class="btn" href="#products" data-i18n="cta_shop">اكتشفي The Collection ✨</a>
 <a class="btn ghost" href="#about-us" data-i18n="cta_story">Our Story</a>
 </div>
-<div class="trust">
-<span data-i18n="trust1">🚚 توصيل لكل مصر</span>
-<span data-i18n="trust2">🤲 100% صناعة يدوية</span>
-<span data-i18n="trust3">🎁 تغليف هدايا مجاني</span>
-<span data-i18n="trust4">🔁 استبدال خلال 3 أيام</span>
 </div>
 </div>
-<div class="hvisual">
-<div class="frame"><img src="https://velalight.github.io/RR.jpg" alt="VelaLight"></div>
-<div class="float-card fc1"><b>+500</b><span data-i18n="stat_clients">عميلة سعيدة</span></div>
-<div class="float-card fc2"><b>19</b><span data-i18n="stat_scents">عطر مميز</span></div>
-</div>
-</div>
+<div class="hero-dots" id="heroDots" aria-label="Hero slides"></div>
 </section>
 
 <section id="products" class="sec">
@@ -337,5 +339,37 @@
 <script src="data.js"></script>
 <script type="module" src="firebase.js"></script>
 <script src="app.js"></script>
+<script>
+(function(){
+  const slides=[...document.querySelectorAll(".hero-slide")];
+  const dotsWrap=document.getElementById("heroDots");
+  if(!slides.length||!dotsWrap)return;
+  let index=0,timer=null;
+  slides.forEach((_,i)=>{
+    const dot=document.createElement("button");
+    dot.type="button";
+    dot.className="hero-dot"+(i===0?" is-active":"");
+    dot.setAttribute("aria-label","Slide "+(i+1));
+    dot.addEventListener("click",()=>show(i,true));
+    dotsWrap.appendChild(dot);
+  });
+  const dots=[...dotsWrap.children];
+  function show(next,manual){
+    index=(next+slides.length)%slides.length;
+    slides.forEach((el,i)=>el.classList.toggle("is-active",i===index));
+    dots.forEach((el,i)=>el.classList.toggle("is-active",i===index));
+    if(manual)restart();
+  }
+  function restart(){
+    clearInterval(timer);
+    timer=setInterval(()=>show(index+1,false),3800);
+  }
+  const hero=document.querySelector(".hero-slider");
+  hero?.addEventListener("mouseenter",()=>clearInterval(timer));
+  hero?.addEventListener("mouseleave",restart);
+  document.addEventListener("visibilitychange",()=>document.hidden?clearInterval(timer):restart());
+  restart();
+})();
+</script>
 </body>
 </html>
