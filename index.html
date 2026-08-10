@@ -1841,6 +1841,11 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
   start();
 
+  /* Cinematic hero copy: reveal once, then stay calm while slides change. */
+  requestAnimationFrame(()=>{
+    document.querySelector('.hero-content')?.classList.add('cinematic-in');
+  });
+
 })();
 
 </script>

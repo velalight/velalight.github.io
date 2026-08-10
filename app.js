@@ -9,6 +9,37 @@ let quickAddProduct=null;
 let quickAddScent="";
 let quickAddQty=1;
 
+const VELA_SCENTS=[
+  ["فانيلا","Vanilla"],
+  ["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
+  ["لافندر","Lavender"],
+  ["موكا","Mocha"],
+  ["كراميل","Caramel"],
+  ["كاريبيان فروت","Caribbean Fruit"],
+  ["فل","Jasmine Sambac"],
+  ["ياسمين","Jasmine"],
+  ["اناناس","Pineapple"],
+  ["شيكولاتة","Chocolate"],
+  ["كوكونات","Coconut"],
+  ["كاسيليا","Cassilia — Massage"],
+  ["اينتو زانايت","Into Zanaite — Massage"],
+  ["بوكيت روز","Bouquet Rose"],
+  ["ورد بلدى","Egyptian Rose"],
+  ["تيوليب","Tulip"],
+  ["قهوة","Coffee"],
+  ["قهوة فانيلا","Vanilla Coffee"],
+  ["قهوة بندق","Hazelnut Coffee"],
+  ["عود فانيليا","Vanilla Oud"],
+  ["عنبر","Amber"],
+  ["فراولة","Strawberry"],
+  ["عود خشب صندل","Sandalwood Oud"]
+];
+
+const velaScentTr=name=>{
+  const found=VELA_SCENTS.find(s=>s[0]===name||s[1]===name);
+  return found ? (LANG==="en" ? found[1] : found[0]) : (name||"");
+};
+
 
 /* ═══════════════════════════════════════
    INITIALIZATION
@@ -840,7 +871,7 @@ function openQuickAdd(p){
   */
 
   w.innerHTML=
-    SCENTS.map(
+    VELA_SCENTS.map(
       s=>
       `
         <button
@@ -848,7 +879,7 @@ function openQuickAdd(p){
           type="button"
           data-s="${s[0]}"
         >
-          ${scentTr(s[0])}
+          ${velaScentTr(s[0])}
         </button>
       `
     ).join("");
@@ -934,7 +965,7 @@ function renderScents(){
   if(!w)return;
 
   w.innerHTML=
-    SCENTS.map(
+    VELA_SCENTS.map(
       (s,i)=>
       `
         <div class="scent">
@@ -1309,13 +1340,13 @@ function renderCart(){
                   <option value="">
                     ${LANG === "en" ? "Choose a scent" : "اختاري العطر"}
                   </option>
-                  ${SCENTS.map(
+                  ${VELA_SCENTS.map(
                     scent => `
                       <option
                         value="${scent[0]}"
                         ${String(it.scent||"") === String(scent[0]) ? "selected" : ""}
                       >
-                        ${scentTr(scent[0])}
+                        ${velaScentTr(scent[0])}
                       </option>
                     `
                   ).join("")}
@@ -1903,7 +1934,7 @@ async function checkout(){
       })}\n`;
 
     msg+=
-      `${t("wa_scent")}: ${scentTr(
+      `${t("wa_scent")}: ${velaScentTr(
         it.scent
       )}\n`;
 
@@ -2019,7 +2050,7 @@ async function checkout(){
       scent:it.scent,
 
       scentName:
-        scentTr(it.scent),
+        velaScentTr(it.scent),
 
       quantity:
         Number(it.qty||1),
