@@ -237,7 +237,13 @@ function renderScents(){
 const select=$("#pdScentSelect");
 if(!select)return;
 selScent="";
-select.innerHTML=`<option value="">${LANG==="ar"?"اختاري العطر":"Choose a scent"}</option>`+SCENTS.map(s=>`<option value="${s[0]}">${scentTr(s[0])}</option>`).join("");
+const scents=Array.isArray(P?.scents)&&P.scents.length?P.scents:SCENTS;
+select.innerHTML=`<option value="">${LANG==="ar"?"🌸 اختاري العطر":"🌸 Choose a scent"}</option>`+
+scents.map(s=>{
+const value=Array.isArray(s)?s[0]:String(s);
+const label=Array.isArray(s)?(LANG==="en"?(s[1]||s[0]):s[0]):String(s);
+return `<option value="${String(value).replace(/"/g,"&quot;")}">${String(label).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</option>`;
+}).join("");
 select.value="";
 select.onchange=()=>{selScent=select.value;select.classList.remove("scent-error")};
 }
