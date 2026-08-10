@@ -2082,12 +2082,26 @@ table.adm{
 }
 
 .dbody{
-  flex:1;
-
+  flex:1 1 44%;
+  min-height:0;
   overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  padding:1rem 1.25rem 1.5rem;
+  scrollbar-width:thin;
+}
 
-  padding:
-    1rem 1.25rem 1.5rem
+/* The cart has two independent zones: products and checkout.
+   Keeping the product zone shrinkable prevents the checkout form
+   from pushing the actual cart items out of view on small screens. */
+.dfoot{
+  flex:1 1 56%;
+  min-height:0;
+  max-height:58%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
 }
 
 
@@ -2395,6 +2409,49 @@ table.adm{
   font-size:.78rem
 }
 
+
+
+@media (max-width:520px){
+  .drawer{
+    width:100vw;
+    height:100dvh;
+  }
+
+  .dhead{
+    flex:0 0 auto;
+  }
+
+  .dbody{
+    flex:0 1 40%;
+    min-height:115px;
+    max-height:42%;
+  }
+
+  .dfoot{
+    flex:1 1 60%;
+    max-height:60%;
+    padding:.7rem;
+  }
+
+  .citem{
+    grid-template-columns:64px minmax(0,1fr) 28px;
+    gap:.55rem;
+  }
+
+  .citem-media{
+    width:64px;
+    height:64px;
+  }
+
+  .cart-scent-select{
+    min-width:0;
+    width:100%;
+  }
+
+  .co-form .g2{
+    grid-template-columns:1fr;
+  }
+}
 
 /* ═══════════════════════════════════════════════
    MODALS
@@ -3057,15 +3114,20 @@ html[dir=ltr]
 
   .drawer{
     width:100vw;
-
-    max-width:100vw
+    max-width:100vw;
   }
 
   .dbody{
-    padding:
-      .8rem
-      .8rem
-      1rem
+    flex:0 1 42%;
+    min-height:120px;
+    max-height:44%;
+    padding:.8rem .8rem 1rem;
+  }
+
+  .dfoot{
+    flex:1 1 58%;
+    max-height:58%;
+    padding:.85rem;
   }
 
   .dhead{
@@ -3183,340 +3245,4 @@ html[dir=ltr]
     font-size:1.75rem
   }
 
-}
-
-/* ═══════════════════════════════════════════════
-   VelaLight Cart 2.0 — final premium overrides
-   ═══════════════════════════════════════════════ */
-
-/* Product cards: description is the hero text, never the scent list. */
-.p-card .p-scents,
-.p-card .product-scents,
-.p-card [class*="scents"]{
-  display:none!important;
-}
-
-.p-card .p-desc{
-  display:-webkit-box;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
-  overflow:hidden;
-  min-height:3.25em;
-  line-height:1.62;
-  color:var(--mut);
-}
-
-/* Cart drawer */
-#cartDrawer{
-  width:min(680px,96vw);
-  max-width:680px;
-  background:linear-gradient(180deg,#fffdf9 0%,#f8f1e7 100%);
-  border-inline-end:1px solid rgba(143,100,43,.18);
-  box-shadow:18px 0 60px -30px rgba(45,32,21,.48);
-}
-
-#cartDrawer .dhead{
-  min-height:76px;
-  padding:1rem 1.25rem;
-  background:rgba(255,253,249,.94);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid rgba(143,100,43,.14);
-}
-
-#cartDrawer .dhead h3{
-  font-size:1.25rem;
-  letter-spacing:.01em;
-}
-
-#cartDrawer .dbody{
-  padding:1rem 1rem 1.25rem;
-  overscroll-behavior:contain;
-  scrollbar-width:thin;
-}
-
-#cartDrawer .citem{
-  position:relative;
-  grid-template-columns:88px minmax(0,1fr) 34px;
-  gap:.9rem;
-  margin:0 0 .8rem;
-  padding:.75rem;
-  border:1px solid rgba(143,100,43,.13);
-  border-radius:20px;
-  background:rgba(255,253,249,.94);
-  box-shadow:0 12px 32px -27px rgba(65,45,25,.55);
-  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
-}
-
-#cartDrawer .citem:hover{
-  transform:translateY(-1px);
-  border-color:rgba(185,133,63,.28);
-  box-shadow:0 16px 38px -28px rgba(65,45,25,.62);
-}
-
-#cartDrawer .citem-media{
-  width:88px;
-  height:104px;
-  border-radius:16px;
-  background:#eee4d5;
-  box-shadow:inset 0 0 0 1px rgba(143,100,43,.08);
-}
-
-#cartDrawer .citem-media img{
-  object-fit:cover;
-}
-
-#cartDrawer .citem-info{
-  display:flex;
-  flex-direction:column;
-  min-width:0;
-}
-
-#cartDrawer .citem h5{
-  margin:0 0 .45rem;
-  font-size:1rem;
-  line-height:1.45;
-  font-weight:800;
-}
-
-#cartDrawer .cart-scent-picker{
-  display:grid;
-  gap:.35rem;
-  margin:.05rem 0 .45rem;
-}
-
-#cartDrawer .cart-scent-label{
-  display:block;
-  font-size:.72rem;
-  font-weight:700;
-  color:var(--dim);
-}
-
-#cartDrawer .cart-scent-select{
-  width:100%;
-  min-height:42px;
-  padding:.55rem 2.25rem .55rem .75rem;
-  border:1px solid rgba(143,100,43,.18);
-  border-radius:12px;
-  background:#fffefa;
-  color:var(--ink);
-  font-size:.82rem;
-  font-weight:700;
-  cursor:pointer;
-}
-
-#cartDrawer .cart-scent-select:focus{
-  border-color:var(--gold);
-  box-shadow:0 0 0 3px rgba(185,133,63,.10);
-}
-
-#cartDrawer .citem .cs{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:.5rem;
-  margin-top:.1rem;
-  font-size:.75rem;
-}
-
-#cartDrawer .citem .cs strong{
-  color:var(--ink);
-  font-weight:800;
-}
-
-#cartDrawer .cart-line-total{
-  margin-top:.5rem;
-  padding-top:.45rem;
-  border-top:1px dashed rgba(143,100,43,.15);
-  font-size:.78rem;
-}
-
-#cartDrawer .cart-line-total strong{
-  font-size:.92rem;
-  color:var(--gold2);
-}
-
-#cartDrawer .citem .qty{
-  align-self:flex-start;
-  display:inline-flex;
-  width:max-content;
-  margin-top:.55rem;
-  height:38px;
-  padding:3px;
-  border:1px solid rgba(143,100,43,.16);
-  border-radius:12px;
-  background:#f8f1e7;
-}
-
-#cartDrawer .citem .qty button{
-  width:32px;
-  height:32px;
-  border-radius:9px;
-  background:#fffdf9;
-  font-size:1.05rem;
-  font-weight:800;
-  transition:.18s ease;
-}
-
-#cartDrawer .citem .qty button:hover{
-  background:#f1e6d6;
-}
-
-#cartDrawer .citem .qty b{
-  display:grid;
-  place-items:center;
-  min-width:34px;
-  font-size:.82rem;
-}
-
-#cartDrawer .citem .rm{
-  width:32px;
-  height:32px;
-  border:1px solid rgba(200,93,79,.12);
-  border-radius:10px;
-  color:var(--bad);
-  background:rgba(200,93,79,.035);
-  font-size:.75rem;
-  transition:.18s ease;
-}
-
-#cartDrawer .citem .rm:hover{
-  background:rgba(200,93,79,.10);
-  transform:scale(1.04);
-}
-
-#cartDrawer .dfoot{
-  flex:0 0 auto;
-  padding:1rem 1rem 1.15rem;
-  background:rgba(255,253,249,.97);
-  backdrop-filter:blur(16px);
-  border-top:1px solid rgba(143,100,43,.15);
-}
-
-#cartDrawer .dfoot .trow.total{
-  margin-top:.45rem;
-  padding-top:.75rem;
-  font-size:1.18rem;
-}
-
-#cartDrawer .co-form{
-  margin-top:.85rem;
-  padding:.9rem;
-  border-radius:16px;
-  background:#f8f0e4;
-}
-
-#cartDrawer #checkoutBtn{
-  min-height:52px;
-  margin-top:.8rem;
-  border-radius:14px;
-  font-size:1rem;
-  font-weight:900;
-  letter-spacing:.01em;
-  box-shadow:0 14px 28px -20px rgba(65,45,25,.55);
-}
-
-/* Empty cart */
-#cartDrawer .empty{
-  min-height:240px;
-  display:grid;
-  place-content:center;
-  text-align:center;
-  padding:2rem!important;
-  border:1px dashed rgba(143,100,43,.22);
-  border-radius:20px;
-  color:var(--mut);
-  background:rgba(255,253,249,.58);
-}
-
-/* Mobile */
-@media(max-width:700px){
-  #cartDrawer{
-    width:100vw;
-    max-width:100vw;
-  }
-
-  #cartDrawer .dhead{
-    min-height:68px;
-    padding:.8rem .9rem;
-  }
-
-  #cartDrawer .dbody{
-    padding:.75rem;
-  }
-
-  #cartDrawer .citem{
-    grid-template-columns:72px minmax(0,1fr) 30px;
-    gap:.65rem;
-    padding:.65rem;
-    border-radius:17px;
-  }
-
-  #cartDrawer .citem-media{
-    width:72px;
-    height:92px;
-    border-radius:13px;
-  }
-
-  #cartDrawer .citem h5{
-    font-size:.9rem;
-  }
-
-  #cartDrawer .cart-scent-select{
-    min-height:40px;
-    font-size:.78rem;
-  }
-
-  #cartDrawer .citem .qty{
-    height:36px;
-  }
-
-  #cartDrawer .citem .qty button{
-    width:30px;
-    height:30px;
-  }
-
-  #cartDrawer .citem .rm{
-    width:30px;
-    height:30px;
-  }
-
-  #cartDrawer .dfoot{
-    padding:.8rem;
-    padding-bottom:calc(.8rem + env(safe-area-inset-bottom));
-  }
-}
-
-@media(max-width:420px){
-  #cartDrawer .citem{
-    grid-template-columns:64px minmax(0,1fr) 28px;
-    gap:.55rem;
-  }
-
-  #cartDrawer .citem-media{
-    width:64px;
-    height:82px;
-  }
-
-  #cartDrawer .citem h5{
-    font-size:.84rem;
-  }
-
-  #cartDrawer .cart-scent-label,
-  #cartDrawer .citem .cs,
-  #cartDrawer .cart-line-total{
-    font-size:.68rem;
-  }
-
-  #cartDrawer .cart-scent-select{
-    min-height:38px;
-    padding:.45rem 1.8rem .45rem .6rem;
-    font-size:.72rem;
-  }
-}
-
-/* Tablet */
-@media(min-width:701px) and (max-width:1024px){
-  #cartDrawer{
-    width:min(620px,92vw);
-  }
 }
