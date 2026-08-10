@@ -225,12 +225,24 @@ return {value,label:scentTr(value)};
 function renderScents(){
 const select=$("#pdScentSelect");
 if(!select)return;
-selScent="";
+
 const list=getProductScents();
 select.innerHTML=
 `<option value="">${LANG==="ar"?"🌸 اختاري العطر":"🌸 Choose a scent"}</option>`+
 list.map(s=>`<option value="${String(s.value).replace(/"/g,"&quot;")}">${String(s.label).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</option>`).join("");
-select.value="";
+
+// لو المنتج له عطر محفوظ، اختاره تلقائيًا
+const current=String(P?.scent||P?.defaultScent||P?.selectedScent||"").trim();
+const match=list.find(s=>String(s.value).trim()===current);
+
+if(match){
+  selScent=String(match.value);
+  select.value=selScent;
+}else{
+  selScent="";
+  select.value="";
+}
+
 select.onchange=()=>{
 selScent=select.value;
 select.classList.remove("scent-error");
