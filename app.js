@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     renderProducts();
     renderScents();
     renderFAQ();
+    initProductRealtimeSync();
   });
 
   initCart();
@@ -44,6 +45,84 @@ window.addEventListener(
     renderProducts();
   }
 );
+
+
+/* ═══════════════════════════════════════
+   PRODUCTS REALTIME SYNC
+   Firebase is the live source for product changes.
+   data.js remains the local fallback/seed.
+   Reviews, orders, cart and auth are untouched.
+   ═══════════════════════════════════════ */
+
+let productRealtimeStarted=false;
+let productRealtimeUnsubscribe=null;
+
+function initProductRealtimeSync(){
+
+  if(productRealtimeStarted)return;
+
+  if(
+    typeof DB === "undefined" ||
+    typeof DB.watch !== "function"
+  ){
+    return;
+  }
+
+  productRealtimeStarted=true;
+
+  productRealtimeUnsubscribe=
+    DB.watch(
+      "products",
+      cloud=>{
+
+        const map=
+          new Map(
+            (typeof PRODUCTS !== "undefined" ? PRODUCTS : [])
+              .map(p=>[p.id,{...p}])
+          );
+
+        (cloud||[]).forEach(d=>{
+
+          const slug=
+            d.id_ ||
+            d.slug ||
+            d.pid ||
+            d.id;
+
+          if(!slug)return;
+
+          if(d.active===false){
+            map.delete(slug);
+            return;
+          }
+
+          map.set(
+            slug,
+            {
+              ...(map.get(slug)||{}),
+              ...d,
+              id:slug,
+              _fid:d.id || null
+            }
+          );
+
+        });
+
+        ALL_PRODUCTS=[...map.values()];
+
+        window.dispatchEvent(
+          new Event("data-refresh")
+        );
+
+      },
+      error=>{
+        console.error(
+          "Products realtime sync error:",
+          error
+        );
+      }
+    );
+}
 
 
 /* ═══════════════════════════════════════
@@ -305,8 +384,19 @@ function renderProducts(){
 
   const catF=activeCat();
 
+  const min=
+    +($("#priceMin")?.value||0);
+
+  const max=
+    +($("#priceMax")?.value||0);
+
+  const sort=
+    $("#sortSel")?.value||"new";
+
+
   let list=
     ALL_PRODUCTS.filter(p=>{
+
       if(
         catF!=="all" &&
         p.cat!==catF
@@ -314,11 +404,26 @@ function renderProducts(){
         return false;
       }
 
+      if(
+        min &&
+        p.price<min
+      ){
+        return false;
+      }
+
+      if(
+        max &&
+        p.price>max
+      ){
+        return false;
+      }
+
       return true;
+
     });
 
 
-  switch("new"){
+  switch(sort){
 
     case "asc":
 
@@ -491,12 +596,6 @@ function renderProducts(){
               ${productDesc}
             </p>
 
-            <a
-              class="p-more"
-              href="product.html?p=${p.id}"
-            >
-              ${LANG === "en" ? "View more" : "عرض المزيد"} ←
-            </a>
 
             <div class="p-foot">
 
@@ -742,6 +841,45 @@ function openQuickAdd(p){
   );
 
 }
+
+
+/* ═══════════════════════════════════════
+   FILTERS
+   ═══════════════════════════════════════ */
+
+document.addEventListener(
+  "change",
+  e=>{
+
+    if(
+      e.target.id==="priceMin" ||
+      e.target.id==="priceMax" ||
+      e.target.id==="sortSel"
+    ){
+
+      renderProducts();
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "input",
+  e=>{
+
+    if(
+      e.target.id==="priceMin" ||
+      e.target.id==="priceMax"
+    ){
+
+      renderProducts();
+
+    }
+
+  }
+);
 
 
 /* ═══════════════════════════════════════
