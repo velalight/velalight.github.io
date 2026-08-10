@@ -10,56 +10,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* VelaLight — premium product presentation only. Firebase / data / reviews logic untouched. */
-.pd-page{max-width:1240px;margin:0 auto}
-.pd-grid{align-items:center;gap:clamp(2rem,5vw,5rem);padding-top:.6rem}
-.pd-img{position:relative;background:#f6efe5;border:1px solid rgba(151,103,42,.20);box-shadow:0 24px 70px rgba(72,49,27,.14);border-radius:28px;overflow:hidden}
-.pd-img:after{content:"";position:absolute;inset:0;pointer-events:none;border:1px solid rgba(255,255,255,.48);border-radius:inherit}
-.pd-img img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform .65s cubic-bezier(.2,.7,.2,1)}
-.pd-img:hover img{transform:scale(1.018)}
-.pd-thumbs{display:flex;gap:.55rem;margin-top:.7rem;flex-wrap:wrap}
-.pd-thumbs img{width:58px;height:58px;border-radius:11px;object-fit:cover;border:1px solid rgba(151,103,42,.18);cursor:pointer;transition:.22s;box-shadow:0 4px 14px rgba(72,49,27,.06)}
-.pd-thumbs img:hover,.pd-thumbs img.on{border-color:var(--gold);box-shadow:0 0 0 2px rgba(151,103,42,.10)}
-.pd-info{padding:.2rem 0;max-width:570px}
-#pdBadge{min-height:0;margin:0 0 .55rem}
-#pdName{margin:0 0 .18rem;font-size:clamp(1.9rem,3.5vw,3.05rem);line-height:1.18;letter-spacing:-.035em;color:#241b14}
-.pd-price{display:flex;align-items:baseline;gap:.42rem;margin:.1rem 0 .95rem;font-size:1.28rem;font-weight:800;color:#946226}
-.pd-price del{font-size:.82rem;opacity:.48;font-weight:500;color:#6d6258}
-.pd-price small{font-size:.72rem;font-weight:700;color:#8b7a69}
-.opt-t{margin:.62rem 0 .28rem;font-size:.78rem;font-weight:800;color:#946226;letter-spacing:.01em}
-.pd-scent-select{appearance:none;-webkit-appearance:none;width:235px;height:43px;padding:0 2.35rem 0 .85rem;border:1px solid rgba(151,103,42,.30);border-radius:12px;background-color:#fffdf9;color:#3a2b1d;font-family:inherit;font-size:.88rem;font-weight:600;outline:none;box-shadow:0 7px 22px rgba(72,49,27,.055);transition:.2s;cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,#9a6b2d 50%),linear-gradient(135deg,#9a6b2d 50%,transparent 50%);background-position:calc(100% - 16px) 18px,calc(100% - 11px) 18px;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
-.pd-scent-select:hover{border-color:rgba(151,103,42,.55);box-shadow:0 9px 25px rgba(72,49,27,.08)}
-.pd-scent-select:focus{border-color:#b47b32;box-shadow:0 0 0 3px rgba(180,123,50,.10),0 9px 25px rgba(72,49,27,.08)}
-.pd-scent-select option{background:#fffdf9;color:#3a2b1d;font-weight:500}
-.qty{display:inline-flex!important;align-items:center;gap:0!important;width:max-content!important;height:38px;border:1px solid rgba(151,103,42,.24);border-radius:11px;overflow:hidden;margin:.05rem 0 .55rem;background:#fffdf9;box-shadow:0 5px 18px rgba(72,49,27,.045)}
-.qty button{width:34px!important;height:36px!important;min-width:34px!important;padding:0!important;border:0!important;background:transparent!important;color:#815823!important;font-size:1rem!important;font-weight:700}
-.qty button:hover{background:#f6eee3!important}
-.qty b{width:34px;text-align:center;font-size:.86rem;color:#35271b}
-.pd-actions{margin:.05rem 0 .7rem}
-.pd-actions .btn{width:235px;min-height:43px;border-radius:12px;font-size:.9rem;font-weight:800;box-shadow:0 10px 24px rgba(151,103,42,.16)}
-#pdDesc{max-width:570px;margin:.9rem 0 0!important;padding-top:.9rem;border-top:1px solid rgba(151,103,42,.13);font-size:1rem;line-height:2!important;color:#67584b}
-.share-row{margin-top:1rem!important;display:flex;gap:.45rem;flex-wrap:wrap}
-.share-row a{padding:.42rem .68rem;border:1px solid rgba(151,103,42,.15);border-radius:9px;font-size:.76rem;background:rgba(255,255,255,.35)}
-section[style*="margin-top:3rem"]{margin-top:2.5rem!important}
-#revList{display:grid;gap:.7rem}
-.rv-item{padding:1rem 1.1rem;border:1px solid rgba(151,103,42,.13);border-radius:14px;background:rgba(255,255,255,.34);box-shadow:0 6px 20px rgba(72,49,27,.035)}
-.rv-item .stars{margin-inline-start:.35rem}
-.rv-item p{margin:.4rem 0 0!important;line-height:1.8}
-.rv-photo{display:block;max-width:180px;max-height:180px;object-fit:cover;border-radius:10px;margin-top:.65rem}
-@media(max-width:760px){
-  .pd-page{padding-inline:1rem!important}
-  .pd-grid{grid-template-columns:1fr!important;gap:1.15rem!important;padding-top:.2rem}
-  .pd-img{border-radius:18px}
-  #pdName{font-size:1.65rem;line-height:1.25}
-  .pd-price{font-size:1.12rem;margin-bottom:.65rem}
-  .pd-scent-select{width:210px;height:41px}
-  .pd-actions .btn{width:210px;min-height:42px}
-  #pdDesc{font-size:.94rem;line-height:1.9!important;margin-top:.7rem!important;padding-top:.7rem}
-  .pd-thumbs img{width:50px;height:50px}
-}
-@media(max-width:420px){
-  .pd-scent-select,.pd-actions .btn{width:100%}
-}
+.pd-thumbs{display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap}
+.pd-thumbs img{width:64px;height:64px;border-radius:10px;object-fit:cover;border:2px solid var(--line);cursor:pointer;transition:.2s}
+.pd-thumbs img:hover,.pd-thumbs img.on{border-color:var(--gold)}
 </style>
 </head>
 <body>
@@ -74,7 +27,7 @@ section[style*="margin-top:3rem"]{margin-top:2.5rem!important}
 </div>
 </header>
 
-<div class="wrap pd-page" style="padding-top:1.25rem;padding-bottom:3rem">
+<div class="wrap" style="padding-top:2rem;padding-bottom:4rem">
 <div class="crumb"><a href="index.html" data-i18n="crumb_home">الرئيسية</a> › <span id="crumbName">...</span></div>
 <div id="pdLoading" style="text-align:center;padding:3rem;color:var(--dim)">⏳ ...</div>
 
@@ -85,10 +38,15 @@ section[style*="margin-top:3rem"]{margin-top:2.5rem!important}
 <div class="pd-thumbs" id="pdThumbs"></div>
 </div>
 <div class="pd-info">
+<div class="pd-kicker">VELALIGHT • LUXURY CANDLE STUDIO</div>
 <h1 id="pdName"></h1>
+<div class="pd-rating-summary" id="pdRatingSummary"></div>
 <div id="pdBadge"></div>
 <div class="pd-price"><span id="pdPrice"></span> <del id="pdOld"></del> <small data-i18n="egp">ج.م</small></div>
-<div class="opt-t" data-i18n="pd_scent_t">🌸 اختاري العطر:</div>
+<div class="pd-option-head">
+  <span class="opt-t" data-i18n="pd_scent_t">🌸 اختاري العطر:</span>
+  <span class="pd-required">مطلوب</span>
+</div>
 <select class="pd-scent-select" id="pdScentSelect" aria-label="Scent">
 <option value="">اختاري العطر</option>
 </select>
@@ -101,11 +59,15 @@ section[style*="margin-top:3rem"]{margin-top:2.5rem!important}
 </div>
 
 <div class="pd-actions">
-<button class="btn" id="addBtn" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
+<button class="btn pd-buy-btn" id="addBtn" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
 </div>
 
+<p class="pd-desc" id="pdDesc"></p>
 
-<p style="color:var(--mut);margin-top:1rem;line-height:1.9" id="pdDesc"></p>
+<div class="pd-mini-note">
+  <span>✦</span>
+  <span>قطعة يدوية تُجهّز بعناية عند الطلب</span>
+</div>
 
 <div class="share-row" id="shareRow"></div>
 </div>
@@ -203,6 +165,16 @@ $("#crumbName").textContent=pname(P);
 $("#pdName").textContent=pname(P);
 $("#pdDesc").textContent=pdesc(P);
 $("#pdImg").src=imgOf(P);
+const reviewSummary=prodReviews(P.id);
+const ratingBox=$("#pdRatingSummary");
+if(ratingBox){
+  if(reviewSummary.length){
+    const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
+    ratingBox.innerHTML=`<span class="stars">★★★★★</span><b>${avg.toFixed(1)}</b><span>(${reviewSummary.length} مراجعة)</span>`;
+  }else{
+    ratingBox.innerHTML=`<span class="stars muted">★★★★★</span><span>كوني أول من يشارك رأيه</span>`;
+  }
+}
 $("#pdImg").alt=pname(P);
 
 const badge=pbadge(P);
@@ -211,6 +183,7 @@ $("#pdBadge").innerHTML=badge?`<span class="p-badge" style="position:static;disp
 $("#pdPrice").textContent=money(P.price);
 $("#pdOld").textContent=P.old>P.price?money(P.old):"";
 $("#pdOld").style.display=P.old>P.price?"inline":"none";
+$("#pdHours").textContent=phours(P);
 
 
 renderThumbs();
@@ -233,32 +206,61 @@ im.classList.add("on");
 }));
 }
 
+function getProductScents(){
+const raw=P?.scents;
+let list=[];
+if(Array.isArray(raw)){
+list=raw;
+}else if(typeof raw==="string"&&raw.trim()){
+list=raw.split(",").map(x=>x.trim()).filter(Boolean);
+}
+if(!list.length)list=SCENTS;
+return list.map(s=>{
+if(Array.isArray(s))return {value:s[0],label:LANG==="en"?(s[1]||s[0]):s[0]};
+const value=String(s);
+return {value,label:scentTr(value)};
+});
+}
+
 function renderScents(){
 const select=$("#pdScentSelect");
 if(!select)return;
 selScent="";
-const scents=Array.isArray(P?.scents)&&P.scents.length?P.scents:SCENTS;
-select.innerHTML=`<option value="">${LANG==="ar"?"🌸 اختاري العطر":"🌸 Choose a scent"}</option>`+
-scents.map(s=>{
-const value=Array.isArray(s)?s[0]:String(s);
-const label=Array.isArray(s)?(LANG==="en"?(s[1]||s[0]):s[0]):String(s);
-return `<option value="${String(value).replace(/"/g,"&quot;")}">${String(label).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</option>`;
-}).join("");
+const list=getProductScents();
+select.innerHTML=
+`<option value="">${LANG==="ar"?"🌸 اختاري العطر":"🌸 Choose a scent"}</option>`+
+list.map(s=>`<option value="${String(s.value).replace(/"/g,"&quot;")}">${String(s.label).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</option>`).join("");
 select.value="";
-select.onchange=()=>{selScent=select.value;select.classList.remove("scent-error")};
+select.onchange=()=>{
+selScent=select.value;
+select.classList.remove("scent-error");
+};
 }
 
 function bindEvents(){
-$("#qMinus").addEventListener("click",()=>{if(qty>1)qty--;$("#qVal").textContent=qty});
-$("#qPlus").addEventListener("click",()=>{qty++;$("#qVal").textContent=qty});
+const minus=$("#qMinus"),plus=$("#qPlus"),add=$("#addBtn"),rev=$("#rvSubmit");
 
-$("#addBtn").addEventListener("click",()=>{
-if(!selScent){toast(t("t_scentwarn"));return}
+minus.onclick=()=>{
+if(qty>1)qty--;
+$("#qVal").textContent=qty;
+};
+
+plus.onclick=()=>{
+qty++;
+$("#qVal").textContent=qty;
+};
+
+add.onclick=()=>{
+if(!selScent){
+$("#pdScentSelect")?.classList.add("scent-error");
+toast(t("t_scentwarn"));
+$("#pdScentSelect")?.focus();
+return;
+}
 addToCart(P,{scent:selScent,qty});
-});
+};
 
-
-$("#rvSubmit").addEventListener("click",()=>{
+rev.onclick=()=>{
 const name=$("#rvName").value.trim();
 const text=$("#rvText").value.trim();
 const photo=$("#rvPhoto").value.trim();
@@ -268,9 +270,11 @@ productSlug:P.id,pid:P.id,name,text,photo,
 rating:selRating,approved:false,createdAt:Date.now()
 }).then(()=>{
 toast(t("t_revok"));
-$("#rvName").value="";$("#rvText").value="";$("#rvPhoto").value="";
+$("#rvName").value="";
+$("#rvText").value="";
+$("#rvPhoto").value="";
 }).catch(e=>{console.warn(e);toast("⚠️")});
-});
+};
 }
 
 function buildStars(){
