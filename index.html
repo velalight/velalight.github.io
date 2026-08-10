@@ -167,14 +167,8 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         <span class="badge" id="cartCount">0</span>
       </button>
 
-      <button
-        class="icobtn hamburger-btn"
-        id="navToggle"
-        aria-label="Open menu"
-        aria-expanded="false">
-        <span class="hamburger-lines" aria-hidden="true">
-          <i></i><i></i><i></i>
-        </span>
+      <button class="icobtn" id="navToggle">
+        ☰
       </button>
 
     </div>
@@ -1946,18 +1940,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       % slides.length;
 
 
-    const nextIndex =
-      (current + 1) % slides.length;
-
-    const nextImage =
-      slides[nextIndex]?.querySelector("img")?.getAttribute("src");
-
-    if(nextImage){
-      const preload = new Image();
-      preload.src = nextImage;
-    }
-
-
     slides.forEach(
       (slide,i)=>{
 
@@ -2000,7 +1982,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     timer =
       setInterval(
         next,
-        1000
+        2000
       );
 
   }

@@ -1048,45 +1048,11 @@ nav.mainnav>div:hover .dd{
   color:var(--gold2)
 }
 
-.p-desc{
-  margin:.45rem 0 .85rem;
+.p-scents{
+  font-size:.76rem;
   color:var(--dim);
-  font-size:.82rem;
-  line-height:1.75;
-  display:-webkit-box;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:2;
-  overflow:hidden;
-  min-height:2.85em;
-}
-
-.cart-scent-picker{
-  display:grid;
-  gap:.35rem;
-  margin-top:.45rem;
-}
-
-.cart-scent-label{
-  font-size:.72rem;
-  color:var(--dim);
-}
-
-.cart-scent-select{
-  width:100%;
-  min-width:0;
-  padding:.5rem .65rem;
-  border:1px solid var(--line);
-  border-radius:11px;
-  background:#fffdfa;
-  color:var(--ink);
-  font-size:.78rem;
-  outline:none;
-  transition:.2s;
-}
-
-.cart-scent-select:focus{
-  border-color:var(--gold);
-  box-shadow:0 0 0 3px rgba(185,133,63,.09);
+  margin-bottom:.6rem;
+  min-height:1.2em
 }
 
 .p-foot{
@@ -2337,12 +2303,6 @@ table.adm{
 }
 
 
-.dfoot{
-  max-height:56vh;
-  overflow-y:auto;
-  overscroll-behavior:contain;
-}
-
 /* CUSTOMER FORM */
 
 .co-form{
@@ -3155,17 +3115,6 @@ html[dir=ltr]
   }
 
 
-  .dfoot{
-    max-height:58vh;
-    overflow-y:auto;
-    overscroll-behavior:contain;
-  }
-
-  .cart-scent-select{
-    min-height:40px;
-    font-size:.8rem;
-  }
-
   /* PRODUCTS */
 
   .pgrid{
@@ -3186,10 +3135,8 @@ html[dir=ltr]
     font-size:.95rem
   }
 
-  .p-desc{
-    font-size:.72rem;
-    line-height:1.65;
-    min-height:2.4em;
+  .p-scents{
+    font-size:.68rem
   }
 
   .p-foot{
@@ -3236,78 +3183,4 @@ html[dir=ltr]
     font-size:1.75rem
   }
 
-}
-
-
-/* ═══════════════════════════════════════════════
-   VELALIGHT 2.0 — POLISH OVERRIDES
-   ═══════════════════════════════════════════════ */
-
-.hamburger-btn{
-  position:relative;
-  display:grid;
-  place-items:center;
-}
-
-.hamburger-lines{
-  width:20px;
-  height:16px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.hamburger-lines i{
-  display:block;
-  width:100%;
-  height:1.5px;
-  border-radius:99px;
-  background:currentColor;
-  transition:.25s ease;
-}
-
-.p-card{
-  box-shadow:0 12px 35px -28px rgba(45,32,21,.42);
-}
-
-.p-card:hover{
-  transform:translateY(-5px);
-}
-
-.p-desc{
-  max-width:42em;
-}
-
-.citem{
-  grid-template-columns:88px minmax(0,1fr) auto;
-}
-
-.citem-info{
-  display:flex;
-  flex-direction:column;
-}
-
-.citem .qty{
-  align-self:flex-start;
-}
-
-@media(max-width:600px){
-  .citem{
-    grid-template-columns:70px minmax(0,1fr) 30px;
-  }
-
-  .citem .qty{
-    height:38px;
-  }
-
-  .citem .qty button{
-    width:38px;
-    height:38px;
-  }
-}
-
-@media(min-width:601px){
-  .p-desc{
-    min-height:2.9em;
-  }
 }
