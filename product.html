@@ -13,6 +13,47 @@
 .pd-thumbs{display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap}
 .pd-thumbs img{width:64px;height:64px;border-radius:10px;object-fit:cover;border:2px solid var(--line);cursor:pointer;transition:.2s}
 .pd-thumbs img:hover,.pd-thumbs img.on{border-color:var(--gold)}
+
+/* VelaLight product-page refinement — presentation only; Firebase/data logic untouched */
+.pd-page{max-width:1180px;margin:0 auto}
+.pd-grid{align-items:start;gap:clamp(1.4rem,3vw,3.2rem)}
+.pd-img{background:linear-gradient(145deg,#17120d,#0c0b09);border:1px solid rgba(212,175,55,.22);box-shadow:0 20px 55px rgba(0,0,0,.28);border-radius:22px;overflow:hidden}
+.pd-img img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;transition:transform .45s ease}
+.pd-img:hover img{transform:scale(1.025)}
+.pd-info{padding:.25rem 0}
+#pdName{margin:.15rem 0 .35rem;font-size:clamp(1.65rem,3vw,2.35rem);line-height:1.25;letter-spacing:-.02em}
+#pdBadge{min-height:0;margin:.2rem 0 .45rem}
+.pd-price{display:flex;align-items:baseline;gap:.45rem;margin:.15rem 0 .9rem;font-size:1.35rem;font-weight:800}
+.pd-price del{font-size:.9rem;opacity:.55;font-weight:500}
+.opt-t{margin:.65rem 0 .3rem;font-size:.84rem;font-weight:700;color:var(--gold2)}
+.pd-scent-select{width:min(100%,280px);height:42px;padding:0 .8rem;border:1px solid rgba(212,175,55,.35);border-radius:10px;background:#111;color:inherit;font:inherit;outline:none;transition:.2s}
+.pd-scent-select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,.10)}
+.qty{display:inline-flex!important;align-items:center;gap:0!important;width:max-content!important;border:1px solid rgba(212,175,55,.28);border-radius:10px;overflow:hidden;margin:.15rem 0 .7rem}
+.qty button{width:34px!important;height:34px!important;min-width:34px!important;padding:0!important;border:0!important;background:rgba(255,255,255,.04)!important;color:inherit!important;font-size:1.05rem!important}
+.qty b{width:38px;text-align:center;font-size:.9rem}
+.pd-actions{margin:.15rem 0 .9rem}
+.pd-actions .btn{width:min(100%,280px);min-height:44px;border-radius:11px;font-size:.92rem}
+#pdDesc{max-width:680px;margin:.85rem 0 0!important;font-size:1rem;line-height:2!important;color:var(--mut)}
+.share-row{margin-top:1rem!important;display:flex;gap:.45rem;flex-wrap:wrap}
+.share-row a{padding:.45rem .7rem;border:1px solid rgba(212,175,55,.18);border-radius:9px;font-size:.78rem}
+.pd-thumbs{gap:.45rem!important;margin-top:.55rem!important}
+.pd-thumbs img{width:58px!important;height:58px!important;border-radius:9px!important}
+section[style*="margin-top:3rem"]{margin-top:2.3rem!important}
+#revList{display:grid;gap:.7rem}
+.rv-item{padding:1rem 1.1rem;border:1px solid rgba(212,175,55,.14);border-radius:14px;background:rgba(255,255,255,.025)}
+.rv-item .stars{margin-inline-start:.35rem}
+.rv-item p{margin:.4rem 0 0!important;line-height:1.8}
+.rv-photo{display:block;max-width:180px;max-height:180px;object-fit:cover;border-radius:10px;margin-top:.65rem}
+@media(max-width:760px){
+  .pd-grid{grid-template-columns:1fr!important;gap:1.1rem!important}
+  .pd-img{border-radius:16px}
+  #pdName{font-size:1.5rem}
+  .pd-price{font-size:1.2rem;margin-bottom:.65rem}
+  .pd-scent-select,.pd-actions .btn{width:100%;max-width:none}
+  #pdDesc{font-size:.94rem;line-height:1.9!important}
+  .pd-thumbs img{width:52px!important;height:52px!important}
+}
+
 </style>
 </head>
 <body>
@@ -27,7 +68,7 @@
 </div>
 </header>
 
-<div class="wrap" style="padding-top:2rem;padding-bottom:4rem">
+<div class="wrap pd-page" style="padding-top:1.25rem;padding-bottom:3rem">
 <div class="crumb"><a href="index.html" data-i18n="crumb_home">الرئيسية</a> › <span id="crumbName">...</span></div>
 <div id="pdLoading" style="text-align:center;padding:3rem;color:var(--dim)">⏳ ...</div>
 
@@ -57,7 +98,8 @@
 <button class="btn" id="addBtn" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
 </div>
 
-<p class="pd-desc" id="pdDesc"></p>
+
+<p style="color:var(--mut);margin-top:1rem;line-height:1.9" id="pdDesc"></p>
 
 <div class="share-row" id="shareRow"></div>
 </div>
@@ -163,6 +205,9 @@ $("#pdBadge").innerHTML=badge?`<span class="p-badge" style="position:static;disp
 $("#pdPrice").textContent=money(P.price);
 $("#pdOld").textContent=P.old>P.price?money(P.old):"";
 $("#pdOld").style.display=P.old>P.price?"inline":"none";
+$("#pdHours").textContent=phours(P);
+
+
 renderThumbs();
 renderScents();
 renderReviews();
