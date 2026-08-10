@@ -218,7 +218,7 @@ if(!list.length)list=SCENTS;
 return list.map(s=>{
 if(Array.isArray(s))return {value:s[0],label:LANG==="en"?(s[1]||s[0]):s[0]};
 const value=String(s);
-return {value,label:scentTr(value)};
+return {value,label:velaScentTr(value)};
 });
 }
 
