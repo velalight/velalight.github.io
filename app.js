@@ -188,11 +188,29 @@ const qv=$("#smQVal");
 if(qv)qv.textContent="1";
 const w=$("#scentModalScents");
 if(!w)return;
-w.innerHTML=SCENTS.map(s=>`<button class="chip" data-s="${s[0]}">${scentTr(s[0])}</button>`).join("");
+
+/* Always load scents from the selected product first.
+   This prevents the quick-add picker from becoming empty when the
+   global SCENTS list is unavailable or differs from the product data. */
+let productScents=Array.isArray(p.scents)?p.scents:[];
+if(!productScents.length && typeof SCENTS!=="undefined" && Array.isArray(SCENTS)){
+  productScents=SCENTS;
+}
+
+const normalizedScents=productScents.map(s=>{
+  if(Array.isArray(s))return {value:String(s[0]),label:scentTr(s[0])};
+  const value=String(s||"");
+  return {value,label:scentTr(value)};
+}).filter(s=>s.value);
+
+w.innerHTML=normalizedScents.length
+  ? normalizedScents.map(s=>`<button type="button" class="chip" data-s="${s.value.replace(/"/g,"&quot;")}">${s.label}</button>`).join("")
+  : `<div class="empty">لا توجد عطور متاحة لهذا المنتج</div>`;
+
 w.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
-w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
-b.classList.add("on");
-quickAddScent=b.dataset.s;
+  w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on");
+  quickAddScent=b.dataset.s;
 }));
 openDrawer("scentOv");
 }

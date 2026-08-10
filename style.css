@@ -4262,3 +4262,38 @@ nav.mainnav>div{
     width:min(350px,91vw);
   }
 }
+
+
+/* Quick-add scent picker: keep choices visible and touch-friendly. */
+#scentModalScents{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:.5rem;
+  max-height:min(46vh,360px);
+  overflow:auto;
+  padding:.15rem;
+}
+
+#scentModalScents .chip{
+  min-height:42px;
+  border:1px solid rgba(143,100,43,.15);
+  border-radius:11px;
+  background:#fffdf9;
+  color:var(--ink);
+  font-size:.72rem;
+  font-weight:800;
+}
+
+#scentModalScents .chip.on{
+  border-color:var(--gold);
+  background:rgba(185,133,63,.1);
+  color:var(--gold2);
+  box-shadow:0 0 0 3px rgba(185,133,63,.07);
+}
+
+@media(max-width:520px){
+  #scentModalScents{
+    grid-template-columns:1fr;
+    max-height:42vh;
+  }
+}
