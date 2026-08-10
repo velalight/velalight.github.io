@@ -243,14 +243,48 @@
 
 <div id="tab-products" class="hidden">
 
-  <button
-    class="btn sm"
-    id="addProductBtn"
-    style="margin-bottom:1rem"
-    type="button"
-  >
-    ➕ إضافة / تعديل منتج (بدون تعديل كود)
-  </button>
+  <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
+
+    <button
+      class="btn sm"
+      id="addProductBtn"
+      type="button"
+    >
+      ➕ إضافة منتج جديد
+    </button>
+
+    <div style="display:flex;gap:.5rem;flex:1;min-width:260px;max-width:760px;flex-wrap:wrap">
+      <input
+        id="productSearch"
+        type="search"
+        placeholder="🔎 ابحث باسم المنتج أو ID..."
+        style="flex:1;min-width:220px;margin:0"
+      >
+
+      <select id="productCatFilter" style="min-width:170px;margin:0">
+        <option value="">كل التصنيفات</option>
+        <option value="wood">شموع خشبية</option>
+        <option value="glass">شموع زجاجية</option>
+        <option value="crystal">شموع كريستالية</option>
+        <option value="metal">شموع معدنية</option>
+        <option value="massage">شموع المساج</option>
+        <option value="gift">الهدايا</option>
+        <option value="bride">بوكس العروسة</option>
+      </select>
+
+      <select id="productSort" style="min-width:150px;margin:0">
+        <option value="newest">الأحدث أولًا</option>
+        <option value="name">الاسم</option>
+        <option value="priceLow">السعر الأقل</option>
+        <option value="priceHigh">السعر الأعلى</option>
+      </select>
+    </div>
+
+  </div>
+
+  <p id="productAdminHint" style="color:var(--dim);font-size:.78rem;margin:-.35rem 0 1rem">
+    يمكنك إضافة عدد غير محدود عمليًا من المنتجات؛ المنتجات الجديدة تُحفظ في Firebase وتظهر للموقع من قاعدة البيانات.
+  </p>
 
 
   <div
@@ -1199,201 +1233,236 @@ function loadOrders(){
    PRODUCTS
 ========================================================= */
 
+let PRODUCTS_ADMIN_CACHE = [];
+
+function renderAdminProducts(){
+
+  const search =
+    String(document.getElementById("productSearch")?.value || "")
+      .trim()
+      .toLowerCase();
+
+  const cat =
+    document.getElementById("productCatFilter")?.value || "";
+
+  const sort =
+    document.getElementById("productSort")?.value || "newest";
+
+  let list = PRODUCTS_ADMIN_CACHE.filter(product => {
+
+    const haystack = [
+      product.name,
+      product.nameEn,
+      product.id
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    if(search && !haystack.includes(search)){
+      return false;
+    }
+
+    if(cat && product.cat !== cat){
+      return false;
+    }
+
+    return true;
+
+  });
+
+  list.sort((a,b) => {
+
+    if(sort === "name"){
+      return String(a.name || "").localeCompare(
+        String(b.name || ""),
+        "ar"
+      );
+    }
+
+    if(sort === "priceLow"){
+      return Number(a.price || 0) - Number(b.price || 0);
+    }
+
+    if(sort === "priceHigh"){
+      return Number(b.price || 0) - Number(a.price || 0);
+    }
+
+    return Number(b.createdAt || 0) - Number(a.createdAt || 0);
+
+  });
+
+  const count = document.getElementById("stProducts");
+
+  if(count){
+    count.textContent = PRODUCTS_ADMIN_CACHE.length;
+  }
+
+  const body = document.getElementById("productsBody");
+
+  if(!body){
+    return;
+  }
+
+  if(!list.length){
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center;padding:2rem;color:var(--dim)">
+          لا توجد منتجات مطابقة للبحث الحالي.
+        </td>
+      </tr>
+    `;
+
+    return;
+
+  }
+
+  body.innerHTML = list.map(product => `
+
+    <tr>
+
+      <td>
+        <img
+          class="adm-thumb"
+          src="${imgOf(product)}"
+          alt=""
+          loading="lazy"
+        >
+      </td>
+
+      <td>
+        <b>${product.name || ""}</b>
+        <br>
+        <small style="color:var(--dim);font-size:.7rem">
+          ID: ${product.id}
+        </small>
+      </td>
+
+      <td>
+        ${CATS.ar[product.cat] || product.cat || ""}
+      </td>
+
+      <td>${money(product.price || 0)}</td>
+
+      <td>
+        ${product.active === false ? "❌ مخفي" : "✅ ظاهر"}
+      </td>
+
+      <td style="display:flex;gap:.3rem;flex-wrap:wrap">
+
+        <button
+          class="btn sm ghost"
+          data-edit="${product.id}"
+          type="button"
+        >
+          ✏️ تعديل
+        </button>
+
+        <button
+          class="btn sm ghost"
+          data-toggle="${product.id}"
+          data-fid="${product._fid || ""}"
+          data-active="${product.active !== false}"
+          type="button"
+        >
+          ${product.active === false ? "👁️ إظهار" : "🙈 إخفاء"}
+        </button>
+
+        <button
+          class="btn sm danger"
+          data-del="${product.id}"
+          data-fid="${product._fid || ""}"
+          type="button"
+        >
+          🗑️
+        </button>
+
+      </td>
+
+    </tr>
+
+  `).join("");
+
+  bindProductActions(PRODUCTS_ADMIN_CACHE);
+
+}
+
+
 function loadProducts(){
 
   if(
     !window.FB ||
     typeof window.FB.list !== "function"
   ){
-
     return;
-
   }
-
 
   window.FB
     .list("products")
     .then(cloud => {
 
-      const map =
-        new Map(
-          PRODUCTS.map(
-            product => [
-              product.id,
-              {
-                ...product,
-                _fid:null
-              }
-            ]
-          )
-        );
+      /*
+         Cloud-first product catalog:
+         - PRODUCTS is only the built-in fallback catalog.
+         - Every valid Firestore product is added by its id_.
+         - There is intentionally no slice/limit here.
+         - Existing Firebase records override the fallback record.
+      */
 
+      const map = new Map();
 
-      (cloud || [])
-        .forEach(data => {
+      (PRODUCTS || []).forEach(product => {
 
-          const slug =
-            data.id_ ||
-            data.slug ||
-            data.pid;
+        if(!product || !product.id){
+          return;
+        }
 
-
-          if(!slug){
-
-            return;
-
-          }
-
-
-          if(data.active === false){
-
-            map.delete(slug);
-
-            return;
-
-          }
-
-
-          map.set(
-            slug,
-            {
-              ...(map.get(slug) || {}),
-              ...data,
-              id:slug,
-              _fid:data.id
-            }
-          );
-
+        map.set(product.id, {
+          ...product,
+          _fid:null,
+          active:true
         });
 
+      });
 
-      const list =
-        [...map.values()];
+      (cloud || []).forEach(data => {
 
+        const slug =
+          data.id_ ||
+          data.slug ||
+          data.pid ||
+          data.id;
 
-      $("#stProducts").textContent =
-        list.length;
+        if(!slug){
+          return;
+        }
 
+        if(data.active === false){
+          map.delete(slug);
+          return;
+        }
 
-      $("#productsBody").innerHTML =
-        list.map(product => `
+        map.set(slug, {
+          ...(map.get(slug) || {}),
+          ...data,
+          id:slug,
+          _fid:data.id || null,
+          active:data.active !== false
+        });
 
-          <tr>
+      });
 
-            <td>
+      PRODUCTS_ADMIN_CACHE = [...map.values()];
 
-              <img
-                class="adm-thumb"
-                src="${imgOf(product)}"
-                alt=""
-              >
-
-            </td>
-
-
-            <td>
-
-              <b>
-                ${product.name || ""}
-              </b>
-
-              <br>
-
-              <small
-                style="color:var(--dim);font-size:.7rem"
-              >
-                ID: ${product.id}
-              </small>
-
-            </td>
-
-
-            <td>
-              ${
-                CATS.ar[product.cat] ||
-                product.cat ||
-                ""
-              }
-            </td>
-
-
-            <td>
-              ${money(product.price || 0)}
-            </td>
-
-
-            <td>
-              ${
-                product.active === false
-                  ? "❌ مخفي"
-                  : "✅ ظاهر"
-              }
-            </td>
-
-
-            <td
-              style="
-                display:flex;
-                gap:.3rem;
-                flex-wrap:wrap
-              "
-            >
-
-              <button
-                class="btn sm ghost"
-                data-edit="${product.id}"
-                type="button"
-              >
-                ✏️ تعديل
-              </button>
-
-
-              <button
-                class="btn sm ghost"
-                data-toggle="${product.id}"
-                data-fid="${product._fid || ""}"
-                data-active="${
-                  product.active !== false
-                }"
-                type="button"
-              >
-                ${
-                  product.active === false
-                    ? "👁️ إظهار"
-                    : "🙈 إخفاء"
-                }
-              </button>
-
-
-              <button
-                class="btn sm danger"
-                data-del="${product.id}"
-                data-fid="${product._fid || ""}"
-                type="button"
-              >
-                🗑️
-              </button>
-
-            </td>
-
-          </tr>
-
-        `).join("");
-
-
-      bindProductActions(list);
+      renderAdminProducts();
 
     })
     .catch(error => {
 
-      console.error(
-        "Products error:",
-        error
-      );
+      console.error("Products error:", error);
 
-      toast(
-        "⚠️ تعذر تحميل المنتجات"
-      );
+      toast("⚠️ تعذر تحميل المنتجات");
 
     });
 
@@ -1621,6 +1690,21 @@ function bindProductActions(list){
 ========================================================= */
 
 function initProductForm(){
+
+  [
+    "productSearch",
+    "productCatFilter",
+    "productSort"
+  ].forEach(id => {
+
+    const el = document.getElementById(id);
+
+    if(el){
+      el.addEventListener("input", renderAdminProducts);
+      el.addEventListener("change", renderAdminProducts);
+    }
+
+  });
 
 
   $("#addProductBtn")
