@@ -8,7 +8,6 @@
 let quickAddProduct=null;
 let quickAddScent="";
 let quickAddQty=1;
-let CURRENT_CAT="all";
 
 
 /* ═══════════════════════════════════════
@@ -23,6 +22,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   initReveal();
 
   loadAll().then(()=>{
+    renderChips();
     renderProducts();
     renderScents();
     renderFAQ();
@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   initCart();
   initAccount();
+  initSearch();
   initChat();
   initNav();
   initQuickAdd();
@@ -75,6 +76,7 @@ function initLang(){
 
     updateLangBtn();
 
+    renderChips();
     renderProducts();
     renderScents();
     renderFAQ();
@@ -280,7 +282,14 @@ function renderChips(){
 
 
 function activeCat(){
-  return CURRENT_CAT || "all";
+
+  const c=
+    $("#chips .chip.on");
+
+  return c
+    ?c.dataset.cat
+    :"all";
+
 }
 
 
@@ -296,13 +305,8 @@ function renderProducts(){
 
   const catF=activeCat();
 
-  const sort=
-    $("#sortSel")?.value||"new";
-
-
   let list=
     ALL_PRODUCTS.filter(p=>{
-
       if(
         catF!=="all" &&
         p.cat!==catF
@@ -310,13 +314,11 @@ function renderProducts(){
         return false;
       }
 
-
       return true;
-
     });
 
 
-  switch(sort){
+  switch("new"){
 
     case "asc":
 
@@ -491,10 +493,10 @@ function renderProducts(){
 
             <a
               class="p-more"
-              href="product.html?p=${p.id}">
-              ${t("view_details")} ←
+              href="product.html?p=${p.id}"
+            >
+              ${LANG === "en" ? "View more" : "عرض المزيد"} ←
             </a>
-
 
             <div class="p-foot">
 
@@ -698,27 +700,41 @@ function openQuickAdd(p){
   */
 
   w.innerHTML=
-    `<select
-      class="pd-scent-select quick-scent-select"
-      id="quickScentSelect"
-      aria-label="Scent">
-      <option value="">
-        ${LANG === "ar" ? "اختاري العطر" : "Choose a scent"}
-      </option>
-      ${SCENTS.map(
-        s=>`<option value="${s[0]}">${scentTr(s[0])}</option>`
-      ).join("")}
-    </select>`;
+    SCENTS.map(
+      s=>
+      `
+        <button
+          class="chip"
+          type="button"
+          data-s="${s[0]}"
+        >
+          ${scentTr(s[0])}
+        </button>
+      `
+    ).join("");
 
-  const select=
-    $("#quickScentSelect");
 
-  select?.addEventListener(
-    "change",
-    ()=>{
-      quickAddScent=select.value;
-    }
-  );
+  w.querySelectorAll(".chip")
+    .forEach(b=>{
+
+      b.addEventListener(
+        "click",
+        ()=>{
+
+          w.querySelectorAll(".chip")
+            .forEach(
+              x=>x.classList.remove("on")
+            );
+
+          b.classList.add("on");
+
+          quickAddScent=
+            b.dataset.s;
+
+        }
+      );
+
+    });
 
 
   openDrawer(
@@ -2584,18 +2600,23 @@ function initNav(){
           "click",
           ()=>{
 
-            CURRENT_CAT =
-              a.dataset.cat || "all";
-
-            renderProducts();
-
             setTimeout(
               ()=>{
-                document
-                  .getElementById("products")
-                  ?.scrollIntoView({behavior:"smooth",block:"start"});
+
+                const chip=
+                  $(
+                    `#chips .chip[data-cat="${a.dataset.cat}"]`
+                  );
+
+
+                if(chip){
+
+                  chip.click();
+
+                }
+
               },
-              60
+              100
             );
 
           }

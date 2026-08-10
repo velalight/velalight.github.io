@@ -3459,3 +3459,199 @@ html[dir=ltr]
   .citem-media{width:64px;height:64px}
   .cart-scent-select{width:min(100%,170px)!important;height:32px;min-height:32px;font-size:.7rem}
 }
+
+
+/* =========================================================
+   VelaLight — Homepage Luxury Collection Polish
+   This layer is UI-only. Firebase / cart data logic untouched.
+   ========================================================= */
+.products-clean{
+  padding:clamp(1.35rem,2.4vw,2.25rem) 0 4.5rem;
+}
+
+.collection-intro{
+  display:flex;
+  align-items:center;
+  gap:.85rem;
+  margin:0 0 1.25rem;
+  color:var(--dim);
+}
+.collection-kicker{
+  font-family:var(--fd);
+  color:var(--gold2);
+  font-size:.78rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.collection-line{
+  height:1px;
+  flex:1;
+  background:linear-gradient(90deg,rgba(185,133,63,.45),transparent);
+}
+.collection-intro p{
+  margin:0;
+  font-size:.78rem;
+  color:var(--dim);
+  white-space:nowrap;
+}
+
+.products-clean .pgrid{
+  margin-top:0;
+  gap:clamp(.85rem,1.6vw,1.35rem);
+}
+
+.products-clean .p-card{
+  border-radius:22px;
+  background:rgba(255,253,249,.92);
+  border-color:rgba(185,133,63,.16);
+  box-shadow:0 12px 35px -28px rgba(57,40,23,.42);
+  transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease;
+}
+.products-clean .p-card:hover{
+  transform:translateY(-7px);
+  border-color:rgba(185,133,63,.34);
+  box-shadow:0 22px 45px -28px rgba(57,40,23,.48);
+}
+
+.products-clean .p-media{
+  aspect-ratio:1/1.08;
+  background:#eee5d8;
+}
+.products-clean .p-media img{
+  transition:transform .65s cubic-bezier(.2,.7,.2,1),filter .35s ease;
+}
+.products-clean .p-card:hover .p-media img{
+  transform:scale(1.045);
+}
+.products-clean .p-quick{
+  backdrop-filter:blur(8px);
+  background:rgba(35,25,16,.72);
+  border:1px solid rgba(255,255,255,.16);
+}
+
+.products-clean .p-body{
+  padding:1rem 1rem .95rem;
+}
+.products-clean .p-cat{
+  font-size:.68rem;
+  letter-spacing:.04em;
+  color:var(--gold2);
+  opacity:.9;
+}
+.products-clean .p-body h3{
+  margin:.25rem 0 .25rem;
+  font-size:1.02rem;
+  line-height:1.45;
+}
+.products-clean .stars{
+  font-size:.72rem;
+  letter-spacing:.05em;
+}
+.products-clean .p-card .p-desc{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  min-height:3.05em;
+  max-height:3.05em;
+  line-height:1.52;
+  margin:.45rem 0 .15rem;
+  color:var(--mut);
+  font-size:.82rem;
+}
+.products-clean .p-more{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  margin:.05rem 0 .75rem;
+  color:var(--gold2);
+  font-size:.72rem;
+  font-weight:800;
+  transition:transform .2s ease,color .2s ease;
+}
+.products-clean .p-more:hover{
+  color:var(--gold);
+  transform:translateX(-3px);
+}
+.products-clean .p-foot{
+  margin-top:auto;
+  align-items:center;
+  gap:.65rem;
+}
+.products-clean .p-price{
+  font-size:1rem;
+  white-space:nowrap;
+}
+.products-clean .p-price del{
+  font-size:.7rem;
+  margin-inline-start:.35rem;
+}
+.products-clean .p-add{
+  min-height:38px;
+  padding:.48rem .75rem;
+  border-radius:11px;
+  font-size:.76rem;
+  white-space:nowrap;
+  box-shadow:0 8px 18px -14px rgba(185,133,63,.8);
+}
+
+/* The scent picker is the single compact entry point from a product card.
+   The existing modal then lists all scents and keeps the current cart logic. */
+.products-clean .p-add::before{
+  content:'✦ ';
+  opacity:.85;
+}
+
+/* Hero: premium contrast without changing the image files. */
+.hero-slide::after{
+  background:linear-gradient(90deg,rgba(24,17,11,.64) 0%,rgba(24,17,11,.22) 46%,rgba(24,17,11,.05) 100%);
+}
+.hero-content{
+  text-shadow:0 5px 24px rgba(0,0,0,.24);
+}
+.hero .kick{
+  letter-spacing:.05em;
+}
+.hero-dots .hero-dot{
+  width:7px;
+  height:7px;
+  border-width:1px;
+  opacity:.72;
+}
+.hero-dots .hero-dot.active{
+  width:24px;
+  border-radius:99px;
+  opacity:1;
+}
+
+/* No search / price / chip UI on the clean collection. */
+#searchBtn,#searchOv,#priceMin,#priceMax,.products-clean .chips,.products-clean .toolbar{
+  display:none!important;
+}
+
+@media(max-width:800px){
+  .collection-intro{margin-bottom:1rem;}
+  .collection-intro p{display:none;}
+  .collection-line{background:linear-gradient(90deg,rgba(185,133,63,.38),transparent);}
+}
+
+@media(max-width:600px){
+  .products-clean{padding-top:1rem;padding-bottom:3rem;}
+  .products-clean .pgrid{gap:.65rem;}
+  .products-clean .p-body{padding:.72rem .72rem .8rem;}
+  .products-clean .p-body h3{font-size:.9rem;}
+  .products-clean .p-card .p-desc{font-size:.72rem;line-height:1.52;min-height:3.04em;max-height:3.04em;}
+  .products-clean .p-more{font-size:.68rem;margin-bottom:.55rem;}
+  .products-clean .p-foot{flex-direction:column;align-items:stretch;gap:.45rem;}
+  .products-clean .p-price{font-size:.9rem;}
+  .products-clean .p-add{width:100%;min-height:35px;font-size:.7rem;}
+  .products-clean .p-media{aspect-ratio:1/1.05;}
+  .collection-kicker{font-size:.7rem;}
+}
+
+@media(max-width:380px){
+  .products-clean .pgrid{grid-template-columns:1fr 1fr;}
+  .products-clean .p-body h3{font-size:.84rem;}
+  .products-clean .p-card .p-desc{font-size:.69rem;}
+}
