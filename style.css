@@ -4485,3 +4485,92 @@ html[dir=ltr]
     font-size:.64rem;
   }
 }
+
+
+/* =========================================================
+   CART 4.0 — FIXED LAYOUT
+   The checkout form must not push the products out of view.
+   Products get a real scroll area; checkout gets its own scroll.
+   ========================================================= */
+
+#cartDrawer{
+  display:flex;
+  flex-direction:column;
+  height:100dvh;
+  max-height:100dvh;
+}
+
+#cartDrawer .dbody{
+  flex:1 1 46%;
+  min-height:190px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+}
+
+#cartDrawer .dfoot{
+  flex:0 1 54%;
+  min-height:0;
+  max-height:54%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+}
+
+#cartDrawer .dfoot .co-form{
+  margin-top:.55rem;
+}
+
+#cartDrawer .dfoot #checkoutBtn{
+  position:sticky;
+  bottom:0;
+  z-index:3;
+}
+
+/* When there is only one item, give it more breathing room. */
+#cartDrawer .dbody:has(.citem:only-of-type){
+  padding-top:.75rem;
+}
+
+/* Never let the product area collapse to a few pixels. */
+@media(max-height:760px){
+  #cartDrawer .dbody{
+    flex-basis:48%;
+    min-height:170px;
+  }
+
+  #cartDrawer .dfoot{
+    flex-basis:52%;
+    max-height:52%;
+  }
+}
+
+@media(max-width:700px){
+  #cartDrawer .dbody{
+    flex:1 1 44%;
+    min-height:180px;
+  }
+
+  #cartDrawer .dfoot{
+    flex:0 1 56%;
+    max-height:56%;
+  }
+
+  #cartDrawer .dfoot #checkoutBtn{
+    position:sticky;
+    bottom:0;
+  }
+}
+
+@media(max-width:700px) and (max-height:760px){
+  #cartDrawer .dbody{
+    flex-basis:46%;
+    min-height:165px;
+  }
+
+  #cartDrawer .dfoot{
+    flex-basis:54%;
+    max-height:54%;
+  }
+}
