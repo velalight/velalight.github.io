@@ -1,1928 +1,283 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,initial-scale=1">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>منتج | VelaLight</title>
-
-<meta name="description"
-      content="منتج من VelaLight — شموع يدوية فاخرة">
-
-<link rel="stylesheet"
-      href="style.css">
-
-<link rel="preconnect"
-      href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap"
-      rel="stylesheet">
-
-
+<meta name="description" content="منتج من VelaLight — شموع يدوية فاخرة">
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-
-/* =========================================================
-   PRODUCT PAGE
-   ========================================================= */
-
-.pd-thumbs{
-  display:flex;
-  gap:.55rem;
-  margin-top:.7rem;
-  flex-wrap:wrap;
-}
-
-.pd-thumbs img{
-  width:64px;
-  height:64px;
-  border-radius:12px;
-  object-fit:cover;
-  border:2px solid var(--line);
-  cursor:pointer;
-  transition:.2s ease;
-}
-
-.pd-thumbs img:hover,
-.pd-thumbs img.on{
-  border-color:var(--gold);
-  transform:translateY(-2px);
-}
-
-
-/* =========================================================
-   SCENT PICKER
-   ========================================================= */
-
-.pd-scent-required{
-  margin:.45rem 0 .8rem;
-  padding:.65rem .8rem;
-  border-radius:12px;
-  border:1px solid rgba(190,150,70,.25);
-  background:rgba(190,150,70,.06);
-  color:var(--mut);
-  font-size:.82rem;
-  line-height:1.7;
-}
-
-.pd-scent-required strong{
-  color:var(--gold2);
-}
-
-
-.scents-pick{
-  display:grid;
-  grid-template-columns:
-    repeat(auto-fill,minmax(130px,1fr));
-  gap:.55rem;
-  margin-bottom:1.2rem;
-}
-
-
-.scents-pick .chip{
-  min-height:42px;
-  padding:.55rem .65rem;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:transparent;
-  color:var(--text);
-  cursor:pointer;
-  font-family:inherit;
-  font-size:.82rem;
-  line-height:1.3;
-  transition:.2s ease;
-}
-
-
-.scents-pick .chip:hover{
-  border-color:var(--gold);
-  transform:translateY(-1px);
-}
-
-
-.scents-pick .chip.on{
-  border-color:var(--gold);
-  background:rgba(190,150,70,.13);
-  color:var(--gold2);
-  box-shadow:
-    0 0 0 1px rgba(190,150,70,.12);
-}
-
-
-.scent-error{
-  border-color:#b84a4a !important;
-  animation:scentShake .25s linear;
-}
-
-
-@keyframes scentShake{
-
-  0%{
-    transform:translateX(0);
-  }
-
-  25%{
-    transform:translateX(-4px);
-  }
-
-  50%{
-    transform:translateX(4px);
-  }
-
-  75%{
-    transform:translateX(-3px);
-  }
-
-  100%{
-    transform:translateX(0);
-  }
-
-}
-
-
-/* =========================================================
-   PRODUCT ACTIONS
-   ========================================================= */
-
-.pd-actions{
-  display:flex;
-  gap:.7rem;
-  flex-wrap:wrap;
-  margin-top:1rem;
-}
-
-.pd-actions .btn{
-  flex:1;
-  min-width:170px;
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media(max-width:700px){
-
-  .scents-pick{
-    grid-template-columns:
-      repeat(2,minmax(0,1fr));
-  }
-
-  .pd-actions{
-    flex-direction:column;
-  }
-
-  .pd-actions .btn{
-    width:100%;
-  }
-
-}
-
+.pd-thumbs{display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap}
+.pd-thumbs img{width:64px;height:64px;border-radius:10px;object-fit:cover;border:2px solid var(--line);cursor:pointer;transition:.2s}
+.pd-thumbs img:hover,.pd-thumbs img.on{border-color:var(--gold)}
 </style>
-
 </head>
-
-
 <body>
 
-
-<!-- =========================================================
-     HEADER
-     ========================================================= -->
-
 <header>
-
-  <div class="wrap hrow">
-
-    <a class="logo"
-       href="index.html">
-
-      <span class="flame"></span>
-
-      <div>
-
-        <b>VelaLight</b>
-
-        <small>
-          Luxury Candle Studio
-        </small>
-
-      </div>
-
-    </a>
-
-
-    <div class="hact">
-
-      <button
-        class="langbtn"
-        id="langBtn">
-        EN
-      </button>
-
-
-      <a
-        class="icobtn"
-        href="index.html?cart=1"
-        aria-label="Cart">
-
-        🛍️
-
-        <span
-          class="badge"
-          id="cartCount">
-          0
-        </span>
-
-      </a>
-
-    </div>
-
-  </div>
-
+<div class="wrap hrow">
+<a class="logo" href="index.html"><span class="flame"></span><div><b>VelaLight</b><small>Luxury Candle Studio</small></div></a>
+<div class="hact">
+<button class="langbtn" id="langBtn">EN</button>
+<a class="icobtn" href="index.html?cart=1">🛍️<span class="badge" id="cartCount">0</span></a>
+</div>
+</div>
 </header>
 
-
-
-<!-- =========================================================
-     PRODUCT
-     ========================================================= -->
-
-<div
-  class="wrap"
-  style="padding-top:2rem;padding-bottom:4rem">
-
-
-  <!-- BREADCRUMB -->
-
-  <div class="crumb">
-
-    <a
-      href="index.html"
-      data-i18n="crumb_home">
-      الرئيسية
-    </a>
-
-    ›
-
-    <span id="crumbName">
-      ...
-    </span>
-
-  </div>
-
-
-  <!-- LOADING -->
-
-  <div
-    id="pdLoading"
-    style="
-      text-align:center;
-      padding:3rem;
-      color:var(--dim)
-    ">
-
-    ⏳ ...
-
-  </div>
-
-
-
-  <!-- PRODUCT WRAPPER -->
-
-  <div
-    id="pdWrap"
-    class="hidden">
-
-
-    <div class="pd-grid">
-
-
-      <!-- ===================================================
-           PRODUCT IMAGES
-           =================================================== -->
-
-      <div>
-
-
-        <div class="pd-img">
-
-          <img
-            id="pdImg"
-            src=""
-            alt="">
-
-        </div>
-
-
-        <div
-          class="pd-thumbs"
-          id="pdThumbs">
-        </div>
-
-
-      </div>
-
-
-
-      <!-- ===================================================
-           PRODUCT INFO
-           =================================================== -->
-
-      <div class="pd-info">
-
-
-        <h1 id="pdName"></h1>
-
-
-        <div id="pdBadge"></div>
-
-
-        <!-- PRICE -->
-
-        <div class="pd-price">
-
-          <span id="pdPrice"></span>
-
-          <del id="pdOld"></del>
-
-          <small data-i18n="egp">
-            ج.م
-          </small>
-
-        </div>
-
-
-        <!-- SOLD -->
-
-        <div
-          id="pdSold"
-          style="
-            color:var(--dim);
-            font-size:.8rem;
-            margin-bottom:1rem
-          ">
-        </div>
-
-
-
-        <!-- =================================================
-             SCENT
-             ================================================= -->
-
-        <div
-          class="opt-t"
-          data-i18n="pd_scent_t">
-
-          🌸 اختاري العطر:
-
-        </div>
-
-
-        <div class="pd-scent-required">
-
-          <strong data-i18n="pd_scent_required">
-            اختيار العطر إجباري
-          </strong>
-
-          <br>
-
-          <span data-i18n="pd_scent_help">
-            اختاري عطرًا واحدًا قبل إضافة المنتج إلى السلة.
-          </span>
-
-        </div>
-
-
-        <div
-          class="scents-pick"
-          id="pdScents">
-        </div>
-
-
-
-        <!-- =================================================
-             QUANTITY
-             ================================================= -->
-
-        <div
-          class="opt-t"
-          data-i18n="pd_qty_t">
-
-          الكمية:
-
-        </div>
-
-
-        <div class="qty">
-
-          <button
-            id="qMinus"
-            type="button">
-            −
-          </button>
-
-
-          <b id="qVal">
-            1
-          </b>
-
-
-          <button
-            id="qPlus"
-            type="button">
-            +
-          </button>
-
-        </div>
-
-
-
-        <!-- =================================================
-             ACTIONS
-             ================================================= -->
-
-        <div class="pd-actions">
-
-
-          <button
-            class="btn"
-            id="addBtn"
-            type="button"
-            data-i18n="pd_add">
-
-            🛍️ أضيفي للسلة
-
-          </button>
-
-
-          <button
-            class="btn wa"
-            id="buyBtn"
-            type="button"
-            data-i18n="pd_buy">
-
-            اطلبِي عبر واتساب
-
-          </button>
-
-
-        </div>
-
-
-
-        <!-- DESCRIPTION -->
-
-        <p
-          style="
-            color:var(--mut);
-            margin-top:1rem;
-            line-height:1.9
-          "
-          id="pdDesc">
-        </p>
-
-
-        <!-- SHARE -->
-
-        <div
-          class="share-row"
-          id="shareRow">
-        </div>
-
-
-      </div>
-
-    </div>
-
-
-
-    <!-- =====================================================
-         REVIEWS
-         ===================================================== -->
-
-    <section style="margin-top:3rem">
-
-
-      <h2
-        class="fd"
-        data-i18n="pd_rev_h2">
-
-        مراجعات المنتج
-
-      </h2>
-
-
-      <div
-        id="revList">
-      </div>
-
-
-
-      <div class="rv-form">
-
-
-        <h3
-          style="
-            color:var(--gold2);
-            margin-bottom:1rem
-          "
-          data-i18n="pd_form_t">
-
-          ضيفي مراجعتك ⭐
-
-        </h3>
-
-
-        <div class="row">
-
-
-          <input
-            id="rvName"
-            data-i18n-ph="pd_name_ph"
-            placeholder="اسمك">
-
-
-          <div
-            class="starpick"
-            id="starPick">
-          </div>
-
-
-        </div>
-
-
-        <textarea
-          id="rvText"
-          rows="3"
-          data-i18n-ph="pd_text_ph"
-          placeholder="اكتبي رأيك..."></textarea>
-
-
-        <input
-          id="rvPhoto"
-          data-i18n-ph="pd_photo_ph"
-          placeholder="رابط صورة (اختياري)"
-          style="margin-top:.5rem">
-
-
-        <button
-          class="btn sm"
-          id="rvSubmit"
-          type="button"
-          style="margin-top:.8rem"
-          data-i18n="pd_submit">
-
-          إرسال
-
-        </button>
-
-
-        <p
-          style="
-            color:var(--dim);
-            font-size:.75rem;
-            margin-top:.5rem
-          "
-          data-i18n="pd_note">
-
-          المراجعة بتظهر بعد الموافقة
-
-        </p>
-
-
-      </div>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         RELATED
-         ===================================================== -->
-
-    <section style="margin-top:3rem">
-
-
-      <h2
-        class="fd"
-        data-i18n="pd_rel_h2">
-
-        منتجات هتعجبك
-
-      </h2>
-
-
-      <div
-        class="rel-grid"
-        id="relGrid">
-      </div>
-
-
-    </section>
-
-
-  </div>
-
-
-
-  <!-- =======================================================
-       NOT FOUND
-       ======================================================= -->
-
-  <div
-    id="pdNotFound"
-    class="hidden"
-    style="
-      text-align:center;
-      padding:4rem
-    ">
-
-
-    <p
-      style="font-size:1.2rem"
-      data-i18n="pd_notfound">
-
-      😕 المنتج مش موجود
-
-    </p>
-
-
-    <a
-      class="btn"
-      href="index.html"
-      style="margin-top:1rem"
-      data-i18n="nav_home">
-
-      الرئيسية
-
-    </a>
-
-
-  </div>
-
-
+<div class="wrap" style="padding-top:2rem;padding-bottom:4rem">
+<div class="crumb"><a href="index.html" data-i18n="crumb_home">الرئيسية</a> › <span id="crumbName">...</span></div>
+<div id="pdLoading" style="text-align:center;padding:3rem;color:var(--dim)">⏳ ...</div>
+
+<div id="pdWrap" class="hidden">
+<div class="pd-grid">
+<div>
+<div class="pd-img"><img id="pdImg" src="" alt=""></div>
+<div class="pd-thumbs" id="pdThumbs"></div>
+</div>
+<div class="pd-info">
+<h1 id="pdName"></h1>
+<div id="pdBadge"></div>
+<div class="pd-price"><span id="pdPrice"></span> <del id="pdOld"></del> <small data-i18n="egp">ج.م</small></div>
+<div class="opt-t" data-i18n="pd_scent_t">🌸 اختاري العطر:</div>
+<select class="pd-scent-select" id="pdScentSelect" aria-label="Scent">
+<option value="">اختاري العطر</option>
+</select>
+
+<div class="opt-t" data-i18n="pd_qty_t">الكمية:</div>
+<div class="qty">
+<button id="qMinus">−</button>
+<b id="qVal">1</b>
+<button id="qPlus">+</button>
 </div>
 
+<div class="pd-actions">
+<button class="btn" id="addBtn" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
+</div>
 
+<div class="pd-meta">
+<div><span data-i18n="pd_hours">مدة الاشتعال:</span> <b id="pdHours"></b></div>
+<div><span data-i18n="pd_materials">الخامات:</span> <b data-i18n="pd_materials_v">شمع طبيعي 100%</b></div>
+<div><span data-i18n="pd_ship">التوصيل:</span> <b data-i18n="pd_ship_v">3–7 أيام</b></div>
+<div><span data-i18n="pd_gift">تغليف هدايا مجاني</span> <b data-i18n="pd_gift_v">مع كل طلب</b></div>
+<div><span data-i18n="pd_exchange">ضمان استبدال</span> <b data-i18n="pd_exchange_v">خلال 3 أيام</b></div>
+</div>
 
-<!-- =========================================================
-     FOOTER
-     ========================================================= -->
+<p style="color:var(--mut);margin-top:1rem;line-height:1.9" id="pdDesc"></p>
+
+<div class="share-row" id="shareRow"></div>
+</div>
+</div>
+
+<section style="margin-top:3rem">
+<h2 class="fd" data-i18n="pd_rev_h2">مراجعات المنتج</h2>
+<div id="revList"></div>
+<div class="rv-form">
+<h3 style="color:var(--gold2);margin-bottom:1rem" data-i18n="pd_form_t">ضيفي مراجعتك ⭐</h3>
+<div class="row">
+<input id="rvName" data-i18n-ph="pd_name_ph" placeholder="اسمك">
+<div class="starpick" id="starPick"></div>
+</div>
+<textarea id="rvText" rows="3" data-i18n-ph="pd_text_ph" placeholder="اكتبي رأيك..."></textarea>
+<input id="rvPhoto" data-i18n-ph="pd_photo_ph" placeholder="رابط صورة (اختياري)" style="margin-top:.5rem">
+<button class="btn sm" id="rvSubmit" style="margin-top:.8rem" data-i18n="pd_submit">إرسال</button>
+<p style="color:var(--dim);font-size:.75rem;margin-top:.5rem" data-i18n="pd_note">المراجعة بتظهر بعد الموافقة</p>
+</div>
+</section>
+
+<section style="margin-top:3rem">
+<h2 class="fd" data-i18n="pd_rel_h2">منتجات هتعجبك</h2>
+<div class="rel-grid" id="relGrid"></div>
+</section>
+</div>
+
+<div id="pdNotFound" class="hidden" style="text-align:center;padding:4rem">
+<p style="font-size:1.2rem" data-i18n="pd_notfound">😕 المنتج مش موجود</p>
+<a class="btn" href="index.html" style="margin-top:1rem" data-i18n="nav_home">الرئيسية</a>
+</div>
+</div>
 
 <footer>
-
-  <div class="wrap">
-
-
-    <div class="fbot">
-
-
-      <span data-i18n="foot_rights">
-
-        © 2026 - 2030 VelaLight — جميع الحقوق محفوظة
-
-      </span>
-
-
-      <div>
-
-        <a
-          href="track.html"
-          data-i18n="mn_track">
-
-          📦 تتبع الطلب
-
-        </a>
-
-        ·
-
-        <a
-          href="exchange-policy.html"
-          data-i18n="foot_exchange">
-
-          سياسة الاستبدال
-
-        </a>
-
-      </div>
-
-
-    </div>
-
-
-  </div>
-
+<div class="wrap">
+<div class="fbot">
+<span data-i18n="foot_rights">© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</span>
+<div>
+<a href="track.html" data-i18n="mn_track">📦 تتبع الطلب</a> ·
+<a href="exchange-policy.html" data-i18n="foot_exchange">سياسة الاستبدال</a>
+</div>
+</div>
+</div>
 </footer>
-
-
-
-<!-- TOASTS -->
 
 <div id="toasts"></div>
 
-
-
-<!-- =========================================================
-     DATA
-     ========================================================= -->
-
 <script src="data.js"></script>
-
-<script
-  type="module"
-  src="firebase.js">
-</script>
-
-
-
-<!-- =========================================================
-     PRODUCT PAGE SCRIPT
-     ========================================================= -->
-
+<script type="module" src="firebase.js"></script>
 <script>
-
 (function(){
-
 "use strict";
 
+let P=null,qty=1,selScent="",selRating=5;
 
-/* ==========================================================
-   STATE
-   ========================================================== */
-
-let P = null;
-
-let qty = 1;
-
-let selScent = "";
-
-let selRating = 5;
-
-
-
-/* ==========================================================
-   FIXED VELALIGHT SCENTS
-   الـ23 عطر المعتمدين في الموقع
-   ========================================================== */
-
-const VL_SCENTS = [
-
-  {
-    ar:"فانيلا",
-    en:"Vanilla"
-  },
-
-  {
-    ar:"سينامون سبايس فانيلا",
-    en:"Cinnamon Spice Vanilla"
-  },
-
-  {
-    ar:"لافندر",
-    en:"Lavender"
-  },
-
-  {
-    ar:"موكا",
-    en:"Mocha"
-  },
-
-  {
-    ar:"كراميل",
-    en:"Caramel"
-  },
-
-  {
-    ar:"كاريبيان فروت",
-    en:"Caribbean Fruit"
-  },
-
-  {
-    ar:"فل",
-    en:"Jasmine Sambac"
-  },
-
-  {
-    ar:"ياسمين",
-    en:"Jasmine"
-  },
-
-  {
-    ar:"اناناس",
-    en:"Pineapple"
-  },
-
-  {
-    ar:"شيكولاتة",
-    en:"Chocolate"
-  },
-
-  {
-    ar:"كوكونات",
-    en:"Coconut"
-  },
-
-  {
-    ar:"كاسيليا",
-    en:"Cassilia Massage"
-  },
-
-  {
-    ar:"اينتو زانايت",
-    en:"Into Zenite Massage"
-  },
-
-  {
-    ar:"بوكيت روز",
-    en:"Bouquet Rose"
-  },
-
-  {
-    ar:"ورد بلدى",
-    en:"Egyptian Rose"
-  },
-
-  {
-    ar:"تيوليب",
-    en:"Tulip"
-  },
-
-  {
-    ar:"قهوة",
-    en:"Coffee"
-  },
-
-  {
-    ar:"قهوة فانيلا",
-    en:"Coffee Vanilla"
-  },
-
-  {
-    ar:"قهوة بندق",
-    en:"Hazelnut Coffee"
-  },
-
-  {
-    ar:"عود فانيليا",
-    en:"Oud Vanilla"
-  },
-
-  {
-    ar:"عنبر",
-    en:"Amber"
-  },
-
-  {
-    ar:"فراولة",
-    en:"Strawberry"
-  },
-
-  {
-    ar:"عود خشب صندل",
-    en:"Sandalwood Oud"
-  }
-
-];
-
-
-
-/* ==========================================================
-   DOM READY
-   ========================================================== */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  ()=>{
-
-    initLang();
-
-    cartBadge();
-
-    buildStars();
-
-
-    const pid =
-      new URLSearchParams(
-        location.search
-      ).get("p");
-
-
-    if(!pid){
-
-      showNotFound();
-
-      return;
-
-    }
-
-
-    loadAll().then(()=>{
-
-      P =
-        ALL_PRODUCTS.find(
-          x=>String(x.id) === String(pid)
-        );
-
-
-      if(!P){
-
-        showNotFound();
-
-        return;
-
-      }
-
-
-      render();
-
-    });
-
-  }
-);
-
-
-
-/* ==========================================================
-   LANGUAGE
-   ========================================================== */
+document.addEventListener("DOMContentLoaded",()=>{
+initLang();
+cartBadge();
+buildStars();
+const pid=new URLSearchParams(location.search).get("p");
+if(!pid){showNotFound();return}
+loadAll().then(()=>{
+P=ALL_PRODUCTS.find(x=>x.id===pid);
+if(!P){showNotFound();return}
+render();
+});
+});
 
 function initLang(){
-
-  document.documentElement.dir =
-    LANG === "ar"
-      ? "rtl"
-      : "ltr";
-
-
-  applyI18n();
-
-
-  $("#langBtn")?.addEventListener(
-    "click",
-    ()=>{
-
-      LANG =
-        LANG === "ar"
-          ? "en"
-          : "ar";
-
-
-      localStorage.setItem(
-        "vl_lang",
-        LANG
-      );
-
-
-      document.documentElement.lang =
-        LANG;
-
-
-      document.documentElement.dir =
-        LANG === "ar"
-          ? "rtl"
-          : "ltr";
-
-
-      applyI18n();
-
-
-      if(P){
-
-        render();
-
-      }
-
-    }
-  );
-
+applyI18n();
+$("#langBtn")?.addEventListener("click",()=>{
+LANG=LANG==="ar"?"en":"ar";
+localStorage.setItem("vl_lang",LANG);
+document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+applyI18n();
+if(P)render();
+});
 }
-
-
-
 function applyI18n(){
-
-  $$("[data-i18n]")
-    .forEach(el=>{
-
-      el.textContent =
-        t(el.dataset.i18n);
-
-    });
-
-
-  $$("[data-i18n-ph]")
-    .forEach(el=>{
-
-      el.placeholder =
-        t(el.dataset.i18nPh);
-
-    });
-
+$$("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
+$$("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
 }
-
-
-
-/* ==========================================================
-   NOT FOUND
-   ========================================================== */
 
 function showNotFound(){
-
-  $("#pdLoading")
-    .classList
-    .add("hidden");
-
-
-  $("#pdNotFound")
-    .classList
-    .remove("hidden");
-
+$("#pdLoading").classList.add("hidden");
+$("#pdNotFound").classList.remove("hidden");
 }
-
-
-
-/* ==========================================================
-   MAIN RENDER
-   ========================================================== */
 
 function render(){
+$("#pdLoading").classList.add("hidden");
+$("#pdWrap").classList.remove("hidden");
 
-  $("#pdLoading")
-    .classList
-    .add("hidden");
+document.title=pname(P)+" | VelaLight";
+$("#crumbName").textContent=pname(P);
+$("#pdName").textContent=pname(P);
+$("#pdDesc").textContent=pdesc(P);
+$("#pdImg").src=imgOf(P);
+$("#pdImg").alt=pname(P);
 
+const badge=pbadge(P);
+$("#pdBadge").innerHTML=badge?`<span class="p-badge" style="position:static;display:inline-block">${badge}</span>`:"";
 
-  $("#pdWrap")
-    .classList
-    .remove("hidden");
-
-
-  document.title =
-    pname(P) + " | VelaLight";
-
-
-  $("#crumbName")
-    .textContent =
-    pname(P);
-
-
-  $("#pdName")
-    .textContent =
-    pname(P);
+$("#pdPrice").textContent=money(P.price);
+$("#pdOld").textContent=P.old>P.price?money(P.old):"";
+$("#pdOld").style.display=P.old>P.price?"inline":"none";
+$("#pdHours").textContent=phours(P);
 
 
-  $("#pdDesc")
-    .textContent =
-    pdesc(P);
-
-
-  $("#pdImg").src =
-    imgOf(P);
-
-
-  $("#pdImg").alt =
-    pname(P);
-
-
-
-  /* BADGE */
-
-  const badge =
-    pbadge(P);
-
-
-  $("#pdBadge").innerHTML =
-    badge
-      ? `
-        <span
-          class="p-badge"
-          style="position:static;display:inline-block">
-          ${badge}
-        </span>
-      `
-      : "";
-
-
-
-  /* PRICE */
-
-  $("#pdPrice")
-    .textContent =
-    money(P.price);
-
-
-  $("#pdOld")
-    .textContent =
-    P.old > P.price
-      ? money(P.old)
-      : "";
-
-
-  $("#pdOld")
-    .style.display =
-    P.old > P.price
-      ? "inline"
-      : "none";
-
-
-
-  /* SOLD */
-
-  if(P.sold){
-
-    $("#pdSold")
-      .textContent =
-      `${t("pd_sold")} ${P.sold} ${t("pd_times")}`;
-
-  }else{
-
-    $("#pdSold")
-      .textContent = "";
-
-  }
-
-
-
-  /* COMPONENTS */
-
-  renderThumbs();
-
-  renderScents();
-
-  renderReviews();
-
-  renderRelated();
-
-  renderShare();
-
-  bindEvents();
-
+renderThumbs();
+renderScents();
+renderReviews();
+renderRelated();
+renderShare();
+bindEvents();
 }
-
-
-
-/* ==========================================================
-   PRODUCT THUMBNAILS
-   ========================================================== */
 
 function renderThumbs(){
-
-  const imgs =
-    imgsOf(P);
-
-
-  const w =
-    $("#pdThumbs");
-
-
-  if(!imgs || imgs.length <= 1){
-
-    w.innerHTML = "";
-
-    return;
-
-  }
-
-
-  w.innerHTML =
-    imgs.map(
-      (u,i)=>`
-
-        <img
-          src="${CDN(u)}"
-          class="${i === 0 ? "on" : ""}"
-          data-i="${i}"
-          alt="${pname(P)}">
-
-      `
-    ).join("");
-
-
-  w.querySelectorAll("img")
-    .forEach(im=>{
-
-      im.addEventListener(
-        "click",
-        ()=>{
-
-          $("#pdImg").src =
-            im.src;
-
-
-          w.querySelectorAll("img")
-            .forEach(x=>
-              x.classList.remove("on")
-            );
-
-
-          im.classList.add("on");
-
-        }
-      );
-
-    });
-
+const imgs=imgsOf(P);
+const w=$("#pdThumbs");
+if(imgs.length<=1){w.innerHTML="";return}
+w.innerHTML=imgs.map((u,i)=>`<img src="${CDN(u)}" class="${i===0?'on':''}" data-i="${i}">`).join("");
+w.querySelectorAll("img").forEach(im=>im.addEventListener("click",()=>{
+$("#pdImg").src=im.src;
+w.querySelectorAll("img").forEach(x=>x.classList.remove("on"));
+im.classList.add("on");
+}));
 }
-
-
-
-/* ==========================================================
-   SCENTS
-   ========================================================== */
 
 function renderScents(){
-
-  const w =
-    $("#pdScents");
-
-
-  /*
-   * مهم:
-   * لا يوجد اختيار تلقائي.
-   */
-
-  selScent = "";
-
-
-  w.innerHTML =
-    VL_SCENTS
-      .map(
-        (s,index)=>{
-
-          const label =
-            LANG === "ar"
-              ? s.ar
-              : s.en;
-
-
-          return `
-
-            <button
-              type="button"
-              class="chip"
-              data-scent-index="${index}"
-              aria-pressed="false">
-
-              ${label}
-
-            </button>
-
-          `;
-
-        }
-      )
-      .join("");
-
-
-  w.querySelectorAll(".chip")
-    .forEach(btn=>{
-
-      btn.addEventListener(
-        "click",
-        ()=>{
-
-          w.querySelectorAll(".chip")
-            .forEach(x=>{
-
-              x.classList.remove("on");
-
-              x.setAttribute(
-                "aria-pressed",
-                "false"
-              );
-
-            });
-
-
-          btn.classList.add("on");
-
-
-          btn.setAttribute(
-            "aria-pressed",
-            "true"
-          );
-
-
-          const index =
-            Number(
-              btn.dataset.scentIndex
-            );
-
-
-          selScent =
-            VL_SCENTS[index].ar;
-
-        }
-      );
-
-    });
-
+const select=$("#pdScentSelect");
+if(!select)return;
+selScent="";
+select.innerHTML=`<option value="">${LANG==="ar"?"اختاري العطر":"Choose a scent"}</option>`+SCENTS.map(s=>`<option value="${s[0]}">${scentTr(s[0])}</option>`).join("");
+select.value="";
+select.onchange=()=>{selScent=select.value;select.classList.remove("scent-error")};
 }
-
-
-
-/* ==========================================================
-   SCENT VALIDATION
-   ========================================================== */
-
-function validateScent(){
-
-  if(selScent){
-
-    return true;
-
-  }
-
-
-  const box =
-    $("#pdScents");
-
-
-  box.classList.add(
-    "scent-error"
-  );
-
-
-  setTimeout(
-    ()=>{
-      box.classList.remove(
-        "scent-error"
-      );
-    },
-    500
-  );
-
-
-  toast(
-    t("t_scentwarn")
-    ||
-    (
-      LANG === "ar"
-        ? "🌸 من فضلك اختاري العطر أولًا"
-        : "🌸 Please choose a scent first"
-    )
-  );
-
-
-  box.scrollIntoView({
-    behavior:"smooth",
-    block:"center"
-  });
-
-
-  return false;
-
-}
-
-
-
-/* ==========================================================
-   EVENTS
-   ========================================================== */
 
 function bindEvents(){
-
-  /*
-   * منع تكرار listeners
-   * عن طريق استبدال العناصر نفسها
-   * في كل render.
-   */
-
-
-  const minus =
-    $("#qMinus");
-
-
-  const plus =
-    $("#qPlus");
-
-
-  minus.onclick =
-    ()=>{
-
-      if(qty > 1){
-
-        qty--;
-
-      }
-
-
-      $("#qVal")
-        .textContent =
-        qty;
-
-    };
-
-
-  plus.onclick =
-    ()=>{
-
-      qty++;
-
-      $("#qVal")
-        .textContent =
-        qty;
-
-    };
-
-
-
-  /* ADD */
-
-  $("#addBtn").onclick =
-    ()=>{
-
-      if(!validateScent()){
-
-        return;
-
-      }
-
-
-      const added =
-        addToCart(
-          P,
-          {
-            scent:selScent,
-            qty:qty
-          }
-        );
-
-
-      if(added !== false){
-
-        toast(
-          LANG === "ar"
-            ? "✅ تمت إضافة المنتج للسلة"
-            : "✅ Product added to cart"
-        );
-
-      }
-
-    };
-
-
-
-  /* BUY */
-
-  $("#buyBtn").onclick =
-    ()=>{
-
-      if(!validateScent()){
-
-        return;
-
-      }
-
-
-      const added =
-        addToCart(
-          P,
-          {
-            scent:selScent,
-            qty:qty
-          }
-        );
-
-
-      if(added !== false){
-
-        location.href =
-          "index.html?cart=1";
-
-      }
-
-    };
-
-
-
-  /* REVIEW */
-
-  $("#rvSubmit").onclick =
-    ()=>{
-
-      const name =
-        $("#rvName")
-          .value
-          .trim();
-
-
-      const text =
-        $("#rvText")
-          .value
-          .trim();
-
-
-      const photo =
-        $("#rvPhoto")
-          .value
-          .trim();
-
-
-      if(!name || !text){
-
-        toast(
-          t("t_revwarn")
-        );
-
-        return;
-
-      }
-
-
-      DB.add(
-        "reviews",
-        {
-          productSlug:P.id,
-
-          pid:P.id,
-
-          name:name,
-
-          text:text,
-
-          photo:photo,
-
-          rating:selRating,
-
-          approved:false,
-
-          createdAt:Date.now()
-        }
-      )
-      .then(()=>{
-
-        toast(
-          t("t_revok")
-        );
-
-
-        $("#rvName").value =
-          "";
-
-
-        $("#rvText").value =
-          "";
-
-
-        $("#rvPhoto").value =
-          "";
-
-      })
-      .catch(e=>{
-
-        console.warn(e);
-
-        toast("⚠️");
-
-      });
-
-    };
-
+$("#qMinus").addEventListener("click",()=>{if(qty>1)qty--;$("#qVal").textContent=qty});
+$("#qPlus").addEventListener("click",()=>{qty++;$("#qVal").textContent=qty});
+
+$("#addBtn").addEventListener("click",()=>{
+if(!selScent){toast(t("t_scentwarn"));return}
+addToCart(P,{scent:selScent,qty});
+});
+
+
+$("#rvSubmit").addEventListener("click",()=>{
+const name=$("#rvName").value.trim();
+const text=$("#rvText").value.trim();
+const photo=$("#rvPhoto").value.trim();
+if(!name||!text){toast(t("t_revwarn"));return}
+DB.add("reviews",{
+productSlug:P.id,pid:P.id,name,text,photo,
+rating:selRating,approved:false,createdAt:Date.now()
+}).then(()=>{
+toast(t("t_revok"));
+$("#rvName").value="";$("#rvText").value="";$("#rvPhoto").value="";
+}).catch(e=>{console.warn(e);toast("⚠️")});
+});
 }
-
-
-
-/* ==========================================================
-   STARS
-   ========================================================== */
 
 function buildStars(){
-
-  const w =
-    $("#starPick");
-
-
-  if(!w) return;
-
-
-  w.innerHTML = "";
-
-
-  for(
-    let i=1;
-    i<=5;
-    i++
-  ){
-
-    const b =
-      document.createElement(
-        "button"
-      );
-
-
-    b.type =
-      "button";
-
-
-    b.textContent =
-      "★";
-
-
-    b.dataset.v =
-      i;
-
-
-    if(i === 5){
-
-      b.classList.add(
-        "lit"
-      );
-
-    }
-
-
-    b.addEventListener(
-      "click",
-      ()=>{
-
-        selRating =
-          i;
-
-
-        w.querySelectorAll(
-          "button"
-        )
-        .forEach(x=>
-          x.classList.toggle(
-            "lit",
-            Number(x.dataset.v) <= i
-          )
-        );
-
-      }
-    );
-
-
-    w.appendChild(b);
-
-  }
-
+const w=$("#starPick");
+for(let i=1;i<=5;i++){
+const b=document.createElement("button");
+b.textContent="★";
+b.dataset.v=i;
+if(i===5)b.classList.add("lit");
+b.addEventListener("click",()=>{
+selRating=i;
+w.querySelectorAll("button").forEach(x=>x.classList.toggle("lit",+x.dataset.v<=i));
+});
+w.appendChild(b);
 }
-
-
-
-/* ==========================================================
-   REVIEWS
-   ========================================================== */
+}
 
 function renderReviews(){
-
-  const list =
-    prodReviews(P.id);
-
-
-  const w =
-    $("#revList");
-
-
-  if(!list.length){
-
-    w.innerHTML = `
-
-      <p
-        style="
-          color:var(--dim);
-          padding:1rem 0
-        ">
-
-        ${t("pd_first")}
-
-      </p>
-
-    `;
-
-    return;
-
-  }
-
-
-  w.innerHTML =
-    list
-      .map(
-        r=>`
-
-          <div class="rv-item">
-
-            <b>
-              ${escapeHtml(r.name || "-")}
-            </b>
-
-            <span class="stars">
-              ${"★".repeat(r.rating || 5)}
-            </span>
-
-
-            <p
-              style="
-                color:var(--mut);
-                margin-top:.3rem
-              ">
-
-              ${escapeHtml(r.text || "")}
-
-            </p>
-
-
-            ${
-              r.photo
-                ? `
-                  <img
-                    class="rv-photo"
-                    src="${escapeAttr(r.photo)}"
-                    alt="Review">
-                `
-                : ""
-            }
-
-          </div>
-
-        `
-      )
-      .join("");
-
+const list=prodReviews(P.id);
+const w=$("#revList");
+if(!list.length){
+w.innerHTML=`<p style="color:var(--dim);padding:1rem 0">${t("pd_first")}</p>`;
+return;
 }
-
-
-
-/* ==========================================================
-   RELATED PRODUCTS
-   ========================================================== */
+w.innerHTML=list.map(r=>`<div class="rv-item">
+<b>${r.name||"-"}</b> <span class="stars">${"★".repeat(r.rating||5)}</span>
+<p style="color:var(--mut);margin-top:.3rem">${r.text||""}</p>
+${r.photo?`<img class="rv-photo" src="${r.photo}">`:""}
+</div>`).join("");
+}
 
 function renderRelated(){
-
-  const rel =
-    ALL_PRODUCTS
-      .filter(
-        x=>
-          x.cat === P.cat &&
-          x.id !== P.id
-      )
-      .slice(0,4);
-
-
-  $("#relGrid").innerHTML =
-    rel
-      .map(
-        p=>`
-
-          <a
-            class="p-card"
-            href="product.html?p=${encodeURIComponent(p.id)}">
-
-
-            <div class="p-media">
-
-              <img
-                src="${imgOf(p)}"
-                alt="${escapeAttr(pname(p))}"
-                loading="lazy">
-
-            </div>
-
-
-            <div class="p-body">
-
-              <h3>
-                ${escapeHtml(pname(p))}
-              </h3>
-
-
-              <div class="p-price">
-                ${money(p.price)}
-              </div>
-
-            </div>
-
-
-          </a>
-
-        `
-      )
-      .join("");
-
+const rel=ALL_PRODUCTS.filter(x=>x.cat===P.cat&&x.id!==P.id).slice(0,4);
+$("#relGrid").innerHTML=rel.map(p=>`<a class="p-card" href="product.html?p=${p.id}">
+<div class="p-media"><img src="${imgOf(p)}" alt="${pname(p)}" loading="lazy"></div>
+<div class="p-body"><h3>${pname(p)}</h3><div class="p-price">${money(p.price)}</div></div>
+</a>`).join("");
 }
-
-
-
-/* ==========================================================
-   SHARE
-   ========================================================== */
 
 function renderShare(){
-
-  const url =
-    location.href;
-
-
-  const txt =
-    encodeURIComponent(
-      pname(P) +
-      " | VelaLight"
-    );
-
-
-  $("#shareRow").innerHTML = `
-
-    <a
-      href="https://wa.me/?text=${txt}%20${encodeURIComponent(url)}"
-      target="_blank"
-      rel="noopener">
-
-      واتساب
-
-    </a>
-
-
-    <a
-      href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}"
-      target="_blank"
-      rel="noopener">
-
-      فيسبوك
-
-    </a>
-
-
-    <a
-      href="#"
-      id="copyLink">
-
-      نسخ الرابط
-
-    </a>
-
-  `;
-
-
-  $("#copyLink")
-    ?.addEventListener(
-      "click",
-      e=>{
-
-        e.preventDefault();
-
-
-        if(
-          navigator.clipboard &&
-          navigator.clipboard.writeText
-        ){
-
-          navigator.clipboard
-            .writeText(url)
-            .then(()=>{
-
-              toast(
-                t("t_saved")
-              );
-
-            });
-
-        }
-
-      }
-    );
-
+const url=location.href;
+const txt=encodeURIComponent(pname(P)+" | VelaLight");
+$("#shareRow").innerHTML=`
+<a href="https://wa.me/?text=${txt}%20${url}" target="_blank">واتساب</a>
+<a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank">فيسبوك</a>
+<a href="javascript:void(0)" id="copyLink">نسخ الرابط</a>`;
+$("#copyLink")?.addEventListener("click",()=>{
+navigator.clipboard.writeText(url).then(()=>toast(t("t_saved")));
+});
 }
-
-
-
-/* ==========================================================
-   SAFE HTML HELPERS
-   ========================================================== */
-
-function escapeHtml(value){
-
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-
-function escapeAttr(value){
-
-  return escapeHtml(value);
-
-}
-
 
 })();
-
 </script>
-
-
 </body>
-
 </html>

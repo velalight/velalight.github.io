@@ -154,9 +154,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         EN
       </button>
 
-      <button class="icobtn" id="searchBtn">
-        🔍
-      </button>
 
       <button class="icobtn" id="accBtn">
         👤
@@ -471,27 +468,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
-      <div class="trust">
-
-        <span data-i18n="trust1">
-          🚚 توصيل لكل مصر
-        </span>
-
-        <span data-i18n="trust2">
-          🤲 100% صناعة يدوية
-        </span>
-
-        <span data-i18n="trust3">
-          🎁 تغليف هدايا مجاني
-        </span>
-
-        <span data-i18n="trust4">
-          🔁 استبدال خلال 3 أيام
-        </span>
-
-      </div>
-
     </div>
 
 
@@ -571,108 +547,9 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
      PRODUCTS
      ═══════════════════════════════════════════════ -->
 
-<section id="products" class="sec">
+<section id="products" class="sec products-clean">
 
   <div class="wrap">
-
-    <div class="sec-head rv">
-
-      <div class="kick">
-        The Collection
-      </div>
-
-      <h2 data-i18n="prod_h2">
-        اختار قطعتك المفضلة
-      </h2>
-
-    </div>
-
-
-    <div class="chips rv" id="chips"></div>
-
-
-    <div class="toolbar rv">
-
-      <div class="tb-group">
-
-        <span data-i18n="price_lbl">
-          💰 السعر:
-        </span>
-
-        <input
-          type="number"
-          id="priceMin"
-          placeholder="من"
-          data-i18n-ph="from_ph"
-        >
-
-        <input
-          type="number"
-          id="priceMax"
-          placeholder="إلى"
-          data-i18n-ph="to_ph"
-        >
-
-      </div>
-
-
-      <div class="tb-group">
-
-        <span data-i18n="sort_lbl">
-          ترتيب:
-        </span>
-
-        <select id="sortSel">
-
-          <option
-            value="new"
-            data-i18n="sort_new">
-            الأحدث
-          </option>
-
-          <option
-            value="asc"
-            data-i18n="sort_asc">
-            الأرخص أولًا
-          </option>
-
-          <option
-            value="desc"
-            data-i18n="sort_desc">
-            الأغلى أولًا
-          </option>
-
-          <option
-            value="rating"
-            data-i18n="sort_rating">
-            الأعلى تقييمًا
-          </option>
-
-          <option
-            value="best"
-            data-i18n="sort_best">
-            الأكثر مبيعًا
-          </option>
-
-          <option
-            value="disc"
-            data-i18n="sort_disc">
-            أكبر خصم
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="tb-group">
-
-        <span id="prodCount"></span>
-
-      </div>
-
-    </div>
-
 
     <div
       class="pgrid rv"
@@ -1646,10 +1523,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     </div>
 
 
-    <div
-      class="scents-pick"
-      id="scentModalScents">
-    </div>
+    <div id="scentModalScents"></div>
 
 
     <div
@@ -1787,50 +1661,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 
 
-<!-- ═══════════════════════════════════════════════
-     SEARCH
-     ═══════════════════════════════════════════════ -->
-
-<div class="modal" id="searchOv">
-
-  <div class="mpanel">
-
-
-    <button
-      class="icobtn"
-      id="closeSearch"
-      style="float:left">
-      ✕
-    </button>
-
-
-    <h3
-      class="fd"
-      data-i18n="search_title">
-      البحث 🔍
-    </h3>
-
-
-    <input
-      id="searchInput"
-      data-i18n-ph="search_ph"
-      placeholder="ابحثي عن شمعة..."
-      style="margin-top:1rem">
-
-
-    <p
-      style="color:var(--dim);font-size:.75rem;margin:.5rem 0"
-      data-i18n="search_help">
-      البحث يشمل: اسم المنتج، الوصف، الكاتيجوري — بالعربي والإنجليزي.
-    </p>
-
-
-    <div id="searchResults"></div>
-
-
-  </div>
-
-</div>
 
 
 

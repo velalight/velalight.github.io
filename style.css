@@ -3246,3 +3246,68 @@ html[dir=ltr]
   }
 
 }
+
+
+/* ═══════════════════════════════════════════════
+   VelaLight — clean collection under the hero
+   ═══════════════════════════════════════════════ */
+.products-clean{padding-top:2.2rem;}
+.products-clean .pgrid{margin-top:0;}
+.p-card .p-desc{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  min-height:3.1em;
+  max-height:3.1em;
+  line-height:1.55;
+  margin:.55rem 0 .35rem;
+}
+.p-more{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  color:var(--gold2);
+  font-size:.78rem;
+  font-weight:800;
+  margin:.1rem 0 .8rem;
+  transition:.2s ease;
+}
+.p-more:hover{color:var(--gold);transform:translateX(-3px);}
+.products-clean .p-scents,
+.products-clean .product-scents,
+.products-clean [class*="p-scent"],
+.products-clean [class*="product-scent"]{display:none!important;}
+.pd-scent-select{
+  width:100%;
+  min-height:50px;
+  border-radius:14px;
+  padding:.75rem 1rem;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:var(--ink);
+  font-size:.95rem;
+  font-weight:700;
+  cursor:pointer;
+}
+.pd-scent-select:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 4px rgba(185,133,63,.10);
+}
+@media(max-width:700px){
+  .products-clean{padding-top:1.2rem;}
+  .p-more{font-size:.75rem;}
+}
+
+.quick-scent-select{
+  width:100%;
+  min-height:52px;
+  border-radius:14px;
+  padding:.8rem 1rem;
+  font-weight:700;
+  background:var(--panel);
+}
+
+#scentModalScents{
+  width:100%;
+}

@@ -8,6 +8,7 @@
 let quickAddProduct=null;
 let quickAddScent="";
 let quickAddQty=1;
+let CURRENT_CAT="all";
 
 
 /* ═══════════════════════════════════════
@@ -22,7 +23,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   initReveal();
 
   loadAll().then(()=>{
-    renderChips();
     renderProducts();
     renderScents();
     renderFAQ();
@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   initCart();
   initAccount();
-  initSearch();
   initChat();
   initNav();
   initQuickAdd();
@@ -76,7 +75,6 @@ function initLang(){
 
     updateLangBtn();
 
-    renderChips();
     renderProducts();
     renderScents();
     renderFAQ();
@@ -282,14 +280,7 @@ function renderChips(){
 
 
 function activeCat(){
-
-  const c=
-    $("#chips .chip.on");
-
-  return c
-    ?c.dataset.cat
-    :"all";
-
+  return CURRENT_CAT || "all";
 }
 
 
@@ -305,12 +296,6 @@ function renderProducts(){
 
   const catF=activeCat();
 
-  const min=
-    +($("#priceMin")?.value||0);
-
-  const max=
-    +($("#priceMax")?.value||0);
-
   const sort=
     $("#sortSel")?.value||"new";
 
@@ -325,19 +310,6 @@ function renderProducts(){
         return false;
       }
 
-      if(
-        min &&
-        p.price<min
-      ){
-        return false;
-      }
-
-      if(
-        max &&
-        p.price>max
-      ){
-        return false;
-      }
 
       return true;
 
@@ -516,6 +488,12 @@ function renderProducts(){
             <p class="p-desc">
               ${productDesc}
             </p>
+
+            <a
+              class="p-more"
+              href="product.html?p=${p.id}">
+              ${t("view_details")} ←
+            </a>
 
 
             <div class="p-foot">
@@ -720,41 +698,27 @@ function openQuickAdd(p){
   */
 
   w.innerHTML=
-    SCENTS.map(
-      s=>
-      `
-        <button
-          class="chip"
-          type="button"
-          data-s="${s[0]}"
-        >
-          ${scentTr(s[0])}
-        </button>
-      `
-    ).join("");
+    `<select
+      class="pd-scent-select quick-scent-select"
+      id="quickScentSelect"
+      aria-label="Scent">
+      <option value="">
+        ${LANG === "ar" ? "اختاري العطر" : "Choose a scent"}
+      </option>
+      ${SCENTS.map(
+        s=>`<option value="${s[0]}">${scentTr(s[0])}</option>`
+      ).join("")}
+    </select>`;
 
+  const select=
+    $("#quickScentSelect");
 
-  w.querySelectorAll(".chip")
-    .forEach(b=>{
-
-      b.addEventListener(
-        "click",
-        ()=>{
-
-          w.querySelectorAll(".chip")
-            .forEach(
-              x=>x.classList.remove("on")
-            );
-
-          b.classList.add("on");
-
-          quickAddScent=
-            b.dataset.s;
-
-        }
-      );
-
-    });
+  select?.addEventListener(
+    "change",
+    ()=>{
+      quickAddScent=select.value;
+    }
+  );
 
 
   openDrawer(
@@ -762,45 +726,6 @@ function openQuickAdd(p){
   );
 
 }
-
-
-/* ═══════════════════════════════════════
-   FILTERS
-   ═══════════════════════════════════════ */
-
-document.addEventListener(
-  "change",
-  e=>{
-
-    if(
-      e.target.id==="priceMin" ||
-      e.target.id==="priceMax" ||
-      e.target.id==="sortSel"
-    ){
-
-      renderProducts();
-
-    }
-
-  }
-);
-
-
-document.addEventListener(
-  "input",
-  e=>{
-
-    if(
-      e.target.id==="priceMin" ||
-      e.target.id==="priceMax"
-    ){
-
-      renderProducts();
-
-    }
-
-  }
-);
 
 
 /* ═══════════════════════════════════════
@@ -2659,23 +2584,18 @@ function initNav(){
           "click",
           ()=>{
 
+            CURRENT_CAT =
+              a.dataset.cat || "all";
+
+            renderProducts();
+
             setTimeout(
               ()=>{
-
-                const chip=
-                  $(
-                    `#chips .chip[data-cat="${a.dataset.cat}"]`
-                  );
-
-
-                if(chip){
-
-                  chip.click();
-
-                }
-
+                document
+                  .getElementById("products")
+                  ?.scrollIntoView({behavior:"smooth",block:"start"});
               },
-              100
+              60
             );
 
           }
