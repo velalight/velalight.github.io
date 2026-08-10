@@ -57,15 +57,7 @@
 <button class="btn" id="addBtn" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
 </div>
 
-<div class="pd-meta">
-<div><span data-i18n="pd_hours">مدة الاشتعال:</span> <b id="pdHours"></b></div>
-<div><span data-i18n="pd_materials">الخامات:</span> <b data-i18n="pd_materials_v">شمع طبيعي 100%</b></div>
-<div><span data-i18n="pd_ship">التوصيل:</span> <b data-i18n="pd_ship_v">3–7 أيام</b></div>
-<div><span data-i18n="pd_gift">تغليف هدايا مجاني</span> <b data-i18n="pd_gift_v">مع كل طلب</b></div>
-<div><span data-i18n="pd_exchange">ضمان استبدال</span> <b data-i18n="pd_exchange_v">خلال 3 أيام</b></div>
-</div>
-
-<p style="color:var(--mut);margin-top:1rem;line-height:1.9" id="pdDesc"></p>
+<p class="pd-desc" id="pdDesc"></p>
 
 <div class="share-row" id="shareRow"></div>
 </div>
@@ -171,9 +163,6 @@ $("#pdBadge").innerHTML=badge?`<span class="p-badge" style="position:static;disp
 $("#pdPrice").textContent=money(P.price);
 $("#pdOld").textContent=P.old>P.price?money(P.old):"";
 $("#pdOld").style.display=P.old>P.price?"inline":"none";
-$("#pdHours").textContent=phours(P);
-
-
 renderThumbs();
 renderScents();
 renderReviews();

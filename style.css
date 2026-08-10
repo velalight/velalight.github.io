@@ -3311,3 +3311,151 @@ html[dir=ltr]
 #scentModalScents{
   width:100%;
 }
+
+
+/* =========================================================
+   VelaLight — Product / Cart spacing refinement
+   ========================================================= */
+
+/* Product page: let the description be the hero information. */
+.pd-info h1{
+  margin:.15rem 0 .25rem;
+}
+
+.pd-price{
+  margin:.35rem 0 .65rem;
+  font-size:1.45rem;
+}
+
+.opt-t{
+  margin:.65rem 0 .35rem;
+  font-size:.78rem;
+}
+
+.pd-scent-select{
+  width:min(100%,260px);
+  min-height:40px;
+  height:40px;
+  padding:.45rem .75rem;
+  border-radius:11px;
+  font-size:.82rem;
+}
+
+.pd-desc{
+  margin:.9rem 0 0;
+  color:var(--mut);
+  line-height:1.9;
+  font-size:.96rem;
+  white-space:pre-line;
+}
+
+.pd-info .qty{
+  height:32px;
+}
+
+.pd-info .qty button{
+  width:31px;
+  height:31px;
+  font-size:.95rem;
+}
+
+.pd-info .qty b{
+  min-width:30px;
+  font-size:.85rem;
+}
+
+.pd-actions{
+  margin-top:.8rem;
+}
+
+.pd-actions .btn{
+  min-height:40px;
+  padding:.55rem 1rem;
+  font-size:.84rem;
+}
+
+/* The old product-information strip is intentionally removed. */
+.pd-meta{
+  display:none!important;
+}
+
+/* Cart: compact product card so the important product information has room. */
+.citem{
+  grid-template-columns:78px minmax(0,1fr) 26px;
+  gap:.65rem;
+  padding:.65rem;
+  margin-bottom:.65rem;
+  border-radius:15px;
+}
+
+.citem-media{
+  width:78px;
+  height:78px;
+  border-radius:12px;
+}
+
+.citem h5{
+  font-size:.9rem;
+  margin:0 0 .12rem;
+  line-height:1.35;
+}
+
+.citem .cs{
+  margin-top:.08rem;
+  font-size:.74rem;
+}
+
+.cart-scent-picker{
+  display:block;
+  margin-top:.28rem;
+}
+
+.cart-scent-label{
+  display:none;
+}
+
+.cart-scent-select{
+  width:min(100%,190px)!important;
+  min-width:0!important;
+  height:34px;
+  min-height:34px;
+  padding:.3rem .55rem;
+  border-radius:9px;
+  font-size:.74rem;
+}
+
+.citem .cart-line-total{
+  margin-top:.18rem;
+  font-size:.72rem;
+}
+
+.citem .qty{
+  margin-top:.3rem;
+  height:29px;
+}
+
+.citem .qty button{
+  width:28px;
+  height:28px;
+  font-size:.85rem;
+}
+
+.citem .qty b{
+  min-width:28px;
+  font-size:.78rem;
+}
+
+.citem .rm{
+  width:25px;
+  height:25px;
+  font-size:.72rem;
+}
+
+@media(max-width:700px){
+  .pd-price{font-size:1.3rem;margin:.25rem 0 .5rem}
+  .pd-scent-select{width:min(100%,220px)}
+  .pd-desc{font-size:.9rem;line-height:1.8;margin-top:.7rem}
+  .citem{grid-template-columns:64px minmax(0,1fr) 24px;gap:.5rem;padding:.55rem}
+  .citem-media{width:64px;height:64px}
+  .cart-scent-select{width:min(100%,170px)!important;height:32px;min-height:32px;font-size:.7rem}
+}
