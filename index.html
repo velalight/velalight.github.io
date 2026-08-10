@@ -167,8 +167,14 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         <span class="badge" id="cartCount">0</span>
       </button>
 
-      <button class="icobtn" id="navToggle">
-        ☰
+      <button
+        class="icobtn hamburger-btn"
+        id="navToggle"
+        aria-label="Open menu"
+        aria-expanded="false">
+        <span class="hamburger-lines" aria-hidden="true">
+          <i></i><i></i><i></i>
+        </span>
       </button>
 
     </div>
@@ -459,12 +465,12 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         <a class="btn"
            href="#products"
            data-i18n="cta_shop">
-           The Collection ✨
+          اكتشفي The Collection ✨
         </a>
 
 
         <a class="btn ghost"
-           href="#Our Story"
+           href="#about-us"
            data-i18n="cta_story">
           Our Story
         </a>
@@ -473,6 +479,22 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 
       <div class="trust">
+
+        <span data-i18n="trust1">
+          🚚 توصيل لكل مصر
+        </span>
+
+        <span data-i18n="trust2">
+          🤲 100% صناعة يدوية
+        </span>
+
+        <span data-i18n="trust3">
+          🎁 تغليف هدايا مجاني
+        </span>
+
+        <span data-i18n="trust4">
+          🔁 استبدال خلال 3 أيام
+        </span>
 
       </div>
 
@@ -1924,6 +1946,18 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       % slides.length;
 
 
+    const nextIndex =
+      (current + 1) % slides.length;
+
+    const nextImage =
+      slides[nextIndex]?.querySelector("img")?.getAttribute("src");
+
+    if(nextImage){
+      const preload = new Image();
+      preload.src = nextImage;
+    }
+
+
     slides.forEach(
       (slide,i)=>{
 
@@ -1966,7 +2000,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     timer =
       setInterval(
         next,
-        4000
+        1000
       );
 
   }
