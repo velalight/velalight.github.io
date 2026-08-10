@@ -183,7 +183,7 @@ $("#pdBadge").innerHTML=badge?`<span class="p-badge" style="position:static;disp
 $("#pdPrice").textContent=money(P.price);
 $("#pdOld").textContent=P.old>P.price?money(P.old):"";
 $("#pdOld").style.display=P.old>P.price?"inline":"none";
-$("#pdHours").textContent=phours(P);
+$("#pdHours")?.textContent=phours(P);
 
 
 renderThumbs();
