@@ -247,7 +247,7 @@ function initLang(){
     renderFAQ();
 
     fillCitySelect($("#accCity"));
-    removeCheckoutCityField();
+    fillCitySelect($("#coCity"));
 
     fillCartForm();
 
@@ -1148,19 +1148,13 @@ function renderFAQ(){
    CART INITIALIZATION
    ═══════════════════════════════════════ */
 
-function removeCheckoutCityField(){
-  const city=document.querySelector("#coCity");
-  if(city){
-    const wrapper=city.closest("label,.field,.form-group,.co-city") || city;
-    wrapper.remove();
-  }
-}
-
 function initCart(){
 
-  removeCheckoutCityField();
-
   cartBadge();
+
+  fillCitySelect(
+    $("#coCity")
+  );
 
   fillCartForm();
 
@@ -1197,21 +1191,16 @@ function initCart(){
   renderCart();
 
 
-  if(
-    new URLSearchParams(
-      location.search
-    ).get("cart")==="1"
-  ){
-
-    fillCartForm();
-
-    renderCart();
-
-    openDrawer(
-      "cartDrawer",
-      "cartOv"
-    );
-
+  /*
+    IMPORTANT: never auto-open the cart on page load / refresh.
+    The cart may keep its saved items, but the drawer itself must remain
+    closed until the visitor explicitly clicks the cart button.
+  */
+  const cartParam = new URLSearchParams(location.search).get("cart");
+  if(cartParam === "1") {
+    const url = new URL(location.href);
+    url.searchParams.delete("cart");
+    history.replaceState(null, "", url.pathname + (url.search ? "?" + url.searchParams.toString() : "") + url.hash);
   }
 
 
@@ -1242,7 +1231,24 @@ function initCart(){
   $("#checkoutBtn")
     ?.addEventListener(
       "click",
-      checkout
+      async e=>{
+        const btn=e.currentTarget;
+        if(btn.disabled)return;
+        btn.disabled=true;
+        btn.setAttribute("aria-busy","true");
+        btn.classList.add("is-loading");
+        const original=btn.innerHTML;
+        btn.dataset.originalHtml=original;
+        btn.innerHTML = LANG === "en" ? "⏳ Processing…" : "⏳ جاري تجهيز الطلب…";
+        try{
+          await checkout();
+        }finally{
+          btn.disabled=false;
+          btn.removeAttribute("aria-busy");
+          btn.classList.remove("is-loading");
+          btn.innerHTML=btn.dataset.originalHtml || original;
+        }
+      }
     );
 
 
@@ -1254,6 +1260,7 @@ function initCart(){
   [
     "#coName",
     "#coPhone",
+    "#coCity",
     "#coAddr",
     "#coNotes"
   ].forEach(selector=>{
@@ -1355,6 +1362,7 @@ function renderCart(){
                   nameEn:it.nameEn
                 })}"
                 loading="lazy"
+                decoding="async"
               >
 
             </div>
@@ -1661,6 +1669,13 @@ function fillCartForm(){
   }
 
 
+  if($("#coCity")){
+
+    $("#coCity").value=
+      u.city||"";
+
+  }
+
 
   if($("#coAddr")){
 
@@ -1683,6 +1698,7 @@ function fillCartForm(){
 function saveUserFromCart(
   name,
   phone,
+  city,
   addr,
   notes=""
 ){
@@ -1695,6 +1711,7 @@ function saveUserFromCart(
     ...old,
     name,
     phone,
+    city,
     addr,
     notes,
     orders:old.orders||0
@@ -1715,6 +1732,9 @@ function saveUserFromCart(
     $("#accPhone").value=phone;
 
 
+  if($("#accCity"))
+    $("#accCity").value=city;
+
 
   if($("#accAddr"))
     $("#accAddr").value=addr;
@@ -1729,6 +1749,9 @@ function saveCartCustomer(){
 
   const phone=
     $("#coPhone")?.value.trim()||"";
+
+  const city=
+    $("#coCity")?.value||"";
 
   const addr=
     $("#coAddr")?.value.trim()||"";
@@ -1747,6 +1770,7 @@ function saveCartCustomer(){
       ...old,
       name,
       phone,
+      city,
       addr,
       notes,
       orders:old.orders||0
@@ -1791,91 +1815,12 @@ function genOrderId(){
 
 
 /* ═══════════════════════════════════════
-   CHECKOUT — FIREBASE SOURCE OF TRUTH
-   ═══════════════════════════════════════ */
-
-async function refreshCartFromFirebase(){
-
-  if(
-    typeof DB === "undefined" ||
-    !DB ||
-    typeof DB.list !== "function"
-  ){
-    throw new Error("Firebase unavailable");
-  }
-
-  const cloud=await DB.list("products");
-  if(!Array.isArray(cloud)) throw new Error("Invalid products response");
-
-  const map=new Map();
-
-  cloud.forEach(d=>{
-    const id=String(
-      d.id_ || d.slug || d.pid || d.id || ""
-    ).trim();
-
-    if(!id || d.active===false) return;
-    map.set(id,{...d,id});
-  });
-
-  const cart=getCart();
-  const missing=[];
-  let changed=false;
-
-  const refreshed=cart.map(item=>{
-    const live=map.get(String(item.id));
-
-    if(!live){
-      missing.push(item);
-      return item;
-    }
-
-    const livePrice=Number(live.price);
-
-    if(!Number.isFinite(livePrice) || livePrice<0){
-      missing.push(item);
-      return item;
-    }
-
-    const next={
-      ...item,
-      price:livePrice,
-      name:live.name ?? item.name,
-      nameEn:live.nameEn ?? item.nameEn,
-      img:live.img || live.image || live.imageUrl || item.img || ""
-    };
-
-    if(
-      Number(item.price)!==livePrice ||
-      next.name!==item.name ||
-      next.nameEn!==item.nameEn ||
-      next.img!==item.img
-    ){
-      changed=true;
-    }
-
-    return next;
-  });
-
-  if(missing.length){
-    throw new Error("PRODUCT_NOT_FOUND");
-  }
-
-  if(changed){
-    saveCart(refreshed);
-    renderCart();
-  }
-
-  return refreshed;
-}
-
-/* ═══════════════════════════════════════
    CHECKOUT
    ═══════════════════════════════════════ */
 
 async function checkout(){
 
-  let c=getCart();
+  const c=getCart();
 
 
   /* 1 — PRODUCTS */
@@ -1884,31 +1829,6 @@ async function checkout(){
 
     toast(
       t("t_empty")
-    );
-
-    return;
-
-  }
-
-
-  /* 1.5 — FIREBASE PRICE / PRODUCT VERIFICATION */
-
-  try{
-
-    c=await refreshCartFromFirebase();
-
-  }catch(e){
-
-    console.error("Checkout Firebase verification failed:",e);
-
-    toast(
-      e && e.message === "PRODUCT_NOT_FOUND"
-        ? (LANG==="en"
-          ? "⚠️ One of the products is no longer available."
-          : "⚠️ أحد المنتجات لم يعد متاحًا حاليًا.")
-        : (LANG==="en"
-          ? "⚠️ Please try again after reconnecting to Firebase."
-          : "⚠️ تعذر التحقق من أحدث سعر للمنتج. حاولي مرة أخرى.")
     );
 
     return;
@@ -1944,6 +1864,9 @@ async function checkout(){
 
   const phone=
     $("#coPhone")?.value.trim()||"";
+
+  const city=
+    $("#coCity")?.value||"";
 
   const addr=
     $("#coAddr")?.value.trim()||"";
@@ -2002,6 +1925,7 @@ async function checkout(){
   saveUserFromCart(
     name,
     phone,
+    city,
     addr,
     notes
   );
@@ -2124,6 +2048,13 @@ async function checkout(){
     `${t("wa_phone")} ${phone}\n`;
 
 
+  if(city){
+
+    msg+=
+      `${t("wa_city")} ${city}\n`;
+
+  }
+
 
   msg+=
     `${t("wa_addr")} ${addr}\n`;
@@ -2148,11 +2079,13 @@ async function checkout(){
     customer:{
       name,
       phone,
+      city,
       address:addr
     },
 
     name,
     phone,
+    city,
     address:addr,
 
     notes,
@@ -2238,6 +2171,7 @@ async function checkout(){
 
   u.name=name;
   u.phone=phone;
+  u.city=city;
   u.addr=addr;
   u.notes=notes;
 
@@ -2469,6 +2403,7 @@ function initAccount(){
 
             name,
             phone,
+            city,
             addr,
 
             orders:
