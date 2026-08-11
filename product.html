@@ -131,36 +131,45 @@ buildStars();
 const pid=new URLSearchParams(location.search).get("p");
 if(!pid){showNotFound();return}
 
-// اعرض المنتج المحلي فورًا، بدون انتظار Firebase.
-const localProducts=Array.isArray(window.PRODUCTS)?window.PRODUCTS:
-(Array.isArray(window.ALL_PRODUCTS)?window.ALL_PRODUCTS:[]);
-P=localProducts.find(x=>String(x.id)===String(pid));
+// PRODUCTS و ALL_PRODUCTS متغيرات داخل data.js وليسا window properties.
+// لذلك نستخدم PRODUCTS مباشرة لعرض المنتج فورًا.
+P=Array.isArray(PRODUCTS)
+  ?PRODUCTS.find(x=>String(x.id)===String(pid))
+  :null;
 
 if(P){
-render();
+  render();
 }else{
-try{
-await loadAll();
-const remoteProducts=Array.isArray(window.ALL_PRODUCTS)?window.ALL_PRODUCTS:[];
-P=remoteProducts.find(x=>String(x.id)===String(pid));
-if(P)render();else showNotFound();
-}catch(e){
-console.warn("Product fallback failed:",e);
-showNotFound();
-}
+  // احتياطي: حاول تحميل بيانات Firebase/LocalDB في حالة المنتج غير موجود في النسخة المحلية.
+  try{
+    await loadAll();
+    P=Array.isArray(ALL_PRODUCTS)
+      ?ALL_PRODUCTS.find(x=>String(x.id)===String(pid))
+      :null;
+
+    if(P)render();
+    else showNotFound();
+  }catch(e){
+    console.warn("Product loading failed:",e);
+    showNotFound();
+  }
 }
 
-// تحديث Firebase في الخلفية فقط.
+// تحديث بيانات Firebase في الخلفية بعد ظهور المنتج.
+// لو وُجد تعديل على المنتج، نعيد الرسم بالبيانات الأحدث.
 try{
-await loadAll();
-const freshProducts=Array.isArray(window.ALL_PRODUCTS)?window.ALL_PRODUCTS:[];
-const fresh=freshProducts.find(x=>String(x.id)===String(pid));
-if(fresh){
-P=fresh;
-render();
-}
+  await loadAll();
+
+  const fresh=Array.isArray(ALL_PRODUCTS)
+    ?ALL_PRODUCTS.find(x=>String(x.id)===String(pid))
+    :null;
+
+  if(fresh){
+    P=fresh;
+    render();
+  }
 }catch(e){
-console.warn("Background Firebase update failed:",e);
+  console.warn("Background Firebase update failed:",e);
 }
 });
 
