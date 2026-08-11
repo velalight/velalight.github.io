@@ -121,349 +121,284 @@
 (function(){
 "use strict";
 
-let P=null, qty=1, selScent="", selRating=5;
+let P=null,qty=1,selScent="",selRating=5;
 let productPid="";
-let productUnwatch=null;
-let firebaseLoaded=false;
-
-const $=s=>document.querySelector(s);
-const $$=s=>Array.from(document.querySelectorAll(s));
-
-function norm(v){
-  return String(v??"").trim();
-}
-
-function scentLabel(v){
-  const value=norm(v);
-  if(!value)return "";
-  if(typeof scentTr==="function") return scentTr(value);
-  if(Array.isArray(window.SCENTS)){
-    const hit=window.SCENTS.find(s=>Array.isArray(s)&&(s[0]===value||s[1]===value));
-    if(hit)return (window.LANG==="en" ? hit[1] : hit[0]);
-  }
-  return value;
-}
-
-function normalizeScents(raw){
-  if(Array.isArray(raw)){
-    return raw.flatMap(x=>{
-      if(Array.isArray(x)) return [norm(x[0])].filter(Boolean);
-      if(typeof x==="string") return [norm(x)].filter(Boolean);
-      return [];
-    });
-  }
-  if(typeof raw==="string"){
-    return raw.split(",").map(norm).filter(Boolean);
-  }
-  return [];
-}
-
-function hasOwn(obj,key){
-  return Object.prototype.hasOwnProperty.call(obj,key);
-}
-
-function cloudProductMatches(d,pid){
-  const wanted=norm(pid);
-  if(!wanted)return false;
-  return [d?.id_,d?.slug,d?.pid,d?.id].some(v=>norm(v)===wanted);
-}
-
-function mergeProduct(local, cloud){
-  const base={...(local||{})};
-  const remote={...(cloud||{})};
-  const merged={...base,...remote};
-
-  const remoteScents=normalizeScents(remote.scents);
-  const localScents=normalizeScents(base.scents);
-
-  // Never let a missing/empty cloud scent field erase working local scents.
-  // If neither source has scents, use the same global scent catalog used by the homepage.
-  merged.scents =
-    remoteScents.length ? remoteScents :
-    localScents.length ? localScents :
-    (Array.isArray(window.SCENTS) ? window.SCENTS.map(s=>Array.isArray(s)?s[0]:s).filter(Boolean) : []);
-
-  if(hasOwn(remote,"price") && remote.price!=="" && remote.price!==null && remote.price!==undefined){
-    const n=Number(remote.price);
-    if(Number.isFinite(n)) merged.price=n;
-  }
-  if(hasOwn(remote,"old") && remote.old!=="" && remote.old!==null && remote.old!==undefined){
-    const n=Number(remote.old);
-    if(Number.isFinite(n)) merged.old=n;
-  }
-
-  const canonical=norm(remote.id_||remote.slug||remote.pid||remote.id||base.id);
-  if(canonical) merged.id=canonical;
-  merged._fid=remote.id||base._fid||null;
-
-  return merged;
-}
+let cloudCatalog=[];
 
 document.addEventListener("DOMContentLoaded",()=>{
-  initLang();
-  cartBadge();
-  buildStars();
+initLang();
+cartBadge();
+buildStars();
 
-  productPid=norm(new URLSearchParams(location.search).get("p"));
-  if(!productPid){showNotFound();return;}
+productPid=new URLSearchParams(location.search).get("p")||"";
+if(!productPid){showNotFound();return}
 
-  const local=(Array.isArray(window.PRODUCTS)?PRODUCTS:[]).find(x=>norm(x.id)===productPid);
-  if(local){
-    P=mergeProduct(local,null);
-    render();
-  }
+// Local fallback renders immediately when available.
+const local=PRODUCTS.find(x=>String(x.id)===String(productPid));
+if(local){
+P={...local};
+render();
+}
 
-  // Firebase is authoritative. Wait for fb-ready if the module has not initialized yet.
-  if(window.FB && typeof window.FB.list==="function"){
-    loadAuthoritativeProduct();
-  }else{
-    window.addEventListener("fb-ready",loadAuthoritativeProduct,{once:true});
-  }
+// Firebase is the authoritative source for product data.
+const sync=()=>loadCloudCatalog(productPid);
+if(window.FB&&typeof window.FB.list==="function")sync();
+else window.addEventListener("fb-ready",sync,{once:true});
 
-  setTimeout(()=>{
-    if(!P)showNotFound();
-  },10000);
+setTimeout(()=>{if(!P)showNotFound()},7000);
 });
 
-async function loadAuthoritativeProduct(){
-  if(firebaseLoaded)return;
-  firebaseLoaded=true;
+async function loadCloudCatalog(pid){
+if(!window.FB||typeof window.FB.list!=="function")return;
+try{
+const cloud=await window.FB.list("products");
+cloudCatalog=Array.isArray(cloud)?cloud:[];
+const map=new Map((Array.isArray(PRODUCTS)?PRODUCTS:[]).map(x=>[String(x.id),{...x}]));
 
-  try{
-    const cloud=await window.FB.list("products");
-    const rows=Array.isArray(cloud)?cloud:[];
-    const local=(Array.isArray(window.PRODUCTS)?PRODUCTS:[]).find(x=>norm(x.id)===productPid);
-    const exact=rows.find(d=>cloudProductMatches(d,productPid));
+cloudCatalog.forEach(d=>{
+const slug=String(d.id_||d.slug||d.pid||d.id||"").trim();
+if(!slug)return;
+if(d.active===false){map.delete(slug);return}
+const base=map.get(slug)||{};
+const merged={...base,...d,id:slug,_fid:d.id||null};
+const rs=d.scents;
+const hasScents=Array.isArray(rs)?rs.length>0:(typeof rs==="string"&&rs.trim().length>0);
+merged.scents=hasScents?rs:(base.scents||[]);
+merged.price=Number(merged.price)||0;
+merged.old=Number(merged.old)||0;
+map.set(slug,merged);
+});
 
-    if(exact){
-      P=mergeProduct(local,exact);
-      render();
-    }else if(local){
-      P=mergeProduct(local,null);
-      render();
-    }else{
-      showNotFound();
-    }
+ALL_PRODUCTS=[...map.values()];
+const fresh=ALL_PRODUCTS.find(x=>String(x.id)===String(pid));
+if(fresh){P=fresh;render()}
+else if(!P)showNotFound();
 
-    // Keep the detail page synchronized with Admin/Firebase edits.
-    if(typeof window.FB.watch==="function"){
-      productUnwatch=window.FB.watch("products",(fresh)=>{
-        const arr=Array.isArray(fresh)?fresh:[];
-        const hit=arr.find(d=>cloudProductMatches(d,productPid));
-        if(hit && hit.active!==false){
-          P=mergeProduct(local,hit);
-          render();
-        }
-      },err=>console.warn("Product realtime sync failed:",err));
-    }
-
-    try{
-      const reviews=await window.FB.list("reviews");
-      ALL_REVIEWS=Array.isArray(reviews)?reviews:[];
-      if(P)renderReviews();
-    }catch(e){
-      console.warn("Product reviews refresh failed:",e);
-    }
-  }catch(error){
-    console.error("Product cloud load failed:",error);
-    if(P)render();
-    else showNotFound();
-  }
+try{
+const reviews=await window.FB.list("reviews");
+ALL_REVIEWS=Array.isArray(reviews)?reviews:[];
+if(P)render();
+}catch(e){console.warn("Product reviews refresh failed:",e)}
+}catch(error){
+console.error("Product cloud load failed:",error);
+if(!P)showNotFound();
+}
 }
 
 function initLang(){
-  applyI18n();
-  $("#langBtn")?.addEventListener("click",()=>{
-    LANG=LANG==="ar"?"en":"ar";
-    localStorage.setItem("vl_lang",LANG);
-    document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
-    applyI18n();
-    if(P)render();
-  });
+applyI18n();
+$("#langBtn")?.addEventListener("click",()=>{
+LANG=LANG==="ar"?"en":"ar";
+localStorage.setItem("vl_lang",LANG);
+document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+applyI18n();
+if(P)render();
+});
 }
-
 function applyI18n(){
-  $$("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
-  $$("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
+$$("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
+$$("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
 }
 
 function showNotFound(){
-  $("#pdLoading")?.classList.add("hidden");
-  $("#pdNotFound")?.classList.remove("hidden");
+$("#pdLoading").classList.add("hidden");
+$("#pdNotFound").classList.remove("hidden");
 }
 
 function render(){
-  if(!P)return;
+$("#pdLoading").classList.add("hidden");
+$("#pdWrap").classList.remove("hidden");
 
-  $("#pdLoading")?.classList.add("hidden");
-  $("#pdWrap")?.classList.remove("hidden");
-
-  document.title=pname(P)+" | VelaLight";
-  $("#crumbName").textContent=pname(P);
-  $("#pdName").textContent=pname(P);
-  $("#pdDesc").textContent=pdesc(P);
-
-  const mainImg=$("#pdImg");
-  if(mainImg){
-    mainImg.onerror=()=>mainImg.removeAttribute("src");
-    mainImg.src=imgOf(P);
-    mainImg.alt=pname(P);
+document.title=pname(P)+" | VelaLight";
+$("#crumbName").textContent=pname(P);
+$("#pdName").textContent=pname(P);
+$("#pdDesc").textContent=pdesc(P);
+const mainImg=$("#pdImg");
+mainImg.onerror=()=>mainImg.removeAttribute("src");
+mainImg.src=imgOf(P);
+const reviewSummary=prodReviews(P.id);
+const ratingBox=$("#pdRatingSummary");
+if(ratingBox){
+  if(reviewSummary.length){
+    const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
+    ratingBox.innerHTML=`<span class="stars">★★★★★</span><b>${avg.toFixed(1)}</b><span>(${reviewSummary.length} مراجعة)</span>`;
+  }else{
+    ratingBox.innerHTML=`<span class="stars muted">★★★★★</span><span>كوني أول من يشارك رأيه</span>`;
   }
+}
+$("#pdImg").alt=pname(P);
 
-  const reviewSummary=prodReviews(P.id);
-  const ratingBox=$("#pdRatingSummary");
-  if(ratingBox){
-    if(reviewSummary.length){
-      const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
-      ratingBox.innerHTML=`<span class="stars">★★★★★</span><b>${avg.toFixed(1)}</b><span>(${reviewSummary.length} مراجعة)</span>`;
-    }else{
-      ratingBox.innerHTML=`<span class="stars muted">★★★★★</span><span>كوني أول من يشارك رأيه</span>`;
-    }
-  }
+const badge=pbadge(P);
+$("#pdBadge").innerHTML=badge?`<span class="p-badge" style="position:static;display:inline-block">${badge}</span>`:"";
 
-  const badge=pbadge(P);
-  $("#pdBadge").innerHTML=badge?`<span class="p-badge" style="position:static;display:inline-block">${badge}</span>`:"";
+$("#pdPrice").textContent=money(P.price);
+$("#pdOld").textContent=P.old>P.price?money(P.old):"";
+$("#pdOld").style.display=P.old>P.price?"inline":"none";
+const hoursEl=$("#pdHours");
+if(hoursEl)hoursEl.textContent=phours(P);
 
-  // IMPORTANT: price here is the already-merged Firebase value.
-  $("#pdPrice").textContent=money(P.price);
-  $("#pdOld").textContent=P.old>P.price?money(P.old):"";
-  $("#pdOld").style.display=P.old>P.price?"inline":"none";
 
-  renderThumbs();
-  renderScents();
-  renderReviews();
-  renderRelated();
-  renderShare();
-  bindEvents();
+renderThumbs();
+renderScents();
+renderReviews();
+renderRelated();
+renderShare();
+bindEvents();
 }
 
 function renderThumbs(){
-  const imgs=imgsOf(P);
-  const w=$("#pdThumbs");
-  if(!w)return;
-  if(imgs.length<=1){w.innerHTML="";return;}
-  w.innerHTML=imgs.map((u,i)=>`<img src="${CDN(u)}" class="${i===0?'on':''}" data-i="${i}" loading="lazy" decoding="async" alt="">`).join("");
-  w.querySelectorAll("img").forEach(im=>im.addEventListener("click",()=>{
-    $("#pdImg").src=im.src;
-    w.querySelectorAll("img").forEach(x=>x.classList.remove("on"));
-    im.classList.add("on");
-  }));
+const imgs=imgsOf(P);
+const w=$("#pdThumbs");
+if(imgs.length<=1){w.innerHTML="";return}
+w.innerHTML=imgs.map((u,i)=>`<img src="${CDN(u)}" class="${i===0?'on':''}" data-i="${i}" loading="lazy" decoding="async">`).join("");
+w.querySelectorAll("img").forEach(im=>im.addEventListener("click",()=>{
+$("#pdImg").src=im.src;
+w.querySelectorAll("img").forEach(x=>x.classList.remove("on"));
+im.classList.add("on");
+}));
 }
 
 function getProductScents(){
-  const productList=normalizeScents(P?.scents);
-  if(productList.length)return productList;
+const raw=P?.scents;
+let list=[];
+if(Array.isArray(raw)){
+list=raw.filter(Boolean);
+}else if(typeof raw==="string"&&raw.trim()){
+list=raw.split(",").map(x=>x.trim()).filter(Boolean);
+}
 
-  // Same catalog used by the homepage/quick-add. A missing product-specific
-  // list must never make the scent selector disappear.
-  return Array.isArray(window.SCENTS)
-    ?window.SCENTS.map(s=>Array.isArray(s)?norm(s[0]):norm(s)).filter(Boolean)
-    :[];
+// Every VelaLight candle uses the official scent catalog unless the product
+// explicitly provides its own non-empty scent list. This prevents the
+// detail page from losing the scent selector when an older Firebase record
+// does not contain the scents field.
+if(!list.length && typeof SCENTS!=="undefined" && Array.isArray(SCENTS)){
+list=SCENTS.map(s=>Array.isArray(s)?s[0]:s).filter(Boolean);
+}
+
+const translate=typeof scentTr==="function"
+  ? scentTr
+  : (value)=>{
+      const found=(typeof SCENTS!=="undefined"&&Array.isArray(SCENTS))
+        ?SCENTS.find(x=>Array.isArray(x)&&(x[0]===value||x[1]===value))
+        :null;
+      return found?(LANG==="en"?found[1]:found[0]):value;
+    };
+
+return list.map(s=>{
+if(Array.isArray(s)){
+  const value=String(s[0]||"").trim();
+  return {value,label:LANG==="en"?String(s[1]||s[0]||""):String(s[0]||"")};
+}
+if(typeof s==="object"&&s!==null){
+  const value=String(s.value||s.name||s.id||"").trim();
+  const label=String(s.label||s.name||value).trim();
+  return {value,label:LANG==="en"?label:translate(value)};
+}
+const value=String(s).trim();
+return {value,label:translate(value)};
+}).filter(x=>x.value);
 }
 
 function renderScents(){
-  const select=$("#pdScentSelect");
-  if(!select)return;
+const select=$("#pdScentSelect");
+if(!select)return;
 
-  const list=getProductScents();
-  const head=select.closest(".pd-option-head");
+const list=getProductScents();
+const head=select.closest(".pd-option-head");
+if(!list.length){
+if(head)head.style.display="none";
+select.style.display="none";
+selScent="";
+return;
+}
+if(head)head.style.display="flex";
+select.style.display="";
+select.innerHTML=
+`<option value="">${LANG==="ar"?"🌸 اختاري العطر":"🌸 Choose a scent"}</option>`+
+list.map(s=>`<option value="${String(s.value).replace(/"/g,"&quot;")}">${String(s.label).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</option>`).join("");
 
-  if(!list.length){
-    if(head)head.style.display="none";
-    select.style.display="none";
-    selScent="";
-    return;
-  }
+// لو المنتج له عطر محفوظ، اختاره تلقائيًا
+const current=String(P?.scent||P?.defaultScent||P?.selectedScent||"").trim();
+const match=list.find(s=>String(s.value).trim()===current);
 
-  if(head)head.style.display="flex";
-  select.style.display="";
-  select.innerHTML=
-    `<option value="">${LANG==="ar"?"🌸 اختاري العطر":"🌸 Choose a scent"}</option>`+
-    list.map(value=>{
-      const safeValue=String(value).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-      const safeLabel=String(scentLabel(value)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-      return `<option value="${safeValue}">${safeLabel}</option>`;
-    }).join("");
-
-  const current=norm(P?.scent||P?.defaultScent||P?.selectedScent);
-  const match=list.find(v=>norm(v)===current);
-  selScent=match?norm(match):"";
+if(match){
+  selScent=String(match.value);
   select.value=selScent;
+}else{
+  selScent="";
+  select.value="";
+}
 
-  select.onchange=()=>{
-    selScent=select.value;
-    select.classList.remove("scent-error");
-  };
+select.onchange=()=>{
+selScent=select.value;
+select.classList.remove("scent-error");
+};
 }
 
 function bindEvents(){
-  const minus=$("#qMinus"),plus=$("#qPlus"),add=$("#addBtn"),rev=$("#rvSubmit");
+const minus=$("#qMinus"),plus=$("#qPlus"),add=$("#addBtn"),rev=$("#rvSubmit");
 
-  if(minus)minus.onclick=()=>{
-    if(qty>1)qty--;
-    $("#qVal").textContent=qty;
-  };
+minus.onclick=()=>{
+if(qty>1)qty--;
+$("#qVal").textContent=qty;
+};
 
-  if(plus)plus.onclick=()=>{
-    qty++;
-    $("#qVal").textContent=qty;
-  };
+plus.onclick=()=>{
+qty++;
+$("#qVal").textContent=qty;
+};
 
-  if(add)add.onclick=()=>{
-    const required=getProductScents().length>0;
-    if(required&&!selScent){
-      $("#pdScentSelect")?.classList.add("scent-error");
-      toast(t("t_scentwarn"));
-      $("#pdScentSelect")?.focus();
-      return;
-    }
-    addToCart(P,{scent:selScent,qty});
-  };
+add.onclick=()=>{
+const required=getProductScents().length>0;
+if(required&&!selScent){
+$("#pdScentSelect")?.classList.add("scent-error");
+toast(t("t_scentwarn"));
+$("#pdScentSelect")?.focus();
+return;
+}
+addToCart(P,{scent:selScent,qty});
+};
 
-  if(rev)rev.onclick=()=>{
-    const name=$("#rvName").value.trim();
-    const text=$("#rvText").value.trim();
-    const photo=$("#rvPhoto").value.trim();
-    if(!name||!text){toast(t("t_revwarn"));return;}
-    DB.add("reviews",{
-      productSlug:P.id,pid:P.id,name,text,photo,
-      rating:selRating,approved:false,createdAt:Date.now()
-    }).then(()=>{
-      toast(t("t_revok"));
-      $("#rvName").value="";
-      $("#rvText").value="";
-      $("#rvPhoto").value="";
-    }).catch(e=>{console.warn(e);toast("⚠️");});
-  };
+rev.onclick=()=>{
+const name=$("#rvName").value.trim();
+const text=$("#rvText").value.trim();
+const photo=$("#rvPhoto").value.trim();
+if(!name||!text){toast(t("t_revwarn"));return}
+DB.add("reviews",{
+productSlug:P.id,pid:P.id,name,text,photo,
+rating:selRating,approved:false,createdAt:Date.now()
+}).then(()=>{
+toast(t("t_revok"));
+$("#rvName").value="";
+$("#rvText").value="";
+$("#rvPhoto").value="";
+}).catch(e=>{console.warn(e);toast("⚠️")});
+};
 }
 
 function buildStars(){
-  const w=$("#starPick");
-  if(!w)return;
-  w.innerHTML="";
-  for(let i=1;i<=5;i++){
-    const b=document.createElement("button");
-    b.type="button";
-    b.textContent="★";
-    b.dataset.v=i;
-    if(i===5)b.classList.add("lit");
-    b.addEventListener("click",()=>{
-      selRating=i;
-      w.querySelectorAll("button").forEach(x=>x.classList.toggle("lit",+x.dataset.v<=i));
-    });
-    w.appendChild(b);
-  }
+const w=$("#starPick");
+for(let i=1;i<=5;i++){
+const b=document.createElement("button");
+b.textContent="★";
+b.dataset.v=i;
+if(i===5)b.classList.add("lit");
+b.addEventListener("click",()=>{
+selRating=i;
+w.querySelectorAll("button").forEach(x=>x.classList.toggle("lit",+x.dataset.v<=i));
+});
+w.appendChild(b);
+}
 }
 
 function renderReviews(){
-  const list=prodReviews(P.id);
-  const w=$("#revList");
-  if(!w)return;
-  if(!list.length){
-    w.innerHTML=`<p style="color:var(--dim);padding:1rem 0">${t("pd_first")}</p>`;
-    return;
-  }
-  w.innerHTML=list.map(r=>`<div class="rv-item">
+const list=prodReviews(P.id);
+const w=$("#revList");
+if(!list.length){
+w.innerHTML=`<p style="color:var(--dim);padding:1rem 0">${t("pd_first")}</p>`;
+return;
+}
+w.innerHTML=list.map(r=>`<div class="rv-item">
 <b>${r.name||"-"}</b> <span class="stars">${"★".repeat(r.rating||5)}</span>
 <p style="color:var(--mut);margin-top:.3rem">${r.text||""}</p>
 ${r.photo?`<img class="rv-photo" src="${r.photo}">`:""}
@@ -471,31 +406,24 @@ ${r.photo?`<img class="rv-photo" src="${r.photo}">`:""}
 }
 
 function renderRelated(){
-  const rel=(Array.isArray(ALL_PRODUCTS)&&ALL_PRODUCTS.length?ALL_PRODUCTS:PRODUCTS)
-    .filter(x=>x.cat===P.cat&&x.id!==P.id).slice(0,4);
-  const grid=$("#relGrid");
-  if(!grid)return;
-  grid.innerHTML=rel.map(p=>`<a class="p-card" href="product.html?p=${encodeURIComponent(p.id)}">
+const rel=(ALL_PRODUCTS.length?ALL_PRODUCTS:PRODUCTS).filter(x=>x.cat===P.cat&&x.id!==P.id).slice(0,4);
+$("#relGrid").innerHTML=rel.map(p=>`<a class="p-card" href="product.html?p=${p.id}">
 <div class="p-media"><img src="${imgOf(p)}" alt="${pname(p)}" loading="lazy"></div>
 <div class="p-body"><h3>${pname(p)}</h3><div class="p-price">${money(p.price)}</div></div>
 </a>`).join("");
 }
 
 function renderShare(){
-  const url=location.href;
-  const txt=encodeURIComponent(pname(P)+" | VelaLight");
-  $("#shareRow").innerHTML=`
-<a href="https://wa.me/?text=${txt}%20${encodeURIComponent(url)}" target="_blank" rel="noopener">واتساب</a>
-<a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener">فيسبوك</a>
+const url=location.href;
+const txt=encodeURIComponent(pname(P)+" | VelaLight");
+$("#shareRow").innerHTML=`
+<a href="https://wa.me/?text=${txt}%20${url}" target="_blank">واتساب</a>
+<a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank">فيسبوك</a>
 <a href="javascript:void(0)" id="copyLink">نسخ الرابط</a>`;
-  $("#copyLink")?.addEventListener("click",()=>{
-    navigator.clipboard.writeText(url).then(()=>toast(t("t_saved")));
-  });
-}
-
-window.addEventListener("beforeunload",()=>{
-  if(typeof productUnwatch==="function")productUnwatch();
+$("#copyLink")?.addEventListener("click",()=>{
+navigator.clipboard.writeText(url).then(()=>toast(t("t_saved")));
 });
+}
 
 })();
 </script>
