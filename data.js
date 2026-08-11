@@ -777,18 +777,12 @@ ALL_REVIEWS=[...SEED_REVIEWS];
 
 async function loadAll(){
 
-// Never block the UI on Firebase. The local catalog is already available.
-// When Firebase is ready, fetch products and reviews in parallel.
-let productPromise=Promise.resolve([]);
-let reviewPromise=Promise.resolve([]);
-
-if(typeof DB!=="undefined"&&DB&&typeof DB.list==="function"){
-  productPromise=DB.list("products").catch(()=>[]);
-  reviewPromise=DB.list("reviews").catch(()=>[]);
+try{
+dbProductsCache=
+await DB.list("products");
+}catch(e){
+dbProductsCache=[];
 }
-
-const [cloudProducts,cloudReviews]=await Promise.all([productPromise,reviewPromise]);
-dbProductsCache=Array.isArray(cloudProducts)?cloudProducts:[];
 
 const map=
 new Map(
@@ -803,8 +797,7 @@ p=>[p.id,{...p}]
 const slug=
 d.id_||
 d.slug||
-d.pid||
-d.id;
+d.pid;
 
 if(!slug)return;
 
@@ -840,7 +833,11 @@ ALL_PRODUCTS=[
 ...map.values()
 ];
 
-const dr=Array.isArray(cloudReviews)?cloudReviews:[];
+let dr=[];
+
+try{
+dr=await DB.list("reviews");
+}catch(e){}
 
 ALL_REVIEWS=[
 ...SEED_REVIEWS,

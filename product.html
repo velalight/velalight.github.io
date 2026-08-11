@@ -122,96 +122,33 @@
 "use strict";
 
 let P=null,qty=1,selScent="",selRating=5;
-let productPid="";
-let cloudCatalog=[];
 
 document.addEventListener("DOMContentLoaded",()=>{
 initLang();
 cartBadge();
 buildStars();
+const pid=new URLSearchParams(location.search).get("p");
+if(!pid){showNotFound();return}
 
-productPid=new URLSearchParams(location.search).get("p")||"";
-if(!productPid){showNotFound();return}
-
-// Render from the freshest local cache first. This makes navigation feel
-// instant while Firebase verifies the exact product in the background.
-let cached=null;
-try{
-  const cache=JSON.parse(localStorage.getItem("vl_products_cache_v1")||"[]");
-  if(Array.isArray(cache)){
-    cached=cache.find(x=>String(x.id)===String(productPid)||String(x.id_)===String(productPid)||String(x.slug)===String(productPid)||String(x.pid)===String(productPid))||null;
-  }
-}catch(e){}
-
-const local=PRODUCTS.find(x=>String(x.id)===String(productPid));
-const first= cached || local;
-if(first){
-P={...first};
+// Local-first: product pages never wait for Firebase before rendering.
+P=PRODUCTS.find(x=>String(x.id)===String(pid));
+if(!P){showNotFound();return}
 render();
-}
 
-// Firebase is the authoritative source for product data.
-const sync=()=>loadCloudCatalog(productPid);
-if(window.FB&&typeof window.FB.list==="function")sync();
-else window.addEventListener("fb-ready",sync,{once:true});
-
-setTimeout(()=>{if(!P)showNotFound()},5000);
+// Background refresh only. If Firebase is slow/offline, the page stays usable.
+const refresh=()=>{
+if(typeof loadAll!=="function")return;
+loadAll().then(()=>{
+const fresh=Array.isArray(ALL_PRODUCTS)
+?ALL_PRODUCTS.find(x=>String(x.id)===String(pid))
+:null;
+if(fresh){P=fresh;render();}
+}).catch(e=>console.warn("Background data refresh failed:",e));
+};
+if(CLOUD)refresh();
+else window.addEventListener("fb-ready",refresh,{once:true});
 });
 
-async function loadCloudCatalog(pid){
-if(!window.FB||typeof window.FB.list!=="function")return;
-try{
-let direct=null;
-
-// Fast path: admin saves product documents using the product id.
-// This avoids downloading the entire catalog every time a detail page opens.
-if(typeof window.FB.get==="function") direct=await window.FB.get("products",pid);
-
-if(direct){
-  cloudCatalog=[direct];
-}else{
-  // Backward-compatible fallback for older records whose Firestore document id
-  // is not the same as the product id/slug.
-  const cloud=await window.FB.list("products");
-  cloudCatalog=Array.isArray(cloud)?cloud:[];
-}
-
-const map=new Map((Array.isArray(PRODUCTS)?PRODUCTS:[]).map(x=>[String(x.id),{...x}]));
-
-cloudCatalog.forEach(d=>{
-const slug=String(d.id_||d.slug||d.pid||d.id||"").trim();
-if(!slug)return;
-if(d.active===false){map.delete(slug);return}
-const base=map.get(slug)||{};
-const merged={...base,...d,id:slug,_fid:d.id||null};
-const rs=d.scents;
-const hasScents=Array.isArray(rs)?rs.length>0:(typeof rs==="string"&&rs.trim().length>0);
-merged.scents=hasScents?rs:(base.scents||[]);
-merged.price=Number(merged.price)||0;
-merged.old=Number(merged.old)||0;
-map.set(slug,merged);
-});
-
-ALL_PRODUCTS=[...map.values()];
-const fresh=ALL_PRODUCTS.find(x=>String(x.id)===String(pid));
-if(fresh){P=fresh;render()}
-else if(!P)showNotFound();
-
-// Reviews are independent from the product itself; do not make product
-// rendering wait for them.
-window.FB.list("reviews").then(reviews=>{
-  ALL_REVIEWS=Array.isArray(reviews)?reviews:[];
-  if(P) {
-    renderReviews();
-    render();
-  }
-}).catch(e=>console.warn("Product reviews refresh failed:",e));
-
-}catch(error){
-console.error("Product cloud load failed:",error);
-if(!P)showNotFound();
-}
-}
 function initLang(){
 applyI18n();
 $("#langBtn")?.addEventListener("click",()=>{
@@ -289,41 +226,16 @@ function getProductScents(){
 const raw=P?.scents;
 let list=[];
 if(Array.isArray(raw)){
-list=raw.filter(Boolean);
+list=raw;
 }else if(typeof raw==="string"&&raw.trim()){
 list=raw.split(",").map(x=>x.trim()).filter(Boolean);
 }
-
-// Every VelaLight candle uses the official scent catalog unless the product
-// explicitly provides its own non-empty scent list. This prevents the
-// detail page from losing the scent selector when an older Firebase record
-// does not contain the scents field.
-if(!list.length && typeof SCENTS!=="undefined" && Array.isArray(SCENTS)){
-list=SCENTS.map(s=>Array.isArray(s)?s[0]:s).filter(Boolean);
-}
-
-const translate=typeof scentTr==="function"
-  ? scentTr
-  : (value)=>{
-      const found=(typeof SCENTS!=="undefined"&&Array.isArray(SCENTS))
-        ?SCENTS.find(x=>Array.isArray(x)&&(x[0]===value||x[1]===value))
-        :null;
-      return found?(LANG==="en"?found[1]:found[0]):value;
-    };
-
+if(!list.length)return [];
 return list.map(s=>{
-if(Array.isArray(s)){
-  const value=String(s[0]||"").trim();
-  return {value,label:LANG==="en"?String(s[1]||s[0]||""):String(s[0]||"")};
-}
-if(typeof s==="object"&&s!==null){
-  const value=String(s.value||s.name||s.id||"").trim();
-  const label=String(s.label||s.name||value).trim();
-  return {value,label:LANG==="en"?label:translate(value)};
-}
-const value=String(s).trim();
-return {value,label:translate(value)};
-}).filter(x=>x.value);
+if(Array.isArray(s))return {value:s[0],label:LANG==="en"?(s[1]||s[0]):s[0]};
+const value=String(s);
+return {value,label:velaScentTr(value)};
+});
 }
 
 function renderScents(){
@@ -428,7 +340,7 @@ return;
 w.innerHTML=list.map(r=>`<div class="rv-item">
 <b>${r.name||"-"}</b> <span class="stars">${"★".repeat(r.rating||5)}</span>
 <p style="color:var(--mut);margin-top:.3rem">${r.text||""}</p>
-${r.photo?`<img class="rv-photo" src="${r.photo}" loading="lazy" decoding="async" alt="">`:""}
+${r.photo?`<img class="rv-photo" src="${r.photo}">`:""}
 </div>`).join("");
 }
 
