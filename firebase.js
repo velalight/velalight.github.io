@@ -3,6 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
   getFirestore,
   collection,
+  getDoc,
   getDocs,
   onSnapshot,
   addDoc,
@@ -77,6 +78,26 @@ try {
         id: d.id,
         ...d.data()
       }));
+
+    },
+
+
+    /* =========================
+       FIRESTORE - SINGLE DOCUMENT
+       ========================= */
+
+    get: async (collectionName, id) => {
+
+      const snapshot = await getDoc(
+        doc(db, collectionName, String(id))
+      );
+
+      if(!snapshot.exists()) return null;
+
+      return {
+        id: snapshot.id,
+        ...snapshot.data()
+      };
 
     },
 

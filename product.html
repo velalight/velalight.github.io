@@ -151,8 +151,21 @@ setTimeout(()=>{if(!P)showNotFound()},7000);
 async function loadCloudCatalog(pid){
 if(!window.FB||typeof window.FB.list!=="function")return;
 try{
-const cloud=await window.FB.list("products");
-cloudCatalog=Array.isArray(cloud)?cloud:[];
+let direct=null;
+
+// Fast path: admin saves product documents using the product id.
+// This avoids downloading the entire catalog every time a detail page opens.
+if(typeof window.FB.get==="function") direct=await window.FB.get("products",pid);
+
+if(direct){
+  cloudCatalog=[direct];
+}else{
+  // Backward-compatible fallback for older records whose Firestore document id
+  // is not the same as the product id/slug.
+  const cloud=await window.FB.list("products");
+  cloudCatalog=Array.isArray(cloud)?cloud:[];
+}
+
 const map=new Map((Array.isArray(PRODUCTS)?PRODUCTS:[]).map(x=>[String(x.id),{...x}]));
 
 cloudCatalog.forEach(d=>{
@@ -174,17 +187,21 @@ const fresh=ALL_PRODUCTS.find(x=>String(x.id)===String(pid));
 if(fresh){P=fresh;render()}
 else if(!P)showNotFound();
 
-try{
-const reviews=await window.FB.list("reviews");
-ALL_REVIEWS=Array.isArray(reviews)?reviews:[];
-if(P)render();
-}catch(e){console.warn("Product reviews refresh failed:",e)}
+// Reviews are independent from the product itself; do not make product
+// rendering wait for them.
+window.FB.list("reviews").then(reviews=>{
+  ALL_REVIEWS=Array.isArray(reviews)?reviews:[];
+  if(P) {
+    renderReviews();
+    render();
+  }
+}).catch(e=>console.warn("Product reviews refresh failed:",e));
+
 }catch(error){
 console.error("Product cloud load failed:",error);
 if(!P)showNotFound();
 }
 }
-
 function initLang(){
 applyI18n();
 $("#langBtn")?.addEventListener("click",()=>{

@@ -52,6 +52,14 @@ document.addEventListener("DOMContentLoaded",()=>{
   initEmbers();
   initReveal();
 
+  // Render the local catalog immediately. Firebase sync happens in the background.
+  renderChips();
+  renderProducts();
+  renderScents();
+  renderFAQ();
+  initProductRealtimeSync();
+  window.addEventListener("fb-ready", initProductRealtimeSync, {once:true});
+
   loadAll().then(()=>{
     renderChips();
     renderProducts();
