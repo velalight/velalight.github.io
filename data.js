@@ -804,13 +804,24 @@ map.delete(slug);
 return;
 }
 
+const base=map.get(slug)||{};
+const remoteScents=Array.isArray(d.scents)
+  ?d.scents.filter(Boolean)
+  :(typeof d.scents==="string"
+    ?d.scents.split(",").map(x=>x.trim()).filter(Boolean)
+    :[]);
+
 map.set(
 slug,
 {
-...(map.get(slug)||{}),
+...base,
 ...d,
 id:slug,
-_fid:d.id
+_fid:d.id,
+// لا تسمح لسجل Firebase ناقص أن يمسح قائمة عطور المنتج الأساسية.
+scents:remoteScents.length
+  ?remoteScents
+  :(Array.isArray(base.scents)?base.scents:[])
 }
 );
 
@@ -900,12 +911,12 @@ b.textContent=n;
 
 function addToCart(p,opt={}){
 
-if(!opt.scent){
+const scentRequired=Array.isArray(p?.scents)
+  ?p.scents.length>0
+  :Boolean(p?.scentRequired);
 
-toast(
-t("t_scentwarn")
-);
-
+if(scentRequired&&!opt.scent){
+toast(t("t_scentwarn"));
 return false;
 }
 
@@ -995,17 +1006,17 @@ mn_track:"📦 تتبع الطلب",
 mn_contact:"تواصل",
 
 hero_kick:"✦ شموع يدوية فاخرة · صناعة مصرية",
-hero_a:"ضوءٌ يُشبهكِ.",
-hero_b:"شموع تُضيء… لتنير يومكِ بلحظاتٍ تستحقينها.",
+hero_a:"ضوء يُحكى…",
+hero_b:"وبريق يليق بكِ",
 
 hero_lead:
-"صناعة يدوية مصرية · عطور مختارة · تفاصيل تُحسّ",
+"في VelaLight كل شمعة اتصنعت يدويًا بعناية.",
 
 cta_shop:
-"اكتشفي مجموعتكِ ✦",
+"اكتشفي The Collection ✨",
 
 cta_story:
-"شاهدي القطع ↓",
+"Our Story",
 
 trust1:"🚚 توصيل لكل مصر",
 trust2:"🤲 100% صناعة يدوية",
