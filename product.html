@@ -428,7 +428,7 @@ return;
 w.innerHTML=list.map(r=>`<div class="rv-item">
 <b>${r.name||"-"}</b> <span class="stars">${"★".repeat(r.rating||5)}</span>
 <p style="color:var(--mut);margin-top:.3rem">${r.text||""}</p>
-${r.photo?`<img class="rv-photo" src="${r.photo}">`:""}
+${r.photo?`<img class="rv-photo" src="${r.photo}" loading="lazy" decoding="async" alt="">`:""}
 </div>`).join("");
 }
 

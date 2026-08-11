@@ -658,6 +658,7 @@ function renderProducts(){
               src="${imgOf(p)}"
               alt="${pname(p)}"
               loading="lazy"
+              decoding="async"
             >
 
             ${
@@ -2589,6 +2590,8 @@ function initSearch(){
                 <img
                   src="${imgOf(p)}"
                   alt=""
+                  loading="lazy"
+                  decoding="async"
                 >
 
                 <div>
