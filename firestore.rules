@@ -9,7 +9,10 @@ service cloud.firestore {
 
     function admin() {
       return signedIn()
-        && request.auth.token.email == "admin@velalight.com";
+        && (
+          request.auth.token.email == "wagdyme@aol.com"
+          || request.auth.token.email == "itswagdy@gmail.com"
+        );
     }
 
     match /products/{productId} {
