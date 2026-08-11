@@ -123,54 +123,30 @@
 
 let P=null,qty=1,selScent="",selRating=5;
 
-document.addEventListener("DOMContentLoaded",async()=>{
+document.addEventListener("DOMContentLoaded",()=>{
 initLang();
 cartBadge();
 buildStars();
-
 const pid=new URLSearchParams(location.search).get("p");
 if(!pid){showNotFound();return}
 
-// PRODUCTS و ALL_PRODUCTS متغيرات داخل data.js وليسا window properties.
-// لذلك نستخدم PRODUCTS مباشرة لعرض المنتج فورًا.
-P=Array.isArray(PRODUCTS)
-  ?PRODUCTS.find(x=>String(x.id)===String(pid))
-  :null;
+// Local-first: product pages never wait for Firebase before rendering.
+P=PRODUCTS.find(x=>String(x.id)===String(pid));
+if(!P){showNotFound();return}
+render();
 
-if(P){
-  render();
-}else{
-  // احتياطي: حاول تحميل بيانات Firebase/LocalDB في حالة المنتج غير موجود في النسخة المحلية.
-  try{
-    await loadAll();
-    P=Array.isArray(ALL_PRODUCTS)
-      ?ALL_PRODUCTS.find(x=>String(x.id)===String(pid))
-      :null;
-
-    if(P)render();
-    else showNotFound();
-  }catch(e){
-    console.warn("Product loading failed:",e);
-    showNotFound();
-  }
-}
-
-// تحديث بيانات Firebase في الخلفية بعد ظهور المنتج.
-// لو وُجد تعديل على المنتج، نعيد الرسم بالبيانات الأحدث.
-try{
-  await loadAll();
-
-  const fresh=Array.isArray(ALL_PRODUCTS)
-    ?ALL_PRODUCTS.find(x=>String(x.id)===String(pid))
-    :null;
-
-  if(fresh){
-    P=fresh;
-    render();
-  }
-}catch(e){
-  console.warn("Background Firebase update failed:",e);
-}
+// Background refresh only. If Firebase is slow/offline, the page stays usable.
+const refresh=()=>{
+if(typeof loadAll!=="function")return;
+loadAll().then(()=>{
+const fresh=Array.isArray(ALL_PRODUCTS)
+?ALL_PRODUCTS.find(x=>String(x.id)===String(pid))
+:null;
+if(fresh){P=fresh;render();}
+}).catch(e=>console.warn("Background data refresh failed:",e));
+};
+if(CLOUD)refresh();
+else window.addEventListener("fb-ready",refresh,{once:true});
 });
 
 function initLang(){
@@ -202,7 +178,7 @@ $("#crumbName").textContent=pname(P);
 $("#pdName").textContent=pname(P);
 $("#pdDesc").textContent=pdesc(P);
 const mainImg=$("#pdImg");
-mainImg.onerror=()=>{mainImg.removeAttribute("src");};
+mainImg.onerror=()=>mainImg.removeAttribute("src");
 mainImg.src=imgOf(P);
 const reviewSummary=prodReviews(P.id);
 const ratingBox=$("#pdRatingSummary");
@@ -222,6 +198,8 @@ $("#pdBadge").innerHTML=badge?`<span class="p-badge" style="position:static;disp
 $("#pdPrice").textContent=money(P.price);
 $("#pdOld").textContent=P.old>P.price?money(P.old):"";
 $("#pdOld").style.display=P.old>P.price?"inline":"none";
+const hoursEl=$("#pdHours");
+if(hoursEl)hoursEl.textContent=phours(P);
 
 
 renderThumbs();
@@ -252,7 +230,7 @@ list=raw;
 }else if(typeof raw==="string"&&raw.trim()){
 list=raw.split(",").map(x=>x.trim()).filter(Boolean);
 }
-if(!list.length)list=SCENTS;
+if(!list.length)return [];
 return list.map(s=>{
 if(Array.isArray(s))return {value:s[0],label:LANG==="en"?(s[1]||s[0]):s[0]};
 const value=String(s);
@@ -265,6 +243,15 @@ const select=$("#pdScentSelect");
 if(!select)return;
 
 const list=getProductScents();
+const head=select.closest(".pd-option-head");
+if(!list.length){
+if(head)head.style.display="none";
+select.style.display="none";
+selScent="";
+return;
+}
+if(head)head.style.display="flex";
+select.style.display="";
 select.innerHTML=
 `<option value="">${LANG==="ar"?"🌸 اختاري العطر":"🌸 Choose a scent"}</option>`+
 list.map(s=>`<option value="${String(s.value).replace(/"/g,"&quot;")}">${String(s.label).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</option>`).join("");
@@ -301,7 +288,8 @@ $("#qVal").textContent=qty;
 };
 
 add.onclick=()=>{
-if(!selScent){
+const required=getProductScents().length>0;
+if(required&&!selScent){
 $("#pdScentSelect")?.classList.add("scent-error");
 toast(t("t_scentwarn"));
 $("#pdScentSelect")?.focus();
@@ -357,7 +345,7 @@ ${r.photo?`<img class="rv-photo" src="${r.photo}">`:""}
 }
 
 function renderRelated(){
-const rel=ALL_PRODUCTS.filter(x=>x.cat===P.cat&&x.id!==P.id).slice(0,4);
+const rel=(ALL_PRODUCTS.length?ALL_PRODUCTS:PRODUCTS).filter(x=>x.cat===P.cat&&x.id!==P.id).slice(0,4);
 $("#relGrid").innerHTML=rel.map(p=>`<a class="p-card" href="product.html?p=${p.id}">
 <div class="p-media"><img src="${imgOf(p)}" alt="${pname(p)}" loading="lazy"></div>
 <div class="p-body"><h3>${pname(p)}</h3><div class="p-price">${money(p.price)}</div></div>

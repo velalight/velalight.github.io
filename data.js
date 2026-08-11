@@ -766,11 +766,13 @@ new Event("data-refresh")
 });
 
 
-let ALL_PRODUCTS=[],
+// Local-first cache: pages can render immediately without waiting for Firebase.
+let ALL_PRODUCTS=PRODUCTS.map(p=>({...p})),
 ALL_REVIEWS=[],
 dbProductsCache=[];
 
 const SEED_REVIEWS=[];
+ALL_REVIEWS=[...SEED_REVIEWS];
 
 
 async function loadAll(){
@@ -805,23 +807,23 @@ return;
 }
 
 const base=map.get(slug)||{};
-const remoteScents=Array.isArray(d.scents)
-  ?d.scents.filter(Boolean)
-  :(typeof d.scents==="string"
-    ?d.scents.split(",").map(x=>x.trim()).filter(Boolean)
-    :[]);
+const remote={...d};
+
+// Firebase is an override layer, not the source of truth for fields that
+// may be omitted by older/admin-created records. Preserve local values.
+const remoteScents=remote.scents;
+const hasRemoteScents=Array.isArray(remoteScents)
+  ?remoteScents.length>0
+  :(typeof remoteScents==='string'&&remoteScents.trim().length>0);
 
 map.set(
 slug,
 {
 ...base,
-...d,
+...remote,
+scents:hasRemoteScents?remoteScents:(base.scents||[]),
 id:slug,
-_fid:d.id,
-// لا تسمح لسجل Firebase ناقص أن يمسح قائمة عطور المنتج الأساسية.
-scents:remoteScents.length
-  ?remoteScents
-  :(Array.isArray(base.scents)?base.scents:[])
+_fid:d.id
 }
 );
 
@@ -911,17 +913,17 @@ b.textContent=n;
 
 function addToCart(p,opt={}){
 
-const scentRequired=Array.isArray(p?.scents)
+const scent=opt.scent||"";
+const hasScents=Array.isArray(p?.scents)
   ?p.scents.length>0
-  :Boolean(p?.scentRequired);
+  :(typeof p?.scents==="string"&&p.scents.trim().length>0);
 
-if(scentRequired&&!opt.scent){
-toast(t("t_scentwarn"));
-return false;
+if(hasScents&&!scent){
+ toast(t("t_scentwarn"));
+ return false;
 }
 
-const c=getCart(),
-scent=opt.scent;
+const c=getCart();
 
 const ex=
 c.find(
