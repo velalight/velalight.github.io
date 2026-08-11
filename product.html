@@ -122,32 +122,68 @@
 "use strict";
 
 let P=null,qty=1,selScent="",selRating=5;
+let productPid="";
+let cloudCatalog=[];
 
 document.addEventListener("DOMContentLoaded",()=>{
 initLang();
 cartBadge();
 buildStars();
-const pid=new URLSearchParams(location.search).get("p");
-if(!pid){showNotFound();return}
 
-// Local-first: product pages never wait for Firebase before rendering.
-P=PRODUCTS.find(x=>String(x.id)===String(pid));
-if(!P){showNotFound();return}
+productPid=new URLSearchParams(location.search).get("p")||"";
+if(!productPid){showNotFound();return}
+
+// Local fallback renders immediately when available.
+const local=PRODUCTS.find(x=>String(x.id)===String(productPid));
+if(local){
+P={...local};
 render();
+}
 
-// Background refresh only. If Firebase is slow/offline, the page stays usable.
-const refresh=()=>{
-if(typeof loadAll!=="function")return;
-loadAll().then(()=>{
-const fresh=Array.isArray(ALL_PRODUCTS)
-?ALL_PRODUCTS.find(x=>String(x.id)===String(pid))
-:null;
-if(fresh){P=fresh;render();}
-}).catch(e=>console.warn("Background data refresh failed:",e));
-};
-if(CLOUD)refresh();
-else window.addEventListener("fb-ready",refresh,{once:true});
+// Firebase is the authoritative source for product data.
+const sync=()=>loadCloudCatalog(productPid);
+if(window.FB&&typeof window.FB.list==="function")sync();
+else window.addEventListener("fb-ready",sync,{once:true});
+
+setTimeout(()=>{if(!P)showNotFound()},7000);
 });
+
+async function loadCloudCatalog(pid){
+if(!window.FB||typeof window.FB.list!=="function")return;
+try{
+const cloud=await window.FB.list("products");
+cloudCatalog=Array.isArray(cloud)?cloud:[];
+const map=new Map((Array.isArray(PRODUCTS)?PRODUCTS:[]).map(x=>[String(x.id),{...x}]));
+
+cloudCatalog.forEach(d=>{
+const slug=String(d.id_||d.slug||d.pid||d.id||"").trim();
+if(!slug)return;
+if(d.active===false){map.delete(slug);return}
+const base=map.get(slug)||{};
+const merged={...base,...d,id:slug,_fid:d.id||null};
+const rs=d.scents;
+const hasScents=Array.isArray(rs)?rs.length>0:(typeof rs==="string"&&rs.trim().length>0);
+merged.scents=hasScents?rs:(base.scents||[]);
+merged.price=Number(merged.price)||0;
+merged.old=Number(merged.old)||0;
+map.set(slug,merged);
+});
+
+ALL_PRODUCTS=[...map.values()];
+const fresh=ALL_PRODUCTS.find(x=>String(x.id)===String(pid));
+if(fresh){P=fresh;render()}
+else if(!P)showNotFound();
+
+try{
+const reviews=await window.FB.list("reviews");
+ALL_REVIEWS=Array.isArray(reviews)?reviews:[];
+if(P)render();
+}catch(e){console.warn("Product reviews refresh failed:",e)}
+}catch(error){
+console.error("Product cloud load failed:",error);
+if(!P)showNotFound();
+}
+}
 
 function initLang(){
 applyI18n();

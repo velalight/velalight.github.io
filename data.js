@@ -797,7 +797,8 @@ p=>[p.id,{...p}]
 const slug=
 d.id_||
 d.slug||
-d.pid;
+d.pid||
+d.id;
 
 if(!slug)return;
 
