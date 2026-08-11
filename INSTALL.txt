@@ -1,0 +1,24 @@
+VelaLight — SAFE Scent Fix
+===========================
+
+IMPORTANT:
+Do NOT install the previous "mobile-cart-pass.js" on product.html.
+That was an unnecessary addition to the product page.
+
+Install ONLY this file:
+
+1) Upload product-scent-fix.js to the repository root.
+
+2) In product.html, place this immediately AFTER the existing inline
+   product-page script (the script that ends just before </body>):
+
+   <script src="product-scent-fix.js"></script>
+
+Do NOT replace app.js.
+Do NOT replace data.js.
+Do NOT change Firebase.
+Do NOT change the cart.
+
+This patch only restores the official 23-scent catalog if the product-page
+scent selector becomes empty. If Firebase supplies a valid product-specific
+scent list, it leaves that list untouched.
