@@ -1791,12 +1791,91 @@ function genOrderId(){
 
 
 /* ═══════════════════════════════════════
+   CHECKOUT — FIREBASE SOURCE OF TRUTH
+   ═══════════════════════════════════════ */
+
+async function refreshCartFromFirebase(){
+
+  if(
+    typeof DB === "undefined" ||
+    !DB ||
+    typeof DB.list !== "function"
+  ){
+    throw new Error("Firebase unavailable");
+  }
+
+  const cloud=await DB.list("products");
+  if(!Array.isArray(cloud)) throw new Error("Invalid products response");
+
+  const map=new Map();
+
+  cloud.forEach(d=>{
+    const id=String(
+      d.id_ || d.slug || d.pid || d.id || ""
+    ).trim();
+
+    if(!id || d.active===false) return;
+    map.set(id,{...d,id});
+  });
+
+  const cart=getCart();
+  const missing=[];
+  let changed=false;
+
+  const refreshed=cart.map(item=>{
+    const live=map.get(String(item.id));
+
+    if(!live){
+      missing.push(item);
+      return item;
+    }
+
+    const livePrice=Number(live.price);
+
+    if(!Number.isFinite(livePrice) || livePrice<0){
+      missing.push(item);
+      return item;
+    }
+
+    const next={
+      ...item,
+      price:livePrice,
+      name:live.name ?? item.name,
+      nameEn:live.nameEn ?? item.nameEn,
+      img:live.img || live.image || live.imageUrl || item.img || ""
+    };
+
+    if(
+      Number(item.price)!==livePrice ||
+      next.name!==item.name ||
+      next.nameEn!==item.nameEn ||
+      next.img!==item.img
+    ){
+      changed=true;
+    }
+
+    return next;
+  });
+
+  if(missing.length){
+    throw new Error("PRODUCT_NOT_FOUND");
+  }
+
+  if(changed){
+    saveCart(refreshed);
+    renderCart();
+  }
+
+  return refreshed;
+}
+
+/* ═══════════════════════════════════════
    CHECKOUT
    ═══════════════════════════════════════ */
 
 async function checkout(){
 
-  const c=getCart();
+  let c=getCart();
 
 
   /* 1 — PRODUCTS */
@@ -1805,6 +1884,31 @@ async function checkout(){
 
     toast(
       t("t_empty")
+    );
+
+    return;
+
+  }
+
+
+  /* 1.5 — FIREBASE PRICE / PRODUCT VERIFICATION */
+
+  try{
+
+    c=await refreshCartFromFirebase();
+
+  }catch(e){
+
+    console.error("Checkout Firebase verification failed:",e);
+
+    toast(
+      e && e.message === "PRODUCT_NOT_FOUND"
+        ? (LANG==="en"
+          ? "⚠️ One of the products is no longer available."
+          : "⚠️ أحد المنتجات لم يعد متاحًا حاليًا.")
+        : (LANG==="en"
+          ? "⚠️ Please try again after reconnecting to Firebase."
+          : "⚠️ تعذر التحقق من أحدث سعر للمنتج. حاولي مرة أخرى.")
     );
 
     return;
