@@ -247,7 +247,7 @@ function initLang(){
     renderFAQ();
 
     fillCitySelect($("#accCity"));
-    fillCitySelect($("#coCity"));
+    removeCheckoutCityField();
 
     fillCartForm();
 
@@ -1148,37 +1148,19 @@ function renderFAQ(){
    CART INITIALIZATION
    ═══════════════════════════════════════ */
 
+function removeCheckoutCityField(){
+  const city=document.querySelector("#coCity");
+  if(city){
+    const wrapper=city.closest("label,.field,.form-group,.co-city") || city;
+    wrapper.remove();
+  }
+}
+
 function initCart(){
 
+  removeCheckoutCityField();
+
   cartBadge();
-
-  fillCitySelect(
-    $("#coCity")
-  );
-
-  /* VelaLight cart UX:
-     The customer can type the governorate/city freely.
-     Keep the same #coCity id so the existing checkout/save flow is unchanged.
-  */
-  const cartCity = $("#coCity");
-  if(cartCity && cartCity.tagName === "SELECT"){
-    const cityInput = document.createElement("input");
-    cityInput.type = "text";
-    cityInput.id = "coCity";
-    cityInput.name = cartCity.name || "city";
-    cityInput.className = cartCity.className || "";
-    cityInput.placeholder =
-      LANG === "en"
-        ? "Governorate / City"
-        : "المحافظة / المدينة";
-    cityInput.autocomplete = "address-level1";
-    cityInput.value = cartCity.value || "";
-    cityInput.setAttribute(
-      "aria-label",
-      LANG === "en" ? "Governorate / City" : "المحافظة / المدينة"
-    );
-    cartCity.replaceWith(cityInput);
-  }
 
   fillCartForm();
 
@@ -1272,7 +1254,6 @@ function initCart(){
   [
     "#coName",
     "#coPhone",
-    "#coCity",
     "#coAddr",
     "#coNotes"
   ].forEach(selector=>{
@@ -1680,13 +1661,6 @@ function fillCartForm(){
   }
 
 
-  if($("#coCity")){
-
-    $("#coCity").value=
-      u.city||"";
-
-  }
-
 
   if($("#coAddr")){
 
@@ -1709,7 +1683,6 @@ function fillCartForm(){
 function saveUserFromCart(
   name,
   phone,
-  city,
   addr,
   notes=""
 ){
@@ -1722,7 +1695,6 @@ function saveUserFromCart(
     ...old,
     name,
     phone,
-    city,
     addr,
     notes,
     orders:old.orders||0
@@ -1743,9 +1715,6 @@ function saveUserFromCart(
     $("#accPhone").value=phone;
 
 
-  if($("#accCity"))
-    $("#accCity").value=city;
-
 
   if($("#accAddr"))
     $("#accAddr").value=addr;
@@ -1760,9 +1729,6 @@ function saveCartCustomer(){
 
   const phone=
     $("#coPhone")?.value.trim()||"";
-
-  const city=
-    $("#coCity")?.value||"";
 
   const addr=
     $("#coAddr")?.value.trim()||"";
@@ -1781,7 +1747,6 @@ function saveCartCustomer(){
       ...old,
       name,
       phone,
-      city,
       addr,
       notes,
       orders:old.orders||0
@@ -1876,9 +1841,6 @@ async function checkout(){
   const phone=
     $("#coPhone")?.value.trim()||"";
 
-  const city=
-    $("#coCity")?.value||"";
-
   const addr=
     $("#coAddr")?.value.trim()||"";
 
@@ -1936,7 +1898,6 @@ async function checkout(){
   saveUserFromCart(
     name,
     phone,
-    city,
     addr,
     notes
   );
@@ -2059,13 +2020,6 @@ async function checkout(){
     `${t("wa_phone")} ${phone}\n`;
 
 
-  if(city){
-
-    msg+=
-      `${t("wa_city")} ${city}\n`;
-
-  }
-
 
   msg+=
     `${t("wa_addr")} ${addr}\n`;
@@ -2090,13 +2044,11 @@ async function checkout(){
     customer:{
       name,
       phone,
-      city,
       address:addr
     },
 
     name,
     phone,
-    city,
     address:addr,
 
     notes,
@@ -2182,7 +2134,6 @@ async function checkout(){
 
   u.name=name;
   u.phone=phone;
-  u.city=city;
   u.addr=addr;
   u.notes=notes;
 
@@ -2414,7 +2365,6 @@ function initAccount(){
 
             name,
             phone,
-            city,
             addr,
 
             orders:
