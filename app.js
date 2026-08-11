@@ -57,16 +57,18 @@ document.addEventListener("DOMContentLoaded",()=>{
   renderProducts();
   renderScents();
   renderFAQ();
-  initProductRealtimeSync();
-  window.addEventListener("fb-ready", initProductRealtimeSync, {once:true});
 
-  loadAll().then(()=>{
-    renderChips();
-    renderProducts();
-    renderScents();
-    renderFAQ();
+  // Start the single live products stream. The local catalog above is
+  // already visible, so no initial getDocs(products) call is needed here.
+  initProductRealtimeSync();
+
+  // Reviews are independent from products; fetch them once in the background.
+  loadReviewsBackground();
+
+  window.addEventListener("fb-ready", ()=>{
     initProductRealtimeSync();
-  });
+    loadReviewsBackground();
+  }, {once:true});
 
   initCart();
   initAccount();
@@ -85,6 +87,24 @@ window.addEventListener(
     renderProducts();
   }
 );
+
+let reviewsLoadStarted=false;
+async function loadReviewsBackground(){
+  if(reviewsLoadStarted)return;
+  if(typeof DB === "undefined" || !DB || typeof DB.list !== "function")return;
+
+  reviewsLoadStarted=true;
+  try{
+    const reviews=await DB.list("reviews");
+    if(Array.isArray(reviews)){
+      ALL_REVIEWS=reviews;
+      renderProducts();
+    }
+  }catch(e){
+    reviewsLoadStarted=false;
+    console.warn("Reviews background load failed:",e);
+  }
+}
 
 
 
@@ -165,6 +185,15 @@ function initProductRealtimeSync(){
         });
 
         ALL_PRODUCTS=[...map.values()];
+
+        // Keep the last good live catalog locally so product-detail pages can
+        // render immediately on the next navigation, then verify with Firebase.
+        try{
+          localStorage.setItem(
+            "vl_products_cache_v1",
+            JSON.stringify(ALL_PRODUCTS)
+          );
+        }catch(e){}
 
         window.dispatchEvent(
           new Event("data-refresh")

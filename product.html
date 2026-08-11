@@ -133,10 +133,20 @@ buildStars();
 productPid=new URLSearchParams(location.search).get("p")||"";
 if(!productPid){showNotFound();return}
 
-// Local fallback renders immediately when available.
+// Render from the freshest local cache first. This makes navigation feel
+// instant while Firebase verifies the exact product in the background.
+let cached=null;
+try{
+  const cache=JSON.parse(localStorage.getItem("vl_products_cache_v1")||"[]");
+  if(Array.isArray(cache)){
+    cached=cache.find(x=>String(x.id)===String(productPid)||String(x.id_)===String(productPid)||String(x.slug)===String(productPid)||String(x.pid)===String(productPid))||null;
+  }
+}catch(e){}
+
 const local=PRODUCTS.find(x=>String(x.id)===String(productPid));
-if(local){
-P={...local};
+const first= cached || local;
+if(first){
+P={...first};
 render();
 }
 
@@ -145,7 +155,7 @@ const sync=()=>loadCloudCatalog(productPid);
 if(window.FB&&typeof window.FB.list==="function")sync();
 else window.addEventListener("fb-ready",sync,{once:true});
 
-setTimeout(()=>{if(!P)showNotFound()},7000);
+setTimeout(()=>{if(!P)showNotFound()},5000);
 });
 
 async function loadCloudCatalog(pid){
