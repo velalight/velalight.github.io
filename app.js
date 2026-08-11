@@ -1156,6 +1156,30 @@ function initCart(){
     $("#coCity")
   );
 
+  /* VelaLight cart UX:
+     The customer can type the governorate/city freely.
+     Keep the same #coCity id so the existing checkout/save flow is unchanged.
+  */
+  const cartCity = $("#coCity");
+  if(cartCity && cartCity.tagName === "SELECT"){
+    const cityInput = document.createElement("input");
+    cityInput.type = "text";
+    cityInput.id = "coCity";
+    cityInput.name = cartCity.name || "city";
+    cityInput.className = cartCity.className || "";
+    cityInput.placeholder =
+      LANG === "en"
+        ? "Governorate / City"
+        : "المحافظة / المدينة";
+    cityInput.autocomplete = "address-level1";
+    cityInput.value = cartCity.value || "";
+    cityInput.setAttribute(
+      "aria-label",
+      LANG === "en" ? "Governorate / City" : "المحافظة / المدينة"
+    );
+    cartCity.replaceWith(cityInput);
+  }
+
   fillCartForm();
 
 
