@@ -34,7 +34,7 @@
 <div id="pdWrap" class="hidden">
 <div class="pd-grid">
 <div>
-<div class="pd-img"><img id="pdImg" src="" alt=""></div>
+<div class="pd-img"><img id="pdImg" src="" alt="" decoding="async" fetchpriority="high"></div>
 <div class="pd-thumbs" id="pdThumbs"></div>
 </div>
 <div class="pd-info">
@@ -123,17 +123,45 @@
 
 let P=null,qty=1,selScent="",selRating=5;
 
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded",async()=>{
 initLang();
 cartBadge();
 buildStars();
+
 const pid=new URLSearchParams(location.search).get("p");
 if(!pid){showNotFound();return}
-loadAll().then(()=>{
-P=ALL_PRODUCTS.find(x=>x.id===pid);
-if(!P){showNotFound();return}
+
+// اعرض المنتج المحلي فورًا، بدون انتظار Firebase.
+const localProducts=Array.isArray(window.PRODUCTS)?window.PRODUCTS:
+(Array.isArray(window.ALL_PRODUCTS)?window.ALL_PRODUCTS:[]);
+P=localProducts.find(x=>String(x.id)===String(pid));
+
+if(P){
 render();
-});
+}else{
+try{
+await loadAll();
+const remoteProducts=Array.isArray(window.ALL_PRODUCTS)?window.ALL_PRODUCTS:[];
+P=remoteProducts.find(x=>String(x.id)===String(pid));
+if(P)render();else showNotFound();
+}catch(e){
+console.warn("Product fallback failed:",e);
+showNotFound();
+}
+}
+
+// تحديث Firebase في الخلفية فقط.
+try{
+await loadAll();
+const freshProducts=Array.isArray(window.ALL_PRODUCTS)?window.ALL_PRODUCTS:[];
+const fresh=freshProducts.find(x=>String(x.id)===String(pid));
+if(fresh){
+P=fresh;
+render();
+}
+}catch(e){
+console.warn("Background Firebase update failed:",e);
+}
 });
 
 function initLang(){
@@ -164,7 +192,9 @@ document.title=pname(P)+" | VelaLight";
 $("#crumbName").textContent=pname(P);
 $("#pdName").textContent=pname(P);
 $("#pdDesc").textContent=pdesc(P);
-$("#pdImg").src=imgOf(P);
+const mainImg=$("#pdImg");
+mainImg.onerror=()=>{mainImg.removeAttribute("src");};
+mainImg.src=imgOf(P);
 const reviewSummary=prodReviews(P.id);
 const ratingBox=$("#pdRatingSummary");
 if(ratingBox){
@@ -183,7 +213,6 @@ $("#pdBadge").innerHTML=badge?`<span class="p-badge" style="position:static;disp
 $("#pdPrice").textContent=money(P.price);
 $("#pdOld").textContent=P.old>P.price?money(P.old):"";
 $("#pdOld").style.display=P.old>P.price?"inline":"none";
-$("#pdHours")?.textContent=phours(P);
 
 
 renderThumbs();
@@ -198,7 +227,7 @@ function renderThumbs(){
 const imgs=imgsOf(P);
 const w=$("#pdThumbs");
 if(imgs.length<=1){w.innerHTML="";return}
-w.innerHTML=imgs.map((u,i)=>`<img src="${CDN(u)}" class="${i===0?'on':''}" data-i="${i}">`).join("");
+w.innerHTML=imgs.map((u,i)=>`<img src="${CDN(u)}" class="${i===0?'on':''}" data-i="${i}" loading="lazy" decoding="async">`).join("");
 w.querySelectorAll("img").forEach(im=>im.addEventListener("click",()=>{
 $("#pdImg").src=im.src;
 w.querySelectorAll("img").forEach(x=>x.classList.remove("on"));
