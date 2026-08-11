@@ -19,6 +19,30 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="manifest" href="manifest.json">
+<style>
+/* تثبيت الهيرو عمودين جنب بعض على الموبايل فقط */
+@media (max-width: 960px){
+  section:has(h1){
+    display:grid !important;
+    grid-template-columns:.95fr 1.05fr !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    gap:18px !important;
+    padding:30px 16px !important;
+  }
+  section:has(h1) > *{min-width:0}
+  section:has(h1) h1{font-size:clamp(24px,7.2vw,44px) !important;line-height:1.15 !important}
+  section:has(h1) p{font-size:12.5px !important;margin:8px 0 14px !important}
+  section:has(h1) a{padding:10px 16px !important;font-size:12px !important}
+}
+@media (max-width:560px){
+  section:has(h1){gap:12px !important;padding:22px 12px !important}
+  section:has(h1) h1{font-size:clamp(19px,6.8vw,26px) !important}
+  section:has(h1) p{font-size:11px !important}
+  section:has(h1) a{padding:9px 12px !important;font-size:10.5px !important}
+}
+</style>
+     
 </head>
 
 
