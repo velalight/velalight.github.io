@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<meta name="hero-design" content="VelaLight Hybrid Editorial Hero — jar1 original photo">
 <title>VelaLight | شموع يدوية فاخرة بعطور مميزة وهدايا فخمة | توصيل لكل مصر</title>
 
 <meta name="description"
@@ -289,406 +288,443 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 
 <!-- ═══════════════════════════════════════════════
-     VelaLight — HYBRID CINEMATIC HERO
+     VelaLight — SIGNATURE EDITORIAL HERO
      ═══════════════════════════════════════════════ -->
-<section class="hero vl-hybrid-hero" aria-label="VelaLight">
-  <div class="vl-hero-particles" id="vlHeroParticles" aria-hidden="true"></div>
+<section class="hero vl-signature-hero" aria-label="VelaLight">
+  <div class="vl-hero-noise" aria-hidden="true"></div>
+  <div class="vl-hero-orb vl-orb-one" aria-hidden="true"></div>
+  <div class="vl-hero-orb vl-orb-two" aria-hidden="true"></div>
+  <div class="vl-hero-dust" id="vlHeroDust" aria-hidden="true"></div>
 
-  <div class="vl-hero-copy">
-    <div class="vl-hero-kicker">VELALIGHT · LUXURY CANDLE STUDIO</div>
+  <div class="vl-signature-copy">
+    <div class="vl-signature-eyebrow">
+      <span>VELALIGHT</span>
+      <i></i>
+      <span>SCENTED MOMENTS</span>
+    </div>
 
-    <h1 class="vl-hero-title">
-      <span>أشعلي</span>
-      <strong>لحظتكِ.</strong>
+    <h1 class="vl-signature-title">
+      <span>ليست مجرد</span>
+      <em>شمعة.</em>
+      <span class="vl-title-small">إنها لحظة تُضاء بالعطر.</span>
     </h1>
 
-    <p class="vl-hero-lead">
-      شموع صنعت لتمنح المكان رائحةً ودفئًا يبقى في الذاكرة.
+    <p class="vl-signature-desc">
+      اصنعي للمكان مزاجًا مختلفًا، بعطرٍ يبقى ودفءٍ يُرى.
     </p>
 
-    <a class="vl-hero-cta" href="#products">
-      اكتشفي المجموعة
-      <span aria-hidden="true">←</span>
-    </a>
+    <div class="vl-signature-actions">
+      <a class="vl-signature-primary" href="#products">
+        اكتشفي المجموعة
+        <span>←</span>
+      </a>
+      <a class="vl-signature-secondary" href="#scents">
+        استكشفي العطور
+      </a>
+    </div>
 
-    <div class="vl-hero-meta" aria-label="VelaLight highlights">
-      <span><b>23</b> عطرًا</span>
-      <i></i>
-      <span>صناعة يدوية</span>
-      <i></i>
-      <span>هدايا فاخرة</span>
+    <div class="vl-signature-stats" aria-label="VelaLight highlights">
+      <div><strong>23</strong><span>عطرًا</span></div>
+      <b></b>
+      <div><strong>01</strong><span>صناعة يدوية</span></div>
+      <b></b>
+      <div><strong>∞</strong><span>لحظات</span></div>
     </div>
   </div>
 
-  <div class="vl-hero-photo">
-    <img
-      src="jar1.jpg"
-      alt="شمعة VelaLight الوردية"
-      fetchpriority="high"
-      decoding="async">
-    <div class="vl-hero-photo-glow" aria-hidden="true"></div>
+  <div class="vl-signature-visual">
+    <div class="vl-visual-label vl-label-top">HANDCRAFTED · EGYPT</div>
+    <div class="vl-image-stage">
+      <div class="vl-image-aura" aria-hidden="true"></div>
+      <div class="vl-image-frame">
+        <img src="jar1.jpg" alt="شمعة VelaLight الوردية" fetchpriority="high" decoding="async">
+      </div>
+      <div class="vl-image-caption">
+        <span>VELALIGHT</span>
+        <i></i>
+        <small>THE ART OF SCENT</small>
+      </div>
+    </div>
+    <div class="vl-visual-label vl-label-bottom">A LITTLE LIGHT · A LOT OF FEELING</div>
   </div>
 
-  <a class="vl-hero-scroll" href="#products" aria-label="انتقلي إلى المنتجات">
-    <span>اكتشفي المجموعة</span>
-    <b>↓</b>
+  <a class="vl-signature-scroll" href="#products" aria-label="اكتشفي المنتجات">
+    <span>SCROLL TO DISCOVER</span>
+    <i></i>
   </a>
 </section>
 
 <style>
 /* =========================================================
-   VelaLight — Hybrid Editorial Hero
-   Uses the original jar1.jpg exactly as supplied.
-   No slider, no image generation, no image filters.
+   VelaLight Signature Editorial Hero
+   Direction: luxury editorial / beauty campaign
+   Image is used exactly as supplied — no crop, no filters.
    ========================================================= */
-
-.vl-hybrid-hero{
+.vl-signature-hero{
+  --ink:#2d211b;
+  --muted:#806b5b;
+  --gold:#a57a42;
+  --rose:#e8c9c5;
+  --cream:#f8f2ec;
   position:relative;
   display:grid;
-  grid-template-columns:minmax(0, .92fr) minmax(0, 1.08fr);
-  min-height:clamp(410px, 56vh, 590px);
-  height:clamp(410px, 56vh, 590px);
+  grid-template-columns:1.03fr .97fr;
+  height:clamp(440px,58vh,610px);
+  min-height:440px;
   overflow:hidden;
   isolation:isolate;
-  background:#f7f2eb;
-  color:#2d2119;
-  border-bottom:1px solid rgba(90,65,43,.10);
+  background:
+    radial-gradient(circle at 77% 18%,rgba(232,201,197,.46),transparent 27%),
+    radial-gradient(circle at 8% 86%,rgba(204,170,130,.12),transparent 25%),
+    var(--cream);
+  color:var(--ink);
 }
 
-.vl-hero-copy{
+.vl-hero-noise{
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.055;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
+}
+
+.vl-hero-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(2px);
+  pointer-events:none;
+  z-index:-1;
+  opacity:.5;
+}
+.vl-orb-one{width:260px;height:260px;right:39%;top:-160px;background:rgba(196,142,120,.13);animation:vlOrbFloat 11s ease-in-out infinite}
+.vl-orb-two{width:190px;height:190px;left:-110px;bottom:-90px;background:rgba(168,126,68,.09);animation:vlOrbFloat 14s 1s ease-in-out infinite reverse}
+
+.vl-signature-copy{
   position:relative;
-  z-index:3;
+  z-index:4;
   display:flex;
   flex-direction:column;
-  align-items:flex-start;
   justify-content:center;
-  padding:clamp(30px,5vw,72px);
+  align-items:flex-start;
+  padding:44px clamp(34px,6vw,92px) 56px clamp(34px,5vw,74px);
   direction:rtl;
   text-align:right;
-  overflow:hidden;
 }
 
-.vl-hero-kicker{
-  color:#a87935;
-  font-size:.68rem;
-  font-weight:800;
-  letter-spacing:.16em;
-  margin-bottom:14px;
-  opacity:0;
-  animation:vlCopyIn .75s .08s cubic-bezier(.2,.7,.2,1) forwards;
-}
-
-.vl-hero-title{
-  margin:0;
-  font-family:"El Messiri","Tajawal",sans-serif;
-  font-size:clamp(2.25rem,4.5vw,4.65rem);
-  line-height:1.08;
-  letter-spacing:-.035em;
-  font-weight:500;
-  color:#2d2119;
-  opacity:0;
-  transform:translateY(14px);
-  animation:vlCopyIn .9s .16s cubic-bezier(.2,.7,.2,1) forwards;
-}
-
-.vl-hero-title span,
-.vl-hero-title strong{
-  display:block;
-}
-
-.vl-hero-title strong{
-  font-weight:700;
-  color:#8b622d;
-  margin-top:.04em;
-}
-
-.vl-hero-lead{
-  max-width:430px;
-  margin:17px 0 22px;
-  color:#6c5a4a;
-  font-size:clamp(.88rem,1.2vw,1.06rem);
-  line-height:1.9;
-  opacity:0;
-  transform:translateY(12px);
-  animation:vlCopyIn .8s .28s cubic-bezier(.2,.7,.2,1) forwards;
-}
-
-.vl-hero-cta{
-  display:inline-flex;
-  align-items:center;
-  gap:11px;
-  min-height:42px;
-  padding:10px 18px;
-  border-radius:999px;
-  background:#2b211b;
-  color:#fff;
-  text-decoration:none;
-  font-size:.82rem;
-  font-weight:800;
-  box-shadow:0 8px 22px rgba(44,31,21,.12);
-  transition:transform .25s ease,box-shadow .25s ease,background .25s ease;
-  opacity:0;
-  transform:translateY(10px);
-  animation:vlCopyIn .8s .38s cubic-bezier(.2,.7,.2,1) forwards;
-}
-
-.vl-hero-cta:hover{
-  transform:translateY(-2px);
-  background:#3b2b21;
-  box-shadow:0 12px 28px rgba(44,31,21,.18);
-}
-
-.vl-hero-cta span{
-  font-size:1rem;
-  transition:transform .25s ease;
-}
-
-.vl-hero-cta:hover span{
-  transform:translateX(-3px);
-}
-
-.vl-hero-meta{
+.vl-signature-eyebrow{
   display:flex;
   align-items:center;
+  gap:11px;
+  margin-bottom:18px;
+  color:var(--gold);
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.16em;
+  opacity:0;
+  animation:vlReveal .8s .08s cubic-bezier(.2,.75,.2,1) forwards;
+}
+.vl-signature-eyebrow i{width:28px;height:1px;background:#c8aa86;display:block}
+
+.vl-signature-title{
+  margin:0;
+  max-width:650px;
+  font-family:"El Messiri","Tajawal",sans-serif;
+  font-weight:500;
+  font-size:clamp(2.25rem,4.4vw,4.55rem);
+  line-height:1.04;
+  letter-spacing:-.045em;
+  color:var(--ink);
+  opacity:0;
+  transform:translateY(16px);
+  animation:vlReveal .95s .14s cubic-bezier(.2,.75,.2,1) forwards;
+}
+.vl-signature-title em{
+  display:block;
+  margin-top:.02em;
+  color:#9c6d37;
+  font-style:normal;
+  font-weight:700;
+  position:relative;
+}
+.vl-signature-title em::after{
+  content:"";
+  position:absolute;
+  right:0;
+  bottom:-7px;
+  width:92px;
+  height:2px;
+  background:linear-gradient(90deg,#b4874f,transparent);
+  opacity:.65;
+}
+.vl-title-small{
+  display:block;
+  margin-top:15px;
+  font-family:"Tajawal",sans-serif;
+  font-size:clamp(.9rem,1.35vw,1.16rem);
+  line-height:1.8;
+  font-weight:500;
+  letter-spacing:0;
+  color:#6f5a49;
+}
+
+.vl-signature-desc{
+  max-width:440px;
+  margin:18px 0 21px;
+  color:var(--muted);
+  font-size:clamp(.83rem,1.1vw,.98rem);
+  line-height:1.85;
+  opacity:0;
+  transform:translateY(12px);
+  animation:vlReveal .85s .29s cubic-bezier(.2,.75,.2,1) forwards;
+}
+
+.vl-signature-actions{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  opacity:0;
+  transform:translateY(10px);
+  animation:vlReveal .85s .39s cubic-bezier(.2,.75,.2,1) forwards;
+}
+.vl-signature-primary,
+.vl-signature-secondary{text-decoration:none;white-space:nowrap}
+.vl-signature-primary{
+  display:inline-flex;
+  align-items:center;
   gap:12px;
-  margin-top:22px;
-  color:#806e5c;
-  font-size:.68rem;
+  padding:11px 19px;
+  border-radius:999px;
+  background:#2d211b;
+  color:#fff;
+  font-size:.78rem;
+  font-weight:800;
+  box-shadow:0 12px 28px rgba(54,36,24,.14);
+  transition:transform .25s ease,box-shadow .25s ease,background .25s ease;
+}
+.vl-signature-primary:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(54,36,24,.20);background:#443026}
+.vl-signature-primary span{font-size:1rem;transition:transform .25s ease}
+.vl-signature-primary:hover span{transform:translateX(-4px)}
+.vl-signature-secondary{color:#6f5a49;font-size:.76rem;font-weight:700;border-bottom:1px solid #c9b6a1;padding-bottom:4px;transition:color .2s ease,border-color .2s ease}
+.vl-signature-secondary:hover{color:#9c6d37;border-color:#9c6d37}
+
+.vl-signature-stats{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin-top:24px;
   opacity:0;
   transform:translateY(8px);
-  animation:vlCopyIn .8s .46s cubic-bezier(.2,.7,.2,1) forwards;
+  animation:vlReveal .85s .48s cubic-bezier(.2,.75,.2,1) forwards;
 }
+.vl-signature-stats div{display:flex;align-items:baseline;gap:5px;color:#816e5e}
+.vl-signature-stats strong{font-family:"El Messiri",sans-serif;color:#9c6d37;font-size:.96rem}
+.vl-signature-stats span{font-size:.62rem}
+.vl-signature-stats>b{width:3px;height:3px;border-radius:50%;background:#cdb9a4}
 
-.vl-hero-meta b{
-  color:#8b622d;
-  font-size:.9rem;
-}
-
-.vl-hero-meta i{
-  width:3px;
-  height:3px;
-  border-radius:50%;
-  background:#c8b7a5;
-}
-
-.vl-hero-photo{
+.vl-signature-visual{
   position:relative;
+  z-index:2;
   min-width:0;
-  overflow:hidden;
-  background:#3a2820;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:26px 7vw 36px 26px;
 }
 
-.vl-hero-photo img{
+.vl-image-stage{
+  position:relative;
+  width:min(38vw,470px);
+  aspect-ratio:1/1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  animation:vlStageFloat 8s ease-in-out infinite;
+}
+.vl-image-stage::before{
+  content:"";
+  position:absolute;
+  inset:7% 8%;
+  border-radius:47% 53% 51% 49% / 43% 45% 55% 57%;
+  background:linear-gradient(145deg,rgba(255,255,255,.74),rgba(229,199,190,.34));
+  box-shadow:0 30px 70px rgba(76,49,35,.12), inset 0 0 0 1px rgba(255,255,255,.6);
+  transform:rotate(-5deg);
+}
+.vl-image-aura{
+  position:absolute;
+  width:74%;
+  height:74%;
+  border-radius:50%;
+  background:rgba(213,160,145,.22);
+  filter:blur(32px);
+  animation:vlAura 7s ease-in-out infinite;
+}
+.vl-image-frame{
+  position:relative;
+  z-index:2;
+  width:82%;
+  height:82%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:40px;
+  background:#5a3d31;
+  padding:12px;
+  box-shadow:0 26px 70px rgba(62,39,27,.20),0 4px 16px rgba(62,39,27,.12);
+  transform:rotate(1.2deg);
+}
+.vl-image-frame::after{
+  content:"";
+  position:absolute;
+  inset:10px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:31px;
+  pointer-events:none;
+}
+.vl-image-frame img{
   width:100%;
   height:100%;
   display:block;
-  object-fit:cover;
-  object-position:center center;
-  /* Original photo — no filters or artificial effects. */
+  object-fit:contain;
+  border-radius:29px;
+  /* The original jar1 image is kept intact — no crop/filter. */
 }
-
-.vl-hero-photo-glow{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:linear-gradient(90deg,rgba(247,242,235,.10),transparent 35%);
-}
-
-.vl-hero-particles{
-  position:absolute;
-  inset:0;
-  z-index:1;
-  pointer-events:none;
-  overflow:hidden;
-}
-
-.vl-particle{
-  position:absolute;
-  width:3px;
-  height:3px;
-  border-radius:50%;
-  background:rgba(169,126,68,.25);
-  box-shadow:0 0 10px rgba(169,126,68,.14);
-  animation:vlFloat linear infinite;
-}
-
-.vl-hero-scroll{
+.vl-image-caption{
   position:absolute;
   z-index:4;
+  left:-8%;
+  bottom:7%;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 11px;
+  background:rgba(255,250,246,.88);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(125,92,64,.12);
+  border-radius:999px;
+  box-shadow:0 12px 30px rgba(62,39,27,.10);
+  direction:ltr;
+  color:#715744;
+}
+.vl-image-caption span{font-size:.58rem;font-weight:900;letter-spacing:.12em}
+.vl-image-caption i{width:18px;height:1px;background:#c6a581}
+.vl-image-caption small{font-size:.48rem;letter-spacing:.08em;color:#a07b58}
+
+.vl-visual-label{
+  position:absolute;
+  z-index:4;
+  color:#a98967;
+  font-size:.5rem;
+  letter-spacing:.19em;
+  writing-mode:vertical-rl;
+  direction:ltr;
+  opacity:.7;
+}
+.vl-label-top{top:24%;right:6%}
+.vl-label-bottom{bottom:24%;right:6%}
+
+.vl-signature-scroll{
+  position:absolute;
+  z-index:5;
   left:50%;
-  bottom:13px;
+  bottom:14px;
   transform:translateX(-50%);
   display:flex;
   align-items:center;
-  gap:7px;
-  color:rgba(75,58,44,.55);
+  gap:10px;
+  direction:ltr;
   text-decoration:none;
-  font-size:.61rem;
-  direction:rtl;
+  color:#967a60;
+  font-size:.49rem;
+  letter-spacing:.16em;
+  opacity:.78;
+}
+.vl-signature-scroll i{width:38px;height:1px;background:#c6aa89;position:relative;overflow:hidden}
+.vl-signature-scroll i::after{content:"";position:absolute;left:-100%;top:0;width:100%;height:100%;background:#8f6635;animation:vlLine 2.6s ease-in-out infinite}
+
+.vl-hero-dust{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.vl-dust-dot{position:absolute;width:3px;height:3px;border-radius:50%;background:#ad8352;opacity:0;animation:vlDust linear infinite;box-shadow:0 0 12px rgba(173,131,82,.18)}
+
+@keyframes vlReveal{to{opacity:1;transform:translateY(0)}}
+@keyframes vlStageFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes vlAura{0%,100%{transform:scale(.96);opacity:.55}50%{transform:scale(1.04);opacity:.8}}
+@keyframes vlOrbFloat{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(18px,14px,0)}}
+@keyframes vlDust{0%{transform:translate3d(0,18px,0);opacity:0}15%{opacity:.55}55%{opacity:.25}100%{transform:translate3d(12px,-85px,0);opacity:0}}
+@keyframes vlLine{0%{left:-100%}45%,100%{left:100%}}
+
+@media(max-width:900px){
+  .vl-signature-hero{grid-template-columns:1fr .88fr;height:500px;min-height:500px}
+  .vl-signature-copy{padding:34px 26px 52px 20px}
+  .vl-signature-visual{padding:20px 4vw 32px 10px}
+  .vl-image-stage{width:min(42vw,390px)}
+  .vl-visual-label{display:none}
+  .vl-signature-title{font-size:clamp(2rem,5.8vw,3.7rem)}
 }
 
-.vl-hero-scroll b{
-  font-size:.85rem;
-  font-weight:400;
-  animation:vlScrollArrow 1.8s ease-in-out infinite;
-}
-
-@keyframes vlCopyIn{
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-@keyframes vlFloat{
-  0%{
-    transform:translate3d(0,18px,0) scale(.7);
-    opacity:0;
-  }
-  15%{opacity:.65}
-  50%{
-    transform:translate3d(8px,-32px,0) scale(1);
-    opacity:.45;
-  }
-  85%{opacity:.25}
-  100%{
-    transform:translate3d(-5px,-72px,0) scale(.55);
-    opacity:0;
-  }
-}
-
-@keyframes vlScrollArrow{
-  0%,100%{transform:translateY(0);opacity:.55}
-  50%{transform:translateY(4px);opacity:1}
-}
-
-@media(max-width:720px){
-  .vl-hybrid-hero{
+@media(max-width:680px){
+  .vl-signature-hero{
     display:grid;
     grid-template-columns:1fr;
-    grid-template-rows:43% 57%;
-    min-height:clamp(430px,54svh,540px);
-    height:clamp(430px,54svh,540px);
+    grid-template-rows:48% 52%;
+    height:540px;
+    min-height:540px;
+    background:
+      radial-gradient(circle at 50% 10%,rgba(232,201,197,.55),transparent 28%),
+      var(--cream);
   }
-
-  .vl-hero-photo{
-    grid-row:1;
-  }
-
-  .vl-hero-photo img{
-    object-position:center center;
-  }
-
-  .vl-hero-photo-glow{
-    background:linear-gradient(180deg,rgba(247,242,235,0),rgba(247,242,235,.12));
-  }
-
-  .vl-hero-copy{
-    grid-row:2;
-    padding:18px 22px 28px;
-    justify-content:center;
-  }
-
-  .vl-hero-kicker{
-    font-size:.57rem;
-    margin-bottom:8px;
-    letter-spacing:.12em;
-  }
-
-  .vl-hero-title{
-    font-size:clamp(2rem,9.8vw,3rem);
-  }
-
-  .vl-hero-lead{
-    max-width:340px;
-    margin:9px 0 13px;
-    font-size:.79rem;
-    line-height:1.75;
-  }
-
-  .vl-hero-cta{
-    min-height:38px;
-    padding:8px 15px;
-    font-size:.76rem;
-  }
-
-  .vl-hero-meta{
-    margin-top:13px;
-    gap:8px;
-    font-size:.58rem;
-  }
-
-  .vl-hero-meta b{
-    font-size:.72rem;
-  }
-
-  .vl-hero-scroll{
-    display:none;
-  }
-
-  .vl-particle{
-    width:2px;
-    height:2px;
-  }
+  .vl-signature-visual{grid-row:1;padding:15px 20px 0;align-items:center}
+  .vl-signature-copy{grid-row:2;padding:10px 24px 34px;justify-content:center;align-items:center;text-align:center}
+  .vl-signature-eyebrow{font-size:.52rem;margin-bottom:9px;gap:8px}
+  .vl-signature-eyebrow i{width:18px}
+  .vl-signature-title{font-size:clamp(2rem,10vw,2.8rem);line-height:1.03}
+  .vl-signature-title em::after{right:50%;transform:translateX(50%);width:62px}
+  .vl-title-small{font-size:.78rem;margin-top:10px;line-height:1.7}
+  .vl-signature-desc{font-size:.71rem;margin:8px 0 12px;line-height:1.7;max-width:320px}
+  .vl-signature-actions{gap:12px}
+  .vl-signature-primary{padding:9px 15px;font-size:.7rem}
+  .vl-signature-secondary{font-size:.68rem}
+  .vl-signature-stats{margin-top:14px;gap:10px}
+  .vl-signature-stats span{font-size:.53rem}
+  .vl-signature-stats strong{font-size:.78rem}
+  .vl-image-stage{width:min(62vw,300px);height:min(62vw,300px)}
+  .vl-image-frame{width:82%;height:82%;padding:8px;border-radius:25px}
+  .vl-image-frame::after{inset:7px;border-radius:19px}
+  .vl-image-frame img{border-radius:18px}
+  .vl-image-caption{left:-4%;bottom:5%;padding:6px 8px;gap:6px}
+  .vl-image-caption span{font-size:.45rem}
+  .vl-image-caption small{font-size:.39rem}
+  .vl-signature-scroll{display:none}
+  .vl-dust-dot{width:2px;height:2px}
 }
 
-@media(max-width:380px){
-  .vl-hybrid-hero{
-    grid-template-rows:40% 60%;
-    min-height:430px;
-    height:430px;
-  }
-
-  .vl-hero-copy{
-    padding:15px 18px 23px;
-  }
-
-  .vl-hero-lead{
-    font-size:.74rem;
-  }
-
-  .vl-hero-meta{
-    font-size:.54rem;
-  }
+@media(max-width:390px){
+  .vl-signature-hero{height:510px;min-height:510px;grid-template-rows:46% 54%}
+  .vl-signature-copy{padding-bottom:26px}
+  .vl-signature-desc{display:none}
+  .vl-signature-stats{margin-top:12px}
+  .vl-signature-actions{margin-top:5px}
 }
 
 @media(prefers-reduced-motion:reduce){
-  .vl-hero-kicker,
-  .vl-hero-title,
-  .vl-hero-lead,
-  .vl-hero-cta,
-  .vl-hero-meta{
-    animation:none;
-    opacity:1;
-    transform:none;
-  }
-
-  .vl-particle,
-  .vl-hero-scroll b{
-    animation:none;
-  }
+  .vl-signature-hero *{animation:none!important;transition:none!important}
 }
 </style>
 
 <script>
 (function(){
-  const host = document.getElementById('vlHeroParticles');
+  const host=document.getElementById('vlHeroDust');
   if(!host) return;
-
-  const count = window.matchMedia('(max-width:720px)').matches ? 9 : 15;
-  const frag = document.createDocumentFragment();
-
+  const count=window.matchMedia('(max-width:680px)').matches?8:15;
+  const frag=document.createDocumentFragment();
   for(let i=0;i<count;i++){
-    const dot = document.createElement('span');
-    dot.className = 'vl-particle';
-    dot.style.left = (8 + Math.random()*84).toFixed(2) + '%';
-    dot.style.bottom = (4 + Math.random()*36).toFixed(2) + '%';
-    dot.style.animationDuration = (5.5 + Math.random()*5).toFixed(2) + 's';
-    dot.style.animationDelay = (-Math.random()*7).toFixed(2) + 's';
-    dot.style.opacity = (0.18 + Math.random()*0.32).toFixed(2);
-    frag.appendChild(dot);
+    const d=document.createElement('span');
+    d.className='vl-dust-dot';
+    d.style.left=(8+Math.random()*84).toFixed(2)+'%';
+    d.style.bottom=(4+Math.random()*38).toFixed(2)+'%';
+    d.style.animationDuration=(5.5+Math.random()*5.5).toFixed(2)+'s';
+    d.style.animationDelay=(-Math.random()*8).toFixed(2)+'s';
+    frag.appendChild(d);
   }
-
   host.appendChild(frag);
 })();
 </script>
