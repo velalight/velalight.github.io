@@ -1324,10 +1324,11 @@ mn_why:"Why VelaLight?",
 mn_rev:"Reviews",
 mn_track:"📦 Track",
 mn_contact:"Contact",
-
 hero_kick:"✦ Luxury Handmade Candles",
-hero_a:"A Light That Tells a Story…",
-hero_b:"& a Sparkle That Suits You",
+
+hero_a:"A Light",
+
+hero_b:"That Resembles You.",
 
 hero_lead:
 "Every candle is handcrafted with care.",
@@ -1336,13 +1337,29 @@ cta_shop:
 "Discover The Collection ✨",
 
 cta_story:
-"Our Story",
+"Fragrance Journey",
 
-trust1:"🚚 Delivery all over Egypt",
-trust2:"🤲 100% Handmade",
-trust3:"🎁 Free wrapping",
-trust4:"🔁 3-day replacement",
+trust1:"23",
 
+trust2:"Notes",
+
+trust3:"Handmade",
+
+trust4:"Art to Own",
+
+hero_eyebrow:"✦ Luxury Handmade Candles",
+hero_t1:"A Light",
+hero_t2:"That Resembles You.",
+hero_desc:"Candles that shine… to brighten your day with moments you deserve.",
+hero_btn1:"Discover The Magic ✨",
+hero_btn2:"Fragrance Journey",
+hero_s1_v:"23",
+hero_s1_t:"Notes",
+hero_s2:"Handmade",
+hero_s3:"Art to Own",
+hero_card:"Luxury Edition",
+   
+   
 prod_h2:"Choose Your Favorite",
 
 price_lbl:"💰 Price:",
