@@ -193,7 +193,7 @@
 (function(){
 "use strict";
 
-/* ═══════ VELA SCENTS — fix for missing scents ═══════ */
+/* ═══════ VELA SCENTS (fix missing scents) ═══════ */
 const VELA_SCENTS=[
 ["فانيلا","Vanilla"],
 ["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
@@ -225,10 +225,34 @@ const velaScentTr=name=>{
   return f?(LANG==="en"?f[1]:f[0]):(name||"");
 };
 
-const scentWarnMsg=()=>
-  LANG==="en"
-  ?"⚠️ Please choose a scent first."
-  :"⚠️ من فضلك اختاري العطر الأول.";
+/* ═══════ FILL MISSING TRANSLATIONS ═══════ */
+(function fillMissingI18n(){
+  if(typeof I18N==="undefined")return;
+  const add={
+    ar:{
+      ship_note:"🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
+      pay_products_note:"💳 قيمة المنتجات تُدفع مقدمًا عبر InstaPay.",
+      t_scentwarn:"⚠️ من فضلك اختاري العطر الأول.",
+      scent_req:"مطلوب",
+      handmade_note:"قطعة يدوية تُجهّز بعناية عند الطلب"
+    },
+    en:{
+      ship_note:"🚚 Shipping: paid cash to courier on delivery.",
+      pay_products_note:"💳 Products paid upfront via InstaPay.",
+      t_scentwarn:"⚠️ Please choose a scent first.",
+      scent_req:"Required",
+      handmade_note:"Handmade piece prepared with care upon order"
+    }
+  };
+  Object.keys(add).forEach(L=>{
+    if(!I18N[L])I18N[L]={};
+    Object.keys(add[L]).forEach(k=>{
+      if(!I18N[L][k])I18N[L][k]=add[L][k];
+    });
+  });
+})();
+
+const scentWarnMsg=()=>t("t_scentwarn");
 
 let P=null,qty=1,selScent="",selRating=5;
 let productPid="";
@@ -306,12 +330,12 @@ function initLang(){
 
 function applyI18n(){
   $$("[data-i18n]").forEach(el=>{
-    const v=t(el.dataset.i18n);
-    if(v!==el.dataset.i18n)el.textContent=v;
+    const k=el.dataset.i18n,v=t(k);
+    if(v&&v!==k)el.textContent=v;
   });
   $$("[data-i18n-ph]").forEach(el=>{
-    const v=t(el.dataset.i18nPh);
-    if(v!==el.dataset.i18nPh)el.placeholder=v;
+    const k=el.dataset.i18nPh,v=t(k);
+    if(v&&v!==k)el.placeholder=v;
   });
   const mq=$("#mqTrack");
   if(mq){
@@ -393,7 +417,7 @@ function renderThumbs(){
   });
 }
 
-/* ═══════ SCENTS — never empty (fallback to all) ═══════ */
+/* ═══════ SCENTS — never empty ═══════ */
 function getProductScents(){
   const cloudP=(cloudCatalog||[]).find(x=>
     String(x.id)===String(P.id)||

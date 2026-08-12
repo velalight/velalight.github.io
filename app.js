@@ -6,7 +6,7 @@ let quickAddProduct=null;
 let quickAddScent="";
 let quickAddQty=1;
 
-/* ═══════ VELA SCENTS (Clean) ═══════ */
+/* ═══════ VELA SCENTS ═══════ */
 const VELA_SCENTS=[
 ["فانيلا","Vanilla"],
 ["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
@@ -38,10 +38,32 @@ const velaScentTr=name=>{
   return f?(LANG==="en"?f[1]:f[0]):(name||"");
 };
 
-const scentWarnMsg=()=>
-  LANG==="en"
-  ?"⚠️ Please choose a scent first."
-  :"⚠️ من فضلك اختاري العطر الأول.";
+/* ═══════ FILL MISSING TRANSLATIONS ═══════ */
+(function fillMissingI18n(){
+  if(typeof I18N==="undefined")return;
+  const add={
+    ar:{
+      ship_note:"🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
+      pay_products_note:"💳 قيمة المنتجات تُدفع مقدمًا عبر InstaPay.",
+      t_scentwarn:"⚠️ من فضلك اختاري العطر الأول.",
+      scent_req:"مطلوب",
+      handmade_note:"قطعة يدوية تُجهّز بعناية عند الطلب"
+    },
+    en:{
+      ship_note:"🚚 Shipping: paid cash to courier on delivery.",
+      pay_products_note:"💳 Products paid upfront via InstaPay.",
+      t_scentwarn:"⚠️ Please choose a scent first.",
+      scent_req:"Required",
+      handmade_note:"Handmade piece prepared with care upon order"
+    }
+  };
+  Object.keys(add).forEach(L=>{
+    if(!I18N[L])I18N[L]={};
+    Object.keys(add[L]).forEach(k=>{
+      if(!I18N[L][k])I18N[L][k]=add[L][k];
+    });
+  });
+})();
 
 /* ═══════ INIT ═══════ */
 document.addEventListener("DOMContentLoaded",()=>{
@@ -154,8 +176,14 @@ function updateLangBtn(){
 
 function applyI18n(){
   document.title=t("docTitle");
-  $$("[data-i18n]").forEach(el=>{el.textContent=t(el.dataset.i18n);});
-  $$("[data-i18n-ph]").forEach(el=>{el.placeholder=t(el.dataset.i18nPh);});
+  $$("[data-i18n]").forEach(el=>{
+    const k=el.dataset.i18n,v=t(k);
+    if(v&&v!==k)el.textContent=v;
+  });
+  $$("[data-i18n-ph]").forEach(el=>{
+    const k=el.dataset.i18nPh,v=t(k);
+    if(v&&v!==k)el.placeholder=v;
+  });
   const mq=$("#mqTrack");
   if(mq){
     const txt=t("mq");
@@ -191,7 +219,7 @@ function initReveal(){
   $$(".rv").forEach(el=>io.observe(el));
 }
 
-/* ═══════ CATEGORIES (hidden squares, logic kept) ═══════ */
+/* ═══════ CATEGORIES (hidden squares) ═══════ */
 function renderChips(){
   const w=$("#chips");
   if(!w)return;
@@ -306,7 +334,7 @@ function initQuickAdd(){
   });
   $("#scentModalAdd")?.addEventListener("click",()=>{
     if(!quickAddProduct)return;
-    if(!quickAddScent){toast(scentWarnMsg());return;}
+    if(!quickAddScent){toast(t("t_scentwarn"));return;}
     if(addToCart(quickAddProduct,{scent:quickAddScent,qty:quickAddQty})){
       closeModal("scentOv");
     }
@@ -327,7 +355,6 @@ function openQuickAdd(p){
   const w=$("#scentModalScents");
   if(!w)return;
 
-  /* لا يوجد عطر مختار تلقائيًا — العميل يختار بنفسه */
   w.innerHTML=VELA_SCENTS.map(s=>
     `<button class="chip" type="button" data-s="${s[0]}">${velaScentTr(s[0])}</button>`
   ).join("");
@@ -439,7 +466,7 @@ function initCart(){
   });
 }
 
-/* ═══════ CART RENDER (aligned layout) ═══════ */
+/* ═══════ CART RENDER ═══════ */
 function renderCart(){
   const c=getCart();
   const w=$("#cartItems");
@@ -590,7 +617,7 @@ async function checkout(){
   if(!c.length){toast(t("t_empty"));return;}
 
   const missingScent=c.some(it=>!it.scent||!String(it.scent).trim());
-  if(missingScent){toast(scentWarnMsg());return;}
+  if(missingScent){toast(t("t_scentwarn"));return;}
 
   const name=$("#coName")?.value.trim()||"";
   const phone=$("#coPhone")?.value.trim()||"";
@@ -614,7 +641,6 @@ async function checkout(){
   saveUserFromCart(name,phone,city,addr,notes);
 
   const orderId=genOrderId();
-
   const total=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
 
   let msg=`${t("wa_head")}\n`;
@@ -634,11 +660,11 @@ async function checkout(){
 
   msg+=`━━━━━━━━━━━━━━━━━━━━\n`;
   msg+=`${waTotalLabel()} ${money(total)}\n`;
-  msg+=`${LANG==="en"?"💳 Products paid upfront via InstaPay.":"💳 قيمة المنتجات تُدفع مقدمًا عبر InstaPay."}\n`;
+  msg+=`${t("pay_products_note")}\n`;
   if(CFG&&CFG.INSTAPAY&&String(CFG.INSTAPAY).trim()){
     msg+=`${t("wa_insta")} ${CFG.INSTAPAY}\n`;
   }
-  msg+=`${LANG==="en"?"🚚 Shipping paid cash to courier on delivery.":"🚚 الشحن يُدفع كاش لمندوب الشحن عند الاستلام."}\n\n`;
+  msg+=`${t("ship_note")}\n\n`;
   msg+=`${t("wa_name")} ${name}\n`;
   msg+=`${t("wa_phone")} ${phone}\n`;
   if(city){msg+=`${t("wa_city")} ${city}\n`;}
