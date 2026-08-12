@@ -605,39 +605,37 @@ return"data:image/svg+xml;charset=utf-8,"+
 encodeURIComponent(s);
 }
 
-
 const imgsOf=p=>{
-  const raw = p?.img;
+  const result=[];
 
-  // img يمكن أن يكون:
-  // 1) اسم صورة واحد
-  // 2) عدة صور مفصولة بفواصل
-  // 3) Array من الصور
-  // 4) فارغ
+  const addImages=source=>{
+    if(!source)return;
 
-  if(Array.isArray(raw)){
-    return raw
-      .flat(Infinity)
-      .map(x=>String(x||"").trim())
-      .filter(Boolean);
-  }
+    if(Array.isArray(source)){
+      source
+        .flat(Infinity)
+        .forEach(x=>{
+          const v=String(x||"").trim();
+          if(v)result.push(v);
+        });
+      return;
+    }
 
-  if(raw){
-    return String(raw)
+    String(source)
       .split(",")
       .map(x=>x.trim())
-      .filter(Boolean);
-  }
+      .filter(Boolean)
+      .forEach(x=>result.push(x));
+  };
 
-  // دعم المنتجات القديمة التي تستخدم imgs
-  if(Array.isArray(p?.imgs)){
-    return p.imgs
-      .flat(Infinity)
-      .map(x=>String(x||"").trim())
-      .filter(Boolean);
-  }
+  // الصورة الأساسية أولًا
+  addImages(p?.img);
 
-  return [];
+  // ثم جميع الصور الإضافية
+  addImages(p?.imgs);
+
+  // إزالة التكرار مع الحفاظ على الترتيب
+  return [...new Set(result)];
 };
 
 const imgOf=p=>{
