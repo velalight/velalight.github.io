@@ -307,13 +307,11 @@ header{
   top:0;
   z-index:60;
 
-  background:
-    rgba(255,253,249,.90);
+  background:rgba(255,253,249,.97);
 
-  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
 
-  border-bottom:
-    1px solid var(--line)
+  will-change:transform;
 }
 
 .hrow{
