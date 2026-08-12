@@ -133,7 +133,7 @@ function initHeroIntro(){
 let productRealtimeStarted=false;
 let productRealtimeUnsubscribe=null;
 
-function initProductRealtimeSync(){
+   function initProductRealtimeSync(){
 
   if(productRealtimeStarted)return;
 
@@ -149,12 +149,22 @@ function initProductRealtimeSync(){
   productRealtimeUnsubscribe=
     DB.watch(
       "products",
+
       cloud=>{
+
+        const baseProducts=
+          typeof PRODUCTS !== "undefined"
+            ? PRODUCTS
+            : [];
 
         const map=
           new Map(
-            (typeof PRODUCTS !== "undefined" ? PRODUCTS : [])
-              .map(p=>[p.id,{...p}])
+            baseProducts.map(
+              p=>[
+                p.id,
+                {...p}
+              ]
+            )
           );
 
         (cloud||[]).forEach(d=>{
@@ -168,7 +178,9 @@ function initProductRealtimeSync(){
           if(!slug)return;
 
           if(d.active===false){
+
             map.delete(slug);
+
             return;
           }
 
@@ -184,31 +196,97 @@ function initProductRealtimeSync(){
 
         });
 
-        ALL_PRODUCTS=[...map.values()];
+        const nextProducts=[
+          ...map.values()
+        ];
 
-        // Keep the last good live catalog locally so product-detail pages can
-        // render immediately on the next navigation, then verify with Firebase.
+        /*
+         * لا تعيد رسم الصفحة إذا لم تتغير
+         * بيانات المنتجات فعليًا.
+         */
+        let changed=
+          nextProducts.length !==
+          ALL_PRODUCTS.length;
+
+        if(!changed){
+
+          for(
+            let i=0;
+            i<nextProducts.length;
+            i++
+          ){
+
+            const oldP=
+              ALL_PRODUCTS[i];
+
+            const newP=
+              nextProducts[i];
+
+            if(
+              oldP?.id !== newP?.id ||
+              oldP?.price !== newP?.price ||
+              oldP?.old !== newP?.old ||
+              oldP?.active !== newP?.active ||
+              oldP?.img !== newP?.img ||
+              oldP?.imgs !== newP?.imgs ||
+              oldP?.name !== newP?.name ||
+              oldP?.nameEn !== newP?.nameEn
+            ){
+
+              changed=true;
+
+              break;
+            }
+
+          }
+
+        }
+
+        /*
+         * Firebase أرسل نفس البيانات الموجودة بالفعل.
+         * لا داعي لإعادة بناء المنتجات أو الصفحة.
+         */
+        if(!changed)return;
+
+        ALL_PRODUCTS=
+          nextProducts;
+
+        /*
+         * حفظ نسخة محلية لاستخدامها
+         * عند فتح صفحة المنتج لاحقًا.
+         */
         try{
+
           localStorage.setItem(
             "vl_products_cache_v1",
-            JSON.stringify(ALL_PRODUCTS)
+            JSON.stringify(
+              ALL_PRODUCTS
+            )
           );
+
         }catch(e){}
 
+        /*
+         * أعد رسم المنتجات مرة واحدة فقط
+         * عندما يحدث تغيير حقيقي.
+         */
         window.dispatchEvent(
           new Event("data-refresh")
         );
 
       },
+
       error=>{
+
         console.error(
           "Products realtime sync error:",
           error
         );
+
       }
     );
 }
-
+   
 
 /* ═══════════════════════════════════════
    LANGUAGE
