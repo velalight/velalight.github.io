@@ -639,6 +639,38 @@ const imgsOf=p=>{
 
   return [];
 };
+const raw = p?.img;
+
+  // img يمكن أن يكون:
+  // 1) اسم صورة واحد
+  // 2) عدة صور مفصولة بفواصل
+  // 3) Array من الصور
+  // 4) فارغ
+
+  if(Array.isArray(raw)){
+    return raw
+      .flat(Infinity)
+      .map(x=>String(x||"").trim())
+      .filter(Boolean);
+  }
+
+  if(raw){
+    return String(raw)
+      .split(",")
+      .map(x=>x.trim())
+      .filter(Boolean);
+  }
+
+  // دعم المنتجات القديمة التي تستخدم imgs
+  if(Array.isArray(p?.imgs)){
+    return p.imgs
+      .flat(Infinity)
+      .map(x=>String(x||"").trim())
+      .filter(Boolean);
+  }
+
+  return [];
+};
 
 const imgOf=p=>{
 const a=imgsOf(p);
