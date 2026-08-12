@@ -664,14 +664,9 @@ function renderProducts(){
               :""
             }
 
-            ${productDesc ? `
-              <p class="p-desc p-desc-clamp">
-                ${productDesc}
-              </p>
-              <a class="p-more" href="product.html?p=${p.id}">
-                ${LANG === "en" ? "Read more" : "عرض المزيد"}
-              </a>
-            ` : ""}
+            <p class="p-desc">
+              ${productDesc}
+            </p>
 
 
             <div class="p-foot">

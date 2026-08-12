@@ -1,130 +1,303 @@
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getFirestore,
   collection,
+  getDoc,
+  getDocs,
   onSnapshot,
   addDoc,
   updateDoc,
   deleteDoc,
-  doc
+  doc,
+  setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
   getAuth,
-  signInAnonymously,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
-const C = (window.CFG || {}).FIREBASE || {};
+/* =========================================================
+   VelaLight Firebase Configuration
+   ========================================================= */
 
-if (C.apiKey && !C.apiKey.startsWith("YOUR_")) {
+const firebaseConfig = {
+  apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",
+  authDomain: "velalight.firebaseapp.com",
+  projectId: "velalight",
+  storageBucket: "velalight.firebasestorage.app",
+  messagingSenderId: "1095485535268",
+  appId: "1:1095485535268:web:4d17ee9de6f5acdacbd4b1",
+  measurementId: "G-BWBD8ZZD23"
+};
 
-  try {
 
-    const app = initializeApp(C);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
+/* =========================================================
+   Initialize Firebase
+   ========================================================= */
 
-    try {
-      await signInAnonymously(auth);
-    } catch (e) {
-      console.warn("Anonymous auth:", e.message);
+let app;
+let db;
+let auth;
+
+try {
+
+  app = initializeApp(firebaseConfig);
+
+  db = getFirestore(app);
+
+  auth = getAuth(app);
+
+
+  /* =======================================================
+     Firebase Interface
+     ======================================================= */
+
+  window.FB = {
+
+    db,
+
+    auth,
+
+
+    /* =========================
+       FIRESTORE - LIST
+       ========================= */
+
+    list: async (collectionName) => {
+
+      const snapshot = await getDocs(
+        collection(db, collectionName)
+      );
+
+      return snapshot.docs.map((d) => ({
+        id: d.id,
+        ...d.data()
+      }));
+
+    },
+
+
+    /* =========================
+       FIRESTORE - SINGLE DOCUMENT
+       ========================= */
+
+    get: async (collectionName, id) => {
+
+      const snapshot = await getDoc(
+        doc(db, collectionName, String(id))
+      );
+
+      if(!snapshot.exists()) return null;
+
+      return {
+        id: snapshot.id,
+        ...snapshot.data()
+      };
+
+    },
+
+
+    /* =========================
+       FIRESTORE - REALTIME
+       ========================= */
+
+    watch: (collectionName, callback, onError) => {
+
+      return onSnapshot(
+
+        collection(db, collectionName),
+
+        (snapshot) => {
+
+          const data = snapshot.docs.map((d) => ({
+            id: d.id,
+            ...d.data()
+          }));
+
+          callback(data);
+
+        },
+
+        (error) => {
+
+          console.error(
+            "Firebase realtime error [" +
+            collectionName +
+            "]:",
+            error
+          );
+
+          if (typeof onError === "function") {
+            onError(error);
+          }
+
+        }
+
+      );
+
+    },
+
+
+    /* =========================
+       FIRESTORE - ADD
+       ========================= */
+
+    add: (collectionName, data) => {
+
+      return addDoc(
+        collection(db, collectionName),
+        data
+      );
+
+    },
+
+
+    /* =========================
+       FIRESTORE - SET
+       ========================= */
+
+    set: (collectionName, id, data) => {
+
+      return setDoc(
+        doc(db, collectionName, id),
+        data,
+        { merge: true }
+      );
+
+    },
+
+
+    /* =========================
+       FIRESTORE - UPDATE
+       ========================= */
+
+    update: (collectionName, id, data) => {
+
+      return updateDoc(
+        doc(db, collectionName, id),
+        data
+      );
+
+    },
+
+
+    /* =========================
+       FIRESTORE - DELETE
+       ========================= */
+
+    remove: (collectionName, id) => {
+
+      return deleteDoc(
+        doc(db, collectionName, id)
+      );
+
+    },
+
+
+    /* =========================
+       AUTH - LOGIN
+       ========================= */
+
+    admin: (email, password) => {
+
+      return signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+    },
+
+
+    /* =========================
+       AUTH - CURRENT USER
+       ========================= */
+
+    authUser: () => {
+
+      return auth.currentUser;
+
+    },
+
+
+    /* =========================
+       AUTH - STATE
+       ========================= */
+
+    onAuthStateChanged: (callback) => {
+
+      return onAuthStateChanged(
+        auth,
+        callback
+      );
+
+    },
+
+
+    /* =========================
+       AUTH - LOGOUT
+       ========================= */
+
+    logout: () => {
+
+      return signOut(auth);
+
     }
 
-
-    window.FB = {
-
-      // قراءة مرة واحدة عند الحاجة
-      list: async (collectionName) => {
-        const snapshot = await import(
-          "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
-        ).then(({ getDocs }) =>
-          getDocs(collection(db, collectionName))
-        );
-
-        return snapshot.docs.map(d => ({
-          id: d.id,
-          ...d.data()
-        }));
-      },
+  };
 
 
-      // مراقبة مباشرة للتغييرات
-      watch: (collectionName, callback) => {
+  /* =======================================================
+     AUTH STATE MONITOR
+     ======================================================= */
 
-        return onSnapshot(
-          collection(db, collectionName),
+  onAuthStateChanged(auth, (user) => {
 
-          snapshot => {
-
-            const products = snapshot.docs.map(d => ({
-              id: d.id,
-              ...d.data()
-            }));
-
-            callback(products);
-
-          },
-
-          error => {
-            console.error(
-              `Firebase realtime error [${collectionName}]:`,
-              error
-            );
-          }
-        );
-
-      },
-
-
-      add: (collectionName, data) =>
-        addDoc(
-          collection(db, collectionName),
-          data
-        ),
-
-
-      update: (collectionName, id, data) =>
-        updateDoc(
-          doc(db, collectionName, id),
-          data
-        ),
-
-
-      remove: (collectionName, id) =>
-        deleteDoc(
-          doc(db, collectionName, id)
-        ),
-
-
-      admin: (email, password) =>
-        signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        )
-
-    };
-
+    console.log(
+      "Firebase Auth State:",
+      user ? user.email : "No user"
+    );
 
     window.dispatchEvent(
-      new Event("fb-ready")
+      new CustomEvent("fb-auth-state", {
+        detail: {
+          user: user || null
+        }
+      })
     );
 
+  });
 
-    console.log("🔥 Firebase connected successfully");
 
-  } catch (e) {
+  /* =======================================================
+     FIREBASE READY
+     ======================================================= */
 
-    console.error(
-      "Firebase initialization failed:",
-      e
-    );
+  console.log(
+    "✅ Firebase connected successfully"
+  );
 
-  }
+  window.dispatchEvent(
+    new Event("fb-ready")
+  );
+
+
+} catch (error) {
+
+  console.error(
+    "❌ Firebase initialization failed:",
+    error
+  );
+
+  window.dispatchEvent(
+    new CustomEvent("fb-error", {
+      detail: error
+    })
+  );
 
 }
