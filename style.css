@@ -95,9 +95,43 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 .p-quick{position:absolute;bottom:0;inset-inline:0;background:rgba(14,11,9,.8);backdrop-filter:blur(6px);text-align:center;padding:.55rem;font-size:.8rem;color:var(--gold2);transform:translateY(100%);transition:.3s}
 .p-card:hover .p-quick{transform:none}
 .p-body{padding:1.1rem 1.2rem 1.3rem;display:flex;flex-direction:column;flex:1}
-.p-cat{font-size:.7rem;color:var(--gold);letter-spacing:.08em}
-.p-body h3{font-family:var(--fd);font-size:1.1rem;margin:.3rem 0}
+.p-cat{font-size:.7rem;color:var(--ink);letter-spacing:.08em}
+.p-body h3{font-family:var(--fd);font-size:1.1rem;margin:.3rem 0;color:var(--ink)}
+.p-body h3 a{color:var(--ink)}
 .p-body h3 a:hover{color:var(--gold2)}
+
+/* Product cards: short description only; full details live on product.html. */
+.p-desc{
+  color:var(--ink);
+  font-size:.82rem;
+  line-height:1.6;
+  margin:.45rem 0 .18rem;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  min-height:2.56em;
+  max-height:2.56em;
+}
+.p-more{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  color:var(--ink);
+  font-size:.75rem;
+  font-weight:800;
+  margin:.05rem 0 .65rem;
+  transition:color .2s ease,transform .2s ease;
+}
+.p-more:hover{
+  color:var(--gold2);
+  transform:translateX(-3px);
+}
+@media(max-width:600px){
+  .p-desc{font-size:.72rem;line-height:1.52;min-height:3.04em;max-height:3.04em}
+  .p-more{font-size:.68rem;margin-bottom:.5rem}
+}
+
 .p-scents{font-size:.76rem;color:var(--dim);margin-bottom:.6rem;min-height:1.2em}
 .p-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:.6rem}
 .p-price{font-weight:800;font-size:1.05rem;color:var(--gold2)}

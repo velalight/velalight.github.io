@@ -668,6 +668,13 @@ function renderProducts(){
               ${productDesc}
             </p>
 
+            <a
+              class="p-more"
+              href="product.html?p=${p.id}"
+              aria-label="${LANG === "en" ? "View more details" : "عرض المزيد من تفاصيل المنتج"}"
+            >
+              ${LANG === "en" ? "View more" : "عرض المزيد"}
+            </a>
 
             <div class="p-foot">
 
