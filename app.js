@@ -52,23 +52,13 @@ document.addEventListener("DOMContentLoaded",()=>{
   initEmbers();
   initReveal();
 
-  // Render the local catalog immediately. Firebase sync happens in the background.
-  renderChips();
-  renderProducts();
-  renderScents();
-  renderFAQ();
-
-  // Start the single live products stream. The local catalog above is
-  // already visible, so no initial getDocs(products) call is needed here.
-  initProductRealtimeSync();
-
-  // Reviews are independent from products; fetch them once in the background.
-  loadReviewsBackground();
-
-  window.addEventListener("fb-ready", ()=>{
+  loadAll().then(()=>{
+    renderChips();
+    renderProducts();
+    renderScents();
+    renderFAQ();
     initProductRealtimeSync();
-    loadReviewsBackground();
-  }, {once:true});
+  });
 
   initCart();
   initAccount();
@@ -87,24 +77,6 @@ window.addEventListener(
     renderProducts();
   }
 );
-
-let reviewsLoadStarted=false;
-async function loadReviewsBackground(){
-  if(reviewsLoadStarted)return;
-  if(typeof DB === "undefined" || !DB || typeof DB.list !== "function")return;
-
-  reviewsLoadStarted=true;
-  try{
-    const reviews=await DB.list("reviews");
-    if(Array.isArray(reviews)){
-      ALL_REVIEWS=reviews;
-      renderProducts();
-    }
-  }catch(e){
-    reviewsLoadStarted=false;
-    console.warn("Reviews background load failed:",e);
-  }
-}
 
 
 
@@ -133,7 +105,7 @@ function initHeroIntro(){
 let productRealtimeStarted=false;
 let productRealtimeUnsubscribe=null;
 
-   function initProductRealtimeSync(){
+function initProductRealtimeSync(){
 
   if(productRealtimeStarted)return;
 
@@ -149,22 +121,12 @@ let productRealtimeUnsubscribe=null;
   productRealtimeUnsubscribe=
     DB.watch(
       "products",
-
       cloud=>{
-
-        const baseProducts=
-          typeof PRODUCTS !== "undefined"
-            ? PRODUCTS
-            : [];
 
         const map=
           new Map(
-            baseProducts.map(
-              p=>[
-                p.id,
-                {...p}
-              ]
-            )
+            (typeof PRODUCTS !== "undefined" ? PRODUCTS : [])
+              .map(p=>[p.id,{...p}])
           );
 
         (cloud||[]).forEach(d=>{
@@ -178,9 +140,7 @@ let productRealtimeUnsubscribe=null;
           if(!slug)return;
 
           if(d.active===false){
-
             map.delete(slug);
-
             return;
           }
 
@@ -196,97 +156,22 @@ let productRealtimeUnsubscribe=null;
 
         });
 
-        const nextProducts=[
-          ...map.values()
-        ];
+        ALL_PRODUCTS=[...map.values()];
 
-        /*
-         * لا تعيد رسم الصفحة إذا لم تتغير
-         * بيانات المنتجات فعليًا.
-         */
-        let changed=
-          nextProducts.length !==
-          ALL_PRODUCTS.length;
-
-        if(!changed){
-
-          for(
-            let i=0;
-            i<nextProducts.length;
-            i++
-          ){
-
-            const oldP=
-              ALL_PRODUCTS[i];
-
-            const newP=
-              nextProducts[i];
-
-            if(
-              oldP?.id !== newP?.id ||
-              oldP?.price !== newP?.price ||
-              oldP?.old !== newP?.old ||
-              oldP?.active !== newP?.active ||
-              oldP?.img !== newP?.img ||
-              oldP?.imgs !== newP?.imgs ||
-              oldP?.name !== newP?.name ||
-              oldP?.nameEn !== newP?.nameEn
-            ){
-
-              changed=true;
-
-              break;
-            }
-
-          }
-
-        }
-
-        /*
-         * Firebase أرسل نفس البيانات الموجودة بالفعل.
-         * لا داعي لإعادة بناء المنتجات أو الصفحة.
-         */
-        if(!changed)return;
-
-        ALL_PRODUCTS=
-          nextProducts;
-
-        /*
-         * حفظ نسخة محلية لاستخدامها
-         * عند فتح صفحة المنتج لاحقًا.
-         */
-        try{
-
-          localStorage.setItem(
-            "vl_products_cache_v1",
-            JSON.stringify(
-              ALL_PRODUCTS
-            )
-          );
-
-        }catch(e){}
-
-        /*
-         * أعد رسم المنتجات مرة واحدة فقط
-         * عندما يحدث تغيير حقيقي.
-         */
         window.dispatchEvent(
           new Event("data-refresh")
         );
 
       },
-
       error=>{
-
         console.error(
           "Products realtime sync error:",
           error
         );
-
       }
     );
 }
-   
+
 
 /* ═══════════════════════════════════════
    LANGUAGE
@@ -736,7 +621,6 @@ function renderProducts(){
               src="${imgOf(p)}"
               alt="${pname(p)}"
               loading="lazy"
-              decoding="async"
             >
 
             ${
@@ -1269,16 +1153,21 @@ function initCart(){
   renderCart();
 
 
-  /*
-    IMPORTANT: never auto-open the cart on page load / refresh.
-    The cart may keep its saved items, but the drawer itself must remain
-    closed until the visitor explicitly clicks the cart button.
-  */
-  const cartParam = new URLSearchParams(location.search).get("cart");
-  if(cartParam === "1") {
-    const url = new URL(location.href);
-    url.searchParams.delete("cart");
-    history.replaceState(null, "", url.pathname + (url.search ? "?" + url.searchParams.toString() : "") + url.hash);
+  if(
+    new URLSearchParams(
+      location.search
+    ).get("cart")==="1"
+  ){
+
+    fillCartForm();
+
+    renderCart();
+
+    openDrawer(
+      "cartDrawer",
+      "cartOv"
+    );
+
   }
 
 
@@ -1309,24 +1198,7 @@ function initCart(){
   $("#checkoutBtn")
     ?.addEventListener(
       "click",
-      async e=>{
-        const btn=e.currentTarget;
-        if(btn.disabled)return;
-        btn.disabled=true;
-        btn.setAttribute("aria-busy","true");
-        btn.classList.add("is-loading");
-        const original=btn.innerHTML;
-        btn.dataset.originalHtml=original;
-        btn.innerHTML = LANG === "en" ? "⏳ Processing…" : "⏳ جاري تجهيز الطلب…";
-        try{
-          await checkout();
-        }finally{
-          btn.disabled=false;
-          btn.removeAttribute("aria-busy");
-          btn.classList.remove("is-loading");
-          btn.innerHTML=btn.dataset.originalHtml || original;
-        }
-      }
+      checkout
     );
 
 
@@ -1440,7 +1312,6 @@ function renderCart(){
                   nameEn:it.nameEn
                 })}"
                 loading="lazy"
-                decoding="async"
               >
 
             </div>
@@ -2681,8 +2552,6 @@ function initSearch(){
                 <img
                   src="${imgOf(p)}"
                   alt=""
-                  loading="lazy"
-                  decoding="async"
                 >
 
                 <div>

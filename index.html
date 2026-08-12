@@ -11,6 +11,7 @@
 <meta name="description"
 content="VelaLight — شموع يدوية فاخرة بعطور مميزة، هدايا حسب الطلب، وتوصيل لكل محافظات مصر.">
 
+<link rel="preload" as="image" href="RR.jpg" fetchpriority="high">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="mobile-luxury-fix.css">
      
@@ -1777,115 +1778,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 <script src="app.js"></script>
 
-<!-- Custom Translation Hook for Hero V3 -->
-<script>
-/* =========================================================
-   VelaLight — HERO TRANSLATION FIX
-   Only handles the Hero section.
-   Does NOT interfere with the main translation system.
-   ========================================================= */
-
-(() => {
-  const heroTranslations = {
-    ar: {
-      hero_eyebrow: "✦ شموع يدوية فاخرة",
-      hero_t1: "ضوءٌ",
-      hero_t2: "يُشبهكِ.",
-      hero_desc: "شموع تُضيء… لتنير يومكِ بلحظاتٍ تستحقينها.",
-      hero_btn1: "اكتشفي السحر ✨",
-      hero_btn2: "رحلة العطور",
-      hero_s1_v: "23",
-      hero_s1_t: "نوتة",
-      hero_s2: "صناعة يدوية",
-      hero_s3: "فنٌ يُقتنى",
-      hero_card: "إصدار فاخر"
-    },
-
-    en: {
-      hero_eyebrow: "✦ Luxury Handmade Candles",
-      hero_t1: "A Light",
-      hero_t2: "That Resembles You.",
-      hero_desc: "Candles that shine… to brighten your day with moments you deserve.",
-      hero_btn1: "Discover the Magic ✨",
-      hero_btn2: "Fragrance Journey",
-      hero_s1_v: "23",
-      hero_s1_t: "Notes",
-      hero_s2: "Handmade",
-      hero_s3: "Art to Own",
-      hero_card: "Luxury Edition"
-    }
-  };
-
-  function updateHeroLanguage(lang) {
-
-    const dict = heroTranslations[lang] || heroTranslations.ar;
-
-    const hero = document.querySelector(".vl-chroma-hero");
-
-    if (!hero) return;
-
-    hero.querySelectorAll("[data-i18n]").forEach(el => {
-
-      const key = el.getAttribute("data-i18n");
-
-      if (!Object.prototype.hasOwnProperty.call(dict, key)) {
-        return;
-      }
-
-      el.textContent = dict[key];
-
-    });
-  }
-
-  /* متاح للنظام الحالي لو احتاجه */
-  window.updateHeroLang = updateHeroLanguage;
-
-  /* تحديث الـHero بعد تحميل الصفحة */
-  document.addEventListener("DOMContentLoaded", () => {
-
-    const currentLang =
-      document.documentElement.lang === "en" ? "en" : "ar";
-
-    updateHeroLanguage(currentLang);
-
-  });
-
-})();
-</script>     
-    function updateHeroLang(lang) {
-      const elements = document.querySelectorAll('[data-i18n]');
-      elements.forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (heroTranslations[lang] && heroTranslations[lang][key]) {
-          el.innerText = heroTranslations[lang][key];
-        }
-      });
-    }
-
-    // Listen for language button clicks
-    const langBtn = document.getElementById('langBtn');
-    if (langBtn) {
-      langBtn.addEventListener('click', () => {
-        // Wait a bit for the main app to toggle the lang
-        setTimeout(() => {
-          const currentLang = document.documentElement.lang || 'ar';
-          updateHeroLang(currentLang);
-        }, 50);
-      });
-    }
-
-    // Initial check
-    window.addEventListener('load', () => {
-      const currentLang = document.documentElement.lang || 'ar';
-      updateHeroLang(currentLang);
-    });
-  })();
-</script>
-
-
-
-
-
+<!-- Hero translations are handled by data.js + app.js. No duplicate hook needed. -->
 
 </body>
 </html>
