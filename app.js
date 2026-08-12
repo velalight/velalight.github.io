@@ -664,17 +664,15 @@ function renderProducts(){
               :""
             }
 
-            <p class="p-desc">
-              ${productDesc}
-            </p>
+            ${productDesc ? `
+              <p class="p-desc p-desc-clamp">
+                ${productDesc}
+              </p>
+              <a class="p-more" href="product.html?p=${p.id}">
+                ${LANG === "en" ? "Read more" : "عرض المزيد"}
+              </a>
+            ` : ""}
 
-            <a
-              class="p-more"
-              href="product.html?p=${p.id}"
-              aria-label="${LANG === "en" ? "View more details" : "عرض المزيد من تفاصيل المنتج"}"
-            >
-              ${LANG === "en" ? "View more" : "عرض المزيد"}
-            </a>
 
             <div class="p-foot">
 

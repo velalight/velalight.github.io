@@ -339,13 +339,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
           </a>
         </div>
         
-        <div class="vl-chroma-stats">
-          <div class="stat-item"><b data-i18n="hero_s1_v">23</b> <span data-i18n="hero_s1_t">نوتة</span></div>
-          <div class="stat-sep"></div>
-          <div class="stat-item" data-i18n="hero_s2">صناعة يدوية</div>
-          <div class="stat-sep"></div>
-          <div class="stat-item" data-i18n="hero_s3">فنٌ يُقتنى</div>
-        </div>
       </div>
 
       <!-- Image Side -->
@@ -591,127 +584,13 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 /* Responsive */
 @media (max-width: 900px) {
-  /* Mobile hero: keep the candle animation, but place the copy over the image
-     instead of creating a second tall block underneath it. */
-  .vl-chroma-hero {
-    min-height: 390px;
-    height: 390px;
-    padding: 0;
-    display:block;
-  }
-
-  .vl-chroma-container {
-    width:100%;
-    height:100%;
-    max-width:none;
-  }
-
-  .vl-chroma-grid {
-    position:relative;
-    display:block;
-    width:100%;
-    height:100%;
-  }
-
-  .vl-chroma-visual {
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:1;
-    order:initial;
-  }
-
-  .visual-wrapper {
-    width:min(78vw,330px);
-    max-width:330px;
-    aspect-ratio:1;
-  }
-
-  .hero-img-main {
-    max-width:none;
-    width:100%;
-    height:100%;
-  }
-
-  .vl-chroma-content {
-    position:absolute;
-    inset:0;
-    z-index:3;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:28px 18px 24px;
-    color:var(--c-dark);
-    pointer-events:none;
-  }
-
-  .vl-chroma-content > * {
-    pointer-events:auto;
-  }
-
-  .vl-badge-premium {
-    font-size:.62rem;
-    padding:5px 10px;
-    margin-bottom:9px;
-  }
-
-  .vl-chroma-title {
-    font-size:clamp(2rem,9vw,2.7rem);
-    line-height:1.08;
-    margin-bottom:9px;
-    text-shadow:0 2px 12px rgba(255,255,255,.55);
-  }
-
-  .vl-chroma-lead {
-    max-width:290px;
-    font-size:.76rem;
-    line-height:1.55;
-    margin-bottom:11px;
-    text-shadow:0 1px 8px rgba(255,255,255,.65);
-  }
-
-  .vl-chroma-actions {
-    justify-content:center;
-    gap:8px;
-    margin-bottom:11px;
-  }
-
-  .btn-primary-lux {
-    padding:8px 12px;
-    font-size:.68rem;
-  }
-
-  .btn-link-lux {
-    padding:7px 0;
-    font-size:.68rem;
-  }
-
-  .vl-chroma-stats {
-    justify-content:center;
-    gap:6px;
-    font-size:.52rem;
-    text-shadow:0 1px 7px rgba(255,255,255,.7);
-  }
-
-  .floating-card {
-    bottom:6%;
-    left:-2%;
-    padding:6px 9px;
-    font-size:.55rem;
-  }
-}
-
-@media (max-width:420px) {
-  .vl-chroma-hero { height:360px; min-height:360px; }
-  .visual-wrapper { width:min(74vw,285px); }
-  .vl-chroma-content { padding-inline:14px; }
-  .vl-chroma-title { font-size:1.85rem; }
-  .vl-chroma-lead { font-size:.69rem; max-width:260px; }
-  .vl-chroma-stats { font-size:.47rem; gap:4px; }
+  .vl-chroma-hero { min-height: auto; padding: 100px 0 60px; }
+  .vl-chroma-grid { grid-template-columns: 1fr; gap: 60px; }
+  .vl-chroma-content { text-align: center; }
+  .vl-chroma-actions { justify-content: center; }
+  .vl-chroma-stats { justify-content: center; }
+  .vl-chroma-visual { order: -1; }
+  .hero-img-main { max-width: 300px; }
 }
 </style>
 

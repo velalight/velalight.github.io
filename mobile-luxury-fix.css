@@ -6,9 +6,9 @@
 @media (max-width: 900px) {
 
   .vl-chroma-hero{
-    min-height: 390px;
-    height: 390px;
-    padding: 0;
+    min-height: auto;
+    height: auto;
+    padding: 24px 0 28px;
   }
 
   .vl-chroma-container{
@@ -17,16 +17,16 @@
 
   /* نحافظ على الصورة والكلام جنب بعض */
   .vl-chroma-grid{
-    grid-template-columns:1fr;
-    gap:0;
-    align-items:stretch;
-    direction:ltr;
+    grid-template-columns: .92fr 1.08fr;
+    gap: 12px;
+    align-items: center;
+    direction: ltr;
   }
 
   .vl-chroma-content{
-    direction:rtl;
-    text-align:center;
-    min-width:0;
+    direction: rtl;
+    text-align: right;
+    min-width: 0;
   }
 
   .vl-badge-premium{
@@ -83,8 +83,8 @@
 
   /* الشمعة والدائرة: نفس الشكل والحركة */
   .vl-chroma-visual{
-    order:initial;
-    min-width:0;
+    order: initial;
+    min-width: 0;
   }
 
   .visual-wrapper{
@@ -239,4 +239,22 @@
   .logo small{
     font-size: .38rem;
   }
+}
+
+
+/* FINAL MOBILE HERO OVERRIDE — content overlays image, stats removed */
+@media (max-width:900px){
+  .vl-chroma-hero{min-height:0 !important;height:auto !important;padding:12px 0 18px !important;}
+  .vl-chroma-grid{display:block !important;position:relative !important;width:100%;}
+  .vl-chroma-visual{order:initial !important;display:flex !important;width:100%;position:relative;z-index:1;}
+  .visual-wrapper{width:min(92vw,430px) !important;max-width:430px !important;margin:0 auto !important;}
+  .vl-chroma-content{position:absolute !important;z-index:5 !important;top:7% !important;left:6% !important;right:6% !important;width:auto !important;display:flex !important;flex-direction:column !important;align-items:center !important;text-align:center !important;direction:rtl !important;pointer-events:none;}
+  .vl-chroma-content > *{pointer-events:auto;}
+  .vl-chroma-stats{display:none !important;}
+  .vl-badge-premium{margin-bottom:7px !important;padding:4px 10px !important;font-size:.62rem !important;color:#f8e9c8 !important;background:rgba(20,15,11,.62) !important;border-color:rgba(212,175,55,.38) !important;backdrop-filter:blur(5px);}
+  .vl-chroma-title{margin:0 0 7px !important;font-size:clamp(1.7rem,8vw,2.35rem) !important;line-height:1.12 !important;color:#fffaf0 !important;text-shadow:0 2px 12px rgba(0,0,0,.65);}
+  .vl-chroma-lead{margin:0 auto 10px !important;max-width:88% !important;font-size:.76rem !important;line-height:1.5 !important;color:#fffaf0 !important;text-shadow:0 2px 9px rgba(0,0,0,.75);}
+  .vl-chroma-actions{gap:10px !important;margin:0 !important;justify-content:center !important;}
+  .btn-primary-lux{padding:8px 13px !important;font-size:.7rem !important;}
+  .btn-link-lux{padding:7px 0 !important;font-size:.7rem !important;color:#fffaf0 !important;text-shadow:0 2px 8px rgba(0,0,0,.8);}
 }
