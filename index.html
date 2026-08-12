@@ -35,7 +35,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 <link rel="manifest" href="manifest.json">
 </head>
 
-
 <body>
 
 <!-- ═══════════════════════════════════════════════
@@ -45,7 +44,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 <div class="topbar">
   <div class="mq-track" id="mqTrack"></div>
 </div>
-
 
 <!-- ═══════════════════════════════════════════════
      HEADER
@@ -66,7 +64,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </a>
 
-
     <nav class="mainnav">
 
       <div>
@@ -75,7 +72,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         </a>
       </div>
 
-
       <div>
 
         <a href="#products" data-i18n="nav_shop">
@@ -83,7 +79,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         </a>
 
         <a href="#products">▾</a>
-
 
         <div class="dd">
 
@@ -139,20 +134,17 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
       <div>
         <a href="#about-us" data-i18n="nav_about">
           من نحن
         </a>
       </div>
 
-
       <div>
         <a href="#faq-section" data-i18n="nav_faq">
           الأسئلة الشائعة
         </a>
       </div>
-
 
       <div>
         <a href="contact.html" data-i18n="nav_contact">
@@ -161,7 +153,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       </div>
 
     </nav>
-
 
     <div class="hact">
 
@@ -188,8 +179,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </header>
 
-
-
 <!-- ═══════════════════════════════════════════════
      MOBILE NAV
      ═══════════════════════════════════════════════ -->
@@ -199,7 +188,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   <h5 data-i18n="mn_cats">
     تصنيفات الشموع
   </h5>
-
 
   <a href="#products"
      data-cat="all"
@@ -249,7 +237,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     بوكس العروسة
   </a>
 
-
   <h5 data-i18n="mn_explore">
     اكتشف
   </h5>
@@ -278,7 +265,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     آراء عملائنا
   </a>
 
-
   <h5 data-i18n="mn_contact">
     تواصل
   </h5>
@@ -297,10 +283,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </nav>
 
-
 <div class="ovl" id="ovl"></div>
-
-
 
 <!-- ═══════════════════════════════════════════════
      VelaLight — THE GLOBAL CHROMA HERO (V3)
@@ -387,7 +370,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 .vl-chroma-hero {
   position: relative;
-  min-height: 65vh; /* Even narrower to ensure products appear */
+  min-height: 65vh;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -589,15 +572,63 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   to { transform: translateY(-15px); }
 }
 
-/* Responsive */
+/* Responsive - MOBILE FIX V2 */
 @media (max-width: 900px) {
-  .vl-chroma-hero { min-height: auto; padding: 100px 0 60px; }
-  .vl-chroma-grid { grid-template-columns: 1fr; gap: 60px; }
-  .vl-chroma-content { text-align: center; }
-  .vl-chroma-actions { justify-content: center; }
-  .vl-chroma-stats { justify-content: center; }
-  .vl-chroma-visual { order: -1; }
-  .hero-img-main { max-width: 300px; }
+  .vl-chroma-hero {
+    min-height: auto !important;
+    padding: 32px 0 24px !important;
+  }
+  .vl-chroma-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  .vl-chroma-content {
+    text-align: center !important;
+  }
+  .vl-chroma-actions {
+    justify-content: center !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+  .btn-primary-lux {
+    width: 85% !important;
+    text-align: center !important;
+  }
+  .vl-chroma-stats {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+  }
+  .vl-chroma-visual {
+    order: -1 !important;
+  }
+  .visual-wrapper {
+    max-width: 260px !important;
+    width: 80% !important;
+    margin: 0 auto !important;
+  }
+  .floating-card {
+    bottom: 5% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .vl-chroma-hero {
+    padding: 24px 0 18px !important;
+  }
+  .vl-chroma-title {
+    font-size: 1.8rem !important;
+    margin-bottom: 10px !important;
+  }
+  .vl-chroma-lead {
+    font-size: 0.9rem !important;
+    margin-bottom: 14px !important;
+  }
+  .visual-wrapper {
+    max-width: 200px !important;
+  }
 }
 </style>
 
@@ -609,8 +640,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
   <div class="wrap">
 
-
-
     <!-- Hidden category state: controlled from the three-line menu only. -->
     <div class="chips" id="chips" aria-hidden="true"></div>
 
@@ -620,8 +649,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </section>
 
-
-
 <!-- ═══════════════════════════════════════════════
      ABOUT
      ═══════════════════════════════════════════════ -->
@@ -629,7 +656,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 <section id="about-us" class="sec about">
 
   <div class="wrap">
-
 
     <div class="rv">
 
@@ -641,16 +667,13 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         من نحن
       </h2>
 
-
       <p data-i18n="about_p1">
         في VelaLight لا نصنع الشموع فقط، بل نصنع لحظات تستحق أن تُعاش. بدأت رحلتنا بشغف تجاه التفاصيل الصغيرة التي تجعل المكان أكثر دفئًا، والبيت أكثر راحة، واللحظات العادية أكثر جمالًا.
       </p>
 
-
       <p data-i18n="about_p2">
         نصنع كل شمعة يدويًا بعناية، مستخدمين خامات مختارة وعطورًا فاخرة، لنقدم منتجًا يجمع بين الأناقة والجودة والإحساس الحقيقي. نؤمن أن الضوء الخافت قادر على تهدئة الروح، وأن العطر الجميل يستطيع أن يعيد أجمل الذكريات.
       </p>
-
 
       <div class="stats">
 
@@ -664,7 +687,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
         </div>
 
-
         <div class="stat">
 
           <b>23</b>
@@ -674,7 +696,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
           </span>
 
         </div>
-
 
         <div class="stat">
 
@@ -690,7 +711,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </div>
 
-
     <div class="rv">
 
       <img src="heart2.jpg" alt="VelaLight" loading="lazy" decoding="async">
@@ -701,8 +721,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </section>
 
-
-
 <!-- ═══════════════════════════════════════════════
      SCENTS
      ═══════════════════════════════════════════════ -->
@@ -710,7 +728,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 <section id="scents" class="sec">
 
   <div class="wrap">
-
 
     <div class="sec-head rv">
 
@@ -728,7 +745,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </div>
 
-
     <div
       class="scent-grid rv"
       id="scentGrid">
@@ -738,8 +754,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </section>
 
-
-
 <!-- ═══════════════════════════════════════════════
      OCCASIONS
      ═══════════════════════════════════════════════ -->
@@ -747,7 +761,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 <section id="occasions" class="sec">
 
   <div class="wrap">
-
 
     <div class="sec-head rv">
 
@@ -761,9 +774,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </div>
 
-
     <div class="occ-grid rv">
-
 
       <div class="occ">
 
@@ -781,7 +792,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
       <div class="occ">
 
         <span class="num">
@@ -797,7 +807,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         </p>
 
       </div>
-
 
       <div class="occ">
 
@@ -815,7 +824,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
       <div class="occ">
 
         <span class="num">
@@ -832,14 +840,11 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
     </div>
 
   </div>
 
 </section>
-
-
 
 <!-- ═══════════════════════════════════════════════
      FEATURES
@@ -848,7 +853,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 <section id="features" class="sec">
 
   <div class="wrap">
-
 
     <div class="sec-head rv">
 
@@ -862,9 +866,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </div>
 
-
     <div class="feat-grid rv">
-
 
       <div class="feat">
 
@@ -890,7 +892,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
       <div class="feat">
 
         <div class="fi">
@@ -914,7 +915,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         </span>
 
       </div>
-
 
       <div class="feat">
 
@@ -940,7 +940,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
       <div class="feat">
 
         <div class="fi">
@@ -964,7 +963,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         </span>
 
       </div>
-
 
       <div class="feat">
 
@@ -990,7 +988,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
       <div class="feat">
 
         <div class="fi">
@@ -1015,14 +1012,11 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
     </div>
 
   </div>
 
 </section>
-
-
 
 <!-- ═══════════════════════════════════════════════
      FAQ
@@ -1031,7 +1025,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 <section id="faq-section" class="sec">
 
   <div class="wrap">
-
 
     <div class="sec-head rv">
 
@@ -1045,7 +1038,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </div>
 
-
     <div
       class="faq rv"
       id="faqWrap">
@@ -1055,8 +1047,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </section>
 
-
-
 <!-- ═══════════════════════════════════════════════
      REVIEWS
      ═══════════════════════════════════════════════ -->
@@ -1064,7 +1054,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 <section id="reviews" class="sec">
 
   <div class="wrap">
-
 
     <div class="sec-head rv">
 
@@ -1082,9 +1071,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </div>
 
-
     <div class="rev-row rv">
-
 
       <div class="rev-card">
 
@@ -1104,7 +1091,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
       <div class="rev-card">
 
         <img src="review2.jpg" alt="Review" loading="lazy" decoding="async">
@@ -1122,7 +1108,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         </div>
 
       </div>
-
 
       <div class="rev-card">
 
@@ -1142,7 +1127,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
       <div class="rev-card">
 
         <img src="review4.jpg" alt="Review" loading="lazy" decoding="async">
@@ -1160,7 +1144,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         </div>
 
       </div>
-
 
       <div class="rev-card">
 
@@ -1180,14 +1163,11 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
     </div>
 
   </div>
 
 </section>
-
-
 
 <!-- ═══════════════════════════════════════════════
      FOOTER
@@ -1197,9 +1177,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
   <div class="wrap">
 
-
     <div class="fgrid">
-
 
       <div>
 
@@ -1219,13 +1197,11 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
         </a>
 
-
         <p
           style="margin-top:1rem;color:var(--mut);font-size:.88rem"
           data-i18n="foot_tag1">
           شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب
         </p>
-
 
         <p
           style="color:var(--dim);font-size:.8rem"
@@ -1234,7 +1210,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         </p>
 
       </div>
-
 
       <div>
 
@@ -1268,7 +1243,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         </a>
 
       </div>
-
 
       <div>
 
@@ -1320,7 +1294,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
       <div>
 
         <h4 data-i18n="foot_pay_h">
@@ -1343,16 +1316,13 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-
     </div>
-
 
     <div class="fbot">
 
       <span data-i18n="foot_rights">
         © 2026 - 2030 VelaLight — جميع الحقوق محفوظة
       </span>
-
 
       <div>
 
@@ -1382,17 +1352,13 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </footer>
 
-
-
 <!-- ═══════════════════════════════════════════════
      CART
      ═══════════════════════════════════════════════ -->
 
 <div class="ovl" id="cartOv"></div>
 
-
 <aside class="drawer" id="cartDrawer">
-
 
   <div class="dhead">
 
@@ -1408,15 +1374,12 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
   </div>
 
-
   <div
     class="dbody"
     id="cartItems">
   </div>
 
-
   <div class="dfoot">
-
 
     <h4
       style="color:var(--gold2);font-size:.9rem;margin-bottom:.3rem"
@@ -1424,15 +1387,12 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       بيانات التوصيل
     </h4>
 
-
     <div class="co-form">
-
 
       <input
         id="coName"
         data-i18n-ph="ph_name"
         placeholder="الاسم بالكامل *">
-
 
       <input
         id="coPhone"
@@ -1440,15 +1400,12 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         data-i18n-ph="ph_phone"
         placeholder="رقم الموبايل *">
 
-
       <select id="coCity"></select>
-
 
       <input
         id="coAddr"
         data-i18n-ph="ph_addr"
         placeholder="العنوان بالتفصيل *">
-
 
       <textarea
         id="coNotes"
@@ -1457,9 +1414,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         placeholder="ملاحظات / طلبات إضافية">
       </textarea>
 
-
     </div>
-
 
     <div
       class="trow"
@@ -1475,7 +1430,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </div>
 
-
     <div class="trow total">
 
       <span data-i18n="total">
@@ -1488,13 +1442,11 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </div>
 
-
     <p
       class="cart-shipping-note"
       data-i18n="ship_note">
       🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.
     </p>
-
 
     <div class="paybox">
 
@@ -1510,7 +1462,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </div>
 
-
     <button
       class="btn wa"
       id="checkoutBtn"
@@ -1520,7 +1471,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       ✅ إتمام الطلب عبر واتساب
 
     </button>
-
 
     <button
       class="btn ghost sm"
@@ -1532,12 +1482,9 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </button>
 
-
   </div>
 
 </aside>
-
-
 
 <!-- ═══════════════════════════════════════════════
      SCENT MODAL
@@ -1547,7 +1494,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
   <div class="mpanel">
 
-
     <button
       class="icobtn"
       id="closeScent"
@@ -1555,13 +1501,11 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       ✕
     </button>
 
-
     <h3
       class="fd"
       style="color:var(--gold2)"
       id="scentModalTitle">
     </h3>
-
 
     <div
       class="opt-t"
@@ -1569,19 +1513,16 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       🌸 اختاري العطر:
     </div>
 
-
     <div
       class="scents-pick"
       id="scentModalScents">
     </div>
-
 
     <div
       class="opt-t"
       data-i18n="pd_qty_t">
       الكمية:
     </div>
-
 
     <div class="qty">
 
@@ -1599,7 +1540,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </div>
 
-
     <button
       class="btn"
       id="scentModalAdd"
@@ -1610,12 +1550,9 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </button>
 
-
   </div>
 
 </div>
-
-
 
 <!-- ═══════════════════════════════════════════════
      ACCOUNT
@@ -1625,7 +1562,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
   <div class="mpanel">
 
-
     <button
       class="icobtn"
       id="closeAcc"
@@ -1633,13 +1569,11 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       ✕
     </button>
 
-
     <h3
       class="fd"
       data-i18n="acc_title">
       حسابي 👤
     </h3>
-
 
     <p
       style="color:var(--mut);font-size:.85rem;margin:.5rem 0 1rem"
@@ -1647,15 +1581,12 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       سجّل بياناتك مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة.
     </p>
 
-
     <div class="co-form">
-
 
       <input
         id="accName"
         data-i18n-ph="ph_name"
         placeholder="الاسم بالكامل *">
-
 
       <input
         id="accPhone"
@@ -1663,15 +1594,12 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         data-i18n-ph="ph_phone"
         placeholder="رقم الموبايل *">
 
-
       <select id="accCity"></select>
-
 
       <input
         id="accAddr"
         data-i18n-ph="ph_addr"
         placeholder="العنوان بالتفصيل *">
-
 
       <button
         class="btn"
@@ -1679,7 +1607,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         data-i18n="save_acc">
         حفظ
       </button>
-
 
       <p
         style="color:var(--dim);font-size:.8rem;margin-top:.5rem">
@@ -1694,7 +1621,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </p>
 
-
       <button
         class="btn ghost sm"
         id="logoutBtn"
@@ -1702,14 +1628,11 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         تسجيل خروج
       </button>
 
-
     </div>
 
   </div>
 
 </div>
-
-
 
 <!-- ═══════════════════════════════════════════════
      CHAT
@@ -1719,12 +1642,9 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   ✦
 </button>
 
-
 <div id="chatOv">
 
-
   <div class="chat-h">
-
 
     <div>
 
@@ -1738,35 +1658,26 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     </div>
 
-
     <button
       class="icobtn"
       id="closeChat">
       ✕
     </button>
 
-
   </div>
 
-
   <div id="chatMsgs"></div>
-
 
   <div
     class="chat-q"
     id="chatQuick">
   </div>
 
-
 </div>
-
-
 
 <!-- TOASTS -->
 
 <div id="toasts"></div>
-
-
 
 <!-- ═══════════════════════════════════════════════
      SCRIPTS
