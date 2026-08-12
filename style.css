@@ -965,25 +965,26 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
 @media(max-width:420px){
  .dfoot{max-height:60%}
  .dbody{min-height:120px}
- /* ═══ تكبير صورة الهيرو 50% بالعرض فقط ═══ */
+
+/* ═══ تكبير صورة الهيرو — الضعف ═══ */
+.vl-chroma-grid{
+  grid-template-columns:.9fr 1.1fr !important;
+  gap:24px !important;
+}
 .visual-wrapper{
-  max-width:630px !important;
-  aspect-ratio:3/2 !important;
+  width:100% !important;
+  max-width:640px !important;
+  aspect-ratio:1 !important;
 }
 @media(max-width:900px){
   .visual-wrapper{
-    width:90% !important;
-    max-width:390px !important;
+    width:92% !important;
+    max-width:480px !important;
   }
 }
 @media(max-width:480px){
   .visual-wrapper{
-    max-width:300px !important;
+    width:95% !important;
+    max-width:400px !important;
   }
-}
-@media(max-width:360px){
-  .visual-wrapper{
-    max-width:260px !important;
-  }
-}
 }
