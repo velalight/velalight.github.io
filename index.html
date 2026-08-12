@@ -1779,9 +1779,14 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 <!-- Custom Translation Hook for Hero V3 -->
 <script>
-/* VelaLight Hero Translation — lightweight */
+/* =========================================================
+   VelaLight — HERO TRANSLATION FIX
+   Only handles the Hero section.
+   Does NOT interfere with the main translation system.
+   ========================================================= */
+
 (() => {
-  const heroKeys = {
+  const heroTranslations = {
     ar: {
       hero_eyebrow: "✦ شموع يدوية فاخرة",
       hero_t1: "ضوءٌ",
@@ -1795,6 +1800,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       hero_s3: "فنٌ يُقتنى",
       hero_card: "إصدار فاخر"
     },
+
     en: {
       hero_eyebrow: "✦ Luxury Handmade Candles",
       hero_t1: "A Light",
@@ -1810,19 +1816,42 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     }
   };
 
-  window.updateHeroLang = function(lang) {
-    const dict = heroKeys[lang] || heroKeys.ar;
+  function updateHeroLanguage(lang) {
 
-    document
-      .querySelectorAll(".vl-chroma-hero [data-i18n]")
-      .forEach(el => {
-        const key = el.dataset.i18n;
-        if (dict[key]) el.textContent = dict[key];
-      });
-  };
+    const dict = heroTranslations[lang] || heroTranslations.ar;
+
+    const hero = document.querySelector(".vl-chroma-hero");
+
+    if (!hero) return;
+
+    hero.querySelectorAll("[data-i18n]").forEach(el => {
+
+      const key = el.getAttribute("data-i18n");
+
+      if (!Object.prototype.hasOwnProperty.call(dict, key)) {
+        return;
+      }
+
+      el.textContent = dict[key];
+
+    });
+  }
+
+  /* متاح للنظام الحالي لو احتاجه */
+  window.updateHeroLang = updateHeroLanguage;
+
+  /* تحديث الـHero بعد تحميل الصفحة */
+  document.addEventListener("DOMContentLoaded", () => {
+
+    const currentLang =
+      document.documentElement.lang === "en" ? "en" : "ar";
+
+    updateHeroLanguage(currentLang);
+
+  });
+
 })();
-</script>
-     
+</script>     
     function updateHeroLang(lang) {
       const elements = document.querySelectorAll('[data-i18n]');
       elements.forEach(el => {
