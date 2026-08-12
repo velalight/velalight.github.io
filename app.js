@@ -40,7 +40,6 @@ const velaScentTr=name=>{
   return found ? (LANG==="en" ? found[1] : found[0]) : (name||"");
 };
 
-
 /* ═══════════════════════════════════════
    INITIALIZATION
    ═══════════════════════════════════════ */
@@ -70,7 +69,6 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 });
 
-
 window.addEventListener(
   "data-refresh",
   ()=>{
@@ -78,18 +76,13 @@ window.addEventListener(
   }
 );
 
-
-
-
 /* ═══════════════════════════════════════
    CINEMATIC HERO INTRO
-   Runs once per page load; slide changes never replay the copy animation.
    ═══════════════════════════════════════ */
 
 function initHeroIntro(){
   const hero=document.querySelector('.hero-content');
   if(!hero)return;
-
   requestAnimationFrame(()=>{
     setTimeout(()=>hero.classList.add('hero-intro'),40);
   });
@@ -97,9 +90,6 @@ function initHeroIntro(){
 
 /* ═══════════════════════════════════════
    PRODUCTS REALTIME SYNC
-   Firebase is the live source for product changes.
-   data.js remains the local fallback/seed.
-   Reviews, orders, cart and auth are untouched.
    ═══════════════════════════════════════ */
 
 let productRealtimeStarted=false;
@@ -172,7 +162,6 @@ function initProductRealtimeSync(){
     );
 }
 
-
 /* ═══════════════════════════════════════
    LANGUAGE
    ═══════════════════════════════════════ */
@@ -180,7 +169,6 @@ function initProductRealtimeSync(){
 function initLang(){
 
   const btn=$("#langBtn");
-
   if(!btn)return;
 
   updateLangBtn();
@@ -201,19 +189,14 @@ function initLang(){
 
     applyI18n();
     updateHeroCopy();
-
     updateLangBtn();
-
     renderChips();
     renderProducts();
     renderScents();
     renderFAQ();
-
     fillCitySelect($("#accCity"));
     fillCitySelect($("#coCity"));
-
     fillCartForm();
-
     initChatWelcome();
 
     toast(
@@ -231,8 +214,8 @@ function initLang(){
 
 }
 
-
 function updateHeroCopy(){
+
   const kick=document.querySelector('.hero-kick');
   const title=document.querySelector('.hero-title-main');
   const lead=document.querySelector('.hero-lead');
@@ -251,66 +234,48 @@ function updateHeroCopy(){
     lead.textContent='شموع تُضيء… لتنير يومكِ بلحظاتٍ تستحقينها.';
     cta.innerHTML='اكتشفي مجموعتكِ <span aria-hidden="true">✦</span>';
   }
+
 }
 
-
 function updateLangBtn(){
-
   const btn=$("#langBtn");
-
   if(btn){
-
     btn.textContent=
       LANG==="ar"
       ?"EN"
       :"ع";
-
   }
-
 }
-
 
 function applyI18n(){
 
   document.title=t("docTitle");
 
   $$("[data-i18n]").forEach(el=>{
-
     el.textContent=
       t(el.dataset.i18n);
-
   });
-
 
   $$("[data-i18n-ph]").forEach(el=>{
-
     el.placeholder=
       t(el.dataset.i18nPh);
-
   });
 
-
   const mq=$("#mqTrack");
-
   if(mq){
-
     const txt=t("mq");
-
     mq.innerHTML=
       `<span>${txt}</span>
        <span>${txt}</span>`;
-
   }
 
 }
-
 
 /* ═══════════════════════════════════════
    MARQUEE
    ═══════════════════════════════════════ */
 
 function initMarquee(){}
-
 
 /* ═══════════════════════════════════════
    HERO EMBERS
@@ -319,13 +284,11 @@ function initMarquee(){}
 function initEmbers(){
 
   const w=$("#embers");
-
   if(!w)return;
 
   w.innerHTML="";
 
   for(let i=0;i<12;i++){
-
     const s=
       document.createElement("span");
 
@@ -339,11 +302,9 @@ function initEmbers(){
       (5+Math.random()*5)+"s";
 
     w.appendChild(s);
-
   }
 
 }
-
 
 /* ═══════════════════════════════════════
    REVEAL
@@ -355,15 +316,10 @@ function initReveal(){
     new IntersectionObserver(
       es=>{
         es.forEach(e=>{
-
           if(e.isIntersecting){
-
             e.target.classList.add("on");
-
             io.unobserve(e.target);
-
           }
-
         });
       },
       {threshold:.12}
@@ -375,16 +331,19 @@ function initReveal(){
 
 }
 
-
 /* ═══════════════════════════════════════
    CATEGORIES
+   (Chips hidden but logic preserved for menu filtering)
    ═══════════════════════════════════════ */
 
 function renderChips(){
 
   const w=$("#chips");
-
   if(!w)return;
+
+  /* ✨ إخفاء المربعات مع الحفاظ على منطق الفلترة */
+  w.style.display="none";
+  w.setAttribute("aria-hidden","true");
 
   const keys=[
     "all",
@@ -400,12 +359,7 @@ function renderChips(){
   w.innerHTML=
     keys.map(
       k=>
-      `<button
-        class="chip${k==="all"?" on":""}"
-        data-cat="${k}"
-      >
-        ${cat(k)}
-      </button>`
+        `<button class="chip${k==="all"?" on":""}" data-cat="${k}">${cat(k)}</button>`
     ).join("");
 
   w.querySelectorAll(".chip")
@@ -431,7 +385,6 @@ function renderChips(){
 
 }
 
-
 function activeCat(){
 
   const c=
@@ -443,15 +396,16 @@ function activeCat(){
 
 }
 
-
 /* ═══════════════════════════════════════
    PRODUCTS
+   ✨ MODIFIED: 2-line description + "Read More"
+   ✨ MODIFIED: lazy loading + fade-in images
+   (المنتجات والأسعار والوصف والصور زي ما هما)
    ═══════════════════════════════════════ */
 
 function renderProducts(){
 
   const grid=$("#pgrid");
-
   if(!grid)return;
 
   const catF=activeCat();
@@ -464,7 +418,6 @@ function renderProducts(){
 
   const sort=
     $("#sortSel")?.value||"new";
-
 
   let list=
     ALL_PRODUCTS.filter(p=>{
@@ -494,53 +447,39 @@ function renderProducts(){
 
     });
 
-
   switch(sort){
 
     case "asc":
-
       list.sort(
         (a,b)=>
           a.price-b.price
       );
-
       break;
 
-
     case "desc":
-
       list.sort(
         (a,b)=>
           b.price-a.price
       );
-
       break;
 
-
     case "rating":
-
       list.sort(
         (a,b)=>
           (ratingOf(b.id)?.avg||0)-
           (ratingOf(a.id)?.avg||0)
       );
-
       break;
 
-
     case "best":
-
       list.sort(
         (a,b)=>
           (b.sold||0)-
           (a.sold||0)
       );
-
       break;
 
-
     case "disc":
-
       list.sort(
         (a,b)=>
           (
@@ -552,12 +491,9 @@ function renderProducts(){
             Math.max(a.old,1)
           )
       );
-
       break;
 
-
     default:
-
       list.sort(
         (a,b)=>
           (b.createdAt||0)-
@@ -566,18 +502,14 @@ function renderProducts(){
 
   }
 
-
   const cnt=$("#prodCount");
 
   if(cnt){
-
     cnt.textContent=
       list.length+
       " "+
       t("prod_word");
-
   }
-
 
   if(!list.length){
 
@@ -589,7 +521,6 @@ function renderProducts(){
     return;
 
   }
-
 
   grid.innerHTML=
     list.map(p=>{
@@ -608,6 +539,11 @@ function renderProducts(){
       const productDesc =
         String(rawDesc).trim();
 
+      /* ✨ NEW: Read more text */
+      const readMoreText =
+        LANG === "en"
+          ? "Read more →"
+          : "عرض المزيد ←";
 
       return `
         <article class="p-card">
@@ -621,6 +557,8 @@ function renderProducts(){
               src="${imgOf(p)}"
               alt="${pname(p)}"
               loading="lazy"
+              decoding="async"
+              onload="this.classList.add('loaded')"
             >
 
             ${
@@ -638,7 +576,6 @@ function renderProducts(){
             </span>
 
           </a>
-
 
           <div class="p-body">
 
@@ -668,6 +605,18 @@ function renderProducts(){
               ${productDesc}
             </p>
 
+            ${
+              productDesc.length > 30
+              ?`
+                <a
+                  href="product.html?p=${p.id}"
+                  class="p-desc-link"
+                >
+                  ${readMoreText}
+                </a>
+              `
+              :""
+            }
 
             <div class="p-foot">
 
@@ -687,7 +636,6 @@ function renderProducts(){
 
               </div>
 
-
               <button
                 class="p-add"
                 data-id="${p.id}"
@@ -704,7 +652,6 @@ function renderProducts(){
 
     }).join("");
 
-
   grid.querySelectorAll(".p-add")
     .forEach(b=>{
 
@@ -718,9 +665,7 @@ function renderProducts(){
             );
 
           if(p){
-
             openQuickAdd(p);
-
           }
 
         }
@@ -729,7 +674,6 @@ function renderProducts(){
     });
 
 }
-
 
 /* ═══════════════════════════════════════
    QUICK ADD / SCENT SELECTOR
@@ -742,7 +686,6 @@ function initQuickAdd(){
     ()=>closeModal("scentOv")
   );
 
-
   $("#scentOv")?.addEventListener(
     "click",
     e=>{
@@ -754,36 +697,25 @@ function initQuickAdd(){
     }
   );
 
-
   $("#smQMinus")?.addEventListener(
     "click",
     ()=>{
-
       if(quickAddQty>1){
-
         quickAddQty--;
-
       }
-
       $("#smQVal").textContent=
         quickAddQty;
-
     }
   );
-
 
   $("#smQPlus")?.addEventListener(
     "click",
     ()=>{
-
       quickAddQty++;
-
       $("#smQVal").textContent=
         quickAddQty;
-
     }
   );
-
 
   $("#scentModalAdd")
     ?.addEventListener(
@@ -794,17 +726,12 @@ function initQuickAdd(){
           return;
         }
 
-
         if(!quickAddScent){
-
           toast(
             t("t_scentwarn")
           );
-
           return;
-
         }
-
 
         if(
           addToCart(
@@ -815,11 +742,9 @@ function initQuickAdd(){
             }
           )
         ){
-
           closeModal(
             "scentOv"
           );
-
         }
 
       }
@@ -827,42 +752,31 @@ function initQuickAdd(){
 
 }
 
-
 function openQuickAdd(p){
 
   quickAddProduct=p;
-
   quickAddScent="";
-
   quickAddQty=1;
-
 
   const title=
     $("#scentModalTitle");
 
   if(title){
-
     title.textContent=
       pname(p);
-
   }
-
 
   const qv=
     $("#smQVal");
 
   if(qv){
-
     qv.textContent="1";
-
   }
-
 
   const w=
     $("#scentModalScents");
 
   if(!w)return;
-
 
   /*
     مهم:
@@ -873,17 +787,8 @@ function openQuickAdd(p){
   w.innerHTML=
     VELA_SCENTS.map(
       s=>
-      `
-        <button
-          class="chip"
-          type="button"
-          data-s="${s[0]}"
-        >
-          ${velaScentTr(s[0])}
-        </button>
-      `
+        `<button class="chip" type="button" data-s="${s[0]}">${velaScentTr(s[0])}</button>`
     ).join("");
-
 
   w.querySelectorAll(".chip")
     .forEach(b=>{
@@ -907,13 +812,11 @@ function openQuickAdd(p){
 
     });
 
-
   openDrawer(
     "scentOv"
   );
 
 }
-
 
 /* ═══════════════════════════════════════
    FILTERS
@@ -922,37 +825,27 @@ function openQuickAdd(p){
 document.addEventListener(
   "change",
   e=>{
-
     if(
       e.target.id==="priceMin" ||
       e.target.id==="priceMax" ||
       e.target.id==="sortSel"
     ){
-
       renderProducts();
-
     }
-
   }
 );
-
 
 document.addEventListener(
   "input",
   e=>{
-
     if(
       e.target.id==="priceMin" ||
       e.target.id==="priceMax"
     ){
-
       renderProducts();
-
     }
-
   }
 );
-
 
 /* ═══════════════════════════════════════
    SCENTS
@@ -961,43 +854,35 @@ document.addEventListener(
 function renderScents(){
 
   const w=$("#scentGrid");
-
   if(!w)return;
 
   w.innerHTML=
     VELA_SCENTS.map(
       (s,i)=>
-      `
-        <div class="scent">
-
-          <i>${i+1}</i>
-
-          <div>
-
-            <b>
-              ${
-                LANG==="en"
-                ?s[1]
-                :s[0]
-              }
-            </b>
-
-            <small>
-              ${
-                LANG==="en"
-                ?s[0]
-                :s[1]
-              }
-            </small>
-
+        `
+          <div class="scent">
+            <i>${i+1}</i>
+            <div>
+              <b>
+                ${
+                  LANG==="en"
+                  ?s[1]
+                  :s[0]
+                }
+              </b>
+              <small>
+                ${
+                  LANG==="en"
+                  ?s[0]
+                  :s[1]
+                }
+              </small>
+            </div>
           </div>
-
-        </div>
-      `
+        `
     ).join("");
 
 }
-
 
 /* ═══════════════════════════════════════
    FAQ
@@ -1006,9 +891,7 @@ function renderScents(){
 function renderFAQ(){
 
   const w=$("#faqWrap");
-
   if(!w)return;
-
 
   const items=[
     [t("faq1q"),t("faq1a")],
@@ -1019,37 +902,27 @@ function renderFAQ(){
     [t("faq6q"),t("faq6a")]
   ];
 
-
   w.innerHTML=
     items.map(
       q=>
-      `
-        <div class="faq-item">
-
-          <button class="faq-q">
-
-            <span>
-              ${q[0]}
-            </span>
-
-            <span>
-              +
-            </span>
-
-          </button>
-
-          <div class="faq-a">
-
-            <div>
-              ${q[1]}
+        `
+          <div class="faq-item">
+            <button class="faq-q">
+              <span>
+                ${q[0]}
+              </span>
+              <span>
+                +
+              </span>
+            </button>
+            <div class="faq-a">
+              <div>
+                ${q[1]}
+              </div>
             </div>
-
           </div>
-
-        </div>
-      `
+        `
     ).join("");
-
 
   w.querySelectorAll(".faq-item")
     .forEach(item=>{
@@ -1065,37 +938,28 @@ function renderFAQ(){
                 "open"
               );
 
-
             w.querySelectorAll(
               ".faq-item"
             ).forEach(x=>{
-
               x.classList.remove(
                 "open"
               );
-
               x.querySelector(
                 ".faq-a"
               ).style.maxHeight=null;
-
             });
 
-
             if(!was){
-
               item.classList.add(
                 "open"
               );
-
               const a=
                 item.querySelector(
                   ".faq-a"
                 );
-
               a.style.maxHeight=
                 a.scrollHeight+
                 "px";
-
             }
 
           }
@@ -1104,7 +968,6 @@ function renderFAQ(){
     });
 
 }
-
 
 /* ═══════════════════════════════════════
    CART INITIALIZATION
@@ -1120,56 +983,42 @@ function initCart(){
 
   fillCartForm();
 
-
   $("#cartBtn")?.addEventListener(
     "click",
     ()=>{
-
       fillCartForm();
-
       renderCart();
-
       openDrawer(
         "cartDrawer",
         "cartOv"
       );
-
     }
   );
-
 
   $("#closeCart")?.addEventListener(
     "click",
     closeDrawers
   );
 
-
   $("#cartOv")?.addEventListener(
     "click",
     closeDrawers
   );
 
-
   renderCart();
-
 
   if(
     new URLSearchParams(
       location.search
     ).get("cart")==="1"
   ){
-
     fillCartForm();
-
     renderCart();
-
     openDrawer(
       "cartDrawer",
       "cartOv"
     );
-
   }
-
 
   $("#emptyCartBtn")
     ?.addEventListener(
@@ -1181,26 +1030,20 @@ function initCart(){
             t("t_confirm_empty")
           )
         ){
-
           return;
-
         }
 
-
         saveCart([]);
-
         renderCart();
 
       }
     );
-
 
   $("#checkoutBtn")
     ?.addEventListener(
       "click",
       checkout
     );
-
 
   /*
     حفظ بيانات العميل مباشرة
@@ -1218,38 +1061,28 @@ function initCart(){
     document.addEventListener(
       "input",
       e=>{
-
         if(
           e.target.matches(selector)
         ){
-
           saveCartCustomer();
-
         }
-
       }
     );
-
 
     document.addEventListener(
       "change",
       e=>{
-
         if(
           e.target.matches(selector)
         ){
-
           saveCartCustomer();
-
         }
-
       }
     );
 
   });
 
 }
-
 
 /* ═══════════════════════════════════════
    CART RENDER
@@ -1258,11 +1091,9 @@ function initCart(){
 function renderCart(){
 
   const c=getCart();
-
   const w=$("#cartItems");
 
   if(!w)return;
-
 
   if(!c.length){
 
@@ -1272,15 +1103,11 @@ function renderCart(){
           class="empty"
           style="padding:2rem 0"
         >
-
           ${t("cart_empty")}
-
           <br>
-
           <small>
             ${t("cart_empty_sub")}
           </small>
-
         </div>
       `;
 
@@ -1290,7 +1117,6 @@ function renderCart(){
 
   }
 
-
   w.innerHTML=
     c.map(
       (it,i)=>{
@@ -1299,12 +1125,10 @@ function renderCart(){
           Number(it.price||0)*
           Number(it.qty||1);
 
-
         return `
           <div class="citem">
 
             <div class="citem-media">
-
               <img
                 src="${it.img||""}"
                 alt="${pname({
@@ -1313,9 +1137,7 @@ function renderCart(){
                 })}"
                 loading="lazy"
               >
-
             </div>
-
 
             <div class="citem-info">
 
@@ -1326,12 +1148,10 @@ function renderCart(){
                 })}
               </h5>
 
-
               <label class="cart-scent-picker">
                 <span class="cart-scent-label">
                   🌸 ${t("scent_lbl")}
                 </span>
-
                 <select
                   class="cart-scent-select"
                   data-i="${i}"
@@ -1353,36 +1173,26 @@ function renderCart(){
                 </select>
               </label>
 
-
               <div class="cs">
-
                 ${t("price_lbl")}
-
                 <strong>
                   ${money(it.price)}
                 </strong>
-
               </div>
 
-
               <div class="cart-line-total">
-
                 <span>
                   ${LANG==="en"
                     ?"Item total:"
                     :"إجمالي الصنف:"
                   }
                 </span>
-
                 <strong>
                   ${money(lineTotal)}
                 </strong>
-
               </div>
 
-
               <div class="qty">
-
                 <button
                   class="cq-minus"
                   type="button"
@@ -1391,11 +1201,9 @@ function renderCart(){
                 >
                   −
                 </button>
-
                 <b>
                   ${it.qty}
                 </b>
-
                 <button
                   class="cq-plus"
                   type="button"
@@ -1404,11 +1212,9 @@ function renderCart(){
                 >
                   +
                 </button>
-
               </div>
 
             </div>
-
 
             <button
               class="rm"
@@ -1425,7 +1231,6 @@ function renderCart(){
       }
     ).join("");
 
-
   w.querySelectorAll(".cart-scent-select")
     .forEach(select=>{
 
@@ -1434,11 +1239,9 @@ function renderCart(){
         ()=>{
 
           const idx=+select.dataset.i;
-
           if(!c[idx])return;
 
           c[idx].scent=select.value;
-
           saveCart(c);
           renderCart();
 
@@ -1446,7 +1249,6 @@ function renderCart(){
       );
 
     });
-
 
   w.querySelectorAll(".rm")
     .forEach(b=>{
@@ -1461,14 +1263,12 @@ function renderCart(){
           );
 
           saveCart(c);
-
           renderCart();
 
         }
       );
 
     });
-
 
   w.querySelectorAll(".cq-plus")
     .forEach(b=>{
@@ -1484,14 +1284,12 @@ function renderCart(){
             Number(c[idx].qty||1)+1;
 
           saveCart(c);
-
           renderCart();
 
         }
       );
 
     });
-
 
   w.querySelectorAll(".cq-minus")
     .forEach(b=>{
@@ -1506,16 +1304,11 @@ function renderCart(){
           c[idx].qty=
             Number(c[idx].qty||1)-1;
 
-
           if(c[idx].qty<=0){
-
             c.splice(idx,1);
-
           }
 
-
           saveCart(c);
-
           renderCart();
 
         }
@@ -1523,15 +1316,12 @@ function renderCart(){
 
     });
 
-
   updateTotals(c);
 
 }
 
-
 /* ═══════════════════════════════════════
-   TOTALS
-   PRODUCTS ONLY
+   TOTALS — PRODUCTS ONLY
    ═══════════════════════════════════════ */
 
 function updateTotals(c){
@@ -1547,22 +1337,15 @@ function updateTotals(c){
       0
     );
 
-
   if($("#cartSub")){
-
     $("#cartSub").textContent=
       money(sub);
-
   }
-
 
   if($("#cartTotal")){
-
     $("#cartTotal").textContent=
       money(sub);
-
   }
-
 
   /*
     مهم:
@@ -1572,7 +1355,6 @@ function updateTotals(c){
 
 }
 
-
 /* ═══════════════════════════════════════
    CUSTOMER DATA
    ═══════════════════════════════════════ */
@@ -1580,69 +1362,48 @@ function updateTotals(c){
 function getSavedUser(){
 
   try{
-
     return JSON.parse(
       localStorage.getItem(
         "vl_user"
       )||"{}"
     );
-
   }catch(e){
-
     return {};
-
   }
 
 }
-
 
 function fillCartForm(){
 
   const u=
     getSavedUser();
 
-
   if($("#coName")){
-
     $("#coName").value=
       u.name||"";
-
   }
-
 
   if($("#coPhone")){
-
     $("#coPhone").value=
       u.phone||"";
-
   }
-
 
   if($("#coCity")){
-
     $("#coCity").value=
       u.city||"";
-
   }
-
 
   if($("#coAddr")){
-
     $("#coAddr").value=
       u.addr||"";
-
   }
 
-
   if($("#coNotes")){
-
     $("#coNotes").value=
       u.notes||"";
-
   }
 
 }
-
 
 function saveUserFromCart(
   name,
@@ -1655,7 +1416,6 @@ function saveUserFromCart(
   const old=
     getSavedUser();
 
-
   const u={
     ...old,
     name,
@@ -1666,30 +1426,24 @@ function saveUserFromCart(
     orders:old.orders||0
   };
 
-
   localStorage.setItem(
     "vl_user",
     JSON.stringify(u)
   );
 
-
   if($("#accName"))
     $("#accName").value=name;
-
 
   if($("#accPhone"))
     $("#accPhone").value=phone;
 
-
   if($("#accCity"))
     $("#accCity").value=city;
-
 
   if($("#accAddr"))
     $("#accAddr").value=addr;
 
 }
-
 
 function saveCartCustomer(){
 
@@ -1708,10 +1462,8 @@ function saveCartCustomer(){
   const notes=
     $("#coNotes")?.value.trim()||"";
 
-
   const old=
     getSavedUser();
-
 
   localStorage.setItem(
     "vl_user",
@@ -1728,7 +1480,6 @@ function saveCartCustomer(){
 
 }
 
-
 /* ═══════════════════════════════════════
    ORDER ID
    ═══════════════════════════════════════ */
@@ -1740,13 +1491,11 @@ function genOrderId(){
 
   let s="";
 
-
   for(
     let i=0;
     i<6;
     i++
   ){
-
     s+=
       chars[
         Math.floor(
@@ -1754,14 +1503,11 @@ function genOrderId(){
           chars.length
         )
       ];
-
   }
-
 
   return "VL-"+s;
 
 }
-
 
 /* ═══════════════════════════════════════
    CHECKOUT
@@ -1771,22 +1517,15 @@ async function checkout(){
 
   const c=getCart();
 
-
   /* 1 — PRODUCTS */
-
   if(!c.length){
-
     toast(
       t("t_empty")
     );
-
     return;
-
   }
 
-
   /* 2 — SCENTS */
-
   const missingScent=
     c.some(
       it=>
@@ -1794,20 +1533,14 @@ async function checkout(){
         !String(it.scent).trim()
     );
 
-
   if(missingScent){
-
     toast(
       t("t_scentwarn")
     );
-
     return;
-
   }
 
-
   /* 3 — CUSTOMER */
-
   const name=
     $("#coName")?.value.trim()||"";
 
@@ -1823,54 +1556,37 @@ async function checkout(){
   const notes=
     $("#coNotes")?.value.trim()||"";
 
-
   if(!name){
-
     toast(
       LANG==="en"
       ?"⚠️ Please enter your full name."
       :"⚠️ من فضلك اكتبي الاسم بالكامل."
     );
-
     $("#coName")?.focus();
-
     return;
-
   }
 
-
   if(!phone){
-
     toast(
       LANG==="en"
       ?"⚠️ Please enter your mobile number."
       :"⚠️ من فضلك اكتبي رقم الموبايل."
     );
-
     $("#coPhone")?.focus();
-
     return;
-
   }
 
-
   if(!addr){
-
     toast(
       LANG==="en"
       ?"⚠️ Please enter the detailed address."
       :"⚠️ من فضلك اكتبي العنوان بالتفصيل."
     );
-
     $("#coAddr")?.focus();
-
     return;
-
   }
 
-
   /* SAVE CUSTOMER */
-
   saveUserFromCart(
     name,
     phone,
@@ -1879,15 +1595,11 @@ async function checkout(){
     notes
   );
 
-
   /* ORDER ID */
-
   const orderId=
     genOrderId();
 
-
   /* PRODUCTS TOTAL ONLY */
-
   const total=
     c.reduce(
       (a,i)=>
@@ -1898,7 +1610,6 @@ async function checkout(){
         ),
       0
     );
-
 
   /*
     WhatsApp message
@@ -1914,7 +1625,6 @@ async function checkout(){
   msg+=
     `━━━━━━━━━━━━━━━━━━━━\n\n`;
 
-
   c.forEach(it=>{
 
     const qty=
@@ -1925,7 +1635,6 @@ async function checkout(){
 
     const itemTotal=
       unitPrice*qty;
-
 
     msg+=
       `${t("wa_item")} ${pname({
@@ -1958,7 +1667,6 @@ async function checkout(){
 
   });
 
-
   msg+=
     `━━━━━━━━━━━━━━━━━━━━\n`;
 
@@ -1967,7 +1675,6 @@ async function checkout(){
 
   msg+=
     `${t("pay_products_note")}\n`;
-
 
   /*
     Only include InstaPay account
@@ -1979,16 +1686,12 @@ async function checkout(){
     CFG.INSTAPAY &&
     String(CFG.INSTAPAY).trim()
   ){
-
     msg+=
       `${t("wa_insta")} ${CFG.INSTAPAY}\n`;
-
   }
-
 
   msg+=
     `${t("ship_note")}\n\n`;
-
 
   msg+=
     `${t("wa_name")} ${name}\n`;
@@ -1996,26 +1699,18 @@ async function checkout(){
   msg+=
     `${t("wa_phone")} ${phone}\n`;
 
-
   if(city){
-
     msg+=
       `${t("wa_city")} ${city}\n`;
-
   }
-
 
   msg+=
     `${t("wa_addr")} ${addr}\n`;
 
-
   if(notes){
-
     msg+=
       `${t("wa_notes")} ${notes}\n`;
-
   }
-
 
   /*
     Firestore
@@ -2036,40 +1731,28 @@ async function checkout(){
     phone,
     city,
     address:addr,
-
     notes,
 
     products:c.map(it=>({
-
       id:it.id,
-
       name:it.name,
-
       nameEn:it.nameEn||"",
-
       scent:it.scent,
-
       scentName:
         velaScentTr(it.scent),
-
       quantity:
         Number(it.qty||1),
-
       price:
         Number(it.price||0),
-
       total:
         Number(it.price||0)*
         Number(it.qty||1),
-
       img:it.img||""
-
     })),
 
     items:c,
 
     total,
-
     productsTotal:total,
 
     paymentMethod:"InstaPay",
@@ -2080,7 +1763,6 @@ async function checkout(){
     shippingIncluded:false,
 
     status:"قيد المراجعة",
-
     statusEn:"Under Review",
 
     createdAt:Date.now(),
@@ -2090,23 +1772,17 @@ async function checkout(){
 
   };
 
-
   try{
-
     await DB.add(
       "orders",
       orderData
     );
-
   }catch(e){
-
     console.warn(
       "Order save warning:",
       e
     );
-
   }
-
 
   /*
     Increase orders count.
@@ -2124,23 +1800,18 @@ async function checkout(){
   u.addr=addr;
   u.notes=notes;
 
-
   localStorage.setItem(
     "vl_user",
     JSON.stringify(u)
   );
 
-
   const oc=
     $("#ordCount");
 
   if(oc){
-
     oc.textContent=
       u.orders;
-
   }
-
 
   /*
     Clear cart ONLY after order data
@@ -2148,15 +1819,12 @@ async function checkout(){
   */
 
   saveCart([]);
-
   renderCart();
-
   cartBadge();
 
   toast(
     t("t_order")
   );
-
 
   /*
     Open WhatsApp
@@ -2168,14 +1836,12 @@ async function checkout(){
     "?text="+
     encodeURIComponent(msg);
 
-
   window.open(
     wa,
     "_blank"
   );
 
 }
-
 
 /* ═══════════════════════════════════════
    WHATSAPP TOTAL LABEL
@@ -2188,9 +1854,7 @@ function waTotalLabel(){
     I18N[LANG] &&
     I18N[LANG].wa_total
   ){
-
     return I18N[LANG].wa_total;
-
   }
 
   return LANG==="en"
@@ -2198,7 +1862,6 @@ function waTotalLabel(){
     :"💰 إجمالي المنتجات:";
 
 }
-
 
 /* ═══════════════════════════════════════
    ACCOUNT
@@ -2210,50 +1873,33 @@ function initAccount(){
     $("#accCity")
   );
 
-
   const u=
     getSavedUser();
 
-
   if(u.name){
-
     $("#accName").value=
       u.name;
-
   }
-
 
   if(u.phone){
-
     $("#accPhone").value=
       u.phone;
-
   }
-
 
   if(u.city){
-
     $("#accCity").value=
       u.city;
-
   }
-
 
   if(u.addr){
-
     $("#accAddr").value=
       u.addr;
-
   }
-
 
   if(u.orders){
-
     $("#ordCount").textContent=
       u.orders;
-
   }
-
 
   $("#accBtn")
     ?.addEventListener(
@@ -2263,13 +1909,11 @@ function initAccount(){
       }
     );
 
-
   $("#closeAcc")
     ?.addEventListener(
       "click",
       ()=>closeModal("accOv")
     );
-
 
   $("#accOv")
     ?.addEventListener(
@@ -2279,16 +1923,13 @@ function initAccount(){
         if(
           e.target.id==="accOv"
         ){
-
           closeModal(
             "accOv"
           );
-
         }
 
       }
     );
-
 
   $("#saveAccBtn")
     ?.addEventListener(
@@ -2313,54 +1954,39 @@ function initAccount(){
             .value
             .trim();
 
-
         if(!name){
-
           toast(
             LANG==="en"
             ?"⚠️ Enter your name."
             :"⚠️ اكتبي الاسم."
           );
-
           return;
-
         }
 
-
         if(!phone){
-
           toast(
             LANG==="en"
             ?"⚠️ Enter your phone."
             :"⚠️ اكتبي رقم الموبايل."
           );
-
           return;
-
         }
-
 
         const old=
           getSavedUser();
 
-
         localStorage.setItem(
           "vl_user",
           JSON.stringify({
-
             ...old,
-
             name,
             phone,
             city,
             addr,
-
             orders:
               old.orders||0
-
           })
         );
-
 
         fillCartForm();
 
@@ -2375,7 +2001,6 @@ function initAccount(){
       }
     );
 
-
   $("#logoutBtn")
     ?.addEventListener(
       "click",
@@ -2385,22 +2010,16 @@ function initAccount(){
           "vl_user"
         );
 
-
         $("#accName").value="";
         $("#accPhone").value="";
         $("#accAddr").value="";
 
-
         if($("#accCity")){
-
           $("#accCity").value="";
-
         }
-
 
         $("#ordCount").textContent=
           "0";
-
 
         toast(
           t("t_saved")
@@ -2411,7 +2030,6 @@ function initAccount(){
 
 }
 
-
 function fillCitySelect(sel){
 
   if(!sel)return;
@@ -2421,20 +2039,14 @@ function fillCitySelect(sel){
     ?GOVS_EN
     :GOVS;
 
-
   sel.innerHTML=
-    `<option value="">
-      ${t("ph_city")}
-    </option>`+
+    `<option value="">${t("ph_city")}</option>`+
     arr.map(
       g=>
-      `<option value="${g}">
-        ${g}
-      </option>`
+        `<option value="${g}">${g}</option>`
     ).join("");
 
 }
-
 
 /* ═══════════════════════════════════════
    SEARCH
@@ -2462,13 +2074,11 @@ function initSearch(){
       }
     );
 
-
   $("#closeSearch")
     ?.addEventListener(
       "click",
       ()=>closeModal("searchOv")
     );
-
 
   $("#searchOv")
     ?.addEventListener(
@@ -2478,16 +2088,13 @@ function initSearch(){
         if(
           e.target.id==="searchOv"
         ){
-
           closeModal(
             "searchOv"
           );
-
         }
 
       }
     );
-
 
   $("#searchInput")
     ?.addEventListener(
@@ -2499,21 +2106,15 @@ function initSearch(){
             .trim()
             .toLowerCase();
 
-
         const w=
           $("#searchResults");
 
         if(!w)return;
 
-
         if(!q){
-
           w.innerHTML="";
-
           return;
-
         }
-
 
         const res=
           ALL_PRODUCTS
@@ -2533,45 +2134,35 @@ function initSearch(){
                 )
                 .toLowerCase();
 
-
               return hay.includes(q);
 
             })
             .slice(0,8);
 
-
         w.innerHTML=
           res.map(
             p=>
-            `
-              <div
-                class="sr-item"
-                data-id="${p.id}"
-              >
-
-                <img
-                  src="${imgOf(p)}"
-                  alt=""
+              `
+                <div
+                  class="sr-item"
+                  data-id="${p.id}"
                 >
-
-                <div>
-
-                  <b>
-                    ${pname(p)}
-                  </b>
-
-                  <br>
-
-                  <small>
-                    ${money(p.price)}
-                  </small>
-
+                  <img
+                    src="${imgOf(p)}"
+                    alt=""
+                  >
+                  <div>
+                    <b>
+                      ${pname(p)}
+                    </b>
+                    <br>
+                    <small>
+                      ${money(p.price)}
+                    </small>
+                  </div>
                 </div>
-
-              </div>
-            `
+              `
           ).join("");
-
 
         w.querySelectorAll(
           ".sr-item"
@@ -2580,11 +2171,9 @@ function initSearch(){
           it.addEventListener(
             "click",
             ()=>{
-
               location.href=
                 "product.html?p="+
                 it.dataset.id;
-
             }
           );
 
@@ -2594,7 +2183,6 @@ function initSearch(){
     );
 
 }
-
 
 /* ═══════════════════════════════════════
    CHAT
@@ -2612,7 +2200,6 @@ function initChat(){
       }
     );
 
-
   $("#closeChat")
     ?.addEventListener(
       "click",
@@ -2623,9 +2210,7 @@ function initChat(){
       }
     );
 
-
   initChatWelcome();
-
 
   const quick=[
     [t("q_gift"),"a_gift"],
@@ -2635,26 +2220,23 @@ function initChat(){
     [t("q_bride"),"a_bride"]
   ];
 
-
   const qw=
     $("#chatQuick");
-
 
   if(qw){
 
     qw.innerHTML=
       quick.map(
         q=>
-        `
-          <button
-            type="button"
-            data-a="${q[1]}"
-          >
-            ${q[0]}
-          </button>
-        `
+          `
+            <button
+              type="button"
+              data-a="${q[1]}"
+            >
+              ${q[0]}
+            </button>
+          `
       ).join("");
-
 
     qw.querySelectorAll(
       "button"
@@ -2668,7 +2250,6 @@ function initChat(){
             b.textContent,
             "user"
           );
-
 
           setTimeout(
             ()=>{
@@ -2689,27 +2270,22 @@ function initChat(){
 
 }
 
-
 function initChatWelcome(){
 
   const w=
     $("#chatMsgs");
 
-
   if(
     w &&
     !w.children.length
   ){
-
     addMsg(
       t("chat_welcome"),
       "bot"
     );
-
   }
 
 }
-
 
 function addMsg(
   txt,
@@ -2721,30 +2297,24 @@ function addMsg(
 
   if(!w)return;
 
-
   const d=
     document.createElement(
       "div"
     );
 
-
   d.className=
     "msg "+
     who;
 
-
   d.textContent=
     txt;
 
-
   w.appendChild(d);
-
 
   w.scrollTop=
     w.scrollHeight;
 
 }
-
 
 /* ═══════════════════════════════════════
    NAVIGATION
@@ -2768,13 +2338,11 @@ function initNav(){
       }
     );
 
-
   $("#ovl")
     ?.addEventListener(
       "click",
       closeDrawers
     );
-
 
   $$(".mnav a")
     .forEach(a=>{
@@ -2795,7 +2363,6 @@ function initNav(){
       );
 
     });
-
 
   $$("[data-cat]")
     .forEach(a=>{
@@ -2818,11 +2385,8 @@ function initNav(){
                     `#chips .chip[data-cat="${a.dataset.cat}"]`
                   );
 
-
                 if(chip){
-
                   chip.click();
-
                 }
 
               },
@@ -2838,7 +2402,6 @@ function initNav(){
 
 }
 
-
 /* ═══════════════════════════════════════
    DRAWERS / MODALS
    ═══════════════════════════════════════ */
@@ -2852,17 +2415,13 @@ function openDrawer(
     ?.classList
     .add("open");
 
-
   if(ovlId){
-
     $("#"+ovlId)
       ?.classList
       .add("open");
-
   }
 
 }
-
 
 function closeDrawers(){
 
@@ -2876,7 +2435,6 @@ function closeDrawers(){
 
 }
 
-
 function closeModal(id){
 
   $("#"+id)
@@ -2884,6 +2442,5 @@ function closeModal(id){
     .remove("open");
 
 }
-
 
 })();

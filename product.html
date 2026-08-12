@@ -1,122 +1,416 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>منتج | VelaLight</title>
-<meta name="description" content="منتج من VelaLight — شموع يدوية فاخرة">
-<link rel="stylesheet" href="style.css">
+
+<meta name="description" content="اكتشفي تفاصيل المنتج من VelaLight — شموع يدوية فاخرة بعطور مميزة.">
+
+<!-- ═══ SEO ═══ -->
+<meta name="theme-color" content="#faf6f0">
+<meta property="og:type" content="product">
+<meta property="og:site_name" content="VelaLight">
+<meta property="og:locale" content="ar_EG">
+
+<!-- ═══ Preconnect ═══ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="mobile-luxury-fix.css">
+
 <style>
+/* ═══ Product Page Specific ═══ */
 .pd-thumbs{display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap}
-.pd-thumbs img{width:64px;height:64px;border-radius:10px;object-fit:cover;border:2px solid var(--line);cursor:pointer;transition:.2s}
-.pd-thumbs img:hover,.pd-thumbs img.on{border-color:var(--gold)}
+.pd-thumbs img{
+  width:64px;
+  height:64px;
+  border-radius:10px;
+  object-fit:cover;
+  border:2px solid var(--line);
+  cursor:pointer;
+  transition:.2s;
+}
+.pd-thumbs img:hover,
+.pd-thumbs img.on{border-color:var(--gold)}
+
+/* Product page topbar slim */
+.topbar{
+  height:24px;
+  line-height:24px;
+  font-size:.72rem;
+}
+.mq-track{
+  line-height:24px;
+  font-size:.72rem;
+}
+.mq-track span{line-height:24px}
+
+/* Product image fade-in */
+.pd-img img{
+  opacity:0;
+  transition:opacity .5s;
+}
+.pd-img img.loaded{opacity:1}
+
+/* Rating summary */
+#pdRatingSummary{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  font-size:.9rem;
+  color:var(--mut);
+  margin-bottom:.5rem;
+}
+#pdRatingSummary b{color:var(--gold2)}
+.stars.muted{color:var(--dim);opacity:.5}
+
+/* Scent required badge */
+.scent-required{
+  display:inline-block;
+  background:rgba(217,171,95,.12);
+  color:var(--gold2);
+  font-size:.72rem;
+  font-weight:700;
+  padding:2px 8px;
+  border-radius:99px;
+  margin-inline-start:.4rem;
+}
+
+/* Handmade note */
+.handmade-note{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  background:rgba(217,171,95,.08);
+  border:1px solid rgba(217,171,95,.15);
+  border-radius:12px;
+  padding:.7rem 1rem;
+  font-size:.85rem;
+  color:var(--mut);
+  margin-top:1.2rem;
+}
+.handmade-note span{color:var(--gold2)}
 </style>
 </head>
+
 <body>
 
+<!-- ═══════════════════════════════════════════════
+     TOP BAR (Slim)
+     ═══════════════════════════════════════════════ -->
+
+<div class="topbar">
+  <div class="mq-track" id="mqTrack">
+    <span>🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp; 🏷️ خصومات حصرية &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; ✨ ضمان استبدال &nbsp;•&nbsp;</span>
+    <span>🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp; 🏷️ خصومات حصرية &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; ✨ ضمان استبدال &nbsp;•&nbsp;</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     HEADER (Slim)
+     ═══════════════════════════════════════════════ -->
+
 <header>
-<div class="wrap hrow">
-<a class="logo" href="index.html"><span class="flame"></span><div><b>VelaLight</b><small>Luxury Candle Studio</small></div></a>
-<div class="hact">
-<button class="langbtn" id="langBtn">EN</button>
-<a class="icobtn" href="index.html?cart=1">🛍️<span class="badge" id="cartCount">0</span></a>
-</div>
-</div>
+
+  <div class="wrap hrow">
+
+    <a class="logo" href="index.html" aria-label="VelaLight - الرئيسية">
+      <span class="flame"></span>
+      <div>
+        <b>VelaLight</b>
+        <small>Luxury Candle Studio</small>
+      </div>
+    </a>
+
+    <div class="hact">
+
+      <button class="langbtn" id="langBtn" aria-label="تغيير اللغة">
+        EN
+      </button>
+
+      <a class="icobtn" href="index.html?cart=1" aria-label="فتح سلة الشراء">
+        🛍️
+        <span class="badge" id="cartCount" aria-live="polite">0</span>
+      </a>
+
+    </div>
+
+  </div>
+
 </header>
 
-<div class="wrap" style="padding-top:2rem;padding-bottom:4rem">
-<div class="crumb"><a href="index.html" data-i18n="crumb_home">الرئيسية</a> › <span id="crumbName">...</span></div>
-<div id="pdLoading" style="text-align:center;padding:3rem;color:var(--dim)">⏳ ...</div>
+<!-- ═══════════════════════════════════════════════
+     MAIN
+     ═══════════════════════════════════════════════ -->
 
-<div id="pdWrap" class="hidden">
-<div class="pd-grid">
-<div>
-<div class="pd-img"><img id="pdImg" src="" alt="" decoding="async" fetchpriority="high" loading="eager"></div>
-<div class="pd-thumbs" id="pdThumbs"></div>
-</div>
-<div class="pd-info">
-<div class="pd-kicker">VELALIGHT • LUXURY CANDLE STUDIO</div>
-<h1 id="pdName"></h1>
-<div class="pd-rating-summary" id="pdRatingSummary"></div>
-<div id="pdBadge"></div>
-<div class="pd-price"><span id="pdPrice"></span> <del id="pdOld"></del> <small data-i18n="egp">ج.م</small></div>
-<div class="pd-option-head">
-  <span class="opt-t" data-i18n="pd_scent_t">🌸 اختاري العطر:</span>
-  <span class="pd-required">مطلوب</span>
-</div>
-<select class="pd-scent-select" id="pdScentSelect" aria-label="Scent">
-<option value="">اختاري العطر</option>
-</select>
+<main class="sec" style="padding-top:2rem">
 
-<div class="opt-t" data-i18n="pd_qty_t">الكمية:</div>
-<div class="qty">
-<button id="qMinus">−</button>
-<b id="qVal">1</b>
-<button id="qPlus">+</button>
-</div>
+  <div class="wrap">
 
-<div class="pd-actions">
-<button class="btn pd-buy-btn" id="addBtn" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
-</div>
+    <!-- Breadcrumb -->
+    <div class="crumb">
+      <a href="index.html" data-i18n="nav_home">الرئيسية</a>
+      &nbsp;›&nbsp;
+      <a href="index.html#products" data-i18n="nav_shop">تسوق</a>
+      &nbsp;›&nbsp;
+      <span id="crumbName">المنتج</span>
+    </div>
 
-<p class="pd-desc" id="pdDesc"></p>
+    <!-- Loading State -->
+    <div id="pdLoading">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start">
+        <div class="skel" style="aspect-ratio:1;border-radius:24px"></div>
+        <div>
+          <div class="skel" style="height:20px;width:40%;margin-bottom:1rem"></div>
+          <div class="skel" style="height:36px;width:70%;margin-bottom:1rem"></div>
+          <div class="skel" style="height:24px;width:30%;margin-bottom:1.5rem"></div>
+          <div class="skel" style="height:80px;margin-bottom:1rem"></div>
+          <div class="skel" style="height:44px;width:50%"></div>
+        </div>
+      </div>
+    </div>
 
-<div class="pd-mini-note">
-  <span>✦</span>
-  <span>قطعة يدوية تُجهّز بعناية عند الطلب</span>
-</div>
+    <!-- Not Found -->
+    <div id="pdNotFound" class="empty hidden">
+      <div style="font-size:4rem;margin-bottom:1rem">🕯️</div>
+      <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem" data-i18n="pd_notfound">
+        😕 المنتج مش موجود
+      </h2>
+      <a href="index.html" class="btn" style="margin-top:1rem" data-i18n="nav_home">
+        الرئيسية
+      </a>
+    </div>
 
-<div class="share-row" id="shareRow"></div>
-</div>
-</div>
+    <!-- Product Detail -->
+    <div id="pdWrap" class="hidden">
 
-<section style="margin-top:3rem">
-<h2 class="fd" data-i18n="pd_rev_h2">مراجعات المنتج</h2>
-<div id="revList"></div>
-<div class="rv-form">
-<h3 style="color:var(--gold2);margin-bottom:1rem" data-i18n="pd_form_t">ضيفي مراجعتك ⭐</h3>
-<div class="row">
-<input id="rvName" data-i18n-ph="pd_name_ph" placeholder="اسمك">
-<div class="starpick" id="starPick"></div>
-</div>
-<textarea id="rvText" rows="3" data-i18n-ph="pd_text_ph" placeholder="اكتبي رأيك..."></textarea>
-<input id="rvPhoto" data-i18n-ph="pd_photo_ph" placeholder="رابط صورة (اختياري)" style="margin-top:.5rem">
-<button class="btn sm" id="rvSubmit" style="margin-top:.8rem" data-i18n="pd_submit">إرسال</button>
-<p style="color:var(--dim);font-size:.75rem;margin-top:.5rem" data-i18n="pd_note">المراجعة بتظهر بعد الموافقة</p>
-</div>
-</section>
+      <div class="pd-grid">
 
-<section style="margin-top:3rem">
-<h2 class="fd" data-i18n="pd_rel_h2">منتجات هتعجبك</h2>
-<div class="rel-grid" id="relGrid"></div>
-</section>
-</div>
+        <!-- Image Side -->
+        <div>
 
-<div id="pdNotFound" class="hidden" style="text-align:center;padding:4rem">
-<p style="font-size:1.2rem" data-i18n="pd_notfound">😕 المنتج مش موجود</p>
-<a class="btn" href="index.html" style="margin-top:1rem" data-i18n="nav_home">الرئيسية</a>
-</div>
-</div>
+          <div class="pd-img">
+            <img
+              id="pdImg"
+              src=""
+              alt=""
+              loading="eager"
+              decoding="async"
+              onload="this.classList.add('loaded')"
+            >
+          </div>
+
+          <div class="pd-thumbs" id="pdThumbs"></div>
+
+        </div>
+
+        <!-- Info Side -->
+        <div class="pd-info">
+
+          <div id="pdBadge"></div>
+
+          <h1 id="pdName" class="fd"></h1>
+
+          <div id="pdRatingSummary"></div>
+
+          <div class="pd-price">
+            <span id="pdPrice"></span>
+            <del id="pdOld" style="display:none"></del>
+          </div>
+
+          <p id="pdDesc" style="color:var(--mut);line-height:1.8;margin-bottom:1rem"></p>
+
+          <!-- Scent Selection -->
+          <div class="opt-t">
+            <span data-i18n="pd_scent_t">🌸 اختاري العطر:</span>
+            <span class="scent-required" data-i18n="scent_req">مطلوب</span>
+          </div>
+
+          <div class="scents-pick" id="pdScents"></div>
+
+          <!-- Quantity -->
+          <div class="opt-t" data-i18n="pd_qty_t">
+            الكمية:
+          </div>
+
+          <div class="qty">
+            <button id="pdQMinus" aria-label="تقليل الكمية">−</button>
+            <b id="pdQVal">1</b>
+            <button id="pdQPlus" aria-label="زيادة الكمية">+</button>
+          </div>
+
+          <!-- Actions -->
+          <div class="pd-actions">
+
+            <button class="btn" id="pdAddBtn" data-i18n="pd_add">
+              🛍️ أضيفي للسلة
+            </button>
+
+            <button class="btn wa" id="pdBuyBtn" data-i18n="pd_buy">
+              اطلبي عبر واتساب
+            </button>
+
+          </div>
+
+          <!-- Handmade Note -->
+          <div class="handmade-note">
+            <span>✦</span>
+            <span data-i18n="handmade_note">
+              قطعة يدوية تُجهّز بعناية عند الطلب
+            </span>
+          </div>
+
+          <!-- Meta Info -->
+          <div class="pd-meta">
+            <div>
+              <b data-i18n="pd_hours">مدة الاشتعال:</b>
+              <span id="pdHours"></span>
+            </div>
+            <div>
+              <b data-i18n="pd_materials">الخامات:</b>
+              <span data-i18n="pd_materials_v">شمع طبيعي 100%</span>
+            </div>
+            <div>
+              <b data-i18n="pd_ship">التوصيل:</b>
+              <span data-i18n="pd_ship_v">3–7 أيام</span>
+            </div>
+            <div>
+              <b>🎁</b>
+              <span data-i18n="pd_gift_v">تغليف هدايا مجاني مع كل طلب</span>
+            </div>
+            <div>
+              <b>🔁</b>
+              <span data-i18n="pd_exchange_v">ضمان استبدال خلال 3 أيام</span>
+            </div>
+          </div>
+
+          <!-- Share -->
+          <div class="share-row" id="pdShare"></div>
+
+        </div>
+
+      </div>
+
+      <!-- Reviews Section -->
+      <div style="margin-top:3rem">
+
+        <h2 class="fd" style="color:var(--gold2);margin-bottom:1rem" data-i18n="pd_rev_h2">
+          مراجعات المنتج
+        </h2>
+
+        <div id="pdReviews"></div>
+
+        <div class="rv-form">
+
+          <h3 class="fd" style="color:var(--gold2);margin-bottom:.8rem" data-i18n="pd_form_t">
+            ضيفي مراجعتك ⭐
+          </h3>
+
+          <div class="row">
+            <input
+              id="rvName"
+              data-i18n-ph="pd_name_ph"
+              placeholder="اسمك"
+            >
+            <div class="starpick" id="starPick">
+              <button data-v="1">★</button>
+              <button data-v="2">★</button>
+              <button data-v="3">★</button>
+              <button data-v="4">★</button>
+              <button data-v="5" class="lit">★</button>
+            </div>
+          </div>
+
+          <textarea
+            id="rvText"
+            rows="3"
+            data-i18n-ph="pd_text_ph"
+            placeholder="اكتبي رأيك..."
+          ></textarea>
+
+          <button class="btn" id="rvSubmit" style="margin-top:.8rem" data-i18n="pd_submit">
+            إرسال
+          </button>
+
+          <small data-i18n="pd_note" style="display:block;margin-top:.5rem">
+            المراجعة بتظهر بعد الموافقة
+          </small>
+
+        </div>
+
+      </div>
+
+      <!-- Related Products -->
+      <div style="margin-top:2.5rem">
+
+        <h2 class="fd" style="color:var(--gold2);margin-bottom:1rem" data-i18n="pd_rel_h2">
+          منتجات هتعجبك
+        </h2>
+
+        <div class="rel-grid" id="pdRelated"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════════ -->
 
 <footer>
-<div class="wrap">
-<div class="fbot">
-<span data-i18n="foot_rights">© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</span>
-<div>
-<a href="track.html" data-i18n="mn_track">📦 تتبع الطلب</a> ·
-<a href="exchange-policy.html" data-i18n="foot_exchange">سياسة الاستبدال</a>
-</div>
-</div>
-</div>
+
+  <div class="wrap">
+
+    <div style="text-align:center;margin-bottom:1.5rem">
+      <div class="kick" style="margin-bottom:.3rem">
+        VELALIGHT • LUXURY CANDLE STUDIO
+      </div>
+    </div>
+
+    <div class="fbot">
+
+      <span data-i18n="foot_rights">
+        © 2026 - 2030 VelaLight — جميع الحقوق محفوظة
+      </span>
+
+      <div>
+        <a href="track.html" data-i18n="mn_track">
+          📦 تتبع الطلب
+        </a>
+        &nbsp;·&nbsp;
+        <a href="exchange-policy.html" data-i18n="foot_exchange">
+          سياسة الاستبدال
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
 </footer>
 
+<!-- Toasts -->
 <div id="toasts"></div>
+
+<!-- ═══════════════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════════════ -->
 
 <script src="data.js"></script>
 <script type="module" src="firebase.js"></script>
+
 <script>
 (function(){
 "use strict";
@@ -126,334 +420,469 @@ let productPid="";
 let cloudCatalog=[];
 
 document.addEventListener("DOMContentLoaded",()=>{
-initLang();
-cartBadge();
-buildStars();
 
-productPid=new URLSearchParams(location.search).get("p")||"";
-if(!productPid){showNotFound();return}
+  initLang();
+  cartBadge();
+  buildStars();
 
-// Render from the freshest local cache first. This makes navigation feel
-// instant while Firebase verifies the exact product in the background.
-let cached=null;
-try{
-  const cache=JSON.parse(localStorage.getItem("vl_products_cache_v1")||"[]");
-  if(Array.isArray(cache)){
-    cached=cache.find(x=>String(x.id)===String(productPid)||String(x.id_)===String(productPid)||String(x.slug)===String(productPid)||String(x.pid)===String(productPid))||null;
+  productPid=new URLSearchParams(location.search).get("p")||"";
+  if(!productPid){showNotFound();return}
+
+  /*
+    Render from the freshest local cache first.
+    This makes navigation feel instant while
+    Firebase verifies the exact product in the background.
+  */
+  let cached=null;
+  try{
+    const cache=JSON.parse(
+      localStorage.getItem("vl_products_cache_v1")||"[]"
+    );
+    if(Array.isArray(cache)){
+      cached=cache.find(x=>
+        String(x.id)===String(productPid)||
+        String(x.id_)===String(productPid)||
+        String(x.slug)===String(productPid)||
+        String(x.pid)===String(productPid)
+      )||null;
+    }
+  }catch(e){}
+
+  const local=PRODUCTS.find(x=>String(x.id)===String(productPid));
+  const first=cached||local;
+
+  if(first){
+    P={...first};
+    render();
   }
-}catch(e){}
 
-const local=PRODUCTS.find(x=>String(x.id)===String(productPid));
-const first= cached || local;
-if(first){
-P={...first};
-render();
-}
+  /* Firebase is the authoritative source for product data. */
+  const sync=()=>loadCloudCatalog(productPid);
+  if(window.FB&&typeof window.FB.list==="function")sync();
+  else window.addEventListener("fb-ready",sync,{once:true});
 
-// Firebase is the authoritative source for product data.
-const sync=()=>loadCloudCatalog(productPid);
-if(window.FB&&typeof window.FB.list==="function")sync();
-else window.addEventListener("fb-ready",sync,{once:true});
+  setTimeout(()=>{if(!P)showNotFound()},5000);
 
-setTimeout(()=>{if(!P)showNotFound()},5000);
 });
 
 async function loadCloudCatalog(pid){
-if(!window.FB||typeof window.FB.list!=="function")return;
-try{
-let direct=null;
 
-// Fast path: admin saves product documents using the product id.
-// This avoids downloading the entire catalog every time a detail page opens.
-if(typeof window.FB.get==="function") direct=await window.FB.get("products",pid);
+  try{
+    const cloud=await DB.list("products");
+    cloudCatalog=cloud||[];
 
-if(direct){
-  cloudCatalog=[direct];
-}else{
-  // Backward-compatible fallback for older records whose Firestore document id
-  // is not the same as the product id/slug.
-  const cloud=await window.FB.list("products");
-  cloudCatalog=Array.isArray(cloud)?cloud:[];
-}
+    const found=cloud.find(x=>
+      String(x.id)===String(pid)||
+      String(x.id_)===String(pid)||
+      String(x.slug)===String(pid)||
+      String(x.pid)===String(pid)
+    );
 
-const map=new Map((Array.isArray(PRODUCTS)?PRODUCTS:[]).map(x=>[String(x.id),{...x}]));
+    if(found&&found.active!==false){
+      P={...P,...found};
+      render();
+    }else if(found&&found.active===false){
+      showNotFound();
+    }
 
-cloudCatalog.forEach(d=>{
-const slug=String(d.id_||d.slug||d.pid||d.id||"").trim();
-if(!slug)return;
-if(d.active===false){map.delete(slug);return}
-const base=map.get(slug)||{};
-const merged={...base,...d,id:slug,_fid:d.id||null};
-const rs=d.scents;
-const hasScents=Array.isArray(rs)?rs.length>0:(typeof rs==="string"&&rs.trim().length>0);
-merged.scents=hasScents?rs:(base.scents||[]);
-merged.price=Number(merged.price)||0;
-merged.old=Number(merged.old)||0;
-map.set(slug,merged);
-});
-
-ALL_PRODUCTS=[...map.values()];
-const fresh=ALL_PRODUCTS.find(x=>String(x.id)===String(pid));
-if(fresh){P=fresh;render()}
-else if(!P)showNotFound();
-
-// Reviews are independent from the product itself; do not make product
-// rendering wait for them.
-window.FB.list("reviews").then(reviews=>{
-  ALL_REVIEWS=Array.isArray(reviews)?reviews:[];
-  if(P) {
-    renderReviews();
-    render();
+  }catch(e){
+    console.warn("Cloud load failed, using local",e);
   }
-}).catch(e=>console.warn("Product reviews refresh failed:",e));
 
-}catch(error){
-console.error("Product cloud load failed:",error);
-if(!P)showNotFound();
 }
-}
+
 function initLang(){
-applyI18n();
-$("#langBtn")?.addEventListener("click",()=>{
-LANG=LANG==="ar"?"en":"ar";
-localStorage.setItem("vl_lang",LANG);
-document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
-applyI18n();
-if(P)render();
-});
+
+  applyI18n();
+
+  $("#langBtn")?.addEventListener("click",()=>{
+
+    LANG=LANG==="ar"?"en":"ar";
+    localStorage.setItem("vl_lang",LANG);
+    document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+    document.documentElement.lang=LANG;
+    applyI18n();
+
+    if(P)render();
+
+  });
+
 }
+
 function applyI18n(){
-$$("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
-$$("[data-i18n-ph]").forEach(el=>el.placeholder=t(el.dataset.i18nPh));
+
+  $$("[data-i18n]").forEach(el=>{
+    const v=t(el.dataset.i18n);
+    if(v!==el.dataset.i18n)el.textContent=v;
+  });
+
+  $$("[data-i18n-ph]").forEach(el=>{
+    const v=t(el.dataset.i18nPh);
+    if(v!==el.dataset.i18nPh)el.placeholder=v;
+  });
+
+  const mq=$("#mqTrack");
+  if(mq){
+    const txt=t("mq");
+    mq.innerHTML=
+      `<span>${txt}</span>
+       <span>${txt}</span>`;
+  }
+
 }
 
 function showNotFound(){
-$("#pdLoading").classList.add("hidden");
-$("#pdNotFound").classList.remove("hidden");
+  $("#pdLoading").classList.add("hidden");
+  $("#pdNotFound").classList.remove("hidden");
 }
 
 function render(){
-$("#pdLoading").classList.add("hidden");
-$("#pdWrap").classList.remove("hidden");
 
-document.title=pname(P)+" | VelaLight";
-$("#crumbName").textContent=pname(P);
-$("#pdName").textContent=pname(P);
-$("#pdDesc").textContent=pdesc(P);
-const mainImg=$("#pdImg");
-mainImg.onerror=()=>mainImg.removeAttribute("src");
-mainImg.src=imgOf(P);
-const reviewSummary=prodReviews(P.id);
-const ratingBox=$("#pdRatingSummary");
-if(ratingBox){
-  if(reviewSummary.length){
-    const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
-    ratingBox.innerHTML=`<span class="stars">★★★★★</span><b>${avg.toFixed(1)}</b><span>(${reviewSummary.length} مراجعة)</span>`;
-  }else{
-    ratingBox.innerHTML=`<span class="stars muted">★★★★★</span><span>كوني أول من يشارك رأيه</span>`;
+  $("#pdLoading").classList.add("hidden");
+  $("#pdNotFound").classList.add("hidden");
+  $("#pdWrap").classList.remove("hidden");
+
+  document.title=pname(P)+" | VelaLight";
+  $("#crumbName").textContent=pname(P);
+  $("#pdName").textContent=pname(P);
+  $("#pdDesc").textContent=pdesc(P);
+
+  const mainImg=$("#pdImg");
+  mainImg.onerror=()=>mainImg.removeAttribute("src");
+  mainImg.src=imgOf(P);
+  mainImg.alt=pname(P);
+
+  /* Rating Summary */
+  const reviewSummary=prodReviews(P.id);
+  const ratingBox=$("#pdRatingSummary");
+
+  if(ratingBox){
+    if(reviewSummary.length){
+      const avg=reviewSummary.reduce(
+        (a,r)=>a+Number(r.rating||5),0
+      )/reviewSummary.length;
+      ratingBox.innerHTML=
+        `<span class="stars">★★★★★</span>`+
+        `<b>${avg.toFixed(1)}</b>`+
+        `<span>(${reviewSummary.length} ${LANG==="en"?"reviews":"مراجعة"})</span>`;
+    }else{
+      ratingBox.innerHTML=
+        `<span class="stars muted">★★★★★</span>`+
+        `<span>${LANG==="en"?"Be the first to review":"كوني أول من يشارك رأيه"}</span>`;
+    }
   }
-}
-$("#pdImg").alt=pname(P);
 
-const badge=pbadge(P);
-$("#pdBadge").innerHTML=badge?`<span class="p-badge" style="position:static;display:inline-block">${badge}</span>`:"";
+  /* Badge */
+  const badge=pbadge(P);
+  $("#pdBadge").innerHTML=badge
+    ?`<span class="p-badge" style="position:static;display:inline-block">${badge}</span>`
+    :"";
 
-$("#pdPrice").textContent=money(P.price);
-$("#pdOld").textContent=P.old>P.price?money(P.old):"";
-$("#pdOld").style.display=P.old>P.price?"inline":"none";
-const hoursEl=$("#pdHours");
-if(hoursEl)hoursEl.textContent=phours(P);
+  /* Price */
+  $("#pdPrice").textContent=money(P.price);
+  $("#pdOld").textContent=P.old>P.price?money(P.old):"";
+  $("#pdOld").style.display=P.old>P.price?"inline":"none";
 
+  /* Hours */
+  const hoursEl=$("#pdHours");
+  if(hoursEl)hoursEl.textContent=phours(P);
 
-renderThumbs();
-renderScents();
-renderReviews();
-renderRelated();
-renderShare();
-bindEvents();
+  renderThumbs();
+  renderScents();
+  renderReviews();
+  renderRelated();
+  renderShare();
+  bindEvents();
+
 }
 
 function renderThumbs(){
-const imgs=imgsOf(P);
-const w=$("#pdThumbs");
-if(imgs.length<=1){w.innerHTML="";return}
-w.innerHTML=imgs.map((u,i)=>`<img src="${CDN(u)}" class="${i===0?'on':''}" data-i="${i}" loading="lazy" decoding="async">`).join("");
-w.querySelectorAll("img").forEach(im=>im.addEventListener("click",()=>{
-$("#pdImg").src=im.src;
-w.querySelectorAll("img").forEach(x=>x.classList.remove("on"));
-im.classList.add("on");
-}));
+
+  const thumbs=$("#pdThumbs");
+  if(!thumbs)return;
+
+  const imgs=imgsOf(P);
+
+  thumbs.innerHTML=imgs.map((u,i)=>
+    `<img
+      src="${CDN(u)}"
+      class="${i===0?"on":""}"
+      data-src="${CDN(u)}"
+      alt="${pname(P)} ${i+1}"
+      loading="lazy"
+      decoding="async"
+    >`
+  ).join("");
+
+  thumbs.querySelectorAll("img").forEach(img=>{
+    img.addEventListener("click",()=>{
+      thumbs.querySelectorAll("img").forEach(x=>x.classList.remove("on"));
+      img.classList.add("on");
+      const main=$("#pdImg");
+      main.src=img.dataset.src;
+      main.classList.add("loaded");
+    });
+  });
+
 }
 
 function getProductScents(){
-const raw=P?.scents;
-let list=[];
-if(Array.isArray(raw)){
-list=raw.filter(Boolean);
-}else if(typeof raw==="string"&&raw.trim()){
-list=raw.split(",").map(x=>x.trim()).filter(Boolean);
-}
 
-// Every VelaLight candle uses the official scent catalog unless the product
-// explicitly provides its own non-empty scent list. This prevents the
-// detail page from losing the scent selector when an older Firebase record
-// does not contain the scents field.
-if(!list.length && typeof SCENTS!=="undefined" && Array.isArray(SCENTS)){
-list=SCENTS.map(s=>Array.isArray(s)?s[0]:s).filter(Boolean);
-}
+  /* Merge cloud and local scents */
+  const cloudP=cloudCatalog.find(x=>
+    String(x.id)===String(P.id)||
+    String(x.id_)===String(P.id)
+  );
 
-const translate=typeof scentTr==="function"
-  ? scentTr
-  : (value)=>{
-      const found=(typeof SCENTS!=="undefined"&&Array.isArray(SCENTS))
-        ?SCENTS.find(x=>Array.isArray(x)&&(x[0]===value||x[1]===value))
-        :null;
-      return found?(LANG==="en"?found[1]:found[0]):value;
-    };
+  const localScents=P.scents||[];
+  const cloudScents=cloudP?.scents||[];
 
-return list.map(s=>{
-if(Array.isArray(s)){
-  const value=String(s[0]||"").trim();
-  return {value,label:LANG==="en"?String(s[1]||s[0]||""):String(s[0]||"")};
-}
-if(typeof s==="object"&&s!==null){
-  const value=String(s.value||s.name||s.id||"").trim();
-  const label=String(s.label||s.name||value).trim();
-  return {value,label:LANG==="en"?label:translate(value)};
-}
-const value=String(s).trim();
-return {value,label:translate(value)};
-}).filter(x=>x.value);
+  /* Use cloud if available, else local */
+  return cloudScents.length?cloudScents:localScents;
+
 }
 
 function renderScents(){
-const select=$("#pdScentSelect");
-if(!select)return;
 
-const list=getProductScents();
-const head=select.closest(".pd-option-head");
-if(!list.length){
-if(head)head.style.display="none";
-select.style.display="none";
-selScent="";
-return;
-}
-if(head)head.style.display="flex";
-select.style.display="";
-select.innerHTML=
-`<option value="">${LANG==="ar"?"🌸 اختاري العطر":"🌸 Choose a scent"}</option>`+
-list.map(s=>`<option value="${String(s.value).replace(/"/g,"&quot;")}">${String(s.label).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</option>`).join("");
+  const pick=$("#pdScents");
+  if(!pick)return;
 
-// لو المنتج له عطر محفوظ، اختاره تلقائيًا
-const current=String(P?.scent||P?.defaultScent||P?.selectedScent||"").trim();
-const match=list.find(s=>String(s.value).trim()===current);
+  const scents=getProductScents();
 
-if(match){
-  selScent=String(match.value);
-  select.value=selScent;
-}else{
+  if(!scents.length){
+    pick.innerHTML=
+      `<span style="color:var(--dim);font-size:.85rem">
+        ${LANG==="en"?"No scents available":"لا توجد عطور متاحة"}
+      </span>`;
+    return;
+  }
+
+  /*
+    مهم: لا يوجد عطر مختار تلقائيًا.
+    العميل لازم يضغط بنفسه.
+  */
+  pick.innerHTML=scents.map((s,i)=>
+    `<button
+      class="chip"
+      type="button"
+      data-scent="${s}"
+    >${velaScentTr(s)}</button>`
+  ).join("");
+
+  pick.querySelectorAll(".chip").forEach(c=>{
+    c.addEventListener("click",()=>{
+      pick.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
+      c.classList.add("on");
+      selScent=c.dataset.scent;
+    });
+  });
+
+  /* No auto-select — user must choose */
   selScent="";
-  select.value="";
-}
 
-select.onchange=()=>{
-selScent=select.value;
-select.classList.remove("scent-error");
-};
 }
 
 function bindEvents(){
-const minus=$("#qMinus"),plus=$("#qPlus"),add=$("#addBtn"),rev=$("#rvSubmit");
 
-minus.onclick=()=>{
-if(qty>1)qty--;
-$("#qVal").textContent=qty;
-};
+  $("#pdQMinus")?.addEventListener("click",()=>{
+    if(qty>1){
+      qty--;
+      $("#pdQVal").textContent=qty;
+    }
+  });
 
-plus.onclick=()=>{
-qty++;
-$("#qVal").textContent=qty;
-};
+  $("#pdQPlus")?.addEventListener("click",()=>{
+    qty++;
+    $("#pdQVal").textContent=qty;
+  });
 
-add.onclick=()=>{
-const required=getProductScents().length>0;
-if(required&&!selScent){
-$("#pdScentSelect")?.classList.add("scent-error");
-toast(t("t_scentwarn"));
-$("#pdScentSelect")?.focus();
-return;
-}
-addToCart(P,{scent:selScent,qty});
-};
+  $("#pdAddBtn")?.addEventListener("click",()=>{
 
-rev.onclick=()=>{
-const name=$("#rvName").value.trim();
-const text=$("#rvText").value.trim();
-const photo=$("#rvPhoto").value.trim();
-if(!name||!text){toast(t("t_revwarn"));return}
-DB.add("reviews",{
-productSlug:P.id,pid:P.id,name,text,photo,
-rating:selRating,approved:false,createdAt:Date.now()
-}).then(()=>{
-toast(t("t_revok"));
-$("#rvName").value="";
-$("#rvText").value="";
-$("#rvPhoto").value="";
-}).catch(e=>{console.warn(e);toast("⚠️")});
-};
+    if(!selScent){
+      toast(t("t_scentwarn"));
+      return;
+    }
+
+    addToCart(P,{scent:selScent,qty});
+    track("add_to_cart",{
+      items:[{
+        item_id:P.id,
+        item_name:P.name,
+        price:P.price,
+        quantity:qty
+      }]
+    });
+
+  });
+
+  $("#pdBuyBtn")?.addEventListener("click",()=>{
+
+    if(!selScent){
+      toast(t("t_scentwarn"));
+      return;
+    }
+
+    const name=pname(P);
+    const scent=velaScentTr(selScent);
+    const total=P.price*qty;
+
+    const msg=
+      `${t("wa_head")}\n\n`+
+      `${t("wa_item")} ${name}\n`+
+      `${t("wa_scent")}: ${scent}\n`+
+      `${LANG==="en"?"Quantity:":"الكمية:"} ${qty}\n`+
+      `${t("wa_total")} ${money(total)}`;
+
+    window.open(
+      `https://wa.me/${CFG.WHATSAPP}?text=${encodeURIComponent(msg)}`,
+      "_blank"
+    );
+
+  });
+
 }
 
 function buildStars(){
-const w=$("#starPick");
-for(let i=1;i<=5;i++){
-const b=document.createElement("button");
-b.textContent="★";
-b.dataset.v=i;
-if(i===5)b.classList.add("lit");
-b.addEventListener("click",()=>{
-selRating=i;
-w.querySelectorAll("button").forEach(x=>x.classList.toggle("lit",+x.dataset.v<=i));
-});
-w.appendChild(b);
-}
+
+  const pick=$("#starPick");
+  if(!pick)return;
+
+  pick.querySelectorAll("button").forEach(b=>{
+    b.addEventListener("click",()=>{
+      selRating=+b.dataset.v;
+      pick.querySelectorAll("button").forEach((x,i)=>{
+        x.classList.toggle("lit",i<selRating);
+      });
+    });
+  });
+
 }
 
 function renderReviews(){
-const list=prodReviews(P.id);
-const w=$("#revList");
-if(!list.length){
-w.innerHTML=`<p style="color:var(--dim);padding:1rem 0">${t("pd_first")}</p>`;
-return;
-}
-w.innerHTML=list.map(r=>`<div class="rv-item">
-<b>${r.name||"-"}</b> <span class="stars">${"★".repeat(r.rating||5)}</span>
-<p style="color:var(--mut);margin-top:.3rem">${r.text||""}</p>
-${r.photo?`<img class="rv-photo" src="${r.photo}" loading="lazy" decoding="async" alt="">`:""}
-</div>`).join("");
+
+  const box=$("#pdReviews");
+  if(!box)return;
+
+  const revs=prodReviews(P.id);
+
+  if(!revs.length){
+    box.innerHTML=
+      `<p style="color:var(--dim)" data-i18n="pd_first">
+        ${t("pd_first")}
+      </p>`;
+    return;
+  }
+
+  box.innerHTML=revs.map(r=>`
+    <div class="rv-item">
+      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
+        <b>${r.name||"Anonymous"}</b>
+        <span class="stars">${"★".repeat(r.rating||5)}</span>
+      </div>
+      <p>${r.text||""}</p>
+      ${r.photo?`<img class="rv-photo" src="${r.photo}" loading="lazy">`:""}
+    </div>
+  `).join("");
+
 }
 
 function renderRelated(){
-const rel=(ALL_PRODUCTS.length?ALL_PRODUCTS:PRODUCTS).filter(x=>x.cat===P.cat&&x.id!==P.id).slice(0,4);
-$("#relGrid").innerHTML=rel.map(p=>`<a class="p-card" href="product.html?p=${p.id}">
-<div class="p-media"><img src="${imgOf(p)}" alt="${pname(p)}" loading="lazy"></div>
-<div class="p-body"><h3>${pname(p)}</h3><div class="p-price">${money(p.price)}</div></div>
-</a>`).join("");
+
+  const box=$("#pdRelated");
+  if(!box)return;
+
+  const related=ALL_PRODUCTS
+    .filter(x=>x.cat===P.cat&&x.id!==P.id)
+    .slice(0,4);
+
+  if(!related.length){
+    box.innerHTML="";
+    return;
+  }
+
+  box.innerHTML=related.map(p=>`
+    <a href="product.html?p=${p.id}" class="p-card" style="text-decoration:none">
+      <div class="p-media">
+        <img
+          src="${imgOf(p)}"
+          alt="${pname(p)}"
+          loading="lazy"
+          decoding="async"
+          onload="this.classList.add('loaded')"
+        >
+      </div>
+      <div class="p-body">
+        <h3>${pname(p)}</h3>
+        <div class="p-price">${money(p.price)}</div>
+      </div>
+    </a>
+  `).join("");
+
 }
 
 function renderShare(){
-const url=location.href;
-const txt=encodeURIComponent(pname(P)+" | VelaLight");
-$("#shareRow").innerHTML=`
-<a href="https://wa.me/?text=${txt}%20${url}" target="_blank">واتساب</a>
-<a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank">فيسبوك</a>
-<a href="javascript:void(0)" id="copyLink">نسخ الرابط</a>`;
-$("#copyLink")?.addEventListener("click",()=>{
-navigator.clipboard.writeText(url).then(()=>toast(t("t_saved")));
-});
+
+  const box=$("#pdShare");
+  if(!box)return;
+
+  const url=location.href;
+
+  box.innerHTML=`
+    <b style="font-size:.85rem;color:var(--dim)" data-i18n="pd_share">
+      ${t("pd_share")}
+    </b>
+    <a href="https://wa.me/?text=${encodeURIComponent(url)}" target="_blank" rel="noopener">
+      WhatsApp
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener">
+      Facebook
+    </a>
+    <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}" target="_blank" rel="noopener">
+      Twitter
+    </a>
+  `;
+
 }
+
+/* Review form submit */
+document.addEventListener("DOMContentLoaded",()=>{
+
+  $("#rvSubmit")?.addEventListener("click",async()=>{
+
+    const name=$("#rvName")?.value.trim();
+    const text=$("#rvText")?.value.trim();
+
+    if(!name||!text){
+      toast(t("t_revwarn"));
+      return;
+    }
+
+    const review={
+      productSlug:P.id,
+      name,
+      text,
+      rating:selRating,
+      createdAt:Date.now(),
+      approved:false
+    };
+
+    try{
+      await DB.add("reviews",review);
+      toast(t("t_revok"));
+      $("#rvName").value="";
+      $("#rvText").value="";
+    }catch(e){
+      toast("Error");
+    }
+
+  });
+
+});
 
 })();
 </script>
+
 <script src="product-scent-fix.js"></script>
+
 </body>
 </html>

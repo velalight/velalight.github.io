@@ -1,324 +1,122 @@
 /* =========================================================
-   VelaLight — MOBILE LUXURY FIX V2
-   يحافظ على شكل الهيرو الأصلي ويضغط المساحات فقط
-   مع تعديلات أقوى لتجاوز الـ inline styles
+   VelaLight — MOBILE LUXURY FIX V3 (Beige Edition)
    ========================================================= */
 
 @media (max-width: 900px) {
 
-  .vl-chroma-hero{
-    min-height: auto !important;
-    height: auto !important;
-    padding: 32px 0 24px !important;
-  }
-
-  .vl-chroma-container{
-    width: min(94%, 700px);
-  }
-
-  /* الصورة فوق والكلام تحتها على الموبايل */
-  .vl-chroma-grid{
-    grid-template-columns: 1fr !important;
-    gap: 20px !important;
-    align-items: center;
-    direction: ltr;
-  }
-
-  .vl-chroma-content{
-    direction: rtl;
-    text-align: center !important;
-    min-width: 0;
-  }
-
-  .vl-badge-premium{
-    padding: 5px 12px !important;
-    font-size: .7rem !important;
-    margin-bottom: 12px !important;
-    white-space: nowrap;
-  }
-
-  .vl-chroma-title{
-    font-size: clamp(1.8rem, 7vw, 2.4rem) !important;
-    line-height: 1.2 !important;
-    margin-bottom: 12px !important;
-  }
-
-  .vl-chroma-lead{
-    font-size: .92rem !important;
-    line-height: 1.7;
-    margin-bottom: 16px !important;
-    max-width: 100%;
-  }
-
-  .vl-chroma-actions{
-    gap: 10px !important;
-    margin-bottom: 16px !important;
-    flex-direction: column !important;
-    align-items: center !important;
-  }
-
-  .btn-primary-lux{
-    padding: 12px 20px !important;
-    border-radius: 10px !important;
-    font-size: .88rem !important;
-    white-space: nowrap;
-    width: 85% !important;
-    text-align: center !important;
-  }
-
-  .btn-link-lux{
-    padding: 8px 0 !important;
-    font-size: .82rem !important;
-    white-space: nowrap;
-  }
-
-  .vl-chroma-stats{
-    gap: 10px !important;
-    font-size: .72rem !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-  }
-
-  .stat-sep{
-    width: 3px;
-    height: 3px;
-    flex: 0 0 3px;
-  }
-
-  /* الشمعة تبقى فوق والكلام تحتها */
-  .vl-chroma-visual{
-    order: -1 !important;
-    min-width: 0;
-  }
-
-  .visual-wrapper{
-    width: 80% !important;
-    max-width: 260px !important;
-    margin-inline: auto !important;
-  }
-
-  .hero-img-main{
-    width: 100%;
-    height: 100%;
-  }
-
-  .floating-card{
-    bottom: 5% !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    padding: 8px 14px !important;
-    border-radius: 12px !important;
-    font-size: .7rem !important;
-  }
-
-  /* Topbar أصغر */
   .topbar{
-    height: 28px;
-    min-height: 28px;
-    overflow: hidden;
+    height:22px !important;
+    min-height:22px !important;
+    font-size:.65rem !important;
+    overflow:hidden;
   }
-
   .mq-track{
-    font-size: .68rem;
-    line-height: 28px;
-    white-space: nowrap;
+    font-size:.65rem !important;
+    line-height:22px !important;
+    gap:2rem !important;
+    white-space:nowrap;
   }
+  .mq-track span{line-height:22px !important}
 
-  /* Header أضيق مع الحفاظ على اللوجو */
-  header{
-    min-height: 54px !important;
-  }
-
+  header{min-height:50px !important}
   .hrow{
-    min-height: 54px !important;
-    height: 54px !important;
-    padding-inline: 10px;
-    gap: 6px;
+    min-height:50px !important;
+    height:50px !important;
+    padding-inline:10px !important;
+    gap:6px !important;
   }
-
-  .logo{
-    flex-shrink: 1;
-    min-width: 0;
-  }
-
-  .logo b{
-    font-size: 1.25rem !important;
-    white-space: nowrap;
-    letter-spacing: .02em;
-  }
-
-  .logo small{
-    font-size: .48rem !important;
-    white-space: nowrap;
-  }
-
-  .hact{
-    gap: 4px;
-    flex-shrink: 0;
-  }
-
-  .hact .icobtn{
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
-  }
-
-  .langbtn{
-    min-width: 38px;
-    height: 32px;
-    padding: 0 6px;
-    font-size: .72rem;
-  }
-
-  .mainnav{
-    display: none;
-  }
-
-  /* تقليل مساحات الأقسام */
-  .sec{
-    padding: 3rem 0 !important;
-  }
-
-  .sec-head{
-    margin-bottom: 1.8rem !important;
-  }
-
-  .sec-head h2{
-    font-size: clamp(1.5rem, 5vw, 2rem) !important;
-  }
-}
-
-/* موبايلات متوسطة (أقل من 600px) */
-@media (max-width: 600px){
-  .sec{
-    padding: 2.5rem 0 !important;
-  }
-
-  .fgrid{
-    grid-template-columns: 1fr;
-  }
-
-  .toolbar{
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .pform .g,.co-form .g2,.rv-form .row{
-    grid-template-columns: 1fr;
-  }
-
-  .fc1{inset-inline-start:0}
-  .fc2{inset-inline-end:0}
-
-  .adm{display:block;overflow-x:auto}
-}
-
-/* أصغر الموبايلات (أقل من 420px) */
-@media (max-width: 420px){
+  .logo{flex-shrink:1;min-width:0}
+  .logo b{font-size:1.15rem !important;white-space:nowrap;letter-spacing:.02em}
+  .logo small{font-size:.45rem !important;white-space:nowrap}
+  .flame{width:10px !important;height:15px !important}
+  .hact{gap:3px !important;flex-shrink:0}
+  .hact .icobtn{width:34px !important;height:34px !important;min-width:34px !important;font-size:.9rem !important}
+  .langbtn{min-width:34px !important;height:28px !important;padding:0 5px !important;font-size:.65rem !important}
+  .mainnav{display:none}
 
   .vl-chroma-hero{
-    padding: 24px 0 18px !important;
+    min-height:auto !important;
+    height:auto !important;
+    padding:28px 0 22px !important;
   }
-
-  .vl-chroma-container{
-    width: 95%;
-  }
-
+  .vl-chroma-container{width:92%}
   .vl-chroma-grid{
-    grid-template-columns: 1fr !important;
-    gap: 16px !important;
+    grid-template-columns:1fr !important;
+    gap:18px !important;
+    align-items:center;
+    direction:ltr;
   }
+  .vl-chroma-content{direction:rtl;text-align:center !important;min-width:0}
+  .vl-badge-premium{padding:5px 12px !important;font-size:.68rem !important;margin-bottom:10px !important}
+  .vl-chroma-title{font-size:clamp(1.7rem,7vw,2.2rem) !important;line-height:1.2 !important;margin-bottom:10px !important}
+  .vl-chroma-lead{font-size:.9rem !important;line-height:1.6;margin-bottom:14px !important;max-width:100%}
+  .vl-chroma-actions{gap:10px !important;margin-bottom:0 !important;flex-direction:column !important;align-items:center !important}
+  .btn-primary-lux{padding:11px 18px !important;border-radius:10px !important;font-size:.82rem !important;width:80% !important;text-align:center !important}
+  .btn-link-lux{padding:7px 0 !important;font-size:.78rem !important}
+  .vl-chroma-visual{order:-1 !important;min-width:0}
+  .visual-wrapper{width:75% !important;max-width:240px !important;margin-inline:auto !important}
+  .floating-card{bottom:5% !important;left:50% !important;transform:translateX(-50%) !important;padding:7px 12px !important;border-radius:10px !important;font-size:.65rem !important}
 
-  .vl-badge-premium{
-    font-size: .62rem !important;
-    padding: 4px 10px !important;
-    margin-bottom: 10px !important;
-  }
+  .sec{padding:2.5rem 0 !important}
+  .sec-head{margin-bottom:1.5rem !important}
+  .sec-head h2{font-size:clamp(1.4rem,5vw,1.8rem) !important}
+  .sec-head p{font-size:.88rem !important}
 
-  .vl-chroma-title{
-    font-size: 1.6rem !important;
-    line-height: 1.2;
-    margin-bottom: 10px !important;
-  }
+  .pgrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr)) !important;gap:1rem !important}
+  .p-card{border-radius:14px !important}
+  .p-body{padding:.8rem .9rem .9rem !important}
+  .p-body h3{font-size:.95rem !important}
+  .p-desc{font-size:.78rem !important;-webkit-line-clamp:2 !important}
+  .p-desc-link{font-size:.72rem !important}
+  .p-price{font-size:.95rem !important}
+  .p-add{padding:.35rem .7rem !important;font-size:.72rem !important}
+  .p-foot{gap:.4rem !important}
 
-  .vl-chroma-lead{
-    font-size: .82rem !important;
-    line-height: 1.6;
-    margin-bottom: 12px !important;
-  }
+  .about .wrap{gap:2rem !important}
+  .stats{gap:1.4rem !important}
+  .stat b{font-size:1.6rem !important}
 
-  .vl-chroma-actions{
-    gap: 8px !important;
-    margin-bottom: 12px !important;
-  }
+  .scent-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr)) !important;gap:.6rem !important}
+  .scent{padding:.6rem .8rem !important}
+  .scent b{font-size:.78rem !important}
 
-  .btn-primary-lux{
-    padding: 10px 16px !important;
-    font-size: .82rem !important;
-    width: 90% !important;
-  }
+  .occ-grid{grid-template-columns:1fr !important;gap:1rem !important}
+  .occ{padding:1.3rem 1.1rem !important}
 
-  .btn-link-lux{
-    font-size: .78rem !important;
-  }
+  .feat-grid{grid-template-columns:1fr !important;gap:.9rem !important}
+  .feat{padding:1rem !important}
 
-  .vl-chroma-stats{
-    font-size: .65rem !important;
-    gap: 8px !important;
-  }
+  .faq-q{padding:.9rem 1.1rem !important;font-size:.88rem !important}
 
-  .visual-wrapper{
-    width: 75% !important;
-    max-width: 200px !important;
-  }
+  .rev-card{flex:0 0 240px !important}
 
-  .floating-card{
-    padding: 6px 10px !important;
-    font-size: .62rem !important;
-  }
+  .fgrid{grid-template-columns:1fr !important;gap:1.8rem !important}
+  footer{padding:2.5rem 0 1rem !important}
 
-  .logo b{
-    font-size: 1.15rem !important;
-  }
-
-  .logo small{
-    font-size: .42rem !important;
-  }
-
-  .sec{
-    padding: 2rem 0 !important;
-  }
-
-  .pgrid{
-    grid-template-columns: 1fr !important;
-  }
+  #backToTop{width:40px;height:40px;font-size:1rem;bottom:16px}
+  #chatFab{width:50px;height:50px;font-size:1.2rem}
 }
 
-/* موبايلات صغيرة جداً (أقل من 360px) */
+@media (max-width: 420px){
+  .topbar{height:20px !important;min-height:20px !important}
+  .mq-track{font-size:.6rem !important;line-height:20px !important}
+  .mq-track span{line-height:20px !important}
+  .hrow{min-height:46px !important;height:46px !important}
+  .logo b{font-size:1.05rem !important}
+  .logo small{font-size:.4rem !important}
+  .vl-chroma-hero{padding:22px 0 16px !important}
+  .vl-chroma-title{font-size:1.5rem !important}
+  .vl-chroma-lead{font-size:.82rem !important}
+  .visual-wrapper{max-width:200px !important}
+  .btn-primary-lux{font-size:.78rem !important;width:85% !important}
+  .sec{padding:2rem 0 !important}
+  .pgrid{grid-template-columns:1fr !important}
+}
+
 @media (max-width: 360px){
-  .vl-chroma-hero{
-    padding: 20px 0 14px !important;
-  }
-
-  .vl-chroma-title{
-    font-size: 1.4rem !important;
-  }
-
-  .visual-wrapper{
-    max-width: 170px !important;
-  }
-
-  .btn-primary-lux{
-    font-size: .78rem !important;
-    padding: 9px 14px !important;
-  }
-
-  .hrow{
-    min-height: 50px !important;
-    height: 50px !important;
-  }
-
-  .logo b{
-    font-size: 1.05rem !important;
-  }
+  .hrow{min-height:44px !important;height:44px !important}
+  .logo b{font-size:.98rem !important}
+  .vl-chroma-hero{padding:18px 0 12px !important}
+  .vl-chroma-title{font-size:1.35rem !important}
+  .visual-wrapper{max-width:170px !important}
 }
