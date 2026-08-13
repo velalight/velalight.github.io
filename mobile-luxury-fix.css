@@ -120,3 +120,30 @@
   .vl-chroma-title{font-size:1.35rem !important}
   .visual-wrapper{max-width:170px !important}
 }
+
+/* ═══ تحسين الأداء على الموبايل ═══ */
+@media (max-width: 768px) {
+  .embers span,
+  .float-card {
+    animation: none !important;
+  }
+  .flame {
+    animation-duration: 4s !important;
+  }
+  .mq-track {
+    animation-duration: 50s !important;
+  }
+  .p-card,
+  .btn,
+  .occ,
+  .feat,
+  .scent {
+    will-change: auto;
+  }
+}
+
+@media (hover: none) {
+  .btn::after { display: none; }
+  .p-card:hover { transform: none; }
+  .p-card:hover .p-media img { transform: none; }
+}
