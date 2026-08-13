@@ -76,7 +76,30 @@
   flex-wrap:wrap;
 }
 </style>
-
+<style>
+/* ═══ تنسيقات جدول الأدمن (مظهر فاتح) ═══ */
+.adm-head{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.6rem}
+.adm-stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1rem 1.5rem;min-width:150px;box-shadow:var(--sh)}
+.adm-stat b{font-family:var(--fd);font-size:1.6rem;color:var(--gold2);display:block}
+.adm-stat span{font-size:.75rem;color:var(--dim)}
+.adm-tabs{display:flex;gap:.5rem;margin-bottom:1.4rem;flex-wrap:wrap}
+table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.adm th{text-align:start;color:var(--dim);font-size:.72rem;padding:.6rem .5rem;border-bottom:1px solid var(--line);background:var(--panel2)}
+.adm td{padding:.65rem .5rem;border-bottom:1px solid var(--line);vertical-align:middle}
+.adm tr:last-child td{border-bottom:none}
+.adm select{width:auto;padding:.3rem .5rem;font-size:.8rem}
+.adm-thumb{width:44px;height:44px;border-radius:10px;object-fit:cover}
+.pform{background:var(--panel);border:1px solid var(--gold);border-radius:18px;padding:1.4rem;margin-bottom:1.4rem}
+.pform .g{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.pform label{font-size:.75rem;color:var(--dim);display:block;margin:.6rem 0 .25rem}
+.hidden{display:none!important}
+@media(max-width:600px){
+  table.adm{display:block;overflow-x:auto}
+  .pform .g{grid-template-columns:1fr}
+}
+</style>
+</head>
+  
 </head>
 
 <body>
