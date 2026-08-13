@@ -158,8 +158,8 @@ prod_h2:"اختار قطعتك المفضلة",price_lbl:"💰 السعر:",from
 sort_new:"الأحدث",sort_asc:"الأرخص أولًا",sort_desc:"الأغلى أولًا",sort_rating:"الأعلى تقييمًا",sort_best:"الأكثر مبيعًا",sort_disc:"أكبر خصم",
 prod_word:"منتج",add_cart:"+ أضيفي للسلة",view_details:"👁️ عرض التفاصيل",no_products:"🕯️ مفيش منتجات",
 about_h2:"من نحن",
-about_p1:"في VelaLight لا نصنع الشموع فقط، بل نصنع لحظات تستحق أن تُعاش.",
-about_p2:"نصنع كل شمعة يدويًا بعناية.",
+about_p1:"حكايتنا بدأت من حبنا للتفاصيل الصغيرة… من إيماننا إن نور بسيط ممكن يهدّي الروح، وإن ريحة حلوة ممكن تاخدك في لحظة لذكرى بتحبيها.\n\nومع الوقت، الشغف ده كبر وبقى ورشة بنشتغل فيها على كل شمعة بهدوء وحب، وكل قطعة بتتعمل بإيدينا، واحدة واحدة… زي رسالة بنكتبها لحد غالي علينا.",
+about_p2:"بنختار لكِ شمع طبيعي ونقي، وفتايل خشب وقطن آمنة ومناسبة لبيتك، ونستخدم أرقى العطور بعناية، عشان كل شمعة يكون لها حضورها الخاص وإحساسها المختلف.\n\nوبنهتم بكل تفصيلة لحد آخر خطوة، من أول الشمعة لحد التغليف… لأننا مؤمنين إن الأناقة الحقيقية بتبدأ من التفاصيل.\n\nشموعنا مش معمولة عشان تتستخدم وخلاص… هي معمولة عشان تعيشي معاها لحظة.\n\nتنور ركن بتحبيه، تكمل فرحتك في يوم مميز، أو تضيف لمسة دافية ليوم عادي وتخليه أحلى.\n\nVelaLight… نور يشبهكِ، وعطر يفضل فاكرِك.",
 stat_clients:"عميلة سعيدة",stat_scents:"عطر مميز",stat_hand:"صناعة يدوية",
 scents_h2:"العطور الفاخرة",scents_sub:"كل العطور متاحة",
 occ_h2:"هدية لكل مناسبة",
@@ -236,7 +236,9 @@ trust1:"🚚 Delivery all over Egypt",trust2:"🤲 100% Handmade",trust3:"🎁 F
 prod_h2:"Choose Your Favorite",price_lbl:"💰 Price:",from_ph:"From",to_ph:"To",sort_lbl:"Sort:",
 sort_new:"Newest",sort_asc:"Low to High",sort_desc:"High to Low",sort_rating:"Top Rated",sort_best:"Best Selling",sort_disc:"Biggest Discount",
 prod_word:"products",add_cart:"+ Add to Cart",view_details:"👁️ View",no_products:"🕯️ No products",
-about_h2:"About Us",about_p1:"We craft moments worth living.",about_p2:"Every candle is handcrafted.",
+about_h2:"About Us",
+about_p1:"Our story began with a love for the little details… with a belief that a simple light can calm the soul, and that a lovely scent can take you — in a moment — back to a memory you love.\n\nWith time, that passion grew into a workshop where we make every candle slowly and with love. Every piece is made by our hands, one by one… like a letter written to someone dear.",
+about_p2:"We choose for you pure natural wax, safe wood and cotton wicks that suit your home, and we blend the finest scents with care — so every candle has its own presence and its own feeling.\n\nAnd we care for every detail all the way to the last step, from the candle itself to the wrapping… because we believe true elegance starts from the details.\n\nOur candles aren't made just to be used… they're made for you to live a moment with them.\n\nTo light up a corner you love, to complete your joy on a special day, or to add a warm touch to an ordinary day and make it prettier.\n\nVelaLight… a light that feels like you, and a scent that keeps remembering you.",
 stat_clients:"Happy Clients",stat_scents:"Scents",stat_hand:"Handmade",
 scents_h2:"Luxury Scents",scents_sub:"All scents available",
 occ_h2:"A Gift for Every Occasion",
@@ -298,3 +300,6 @@ wa_head:"🕯️ New order",wa_order:"🧾 Order ID:",wa_scent:"Scent",wa_total:
 t_scentwarn:"⚠️ Please choose a scent first"
 }};
 const t=k=>(I18N[LANG]&&I18N[LANG][k])||I18N.ar[k]||k;
+
+/* ═══ تنسيق فقرات "من نحن" ═══ */
+(function(){var s=document.createElement("style");s.textContent=".about p{white-space:pre-line}";(document.head||document.documentElement).appendChild(s);})();
