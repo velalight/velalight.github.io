@@ -1,7 +1,6 @@
 const CFG={
-WHATSAPP:"201000000000",
-INSTAPAY:"velalight@instapay",
-SHIPPING:60,
+WHATSAPP:"201223526105",
+INSTAPAY:"",
 ADMIN_PIN:"2846",
 REPO:"velalight/velalight.github.io@main",
 FIREBASE:{
