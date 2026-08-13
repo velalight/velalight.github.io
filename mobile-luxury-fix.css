@@ -268,4 +268,79 @@
   .mq-track {
     animation-duration: 60s !important;
   }
+/* ═══════════════════════════════════════
+   تسريع جذري للموبايل (إضافة آمنة)
+   - ما بيلمسش اللابتوب
+   - ما بيلمسش الصور
+   - ما بيلمسش شكل البطاقة الطايرة أو الشمعة
+   ═══════════════════════════════════════ */
+@media (max-width: 900px) {
+
+  /* 1. المتصفح ميرندرش الأقسام اللي تحت الشاشة إلا لما تقربي ليها
+     ده أكبر تسريع ممكن للموبايل - بيقلل الشغل على المعالج */
+  #products, #about-us, #scents, #occasions, #features, #faq-section, #reviews, footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 900px;
+  }
+
+  /* 2. وقف الـ blur التقيل في خلفية الهيرو (blob)
+     blur(80px) بياكل معالج الموبايل جدًا */
+  .vl-chroma-bg .blob {
+    animation: none !important;
+    filter: blur(40px) !important;
+  }
+
+  /* 3. وقف الهالة المتوهجة حول الشمعة (visual-glow)
+     نفس المشكلة - blur كبير بيتحرك */
+  .visual-glow {
+    animation: none !important;
+    opacity: 0.6 !important;
+  }
+
+  /* 4. الهيدر: شيلي الـ backdrop-filter التقيل
+     ده أكبر سبب في تقطيع السكرول على الموبايل */
+  header {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(250, 246, 240, 0.98) !important;
+  }
+
+  /* 5. الشريط المتحرك (topbar) أبطأ وأخف */
+  .mq-track {
+    animation-duration: 60s !important;
+  }
+
+  /* 6. أوقفي أنيميشن morphing على الشمعة (تغيير شكل الحدود)
+     الحركة دي بتترندر كل فريم وبتاكل موارد */
+  .hero-img-main {
+    animation: none !important;
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70% !important;
+  }
+
+  /* 7. أوقفي تدفق اللون الذهبي على النص (chromaFlow)
+     حركة background-position متكررة بتأكل من المعالج */
+  .text-gradient {
+    animation: none !important;
+    background: linear-gradient(135deg, #b68d2e 0%, #d4af37 50%, #b68d2e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* ═══════════════════════════════════════
+   لموبايلات أصغر (أقل من 480px) - تحسينات إضافية
+   ═══════════════════════════════════════ */
+@media (max-width: 480px) {
+
+  /* إيقاف الـ backdrop-filter على كل البطاقات المنبثقة */
+  .mpanel, .drawer, .chat-h {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* إيقاف الأنيميشن على الشات فاب */
+  #chatFab {
+    animation: none !important;
+  }
+}
 }
