@@ -1,93 +1,122 @@
 /* =========================================================
-   VelaLight — MOBILE LUXURY FIX + PERFORMANCE OPTIMIZATION
-   يحافظ على الشكل ويخفف الحمل على الموبايل
+   VelaLight — MOBILE LUXURY FIX V3 (Beige Edition)
    ========================================================= */
 
 @media (max-width: 900px) {
-  .vl-chroma-hero{ min-height:auto; height:auto; padding:24px 0 28px }
-  .vl-chroma-container{ width:min(94%,700px) }
-  .vl-chroma-grid{ grid-template-columns:.92fr 1.08fr; gap:12px; align-items:center; direction:ltr }
-  .vl-chroma-content{ direction:rtl; text-align:right; min-width:0 }
-  .vl-badge-premium{ padding:5px 10px; font-size:.63rem; margin-bottom:10px; white-space:nowrap }
-  .vl-chroma-title{ font-size:clamp(1.65rem,7vw,2.35rem); line-height:1.18; margin-bottom:10px }
-  .vl-chroma-lead{ font-size:.82rem; line-height:1.7; margin-bottom:14px; max-width:100% }
-  .vl-chroma-actions{ gap:9px; margin-bottom:14px; flex-wrap:wrap }
-  .btn-primary-lux{ padding:9px 13px; border-radius:9px; font-size:.72rem; white-space:nowrap }
-  .btn-link-lux{ padding:8px 0; font-size:.72rem; white-space:nowrap }
-  .vl-chroma-stats{ gap:7px; font-size:.57rem; flex-wrap:nowrap; white-space:nowrap }
-  .stat-sep{ width:3px; height:3px; flex:0 0 3px }
-  .vl-chroma-visual{ order:initial; min-width:0 }
-  .visual-wrapper{ width:min(100%,310px); max-width:310px; margin-inline:auto }
-  .hero-img-main{ width:100%; height:100% }
-  .floating-card{ bottom:7%; left:-3%; padding:7px 10px; border-radius:10px; font-size:.58rem }
-  .topbar{ height:28px; min-height:28px; overflow:hidden }
-  .mq-track{ font-size:.62rem; line-height:28px; white-space:nowrap }
-  header{ min-height:60px }
-  .hrow{ min-height:60px; height:60px; padding-inline:9px; gap:6px }
-  .logo{ flex-shrink:1; min-width:0 }
-  .logo b{ font-size:1.35rem; white-space:nowrap; letter-spacing:.02em }
-  .logo small{ font-size:.43rem; white-space:nowrap }
-  .hact{ gap:3px; flex-shrink:0 }
-  .hact .icobtn{ width:34px; height:34px; min-width:34px }
-  .langbtn{ min-width:35px; height:30px; padding:0 5px; font-size:.68rem }
-  .mainnav{ display:none }
 
-  /* ═══════════════════════════════════════
-     PERFORMANCE: تعطيل الأنيميشن الثقيلة على الموبايل
-     ═══════════════════════════════════════ */
-  .flame { animation-duration: 3s !important; }
-  .embers span { animation: none !important; display: none !important; }
-  .float-card { animation: none !important; }
-  .mq-track { animation-duration: 60s !important; }
+  .topbar{
+    height:22px !important;
+    min-height:22px !important;
+    font-size:.65rem !important;
+    overflow:hidden;
+  }
+  .mq-track{
+    font-size:.65rem !important;
+    line-height:22px !important;
+    gap:2rem !important;
+    white-space:nowrap;
+  }
+  .mq-track span{line-height:22px !important}
+
+  header{min-height:50px !important}
+  .hrow{
+    min-height:50px !important;
+    height:50px !important;
+    padding-inline:10px !important;
+    gap:6px !important;
+  }
+  .logo{flex-shrink:1;min-width:0}
+  .logo b{font-size:1.15rem !important;white-space:nowrap;letter-spacing:.02em}
+  .logo small{font-size:.45rem !important;white-space:nowrap}
+  .flame{width:10px !important;height:15px !important}
+  .hact{gap:3px !important;flex-shrink:0}
+  .hact .icobtn{width:34px !important;height:34px !important;min-width:34px !important;font-size:.9rem !important}
+  .langbtn{min-width:34px !important;height:28px !important;padding:0 5px !important;font-size:.65rem !important}
+  .mainnav{display:none}
+
+  .vl-chroma-hero{
+    min-height:auto !important;
+    height:auto !important;
+    padding:28px 0 22px !important;
+  }
+  .vl-chroma-container{width:92%}
+  .vl-chroma-grid{
+    grid-template-columns:1fr !important;
+    gap:18px !important;
+    align-items:center;
+    direction:ltr;
+  }
+  .vl-chroma-content{direction:rtl;text-align:center !important;min-width:0}
+  .vl-badge-premium{padding:5px 12px !important;font-size:.68rem !important;margin-bottom:10px !important}
+  .vl-chroma-title{font-size:clamp(1.7rem,7vw,2.2rem) !important;line-height:1.2 !important;margin-bottom:10px !important}
+  .vl-chroma-lead{font-size:.9rem !important;line-height:1.6;margin-bottom:14px !important;max-width:100%}
+  .vl-chroma-actions{gap:10px !important;margin-bottom:0 !important;flex-direction:column !important;align-items:center !important}
+  .btn-primary-lux{padding:11px 18px !important;border-radius:10px !important;font-size:.82rem !important;width:80% !important;text-align:center !important}
+  .btn-link-lux{padding:7px 0 !important;font-size:.78rem !important}
+  .vl-chroma-visual{order:-1 !important;min-width:0}
+  .visual-wrapper{width:75% !important;max-width:240px !important;margin-inline:auto !important}
+  .floating-card{bottom:5% !important;left:50% !important;transform:translateX(-50%) !important;padding:7px 12px !important;border-radius:10px !important;font-size:.65rem !important}
+
+  .sec{padding:2.5rem 0 !important}
+  .sec-head{margin-bottom:1.5rem !important}
+  .sec-head h2{font-size:clamp(1.4rem,5vw,1.8rem) !important}
+  .sec-head p{font-size:.88rem !important}
+
+  .pgrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr)) !important;gap:1rem !important}
+  .p-card{border-radius:14px !important}
+  .p-body{padding:.8rem .9rem .9rem !important}
+  .p-body h3{font-size:.95rem !important}
+  .p-desc{font-size:.78rem !important;-webkit-line-clamp:2 !important}
+  .p-desc-link{font-size:.72rem !important}
+  .p-price{font-size:.95rem !important}
+  .p-add{padding:.35rem .7rem !important;font-size:.72rem !important}
+  .p-foot{gap:.4rem !important}
+
+  .about .wrap{gap:2rem !important}
+  .stats{gap:1.4rem !important}
+  .stat b{font-size:1.6rem !important}
+
+  .scent-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr)) !important;gap:.6rem !important}
+  .scent{padding:.6rem .8rem !important}
+  .scent b{font-size:.78rem !important}
+
+  .occ-grid{grid-template-columns:1fr !important;gap:1rem !important}
+  .occ{padding:1.3rem 1.1rem !important}
+
+  .feat-grid{grid-template-columns:1fr !important;gap:.9rem !important}
+  .feat{padding:1rem !important}
+
+  .faq-q{padding:.9rem 1.1rem !important;font-size:.88rem !important}
+
+  .rev-card{flex:0 0 240px !important}
+
+  .fgrid{grid-template-columns:1fr !important;gap:1.8rem !important}
+  footer{padding:2.5rem 0 1rem !important}
+
+  #backToTop{width:40px;height:40px;font-size:1rem;bottom:16px}
+  #chatFab{width:50px;height:50px;font-size:1.2rem}
 }
 
-@media (max-width: 420px) {
-  .vl-chroma-hero{ padding:18px 0 22px }
-  .vl-chroma-container{ width:95% }
-  .vl-chroma-grid{ grid-template-columns:.94fr 1.06fr; gap:7px }
-  .vl-badge-premium{ font-size:.55rem; padding:4px 7px; margin-bottom:7px }
-  .vl-chroma-title{ font-size:1.48rem; line-height:1.2; margin-bottom:7px }
-  .vl-chroma-lead{ font-size:.68rem; line-height:1.6; margin-bottom:9px }
-  .vl-chroma-actions{ gap:6px; margin-bottom:9px }
-  .btn-primary-lux{ padding:7px 9px; font-size:.62rem }
-  .btn-link-lux{ font-size:.61rem }
-  .vl-chroma-stats{ font-size:.47rem; gap:4px }
-  .visual-wrapper{ width:min(100%,190px) }
-  .floating-card{ padding:5px 7px; font-size:.48rem }
-  .logo b{ font-size:1.22rem }
-  .logo small{ font-size:.38rem }
+@media (max-width: 420px){
+  .topbar{height:20px !important;min-height:20px !important}
+  .mq-track{font-size:.6rem !important;line-height:20px !important}
+  .mq-track span{line-height:20px !important}
+  .hrow{min-height:46px !important;height:46px !important}
+  .logo b{font-size:1.05rem !important}
+  .logo small{font-size:.4rem !important}
+  .vl-chroma-hero{padding:22px 0 16px !important}
+  .vl-chroma-title{font-size:1.5rem !important}
+  .vl-chroma-lead{font-size:.82rem !important}
+  .visual-wrapper{max-width:200px !important}
+  .btn-primary-lux{font-size:.78rem !important;width:85% !important}
+  .sec{padding:2rem 0 !important}
+  .pgrid{grid-template-columns:1fr !important}
 }
 
-/* ═══════════════════════════════════════
-   GLOBAL PERFORMANCE IMPROVEMENTS
-   ═══════════════════════════════════════ */
-
-/* تحسين رفع الصور */
-img {
-  content-visibility: auto;
-}
-
-/* تقليل repaint عند الأنيميشن */
-.p-card, .btn, .occ, .feat, .scent, .rev-card {
-  will-change: auto !important;
-  transform: translateZ(0);
-}
-
-/* تحسين الـ hover على الموبايل */
-@media (hover: none) {
-  .p-card:hover { transform: none; }
-  .btn:hover { transform: none; }
-  .p-card:hover .p-media img { transform: none; }
-  .p-quick { display: none; }
-  .btn::after { display: none; }
-}
-
-/* تحسين الـ scrolling */
-html, body {
-  -webkit-overflow-scrolling: touch;
-}
-
-.rev-row, .mq-track {
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
+@media (max-width: 360px){
+  .hrow{min-height:44px !important;height:44px !important}
+  .logo b{font-size:.98rem !important}
+  .vl-chroma-hero{padding:18px 0 12px !important}
+  .vl-chroma-title{font-size:1.35rem !important}
+  .visual-wrapper{max-width:170px !important}
 }
