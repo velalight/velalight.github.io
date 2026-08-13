@@ -238,3 +238,34 @@
   padding:1.8rem;
   box-shadow:0 20px 50px -20px rgba(100,70,30,.25);
 }
+/* ═══════════════════════════════════════
+   تسريع جذري للموبايل (إضافة آمنة)
+   ═══════════════════════════════════════ */
+@media (max-width: 900px) {
+
+  /* المتصفح ميرندرش الأقسام اللي تحت الشاشة إلا لما تقربي ليها */
+  #products, #about-us, #scents, #occasions, #features, #faq-section, #reviews, footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 900px;
+  }
+
+  /* إيقاف الأنيميشن اللي بتاكل معالج الموبايل */
+  .vl-chroma-bg .blob,
+  .visual-glow,
+  .embers span,
+  .floating-card {
+    animation: none !important;
+  }
+
+  /* الهيدر: شيلي الـ blur التقيل وخليه خلفية صلبة أثناء السكرول */
+  header {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: var(--bg) !important;
+  }
+
+  /* الشريط المتحرك أبطأ وأخف */
+  .mq-track {
+    animation-duration: 60s !important;
+  }
+}
