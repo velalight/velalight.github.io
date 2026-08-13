@@ -41,7 +41,12 @@ try{window.ttq&&ttq.track({purchase:"CompletePayment"}[ev]||ev,d)}catch(e){}
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 let LANG=localStorage.getItem("vl_lang")||"ar";
 const money=n=>Number(n||0).toLocaleString("en-US")+" "+(LANG==="en"?"EGP":"ج.م");
+
+/* ═══════════════════════════════════════
+   CDN - من موقعك مباشرة (مش jsDelivr)
+   ═══════════════════════════════════════ */
 const CDN=u=>{if(!u)return"";if(u.startsWith("data:")||u.startsWith("http"))return u;return `https://velalight.github.io/${u}`};
+
 function toast(m){if(!$("#toasts"))return;const d=document.createElement("div");d.className="toast";d.textContent=m;$("#toasts").appendChild(d);setTimeout(()=>d.remove(),3200)}
 
 const CATS={ar:{all:"كل الشموع",wood:"شموع خشبية",glass:"شموع زجاجية",crystal:"شموع كريستالية",metal:"شموع معدنية",massage:"شموع المساج",gift:"الهدايا",bride:"بوكس العروسة"},
@@ -58,58 +63,36 @@ const STATUS=["قيد المراجعة","جاري التجهيز","تم الشح
 
 const D=864e5,NOW=Date.now();
 const PRODUCTS=[
-{id:"1",name:"الشمعة الفاخرة (مجموعة 3 شموع)",nameEn:"Luxury Candle Set (3 Candles)",cat:"wood",price:650,old:750,badge:"خصم",badgeEn:"Sale",hours:"3 شموع × 72 ساعة",hoursEn:"3 candles × 72h",scents:["عود","فانيليا","مسك أبيض"],img:"RRRR.jpg",imgs:["RRRR.jpg","RRRRR.jpg","RRRRRR.jpg","RR.jpg","RRR.jpg"],sold:0,createdAt:NOW-1*D,
-desc:"ثلاث شموع فاخرة في مجموعة واحدة، صُممت لتتناغم معًا كسيمفونية من الضوء والعطر.",
-descEn:"Three luxury candles in one curated set."},
-{id:"2",name:"شمعة نبضين",nameEn:"Two Heartbeats Candle",cat:"wood",price:650,old:750,badge:"خصم",badgeEn:"Sale",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["ورد","فانيليا","مسك أبيض"],img:"heart2.jpg",imgs:["heart2.jpg","heart3.jpg","heart1.jpg"],sold:0,createdAt:NOW-2*D,
-desc:"ليست مجرد شمعة... بل قطعة تُحاكي المشاعر.",
-descEn:"More than a candle — a piece that echoes emotions."},
-{id:"3",name:"جولدن كاندل",nameEn:"Golden Candle Set",cat:"glass",price:2850,old:3600,badge:"خصم",badgeEn:"Sale",hours:"3 شموع × 96 ساعة",hoursEn:"3 candles × 96h",scents:["عنبر","عود","كراميل"],img:"candle1.jpg",imgs:["candle1.jpg","candle2.jpg","candle3.jpg","candle4.jpg","candle5.jpg"],sold:0,createdAt:NOW-3*D,
-desc:"مجموعة من ثلاث شموع في أوانٍ زجاجية فاخرة.",
-descEn:"A set of three candles in luxurious glass vessels."},
-{id:"4",name:"شمعة الأيس كوفي",nameEn:"Iced Coffee Candle",cat:"glass",price:425,old:550,badge:"خصم",badgeEn:"Sale",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["قهوة","موكا","فانيليا"],img:"iccoffe1.jpg",imgs:["iccoffe1.jpg","iccoffe2.jpg","iccoffe3.jpg","iccoffe4.jpg"],sold:0,createdAt:NOW-4*D,
-desc:"شمعة آيس كوفي صُنعت لتأخذك إلى هدوء المقاهي الراقية.",
-descEn:"Iced coffee candle for calm moments."},
-{id:"5",name:"شمعة المانديلا",nameEn:"Mandala Candle",cat:"metal",price:325,old:0,badge:"الأكثر مبيعًا",badgeEn:"Best Seller",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["عود","عنبر","قرفة"],img:"mandle.jpg",imgs:["mandle.jpg"],sold:0,createdAt:NOW-5*D,
-desc:"الأكثر مبيعًا... والأقرب إلى كل بيت يعشق التفاصيل الراقية.",
-descEn:"The best-seller."},
-{id:"6",name:"شمعة المساج",nameEn:"Massage Candle",cat:"metal",price:325,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["لافندر","ياسمين","كوكونات"],img:"gift1.jpg",imgs:["gift1.jpg","gift2.jpg","gift3.jpg","gift4.jpg","gift5.jpg","gift6.jpg","gift7.jpg"],sold:0,createdAt:NOW-6*D,
-desc:"تجربة عناية فاخرة تبدأ بوهجٍ هادئ وتنتهي ببشرة أكثر نعومة.",
-descEn:"A luxury care experience."},
-{id:"7",name:"شمعة كريستال ذهبية",nameEn:"Crystal Gold Candle",cat:"crystal",price:750,old:900,badge:"خصم",badgeEn:"Sale",hours:"96 ساعة اشتعال",hoursEn:"96h burn time",scents:["عنبر","ورد","مسك أبيض"],img:"candle13.jpg",imgs:["candle13.jpg"],sold:0,createdAt:NOW-7*D,
-desc:"قطعة استثنائية في إناء كريستال فاخر.",
-descEn:"An exceptional piece in a luxury crystal vessel."},
-{id:"8",name:"بلو كريستال",nameEn:"Blue Crystal",cat:"crystal",price:720,old:0,badge:"",badgeEn:"",hours:"96 ساعة اشتعال",hoursEn:"96h burn time",scents:["توت","أناناس","لافندر"],img:"candle14.jpg",imgs:["candle14.jpg"],sold:0,createdAt:NOW-8*D,
-desc:"شمعة كريستالية بلون أزرق أنيق.",
-descEn:"A crystal candle with elegant blue color."},
-{id:"9",name:"لافندر (جلاس)",nameEn:"Lavender (Glass)",cat:"glass",price:430,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["لافندر","باتشولي","مسك أبيض"],img:"candle9.jpg",imgs:["candle9.jpg"],sold:0,createdAt:NOW-9*D,
-desc:"شمعة زجاجية بعطر اللافندر الفرنسي المهدئ.",
-descEn:"A glass candle with calming French lavender scent."},
-{id:"10",name:"ياسمين (جلاس)",nameEn:"Jasmine (Glass)",cat:"glass",price:440,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["ياسمين","فل","ورد"],img:"candle10.jpg",imgs:["candle10.jpg"],sold:0,createdAt:NOW-10*D,
-desc:"شمعة زجاجية بعطر الياسمين النقي.",
-descEn:"A glass candle with pure jasmine scent."},
-{id:"11",name:"فانيليا (جلاس)",nameEn:"Vanilla (Glass)",cat:"glass",price:400,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["فانيليا","كراميل","موكا"],img:"candle11.jpg",imgs:["candle11.jpg"],sold:0,createdAt:NOW-11*D,
-desc:"شمعة زجاجية بعطر الفانيلا الكلاسيكي.",
-descEn:"A glass candle with classic vanilla scent."},
-{id:"12",name:"شمعة مساج ريلاكس",nameEn:"Relax Massage Candle",cat:"massage",price:380,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["لافندر","فل","مسك أبيض"],img:"candle19.jpg",imgs:["candle19.jpg"],sold:0,createdAt:NOW-12*D,
-desc:"شمعة مساج بعطر اللافندر المهدئ.",
-descEn:"A massage candle with calming lavender scent."},
-{id:"13",name:"بوكس هدية فاخر",nameEn:"Luxury Gift Box",cat:"gift",price:850,old:0,badge:"",badgeEn:"",hours:"شمعة + إكسسوارات",hoursEn:"Candle + accessories",scents:["عود","عنبر","ورد"],img:"gifta.jpg",imgs:["gifta.jpg"],sold:0,createdAt:NOW-13*D,
-desc:"بوكس هدايا فاخر بتغليف ملكي.",
-descEn:"A luxury gift box with royal wrapping."},
-{id:"14",name:"بوكس العروسة",nameEn:"Bride Box",cat:"bride",price:1500,old:0,badge:"الأكثر طلبًا",badgeEn:"Most Requested",hours:"بوكس متكامل",hoursEn:"Complete box",scents:["ورد","ياسمين","مسك أبيض","فانيليا"],img:"box1.jpg",imgs:["box1.jpg"],sold:0,createdAt:NOW-14*D,
-desc:"أفخم بوكس عروسة.",
-descEn:"The most luxurious bride box."}
+{id:"1",name:"الشمعة الفاخرة (مجموعة 3 شموع)",nameEn:"Luxury Candle Set (3 Candles)",cat:"wood",price:650,old:750,badge:"خصم",badgeEn:"Sale",hours:"3 شموع × 72 ساعة",hoursEn:"3 candles × 72h",scents:["عود","فانيليا","مسك أبيض"],img:"RRRR.jpg",imgs:["RRRR.jpg","RRRRR.jpg","RRRRRR.jpg","RR.jpg","RRR.jpg"],sold:0,createdAt:NOW-1*D,desc:"ثلاث شموع فاخرة في مجموعة واحدة، صُممت لتتناغم معًا كسيمفونية من الضوء والعطر.",descEn:"Three luxury candles in one curated set."},
+{id:"2",name:"شمعة نبضين",nameEn:"Two Heartbeats Candle",cat:"wood",price:650,old:750,badge:"خصم",badgeEn:"Sale",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["ورد","فانيليا","مسك أبيض"],img:"heart2.jpg",imgs:["heart2.jpg","heart3.jpg","heart1.jpg"],sold:0,createdAt:NOW-2*D,desc:"ليست مجرد شمعة... بل قطعة تُحاكي المشاعر.",descEn:"More than a candle — a piece that echoes emotions."},
+{id:"3",name:"جولدن كاندل",nameEn:"Golden Candle Set",cat:"glass",price:2850,old:3600,badge:"خصم",badgeEn:"Sale",hours:"3 شموع × 96 ساعة",hoursEn:"3 candles × 96h",scents:["عنبر","عود","كراميل"],img:"candle1.jpg",imgs:["candle1.jpg","candle2.jpg","candle3.jpg","candle4.jpg","candle5.jpg"],sold:0,createdAt:NOW-3*D,desc:"مجموعة من ثلاث شموع في أوانٍ زجاجية فاخرة.",descEn:"A set of three candles in luxurious glass vessels."},
+{id:"4",name:"شمعة الأيس كوفي",nameEn:"Iced Coffee Candle",cat:"glass",price:425,old:550,badge:"خصم",badgeEn:"Sale",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["قهوة","موكا","فانيليا"],img:"iccoffe1.jpg",imgs:["iccoffe1.jpg","iccoffe2.jpg","iccoffe3.jpg","iccoffe4.jpg"],sold:0,createdAt:NOW-4*D,desc:"شمعة آيس كوفي صُنعت لتأخذك إلى هدوء المقاهي الراقية.",descEn:"Iced coffee candle for calm moments."},
+{id:"5",name:"شمعة المانديلا",nameEn:"Mandala Candle",cat:"metal",price:325,old:0,badge:"الأكثر مبيعًا",badgeEn:"Best Seller",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["عود","عنبر","قرفة"],img:"mandle.jpg",imgs:["mandle.jpg"],sold:0,createdAt:NOW-5*D,desc:"الأكثر مبيعًا... والأقرب إلى كل بيت يعشق التفاصيل الراقية.",descEn:"The best-seller."},
+{id:"6",name:"شمعة المساج",nameEn:"Massage Candle",cat:"metal",price:325,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["لافندر","ياسمين","كوكونات"],img:"gift1.jpg",imgs:["gift1.jpg","gift2.jpg","gift3.jpg","gift4.jpg","gift5.jpg","gift6.jpg","gift7.jpg"],sold:0,createdAt:NOW-6*D,desc:"تجربة عناية فاخرة تبدأ بوهجٍ هادئ وتنتهي ببشرة أكثر نعومة.",descEn:"A luxury care experience."},
+{id:"7",name:"شمعة كريستال ذهبية",nameEn:"Crystal Gold Candle",cat:"crystal",price:750,old:900,badge:"خصم",badgeEn:"Sale",hours:"96 ساعة اشتعال",hoursEn:"96h burn time",scents:["عنبر","ورد","مسك أبيض"],img:"candle13.jpg",imgs:["candle13.jpg"],sold:0,createdAt:NOW-7*D,desc:"قطعة استثنائية في إناء كريستال فاخر.",descEn:"An exceptional piece in a luxury crystal vessel."},
+{id:"8",name:"بلو كريستال",nameEn:"Blue Crystal",cat:"crystal",price:720,old:0,badge:"",badgeEn:"",hours:"96 ساعة اشتعال",hoursEn:"96h burn time",scents:["توت","أناناس","لافندر"],img:"candle14.jpg",imgs:["candle14.jpg"],sold:0,createdAt:NOW-8*D,desc:"شمعة كريستالية بلون أزرق أنيق.",descEn:"A crystal candle with elegant blue color."},
+{id:"9",name:"لافندر (جلاس)",nameEn:"Lavender (Glass)",cat:"glass",price:430,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["لافندر","باتشولي","مسك أبيض"],img:"candle9.jpg",imgs:["candle9.jpg"],sold:0,createdAt:NOW-9*D,desc:"شمعة زجاجية بعطر اللافندر الفرنسي المهدئ.",descEn:"A glass candle with calming French lavender scent."},
+{id:"10",name:"ياسمين (جلاس)",nameEn:"Jasmine (Glass)",cat:"glass",price:440,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["ياسمين","فل","ورد"],img:"candle10.jpg",imgs:["candle10.jpg"],sold:0,createdAt:NOW-10*D,desc:"شمعة زجاجية بعطر الياسمين النقي.",descEn:"A glass candle with pure jasmine scent."},
+{id:"11",name:"فانيليا (جلاس)",nameEn:"Vanilla (Glass)",cat:"glass",price:400,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["فانيليا","كراميل","موكا"],img:"candle11.jpg",imgs:["candle11.jpg"],sold:0,createdAt:NOW-11*D,desc:"شمعة زجاجية بعطر الفانيلا الكلاسيكي.",descEn:"A glass candle with classic vanilla scent."},
+{id:"12",name:"شمعة مساج ريلاكس",nameEn:"Relax Massage Candle",cat:"massage",price:380,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["لافندر","فل","مسك أبيض"],img:"candle19.jpg",imgs:["candle19.jpg"],sold:0,createdAt:NOW-12*D,desc:"شمعة مساج بعطر اللافندر المهدئ.",descEn:"A massage candle with calming lavender scent."},
+{id:"13",name:"بوكس هدية فاخر",nameEn:"Luxury Gift Box",cat:"gift",price:850,old:0,badge:"",badgeEn:"",hours:"شمعة + إكسسوارات",hoursEn:"Candle + accessories",scents:["عود","عنبر","ورد"],img:"gifta.jpg",imgs:["gifta.jpg"],sold:0,createdAt:NOW-13*D,desc:"بوكس هدايا فاخر بتغليف ملكي.",descEn:"A luxury gift box with royal wrapping."},
+{id:"14",name:"بوكس العروسة",nameEn:"Bride Box",cat:"bride",price:1500,old:0,badge:"الأكثر طلبًا",badgeEn:"Most Requested",hours:"بوكس متكامل",hoursEn:"Complete box",scents:["ورد","ياسمين","مسك أبيض","فانيليا"],img:"box1.jpg",imgs:["box1.jpg"],sold:0,createdAt:NOW-14*D,desc:"أفخم بوكس عروسة.",descEn:"The most luxurious bride box."}
 ];
 
 function ph(p){const T={wood:["#3a2417","#8a5a33"],glass:["#1c2a36","#7fa6c4"],crystal:["#33290f","#e2c078"],metal:["#2b2118","#c09a5e"],massage:["#2a2233","#a98cc9"],gift:["#331d1d","#d98a7e"],bride:["#33242e","#e3b7c8"]}[p.cat]||["#2b2118","#c09a5e"];
 const s=`<svg xmlns='http://www.w3.org/2000/svg' width='900' height='900'><defs><radialGradient id='g' cx='50%' cy='36%' r='78%'><stop offset='0%' stop-color='${T[1]}' stop-opacity='.5'/><stop offset='58%' stop-color='${T[0]}'/><stop offset='100%' stop-color='#120d0a'/></radialGradient><linearGradient id='j' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='${T[1]}' stop-opacity='.92'/><stop offset='1' stop-color='${T[0]}'/></linearGradient></defs><rect width='900' height='900' fill='url(#g)'/><ellipse cx='450' cy='320' rx='150' ry='170' fill='#ffb757' opacity='.10'/><ellipse cx='450' cy='340' rx='75' ry='95' fill='#ffcf7d' opacity='.13'/><path d='M450 296 q28 36 0 66 q-28 -30 0 -66' fill='#ffcf7d'/><rect x='445' y='360' width='10' height='32' rx='4' fill='#241610'/><rect x='328' y='392' width='244' height='292' rx='28' fill='url(#j)'/><rect x='328' y='392' width='244' height='292' rx='28' fill='#fff' opacity='.05'/><rect x='352' y='474' width='196' height='122' rx='12' fill='#0f0a08' opacity='.58'/><text x='450' y='528' font-family='Georgia' font-size='34' fill='#e9c87a' text-anchor='middle'>VelaLight</text><text x='450' y='566' font-family='Georgia' font-size='16' fill='#cbb287' text-anchor='middle'>Luxury Candle</text></svg>`;
 return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s)}
 
-const function imgsOf(p){const raw=String(p.img||"").split(",").map(s=>s.trim()).filter(Boolean);const arr=(p.imgs&&p.imgs.length)?p.imgs:[];if(raw.length&&arr.length&&arr[0]===raw[0])return arr;if(raw.length)return raw;return arr}
+/* ═══════════════════════════════════════
+   imgsOf - يفضل صور الفايربيز الجديدة
+   ═══════════════════════════════════════ */
+const imgsOf=p=>{const raw=String(p.img||"").split(",").map(s=>s.trim()).filter(Boolean);const arr=(p.imgs&&p.imgs.length)?p.imgs:[];if(raw.length&&arr.length&&arr[0]===raw[0])return arr;if(raw.length)return raw;return arr};
 
-                                                                                           
+/* ═══════════════════════════════════════
+   imgOf - يضغط الصور تلقائياً
+   ═══════════════════════════════════════ */
 const imgOf=(p,w=800)=>{const a=imgsOf(p);if(!a.length)return ph(p);const u=CDN(a[0]);try{return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&w=${w}&q=75&output=webp&default=${encodeURIComponent(u)}`}catch(e){return u}};
+
 const pname=p=>LANG==="en"?(p.nameEn||p.en||p.name):p.name;
 const pdesc=p=>LANG==="en"?(p.descEn||p.desc||""):(p.desc||"");
 const phours=p=>LANG==="en"?(p.hoursEn||p.hours||"72h"):(p.hours||"72 ساعة");
@@ -221,7 +204,7 @@ pd_scent_t:"🌸 اختاري العطر:",pd_qty_t:"الكمية:",pd_add:"🛍
 pd_hours:"مدة الاشتعال:",pd_materials:"الخامات:",pd_ship:"التوصيل:",pd_ship_v:"3–7 أيام",
 pd_materials_v:"شمع طبيعي 100%",pd_gift:"تغليف هدايا مجاني",pd_gift_v:"مع كل طلب",
 pd_exchange:"ضمان استبدال",pd_exchange_v:"خلال 3 أيام",crumb_home:"الرئيسية",
-pd_rev_h2:"مراجعات المنتج",pd_first:"كوني أول من يراجع",
+pd_rev_h2:"مراجعات المنتج",pd_first:"كوني أول من تراجع",
 pd_form_t:"ضيفي مراجعتك ⭐",pd_name_ph:"اسمك",pd_text_ph:"اكتبي رأيك...",pd_photo_ph:"رابط صورة",pd_submit:"إرسال",pd_note:"المراجعة بتظهر بعد الموافقة",
 pd_rel_h2:"منتجات هتعجبك",pd_share:"مشاركة:",pd_notfound:"😕 المنتج مش موجود",pd_sold:"تم بيعه",pd_times:"مرة",
 chat_name:"مساعد VelaLight",chat_sub:"دليلك الشخصي",
@@ -236,7 +219,8 @@ t_added:"🕯️ تم الإضافة",t_fill:"⚠️ كمّلي البيانات
 t_order:"✅ تم تسجيل طلبك",t_revok:"💛 شكرًا!",t_revwarn:"⚠️ اكتبي اسمك ومراجعتك",
 t_trkwarn:"⚠️ دخّلي رقم الطلب",t_saved:"💾 تم الحفظ",t_lang_ar:"تم التحويل للعربية",t_lang_en:"English",
 t_confirm_empty:"هتفضّي السلة؟",t_confirm_del:"متأكدة؟",t_go_cart:"🛍️ اذهبي للسلة",
-wa_head:"🕯️ طلب جديد",wa_order:"🧾 رقم الطلب:",wa_scent:"العطر",wa_total:"💰 الإجمالي:",wa_ship:"🚚 الشحن:",wa_cod:"(كاش)",wa_insta:"💳 InstaPay:",wa_name:"👤 الاسم:",wa_phone:"📱 الموبايل:",wa_city:"🏙️ المحافظة:",wa_addr:"📍 العنوان:",wa_notes:"📝 ملاحظات:",wa_item:"🕯️ المنتج:"
+wa_head:"🕯️ طلب جديد",wa_order:"🧾 رقم الطلب:",wa_scent:"العطر",wa_total:"💰 الإجمالي:",wa_ship:"🚚 الشحن:",wa_cod:"(كاش)",wa_insta:"💳 InstaPay:",wa_name:"👤 الاسم:",wa_phone:"📱 الموبايل:",wa_city:"🏙️ المحافظة:",wa_addr:"📍 العنوان:",wa_notes:"📝 ملاحظات:",wa_item:"🕯️ المنتج:",
+t_scentwarn:"⚠️ من فضلك اختاري العطر قبل الإضافة"
 },
 en:{
 docTitle:"VelaLight | Luxury Candles",docDesc:"Luxury handmade candles.",
@@ -310,6 +294,7 @@ t_added:"🕯️ Added",t_fill:"⚠️ Complete details",t_empty:"Cart empty �
 t_order:"✅ Order registered",t_revok:"💛 Thank you!",t_revwarn:"⚠️ Write review",
 t_trkwarn:"⚠️ Enter ID",t_saved:"💾 Saved",t_lang_ar:"العربية",t_lang_en:"English",
 t_confirm_empty:"Empty cart?",t_confirm_del:"Are you sure?",t_go_cart:"🛍️ Go to cart",
-wa_head:"🕯️ New order",wa_order:"🧾 Order ID:",wa_scent:"Scent",wa_total:"💰 Total:",wa_ship:"🚚 Shipping:",wa_cod:"(cash)",wa_insta:"💳 InstaPay:",wa_name:"👤 Name:",wa_phone:"📱 Phone:",wa_city:"🏙️ Governorate:",wa_addr:"📍 Address:",wa_notes:"📝 Notes:",wa_item:"🕯️ Product:"
+wa_head:"🕯️ New order",wa_order:"🧾 Order ID:",wa_scent:"Scent",wa_total:"💰 Total:",wa_ship:"🚚 Shipping:",wa_cod:"(cash)",wa_insta:"💳 InstaPay:",wa_name:"👤 Name:",wa_phone:"📱 Phone:",wa_city:"🏙️ Governorate:",wa_addr:"📍 Address:",wa_notes:"📝 Notes:",wa_item:"🕯️ Product:",
+t_scentwarn:"⚠️ Please choose a scent first"
 }};
 const t=k=>(I18N[LANG]&&I18N[LANG][k])||I18N.ar[k]||k;
