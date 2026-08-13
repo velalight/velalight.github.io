@@ -108,7 +108,7 @@ const s=`<svg xmlns='http://www.w3.org/2000/svg' width='900' height='900'><defs>
 return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s)}
 
 const imgsOf=p=>{if(p.imgs&&p.imgs.length)return p.imgs;const raw=p.img||"";return String(raw).split(",").map(s=>s.trim()).filter(Boolean)};
-const imgOf=(p,w=800)=>{const a=imgsOf(p);if(!a.length)return ph(p);const u=CDN(a[0]);return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&w=${w}&q=75&output=webp&default=${encodeURIComponent(u)}`};
+const imgOf=(p,w=800)=>{const a=imgsOf(p);if(!a.length)return ph(p);const u=CDN(a[0]);try{return `https://images.weserv.nl/?url=${encodeURIComponent(u)}&w=${w}&q=75&output=webp&default=${encodeURIComponent(u)}`}catch(e){return u}};
 const pname=p=>LANG==="en"?(p.nameEn||p.en||p.name):p.name;
 const pdesc=p=>LANG==="en"?(p.descEn||p.desc||""):(p.desc||"");
 const phours=p=>LANG==="en"?(p.hoursEn||p.hours||"72h"):(p.hours||"72 ساعة");
