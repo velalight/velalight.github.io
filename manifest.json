@@ -12,10 +12,32 @@
   "dir": "rtl",
   "icons": [
     {
-      "src": "https://velalight.github.io/eeeee.jpg",
+      "src": "https://images.weserv.nl/?url=https://velalight.github.io/heart2.jpg&w=192&h=192&fit=cover&output=png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://images.weserv.nl/?url=https://velalight.github.io/heart2.jpg&w=512&h=512&fit=contain&background=F6EDE0&output=png",
       "sizes": "512x512",
-      "type": "image/jpeg",
+      "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://images.weserv.nl/?url=https://velalight.github.io/RRRR.jpg&w=1280&h=720&fit=cover",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "VelaLight — المتجر على شاشة كبيرة"
+    },
+    {
+      "src": "https://images.weserv.nl/?url=https://velalight.github.io/RR.jpg&w=750&h=1334&fit=cover",
+      "sizes": "750x1334",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "VelaLight — المتجر على الموبايل"
     }
   ]
 }
