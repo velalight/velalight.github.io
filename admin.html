@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -93,6 +92,9 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 .pform .g{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
 .pform label{font-size:.75rem;color:var(--dim);display:block;margin:.6rem 0 .25rem}
 .hidden{display:none!important}
+/* ═══ Export Button (جديد) ═══ */
+.export-btn{background:linear-gradient(135deg,#4a8a5c,#2e6b3f);color:#fff;padding:.5rem 1rem;border-radius:10px;font-size:.8rem;cursor:pointer;border:none;transition:.2s;font-weight:700}
+.export-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px -8px rgba(74,138,92,.5)}
 @media(max-width:600px){
   table.adm{display:block;overflow-x:auto}
   .pform .g{grid-template-columns:1fr}
@@ -110,7 +112,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
   <div class="login-box">
 
-```
 <h2>🔐 لوحة تحكم VelaLight</h2>
 
 <input
@@ -141,7 +142,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   class="login-status"
   style="color:var(--bad);font-size:.82rem;margin-top:.8rem"
 ></p>
-```
 
   </div>
 
@@ -153,7 +153,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
   <div class="wrap">
 
-```
 <div class="adm-top">
 
   <h1>⚙️ لوحة التحكم</h1>
@@ -199,6 +198,12 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
     <span>⭐ المراجعات</span>
   </div>
 
+  <!-- ═══ ✨ جديد: إحصائية العملاء ═══ -->
+  <div class="adm-stat">
+    <b id="stUsers">0</b>
+    <span>👥 العملاء</span>
+  </div>
+
   <div class="adm-stat">
     <b id="stRevenue">0</b>
     <span>💰 الإيرادات</span>
@@ -217,6 +222,15 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
     type="button"
   >
     📦 الطلبات
+  </button>
+
+  <!-- ═══ ✨ جديد: تبويب العملاء ═══ -->
+  <button
+    class="btn sm ghost"
+    data-tab="users"
+    type="button"
+  >
+    👥 العملاء
   </button>
 
   <button
@@ -257,6 +271,37 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
     <tbody id="ordersBody"></tbody>
 
+  </table>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ✨ جديد: USERS TAB (العملاء)
+     ═══════════════════════════════════════════════════════════ -->
+<div id="tab-users" class="hidden">
+
+  <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
+    <h3 style="color:var(--gold2);font-family:var(--fd);margin:0">👥 العملاء المسجلين</h3>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+      <input id="userSearch" type="search" placeholder="🔎 ابحث بالاسم أو الإيميل أو الموبايل..." style="min-width:220px;margin:0">
+      <button class="export-btn" id="exportUsersBtn" type="button">📥 تصدير Excel</button>
+    </div>
+  </div>
+
+  <table class="adm">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>الاسم</th>
+        <th>الإيميل</th>
+        <th>الموبايل</th>
+        <th>المدينة</th>
+        <th>الطلبات</th>
+        <th>الإجمالي</th>
+        <th>تاريخ التسجيل</th>
+      </tr>
+    </thead>
+    <tbody id="usersBody"></tbody>
   </table>
 
 </div>
@@ -535,7 +580,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   </table>
 
 </div>
-```
 
   </div>
 
@@ -562,6 +606,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
 
 let loggedIn = false;
+let ALL_USERS = []; /* ═══ ✨ جديد: تخزين العملاء ═══ */
 
 
 /* =========================================================
@@ -739,6 +784,8 @@ function showAdmin(){
   loadProducts();
 
   loadReviews();
+
+  loadUsers(); /* ═══ ✨ جديد ═══ */
 
 }
 
@@ -1030,7 +1077,7 @@ document.addEventListener("click", async (event) => {
 
 
 /* =========================================================
-   TABS
+   TABS (✨ معدّل: دعم users)
 ========================================================= */
 
 function initTabs(){
@@ -1065,6 +1112,14 @@ function initTabs(){
             .classList.toggle(
               "hidden",
               tab !== "orders"
+            );
+
+
+          /* ═══ ✨ جديد ═══ */
+          $("#tab-users")
+            .classList.toggle(
+              "hidden",
+              tab !== "users"
             );
 
 
@@ -1252,6 +1307,118 @@ function loadOrders(){
 }
 
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ جديد: USERS - عرض العملاء المسجلين
+   ═══════════════════════════════════════════════════════════ */
+function loadUsers(){
+  if(!window.FB || typeof window.FB.list !== "function") return;
+  
+  window.FB.list("users").then(users => {
+    ALL_USERS = users || [];
+    $("#stUsers").textContent = ALL_USERS.length;
+    renderUsers(ALL_USERS);
+  }).catch(err => {
+    console.error("Users error:", err);
+    toast("⚠️ تعذر تحميل العملاء");
+  });
+}
+
+function renderUsers(users){
+  const search = (document.getElementById("userSearch")?.value || "").trim().toLowerCase();
+  let list = users || [];
+  
+  if(search){
+    list = users.filter(u => {
+      const hay = (u.name||"") + " " + (u.email||"") + " " + (u.phone||"") + " " + (u.city||"");
+      return hay.toLowerCase().includes(search);
+    });
+  }
+  
+  /* ترتيب بالأحدث */
+  list.sort((a,b) => {
+    const ta = a.createdAt?.seconds ? a.createdAt.seconds : (a.createdAt || 0);
+    const tb = b.createdAt?.seconds ? b.createdAt.seconds : (b.createdAt || 0);
+    return tb - ta;
+  });
+  
+  const body = document.getElementById("usersBody");
+  if(!body) return;
+  
+  if(!list.length){
+    body.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--dim)">لا يوجد عملاء بعد</td></tr>`;
+    return;
+  }
+  
+  body.innerHTML = list.map((u, i) => {
+    let date = "-";
+    if(u.createdAt){
+      if(u.createdAt.seconds){
+        date = new Date(u.createdAt.seconds * 1000).toLocaleDateString("ar-EG");
+      } else if(typeof u.createdAt === "number"){
+        date = new Date(u.createdAt).toLocaleDateString("ar-EG");
+      }
+    }
+    return `
+      <tr>
+        <td>${i+1}</td>
+        <td><b>${u.name||"-"}</b></td>
+        <td style="direction:ltr;font-size:.8rem">${u.email||"-"}</td>
+        <td style="direction:ltr">${u.phone||"-"}</td>
+        <td>${u.city||"-"}</td>
+        <td>${u.ordersCount||0}</td>
+        <td>${money(u.totalSpent||0)}</td>
+        <td style="font-size:.78rem">${date}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+/* ═══ ✨ جديد: بحث في العملاء ═══ */
+document.addEventListener("input", (e) => {
+  if(e.target.id === "userSearch") renderUsers(ALL_USERS);
+});
+
+/* ═══ ✨ جديد: تصدير العملاء إلى CSV/Excel ═══ */
+document.addEventListener("click", (e) => {
+  if(e.target.id !== "exportUsersBtn") return;
+  if(!ALL_USERS.length){ toast("⚠️ لا يوجد عملاء للتصدير"); return; }
+  
+  const headers = ["الاسم","الإيميل","الموبايل","المدينة","العنوان","عدد الطلبات","إجمالي المشتريات","تاريخ التسجيل"];
+  const rows = ALL_USERS.map(u => {
+    let date = "";
+    if(u.createdAt){
+      if(u.createdAt.seconds) date = new Date(u.createdAt.seconds * 1000).toLocaleDateString("ar-EG");
+      else if(typeof u.createdAt === "number") date = new Date(u.createdAt).toLocaleDateString("ar-EG");
+    }
+    return [
+      u.name || "",
+      u.email || "",
+      u.phone || "",
+      u.city || "",
+      u.address || "",
+      u.ordersCount || 0,
+      u.totalSpent || 0,
+      date
+    ];
+  });
+  
+  let csv = "\uFEFF"; /* BOM للعربي في Excel */
+  csv += headers.join(",") + "\n";
+  rows.forEach(row => {
+    csv += row.map(cell => `"${String(cell||"").replace(/"/g,'""')}"`).join(",") + "\n";
+  });
+  
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `velalight-users-${new Date().toISOString().slice(0,10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+  toast("✅ تم تصدير العملاء بنجاح (" + ALL_USERS.length + " عميل)");
+});
+
+
 /* =========================================================
    PRODUCTS
 ========================================================= */
@@ -1424,14 +1591,6 @@ function loadProducts(){
   window.FB
     .list("products")
     .then(cloud => {
-
-      /*
-         Cloud-first product catalog:
-         - PRODUCTS is only the built-in fallback catalog.
-         - Every valid Firestore product is added by its id_.
-         - There is intentionally no slice/limit here.
-         - Existing Firebase records override the fallback record.
-      */
 
       const map = new Map();
 
