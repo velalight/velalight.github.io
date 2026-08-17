@@ -773,3 +773,39 @@
   /* لو المستخدم بيستخدم dark mode، ممكن نضيف تعديلات هنا */
   /* حالياً مش مطلوب */
 }
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ VelaLight — LOGO STYLE OVERRIDE (أهم من كل الـ media queries)
+   ═══════════════════════════════════════════════════════════ */
+.floating-card {
+  font-family: 'El Messiri', serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  color: #1a1512 !important;
+  padding: 14px 30px !important;
+}
+
+.floating-card span {
+  font-family: 'El Messiri', serif !important;
+  color: #1a1512 !important;
+  -webkit-text-fill-color: #1a1512 !important;
+  background: none !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* للموبايل — نخليها أصغر شوية بس لسه سوداء */
+@media (max-width: 480px) {
+  .floating-card {
+    font-size: 1rem !important;
+    padding: 10px 22px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .floating-card {
+    font-size: 0.9rem !important;
+    padding: 8px 18px !important;
+  }
+}
