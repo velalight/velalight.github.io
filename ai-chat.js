@@ -3,7 +3,7 @@
    ═══════════════════════════════════════════════════════════ */
 
 /* ⚠️⚠️⚠️ مهم جداً: حط الـ API Key بتاعك هنا بين علامتين التنصيص */
-const GEMINI_API_KEY = "حط_الـ Key_هنا";
+const GEMINI_API_KEY = "AQ.Ab8RN6JhUaOWCW4Z1aFuWkqJYhUiruL9w3hdQ56Y6DiKs1Vqtw";
 /* مثال: const GEMINI_API_KEY = "AIzaSyB3xK9mNpQ7rT2wY5uZ8vA1bC4dE6fG9hI"; */
 
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
