@@ -6,6 +6,19 @@ let quickAddProduct=null;
 let quickAddScent="";
 let quickAddQty=1;
 
+/* ═══════ PERFORMANCE OPTIMIZATIONS ═══════ */
+const requestIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
+const cancelIdle = window.cancelIdleCallback || clearTimeout;
+
+/* Debounce utility */
+function debounce(fn, ms=300){
+  let t;
+  return function(...args){
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), ms);
+  };
+}
+
 /* ═══════ VELA SCENTS ═══════ */
 const VELA_SCENTS=[
 ["فانيلا","Vanilla"],
@@ -77,6 +90,8 @@ document.addEventListener("DOMContentLoaded",()=>{
     renderScents();
     renderFAQ();
     initProductRealtimeSync();
+    /* Prefetch product pages on idle for faster navigation */
+    requestIdle(() => prefetchProductPages());
   });
   initCart();
   initAccount();
@@ -88,6 +103,19 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 
 window.addEventListener("data-refresh",()=>{renderProducts();});
+
+/* ═══════ PREFETCH PRODUCT PAGES (Performance) ═══════ */
+function prefetchProductPages(){
+  if(!('requestIdleCallback' in window)) return;
+  const products = typeof ALL_PRODUCTS !== 'undefined' ? ALL_PRODUCTS.slice(0, 8) : [];
+  products.forEach(p => {
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = `product.html?p=${p.id}`;
+    link.as = 'document';
+    document.head.appendChild(link);
+  });
+}
 
 /* ═══════ HERO INTRO ═══════ */
 function initHeroIntro(){
@@ -198,16 +226,23 @@ function initEmbers(){
   const w=$("#embers");
   if(!w)return;
   w.innerHTML="";
+  const frag = document.createDocumentFragment();
   for(let i=0;i<12;i++){
     const s=document.createElement("span");
     s.style.left=Math.random()*100+"%";
     s.style.animationDelay=Math.random()*7+"s";
     s.style.animationDuration=(5+Math.random()*5)+"s";
-    w.appendChild(s);
+    frag.appendChild(s);
   }
+  w.appendChild(frag);
 }
 
+/* ═══════ REVEAL ANIMATION — Optimized ═══════ */
 function initReveal(){
+  if(!('IntersectionObserver' in window)) {
+    $$(".rv").forEach(el => el.classList.add("on"));
+    return;
+  }
   const io=new IntersectionObserver(es=>{
     es.forEach(e=>{
       if(e.isIntersecting){
@@ -215,7 +250,7 @@ function initReveal(){
         io.unobserve(e.target);
       }
     });
-  },{threshold:.12});
+  },{threshold:.08, rootMargin:"0px 0px -50px 0px"});
   $$(".rv").forEach(el=>io.observe(el));
 }
 
@@ -226,9 +261,23 @@ function renderChips(){
   w.style.display="none";
   w.setAttribute("aria-hidden","true");
   const keys=["all","wood","glass","crystal","metal","massage","gift","bride"];
-  w.innerHTML=keys.map(k=>
-    `<button class="chip${k==="all"?" on":""}" data-cat="${k}">${cat(k)}</button>`
-  ).join("");
+  const frag = document.createDocumentFragment();
+  keys.forEach(k => {
+    const btn = document.createElement('button');
+    btn.className = 'chip' + (k==="all" ? " on" : "");
+    btn.dataset.cat = k;
+    btn.textContent = cat(k);
+    btn.addEventListener("click",()=>{
+      frag.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
+      btn.classList.add("on");
+      renderProducts();
+    });
+    frag.appendChild(btn);
+  });
+  w.innerHTML = '';
+  w.appendChild(frag);
+  
+  /* Re-attach to DOM */
   w.querySelectorAll(".chip").forEach(b=>{
     b.addEventListener("click",()=>{
       w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
@@ -243,7 +292,9 @@ function activeCat(){
   return c?c.dataset.cat:"all";
 }
 
-/* ═══════ PRODUCTS (2-line desc + Read More) ═══════ */
+/* ═══════════════════════════════════════════════════════════
+   ═══ PRODUCTS — FULLY OPTIMIZED (Mobile + Performance) ═══
+   ═══════════════════════════════════════════════════════════ */
 function renderProducts(){
   const grid=$("#pgrid");
   if(!grid)return;
@@ -278,24 +329,39 @@ function renderProducts(){
   }
 
   const readMoreText=LANG==="en"?"Read more →":"عرض المزيد ←";
+  
+  /* ✨ KEY FIX: Check if mobile device for optimization */
+  const isMobile = window.innerWidth <= 768;
+  const eagerCount = isMobile ? 4 : 8; /* Fewer eager on mobile */
 
-  grid.innerHTML=list.map(p=>{
+  /* Build HTML string for maximum performance */
+  const htmlChunks = [];
+  
+  list.forEach((p, index) => {
     const r=ratingOf(p.id);
     const badge=pbadge(p);
     const rawDesc=LANG==="en"?(p.descEn||p.desc||""):(p.desc||p.descEn||"");
     const productDesc=String(rawDesc).trim();
+    
+    /* ✨ FIX #1: Dynamic loading strategy */
+    const isFirstBatch = index < eagerCount;
+    const loadingAttr = isFirstBatch ? 'loading="eager"' : 'loading="lazy"';
+    const fetchPriority = isFirstBatch ? 'fetchpriority="high"' : 'fetchpriority="low"';
+    
+    /* ✨ FIX #2: Fixed dimensions prevent layout shift */
+    const imgAttrs = `src="${imgOf(p)}" alt="${pname(p)}" ${loadingAttr} decoding="async" ${fetchPriority} width="400" height="400" onload="this.classList.add('loaded')" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 400 400\\'><rect fill=\\'%23f5efe5\\' width=\\'400\\' height=\\'400\\'/><text x=\\'200\\' y=\\'200\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\' font-family=\\'serif\\' font-size=\\'24\\' fill=\\'%23d9ab5f\\'>✦</text></svg>'"`;
 
-    return `
-      <article class="p-card">
-        <a class="p-media" href="product.html?p=${p.id}">
-          <img src="${imgOf(p)}" alt="${pname(p)}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">
+    htmlChunks.push(`
+      <article class="p-card" data-id="${p.id}">
+        <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
+          <img ${imgAttrs}>
           ${badge?`<span class="p-badge">${badge}</span>`:""}
           <span class="p-quick">${t("view_details")}</span>
         </a>
         <div class="p-body">
           <span class="p-cat">${cat(p.cat)}</span>
           <h3><a href="product.html?p=${p.id}">${pname(p)}</a></h3>
-          ${r?`<span class="stars">${"★".repeat(Math.round(r.avg))}</span>`:""}
+          ${r?`<span class="stars" aria-label="${Math.round(r.avg)} stars">${"★".repeat(Math.round(r.avg))}</span>`:""}
           <p class="p-desc">${productDesc}</p>
           ${productDesc.length>30?`<a href="product.html?p=${p.id}" class="p-desc-link">${readMoreText}</a>`:""}
           <div class="p-foot">
@@ -303,19 +369,36 @@ function renderProducts(){
               ${money(p.price)}
               ${p.old>p.price?`<del>${money(p.old)}</del>`:""}
             </div>
-            <button class="p-add" data-id="${p.id}">${t("add_cart")}</button>
+            <button class="p-add" data-id="${p.id}" aria-label="${t("add_cart")} ${pname(p)}">${t("add_cart")}</button>
           </div>
         </div>
       </article>
-    `;
-  }).join("");
-
-  grid.querySelectorAll(".p-add").forEach(b=>{
-    b.addEventListener("click",()=>{
-      const p=ALL_PRODUCTS.find(x=>x.id===b.dataset.id);
-      if(p){openQuickAdd(p);}
-    });
+    `);
   });
+
+  /* ✨ FIX #3: Batch DOM update (single reflow) */
+  grid.innerHTML = htmlChunks.join('');
+
+  /* Event delegation for better performance */
+  grid.addEventListener('click', handleProductGridClick);
+}
+
+/* ✨ Event delegation instead of attaching to each button */
+function handleProductGridClick(e){
+  const addBtn = e.target.closest('.p-add');
+  if(!addBtn) return;
+  
+  e.preventDefault();
+  e.stopPropagation();
+  
+  const id = addBtn.dataset.id;
+  const p = ALL_PRODUCTS.find(x => x.id === id);
+  if(p){
+    /* Tactile feedback on mobile */
+    addBtn.style.transform = 'scale(0.95)';
+    setTimeout(() => { addBtn.style.transform = ''; }, 150);
+    openQuickAdd(p);
+  }
 }
 
 /* ═══════ QUICK ADD / SCENT SELECTOR ═══════ */
@@ -355,42 +438,60 @@ function openQuickAdd(p){
   const w=$("#scentModalScents");
   if(!w)return;
 
-  w.innerHTML=VELA_SCENTS.map(s=>
-    `<button class="chip" type="button" data-s="${s[0]}">${velaScentTr(s[0])}</button>`
-  ).join("");
-
-  w.querySelectorAll(".chip").forEach(b=>{
-    b.addEventListener("click",()=>{
-      w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
-      b.classList.add("on");
-      quickAddScent=b.dataset.s;
+  /* ✨ Performance: Use DocumentFragment */
+  const frag = document.createDocumentFragment();
+  VELA_SCENTS.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.type = 'button';
+    btn.dataset.s = s[0];
+    btn.textContent = velaScentTr(s[0]);
+    btn.addEventListener('click', () => {
+      w.querySelectorAll('.chip').forEach(x => x.classList.remove('on'));
+      btn.classList.add('on');
+      quickAddScent = s[0];
     });
+    frag.appendChild(btn);
   });
+  w.innerHTML = '';
+  w.appendChild(frag);
 
   openDrawer("scentOv");
 }
 
-/* ═══════ FILTERS ═══════ */
+/* ═══════ FILTERS — Debounced ═══════ */
+const debouncedRenderProducts = debounce(renderProducts, 250);
+
 document.addEventListener("change",e=>{
-  if(e.target.id==="priceMin"||e.target.id==="priceMax"||e.target.id==="sortSel"){renderProducts();}
+  if(e.target.id==="priceMin"||e.target.id==="priceMax"||e.target.id==="sortSel"){
+    renderProducts();
+  }
 });
 document.addEventListener("input",e=>{
-  if(e.target.id==="priceMin"||e.target.id==="priceMax"){renderProducts();}
+  if(e.target.id==="priceMin"||e.target.id==="priceMax"){
+    debouncedRenderProducts();
+  }
 });
 
 /* ═══════ SCENTS GRID ═══════ */
 function renderScents(){
   const w=$("#scentGrid");
   if(!w)return;
-  w.innerHTML=VELA_SCENTS.map((s,i)=>`
-    <div class="scent">
+  const frag = document.createDocumentFragment();
+  VELA_SCENTS.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'scent';
+    div.innerHTML = `
       <i>${i+1}</i>
       <div>
         <b>${LANG==="en"?s[1]:s[0]}</b>
         <small>${LANG==="en"?s[0]:s[1]}</small>
       </div>
-    </div>
-  `).join("");
+    `;
+    frag.appendChild(div);
+  });
+  w.innerHTML = '';
+  w.appendChild(frag);
 }
 
 /* ═══════ FAQ ═══════ */
@@ -405,23 +506,32 @@ function renderFAQ(){
     [t("faq5q"),t("faq5a")],
     [t("faq6q"),t("faq6a")]
   ];
-  w.innerHTML=items.map(q=>`
-    <div class="faq-item">
-      <button class="faq-q"><span>${q[0]}</span><span>+</span></button>
+  const frag = document.createDocumentFragment();
+  items.forEach(q => {
+    const item = document.createElement('div');
+    item.className = 'faq-item';
+    item.innerHTML = `
+      <button class="faq-q" aria-expanded="false"><span>${q[0]}</span><span>+</span></button>
       <div class="faq-a"><div>${q[1]}</div></div>
-    </div>
-  `).join("");
+    `;
+    frag.appendChild(item);
+  });
+  w.innerHTML = '';
+  w.appendChild(frag);
+  
   w.querySelectorAll(".faq-item").forEach(item=>{
     item.querySelector(".faq-q").addEventListener("click",()=>{
       const was=item.classList.contains("open");
       w.querySelectorAll(".faq-item").forEach(x=>{
         x.classList.remove("open");
         x.querySelector(".faq-a").style.maxHeight=null;
+        x.querySelector(".faq-q").setAttribute("aria-expanded","false");
       });
       if(!was){
         item.classList.add("open");
         const a=item.querySelector(".faq-a");
         a.style.maxHeight=a.scrollHeight+"px";
+        item.querySelector(".faq-q").setAttribute("aria-expanded","true");
       }
     });
   });
@@ -456,9 +566,12 @@ function initCart(){
 
   $("#checkoutBtn")?.addEventListener("click",checkout);
 
+  /* ✨ Debounced customer data save */
+  const saveCustomer = debounce(() => saveCartCustomer(), 500);
+  
   ["#coName","#coPhone","#coCity","#coAddr","#coNotes"].forEach(selector=>{
     document.addEventListener("input",e=>{
-      if(e.target.matches(selector)){saveCartCustomer();}
+      if(e.target.matches(selector)){saveCustomer();}
     });
     document.addEventListener("change",e=>{
       if(e.target.matches(selector)){saveCartCustomer();}
@@ -484,80 +597,88 @@ function renderCart(){
     return;
   }
 
-  w.innerHTML=c.map((it,i)=>{
+  const frag = document.createDocumentFragment();
+  
+  c.forEach((it, i) => {
     const lineTotal=Number(it.price||0)*Number(it.qty||1);
-    return `
-      <div class="citem">
-        <div class="citem-media">
-          <img src="${it.img||""}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy">
-        </div>
-        <div class="citem-info">
-          <h5>${pname({name:it.name,nameEn:it.nameEn})}</h5>
-          <label class="cart-scent-picker">
-            <span class="cart-scent-label">🌸 ${t("scent_lbl")}</span>
-            <select class="cart-scent-select" data-i="${i}" aria-label="${t("scent_lbl")}">
-              <option value="">${LANG==="en"?"Choose a scent":"اختاري العطر"}</option>
-              ${VELA_SCENTS.map(scent=>`
-                <option value="${scent[0]}" ${String(it.scent||"")===String(scent[0])?"selected":""}>
-                  ${velaScentTr(scent[0])}
-                </option>
-              `).join("")}
-            </select>
-          </label>
-          <div class="cs">${t("price_lbl")} <strong>${money(it.price)}</strong></div>
-          <div class="cart-line-total">
-            <span>${LANG==="en"?"Item total:":"إجمالي الصنف:"}</span>
-            <strong>${money(lineTotal)}</strong>
-          </div>
-          <div class="qty">
-            <button class="cq-minus" type="button" data-i="${i}" aria-label="minus">−</button>
-            <b>${it.qty}</b>
-            <button class="cq-plus" type="button" data-i="${i}" aria-label="plus">+</button>
-          </div>
-        </div>
-        <button class="rm" type="button" data-i="${i}" aria-label="remove">✕</button>
+    const item = document.createElement('div');
+    item.className = 'citem';
+    item.innerHTML = `
+      <div class="citem-media">
+        <img src="${it.img||''}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy" width="62" height="62">
       </div>
+      <div class="citem-info">
+        <h5>${pname({name:it.name,nameEn:it.nameEn})}</h5>
+        <label class="cart-scent-picker">
+          <span class="cart-scent-label">🌸 ${t("scent_lbl")}</span>
+          <select class="cart-scent-select" data-i="${i}" aria-label="${t("scent_lbl")}">
+            <option value="">${LANG==="en"?"Choose a scent":"اختاري العطر"}</option>
+            ${VELA_SCENTS.map(scent=>`
+              <option value="${scent[0]}" ${String(it.scent||"")===String(scent[0])?"selected":""}>
+                ${velaScentTr(scent[0])}
+              </option>
+            `).join("")}
+          </select>
+        </label>
+        <div class="cs">${t("price_lbl")} <strong>${money(it.price)}</strong></div>
+        <div class="cart-line-total">
+          <span>${LANG==="en"?"Item total:":"إجمالي الصنف:"}</span>
+          <strong>${money(lineTotal)}</strong>
+        </div>
+        <div class="qty">
+          <button class="cq-minus" type="button" data-i="${i}" aria-label="minus">−</button>
+          <b>${it.qty}</b>
+          <button class="cq-plus" type="button" data-i="${i}" aria-label="plus">+</button>
+        </div>
+      </div>
+      <button class="rm" type="button" data-i="${i}" aria-label="remove">✕</button>
     `;
-  }).join("");
-
-  w.querySelectorAll(".cart-scent-select").forEach(select=>{
-    select.addEventListener("change",()=>{
-      const idx=+select.dataset.i;
-      if(!c[idx])return;
-      c[idx].scent=select.value;
-      saveCart(c);
-      renderCart();
-    });
+    frag.appendChild(item);
   });
 
-  w.querySelectorAll(".rm").forEach(b=>{
-    b.addEventListener("click",()=>{
-      c.splice(+b.dataset.i,1);
-      saveCart(c);
-      renderCart();
-    });
-  });
+  w.innerHTML = '';
+  w.appendChild(frag);
 
-  w.querySelectorAll(".cq-plus").forEach(b=>{
-    b.addEventListener("click",()=>{
-      const idx=+b.dataset.i;
-      c[idx].qty=Number(c[idx].qty||1)+1;
-      saveCart(c);
-      renderCart();
-    });
-  });
+  /* Event delegation for cart items */
+  w.addEventListener('click', handleCartClick);
+  w.addEventListener('change', handleCartChange);
+}
 
-  w.querySelectorAll(".cq-minus").forEach(b=>{
-    b.addEventListener("click",()=>{
-      const idx=+b.dataset.i;
-      c[idx].qty=Number(c[idx].qty||1)-1;
-      if(c[idx].qty<=0){c.splice(idx,1);}
-      saveCart(c);
-      renderCart();
-    });
-  });
+function handleCartClick(e){
+  const rmBtn = e.target.closest('.rm');
+  const plusBtn = e.target.closest('.cq-plus');
+  const minusBtn = e.target.closest('.cq-minus');
+  
+  const c = getCart();
+  
+  if(rmBtn){
+    c.splice(+rmBtn.dataset.i, 1);
+    saveCart(c);
+    renderCart();
+  } else if(plusBtn){
+    const idx = +plusBtn.dataset.i;
+    c[idx].qty = Number(c[idx].qty || 1) + 1;
+    saveCart(c);
+    renderCart();
+  } else if(minusBtn){
+    const idx = +minusBtn.dataset.i;
+    c[idx].qty = Number(c[idx].qty || 1) - 1;
+    if(c[idx].qty <= 0){ c.splice(idx, 1); }
+    saveCart(c);
+    renderCart();
+  }
+}
 
-  updateTotals(c);
+function handleCartChange(e){
+  if(e.target.matches('.cart-scent-select')){
+    const select = e.target;
+    const idx = +select.dataset.i;
+    const c = getCart();
+    if(!c[idx]) return;
+    c[idx].scent = select.value;
+    saveCart(c);
+    renderCart();
+  }
 }
 
 /* ═══════ TOTALS — PRODUCTS ONLY ═══════ */
@@ -763,7 +884,7 @@ function fillCitySelect(sel){
     arr.map(g=>`<option value="${g}">${g}</option>`).join("");
 }
 
-/* ═══════ SEARCH ═══════ */
+/* ═══════ SEARCH — Optimized with debounce ═══════ */
 function initSearch(){
   $("#searchBtn")?.addEventListener("click",()=>{
     openDrawer("searchOv");
@@ -773,24 +894,34 @@ function initSearch(){
   $("#searchOv")?.addEventListener("click",e=>{
     if(e.target.id==="searchOv"){closeModal("searchOv");}
   });
+  
+  const debouncedSearch = debounce((q) => performSearch(q), 200);
+  
   $("#searchInput")?.addEventListener("input",e=>{
     const q=e.target.value.trim().toLowerCase();
-    const w=$("#searchResults");
-    if(!w)return;
-    if(!q){w.innerHTML="";return;}
-    const res=ALL_PRODUCTS.filter(p=>{
-      const hay=(p.name+" "+(p.nameEn||"")+" "+(p.desc||"")+" "+(p.descEn||"")+" "+cat(p.cat)).toLowerCase();
-      return hay.includes(q);
-    }).slice(0,8);
-    w.innerHTML=res.map(p=>`
-      <div class="sr-item" data-id="${p.id}">
-        <img src="${imgOf(p)}" alt="">
-        <div><b>${pname(p)}</b><br><small>${money(p.price)}</small></div>
-      </div>
-    `).join("");
-    w.querySelectorAll(".sr-item").forEach(it=>{
-      it.addEventListener("click",()=>{location.href="product.html?p="+it.dataset.id;});
-    });
+    debouncedSearch(q);
+  });
+}
+
+function performSearch(q){
+  const w=$("#searchResults");
+  if(!w)return;
+  if(!q){w.innerHTML="";return;}
+  
+  const res=ALL_PRODUCTS.filter(p=>{
+    const hay=(p.name+" "+(p.nameEn||"")+" "+(p.desc||"")+" "+(p.descEn||"")+" "+cat(p.cat)).toLowerCase();
+    return hay.includes(q);
+  }).slice(0,8);
+  
+  w.innerHTML=res.map(p=>`
+    <div class="sr-item" data-id="${p.id}">
+      <img src="${imgOf(p)}" alt="" loading="lazy" width="50" height="50">
+      <div><b>${pname(p)}</b><br><small>${money(p.price)}</small></div>
+    </div>
+  `).join("");
+  
+  w.querySelectorAll(".sr-item").forEach(it=>{
+    it.addEventListener("click",()=>{location.href="product.html?p="+it.dataset.id;});
   });
 }
 
@@ -862,12 +993,20 @@ function initNav(){
 function openDrawer(id,ovlId){
   $("#"+id)?.classList.add("open");
   if(ovlId){$("#"+ovlId)?.classList.add("open");}
+  /* Prevent body scroll when drawer open */
+  document.body.style.overflow = 'hidden';
 }
 function closeDrawers(){
   $$(".drawer,.ovl").forEach(el=>el.classList.remove("open"));
+  document.body.style.overflow = '';
 }
 function closeModal(id){
   $("#"+id)?.classList.remove("open");
+  /* Check if any drawer still open */
+  const stillOpen = document.querySelector('.drawer.open, .ovl.open');
+  if(!stillOpen){
+    document.body.style.overflow = '';
+  }
 }
 
 })();
