@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
    VelaLight — نظام تسجيل دخول العملاء الكامل
-   ملف جديد: auth.js
+   النسخة المصححة (Fix: Data Persistence Bug)
    ═══════════════════════════════════════════════════════════ */
 import {
   createUserWithEmailAndPassword,
@@ -66,10 +66,10 @@ function createAuthModal() {
 
       <!-- ═══ نموذج إنشاء حساب جديد ═══ -->
       <div id="vlRegForm" style="display:none">
-        <input type="text" id="vlRegName" placeholder="الاسم الكامل" style="margin-bottom:.8rem">
-        <input type="email" id="vlRegEmail" placeholder="الإيميل" style="margin-bottom:.8rem">
+        <input type="text" id="vlRegName" placeholder="الاسم الكامل *" style="margin-bottom:.8rem">
+        <input type="email" id="vlRegEmail" placeholder="الإيميل *" style="margin-bottom:.8rem">
         <input type="tel" id="vlRegPhone" placeholder="رقم الموبايل" style="margin-bottom:.8rem">
-        <input type="password" id="vlRegPass" placeholder="كلمة المرور (6 أحرف على الأقل)" style="margin-bottom:.8rem">
+        <input type="password" id="vlRegPass" placeholder="كلمة المرور (6 أحرف على الأقل) *" style="margin-bottom:.8rem">
         
         <button class="btn" style="width:100%;margin-bottom:.8rem" id="vlRegBtn">
           ✨ إنشاء حساب جديد
@@ -92,6 +92,7 @@ function createAuthModal() {
     document.getElementById("vlLoginForm").style.display = "none";
     document.getElementById("vlRegForm").style.display = "block";
     document.getElementById("authTitle").textContent = "حساب جديد";
+    clearErrors();
   });
 
   document.getElementById("vlShowLogin").addEventListener("click", (e) => {
@@ -99,6 +100,7 @@ function createAuthModal() {
     document.getElementById("vlLoginForm").style.display = "block";
     document.getElementById("vlRegForm").style.display = "none";
     document.getElementById("authTitle").textContent = "تسجيل الدخول";
+    clearErrors();
   });
 
   document.getElementById("vlLoginBtn").addEventListener("click", handleLogin);
@@ -115,13 +117,19 @@ function createAuthModal() {
   });
 }
 
+function clearErrors() {
+  const loginErr = document.getElementById("vlLoginError");
+  const regErr = document.getElementById("vlRegError");
+  if (loginErr) loginErr.textContent = "";
+  if (regErr) regErr.textContent = "";
+}
+
 /* ═══════ فتح / إغلاق النافذة ═══════ */
 window.openAuthModal = function() {
   document.getElementById("vlLoginForm").style.display = "block";
   document.getElementById("vlRegForm").style.display = "none";
   document.getElementById("authTitle").textContent = "تسجيل الدخول";
-  document.getElementById("vlLoginError").textContent = "";
-  document.getElementById("vlRegError").textContent = "";
+  clearErrors();
   document.getElementById("authOv").classList.add("open");
 };
 
@@ -153,6 +161,7 @@ async function handleLogin() {
   if (result.success) {
     closeAuthModal();
     if (typeof toast === "function") toast("✅ تم تسجيل الدخول بنجاح");
+    await syncUserData();
     updateAccountUI();
   } else {
     errBox.textContent = "❌ " + result.error;
@@ -169,7 +178,12 @@ async function handleRegister() {
   const btn = document.getElementById("vlRegBtn");
 
   if (!name || !email || !pass) {
-    errBox.textContent = "⚠️ كمّل كل الحقول المطلوبة";
+    errBox.textContent = "⚠️ كمّل الحقول المطلوبة (*)";
+    return;
+  }
+
+  if (pass.length < 6) {
+    errBox.textContent = "⚠️ كلمة المرور لازم 6 أحرف على الأقل";
     return;
   }
 
@@ -185,6 +199,7 @@ async function handleRegister() {
   if (result.success) {
     closeAuthModal();
     if (typeof toast === "function") toast("✅ تم إنشاء الحساب بنجاح!");
+    await syncUserData();
     updateAccountUI();
   } else {
     errBox.textContent = "❌ " + result.error;
@@ -205,6 +220,7 @@ async function handleGoogleLogin() {
   if (result.success) {
     closeAuthModal();
     if (typeof toast === "function") toast("✅ تم الدخول بنجاح");
+    await syncUserData();
     updateAccountUI();
   } else {
     document.getElementById("vlLoginError").textContent = "❌ " + result.error;
@@ -231,7 +247,8 @@ function updateAccountUI() {
 
   if (window.FB && window.FB.auth && window.FB.auth.currentUser) {
     const user = window.FB.auth.currentUser;
-    const displayName = user.displayName || user.email.split("@")[0];
+    const userData = JSON.parse(localStorage.getItem("vl_user") || "{}");
+    const displayName = userData.name || user.displayName || user.email.split("@")[0];
     accBtn.textContent = "👤";
     accBtn.title = displayName;
   } else {
@@ -241,55 +258,189 @@ function updateAccountUI() {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   ✨ إصلاح رئيسي: مزامنة بيانات المستخدم
+   ═══════════════════════════════════════════════════════════ */
+async function syncUserData() {
+  if (!window.FB || !window.FB.auth || !window.FB.auth.currentUser) return;
+  
+  try {
+    const user = window.FB.auth.currentUser;
+    const userRef = doc(window.FB.db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+    
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      localStorage.setItem("vl_user", JSON.stringify({
+        uid: data.uid || user.uid,
+        email: data.email || user.email || "",
+        name: data.name || user.displayName || "",
+        phone: data.phone || "",
+        city: data.city || "",
+        addr: data.address || "",
+        orders: data.ordersCount || 0
+      }));
+      
+      /* تحديث حقول الحساب في الـ modal */
+      const accName = document.getElementById("accName");
+      const accPhone = document.getElementById("accPhone");
+      const accCity = document.getElementById("accCity");
+      const accAddr = document.getElementById("accAddr");
+      const ordCount = document.getElementById("ordCount");
+      
+      if (accName) accName.value = data.name || "";
+      if (accPhone) accPhone.value = data.phone || "";
+      if (accCity) accCity.value = data.city || "";
+      if (accAddr) accAddr.value = data.address || "";
+      if (ordCount) ordCount.textContent = data.ordersCount || 0;
+    }
+  } catch (err) {
+    console.warn("Failed to sync user data:", err);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
    دوال Firebase Authentication
    ═══════════════════════════════════════════════════════════ */
 
-/* إنشاء حساب جديد */
+/* ═══ إنشاء حساب جديد — نسخة محسّنة ═══ */
 window.VL_Register = async function(email, password, name, phone) {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       window.FB.auth, email, password
     );
 
+    /* حدّث اسم المستخدم في Firebase Auth */
     await updateProfile(userCredential.user, { displayName: name });
-    await createUserDocument(userCredential.user, { name, phone });
+
+    /* ═══ ✨ الإصلاح: احفظ البيانات كاملة في Firestore ═══ */
+    const userRef = doc(window.FB.db, "users", userCredential.user.uid);
+    await setDoc(userRef, {
+      uid: userCredential.user.uid,
+      email: email,
+      name: name || "",
+      phone: phone || "",
+      city: "",
+      address: "",
+      provider: "password",
+      photoURL: "",
+      ordersCount: 0,
+      totalSpent: 0,
+      createdAt: serverTimestamp(),
+      lastLogin: serverTimestamp()
+    });
+
+    /* ═══ ✨ احفظ في localStorage مباشرة ═══ */
+    localStorage.setItem("vl_user", JSON.stringify({
+      uid: userCredential.user.uid,
+      email: email,
+      name: name,
+      phone: phone,
+      city: "",
+      addr: "",
+      orders: 0
+    }));
 
     return { success: true, user: userCredential.user };
   } catch (error) {
+    console.error("VL_Register error:", error);
     return { success: false, error: translateError(error.code) };
   }
 };
 
-/* تسجيل الدخول */
+/* ═══ تسجيل الدخول — نسخة محسّنة (تحافظ على البيانات) ═══ */
 window.VL_Login = async function(email, password) {
   try {
     const userCredential = await signInWithEmailAndPassword(
       window.FB.auth, email, password
     );
 
-    await createUserDocument(userCredential.user);
+    /* ✨ الإصلاح: حدّث lastLogin فقط، متعملش overwrite للبيانات */
+    const userRef = doc(window.FB.db, "users", userCredential.user.uid);
+    const userSnap = await getDoc(userRef);
+    
+    if (userSnap.exists()) {
+      /* المستخدم موجود → حدّث lastLogin بس */
+      await updateDoc(userRef, { lastLogin: serverTimestamp() });
+    } else {
+      /* المستخدم مش موجود (حالة نادرة) → اعمل document جديد */
+      await setDoc(userRef, {
+        uid: userCredential.user.uid,
+        email: email,
+        name: userCredential.user.displayName || "",
+        phone: "",
+        city: "",
+        address: "",
+        provider: "password",
+        photoURL: "",
+        ordersCount: 0,
+        totalSpent: 0,
+        createdAt: serverTimestamp(),
+        lastLogin: serverTimestamp()
+      });
+    }
+
     return { success: true, user: userCredential.user };
   } catch (error) {
+    console.error("VL_Login error:", error);
     return { success: false, error: translateError(error.code) };
   }
 };
 
-/* الدخول بحساب Google */
+/* ═══ الدخول بحساب Google ═══ */
 window.VL_LoginGoogle = async function() {
   try {
     const result = await signInWithPopup(window.FB.auth, googleProvider);
-    await createUserDocument(result.user);
+    
+    /* ✨ فحص وجود المستخدم في Firestore */
+    const userRef = doc(window.FB.db, "users", result.user.uid);
+    const userSnap = await getDoc(userRef);
+    
+    if (!userSnap.exists()) {
+      /* مستخدم جديد من Google → اعمل document جديد */
+      await setDoc(userRef, {
+        uid: result.user.uid,
+        email: result.user.email || "",
+        name: result.user.displayName || "",
+        phone: "",
+        city: "",
+        address: "",
+        provider: "google.com",
+        photoURL: result.user.photoURL || "",
+        ordersCount: 0,
+        totalSpent: 0,
+        createdAt: serverTimestamp(),
+        lastLogin: serverTimestamp()
+      });
+    } else {
+      await updateDoc(userRef, { lastLogin: serverTimestamp() });
+    }
+
     return { success: true, user: result.user };
   } catch (error) {
+    console.error("VL_LoginGoogle error:", error);
     return { success: false, error: translateError(error.code) };
   }
 };
 
-/* تسجيل الخروج */
+/* ═══ تسجيل الخروج ═══ */
 window.VL_Logout = async function() {
   try {
     await signOut(window.FB.auth);
     localStorage.removeItem("vl_user");
+    
+    /* مسح حقول الحساب */
+    const accName = document.getElementById("accName");
+    const accPhone = document.getElementById("accPhone");
+    const accCity = document.getElementById("accCity");
+    const accAddr = document.getElementById("accAddr");
+    const ordCount = document.getElementById("ordCount");
+    
+    if (accName) accName.value = "";
+    if (accPhone) accPhone.value = "";
+    if (accCity) accCity.value = "";
+    if (accAddr) accAddr.value = "";
+    if (ordCount) ordCount.textContent = "0";
+    
     updateAccountUI();
     if (typeof toast === "function") toast("✅ تم تسجيل الخروج");
     return { success: true };
@@ -298,7 +449,7 @@ window.VL_Logout = async function() {
   }
 };
 
-/* إعادة تعيين كلمة المرور */
+/* ═══ إعادة تعيين كلمة المرور ═══ */
 window.VL_ResetPassword = async function(email) {
   try {
     await sendPasswordResetEmail(window.FB.auth, email);
@@ -308,7 +459,7 @@ window.VL_ResetPassword = async function(email) {
   }
 };
 
-/* جلب بيانات المستخدم الحالي */
+/* ═══ جلب بيانات المستخدم الحالي ═══ */
 window.VL_GetCurrentUser = async function() {
   if (!window.FB || !window.FB.auth || !window.FB.auth.currentUser) return null;
 
@@ -319,7 +470,7 @@ window.VL_GetCurrentUser = async function() {
   return userSnap.exists() ? { id: userSnap.id, ...userSnap.data() } : null;
 };
 
-/* تحديث بيانات المستخدم */
+/* ═══ تحديث بيانات المستخدم ═══ */
 window.VL_UpdateProfile = async function(data) {
   if (!window.FB || !window.FB.auth || !window.FB.auth.currentUser) {
     return { success: false, error: "غير مسجل" };
@@ -328,43 +479,22 @@ window.VL_UpdateProfile = async function(data) {
   try {
     const user = window.FB.auth.currentUser;
     const userRef = doc(window.FB.db, "users", user.uid);
-    await updateDoc(userRef, data);
+    
+    /* ✨ استخدام merge: true عشان نحافظ على البيانات التانية */
+    await setDoc(userRef, data, { merge: true });
 
+    /* تحديث localStorage */
     const old = JSON.parse(localStorage.getItem("vl_user") || "{}");
-    localStorage.setItem("vl_user", JSON.stringify({ ...old, ...data }));
+    const updated = { ...old, ...data };
+    if (data.address) updated.addr = data.address;
+    localStorage.setItem("vl_user", JSON.stringify(updated));
 
     return { success: true };
   } catch (error) {
+    console.error("VL_UpdateProfile error:", error);
     return { success: false, error: error.message };
   }
 };
-
-/* ═══════ إنشاء ملف المستخدم في Firestore ═══════ */
-async function createUserDocument(user, extraData = {}) {
-  if (!window.FB || !window.FB.db) return;
-
-  const userRef = doc(window.FB.db, "users", user.uid);
-  const userSnap = await getDoc(userRef);
-
-  if (!userSnap.exists()) {
-    await setDoc(userRef, {
-      uid: user.uid,
-      email: user.email || "",
-      name: extraData.name || user.displayName || "",
-      phone: extraData.phone || "",
-      city: "",
-      address: "",
-      provider: user.providerData[0]?.providerId || "password",
-      photoURL: user.photoURL || "",
-      ordersCount: 0,
-      totalSpent: 0,
-      createdAt: serverTimestamp(),
-      lastLogin: serverTimestamp()
-    });
-  } else {
-    await updateDoc(userRef, { lastLogin: serverTimestamp() });
-  }
-}
 
 /* ═══════ ترجمة أخطاء Firebase للعربي ═══════ */
 function translateError(code) {
@@ -405,18 +535,11 @@ function setupAuthListener() {
     }));
 
     if (user) {
-      const userData = await VL_GetCurrentUser();
-      if (userData) {
-        localStorage.setItem("vl_user", JSON.stringify({
-          name: userData.name,
-          phone: userData.phone,
-          city: userData.city,
-          addr: userData.address,
-          uid: userData.uid,
-          email: userData.email,
-          orders: userData.ordersCount || 0
-        }));
-      }
+      /* ✨ الإصلاح: syncUserData بدل الاعتماد على البيانات الجزئية */
+      await syncUserData();
+    } else {
+      /* المستخدم سجل خروج → امسح البيانات */
+      localStorage.removeItem("vl_user");
     }
     updateAccountUI();
   });
