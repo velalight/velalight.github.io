@@ -1,4 +1,4 @@
-/* ═══════ VelaLight — BEIGE EDITION (Clean & Fixed) ═══════ */
+/* ═══════ VelaLight — BEIGE EDITION (Clean & Fixed + Mobile Optimized) ═══════ */
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
  --bg:#faf6f0;--bg2:#f5efe5;--panel:#ffffff;--panel2:#faf6ef;
@@ -8,7 +8,7 @@
  --ff:'Tajawal',sans-serif;--fd:'El Messiri',serif;
  --sh:0 10px 30px -12px rgba(100,70,30,.12);
 }
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
 body{
  font-family:var(--ff);
  background:var(--bg);
@@ -19,6 +19,8 @@ body{
   radial-gradient(900px 500px at 85% -5%,rgba(217,171,95,.08),transparent 60%),
   radial-gradient(700px 500px at 8% 20%,rgba(255,157,69,.04),transparent 60%);
  animation:fadeIn .4s ease;
+ -webkit-font-smoothing:antialiased;
+ -moz-osx-font-smoothing:grayscale;
 }
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 img{max-width:100%;display:block}
@@ -92,6 +94,7 @@ small{color:var(--dim)}
  overflow:hidden;
  transition:.3s;
  box-shadow:0 6px 18px -8px rgba(217,171,95,.5);
+ -webkit-tap-highlight-color:transparent;
 }
 .btn:hover{transform:translateY(-2px)}
 .btn:active{transform:scale(.96)}
@@ -209,8 +212,10 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  transition:.25s;
  font-size:1rem;
  color:var(--ink);
+ -webkit-tap-highlight-color:transparent;
 }
 .icobtn:hover{border-color:var(--line);background:rgba(217,171,95,.07)}
+.icobtn:active{transform:scale(.95)}
 .badge{
  position:absolute;
  top:2px;
@@ -234,8 +239,10 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  padding:.32rem .75rem;
  color:var(--gold2);
  transition:.25s;
+ -webkit-tap-highlight-color:transparent;
 }
 .langbtn:hover{background:var(--gold);color:#fff}
+.langbtn:active{transform:scale(.95)}
 #navToggle{display:none}
 
 /* ═══ Chips (container hidden, chip styled for modals) ═══ */
@@ -253,8 +260,10 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  background:rgba(217,171,95,.04);
  cursor:pointer;
  white-space:nowrap;
+ -webkit-tap-highlight-color:transparent;
 }
 .chip:hover{color:var(--gold2);border-color:var(--gold)}
+.chip:active{transform:scale(.95)}
 .chip.on{
  background:linear-gradient(135deg,var(--gold),#b8863f);
  color:#fff;
@@ -268,8 +277,14 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  margin:.5rem 0;
 }
 
-/* ═══ Products ═══ */
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.4rem}
+/* ═══════════════════════════════════════════════════════════
+   ═══ PRODUCTS — ENHANCED (Mobile + Performance Fix) ═══
+   ═══════════════════════════════════════════════════════════ */
+.pgrid{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+ gap:1.4rem;
+}
 .p-card{
  background:var(--panel);
  border:1px solid var(--line);
@@ -279,32 +294,53 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  display:flex;
  flex-direction:column;
  box-shadow:0 4px 12px -4px rgba(100,70,30,.06);
+ contain:layout style paint; /* performance boost */
 }
 .p-card:hover{transform:translateY(-4px);border-color:rgba(217,171,95,.35);box-shadow:0 12px 28px -8px rgba(100,70,30,.15)}
-.p-media{position:relative;overflow:hidden;aspect-ratio:1;display:block}
 
-/* ✨ FIX: الصور تظهر دايماً على كل الأجهزة */
+/* ✨ FIX #1: الـ p-media يظهر الصورة فوراً + placeholder واضح */
+.p-media{
+ position:relative;
+ overflow:hidden;
+ aspect-ratio:1;
+ display:block;
+ background:linear-gradient(135deg,#f5efe5 0%,#faf6ef 50%,#f5efe5 100%);
+ background-size:200% 200%;
+ animation:shimmer 2.5s ease-in-out infinite;
+ text-decoration:none;
+ -webkit-tap-highlight-color:transparent;
+}
+@keyframes shimmer{
+ 0%{background-position:0% 50%}
+ 50%{background-position:100% 50%}
+ 100%{background-position:0% 50%}
+}
+
+/* ✨ FIX #2: الصور تظهر فوراً (opacity:1) عشان تقدر تدوس عليها */
 .p-media img{
  width:100%;
  height:100%;
  object-fit:cover;
- transition:.6s;
- opacity:1;
+ transition:transform .6s ease, opacity .4s ease;
+ opacity:1; /* الصورة تظهر فوراً */
+ position:relative;
+ z-index:1;
 }
-.p-media img.loaded{opacity:1}
+.p-media img:not([src]),
+.p-media img[src=""]{
+ opacity:0;
+}
+.p-media img.loaded{
+ opacity:1;
+ animation:imgFadeIn .5s ease;
+}
+@keyframes imgFadeIn{
+ from{opacity:0;transform:scale(.98)}
+ to{opacity:1;transform:scale(1)}
+}
 .p-card:hover .p-media img{transform:scale(1.05)}
 
-.p-badge{
- position:absolute;
- top:12px;
- inset-inline-start:12px;
- background:linear-gradient(135deg,var(--gold),#b8863f);
- color:#fff;
- font-size:.7rem;
- font-weight:800;
- padding:.3rem .75rem;
- border-radius:99px;
-}
+/* ✨ FIX #3: Quick view button يظهر دايماً على الموبايل */
 .p-quick{
  position:absolute;
  bottom:0;
@@ -318,12 +354,49 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  font-weight:600;
  transform:translateY(100%);
  transition:.3s;
+ z-index:2;
+ pointer-events:none; /* مش بيمنع النقر على الصورة */
 }
-.p-card:hover .p-quick{transform:none}
-.p-body{padding:1rem 1.1rem 1.2rem;display:flex;flex-direction:column;flex:1}
-.p-cat{font-size:.7rem;color:var(--gold2);letter-spacing:.08em;text-transform:uppercase}
-.p-body h3{font-family:var(--fd);font-size:1.05rem;margin:.25rem 0;color:var(--ink)}
+.p-card:hover .p-quick{transform:none;pointer-events:auto}
+
+.p-badge{
+ position:absolute;
+ top:12px;
+ inset-inline-start:12px;
+ background:linear-gradient(135deg,var(--gold),#b8863f);
+ color:#fff;
+ font-size:.7rem;
+ font-weight:800;
+ padding:.3rem .75rem;
+ border-radius:99px;
+ z-index:3;
+ pointer-events:none;
+}
+
+.p-body{
+ padding:1rem 1.1rem 1.2rem;
+ display:flex;
+ flex-direction:column;
+ flex:1;
+}
+.p-cat{
+ font-size:.7rem;
+ color:var(--gold2);
+ letter-spacing:.08em;
+ text-transform:uppercase;
+}
+.p-body h3{
+ font-family:var(--fd);
+ font-size:1.05rem;
+ margin:.25rem 0;
+ color:var(--ink);
+ line-height:1.3;
+}
 .p-body h3 a:hover{color:var(--gold2)}
+.p-body h3 a{
+ -webkit-tap-highlight-color:transparent;
+}
+
 .p-desc{
  font-size:.85rem;
  color:var(--mut);
@@ -343,30 +416,50 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  margin-bottom:.5rem;
  text-decoration:none;
  transition:.2s;
+ -webkit-tap-highlight-color:transparent;
 }
 .p-desc-link:hover{color:var(--gold);text-decoration:underline}
+
 .p-foot{
  margin-top:auto;
  display:flex;
  align-items:center;
  justify-content:space-between;
  gap:.6rem;
+ flex-wrap:wrap;
 }
-.p-price{font-weight:800;font-size:1.05rem;color:var(--gold2)}
+.p-price{
+ font-weight:800;
+ font-size:1.05rem;
+ color:var(--gold2);
+ display:flex;
+ align-items:baseline;
+ gap:.3rem;
+ flex-wrap:wrap;
+}
 .p-price small{font-size:.68rem;color:var(--dim)}
-.p-price del{font-size:.75rem;color:var(--dim);font-weight:400;margin-inline-start:.3rem}
+.p-price del{
+ font-size:.75rem;
+ color:var(--dim);
+ font-weight:400;
+ margin-inline-start:.3rem;
+ text-decoration:line-through;
+}
 .p-add{
  border:1px solid var(--gold);
  color:var(--gold2);
  border-radius:99px;
- padding:.4rem .9rem;
+ padding:.45rem 1rem;
  font-size:.78rem;
  font-weight:700;
  transition:.25s;
  white-space:nowrap;
+ -webkit-tap-highlight-color:transparent;
 }
 .p-add:hover{background:var(--gold);color:#fff}
+.p-add:active{transform:scale(.96)}
 .stars{color:var(--gold);font-size:.8rem;letter-spacing:2px}
+
 .skel{
  background:linear-gradient(100deg,#f0ebe2 40%,#faf6ef 50%,#f0ebe2 60%);
  background-size:200% 100%;
@@ -395,8 +488,10 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  border-radius:14px;
  padding:.75rem 1rem;
  transition:.25s;
+ -webkit-tap-highlight-color:transparent;
 }
 .scent:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:var(--sh)}
+.scent:active{transform:translateY(-1px)}
 .scent i{
  font-style:normal;
  width:26px;
@@ -423,8 +518,10 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  position:relative;
  overflow:hidden;
  transition:.35s;
+ -webkit-tap-highlight-color:transparent;
 }
 .occ:hover{transform:translateY(-4px);border-color:rgba(217,171,95,.35);box-shadow:var(--sh)}
+.occ:active{transform:translateY(-2px)}
 .occ .num{
  font-family:var(--fd);
  font-size:3.2rem;
@@ -447,8 +544,10 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  border-radius:18px;
  padding:1.3rem;
  transition:.3s;
+ -webkit-tap-highlight-color:transparent;
 }
 .feat:hover{border-color:rgba(217,171,95,.35);transform:translateY(-3px);box-shadow:var(--sh)}
+.feat:active{transform:translateY(-1px)}
 .feat .fi{
  width:44px;
  height:44px;
@@ -483,13 +582,16 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  font-size:.98rem;
  text-align:start;
  color:var(--ink);
+ -webkit-tap-highlight-color:transparent;
+ transition:background .2s;
 }
+.faq-q:active{background:rgba(217,171,95,.04)}
 .faq-q span:last-child{color:var(--gold);transition:.3s;font-size:1.2rem}
 .faq-item.open .faq-q span:last-child{transform:rotate(45deg)}
 .faq-a{
  max-height:0;
  overflow:hidden;
- transition:max-height .4s;
+ transition:max-height .4s ease;
  color:var(--mut);
  font-size:.9rem;
 }
@@ -502,7 +604,10 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  overflow-x:auto;
  padding:.5rem .2rem 1.4rem;
  scroll-snap-type:x mandatory;
+ -webkit-overflow-scrolling:touch;
+ scrollbar-width:none;
 }
+.rev-row::-webkit-scrollbar{display:none}
 .rev-card{
  flex:0 0 280px;
  scroll-snap-align:start;
@@ -532,6 +637,7 @@ footer{
  font-size:.88rem;
  padding:.28rem 0;
  transition:.2s;
+ -webkit-tap-highlight-color:transparent;
 }
 .fgrid a:hover{color:var(--gold);padding-inline-start:.4rem}
 .paybox{
@@ -664,6 +770,7 @@ footer{
  overflow-y:auto;
  padding:1rem 1.1rem;
  min-height:150px;
+ -webkit-overflow-scrolling:touch;
 }
 .dbody::-webkit-scrollbar,.dfoot::-webkit-scrollbar{width:4px}
 .dbody::-webkit-scrollbar-thumb,.dfoot::-webkit-scrollbar-thumb{
@@ -679,6 +786,7 @@ footer{
  background:var(--panel);
  border-radius:18px 18px 0 0;
  box-shadow:0 -8px 24px rgba(100,70,30,.10);
+ -webkit-overflow-scrolling:touch;
 }
 .dfoot-title{
  color:var(--gold2);
@@ -782,8 +890,10 @@ footer{
  padding:.2rem .45rem;
  border-radius:8px;
  transition:.2s;
+ -webkit-tap-highlight-color:transparent;
 }
 .citem .rm:hover{background:rgba(194,74,58,.12)}
+.citem .rm:active{background:rgba(194,74,58,.2)}
 .dbody .empty{padding:2.2rem 0 !important;font-size:.95rem}
 .dbody .empty small{display:block;margin-top:.3rem}
 
@@ -801,6 +911,7 @@ footer{
  transition:.4s;
  padding:1.4rem;
  overflow-y:auto;
+ -webkit-overflow-scrolling:touch;
 }
 html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
 .mnav.open{transform:none!important}
@@ -812,11 +923,17 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
 }
 .mnav a{
  display:block;
- padding:.5rem 0;
+ padding:.7rem 0;
  border-bottom:1px solid var(--line);
- font-size:.92rem;
+ font-size:.95rem;
  color:var(--mut);
+ -webkit-tap-highlight-color:transparent;
+ transition:background .2s;
+ min-height:44px;
+ display:flex;
+ align-items:center;
 }
+.mnav a:active{background:rgba(217,171,95,.06)}
 
 /* ═══ Chat ═══ */
 #chatFab{
@@ -833,8 +950,10 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  box-shadow:0 10px 30px -8px rgba(217,171,95,.5);
  transition:.3s;
  animation:floaty 4s ease-in-out infinite;
+ -webkit-tap-highlight-color:transparent;
 }
 #chatFab:hover{transform:scale(1.1)}
+#chatFab:active{transform:scale(.95)}
 @keyframes floaty{50%{transform:translateY(-12px)}}
 #chatOv{
  position:fixed;
@@ -871,6 +990,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  display:flex;
  flex-direction:column;
  gap:.6rem;
+ -webkit-overflow-scrolling:touch;
 }
 .msg{
  max-width:85%;
@@ -904,8 +1024,10 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  padding:.35rem .75rem;
  color:var(--mut);
  transition:.2s;
+ -webkit-tap-highlight-color:transparent;
 }
 .chat-q button:hover{border-color:var(--gold);color:var(--gold2)}
+.chat-q button:active{transform:scale(.95)}
 
 /* ═══ Toasts & misc ═══ */
 #toasts{
@@ -918,6 +1040,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  flex-direction:column;
  gap:.5rem;
  align-items:center;
+ pointer-events:none;
 }
 .toast{
  background:var(--panel);
@@ -928,6 +1051,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  font-size:.85rem;
  box-shadow:var(--sh);
  animation:tin .35s ease;
+ pointer-events:auto;
 }
 @keyframes tin{from{opacity:0;transform:translateY(14px)}}
 .empty{text-align:center;color:var(--dim);padding:3rem 0}
@@ -940,51 +1064,385 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  font-size:.78rem;
  color:var(--mut);
  transition:.25s;
+ -webkit-tap-highlight-color:transparent;
 }
 .share-row a:hover{border-color:var(--gold);color:var(--gold2)}
+.share-row a:active{transform:scale(.95)}
 
-/* ═══ Responsive ═══ */
+/* ═══════════════════════════════════════════════════════════
+   ═══ RESPONSIVE — MOBILE FIRST ENHANCEMENTS ═══
+   ═══════════════════════════════════════════════════════════ */
+
+/* ═══ Tablets & Large Mobiles ═══ */
 @media(max-width:960px){
  nav.mainnav{display:none}
  #navToggle{display:grid}
  .about .wrap,.pd-grid{grid-template-columns:1fr}
  .fgrid{grid-template-columns:1fr 1fr}
+ 
+ /* تحسينات الموبايل الأولى */
+ .sec{padding:4rem 0}
+ .sec-head{margin-bottom:2rem}
+ .sec-head h2{font-size:clamp(1.5rem,5vw,2.2rem)}
+ 
+ /* تحسين الـ products grid */
+ .pgrid{
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:1.1rem;
+ }
 }
-@media(max-width:600px){
- .sec{padding:3rem 0}
- .fgrid{grid-template-columns:1fr}
- .pform .g,.co-form .g2,.rv-form .row{grid-template-columns:1fr}
- .pgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+
+/* ═══ Mobile Phones ═══ */
+@media(max-width:768px){
+ body{line-height:1.6}
+ 
+ .sec{padding:3.5rem 0}
+ .sec-head{margin-bottom:1.8rem;text-align:center}
+ .sec-head p{margin-inline:auto}
+ 
+ /* Header محسن */
+ .hrow{gap:.8rem;padding:.5rem 0;min-height:54px}
+ .logo b{font-size:1.15rem}
+ .logo small{font-size:.5rem}
+ 
+ /* Products محسنة جداً للموبايل */
+ .pgrid{
+  grid-template-columns:repeat(2,1fr);
+  gap:.9rem;
+ }
+ 
+ .p-card{
+  border-radius:14px;
+  transition:transform .2s, border-color .2s;
+ }
+ 
+ /* ✨ FIX #4: الصور تظهر فوراً على الموبايل */
+ .p-media img{
+  opacity:1 !important;
+  transition:transform .3s ease;
+ }
+ 
+ /* ✨ FIX #5: زر "عرض التفاصيل" يظهر دايماً على الموبايل */
+ .p-quick{
+  transform:translateY(0);
+  padding:.45rem .3rem;
+  font-size:.72rem;
+  background:rgba(250,246,240,.88);
+  backdrop-filter:blur(8px);
+  border-top:1px solid rgba(217,171,95,.15);
+ }
+ 
+ .p-card:active{
+  transform:scale(.98);
+  border-color:rgba(217,171,95,.35);
+ }
+ 
+ .p-card:active .p-media img{
+  transform:scale(.97);
+ }
+ 
+ .p-body{
+  padding:.7rem .75rem .85rem;
+ }
+ 
+ .p-cat{
+  font-size:.6rem;
+  letter-spacing:.05em;
+ }
+ 
+ .p-body h3{
+  font-size:.92rem;
+  margin:.2rem 0;
+  line-height:1.25;
+  min-height:2.3em; /* ارتفاع ثابت للاسم */
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+ }
+ 
+ .p-desc{
+  font-size:.76rem;
+  margin:.3rem 0 .25rem;
+  line-height:1.4;
+  -webkit-line-clamp:2;
+  min-height:2.1em;
+ }
+ 
+ .p-desc-link{
+  font-size:.72rem;
+  margin-bottom:.4rem;
+ }
+ 
+ .p-foot{
+  gap:.4rem;
+  flex-direction:column;
+  align-items:flex-start;
+ }
+ 
+ .p-price{
+  font-size:.95rem;
+  width:100%;
+ }
+ 
+ .p-price del{
+  font-size:.7rem;
+ }
+ 
+ .p-add{
+  width:100%;
+  padding:.5rem .75rem;
+  font-size:.75rem;
+  justify-content:center;
+ }
+ 
+ .p-badge{
+  top:8px;
+  inset-inline-start:8px;
+  font-size:.62rem;
+  padding:.25rem .6rem;
+ }
+ 
+ /* تحسينات عامة */
+ .fgrid{grid-template-columns:1fr;gap:2rem}
+ .about .wrap{gap:2rem}
+ .about img{transform:none;border-radius:18px}
+ .stats{gap:1.5rem}
+ .stat b{font-size:1.6rem}
+ 
+ /* Cart محسن */
  .citem{padding:.6rem;gap:.6rem}
  .citem-media{flex:0 0 54px;width:54px;height:54px}
  .citem-media img{width:54px;height:54px}
  .cart-scent-select{font-size:.78rem;padding:.4rem .5rem}
- #backToTop{width:40px;height:40px;font-size:1rem;bottom:16px}
- #chatFab{width:50px;height:50px;font-size:1.2rem}
+ .citem-info h5{font-size:.82rem}
+ 
+ /* أزرار */
+ #backToTop{width:42px;height:42px;font-size:1.1rem;bottom:16px;inset-inline-end:16px}
+ #chatFab{width:54px;height:54px;font-size:1.3rem;bottom:16px;inset-inline-start:16px}
+ #chatOv{bottom:80px;inset-inline-start:16px;width:min(340px,92vw)}
+ 
+ /* Toasts */
+ .toast{font-size:.8rem;padding:.6rem 1.2rem}
 }
-@media(max-width:420px){
- .dfoot{max-height:60%}
- .dbody{min-height:120px}
 
-/* ═══ تكبير صورة الهيرو — الضعف ═══ */
-.vl-chroma-grid{
-  grid-template-columns:.9fr 1.1fr !important;
-  gap:24px !important;
-}
-.visual-wrapper{
-  width:100% !important;
-  max-width:640px !important;
-  aspect-ratio:1 !important;
-}
-@media(max-width:900px){
-  .visual-wrapper{
-    width:92% !important;
-    max-width:480px !important;
-  }
-}
+/* ═══ Small Mobile Phones ═══ */
 @media(max-width:480px){
-  .visual-wrapper{
-    width:95% !important;
-    max-width:400px !important;
-  }
+ .wrap{width:94%}
+ 
+ .sec{padding:3rem 0}
+ .sec-head{margin-bottom:1.5rem}
+ .sec-head h2{font-size:clamp(1.4rem,6vw,1.9rem)}
+ .sec-head p{font-size:.9rem}
+ 
+ /* Header أصغر */
+ .hrow{gap:.5rem;padding:.45rem 0;min-height:52px}
+ .logo{gap:.35rem}
+ .logo b{font-size:1.05rem}
+ .logo small{font-size:.45rem;letter-spacing:.12em}
+ .flame{width:10px;height:15px}
+ .icobtn{width:36px;height:36px;font-size:.95rem}
+ .langbtn{padding:.28rem .6rem;font-size:.68rem}
+ 
+ /* Products على موبايلات صغيرة جداً */
+ .pgrid{
+  grid-template-columns:repeat(2,1fr);
+  gap:.7rem;
+ }
+ 
+ .p-card{
+  border-radius:12px;
+ }
+ 
+ .p-media{
+  border-radius:12px 12px 0 0;
+ }
+ 
+ .p-quick{
+  font-size:.65rem;
+  padding:.4rem .25rem;
+ }
+ 
+ .p-body{
+  padding:.6rem .65rem .75rem;
+ }
+ 
+ .p-cat{
+  font-size:.58rem;
+ }
+ 
+ .p-body h3{
+  font-size:.85rem;
+  min-height:2.2em;
+ }
+ 
+ .p-desc{
+  font-size:.7rem;
+  -webkit-line-clamp:1;
+  min-height:1.6em;
+  margin:.25rem 0 .2rem;
+ }
+ 
+ .p-desc-link{
+  font-size:.68rem;
+  margin-bottom:.35rem;
+ }
+ 
+ .p-price{
+  font-size:.88rem;
+ }
+ 
+ .p-price del{
+  font-size:.65rem;
+ }
+ 
+ .p-add{
+  padding:.45rem .65rem;
+  font-size:.72rem;
+ }
+ 
+ /* Scents grid */
+ .scent-grid{grid-template-columns:repeat(2,1fr);gap:.6rem}
+ .scent{padding:.6rem .75rem;gap:.5rem;border-radius:12px}
+ .scent b{font-size:.8rem}
+ .scent small{font-size:.62rem}
+ .scent i{width:22px;height:22px;font-size:.65rem}
+ 
+ /* Occasions */
+ .occ-grid{grid-template-columns:1fr;gap:1rem}
+ .occ{padding:1.4rem 1.2rem;border-radius:16px}
+ .occ .num{font-size:2.5rem}
+ .occ h3{font-size:1.1rem}
+ .occ p{font-size:.82rem}
+ 
+ /* Features */
+ .feat-grid{grid-template-columns:1fr;gap:.9rem}
+ .feat{padding:1rem;border-radius:14px}
+ .feat .fi{width:40px;height:40px;border-radius:10px;font-size:1.05rem}
+ .feat h4{font-size:1rem}
+ .feat p{font-size:.8rem}
+ 
+ /* FAQ */
+ .faq-item{border-radius:12px;margin-bottom:.7rem}
+ .faq-q{padding:.9rem 1.1rem;font-size:.9rem}
+ .faq-q span:last-child{font-size:1.05rem}
+ .faq-a{font-size:.84rem}
+ .faq-a div{padding:0 1.1rem 1rem}
+ 
+ /* Reviews */
+ .rev-card{flex:0 0 240px;border-radius:14px}
+ .rev-card .rb{padding:.65rem .85rem}
+ 
+ /* Footer */
+ footer{padding:2.5rem 0 1.2rem;margin-top:2rem}
+ .fgrid{gap:1.5rem}
+ .fgrid h4{font-size:1rem;margin-bottom:.7rem}
+ .fgrid a{font-size:.82rem;padding:.35rem 0}
+ .paybox{padding:.7rem .8rem;font-size:.72rem}
+ .fbot{margin-top:2rem;padding-top:1rem;font-size:.72rem}
+ 
+ /* Cart drawer */
+ .drawer{width:100vw}
+ .dhead{padding:.75rem 1rem}
+ .dhead h3{font-size:1rem}
+ .dbody{padding:.85rem 1rem}
+ .dfoot{padding:.85rem 1rem calc(.85rem + env(safe-area-inset-bottom))}
+ 
+ .citem{padding:.55rem;gap:.55rem;border-radius:12px}
+ .citem-media{flex:0 0 50px;width:50px;height:50px;border-radius:8px}
+ .citem-media img{width:50px;height:50px}
+ .citem-info h5{font-size:.78rem;margin-bottom:.2rem}
+ .citem .cs{font-size:.7rem}
+ .cart-scent-label{font-size:.65rem}
+ .cart-scent-select{font-size:.75rem;padding:.4rem .5rem}
+ .cart-line-total{font-size:.72rem;margin-top:.3rem;padding-top:.3rem}
+ .citem .qty button{width:28px;height:28px;font-size:.9rem}
+ .citem .qty b{min-width:28px;font-size:.8rem}
+ .citem .rm{top:.4rem;inset-inline-end:.4rem;font-size:.75rem}
+ 
+ /* Mobile nav */
+ .mnav{width:100vw;padding:1rem}
+ .mnav h5{font-size:.7rem;margin:1rem 0 .4rem}
+ .mnav a{font-size:.9rem;padding:.65rem 0;min-height:42px}
+ 
+ /* Chat */
+ #chatFab{width:50px;height:50px;font-size:1.2rem;bottom:14px;inset-inline-start:14px}
+ #chatOv{bottom:75px;inset-inline-start:14px;width:calc(100vw - 28px)}
+ .chat-h{padding:.85rem 1rem}
+ .chat-h b{font-size:1rem}
+ .chat-h small{font-size:.65rem}
+ #chatMsgs{height:260px;padding:.85rem;gap:.5rem}
+ .msg{font-size:.78rem;padding:.55rem .8rem}
+ .chat-q{padding:.6rem;gap:.35rem}
+ .chat-q button{font-size:.68rem;padding:.3rem .65rem}
+ 
+ /* Toasts */
+ #toasts{bottom:18px}
+ .toast{font-size:.76rem;padding:.55rem 1.1rem}
+}
+
+/* ═══ Extra Small Mobile Phones ═══ */
+@media(max-width:360px){
+ .pgrid{gap:.6rem}
+ .p-card{border-radius:10px}
+ .p-media{border-radius:10px 10px 0 0}
+ .p-quick{font-size:.6rem;padding:.35rem .2rem}
+ .p-body{padding:.5rem .6rem .65rem}
+ .p-body h3{font-size:.8rem;min-height:2em}
+ .p-desc{font-size:.68rem}
+ .p-price{font-size:.82rem}
+ .p-add{font-size:.7rem;padding:.4rem .6rem}
+}
+
+/* ═══ Very Small Screens (landscape or tiny devices) ═══ */
+@media(max-height:500px) and (orientation:landscape){
+ .sec{padding:2.5rem 0}
+ #chatFab{width:46px;height:46px;font-size:1.1rem}
+ #backToTop{width:40px;height:40px}
+}
+
+/* ═══ Safe Area for Notched Phones ═══ */
+@supports(padding:max(0px)){
+ body{
+  padding-top:env(safe-area-inset-top);
+  padding-bottom:env(safe-area-inset-bottom);
+ }
+ .dfoot{
+  padding-bottom:calc(1rem + env(safe-area-inset-bottom));
+ }
+}
+
+/* ═══ Touch Device Optimizations ═══ */
+@media(hover:none) and (pointer:coarse){
+ /* على أجهزة اللمس، نخفي تأثيرات hover اللي مش مناسبة */
+ .p-card:hover{transform:none;box-shadow:0 4px 12px -4px rgba(100,70,30,.06)}
+ .p-card:hover .p-media img{transform:none}
+ .btn:hover{transform:none}
+ .icobtn:hover{border-color:transparent;background:transparent}
+ .langbtn:hover{background:transparent;color:var(--gold2)}
+ .chip:hover{color:var(--mut);border-color:var(--line)}
+ 
+ /* نعتمد على :active بدل :hover */
+ .p-card:active{transform:scale(.98)}
+ .p-card:active .p-media img{transform:scale(.98)}
+ .btn:active{transform:scale(.96)}
+ .icobtn:active{background:rgba(217,171,95,.1)}
+}
+
+/* ═══ Reduced Motion ═══ */
+@media(prefers-reduced-motion:reduce){
+ *,
+ *::before,
+ *::after{
+  animation-duration:.01ms !important;
+  animation-iteration-count:1 !important;
+  transition-duration:.01ms !important;
+ }
+}
+
+/* ═══ Print ═══ */
+@media print{
+ header,.topbar,#chatFab,#backToTop,#toasts,.mnav,.drawer,.ovl{display:none!important}
+ body{background:#fff;color:#000}
+ .p-card{break-inside:avoid}
 }
