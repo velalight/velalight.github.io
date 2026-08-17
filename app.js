@@ -731,7 +731,10 @@ function genOrderId(){
   return "VL-"+s;
 }
 
-/* ═══════ CHECKOUT ═══════ */
+/* ═══════════════════════════════════════════════════════════
+   ═══ CHECKOUT — مع حفظ userId لو العميل مسجل ═══
+   (التعديل الوحيد: إضافة userId للطلب)
+   ═══════════════════════════════════════════════════════════ */
 async function checkout(){
   const c=getCart();
 
@@ -764,6 +767,14 @@ async function checkout(){
   const orderId=genOrderId();
   const total=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
 
+  /* ═══ ✨ الجديد: حفظ userId لو العميل مسجل ═══ */
+  let userId = null;
+  let userEmail = null;
+  if(window.FB && window.FB.auth && window.FB.auth.currentUser){
+    userId = window.FB.auth.currentUser.uid;
+    userEmail = window.FB.auth.currentUser.email;
+  }
+
   let msg=`${t("wa_head")}\n`;
   msg+=`${t("wa_order")} ${orderId}\n`;
   msg+=`━━━━━━━━━━━━━━━━━━━━\n\n`;
@@ -791,9 +802,15 @@ async function checkout(){
   if(city){msg+=`${t("wa_city")} ${city}\n`;}
   msg+=`${t("wa_addr")} ${addr}\n`;
   if(notes){msg+=`${t("wa_notes")} ${notes}\n`;}
+  /* ═══ ✨ إضافة الإيميل لو مسجل ═══ */
+  if(userEmail){
+    msg+=`${LANG==="en"?"Email:":"الإيميل:"} ${userEmail}\n`;
+  }
 
   const orderData={
     orderId,
+    userId,          /* ═══ ✨ الجديد ═══ */
+    userEmail,       /* ═══ ✨ الجديد ═══ */
     customer:{name,phone,city,address:addr},
     name,phone,city,address:addr,notes,
     products:c.map(it=>({
@@ -822,6 +839,20 @@ async function checkout(){
   const oc=$("#ordCount");
   if(oc){oc.textContent=u.orders;}
 
+  /* ═══ ✨ الجديد: تحديث عدد الطلبات في Firestore ═══ */
+  if(userId && window.FB && window.FB.db){
+    try{
+      const { doc, updateDoc, increment } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      const userRef = doc(window.FB.db, "users", userId);
+      await updateDoc(userRef, {
+        ordersCount: increment(1),
+        totalSpent: increment(total)
+      });
+    }catch(err){
+      console.warn("Failed to update user order count:", err);
+    }
+  }
+
   saveCart([]);
   renderCart();
   cartBadge();
@@ -836,7 +867,10 @@ function waTotalLabel(){
   return LANG==="en"?"💰 Products Total:":"💰 إجمالي المنتجات:";
 }
 
-/* ═══════ ACCOUNT ═══════ */
+/* ═══════════════════════════════════════════════════════════
+   ═══ ACCOUNT — مع دعم تسجيل الدخول الحقيقي ═══
+   (التعديل الوحيد هنا: لو مش مسجل يفتح نافذة تسجيل الدخول)
+   ═══════════════════════════════════════════════════════════ */
 function initAccount(){
   fillCitySelect($("#accCity"));
   const u=getSavedUser();
@@ -846,19 +880,45 @@ function initAccount(){
   if(u.addr){$("#accAddr").value=u.addr;}
   if(u.orders){$("#ordCount").textContent=u.orders;}
 
-  $("#accBtn")?.addEventListener("click",()=>{openDrawer("accOv");});
+  $("#accBtn")?.addEventListener("click", async ()=>{
+    /* ═══ ✨ الجديد: لو مسجل في Firebase يفتح حسابي، لو لا يفتح تسجيل الدخول ═══ */
+    if(window.FB && window.FB.auth && window.FB.auth.currentUser){
+      /* مسجل → حمّل بياناته من Firestore وافتح الحساب */
+      await loadUserData();
+      openDrawer("accOv");
+    }else{
+      /* مش مسجل → افتح نافذة تسجيل الدخول */
+      if(typeof openAuthModal === "function"){
+        openAuthModal();
+      }else{
+        openDrawer("accOv");
+      }
+    }
+  });
   $("#closeAcc")?.addEventListener("click",()=>closeModal("accOv"));
   $("#accOv")?.addEventListener("click",e=>{
     if(e.target.id==="accOv"){closeModal("accOv");}
   });
 
-  $("#saveAccBtn")?.addEventListener("click",()=>{
+  $("#saveAccBtn")?.addEventListener("click", async ()=>{
     const name=$("#accName").value.trim();
     const phone=$("#accPhone").value.trim();
     const city=$("#accCity").value;
     const addr=$("#accAddr").value.trim();
     if(!name){toast(LANG==="en"?"⚠️ Enter your name.":"⚠️ اكتبي الاسم.");return;}
     if(!phone){toast(LANG==="en"?"⚠️ Enter your phone.":"⚠️ اكتبي رقم الموبايل.");return;}
+
+    /* ═══ ✨ الجديد: لو مسجل في Firebase احفظ في Firestore ═══ */
+    if(window.FB && window.FB.auth && window.FB.auth.currentUser && typeof VL_UpdateProfile === "function"){
+      const result = await VL_UpdateProfile({name, phone, city, address: addr});
+      if(result.success){
+        toast(t("t_saved"));
+        closeModal("accOv");
+        return;
+      }
+    }
+
+    /* Fallback: localStorage للضيوف */
     const old=getSavedUser();
     localStorage.setItem("vl_user",JSON.stringify({...old,name,phone,city,addr,orders:old.orders||0}));
     fillCartForm();
@@ -866,7 +926,11 @@ function initAccount(){
     closeModal("accOv");
   });
 
-  $("#logoutBtn")?.addEventListener("click",()=>{
+  $("#logoutBtn")?.addEventListener("click", async ()=>{
+    /* ═══ ✨ الجديد: تسجيل خروج من Firebase لو مسجل ═══ */
+    if(window.FB && window.FB.auth && window.FB.auth.currentUser && typeof VL_Logout === "function"){
+      await VL_Logout();
+    }
     localStorage.removeItem("vl_user");
     $("#accName").value="";
     $("#accPhone").value="";
@@ -874,7 +938,21 @@ function initAccount(){
     if($("#accCity")){$("#accCity").value="";}
     $("#ordCount").textContent="0";
     toast(t("t_saved"));
+    closeModal("accOv");
   });
+}
+
+/* ═══ ✨ دالة جديدة: تحميل بيانات المستخدم من Firestore ═══ */
+async function loadUserData(){
+  if(typeof VL_GetCurrentUser !== "function") return;
+  const userData = await VL_GetCurrentUser();
+  if(!userData) return;
+
+  if($("#accName"))  $("#accName").value  = userData.name     || "";
+  if($("#accPhone")) $("#accPhone").value = userData.phone    || "";
+  if($("#accCity"))  $("#accCity").value  = userData.city     || "";
+  if($("#accAddr"))  $("#accAddr").value  = userData.address  || "";
+  if($("#ordCount")) $("#ordCount").textContent = userData.ordersCount || 0;
 }
 
 function fillCitySelect(sel){
