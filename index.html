@@ -604,16 +604,29 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   bottom: 10%;
   left: -5%;
   background: #fff;
-  padding: 12px 20px;
+  padding: 14px 30px;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: #b68d2e;
-  border: 1px solid #f0f0f0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(212,175,55,0.1);
+  font-family: 'El Messiri', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1512;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(212,175,55,0.35);
   animation: floatCard 4s infinite alternate;
 }
 
+/* ✨ تأثير اسود على الكلمة */
+.floating-card span {
+  font-family: 'El Messiri', serif;
+  background: linear-gradient(135deg, #b68d2e 0%, #d4af37 25%, #fff 50%, #d4af37 75%, #b68d2e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: chromaFlow 3s linear infinite;
+}
+  
 @keyframes floatCard {
   from { transform: translateY(0); }
   to { transform: translateY(-15px); }
