@@ -1,290 +1,478 @@
 /* =========================================================
-   VelaLight — MOBILE LUXURY FIX
-   يحافظ على شكل الهيرو الأصلي ويضغط المساحات فقط
+   VelaLight — MOBILE LUXURY FIX (النسخة الكاملة المصححة)
+   إصلاحات شاملة للموبايل + تحسين الأداء + UX ممتاز
    ========================================================= */
 
+/* ═══════ Tablet & Large Mobile (601px - 900px) ═══════ */
 @media (max-width: 900px) {
 
-  .vl-chroma-hero{
+  .vl-chroma-hero {
     min-height: auto;
     height: auto;
-    padding: 24px 0 28px;
+    padding: 28px 0 32px;
   }
 
-  .vl-chroma-container{
+  .vl-chroma-container {
     width: min(94%, 700px);
   }
 
-  .vl-chroma-grid{
-    grid-template-columns: .92fr 1.08fr;
-    gap: 12px;
+  /* ✨ إصلاح: Hero يبقى عمود واحد (صورة فوق، محتوى تحت) */
+  .vl-chroma-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
     align-items: center;
     direction: ltr;
   }
 
-  .vl-chroma-content{
+  .vl-chroma-content {
     direction: rtl;
-    text-align: right;
+    text-align: center;
     min-width: 0;
+    order: 2; /* المحتوى تحت */
   }
 
-  .vl-badge-premium{
-    padding: 5px 10px;
-    font-size: .63rem;
-    margin-bottom: 10px;
+  .vl-chroma-visual {
+    order: 1; /* الصورة فوق */
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .visual-wrapper {
+    width: min(100%, 340px);
+    max-width: 340px;
+    margin-inline: auto;
+    aspect-ratio: 1;
+  }
+
+  .hero-img-main {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .vl-badge-premium {
+    padding: 6px 12px;
+    font-size: .72rem;
+    margin-bottom: 12px;
     white-space: nowrap;
+    display: inline-block;
   }
 
-  .vl-chroma-title{
-    font-size: clamp(1.65rem, 7vw, 2.35rem);
-    line-height: 1.18;
-    margin-bottom: 10px;
+  .vl-chroma-title {
+    font-size: clamp(1.7rem, 7vw, 2.2rem);
+    line-height: 1.2;
+    margin-bottom: 12px;
   }
 
-  .vl-chroma-lead{
-    font-size: .82rem;
+  .vl-chroma-lead {
+    font-size: .92rem;
     line-height: 1.7;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
     max-width: 100%;
   }
 
-  .vl-chroma-actions{
-    gap: 9px;
-    margin-bottom: 14px;
+  .vl-chroma-actions {
+    gap: 10px;
+    margin-bottom: 18px;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
-  .btn-primary-lux{
-    padding: 9px 13px;
-    border-radius: 9px;
+  /* ✨ إصلاح: Touch targets 44px على الأقل */
+  .btn-primary-lux {
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: .85rem;
+    white-space: nowrap;
+    min-height: 44px;
+    min-width: 140px;
+  }
+
+  .btn-link-lux {
+    padding: 12px 4px;
+    font-size: .85rem;
+    white-space: nowrap;
+    min-height: 44px;
+  }
+
+  .vl-chroma-stats {
+    gap: 14px;
+    font-size: .75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat-sep {
+    width: 4px;
+    height: 4px;
+    flex: 0 0 4px;
+  }
+
+  .floating-card {
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 14px;
+    border-radius: 12px;
     font-size: .72rem;
-    white-space: nowrap;
+    max-width: 80%;
+    text-align: center;
   }
 
-  .btn-link-lux{
-    padding: 8px 0;
-    font-size: .72rem;
-    white-space: nowrap;
-  }
-
-  .vl-chroma-stats{
-    gap: 7px;
-    font-size: .57rem;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-  }
-
-  .stat-sep{
-    width: 3px;
-    height: 3px;
-    flex: 0 0 3px;
-  }
-
-  .vl-chroma-visual{
-    order: initial;
-    min-width: 0;
-  }
-
-  .visual-wrapper{
-    width: min(100%, 310px);
-    max-width: 310px;
-    margin-inline: auto;
-  }
-
-  .hero-img-main{
-    width: 100%;
-    height: 100%;
-  }
-
-  .floating-card{
-    bottom: 7%;
-    left: -3%;
-    padding: 7px 10px;
-    border-radius: 10px;
-    font-size: .58rem;
-  }
-
-  .topbar{
-    height: 28px;
-    min-height: 28px;
+  /* Header محسن */
+  .topbar {
+    height: 30px;
+    min-height: 30px;
     overflow: hidden;
   }
 
-  .mq-track{
-    font-size: .62rem;
-    line-height: 28px;
+  .mq-track {
+    font-size: .7rem;
+    line-height: 30px;
     white-space: nowrap;
   }
 
-  header{
+  header {
     min-height: 60px;
   }
 
-  .hrow{
+  .hrow {
     min-height: 60px;
     height: 60px;
-    padding-inline: 9px;
+    padding-inline: 12px;
+    gap: 8px;
+  }
+
+  .logo {
+    flex-shrink: 1;
+    min-width: 0;
     gap: 6px;
   }
 
-  .logo{
-    flex-shrink: 1;
-    min-width: 0;
-  }
-
-  .logo b{
-    font-size: 1.35rem;
+  .logo b {
+    font-size: 1.3rem;
     white-space: nowrap;
     letter-spacing: .02em;
   }
 
-  .logo small{
-    font-size: .43rem;
+  .logo small {
+    font-size: .5rem;
     white-space: nowrap;
   }
 
-  .hact{
-    gap: 3px;
+  .flame {
+    width: 10px;
+    height: 14px;
+  }
+
+  .hact {
+    gap: 4px;
     flex-shrink: 0;
   }
 
-  .hact .icobtn{
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
+  .hact .icobtn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
   }
 
-  .langbtn{
-    min-width: 35px;
-    height: 30px;
-    padding: 0 5px;
-    font-size: .68rem;
+  .langbtn {
+    min-width: 40px;
+    height: 36px;
+    padding: 0 8px;
+    font-size: .75rem;
   }
 
-  .mainnav{
+  .mainnav {
     display: none;
   }
 }
 
-/* أصغر الموبايلات */
-@media (max-width: 420px){
+/* ═══════ Mobile Phones (max-width: 480px) ═══════ */
+@media (max-width: 480px) {
 
-  .vl-chroma-hero{
-    padding: 18px 0 22px;
+  .vl-chroma-hero {
+    padding: 20px 0 24px;
   }
 
-  .vl-chroma-container{
+  .vl-chroma-container {
     width: 95%;
   }
 
-  .vl-chroma-grid{
-    grid-template-columns: .94fr 1.06fr;
-    gap: 7px;
+  .vl-chroma-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
   }
 
-  .vl-badge-premium{
-    font-size: .55rem;
-    padding: 4px 7px;
-    margin-bottom: 7px;
+  .vl-chroma-content {
+    order: 2;
+    text-align: center;
   }
 
-  .vl-chroma-title{
-    font-size: 1.48rem;
-    line-height: 1.2;
-    margin-bottom: 7px;
+  .vl-chroma-visual {
+    order: 1;
   }
 
-  .vl-chroma-lead{
+  .visual-wrapper {
+    width: min(100%, 260px);
+    max-width: 260px;
+  }
+
+  .vl-badge-premium {
     font-size: .68rem;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+  }
+
+  .vl-chroma-title {
+    font-size: clamp(1.5rem, 6.5vw, 1.8rem);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .vl-chroma-lead {
+    font-size: .85rem;
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  .vl-chroma-actions {
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-primary-lux {
+    padding: 12px 16px;
+    font-size: .82rem;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .btn-link-lux {
+    font-size: .82rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .vl-chroma-stats {
+    font-size: .68rem;
+    gap: 10px;
+  }
+
+  .floating-card {
+    font-size: .68rem;
+    padding: 7px 12px;
+  }
+
+  .logo b {
+    font-size: 1.15rem;
+  }
+
+  .logo small {
+    font-size: .45rem;
+  }
+
+  .flame {
+    width: 9px;
+    height: 12px;
+  }
+
+  .hact .icobtn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+  }
+
+  .langbtn {
+    min-width: 38px;
+    height: 34px;
+    padding: 0 6px;
+    font-size: .72rem;
+  }
+}
+
+/* ═══════ Small Mobile Phones (max-width: 380px) ═══════ */
+@media (max-width: 380px) {
+
+  .vl-chroma-hero {
+    padding: 16px 0 20px;
+  }
+
+  .visual-wrapper {
+    width: min(100%, 220px);
+    max-width: 220px;
+  }
+
+  .vl-chroma-title {
+    font-size: clamp(1.35rem, 6vw, 1.6rem);
+    margin-bottom: 8px;
+  }
+
+  .vl-chroma-lead {
+    font-size: .8rem;
     line-height: 1.6;
-    margin-bottom: 9px;
+    margin-bottom: 12px;
   }
 
-  .vl-chroma-actions{
+  .btn-primary-lux {
+    padding: 11px 14px;
+    font-size: .78rem;
+  }
+
+  .btn-link-lux {
+    font-size: .78rem;
+  }
+
+  .vl-chroma-stats {
+    font-size: .64rem;
+    gap: 8px;
+  }
+
+  .logo b {
+    font-size: 1.05rem;
+  }
+
+  .logo small {
+    font-size: .42rem;
+  }
+
+  .hrow {
+    padding-inline: 10px;
+    gap: 5px;
+  }
+
+  .hact .icobtn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+}
+
+/* ═══════ Extra Small Mobile (max-width: 360px) ═══════ */
+@media (max-width: 360px) {
+
+  .visual-wrapper {
+    width: min(100%, 200px);
+    max-width: 200px;
+  }
+
+  .vl-chroma-title {
+    font-size: 1.3rem;
+  }
+
+  .vl-chroma-lead {
+    font-size: .76rem;
+  }
+
+  .vl-chroma-stats {
+    font-size: .6rem;
     gap: 6px;
-    margin-bottom: 9px;
   }
 
-  .btn-primary-lux{
-    padding: 7px 9px;
-    font-size: .62rem;
+  .btn-primary-lux {
+    padding: 10px 12px;
+    font-size: .75rem;
   }
 
-  .btn-link-lux{
-    font-size: .61rem;
-  }
-
-  .vl-chroma-stats{
-    font-size: .47rem;
-    gap: 4px;
-  }
-
-  .visual-wrapper{
-    width: min(100%, 190px);
-  }
-
-  .floating-card{
-    padding: 5px 7px;
-    font-size: .48rem;
-  }
-
-  .logo b{
-    font-size: 1.22rem;
-  }
-
-  .logo small{
-    font-size: .38rem;
+  .logo b {
+    font-size: 1rem;
   }
 }
 
-/* ═══════════════════════════════════════
-   إصلاح النوافذ المنبثقة (اللي اشتغل قبل كده)
-   ═══════════════════════════════════════ */
-#scentOv,#accOv,#searchOv{
-  position:fixed;
-  inset:0;
-  z-index:96;
-  display:grid;
-  place-items:center;
-  padding:1rem;
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-  transition:.3s;
-  background:rgba(26,21,18,.45);
-}
-#scentOv.open,#accOv.open,#searchOv.open{
-  opacity:1;
-  visibility:visible;
-  pointer-events:auto;
-}
-#scentOv .mpanel,#accOv .mpanel,#searchOv .mpanel{
-  width:min(460px,96vw);
-  max-height:88vh;
-  overflow-y:auto;
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:1.8rem;
-  box-shadow:0 20px 50px -20px rgba(100,70,30,.25);
+/* ═══════════════════════════════════════════════════════════
+   إصلاح النوافذ المنبثقة (Modals) — محسّن للموبايل
+   ═══════════════════════════════════════════════════════════ */
+#scentOv,
+#accOv,
+#searchOv {
+  position: fixed;
+  inset: 0;
+  z-index: 96;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .3s, visibility .3s;
+  background: rgba(26, 21, 18, .5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
-/* ═══════════════════════════════════════
-   تحسين أداء الموبايل — نسخة آمنة نهائيًا
-   (بيقف حركات ديكورية بس — صفر تغيير في التخطيط)
-   ═══════════════════════════════════════ */
+#scentOv.open,
+#accOv.open,
+#searchOv.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+#scentOv .mpanel,
+#accOv .mpanel,
+#searchOv .mpanel {
+  width: min(460px, 96vw);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 1.8rem;
+  box-shadow: 0 20px 50px -20px rgba(100, 70, 30, .25);
+  -webkit-overflow-scrolling: touch;
+  transform: translateY(20px) scale(.96);
+  transition: transform .3s;
+}
+
+#scentOv.open .mpanel,
+#accOv.open .mpanel,
+#searchOv.open .mpanel {
+  transform: translateY(0) scale(1);
+}
+
+/* Modal محسّن للموبايل */
+@media (max-width: 480px) {
+  #scentOv,
+  #accOv,
+  #searchOv {
+    padding: .5rem;
+    align-items: flex-end; /* Bottom sheet style */
+  }
+
+  #scentOv .mpanel,
+  #accOv .mpanel,
+  #searchOv .mpanel {
+    width: 100%;
+    max-height: 92vh;
+    border-radius: 22px 22px 0 0;
+    padding: 1.4rem;
+    transform: translateY(100%);
+  }
+
+  #scentOv.open .mpanel,
+  #accOv.open .mpanel,
+  #searchOv.open .mpanel {
+    transform: translateY(0);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   تحسين أداء الموبايل — إيقاف الديكور الثقيل
+   ═══════════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
 
-  /* إيقاف الحركات اللي بتستهلك GPU من غير ما تغيّر أي شكل */
+  /* إيقاف الحركات اللي بتستهلك GPU */
   .vl-chroma-bg .blob,
   .visual-glow,
   .embers span,
-  .text-gradient,
-  #chatFab {
+  .text-gradient {
     animation: none !important;
   }
 
-  /* الشمعة تفضل بشكلها الحلو بس من غير حركة morphing */
+  /* الشمعة تفضل بشكلها بس من غير حركة morphing */
   .hero-img-main {
     animation: none !important;
   }
@@ -293,4 +481,295 @@
   .mq-track {
     animation-duration: 60s !important;
   }
+
+  /* إيقاف الـ parallax والتأثيرات الثقيلة */
+  .parallax,
+  [data-parallax] {
+    transform: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   تحسين Touch Experience على الموبايل
+   ═══════════════════════════════════════════════════════════ */
+@media (hover: none) and (pointer: coarse) {
+
+  /* تعطيل الـ hover effects على اللمس */
+  .p-card:hover {
+    transform: none;
+    box-shadow: 0 4px 12px -4px rgba(100, 70, 30, .06);
+  }
+
+  .p-card:hover .p-media img {
+    transform: none;
+  }
+
+  /* نعتمد على :active بدل :hover */
+  .p-card:active {
+    transform: scale(.98);
+    border-color: rgba(217, 171, 95, .35);
+    transition: transform .15s;
+  }
+
+  .p-card:active .p-media img {
+    transform: scale(.98);
+    transition: transform .15s;
+  }
+
+  /* زر "عرض التفاصيل" يظهر دايماً على الموبايل */
+  .p-quick {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* تعطيل hover على الأزرار */
+  .btn:hover,
+  .chip:hover,
+  .icobtn:hover,
+  .langbtn:hover {
+    transform: none;
+  }
+
+  /* نعتمد على :active */
+  .btn:active,
+  .chip:active,
+  .icobtn:active,
+  .langbtn:active {
+    transform: scale(.96);
+    transition: transform .1s;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Safe Area Support (Notched Phones - iPhone X وما بعده)
+   ═══════════════════════════════════════════════════════════ */
+@supports (padding: max(0px)) {
+  @media (max-width: 900px) {
+    .vl-chroma-hero {
+      padding-top: max(28px, env(safe-area-inset-top));
+      padding-bottom: max(32px, env(safe-area-inset-bottom));
+    }
+
+    header {
+      padding-top: env(safe-area-inset-top);
+    }
+
+    .topbar {
+      margin-top: calc(-1 * env(safe-area-inset-top));
+    }
+
+    #scentOv .mpanel,
+    #accOv .mpanel,
+    #searchOv .mpanel {
+      padding-bottom: max(1.4rem, env(safe-area-inset-bottom));
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Landscape Mode على الموبايل
+   ═══════════════════════════════════════════════════════════ */
+@media (max-height: 500px) and (orientation: landscape) {
+
+  .vl-chroma-hero {
+    padding: 16px 0 20px;
+  }
+
+  .vl-chroma-grid {
+    grid-template-columns: 1fr 1.2fr !important;
+    gap: 16px;
+  }
+
+  .vl-chroma-content {
+    order: 2;
+    text-align: left;
+  }
+
+  .vl-chroma-visual {
+    order: 1;
+  }
+
+  .visual-wrapper {
+    width: min(100%, 180px);
+    max-width: 180px;
+  }
+
+  .vl-chroma-title {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+  }
+
+  .vl-chroma-lead {
+    font-size: .78rem;
+    margin-bottom: 10px;
+  }
+
+  .vl-chroma-actions {
+    margin-bottom: 10px;
+    gap: 6px;
+  }
+
+  .btn-primary-lux {
+    padding: 8px 14px;
+    font-size: .75rem;
+    min-height: 38px;
+  }
+
+  .btn-link-lux {
+    font-size: .75rem;
+    padding: 8px 4px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Reduced Motion Support (للناس اللي بتفضل تقليل الحركات)
+   ═══════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .mq-track {
+    animation: none !important;
+  }
+
+  .hero-img-main,
+  .vl-chroma-bg .blob,
+  .visual-glow,
+  .embers span,
+  .flame {
+    animation: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Image Performance Optimization
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+
+  /* تحسين تحميل الصور على الموبايل */
+  .p-media img,
+  .hero-img-main,
+  .visual-wrapper img {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 400px;
+  }
+
+  /* Lazy loading محسّن */
+  .p-media img[loading="lazy"] {
+    background: linear-gradient(135deg, #f5efe5 0%, #faf6ef 50%, #f5efe5 100%);
+    background-size: 200% 200%;
+    animation: shimmerMobile 2.5s ease-in-out infinite;
+  }
+
+  @keyframes shimmerMobile {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* الصور تظهر فوراً بعد التحميل */
+  .p-media img.loaded {
+    opacity: 1;
+    animation: imgFadeMobile .5s ease;
+  }
+
+  @keyframes imgFadeMobile {
+    from {
+      opacity: 0;
+      transform: scale(.98);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Font Size Optimization للموبايل
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+  /* تكبير الخطوط الصغيرة جداً */
+  .logo small {
+    font-size: .48rem !important;
+  }
+
+  .vl-badge-premium {
+    font-size: .72rem !important;
+  }
+
+  .floating-card {
+    font-size: .72rem !important;
+  }
+
+  .mq-track {
+    font-size: .72rem !important;
+  }
+
+  .p-quick {
+    font-size: .72rem !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Prevent Horizontal Scroll
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .vl-chroma-hero,
+  .vl-chroma-container,
+  .vl-chroma-grid,
+  .vl-chroma-content,
+  .vl-chroma-visual,
+  .visual-wrapper,
+  .hero-img-main {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  /* منع الـ overflow من أي element */
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Touch-friendly Spacing
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+  /* زيادة الـ padding عشان الـ touch targets تكبر */
+  .p-add,
+  .chip,
+  .btn,
+  .icobtn,
+  .langbtn {
+    min-height: 44px;
+  }
+
+  .chip {
+    padding: .6rem 1.1rem;
+    min-height: 44px;
+  }
+
+  .p-add {
+    padding: .55rem 1rem;
+    min-height: 44px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Dark Mode Support (اختياري)
+   ═══════════════════════════════════════════════════════════ */
+@media (prefers-color-scheme: dark) and (max-width: 900px) {
+  /* لو المستخدم بيستخدم dark mode، ممكن نضيف تعديلات هنا */
+  /* حالياً مش مطلوب */
 }
