@@ -39,9 +39,9 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 <link rel="preconnect" href="https://images.weserv.nl">
 <link rel="preload" as="image" href="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2FRR.jpg&w=1000&q=75&output=webp" fetchpriority="high">
-     <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="mobile-luxury-fix.css">
-     
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -58,7 +58,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap"
   >
 </noscript>
-     
+
 <link rel="manifest" href="manifest.json">
 
 <!-- ═══ Structured Data (New - Google Rich Results) ═══ -->
@@ -361,22 +361,22 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
   <div class="vl-chroma-container">
     <div class="vl-chroma-grid">
-      
+
       <!-- Content Side -->
       <div class="vl-chroma-content">
         <div class="vl-badge-premium" data-i18n="hero_eyebrow">
           ✦ شموع يدوية فاخرة
         </div>
-        
+
         <h1 class="vl-chroma-title">
           <span data-i18n="hero_t1">ضوءٌ</span>
           <span class="text-gradient" data-i18n="hero_t2">يُشبهكِ.</span>
         </h1>
-        
+
         <p class="vl-chroma-lead" data-i18n="hero_desc">
           شموع تُضيء… لتنير يومكِ بلحظاتٍ تستحقينها.
         </p>
-        
+
         <div class="vl-chroma-actions">
           <a href="#products" class="btn-primary-lux" data-i18n="hero_btn1">
             اكتشفي السحر ✨
@@ -385,7 +385,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
             رحلة العطور
           </a>
         </div>
-        
+
       </div>
 
       <!-- Image Side (شمعة الهيرو زي ما هي) -->
@@ -403,7 +403,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
             decoding="async"
             loading="eager"
           >
-             
+
           <div class="floating-card">
             <span data-i18n="hero_card">Luxury Edition</span>
           </div>
@@ -971,14 +971,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         </div>
       </div>
 
-      <div class="rev-card">
-        <img src="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2Freview5.jpg&w=400&q=70&output=webp" alt="Review" width="400" height="500" loading="lazy" decoding="async">
-        <div class="rb">
-          <b data-i18n="rev_verified">عميلة موثّقة</b>
-          <span class="stars">★★★★★</span>
-        </div>
-      </div>
-
     </div>
 
   </div>
@@ -1222,34 +1214,44 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 <script src="app.js"></script>
 <script type="module" src="auth.js"></script>
 
-<!-- ═══ Back to Top + Service Worker (New) ═══ -->
+<!-- ═══ Back to Top + Service Worker + Image Loader (Fixed) ═══ -->
 <script>
-// Back to Top
-const btt=document.getElementById("backToTop");
+/* ═══ Back to Top ═══ */
+const btt = document.getElementById("backToTop");
 if(btt){
-  window.addEventListener("scroll",()=>{
-    btt.classList.toggle("show",window.scrollY>600);
-  },{passive:true});
-  btt.addEventListener("click",()=>{
-    window.scrollTo({top:0,behavior:"smooth"});
+  window.addEventListener("scroll", () => {
+    btt.classList.toggle("show", window.scrollY > 600);
+  }, {passive: true});
+  btt.addEventListener("click", () => {
+    window.scrollTo({top: 0, behavior: "smooth"});
   });
 }
 
-// Service Worker Registration
+/* ═══ Service Worker Registration ═══ */
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
+  window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
-      .then(()=>console.log('✨ SW Ready'))
-      .catch(e=>console.log('SW registration skipped'));
+      .then(() => console.log('✨ SW Ready'))
+      .catch(e => console.log('SW registration skipped'));
   });
 }
 
-// Image fade-in on load
-document.addEventListener('load',e=>{
-  if(e.target.tagName==='IMG'){
+/* ═══ Image Fade-in Fix (Corrected) ═══ */
+/* ✅ الحل الصحيح: event delegation على document مع capture phase */
+document.addEventListener('load', function(e){
+  if(e.target && e.target.tagName === 'IMG'){
     e.target.classList.add('loaded');
   }
-},true);
+}, true);
+
+/* ✅ كمان نتعامل مع الصور اللي محملة بالفعل (cached) */
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('img').forEach(function(img){
+    if(img.complete && img.naturalHeight !== 0){
+      img.classList.add('loaded');
+    }
+  });
+});
 </script>
 
 </body>
