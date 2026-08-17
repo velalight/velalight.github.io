@@ -1175,14 +1175,16 @@ function loadOrders(){
         orders.length;
 
 
-      const revenue =
-        orders.reduce(
-          (total, order) =>
-            total +
-            Number(order.total || 0),
-          0
-        );
-
+/* ✨ الإصلاح: احسب الإيرادات من الطلبات غير الملغية فقط */
+const revenue =
+  orders
+    .filter(order => order.status !== 4) /* 4 = ملغي */
+    .reduce(
+      (total, order) =>
+        total +
+        Number(order.total || 0),
+      0
+    );
 
       $("#stRevenue").textContent =
         money(revenue);
