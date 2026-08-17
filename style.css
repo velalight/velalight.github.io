@@ -1446,3 +1446,34 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  body{background:#fff;color:#000}
  .p-card{break-inside:avoid}
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   ═══ FLOATING CARD — LOGO STYLE (VelaLight) ═══
+   ═══════════════════════════════════════════════════════════ */
+.floating-card {
+  font-family: 'El Messiri', serif !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: #1a1512 !important;
+  letter-spacing: 0.5px !important;
+  padding: 14px 30px !important;
+  border: 1px solid rgba(212,175,55,0.35) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(212,175,55,0.1) !important;
+}
+
+/* ✨ تأثير ذهبي على الكلمة (زي اللوجو بالظبط) */
+.floating-card span {
+  font-family: 'El Messiri', serif !important;
+  background: linear-gradient(135deg, #b68d2e 0%, #d4af37 25%, #fff 50%, #d4af37 75%, #b68d2e 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  background-size: 200% auto !important;
+  animation: chromaFlow 3s linear infinite !important;
+}
+
+/* ✨ نفس تأثير اللمعان بتاع اللوجو */
+@keyframes chromaFlow {
+  to { background-position: 200% center; }
+}
