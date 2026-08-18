@@ -58,7 +58,7 @@ const velaScentTr=name=>{
     ar:{
       ship_note:"🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
       pay_products_note:"💳 قيمة المنتجات تُدفع مقدمًا عبر InstaPay.",
-      t_scentwarn:"⚠️ من فضلك اختاري العطر الأول.",
+      t_scentwarn:"⚠️ من فضلك اختار العطر الأول.",
       scent_req:"مطلوب",
       handmade_note:"قطعة يدوية تُجهّز بعناية عند الطلب"
     },
@@ -193,7 +193,7 @@ function updateHeroCopy(){
     kick.textContent='✦ شموع يدوية فاخرة';
     title.textContent='ضوءٌ يُشبهكِ.';
     lead.textContent='شموع تُضيء… لتنير يومكِ بلحظاتٍ تستحقينها.';
-    cta.innerHTML='اكتشفي مجموعتكِ <span aria-hidden="true">✦</span>';
+    cta.innerHTML='اكتشف مجموعتكِ <span aria-hidden="true">✦</span>';
   }
 }
 
@@ -612,7 +612,7 @@ function renderCart(){
         <label class="cart-scent-picker">
           <span class="cart-scent-label">🌸 ${t("scent_lbl")}</span>
           <select class="cart-scent-select" data-i="${i}" aria-label="${t("scent_lbl")}">
-            <option value="">${LANG==="en"?"Choose a scent":"اختاري العطر"}</option>
+            <option value="">${LANG==="en"?"Choose a scent":"اختار العطر"}</option>
             ${VELA_SCENTS.map(scent=>`
               <option value="${scent[0]}" ${String(it.scent||"")===String(scent[0])?"selected":""}>
                 ${velaScentTr(scent[0])}
@@ -750,15 +750,15 @@ async function checkout(){
   const notes=$("#coNotes")?.value.trim()||"";
 
   if(!name){
-    toast(LANG==="en"?"⚠️ Please enter your full name.":"⚠️ من فضلك اكتبي الاسم بالكامل.");
+    toast(LANG==="en"?"⚠️ Please enter your full name.":"⚠️ من فضلك اكتب الاسم بالكامل.");
     $("#coName")?.focus();return;
   }
   if(!phone){
-    toast(LANG==="en"?"⚠️ Please enter your mobile number.":"⚠️ من فضلك اكتبي رقم الموبايل.");
+    toast(LANG==="en"?"⚠️ Please enter your mobile number.":"⚠️ من فضلك اكتب رقم الموبايل.");
     $("#coPhone")?.focus();return;
   }
   if(!addr){
-    toast(LANG==="en"?"⚠️ Please enter the detailed address.":"⚠️ من فضلك اكتبي العنوان بالتفصيل.");
+    toast(LANG==="en"?"⚠️ Please enter the detailed address.":"⚠️ من فضلك اكتب العنوان بالتفصيل.");
     $("#coAddr")?.focus();return;
   }
 
@@ -905,8 +905,8 @@ function initAccount(){
     const phone=$("#accPhone").value.trim();
     const city=$("#accCity").value;
     const addr=$("#accAddr").value.trim();
-    if(!name){toast(LANG==="en"?"⚠️ Enter your name.":"⚠️ اكتبي الاسم.");return;}
-    if(!phone){toast(LANG==="en"?"⚠️ Enter your phone.":"⚠️ اكتبي رقم الموبايل.");return;}
+    if(!name){toast(LANG==="en"?"⚠️ Enter your name.":"⚠️ اكتب الاسم.");return;}
+    if(!phone){toast(LANG==="en"?"⚠️ Enter your phone.":"⚠️ اكتب رقم الموبايل.");return;}
 
     /* ═══ ✨ الجديد: لو مسجل في Firebase احفظ في Firestore ═══ */
     if(window.FB && window.FB.auth && window.FB.auth.currentUser && typeof VL_UpdateProfile === "function"){
@@ -1088,3 +1088,125 @@ function closeModal(id){
 }
 
 })();
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ تأكيد الطلب: Email (Web3Forms) + WhatsApp
+   ═══════════════════════════════════════════════════════════ */
+
+const WEB3FORMS_KEY = "a23e1d50-37ee-4aec-a465-aeeb819c02a1";
+
+/* ═══ 1. إرسال إيميل للعميلة عبر Web3Forms ═══ */
+async function sendOrderConfirmationEmail(orderData) {
+  if (!orderData.email) {
+    console.log("⏭️ مفيش إيميل، تخطي الإرسال");
+    return;
+  }
+  
+  try {
+    // تحويل المنتجات لنص
+    const itemsText = (orderData.items || []).map(item => {
+      return `• ${item.name || item.title || "منتج"} × ${item.qty || 1} = ${(item.price || 0) * (item.qty || 1)} جنيه`;
+    }).join("\n") || "منتجات متعددة";
+    
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: `🕯️ تأكيد طلبك من VelaLight - رقم ${orderData.orderId || orderData.id}`,
+        from_name: "VelaLight",
+        to: orderData.email,  // للعميلة
+        message: `
+أهلاً بيكِ ${orderData.name || "عميلنا الكريم"}! ✨
+
+شكراً لاختيارك VelaLight
+
+═══════════════════════
+📋 تفاصيل الطلب:
+═══════════════════════
+رقم الطلب: ${orderData.orderId || orderData.id}
+الاسم: ${orderData.name}
+الموبايل: ${orderData.phone}
+المدينة: ${orderData.city}
+العنوان: ${orderData.address}
+
+═══════════════════════
+🛍️ المنتجات:
+═══════════════════════
+${itemsText}
+
+═══════════════════════
+💰 الإجمالي: ${orderData.total} جنيه
+═══════════════════════
+
+═══════════════════════
+💳 طريقة الدفع:
+═══════════════════════
+• قيمة المنتجات تُدفع مقدماً عبر InstaPay
+• الشحن يُدفع كاش للمندوب عند الاستلام
+
+═══════════════════════
+⏳ الخطوات التالية:
+═══════════════════════
+سنتواصل معكِ لتأكيد الطلب وترتيب الشحن 📱
+
+💛 شكراً لثقتك فينا!
+VelaLight — Luxury Candle Studio
+🌐 https://velalight.github.io
+        `.trim()
+      })
+    });
+    
+    if (response.ok) {
+      console.log("✅ Email sent to customer:", orderData.email);
+      return true;
+    } else {
+      console.error("Email failed:", await response.text());
+      return false;
+    }
+  } catch (err) {
+    console.error("Email error:", err);
+    return false;
+  }
+}
+
+/* ═══ 2. فتح WhatsApp للعميلة ═══ */
+function openWhatsAppConfirmation(orderData) {
+  const phone = (orderData.phone || "").replace(/\D/g, "");
+  
+  // تحويل لأرقام مصرية صحيحة
+  let egyptPhone = phone;
+  if (phone.startsWith("0")) {
+    egyptPhone = "2" + phone;
+  } else if (!phone.startsWith("2") && phone.length === 11) {
+    egyptPhone = "2" + phone;
+  }
+  
+  const itemsSummary = (orderData.items || [])
+    .map(i => `• ${i.name || i.title || "منتج"} × ${i.qty || 1}`)
+    .join("\n");
+  
+  const message = `✨ أهلاً VelaLight!
+
+تم تقديم طلبي بنجاح 🕯️
+
+📋 رقم الطلب: ${orderData.orderId || orderData.id}
+👤 الاسم: ${orderData.name}
+💰 الإجمالي: ${orderData.total} جنيه
+
+📍 العنوان:
+${orderData.city} - ${orderData.address}
+
+🛍️ المنتجات:
+${itemsSummary}
+
+في انتظار تأكيدكم وترتيب الشحن 📱
+
+شكراً لكم!`;
+  
+  const waUrl = `https://wa.me/${egyptPhone}?text=${encodeURIComponent(message)}`;
+  
+  setTimeout(() => {
+    window.open(waUrl, "_blank");
+  }, 1500);
+}
