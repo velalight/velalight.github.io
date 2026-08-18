@@ -3,7 +3,10 @@
 
 /* ═══ QUICK ADD STATE ═══ */
 let quickAddProduct=null;
-  /* ═══ ✨ WISHLIST STATE ═══ */
+let quickAddScent="";
+let quickAddQty=1;
+
+/* ═══ ✨ WISHLIST STATE ═══ */
 const WISHLIST_KEY = "vl_wishlist";
 
 function getWishlist() {
@@ -37,8 +40,6 @@ function toggleWishlist(productId) {
 function isInWishlist(productId) {
   return getWishlist().includes(productId);
 }
-let quickAddScent="";
-let quickAddQty=1;
 
 /* ═══ PERFORMANCE OPTIMIZATIONS ═══ */
 const requestIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
@@ -316,9 +317,6 @@ function activeCat(){
   return c?c.dataset.cat:"all";
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ renderProducts مع نظام المخزون الكامل
-   ═══════════════════════════════════════════════════════════ */
 function renderProducts(){
   const grid=$("#pgrid");
   if(!grid)return;
@@ -402,7 +400,6 @@ function renderProducts(){
 }
 
 function handleProductGridClick(e){
-  /* ✨ زرار القلب */
   const wishBtn = e.target.closest('.p-wish');
   if (wishBtn) {
     e.preventDefault();
@@ -747,9 +744,6 @@ function genOrderId(){
   return "VL-"+s;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ═══ CHECKOUT — مع تأكيد الطلب عبر Email + WhatsApp
-   ═══════════════════════════════════════════════════════════ */
 async function checkout(){
   const c=getCart();
 
@@ -844,7 +838,6 @@ async function checkout(){
   try{await DB.add("orders",orderData);}
   catch(e){console.warn("Order save warning:",e);}
   
-  /* ✨ تقليل المخزون تلقائياً */
   decrementStock(c);
   
   const u=getSavedUser();
@@ -871,7 +864,6 @@ async function checkout(){
   renderCart();
   cartBadge();
   
-  /* ═══ ✨ تأكيد الطلب: إيميل للأدمن + واتساب للعميل ═══ */
   try {
     await sendOrderConfirmationEmail(orderData);
     toast(LANG==="en" ? "✅ Order placed! Check your email." : "✅ تم إرسال الطلب! تم إرسال تأكيد للأدمن.");
@@ -888,9 +880,6 @@ function waTotalLabel(){
   return LANG==="en"?"💰 Products Total:":"💰 إجمالي المنتجات:";
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ تأكيد الطلب: Email (Web3Forms) + WhatsApp
-   ═══════════════════════════════════════════════════════════ */
 const WEB3FORMS_KEY = "a23e1d50-37ee-4aec-a465-aeeb819c02a1";
 
 async function sendOrderConfirmationEmail(orderData) {
@@ -1005,7 +994,6 @@ ${itemsSummary}
   }, 1500);
 }
 
-/* ═══ ACCOUNT ═══ */
 function initAccount(){
   fillCitySelect($("#accCity"));
   const u=getSavedUser();
@@ -1209,9 +1197,6 @@ function closeModal(id){
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ نظام المخزون التلقائي
-   ═══════════════════════════════════════════════════════════ */
 function stockBadge(p){
   if(p.stock===undefined||p.stock===null||p.stock==="")return"";
   const s=Number(p.stock);
@@ -1234,13 +1219,12 @@ async function decrementStock(items){
     }catch(e){console.warn("stock update failed",e);}
   }
 }
+
 /* ═══ ✨ تصدير الدوال عالمياً لصفحة wishlist.html ═══ */
 window.getWishlist = getWishlist;
 window.toggleWishlist = toggleWishlist;
 window.isInWishlist = isInWishlist;
 window.WISHLIST_KEY = WISHLIST_KEY;
-
-/* تصدير ALL_PRODUCTS والدوال المساعدة */
 window.ALL_PRODUCTS_REF = () => (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
 window.imgOfRef = (p) => (typeof imgOf === "function") ? imgOf(p) : (p.img || "");
 window.pnameRef = (p) => (typeof pname === "function") ? pname(p) : (p.name || "");
@@ -1251,5 +1235,5 @@ window.addToCartRef = (p, o) => (typeof addToCart === "function") ? addToCart(p,
 window.openQuickAddRef = (p) => (typeof openQuickAdd === "function") ? openQuickAdd(p) : null;
 window.tRef = (k) => (typeof t === "function") ? t(k) : k;
 window.LANGRef = () => (typeof LANG !== "undefined") ? LANG : "ar";
-  
+
 })();
