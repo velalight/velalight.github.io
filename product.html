@@ -1107,7 +1107,42 @@ function initLangWatcher(){
   },150);
 }
 
-/* ═══════ CLOUD CATALOG ═══════ */
+
+     /* ═══════ ✨ LOAD ALL REVIEWS FROM FIREBASE ═══════ */
+async function loadAllReviews(){
+  try{
+    const revs=await DB.list("reviews");
+    if(Array.isArray(revs)){
+      window.ALL_REVIEWS=[...(typeof SEED_REVIEWS!=="undefined"?SEED_REVIEWS:[]),...revs];
+    }
+    /* Re-render reviews if product is loaded */
+    if(P){
+      renderReviews();
+      /* Update rating summary */
+      const reviewSummary=(typeof prodReviews==="function")?prodReviews(P.id):[];
+      $("#revCount").textContent=reviewSummary.length;
+      const ratingBox=$("#pdRatingSummary");
+      if(ratingBox){
+        if(reviewSummary.length){
+          const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
+          ratingBox.innerHTML=
+            `<span class="stars">${"★".repeat(Math.round(avg))}</span>`+
+            `<b>${avg.toFixed(1)}</b>`+
+            `<span>(${reviewSummary.length} ${LANG==="en"?"reviews":"مراجعة"})</span>`+
+            `<a href="#tab-reviews">${LANG==="en"?"Read all":"اقرئي الكل"}</a>`;
+        }else{
+          ratingBox.innerHTML=
+            `<span class="stars" style="opacity:.4">★★★★★</span>`+
+            `<span>${LANG==="en"?"Be the first to review":"كوني أول من يشارك رأيه"}</span>`;
+        }
+      }
+    }
+  }catch(e){
+    console.warn("Reviews load failed",e);
+  }
+}
+
+/* ═══════ ✨ CLOUD CATALOG WITH CACHE UPDATE ═══════ */
 async function loadCloudCatalog(pid){
   try{
     const cloud=await DB.list("products");
@@ -1117,7 +1152,25 @@ async function loadCloudCatalog(pid){
       String(x.id_)===String(pid)||
       String(x.slug)===String(pid)
     );
+    
     if(found&&found.active!==false){
+      /* ✨ UPDATE CACHE — Next visit will use new price instantly */
+      try{
+        const cacheKey="vl_products_cache_v2";
+        let cache=[];
+        try{cache=JSON.parse(localStorage.getItem(cacheKey)||"[]")}catch(e){}
+        if(!Array.isArray(cache)) cache=[];
+        
+        const idx=cache.findIndex(x=>
+          String(x.id)===String(pid)||String(x.id_)===String(pid)
+        );
+        if(idx>=0) cache[idx]={...found,id:pid};
+        else cache.push({...found,id:pid});
+        
+        /* Keep only last 100 products */
+        localStorage.setItem(cacheKey,JSON.stringify(cache.slice(-100)));
+      }catch(e){console.warn("Cache update failed",e)}
+      
       P={...P,...found};
       render();
     }else if(found&&found.active===false){
@@ -1127,7 +1180,7 @@ async function loadCloudCatalog(pid){
     console.warn("Cloud load failed",e);
   }
 }
-
+     
 /* ═══════ RENDER ═══════ */
 function render(){
   $("#pdLoading").classList.add("hidden");
