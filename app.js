@@ -338,6 +338,7 @@ function renderProducts(){
         <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
           <img ${imgAttrs}>
           ${badge?`<span class="p-badge">${badge}</span>`:""}
+                    ${stockBadge(p)}
           <span class="p-quick">${t("view_details")}</span>
         </a>
         <div class="p-body">
@@ -351,8 +352,8 @@ function renderProducts(){
               ${money(p.price)}
               ${p.old>p.price?`<del>${money(p.old)}</del>`:""}
             </div>
-            <button class="p-add" data-id="${p.id}" aria-label="${t("add_cart")} ${pname(p)}">${t("add_cart")}</button>
-          </div>
+            <button class="p-add" data-id="${p.id}" ${Number(p.stock)===0?"disabled":""} aria-label="${t("add_cart")} ${pname(p)}">${Number(p.stock)===0?(LANG==="en"?"Out of stock":"نفدت الكمية"):t("add_cart")}</button>
+            </div>
         </div>
       </article>
     `);
@@ -371,8 +372,9 @@ function handleProductGridClick(e){
   
   const id = addBtn.dataset.id;
   const p = ALL_PRODUCTS.find(x => x.id === id);
-  if(p){
-    addBtn.style.transform = 'scale(0.95)';
+  if(p && Number(p.stock)!==0){
+    
+  addBtn.style.transform = 'scale(0.95)';
     setTimeout(() => { addBtn.style.transform = ''; }, 150);
     openQuickAdd(p);
   }
@@ -793,8 +795,9 @@ async function checkout(){
   };
 
   try{await DB.add("orders",orderData);}
-  catch(e){console.warn("Order save warning:",e);}
-
+      catch(e){console.warn("Order save warning:",e);}
+  decrementStock(c);
+  
   const u=getSavedUser();
   u.orders=(u.orders||0)+1;
   u.name=name;u.phone=phone;u.email=email;u.city=city;u.addr=addr;u.notes=notes;
@@ -1159,5 +1162,28 @@ function closeModal(id){
     document.body.style.overflow = '';
   }
 }
+/* ═══ ✨ المخزون ═══ */
+function stockBadge(p){
+  if(p.stock===undefined||p.stock===null||p.stock==="")return"";
+  const s=Number(p.stock);
+  if(isNaN(s))return"";
+  if(s===0)return`<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>`;
+  if(s<=5)return`<span class="p-badge" style="background:#e67e22">باقي ${s} فقط</span>`;
+  return"";
+}
 
+async function decrementStock(items){
+  if(!window.FB||typeof window.FB.update!=="function")return;
+  for(const it of items){
+    const p=ALL_PRODUCTS.find(x=>x.id===it.id);
+    if(!p)continue;
+    if(p.stock===undefined||p.stock===null||p.stock===""||isNaN(Number(p.stock)))continue;
+    const newStock=Math.max(0,Number(p.stock)-Number(it.qty||1));
+    try{
+      if(p._fid){await window.FB.update("products",p._fid,{stock:newStock});}
+      else{await window.FB.set("products",p.id,{id_:p.id,stock:newStock});}
+    }catch(e){console.warn("stock update failed",e);}
+  }
+}
+  
 })();
