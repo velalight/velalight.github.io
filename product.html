@@ -887,21 +887,17 @@ function applyI18nStatic(){
   });
 }
 
+/* ✨ لا نعمل toggle هنا — app.js بيقلب اللغة. إحنا بس نعيد الـ render بعده. */
 $("#langBtn")?.addEventListener("click",()=>{
-  LANG=LANG==="ar"?"en":"ar";
-  localStorage.setItem("vl_lang",LANG);
-  document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
-  document.documentElement.lang=LANG;
-  applyI18nStatic();
-  updateLangBtn();
-  // 🔥 إعادة render كاملة عند تغيير اللغة
-  if(P)render();
-  // Re-render related products with new lang
-  renderRelated();
-  // Re-render reviews with new lang
-  renderReviews();
+  setTimeout(()=>{
+    document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+    document.documentElement.lang=LANG;
+    applyI18nStatic();
+    updateLangBtn();
+    if(P)render();
+  },0);
 });
-
+  
 /* ═══════ CLOUD CATALOG ═══════ */
 async function loadCloudCatalog(pid){
   try{
