@@ -1067,15 +1067,32 @@ document.addEventListener("DOMContentLoaded",()=>{
     ?PRODUCTS.find(x=>String(x.id)===String(productPid))
     :null;
 
-  const first=cached||local;
-  if(first){P={...first};render();}
+/* ✨ Use cache v2 (updated from cloud) or v1 (legacy) */
+let cachedV2=null;
+try{
+  const cache2=JSON.parse(localStorage.getItem("vl_products_cache_v2")||"[]");
+  if(Array.isArray(cache2)){
+    cachedV2=cache2.find(x=>
+      String(x.id)===String(productPid)||
+      String(x.id_)===String(productPid)
+    )||null;
+  }
+}catch(e){}
 
-  /* Load from cloud */
-  const sync=()=>loadCloudCatalog(productPid);
-  if(window.FB&&typeof window.FB.list==="function")sync();
-  else window.addEventListener("fb-ready",sync,{once:true});
+const first=cachedV2||cached||local;
+if(first){P={...first};render();}
 
-  setTimeout(()=>{if(!P)showNotFound()},5000);
+/* ✨ Load from cloud THEN load reviews */
+const sync=async ()=>{
+  await loadCloudCatalog(productPid);
+  await loadAllReviews();
+};
+
+if(window.FB&&typeof window.FB.list==="function") sync();
+else window.addEventListener("fb-ready",sync,{once:true});
+
+setTimeout(()=>{if(!P)showNotFound()},5000);
+     
 });
 
 /* ═══════ NAV ═══════ */
