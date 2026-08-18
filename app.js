@@ -1,45 +1,59 @@
 (function(){
 "use strict";
 
-/* ═══ QUICK ADD STATE ═══ */
-let quickAddProduct=null;
-let quickAddScent="";
-let quickAddQty=1;
-
-/* ═══ ✨ WISHLIST STATE ═══ */
+/* ═══════════════════════════════════════════════════════════
+   ✨ WISHLIST — مع Cache للأداء
+   ═══════════════════════════════════════════════════════════ */
 const WISHLIST_KEY = "vl_wishlist";
+let wishlistCache = null; /* Cache في الذاكرة */
 
 function getWishlist() {
+  if (wishlistCache !== null) return wishlistCache;
   try {
-    return JSON.parse(localStorage.getItem(WISHLIST_KEY) || "[]");
+    wishlistCache = JSON.parse(localStorage.getItem(WISHLIST_KEY) || "[]");
+    if (!Array.isArray(wishlistCache)) wishlistCache = [];
   } catch(e) {
-    return [];
+    wishlistCache = [];
   }
+  return wishlistCache;
 }
 
 function saveWishlist(list) {
-  localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
+  wishlistCache = list;
+  try {
+    localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
+  } catch(e) {
+    console.warn("⚠️ Failed to save wishlist:", e);
+  }
 }
 
 function toggleWishlist(productId) {
-  let list = getWishlist();
+  const list = getWishlist();
   const idx = list.indexOf(productId);
+  let added;
   if (idx === -1) {
     list.push(productId);
+    added = true;
     toast("❤️ تمت الإضافة للمفضلة");
   } else {
     list.splice(idx, 1);
+    added = false;
     toast("💔 تمت الإزالة من المفضلة");
   }
   saveWishlist(list);
   renderProducts();
   if (typeof renderWishlistPage === "function") renderWishlistPage();
-  return list.includes(productId);
+  return added;
 }
 
 function isInWishlist(productId) {
   return getWishlist().includes(productId);
 }
+
+/* ═══ QUICK ADD STATE ═══ */
+let quickAddProduct=null;
+let quickAddScent="";
+let quickAddQty=1;
 
 /* ═══ PERFORMANCE OPTIMIZATIONS ═══ */
 const requestIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
@@ -112,12 +126,28 @@ const velaScentTr=name=>{
   });
 })();
 
-/* ═══ INIT ═══ */
+/* ═══════════════════════════════════════════════════════════
+   ✨ INIT — مع Cache-First Strategy
+   ═══════════════════════════════════════════════════════════ */
 document.addEventListener("DOMContentLoaded",()=>{
   initLang();
   initMarquee();
   initEmbers();
   initReveal();
+  
+  /* ✨ Cache-First: اعرض المنتجات فوراً من cache، بعدين حدّث من Firebase */
+  const hasCache = (typeof loadFromCache === "function") && loadFromCache();
+  
+  if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
+    /* عرض فوري من cache */
+    renderChips();
+    renderProducts();
+    renderScents();
+    renderFAQ();
+    console.log("⚡ Products rendered from cache");
+  }
+  
+  /* بعدين حدّث من Firebase في الخلفية */
   loadAll().then(()=>{
     renderChips();
     renderProducts();
@@ -125,7 +155,20 @@ document.addEventListener("DOMContentLoaded",()=>{
     renderFAQ();
     initProductRealtimeSync();
     requestIdle(() => prefetchProductPages());
+  }).catch(err => {
+    console.warn("⚠️ loadAll failed:", err);
+    /* لو فشل، استخدم PRODUCTS المحلي */
+    if (typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)) {
+      if (typeof ALL_PRODUCTS === "undefined" || !ALL_PRODUCTS.length) {
+        window.ALL_PRODUCTS = [...PRODUCTS];
+      }
+      renderChips();
+      renderProducts();
+      renderScents();
+      renderFAQ();
+    }
   });
+  
   initCart();
   initAccount();
   initSearch();
@@ -135,17 +178,26 @@ document.addEventListener("DOMContentLoaded",()=>{
   initHeroIntro();
 });
 
-window.addEventListener("data-refresh",()=>{renderProducts();});
+window.addEventListener("data-refresh",()=>{
+  renderProducts();
+});
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ Prefetch — تدريجي (مش كلهم مرة واحدة)
+   ═══════════════════════════════════════════════════════════ */
 function prefetchProductPages(){
   if(!('requestIdleCallback' in window)) return;
-  const products = typeof ALL_PRODUCTS !== 'undefined' ? ALL_PRODUCTS.slice(0, 8) : [];
-  products.forEach(p => {
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.href = `product.html?p=${p.id}`;
-    link.as = 'document';
-    document.head.appendChild(link);
+  const products = typeof ALL_PRODUCTS !== 'undefined' ? ALL_PRODUCTS.slice(0, 4) : [];
+  
+  /* حمّل 4 بس، مش 8 */
+  products.forEach((p, i) => {
+    setTimeout(() => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = `product.html?p=${p.id}`;
+      link.as = 'document';
+      document.head.appendChild(link);
+    }, i * 500); /* كل 500ms */
   });
 }
 
@@ -160,11 +212,22 @@ function initHeroIntro(){
 let productRealtimeStarted=false;
 let productRealtimeUnsubscribe=null;
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ Realtime Sync — Diff-based (مش full re-render كل مرة)
+   ═══════════════════════════════════════════════════════════ */
 function initProductRealtimeSync(){
   if(productRealtimeStarted)return;
   if(typeof DB==="undefined"||typeof DB.watch!=="function")return;
   productRealtimeStarted=true;
+  
+  let lastHash = "";
+  
   productRealtimeUnsubscribe=DB.watch("products",cloud=>{
+    /* ✨ Hash بسيط عشان نعرف لو في تغيير فعلاً */
+    const hash = JSON.stringify(cloud||[]).length + "-" + (cloud||[]).length;
+    if (hash === lastHash) return;
+    lastHash = hash;
+    
     const map=new Map(
       (typeof PRODUCTS!=="undefined"?PRODUCTS:[]).map(p=>[p.id,{...p}])
     );
@@ -177,7 +240,7 @@ function initProductRealtimeSync(){
     ALL_PRODUCTS=[...map.values()];
     window.dispatchEvent(new Event("data-refresh"));
   },error=>{
-    console.error("Products realtime sync error:",error);
+    console.warn("⚠️ Products realtime sync error:",error);
   });
 }
 
@@ -187,7 +250,7 @@ function initLang(){
   updateLangBtn();
   btn.addEventListener("click",()=>{
     LANG=LANG==="ar"?"en":"ar";
-    localStorage.setItem("vl_lang",LANG);
+    try { localStorage.setItem("vl_lang",LANG); } catch(e){}
     document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
     document.documentElement.lang=LANG;
     applyI18n();
@@ -294,7 +357,7 @@ function renderChips(){
     btn.dataset.cat = k;
     btn.textContent = cat(k);
     btn.addEventListener("click",()=>{
-      frag.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
+      w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
       btn.classList.add("on");
       renderProducts();
     });
@@ -302,14 +365,6 @@ function renderChips(){
   });
   w.innerHTML = '';
   w.appendChild(frag);
-  
-  w.querySelectorAll(".chip").forEach(b=>{
-    b.addEventListener("click",()=>{
-      w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
-      b.classList.add("on");
-      renderProducts();
-    });
-  });
 }
 
 function activeCat(){
@@ -317,26 +372,35 @@ function activeCat(){
   return c?c.dataset.cat:"all";
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ renderProducts — محسّنة بـ Document Fragment + Error Handling
+   ═══════════════════════════════════════════════════════════ */
 function renderProducts(){
   const grid=$("#pgrid");
   if(!grid)return;
+
+  const products = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) 
+    ? ALL_PRODUCTS 
+    : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
 
   const catF=activeCat();
   const min=+($("#priceMin")?.value||0);
   const max=+($("#priceMax")?.value||0);
   const sort=$("#sortSel")?.value||"new";
 
-  let list=ALL_PRODUCTS.filter(p=>{
+  let list=products.filter(p=>{
+    if(!p || !p.id) return false;
     if(catF!=="all"&&p.cat!==catF)return false;
     if(min&&p.price<min)return false;
     if(max&&p.price>max)return false;
+    if(p.active===false) return false;
     return true;
   });
 
   switch(sort){
-    case "asc":list.sort((a,b)=>a.price-b.price);break;
-    case "desc":list.sort((a,b)=>b.price-a.price);break;
-    case "rating":list.sort((a,b)=>(ratingOf(b.id)?.avg||0)-(ratingOf(a.id)?.avg||0));break;
+    case "asc":list.sort((a,b)=>(a.price||0)-(b.price||0));break;
+    case "desc":list.sort((a,b)=>(b.price||0)-(a.price||0));break;
+    case "rating":list.sort((a,b)=>((typeof ratingOf==="function"?ratingOf(b.id)?.avg:0)||0)-((typeof ratingOf==="function"?ratingOf(a.id)?.avg:0)||0));break;
     case "best":list.sort((a,b)=>(b.sold||0)-(a.sold||0));break;
     case "disc":list.sort((a,b)=>((b.old-b.price)/Math.max(b.old,1))-((a.old-a.price)/Math.max(a.old,1)));break;
     default:list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
@@ -354,26 +418,46 @@ function renderProducts(){
   const isMobile = window.innerWidth <= 768;
   const eagerCount = isMobile ? 4 : 8;
 
-  const htmlChunks = [];
+  /* ✨ Placeholder SVG للـ fallback */
+  const placeholderSvg = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>`;
+
+  const frag = document.createDocumentFragment();
   
   list.forEach((p, index) => {
-    const r=ratingOf(p.id);
-    const badge=pbadge(p);
-    const rawDesc=LANG==="en"?(p.descEn||p.desc||""):(p.desc||p.descEn||"");
-    const productDesc=String(rawDesc).trim();
-    
-    const isFirstBatch = index < eagerCount;
-    const loadingAttr = isFirstBatch ? 'loading="eager"' : 'loading="lazy"';
-    const fetchPriority = isFirstBatch ? 'fetchpriority="high"' : 'fetchpriority="low"';
-    
-    const imgAttrs = `src="${imgOf(p)}" alt="${pname(p)}" ${loadingAttr} decoding="async" ${fetchPriority} width="400" height="400" onload="this.classList.add('loaded')" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>'"`;
-
-    htmlChunks.push(`
-      <article class="p-card" data-id="${p.id}">
+    try {
+      const r=(typeof ratingOf==="function")?ratingOf(p.id):null;
+      const badge=(typeof pbadge==="function")?pbadge(p):"";
+      const rawDesc=LANG==="en"?(p.descEn||p.desc||""):(p.desc||p.descEn||"");
+      const productDesc=String(rawDesc).trim();
+      
+      const isFirstBatch = index < eagerCount;
+      const loadingAttr = isFirstBatch ? 'eager' : 'lazy';
+      const fetchPriority = isFirstBatch ? 'high' : 'low';
+      
+      let imgSrc = "";
+      try {
+        imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || "");
+      } catch(e) {
+        imgSrc = placeholderSvg;
+      }
+      
+      if (!imgSrc) imgSrc = placeholderSvg;
+      
+      const inWishlist = isInWishlist(p.id);
+      const stockNum = Number(p.stock);
+      const isOutOfStock = !isNaN(stockNum) && stockNum === 0;
+      const stockBadg = (typeof stockBadge === "function") ? stockBadge(p) : "";
+      
+      /* ✨ Build card using DOM API (faster than innerHTML for many cards) */
+      const article = document.createElement('article');
+      article.className = 'p-card';
+      article.dataset.id = p.id;
+      
+      article.innerHTML = `
         <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
-          <img ${imgAttrs}>
+          <img src="${imgSrc}" alt="${pname(p)}" loading="${loadingAttr}" decoding="async" fetchpriority="${fetchPriority}" width="400" height="400" onload="this.classList.add('loaded')" onerror="this.onerror=null;this.src='${placeholderSvg}'">
           ${badge?`<span class="p-badge">${badge}</span>`:""}
-          ${stockBadge(p)}
+          ${stockBadg}
           <span class="p-quick">${t("view_details")}</span>
         </a>
         <div class="p-body">
@@ -387,15 +471,20 @@ function renderProducts(){
               ${money(p.price)}
               ${p.old>p.price?`<del>${money(p.old)}</del>`:""}
             </div>
-            <button class="p-add" data-id="${p.id}" ${Number(p.stock)===0?"disabled":""} aria-label="${t("add_cart")} ${pname(p)}">${Number(p.stock)===0?(LANG==="en"?"Out of stock":"نفدت الكمية"):t("add_cart")}</button>
-            <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:none;border:1px solid var(--line);border-radius:10px;padding:.4rem .6rem;cursor:pointer;font-size:1rem;transition:.2s;${isInWishlist(p.id)?'background:#fee;color:#e74c3c;border-color:#e74c3c;':''}">${isInWishlist(p.id)?"❤️":"🤍"}</button>
+            <button class="p-add" data-id="${p.id}" ${isOutOfStock?"disabled":""} aria-label="${t("add_cart")} ${pname(p)}">${isOutOfStock?(LANG==="en"?"Out of stock":"نفدت الكمية"):t("add_cart")}</button>
+            <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist?'#fee':'none'};border:1px solid ${inWishlist?'#e74c3c':'var(--line)'};border-radius:10px;padding:.4rem .6rem;cursor:pointer;font-size:1rem;transition:.2s;color:${inWishlist?'#e74c3c':'inherit'}">${inWishlist?"❤️":"🤍"}</button>
           </div>
         </div>
-      </article>
-    `);
+      `;
+      
+      frag.appendChild(article);
+    } catch(e) {
+      console.warn("⚠️ Failed to render product:", p.id, e);
+    }
   });
 
-  grid.innerHTML = htmlChunks.join('');
+  grid.innerHTML = '';
+  grid.appendChild(frag);
   grid.addEventListener('click', handleProductGridClick);
 }
 
@@ -416,7 +505,8 @@ function handleProductGridClick(e){
   e.stopPropagation();
   
   const id = addBtn.dataset.id;
-  const p = ALL_PRODUCTS.find(x => x.id === id);
+  const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
+  const p = products.find(x => x.id === id);
   if(p && Number(p.stock)!==0){
     addBtn.style.transform = 'scale(0.95)';
     setTimeout(() => { addBtn.style.transform = ''; }, 150);
@@ -582,8 +672,6 @@ function initCart(){
   });
 
   $("#checkoutBtn")?.addEventListener("click",checkout);
-  
-  /* ═══ ✨ تعديل 6: ربط زرار الكوبون ═══ */
   $("#applyCouponBtn")?.addEventListener("click",applyCoupon);
 
   const saveCustomer = debounce(() => saveCartCustomer(), 500);
@@ -623,7 +711,7 @@ function renderCart(){
     item.className = 'citem';
     item.innerHTML = `
       <div class="citem-media">
-        <img src="${it.img||''}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy" width="62" height="62">
+        <img src="${it.img||''}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy" width="62" height="62" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 62 62\\'><rect fill=\\'%23f5efe5\\' width=\\'62\\' height=\\'62\\'/></svg>'">
       </div>
       <div class="citem-info">
         <h5>${pname({name:it.name,nameEn:it.nameEn})}</h5>
@@ -659,6 +747,8 @@ function renderCart(){
 
   w.addEventListener('click', handleCartClick);
   w.addEventListener('change', handleCartChange);
+  
+  updateTotals(c);
 }
 
 function handleCartClick(e){
@@ -698,10 +788,9 @@ function handleCartChange(e){
   }
 }
 
-/* ═══ ✨ تعديل 1: حساب الخصم ═══ */
 function updateTotals(c){
   const sub=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
-  const disc=calcCouponDiscount(sub);
+  const disc=(typeof calcCouponDiscount==="function")?calcCouponDiscount(sub):0;
   if($("#cartSub")){$("#cartSub").textContent=money(sub);}
   const dRow=$("#discountRow");
   if(dRow){dRow.style.display=disc>0?"flex":"none";}
@@ -728,7 +817,11 @@ function fillCartForm(){
 function saveUserFromCart(name,phone,email,city,addr,notes=""){
   const old=getSavedUser();
   const u={...old,name,phone,email,city,addr,notes,orders:old.orders||0};
-  localStorage.setItem("vl_user",JSON.stringify(u));
+  try {
+    localStorage.setItem("vl_user",JSON.stringify(u));
+  } catch(e) {
+    console.warn("⚠️ Failed to save user:", e);
+  }
   if($("#accName"))$("#accName").value=name;
   if($("#accPhone"))$("#accPhone").value=phone;
   if($("#accCity"))$("#accCity").value=city;
@@ -743,7 +836,11 @@ function saveCartCustomer(){
   const addr=$("#coAddr")?.value.trim()||"";
   const notes=$("#coNotes")?.value.trim()||"";
   const old=getSavedUser();
-  localStorage.setItem("vl_user",JSON.stringify({...old,name,phone,email,city,addr,notes,orders:old.orders||0}));
+  try {
+    localStorage.setItem("vl_user",JSON.stringify({...old,name,phone,email,city,addr,notes,orders:old.orders||0}));
+  } catch(e) {
+    console.warn("⚠️ Failed to save cart customer:", e);
+  }
 }
 
 function genOrderId(){
@@ -753,6 +850,9 @@ function genOrderId(){
   return "VL-"+s;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ checkout — محصّنة بـ Error Handling شامل + Retry
+   ═══════════════════════════════════════════════════════════ */
 async function checkout(){
   const c=getCart();
 
@@ -784,10 +884,8 @@ async function checkout(){
   saveUserFromCart(name,phone,email,city,addr,notes);
 
   const orderId=genOrderId();
-  
-  /* ═══ ✨ تعديل 2: حساب الإجمالي بعد الخصم ═══ */
   const subTotal=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
-  const discount=calcCouponDiscount(subTotal);
+  const discount=(typeof calcCouponDiscount==="function")?calcCouponDiscount(subTotal):0;
   const total=Math.max(0,subTotal-discount);
   
   let userId = null;
@@ -814,7 +912,6 @@ async function checkout(){
 
   msg+=`━━━━━━━━━━━━━━━━━━━━\n`;
   
-  /* ═══ ✨ تعديل 4: إضافة سطر الكوبون والهدية ═══ */
   if(discount>0&&appliedCoupon){
     msg+=`🎟️ كوبون ${appliedCoupon.code}: -${money(discount)}\n`;
   }
@@ -846,7 +943,6 @@ async function checkout(){
       total:Number(it.price||0)*Number(it.qty||1),img:it.img||""
     })),
     items:c,
-    /* ═══ ✨ تعديل 3: إضافة discount و couponCode للطلب ═══ */
     total,
     productsTotal:subTotal,
     discount,
@@ -859,21 +955,51 @@ async function checkout(){
     orderDate:new Date().toISOString()
   };
 
-  try{await DB.add("orders",orderData);}
-  catch(e){console.warn("Order save warning:",e);}
+  /* ✨ Save to Firebase with retry */
+  let savedToFirebase = false;
+  let retries = 3;
+  while (retries > 0 && !savedToFirebase) {
+    try {
+      await DB.add("orders", orderData);
+      savedToFirebase = true;
+    } catch(e) {
+      console.warn(`⚠️ Order save attempt failed (${retries} left):`, e);
+      retries--;
+      if (retries > 0) await new Promise(r => setTimeout(r, 1000));
+    }
+  }
   
-  decrementStock(c);
+  if (!savedToFirebase) {
+    console.error("❌ Failed to save order to Firebase after retries");
+    /* Don't fail the whole checkout - continue to WhatsApp */
+  }
   
-  /* ═══ ✨ تعديل 5: استهلاك الكوبون ═══ */
-  consumeCoupon();
+  /* Decrement stock (best-effort) */
+  try {
+    await decrementStock(c);
+  } catch(e) {
+    console.warn("⚠️ Stock decrement failed:", e);
+  }
+  
+  /* Consume coupon (best-effort) */
+  try {
+    if (typeof consumeCoupon === "function") consumeCoupon();
+  } catch(e) {
+    console.warn("⚠️ Coupon consume failed:", e);
+  }
   
   const u=getSavedUser();
   u.orders=(u.orders||0)+1;
   u.name=name;u.phone=phone;u.email=email;u.city=city;u.addr=addr;u.notes=notes;
-  localStorage.setItem("vl_user",JSON.stringify(u));
+  try {
+    localStorage.setItem("vl_user",JSON.stringify(u));
+  } catch(e) {
+    console.warn("⚠️ Failed to save user:", e);
+  }
   const oc=$("#ordCount");
   if(oc){oc.textContent=u.orders;}
 
+  /* Update user document (best-effort) */
   if(userId && window.FB && window.FB.db){
     try{
       const { doc, updateDoc, increment } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
@@ -883,7 +1009,7 @@ async function checkout(){
         totalSpent: increment(total)
       });
     }catch(err){
-      console.warn("Failed to update user order count:", err);
+      console.warn("⚠️ Failed to update user order count:", err);
     }
   }
 
@@ -891,11 +1017,17 @@ async function checkout(){
   renderCart();
   cartBadge();
   
+  /* ✨ Send email confirmation (best-effort) */
+  let emailSent = false;
   try {
-    await sendOrderConfirmationEmail(orderData);
-    toast(LANG==="en" ? "✅ Order placed! Check your email." : "✅ تم إرسال الطلب! تم إرسال تأكيد للأدمن.");
+    emailSent = await sendOrderConfirmationEmail(orderData);
   } catch (err) {
-    console.warn("Email notification failed:", err);
+    console.warn("⚠️ Email notification failed:", err);
+  }
+  
+  if (emailSent) {
+    toast(LANG==="en" ? "✅ Order placed! Check your email." : "✅ تم إرسال الطلب! تم إرسال تأكيد للأدمن.");
+  } else {
     toast(t("t_order"));
   }
   
@@ -1071,7 +1203,11 @@ function initAccount(){
     }
 
     const old=getSavedUser();
-    localStorage.setItem("vl_user",JSON.stringify({...old,name,phone,city,addr,orders:old.orders||0}));
+    try {
+      localStorage.setItem("vl_user",JSON.stringify({...old,name,phone,city,addr,orders:old.orders||0}));
+    } catch(e) {
+      console.warn("⚠️ Failed to save account:", e);
+    }
     fillCartForm();
     toast(t("t_saved"));
     closeModal("accOv");
@@ -1081,7 +1217,11 @@ function initAccount(){
     if(window.FB && window.FB.auth && window.FB.auth.currentUser && typeof VL_Logout === "function"){
       await VL_Logout();
     }
-    localStorage.removeItem("vl_user");
+    try {
+      localStorage.removeItem("vl_user");
+    } catch(e) {
+      console.warn("⚠️ Failed to clear user:", e);
+    }
     $("#accName").value="";
     $("#accPhone").value="";
     $("#accAddr").value="";
@@ -1134,14 +1274,16 @@ function performSearch(q){
   if(!w)return;
   if(!q){w.innerHTML="";return;}
   
-  const res=ALL_PRODUCTS.filter(p=>{
+  const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
+  const res=products.filter(p=>{
+    if(!p) return false;
     const hay=(p.name+" "+(p.nameEn||"")+" "+(p.desc||"")+" "+(p.descEn||"")+" "+cat(p.cat)).toLowerCase();
     return hay.includes(q);
   }).slice(0,8);
   
   w.innerHTML=res.map(p=>`
     <div class="sr-item" data-id="${p.id}">
-      <img src="${imgOf(p)}" alt="" loading="lazy" width="50" height="50">
+      <img src="${imgOf(p)}" alt="" loading="lazy" width="50" height="50" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 50 50\\'><rect fill=\\'%23f5efe5\\' width=\\'50\\' height=\\'50\\'/></svg>'">
       <div><b>${pname(p)}</b><br><small>${money(p.price)}</small></div>
     </div>
   `).join("");
@@ -1231,6 +1373,7 @@ function closeModal(id){
 }
 
 function stockBadge(p){
+  if(!p) return "";
   if(p.stock===undefined||p.stock===null||p.stock==="")return"";
   const s=Number(p.stock);
   if(isNaN(s))return"";
@@ -1241,20 +1384,21 @@ function stockBadge(p){
 
 async function decrementStock(items){
   if(!window.FB||typeof window.FB.update!=="function")return;
+  const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   for(const it of items){
-    const p=ALL_PRODUCTS.find(x=>x.id===it.id);
+    const p=products.find(x=>x.id===it.id);
     if(!p)continue;
     if(p.stock===undefined||p.stock===null||p.stock===""||isNaN(Number(p.stock)))continue;
     const newStock=Math.max(0,Number(p.stock)-Number(it.qty||1));
     try{
       if(p._fid){await window.FB.update("products",p._fid,{stock:newStock});}
       else{await window.FB.set("products",p.id,{id_:p.id,stock:newStock});}
-    }catch(e){console.warn("stock update failed",e);}
+    }catch(e){console.warn("⚠️ stock update failed",e);}
   }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ نظام الكوبونات - دوال مساعدة (تعديل 7)
+   نظام الكوبونات
    ═══════════════════════════════════════════════════════════ */
 let appliedCoupon=null;
 
@@ -1296,13 +1440,13 @@ async function consumeCoupon(){
       await window.FB.update("coupons",appliedCoupon._fid,{
         usedCount:Number(appliedCoupon.usedCount||0)+1
       });
-    }catch(e){console.warn("coupon update failed",e);}
+    }catch(e){console.warn("⚠️ coupon update failed",e);}
   }
   appliedCoupon=null;
   if($("#couponInput"))$("#couponInput").value="";
 }
 
-/* ═══ ✨ تصدير الدوال عالمياً ═══ */
+/* ═══ تصدير الدوال عالمياً ═══ */
 window.getWishlist = getWishlist;
 window.toggleWishlist = toggleWishlist;
 window.isInWishlist = isInWishlist;
