@@ -1099,6 +1099,16 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       <textarea id="coNotes" rows="2" data-i18n-ph="ph_notes" placeholder="ملاحظات / طلبات إضافية"></textarea>
     </div>
 
+        <!-- ═══ ✨ الكوبونات ═══ -->
+    <div style="display:flex;gap:.5rem;margin-top:.8rem">
+      <input id="couponInput" placeholder="🎟️ كود الكوبون" style="flex:1">
+      <button class="btn ghost sm" id="applyCouponBtn" type="button">تطبيق</button>
+    </div>
+    <div class="trow" id="discountRow" style="display:none;margin-top:.5rem;color:var(--ok)">
+      <span>🎟️ الخصم (<b id="couponCodeLbl"></b>)</span>
+      <b id="cartDiscount">-0</b>
+    </div>
+    
     <div class="trow" style="margin-top:.8rem">
       <span data-i18n="subtotal">قيمة المنتجات</span>
       <b id="cartSub">0</b>
