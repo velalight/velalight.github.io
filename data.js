@@ -85,7 +85,7 @@ return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s)}
 /* ═══════════════════════════════════════
    imgsOf - يفضل صور الفايربيز الجديدة
    ═══════════════════════════════════════ */
-const imgsOf=p=>{const raw=String(p.img||"").split(",").map(s=>s.trim()).filter(Boolean);const arr=(p.imgs&&p.imgs.length)?p.imgs:[];if(raw.length&&arr.length&&arr[0]===raw[0])return arr;if(raw.length)return raw;return arr};
+const imgsOf=p=>{const raw=String(p.img||"").split(",").map(s=>s.trim()).filter(Boolean);const arr=(p.imgs&&p.imgs.length)?p.imgs:((p.images&&p.images.length)?p.images:[]); if(raw.length&&arr.length&&arr[0]===raw[0])return arr;if(raw.length)return raw;return arr};
 
 /* ═══════════════════════════════════════
    imgOf - يضغط الصور تلقائياً
