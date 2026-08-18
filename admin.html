@@ -95,6 +95,10 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 /* ═══ Export Button (جديد) ═══ */
 .export-btn{background:linear-gradient(135deg,#4a8a5c,#2e6b3f);color:#fff;padding:.5rem 1rem;border-radius:10px;font-size:.8rem;cursor:pointer;border:none;transition:.2s;font-weight:700}
 .export-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px -8px rgba(74,138,92,.5)}
+/* ═══ ✨ تنسيقات الكوبونات ═══ */
+.coupon-active{background:#d4edda;color:#155724;padding:.2rem .6rem;border-radius:99px;font-size:.72rem;font-weight:700}
+.coupon-inactive{background:#f8d7da;color:#721c24;padding:.2rem .6rem;border-radius:99px;font-size:.72rem;font-weight:700}
+.coupon-code{font-family:monospace;font-weight:700;background:#fef5e7;padding:.2rem .5rem;border-radius:6px;color:#d4af37;font-size:.85rem}
 @media(max-width:600px){
   table.adm{display:block;overflow-x:auto}
   .pform .g{grid-template-columns:1fr}
@@ -239,6 +243,15 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
     type="button"
   >
     🕯️ المنتجات
+  </button>
+
+  <!-- ═══ ✨ جديد: تبويب الكوبونات ═══ -->
+  <button
+    class="btn sm ghost"
+    data-tab="coupons"
+    type="button"
+  >
+    🎟️ الكوبونات
   </button>
 
   <button
@@ -576,6 +589,106 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 </div>
 
 
+<!-- ═══════════════════════════════════════════════════════════
+     ✨ جديد: COUPONS TAB (الكوبونات)
+     ═══════════════════════════════════════════════════════════ -->
+<div id="tab-coupons" class="hidden">
+
+  <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
+
+    <button
+      class="btn sm"
+      id="addCouponBtn"
+      type="button"
+    >
+      ➕ إضافة كوبون جديد
+    </button>
+
+  </div>
+
+  <p style="color:var(--dim);font-size:.78rem;margin:-.35rem 0 1rem">
+    أنشئ كوبونات خصم لعملائك — نسبتك المئوية أو مبلغ ثابت. الكوبون يظهر للعميل في السلة.
+  </p>
+
+  <!-- ═══ فورم الكوبون ═══ -->
+  <div class="pform hidden" id="couponForm">
+
+    <h3 style="color:var(--gold2);margin-bottom:1rem" id="couponFormTitle">
+      كوبون جديد
+    </h3>
+
+    <div class="g">
+      <div>
+        <label>كود الكوبون * (حروف إنجليزي)</label>
+        <input id="cf_code" placeholder="WELCOME10" style="text-transform:uppercase">
+      </div>
+
+      <div>
+        <label>نوع الخصم *</label>
+        <select id="cf_type">
+          <option value="percent">نسبة مئوية (%)</option>
+          <option value="fixed">مبلغ ثابت (ج.م)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="g">
+      <div>
+        <label>قيمة الخصم *</label>
+        <input id="cf_value" type="number" min="0" placeholder="مثال: 10 أو 50">
+      </div>
+
+      <div>
+        <label>أقصى عدد استخدامات (فارغ = غير محدود)</label>
+        <input id="cf_maxUses" type="number" min="0" placeholder="مثال: 100">
+      </div>
+    </div>
+
+    <div class="g">
+      <div>
+        <label>تاريخ الانتهاء (اختياري)</label>
+        <input id="cf_expires" type="date">
+      </div>
+
+      <div>
+        <label>الحالة</label>
+        <select id="cf_active">
+          <option value="true">✅ مفعل</option>
+          <option value="false">❌ متوقف</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:.6rem;margin-top:1rem">
+      <button class="btn sm" id="saveCouponBtn" type="button">
+        💾 حفظ الكوبون
+      </button>
+      <button class="btn ghost sm" id="cancelCouponBtn" type="button">
+        إلغاء
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ═══ جدول الكوبونات ═══ -->
+  <table class="adm">
+    <thead>
+      <tr>
+        <th>الكود</th>
+        <th>النوع</th>
+        <th>القيمة</th>
+        <th>الاستخدام</th>
+        <th>الانتهاء</th>
+        <th>الحالة</th>
+        <th>إجراءات</th>
+      </tr>
+    </thead>
+    <tbody id="couponsBody"></tbody>
+  </table>
+
+</div>
+
+
 <!-- ================= REVIEWS ================= -->
 
 <div id="tab-reviews" class="hidden">
@@ -626,6 +739,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
 let loggedIn = false;
 let ALL_USERS = []; /* ═══ ✨ جديد: تخزين العملاء ═══ */
+let ALL_COUPONS = []; /* ═══ ✨ جديد: تخزين الكوبونات ═══ */
 
 
 /* =========================================================
@@ -637,6 +751,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initTabs();
 
   initProductForm();
+  
+  initCouponForm(); /* ═══ ✨ جديد ═══ */
 
 });
 
@@ -805,6 +921,8 @@ function showAdmin(){
   loadReviews();
 
   loadUsers(); /* ═══ ✨ جديد ═══ */
+  
+  loadCoupons(); /* ═══ ✨ جديد ═══ */
 
 }
 
@@ -1096,7 +1214,7 @@ document.addEventListener("click", async (event) => {
 
 
 /* =========================================================
-   TABS (✨ معدّل: دعم users)
+   TABS (✨ معدّل: دعم users + coupons)
 ========================================================= */
 
 function initTabs(){
@@ -1146,6 +1264,13 @@ function initTabs(){
             .classList.toggle(
               "hidden",
               tab !== "products"
+            );
+            
+          /* ═══ ✨ جديد: الكوبونات ═══ */
+          $("#tab-coupons")
+            .classList.toggle(
+              "hidden",
+              tab !== "coupons"
             );
 
 
@@ -2252,6 +2377,244 @@ function openProductForm(product){
     behavior:"smooth"
   });
 
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ جديد: COUPONS - إدارة الكوبونات
+   ═══════════════════════════════════════════════════════════ */
+function loadCoupons(){
+  if(!window.FB || typeof window.FB.list !== "function") return;
+  
+  window.FB.list("coupons").then(coupons => {
+    ALL_COUPONS = coupons || [];
+    renderCoupons(ALL_COUPONS);
+  }).catch(err => {
+    console.error("Coupons error:", err);
+    toast("⚠️ تعذر تحميل الكوبونات");
+  });
+}
+
+function renderCoupons(coupons){
+  const body = document.getElementById("couponsBody");
+  if(!body) return;
+  
+  let list = coupons || [];
+  list.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+  
+  if(!list.length){
+    body.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد كوبونات بعد. أنشئ أول كوبون الآن!</td></tr>`;
+    return;
+  }
+  
+  body.innerHTML = list.map(c => {
+    const isActive = c.active !== false;
+    const usesText = c.maxUses 
+      ? `${Number(c.usedCount||0)} / ${c.maxUses}`
+      : `${Number(c.usedCount||0)} استخدام`;
+    
+    let expiresText = "-";
+    if(c.expiresAt){
+      const exp = Number(c.expiresAt);
+      if(Date.now() > exp){
+        expiresText = `<span style="color:var(--bad)">منتهي (${new Date(exp).toLocaleDateString("ar-EG")})</span>`;
+      } else {
+        expiresText = new Date(exp).toLocaleDateString("ar-EG");
+      }
+    }
+    
+    const valueText = c.type === "percent" 
+      ? `${c.value}%`
+      : `${money(c.value||0)}`;
+    
+    const typeText = c.type === "percent" ? "نسبة مئوية" : "مبلغ ثابت";
+    
+    return `
+      <tr>
+        <td><span class="coupon-code">${c.code || "-"}</span></td>
+        <td>${typeText}</td>
+        <td><b>${valueText}</b></td>
+        <td>${usesText}</td>
+        <td>${expiresText}</td>
+        <td>
+          <span class="${isActive ? 'coupon-active' : 'coupon-inactive'}">
+            ${isActive ? '✅ مفعل' : '❌ متوقف'}
+          </span>
+        </td>
+        <td style="display:flex;gap:.3rem;flex-wrap:wrap">
+          <button class="btn sm ghost" data-editc="${c.id}" type="button">✏️</button>
+          <button class="btn sm ghost" data-togglec="${c.id}" type="button">
+            ${isActive ? '🙈' : '👁️'}
+          </button>
+          <button class="btn sm danger" data-delc="${c.id}" type="button">🗑️</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+  
+  bindCouponActions(list);
+}
+
+function bindCouponActions(list){
+  $$("#couponsBody [data-editc]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const c = list.find(x => x.id === btn.dataset.editc);
+      if(c) openCouponForm(c);
+    });
+  });
+  
+  $$("#couponsBody [data-togglec]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.togglec;
+      const c = list.find(x => x.id === id);
+      if(!c) return;
+      const newActive = c.active === false;
+      window.FB.update("coupons", id, { active: newActive })
+        .then(() => {
+          toast(newActive ? "✅ تم تفعيل الكوبون" : "🙈 تم إيقاف الكوبون");
+          loadCoupons();
+        })
+        .catch(err => {
+          console.error(err);
+          toast("⚠️ فشل التحديث");
+        });
+    });
+  });
+  
+  $$("#couponsBody [data-delc]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if(!confirm("متأكد إنك عايز تحذف الكوبون ده؟")) return;
+      const id = btn.dataset.delc;
+      window.FB.remove("coupons", id)
+        .then(() => {
+          toast("🗑️ تم حذف الكوبون");
+          loadCoupons();
+        })
+        .catch(err => {
+          console.error(err);
+          toast("⚠️ فشل الحذف");
+        });
+    });
+  });
+}
+
+function initCouponForm(){
+  $("#addCouponBtn")?.addEventListener("click", () => openCouponForm(null));
+  
+  $("#cancelCouponBtn")?.addEventListener("click", () => {
+    $("#couponForm").classList.add("hidden");
+  });
+  
+  $("#saveCouponBtn")?.addEventListener("click", saveCoupon);
+}
+
+function openCouponForm(coupon){
+  const form = $("#couponForm");
+  form.classList.remove("hidden");
+  
+  if(coupon){
+    form.dataset.editId = coupon.id;
+    $("#couponFormTitle").textContent = "تعديل كوبون: " + (coupon.code || "");
+    $("#cf_code").value = coupon.code || "";
+    $("#cf_type").value = coupon.type || "percent";
+    $("#cf_value").value = coupon.value || "";
+    $("#cf_maxUses").value = coupon.maxUses || "";
+    $("#cf_active").value = coupon.active !== false ? "true" : "false";
+    
+    if(coupon.expiresAt){
+      const date = new Date(Number(coupon.expiresAt));
+      $("#cf_expires").value = date.toISOString().slice(0,10);
+    } else {
+      $("#cf_expires").value = "";
+    }
+  } else {
+    form.dataset.editId = "";
+    $("#couponFormTitle").textContent = "كوبون جديد";
+    $("#cf_code").value = "";
+    $("#cf_type").value = "percent";
+    $("#cf_value").value = "";
+    $("#cf_maxUses").value = "";
+    $("#cf_expires").value = "";
+    $("#cf_active").value = "true";
+  }
+  
+  form.scrollIntoView({ behavior: "smooth" });
+}
+
+function saveCoupon(){
+  const code = $("#cf_code").value.trim().toUpperCase();
+  const type = $("#cf_type").value;
+  const value = Number($("#cf_value").value || 0);
+  const maxUses = $("#cf_maxUses").value === "" ? null : Number($("#cf_maxUses").value || 0);
+  const expiresVal = $("#cf_expires").value;
+  const active = $("#cf_active").value === "true";
+  const editId = $("#couponForm").dataset.editId || "";
+  
+  if(!code || !/^[A-Z0-9]{3,20}$/.test(code)){
+    toast("⚠️ كود الكوبون لازم 3-20 حرف/رقم إنجليزي");
+    return;
+  }
+  
+  if(value <= 0){
+    toast("⚠️ قيمة الخصم لازم أكبر من صفر");
+    return;
+  }
+  
+  if(type === "percent" && value > 100){
+    toast("⚠️ النسبة المئوية لازم تكون ≤ 100");
+    return;
+  }
+  
+  /* فحص التكرار */
+  const existing = ALL_COUPONS.find(c => c.code === code && c.id !== editId);
+  if(existing){
+    toast("⚠️ الكود ده مستخدم من قبل. اختار كود تاني.");
+    return;
+  }
+  
+  let expiresAt = null;
+  if(expiresVal){
+    expiresAt = new Date(expiresVal).setHours(23,59,59,999);
+  }
+  
+  const data = {
+    code,
+    type,
+    value,
+    maxUses,
+    expiresAt,
+    active
+  };
+  
+  if(editId){
+    /* تعديل كوبون موجود */
+    window.FB.update("coupons", editId, data)
+      .then(() => {
+        toast("💾 تم حفظ الكوبون");
+        $("#couponForm").classList.add("hidden");
+        loadCoupons();
+      })
+      .catch(err => {
+        console.error(err);
+        toast("⚠️ فشل الحفظ — راجع Firestore Rules");
+      });
+  } else {
+    /* كوبون جديد */
+    const newId = "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5);
+    data.usedCount = 0;
+    data.createdAt = Date.now();
+    
+    window.FB.set("coupons", newId, data)
+      .then(() => {
+        toast("💾 تم إنشاء الكوبون");
+        $("#couponForm").classList.add("hidden");
+        loadCoupons();
+      })
+      .catch(err => {
+        console.error(err);
+        toast("⚠️ فشل الإنشاء — راجع Firestore Rules");
+      });
+  }
 }
 
 
