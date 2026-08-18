@@ -3,6 +3,40 @@
 
 /* ═══ QUICK ADD STATE ═══ */
 let quickAddProduct=null;
+  /* ═══ ✨ WISHLIST STATE ═══ */
+const WISHLIST_KEY = "vl_wishlist";
+
+function getWishlist() {
+  try {
+    return JSON.parse(localStorage.getItem(WISHLIST_KEY) || "[]");
+  } catch(e) {
+    return [];
+  }
+}
+
+function saveWishlist(list) {
+  localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
+}
+
+function toggleWishlist(productId) {
+  let list = getWishlist();
+  const idx = list.indexOf(productId);
+  if (idx === -1) {
+    list.push(productId);
+    toast("❤️ تمت الإضافة للمفضلة");
+  } else {
+    list.splice(idx, 1);
+    toast("💔 تمت الإزالة من المفضلة");
+  }
+  saveWishlist(list);
+  renderProducts();
+  if (typeof renderWishlistPage === "function") renderWishlistPage();
+  return list.includes(productId);
+}
+
+function isInWishlist(productId) {
+  return getWishlist().includes(productId);
+}
 let quickAddScent="";
 let quickAddQty=1;
 
@@ -356,6 +390,7 @@ function renderProducts(){
               ${p.old>p.price?`<del>${money(p.old)}</del>`:""}
             </div>
             <button class="p-add" data-id="${p.id}" ${Number(p.stock)===0?"disabled":""} aria-label="${t("add_cart")} ${pname(p)}">${Number(p.stock)===0?(LANG==="en"?"Out of stock":"نفدت الكمية"):t("add_cart")}</button>
+            <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:none;border:1px solid var(--line);border-radius:10px;padding:.4rem .6rem;cursor:pointer;font-size:1rem;transition:.2s;${isInWishlist(p.id)?'background:#fee;color:#e74c3c;border-color:#e74c3c;':''}">${isInWishlist(p.id)?"❤️":"🤍"}</button>
           </div>
         </div>
       </article>
@@ -367,6 +402,16 @@ function renderProducts(){
 }
 
 function handleProductGridClick(e){
+  /* ✨ زرار القلب */
+  const wishBtn = e.target.closest('.p-wish');
+  if (wishBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const pid = wishBtn.dataset.wish;
+    if (pid) toggleWishlist(pid);
+    return;
+  }
+  
   const addBtn = e.target.closest('.p-add');
   if(!addBtn) return;
   
@@ -1189,5 +1234,22 @@ async function decrementStock(items){
     }catch(e){console.warn("stock update failed",e);}
   }
 }
+/* ═══ ✨ تصدير الدوال عالمياً لصفحة wishlist.html ═══ */
+window.getWishlist = getWishlist;
+window.toggleWishlist = toggleWishlist;
+window.isInWishlist = isInWishlist;
+window.WISHLIST_KEY = WISHLIST_KEY;
 
+/* تصدير ALL_PRODUCTS والدوال المساعدة */
+window.ALL_PRODUCTS_REF = () => (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
+window.imgOfRef = (p) => (typeof imgOf === "function") ? imgOf(p) : (p.img || "");
+window.pnameRef = (p) => (typeof pname === "function") ? pname(p) : (p.name || "");
+window.moneyRef = (n) => (typeof money === "function") ? money(n) : (n + " ج.م");
+window.catRef = (c) => (typeof cat === "function") ? cat(c) : (c || "");
+window.toastRef = (m) => (typeof toast === "function") ? toast(m) : console.log(m);
+window.addToCartRef = (p, o) => (typeof addToCart === "function") ? addToCart(p, o) : false;
+window.openQuickAddRef = (p) => (typeof openQuickAdd === "function") ? openQuickAdd(p) : null;
+window.tRef = (k) => (typeof t === "function") ? t(k) : k;
+window.LANGRef = () => (typeof LANG !== "undefined") ? LANG : "ar";
+  
 })();
