@@ -1477,3 +1477,126 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
 @keyframes chromaFlow {
   to { background-position: 200% center; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ Developer Signature — Footer Credit
+   ═══════════════════════════════════════════════════════════ */
+.dev-signature{
+  margin-top:3rem;
+  padding:2rem 1.2rem;
+  background:linear-gradient(135deg, var(--panel) 0%, var(--panel2) 100%);
+  border:1px solid var(--line);
+  border-radius:22px;
+  text-align:center;
+}
+
+.dev-line{
+  width:60px;
+  height:2px;
+  background:linear-gradient(90deg, transparent, var(--gold2), transparent);
+  margin:0 auto 1rem;
+}
+
+.dev-label{
+  color:var(--dim);
+  font-size:.85rem;
+  margin-bottom:1.2rem;
+  letter-spacing:.5px;
+}
+
+.dev-emoji{
+  font-size:1rem;
+  margin-inline-end:.3rem;
+}
+
+.dev-team{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1rem;
+  max-width:700px;
+  margin:0 auto 1.5rem;
+}
+
+.dev-card{
+  display:flex;
+  align-items:center;
+  gap:.8rem;
+  padding:1rem;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:16px;
+  text-decoration:none;
+  color:inherit;
+  transition:.25s ease;
+  text-align:start;
+}
+
+.dev-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--gold2);
+  box-shadow:0 10px 25px -8px rgba(217,171,95,.3);
+}
+
+.dev-avatar{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:linear-gradient(135deg, var(--gold), #b8863f);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--fd);
+  font-size:1.4rem;
+  font-weight:700;
+  flex-shrink:0;
+  box-shadow:0 4px 12px -4px rgba(217,171,95,.5);
+}
+
+.dev-info{
+  display:flex;
+  flex-direction:column;
+  gap:.15rem;
+  min-width:0;
+}
+
+.dev-info b{
+  font-family:var(--fd);
+  font-size:.92rem;
+  color:var(--gold2);
+  line-height:1.2;
+}
+
+.dev-info span{
+  font-size:.8rem;
+  color:var(--dark);
+  direction:ltr;
+  text-align:start;
+}
+
+.dev-info small{
+  font-size:.7rem;
+  color:var(--dim);
+  margin-top:.15rem;
+}
+
+.dev-cta{
+  font-size:.88rem;
+  color:var(--mut);
+  margin:0;
+  padding-top:1rem;
+  border-top:1px dashed var(--line);
+}
+
+.dev-cta strong{
+  color:var(--gold2);
+  font-family:var(--fd);
+}
+
+@media(max-width:600px){
+  .dev-team{grid-template-columns:1fr;}
+  .dev-card{padding:.85rem;}
+  .dev-avatar{width:42px;height:42px;font-size:1.2rem;}
+  .dev-info b{font-size:.85rem;}
+  .dev-cta{font-size:.82rem;}
+}
