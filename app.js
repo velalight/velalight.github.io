@@ -582,6 +582,9 @@ function initCart(){
   });
 
   $("#checkoutBtn")?.addEventListener("click",checkout);
+  
+  /* ═══ ✨ تعديل 6: ربط زرار الكوبون ═══ */
+  $("#applyCouponBtn")?.addEventListener("click",applyCoupon);
 
   const saveCustomer = debounce(() => saveCartCustomer(), 500);
   
@@ -695,10 +698,16 @@ function handleCartChange(e){
   }
 }
 
+/* ═══ ✨ تعديل 1: حساب الخصم ═══ */
 function updateTotals(c){
   const sub=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
+  const disc=calcCouponDiscount(sub);
   if($("#cartSub")){$("#cartSub").textContent=money(sub);}
-  if($("#cartTotal")){$("#cartTotal").textContent=money(sub);}
+  const dRow=$("#discountRow");
+  if(dRow){dRow.style.display=disc>0?"flex":"none";}
+  if($("#cartDiscount")){$("#cartDiscount").textContent="-"+money(disc);}
+  if($("#couponCodeLbl")&&appliedCoupon){$("#couponCodeLbl").textContent=appliedCoupon.code;}
+  if($("#cartTotal")){$("#cartTotal").textContent=money(Math.max(0,sub-disc));}
 }
 
 function getSavedUser(){
@@ -775,8 +784,12 @@ async function checkout(){
   saveUserFromCart(name,phone,email,city,addr,notes);
 
   const orderId=genOrderId();
-  const total=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
-
+  
+  /* ═══ ✨ تعديل 2: حساب الإجمالي بعد الخصم ═══ */
+  const subTotal=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
+  const discount=calcCouponDiscount(subTotal);
+  const total=Math.max(0,subTotal-discount);
+  
   let userId = null;
   let userEmail = null;
   if(window.FB && window.FB.auth && window.FB.auth.currentUser){
@@ -800,6 +813,13 @@ async function checkout(){
   });
 
   msg+=`━━━━━━━━━━━━━━━━━━━━\n`;
+  
+  /* ═══ ✨ تعديل 4: إضافة سطر الكوبون والهدية ═══ */
+  if(discount>0&&appliedCoupon){
+    msg+=`🎟️ كوبون ${appliedCoupon.code}: -${money(discount)}\n`;
+  }
+  msg+=`🎁 هدية ليك: كود THANKS10 لخصم 10% على طلبك الجاي\n`;
+  
   msg+=`${waTotalLabel()} ${money(total)}\n`;
   msg+=`${t("pay_products_note")}\n`;
   if(CFG&&CFG.INSTAPAY&&String(CFG.INSTAPAY).trim()){
@@ -826,7 +846,11 @@ async function checkout(){
       total:Number(it.price||0)*Number(it.qty||1),img:it.img||""
     })),
     items:c,
-    total,productsTotal:total,
+    /* ═══ ✨ تعديل 3: إضافة discount و couponCode للطلب ═══ */
+    total,
+    productsTotal:subTotal,
+    discount,
+    couponCode:appliedCoupon?appliedCoupon.code:"",
     paymentMethod:"InstaPay",
     shippingPayment:"Cash to courier",
     shippingIncluded:false,
@@ -839,6 +863,9 @@ async function checkout(){
   catch(e){console.warn("Order save warning:",e);}
   
   decrementStock(c);
+  
+  /* ═══ ✨ تعديل 5: استهلاك الكوبون ═══ */
+  consumeCoupon();
   
   const u=getSavedUser();
   u.orders=(u.orders||0)+1;
@@ -925,6 +952,7 @@ ${itemsText}
 
 ═══════════════════════════════════════
 💰 الإجمالي: ${orderData.total} جنيه
+${orderData.discount>0 ? `🎟️ كوبون ${orderData.couponCode}: -${orderData.discount} جنيه\n` : ""}
 ═══════════════════════════════════════
 
 ═══════════════════════════════════════
@@ -934,8 +962,10 @@ ${itemsText}
 • الشحن: كاش للمندوب عند الاستلام
 
 ═══════════════════════════════════════
-⏳ الحالة: قيد المراجعة
+🎁 هدية للعميل: كود THANKS10 لخصم 10% على الطلب الجاي
 ═══════════════════════════════════════
+
+⏳ الحالة: قيد المراجعة
 
 — VelaLight Admin Panel
         `.trim()
@@ -976,12 +1006,15 @@ function openWhatsAppConfirmation(orderData) {
 📋 رقم الطلب: ${orderData.orderId}
 👤 الاسم: ${orderData.name}
 💰 الإجمالي: ${orderData.total} جنيه
+${orderData.discount>0 ? `🎟️ كوبون ${orderData.couponCode}: -${orderData.discount} جنيه\n` : ""}
 
 📍 العنوان:
 ${orderData.city || ""} - ${orderData.address}
 
 🛍️ المنتجات:
 ${itemsSummary}
+
+🎁 هدية: كود THANKS10 لخصم 10% على طلبك الجاي
 
 في انتظار تأكيدكم وترتيب الشحن 📱
 
@@ -1220,7 +1253,56 @@ async function decrementStock(items){
   }
 }
 
-/* ═══ ✨ تصدير الدوال عالمياً لصفحة wishlist.html ═══ */
+/* ═══════════════════════════════════════════════════════════
+   ✨ نظام الكوبونات - دوال مساعدة (تعديل 7)
+   ═══════════════════════════════════════════════════════════ */
+let appliedCoupon=null;
+
+function calcCouponDiscount(sub){
+  if(!appliedCoupon)return 0;
+  let d=0;
+  if(appliedCoupon.type==="percent"){
+    d=sub*(Number(appliedCoupon.value||0)/100);
+  }else{
+    d=Number(appliedCoupon.value||0);
+  }
+  return Math.min(sub,Math.round(d));
+}
+
+async function applyCoupon(){
+  const code=($("#couponInput")?.value||"").trim().toUpperCase();
+  if(!code){toast("⚠️ اكتب كود الكوبون");return;}
+  
+  let list=[];
+  try{list=await window.FB.list("coupons")||[];}
+  catch(e){toast("⚠️ تعذر التحقق من الكوبون");return;}
+  
+  const c=list.find(x=>(x.code||"").toUpperCase()===code);
+  if(!c){toast("❌ كود الكوبون غير صحيح");return;}
+  if(c.active===false){toast("❌ الكوبون ده متوقف");return;}
+  if(c.expiresAt&&Date.now()>Number(c.expiresAt)){toast("⚠️ الكوبون منتهي الصلاحية");return;}
+  if(c.maxUses&&Number(c.usedCount||0)>=Number(c.maxUses)){toast("⚠️ انتهت استخدامات الكوبون");return;}
+  
+  appliedCoupon={...c,_fid:c.id};
+  const sub=getCart().reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
+  toast("🎟️ تم تطبيق الكوبون! وفرت "+money(calcCouponDiscount(sub)));
+  renderCart();
+}
+
+async function consumeCoupon(){
+  if(!appliedCoupon||!appliedCoupon._fid)return;
+  if(window.FB&&typeof window.FB.update==="function"){
+    try{
+      await window.FB.update("coupons",appliedCoupon._fid,{
+        usedCount:Number(appliedCoupon.usedCount||0)+1
+      });
+    }catch(e){console.warn("coupon update failed",e);}
+  }
+  appliedCoupon=null;
+  if($("#couponInput"))$("#couponInput").value="";
+}
+
+/* ═══ ✨ تصدير الدوال عالمياً ═══ */
 window.getWishlist = getWishlist;
 window.toggleWishlist = toggleWishlist;
 window.isInWishlist = isInWishlist;
