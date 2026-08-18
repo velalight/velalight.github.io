@@ -404,10 +404,20 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
     </div>
 
 
+    <!-- ═══ ✨ حقل المخزون (جديد) ═══ -->
     <div class="g">
 
       <div>
+        <label>المخزون (فارغ = غير محدود)</label>
+        <input
+          id="pf_stock"
+          type="number"
+          min="0"
+          placeholder="مثال: 10"
+        >
+      </div>
 
+      <div>
         <label>التصنيف</label>
 
         <select id="pf_cat">
@@ -444,6 +454,10 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
       </div>
 
+    </div>
+
+
+    <div class="g">
 
       <div>
 
@@ -454,11 +468,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         <input id="pf_img">
 
       </div>
-
-    </div>
-
-
-    <div class="g">
 
       <div>
 
@@ -471,6 +480,10 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
       </div>
 
+    </div>
+
+
+    <div class="g">
 
       <div>
 
@@ -481,6 +494,10 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
           placeholder="72 ساعة اشتعال"
         >
 
+      </div>
+
+
+      <div>
       </div>
 
     </div>
@@ -535,6 +552,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   </div>
 
 
+  <!-- ═══ ✨ جدول المنتجات (مع عمودي المخزون والظهور) ═══ -->
   <table class="adm">
 
     <thead>
@@ -544,6 +562,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         <th>المنتج</th>
         <th>التصنيف</th>
         <th>السعر</th>
+        <th>المخزون</th>
         <th>ظهور</th>
         <th>إجراءات</th>
       </tr>
@@ -1500,7 +1519,7 @@ function renderAdminProducts(){
 
     body.innerHTML = `
       <tr>
-        <td colspan="6" style="text-align:center;padding:2rem;color:var(--dim)">
+        <td colspan="7" style="text-align:center;padding:2rem;color:var(--dim)">
           لا توجد منتجات مطابقة للبحث الحالي.
         </td>
       </tr>
@@ -1536,6 +1555,8 @@ function renderAdminProducts(){
       </td>
 
       <td>${money(product.price || 0)}</td>
+
+      <td>${(product.stock===null||product.stock===undefined||product.stock==="")?"∞":product.stock}</td>
 
       <td>
         ${product.active === false ? "❌ مخفي" : "✅ ظاهر"}
@@ -1965,6 +1986,9 @@ function initProductForm(){
             .filter(Boolean);
 
 
+        /* ═══ ✨ الإصلاح: المخزون كخاصية منفصلة ═══ */
+        const stockVal = $("#pf_stock").value;
+
         const data = {
 
           name,
@@ -1977,6 +2001,9 @@ function initProductForm(){
             Number(
               $("#pf_old").value || 0
             ),
+
+          stock:
+            stockVal === "" ? null : Number(stockVal || 0),
 
           cat:
             $("#pf_cat").value,
@@ -2151,6 +2178,10 @@ function openProductForm(product){
     $("#pf_old").value =
       product.old || "";
 
+    /* ═══ ✨ الإصلاح: المخزون ═══ */
+    $("#pf_stock").value =
+      (product.stock===null||product.stock===undefined)?"":product.stock;
+
 
     $("#pf_cat").value =
       product.cat || "wood";
@@ -2196,6 +2227,7 @@ function openProductForm(product){
       "pf_nameEn",
       "pf_price",
       "pf_old",
+      "pf_stock",
       "pf_img",
       "pf_badge",
       "pf_hours",
