@@ -6,154 +6,502 @@
 <title>منتج | VelaLight</title>
 <meta name="description" content="اكتشفي تفاصيل المنتج من VelaLight — شموع يدوية فاخرة بعطور مميزة.">
 <meta name="theme-color" content="#faf6f0">
+
+<!-- ═══ SEO — Product Open Graph ═══ -->
 <meta property="og:type" content="product">
 <meta property="og:site_name" content="VelaLight">
 <meta property="og:locale" content="ar_EG">
+<meta property="og:title" content="منتج | VelaLight">
+<meta property="og:description" content="شموع يدوية فاخرة بعطور مميزة">
+<meta property="og:image" content="https://velalight.github.io/RR.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://velalight.github.io/product.html">
+
+<!-- ═══ Preconnect ═══ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://images.weserv.nl">
+
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="mobile-luxury-fix.css">
+
+<!-- ═══ Product Page Styles ═══ -->
 <style>
-.pd-thumbs{display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap}
-.pd-thumbs img{width:64px;height:64px;border-radius:10px;object-fit:cover;border:2px solid var(--line);cursor:pointer;transition:.2s}
-.pd-thumbs img:hover,.pd-thumbs img.on{border-color:var(--gold)}
-.pd-img img{opacity:0;transition:opacity .5s}
+/* ═══════ Layout ═══════ */
+.pd-hero{padding:1rem 0 2rem}
+.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
+
+/* ═══════ Breadcrumb ═══════ */
+.crumb{display:flex;align-items:center;gap:.3rem;font-size:.85rem;color:var(--dim);margin-bottom:1.5rem;flex-wrap:wrap}
+.crumb a{color:var(--mut);text-decoration:none;transition:.2s}
+.crumb a:hover{color:var(--gold2)}
+.crumb span{color:var(--dark);font-weight:500}
+
+/* ═══════ Gallery ═══════ */
+.pd-gallery{position:sticky;top:80px}
+.pd-img{position:relative;border-radius:22px;overflow:hidden;background:var(--panel2);aspect-ratio:1;border:1px solid var(--line);box-shadow:var(--sh)}
+.pd-img img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s;display:block}
 .pd-img img.loaded{opacity:1}
-#pdRatingSummary{display:flex;align-items:center;gap:.5rem;font-size:.9rem;color:var(--mut);margin-bottom:.5rem}
-#pdRatingSummary b{color:var(--gold2)}
+.pd-img .zoom-hint{position:absolute;bottom:12px;right:12px;background:rgba(255,255,255,.9);padding:.3rem .7rem;border-radius:99px;font-size:.75rem;color:var(--dark);backdrop-filter:blur(8px)}
+.pd-thumbs{display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap;overflow-x:auto;padding-bottom:4px}
+.pd-thumbs img{width:68px;height:68px;border-radius:12px;object-fit:cover;border:2px solid var(--line);cursor:pointer;transition:.2s;flex-shrink:0}
+.pd-thumbs img:hover{border-color:var(--gold);transform:translateY(-2px)}
+.pd-thumbs img.on{border-color:var(--gold2);box-shadow:0 4px 12px -4px rgba(217,171,95,.4)}
+
+/* ═══════ Info Panel ═══════ */
+.pd-info{display:flex;flex-direction:column;gap:.8rem}
+.pd-info h1{font-family:var(--fd);font-size:clamp(1.6rem,3vw,2.2rem);color:var(--dark);margin:0;line-height:1.2}
+.pd-price{display:flex;align-items:baseline;gap:.8rem;margin:.3rem 0}
+.pd-price #pdPrice{font-family:var(--fd);font-size:1.8rem;color:var(--gold2);font-weight:700}
+.pd-price del{color:var(--dim);font-size:1rem}
+.pd-price .save-badge{background:#d4edda;color:#155724;padding:2px 10px;border-radius:99px;font-size:.72rem;font-weight:700}
+
+/* ═══════ Rating Summary ═══════ */
+#pdRatingSummary{display:flex;align-items:center;gap:.5rem;font-size:.88rem;color:var(--mut);flex-wrap:wrap}
+#pdRatingSummary b{color:var(--gold2);font-family:var(--fd)}
 .stars.muted{color:var(--dim);opacity:.5}
-.scent-required{display:inline-block;background:rgba(217,171,95,.12);color:var(--gold2);font-size:.72rem;font-weight:700;padding:2px 10px;border-radius:99px;margin-inline-start:.5rem}
-.handmade-note{display:flex;align-items:center;gap:.5rem;background:rgba(217,171,95,.08);border:1px solid rgba(217,171,95,.15);border-radius:12px;padding:.7rem 1rem;font-size:.85rem;color:var(--mut);margin-top:1.2rem}
-.handmade-note span{color:var(--gold2)}
+
+/* ═══════ Description ═══════ */
+.pd-desc{color:var(--mut);line-height:1.85;font-size:.95rem;margin:.5rem 0 1rem}
+
+/* ═══════ Scent Picker ═══════ */
+.opt-t{display:flex;align-items:center;gap:.5rem;font-weight:600;font-size:.9rem;margin-top:.8rem;margin-bottom:.5rem;color:var(--dark)}
+.scent-required{display:inline-block;background:rgba(217,171,95,.12);color:var(--gold2);font-size:.72rem;font-weight:700;padding:2px 10px;border-radius:99px}
+.scents-pick{display:flex;flex-wrap:wrap;gap:.4rem}
+.scents-pick .chip{background:var(--panel);border:1px solid var(--line);color:var(--dark);padding:.45rem .9rem;border-radius:99px;cursor:pointer;font-size:.82rem;transition:.2s;font-weight:500}
+.scents-pick .chip:hover{border-color:var(--gold);transform:translateY(-1px)}
+.scents-pick .chip.on{background:var(--gold2);color:#fff;border-color:var(--gold2);box-shadow:0 4px 12px -4px rgba(217,171,95,.5)}
+
+/* ═══════ Quantity ═══════ */
+.qty{display:inline-flex;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px;gap:0}
+.qty button{background:none;border:none;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.2rem;color:var(--dark);transition:.2s}
+.qty button:hover{background:var(--panel2);color:var(--gold2)}
+.qty b{min-width:44px;text-align:center;font-family:var(--fd);font-size:1.1rem;color:var(--dark)}
+
+/* ═══════ Actions ═══════ */
+.pd-actions{display:grid;grid-template-columns:1fr auto auto;gap:.5rem;margin-top:1rem}
+.pd-actions .btn{padding:.9rem 1.2rem;font-size:.95rem}
+.pd-wish{background:var(--panel);border:1px solid var(--line);color:var(--dark);padding:.9rem 1rem;border-radius:12px;cursor:pointer;font-size:1.1rem;transition:.2s;min-width:54px}
+.pd-wish:hover{border-color:var(--gold);transform:translateY(-2px)}
+.pd-wish.on{background:#fee;color:#e74c3c;border-color:#e74c3c}
+
+/* ═══════ Stock Badge ═══════ */
+.stock-info{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .8rem;border-radius:99px;font-size:.78rem;font-weight:600;margin-top:.3rem}
+.stock-info.low{background:#fff4e6;color:#d97706}
+.stock-info.out{background:#fee;color:#e74c3c}
+.stock-info.ok{background:#d4edda;color:#155724}
+
+/* ═══════ Info Boxes ═══════ */
+.info-boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+.info-box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:.8rem .7rem;text-align:center;transition:.2s}
+.info-box:hover{border-color:var(--gold);transform:translateY(-2px)}
+.info-box .ib-icon{font-size:1.4rem;margin-bottom:.3rem;display:block}
+.info-box .ib-title{font-size:.78rem;font-weight:700;color:var(--dark);margin-bottom:.15rem}
+.info-box .ib-desc{font-size:.68rem;color:var(--dim);line-height:1.3}
+
+/* ═══════ Handmade Note ═══════ */
+.handmade-note{display:flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,rgba(217,171,95,.08),rgba(217,171,95,.04));border:1px solid rgba(217,171,95,.2);border-radius:14px;padding:.9rem 1.1rem;font-size:.88rem;color:var(--mut);margin-top:1rem}
+.handmade-note .hm-icon{font-size:1.3rem;flex-shrink:0}
+
+/* ═══════ Share Row ═══════ */
+.share-row{display:flex;align-items:center;gap:.5rem;margin-top:1rem;padding-top:1rem;border-top:1px dashed var(--line);flex-wrap:wrap}
+.share-row b{font-size:.82rem;color:var(--dim);margin-inline-end:.2rem}
+.share-row a,.share-row button{background:var(--panel);border:1px solid var(--line);padding:.35rem .8rem;border-radius:99px;font-size:.78rem;color:var(--dark);text-decoration:none;transition:.2s;cursor:pointer;font-family:inherit}
+.share-row a:hover,.share-row button:hover{border-color:var(--gold);color:var(--gold2);transform:translateY(-1px)}
+
+/* ═══════ Tabs ═══════ */
+.pd-tabs{margin-top:3rem;border-top:1px solid var(--line);padding-top:2rem}
+.tabs-nav{display:flex;gap:.3rem;border-bottom:1px solid var(--line);margin-bottom:1.5rem;overflow-x:auto}
+.tabs-nav button{background:none;border:none;padding:.8rem 1.2rem;font-family:var(--fd);font-size:.95rem;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:.2s;white-space:nowrap;font-weight:500}
+.tabs-nav button.on{color:var(--gold2);border-bottom-color:var(--gold2)}
+.tabs-nav button:hover{color:var(--dark)}
+.tab-pane{display:none;animation:fadeIn .3s}
+.tab-pane.on{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════ Specs Table ═══════ */
+.specs-table{width:100%;border-collapse:collapse;font-size:.9rem}
+.specs-table tr{border-bottom:1px solid var(--line)}
+.specs-table tr:last-child{border-bottom:none}
+.specs-table td{padding:.8rem .5rem;vertical-align:top}
+.specs-table td:first-child{color:var(--dim);font-weight:600;width:35%;font-size:.82rem}
+.specs-table td:last-child{color:var(--dark)}
+
+/* ═══════ Reviews ═══════ */
+.rv-item{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1rem 1.2rem;margin-bottom:.8rem}
+.rv-item .rv-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;flex-wrap:wrap;gap:.3rem}
+.rv-item .rv-head b{color:var(--dark)}
+.rv-item .rv-date{font-size:.72rem;color:var(--dim)}
+.rv-item p{color:var(--mut);line-height:1.7;margin:0}
+.rv-photo{margin-top:.5rem;border-radius:10px;max-width:150px;max-height:150px;object-fit:cover}
+
+.rv-form{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1.5rem;margin-top:1.5rem}
+.rv-form h3{margin-top:0}
+.rv-form .row{display:grid;grid-template-columns:1fr auto;gap:.8rem;align-items:center;margin-bottom:.8rem}
+.starpick{display:flex;gap:.2rem}
+.starpick button{background:none;border:none;font-size:1.8rem;color:var(--dim);cursor:pointer;transition:.2s;padding:0 2px}
+.starpick button.lit{color:#f1c40f;transform:scale(1.1)}
+.starpick button:hover{color:#f1c40f}
+
+/* ═══════ Related Products ═══════ */
+.rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.rel-grid .p-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.2s;text-decoration:none;color:inherit}
+.rel-grid .p-card:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:var(--sh)}
+.rel-grid .p-media{aspect-ratio:1;background:var(--panel2);overflow:hidden}
+.rel-grid .p-media img{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+.rel-grid .p-media img.loaded{opacity:1}
+.rel-grid .p-body{padding:.8rem .9rem}
+.rel-grid .p-body h3{font-size:.92rem;margin:0 0 .3rem;color:var(--dark);font-family:var(--fd)}
+.rel-grid .p-price{font-family:var(--fd);color:var(--gold2);font-size:1rem;font-weight:700}
+
+/* ═══════ Skeleton ═══════ */
+.skel{background:linear-gradient(90deg,var(--panel2) 0%,var(--panel) 50%,var(--panel2) 100%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:10px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ═══════ Floating WhatsApp ═══════ */
+.float-wa{position:fixed;bottom:20px;left:20px;background:#25d366;color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;text-decoration:none;box-shadow:0 8px 24px rgba(37,211,102,.4);z-index:99;transition:.2s}
+.float-wa:hover{transform:scale(1.1) rotate(-8deg)}
+
+/* ═══════ Zoom Modal ═══════ */
+.zoom-modal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;display:none;align-items:center;justify-content:center;padding:2rem;backdrop-filter:blur(4px)}
+.zoom-modal.open{display:flex}
+.zoom-modal img{max-width:90vw;max-height:90vh;border-radius:16px;object-fit:contain}
+.zoom-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.15);color:#fff;border:none;width:48px;height:48px;border-radius:50%;font-size:1.5rem;cursor:pointer;backdrop-filter:blur(8px)}
+.zoom-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);color:#fff;border:none;width:48px;height:48px;border-radius:50%;font-size:1.5rem;cursor:pointer;backdrop-filter:blur(8px)}
+.zoom-nav.prev{left:20px}
+.zoom-nav.next{right:20px}
+
+/* ═══════ Payment Box ═══════ */
+.pay-info{background:linear-gradient(135deg,var(--panel) 0%,var(--panel2) 100%);border:1px solid var(--line);border-radius:16px;padding:1.1rem;margin-top:1rem}
+.pay-info .pay-row{display:flex;gap:.6rem;align-items:flex-start;margin-bottom:.6rem}
+.pay-info .pay-row:last-child{margin-bottom:0}
+.pay-info .pay-icon{font-size:1.3rem;flex-shrink:0}
+.pay-info .pay-title{font-weight:700;font-size:.88rem;color:var(--dark);margin-bottom:.1rem}
+.pay-info .pay-desc{font-size:.78rem;color:var(--dim);line-height:1.4}
+
+/* ═══════ Responsive ═══════ */
+@media(max-width:900px){
+  .pd-grid{grid-template-columns:1fr;gap:1.5rem}
+  .pd-gallery{position:static}
+  .info-boxes{grid-template-columns:1fr}
+  .pd-actions{grid-template-columns:1fr;gap:.5rem}
+  .pd-actions .btn,.pd-wish{width:100%}
+  .rel-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:480px){
+  .pd-info h1{font-size:1.4rem}
+  .pd-price #pdPrice{font-size:1.5rem}
+  .rv-form .row{grid-template-columns:1fr}
+}
 </style>
+
+<!-- ═══ Product JSON-LD (SEO) ═══ -->
+<script type="application/ld+json" id="pdJsonLd">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "VelaLight Product",
+  "image": "https://velalight.github.io/RR.jpg",
+  "description": "Luxury handmade candle",
+  "brand": {"@type":"Brand","name":"VelaLight"},
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "EGP",
+    "price": "0",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
 </head>
 <body>
 
+<!-- ═══════════════════════════════════════
+     TOP BAR
+     ═══════════════════════════════════════ -->
 <div class="topbar">
   <div class="mq-track" id="mqTrack">
-    <span>🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp; 🏷️ خصومات حصرية &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; ✨ ضمان استبدال &nbsp;•&nbsp;</span>
-    <span>🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp; 🏷️ خصومات حصرية &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; ✨ ضمان استبدال &nbsp;•&nbsp;</span>
+    <span>🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp; 🏷️ خصومات حصرية &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; ✨ ضمان استبدال &nbsp;•&nbsp; 🕯️ أكثر من 19 عطر فاخر &nbsp;•&nbsp;</span>
+    <span>🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp; 🏷️ خصومات حصرية &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; ✨ ضمان استبدال &nbsp;•&nbsp; 🕯️ أكثر من 19 عطر فاخر &nbsp;•&nbsp;</span>
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════
+     HEADER (كامل زي index.html)
+     ═══════════════════════════════════════ -->
 <header>
   <div class="wrap hrow">
     <a class="logo" href="index.html" aria-label="VelaLight - الرئيسية">
       <span class="flame"></span>
       <div><b>VelaLight</b><small>Luxury Candle Studio</small></div>
     </a>
+
+    <nav class="mainnav" aria-label="القائمة الرئيسية">
+      <div><a href="index.html">الرئيسية</a></div>
+      <div>
+        <a href="index.html#products">تسوق</a>
+        <a href="index.html#products">▾</a>
+        <div class="dd">
+          <a href="index.html#products" data-cat="all">كل الشموع</a>
+          <a href="index.html#products" data-cat="wood">شموع خشبية</a>
+          <a href="index.html#products" data-cat="glass">شموع زجاجية</a>
+          <a href="index.html#products" data-cat="crystal">شموع كريستالية</a>
+          <a href="index.html#products" data-cat="metal">شموع معدنية</a>
+          <a href="index.html#products" data-cat="massage">شموع المساج</a>
+          <a href="index.html#products" data-cat="gift">الهدايا</a>
+          <a href="index.html#products" data-cat="bride">بوكس العروسة</a>
+        </div>
+      </div>
+      <div><a href="index.html#about-us">من نحن</a></div>
+      <div><a href="index.html#faq-section">الأسئلة الشائعة</a></div>
+      <div><a href="contact.html">تواصل معنا</a></div>
+    </nav>
+
     <div class="hact">
       <button class="langbtn" id="langBtn" aria-label="تغيير اللغة">EN</button>
-      <a class="icobtn" href="index.html?cart=1" aria-label="فتح سلة الشراء">🛍️<span class="badge" id="cartCount" aria-live="polite">0</span></a>
+      <button class="icobtn" id="accBtn" aria-label="حسابي">👤</button>
+      <button class="icobtn" id="cartBtn" aria-label="فتح سلة الشراء">
+        🛍️<span class="badge" id="cartCount" aria-live="polite">0</span>
+      </button>
+      <a href="wishlist.html" class="icobtn" aria-label="المفضلة" style="text-decoration:none;display:inline-flex">❤️</a>
+      <button class="icobtn" id="navToggle" aria-label="فتح القائمة">☰</button>
     </div>
   </div>
 </header>
 
-<main class="sec" style="padding-top:2rem">
+<nav class="mnav" id="mnav" aria-label="قائمة الموبايل">
+  <h5>تصنيفات الشموع</h5>
+  <a href="index.html#products" data-cat="all">كل الشموع</a>
+  <a href="index.html#products" data-cat="wood">شموع خشبية</a>
+  <a href="index.html#products" data-cat="glass">شموع زجاجية</a>
+  <a href="index.html#products" data-cat="crystal">شموع كريستالية</a>
+  <a href="index.html#products" data-cat="metal">شموع معدنية</a>
+  <a href="index.html#products" data-cat="massage">شموع المساج</a>
+  <a href="index.html#products" data-cat="gift">الهدايا</a>
+  <a href="index.html#products" data-cat="bride">بوكس العروسة</a>
+  <h5>اكتشف</h5>
+  <a href="index.html#about-us">من نحن</a>
+  <a href="index.html#scents">العطور الفاخرة</a>
+  <a href="wishlist.html" style="color:var(--gold2);font-weight:700">❤️ المفضلة</a>
+  <a href="my-orders.html">📦 طلباتي</a>
+  <h5>تواصل</h5>
+  <a href="contact.html">تواصل معنا</a>
+</nav>
+<div class="ovl" id="ovl"></div>
+
+<!-- ═══════════════════════════════════════
+     MAIN — PRODUCT PAGE
+     ═══════════════════════════════════════ -->
+<main class="sec pd-hero">
   <div class="wrap">
 
+    <!-- Breadcrumb -->
     <div class="crumb">
-      <a href="index.html" data-i18n="nav_home">الرئيسية</a>
-      &nbsp;›&nbsp;
-      <a href="index.html#products" data-i18n="nav_shop">تسوق</a>
-      &nbsp;›&nbsp;
+      <a href="index.html">الرئيسية</a>
+      <span>›</span>
+      <a href="index.html#products">تسوق</a>
+      <span>›</span>
       <span id="crumbName">المنتج</span>
     </div>
 
+    <!-- Skeleton Loading -->
     <div id="pdLoading">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start">
-        <div class="skel" style="aspect-ratio:1;border-radius:24px"></div>
+      <div class="pd-grid">
+        <div class="skel" style="aspect-ratio:1;border-radius:22px"></div>
         <div>
-          <div class="skel" style="height:20px;width:40%;margin-bottom:1rem"></div>
-          <div class="skel" style="height:36px;width:70%;margin-bottom:1rem"></div>
-          <div class="skel" style="height:24px;width:30%;margin-bottom:1.5rem"></div>
+          <div class="skel" style="height:20px;width:40%;margin-bottom:.8rem"></div>
+          <div class="skel" style="height:36px;width:75%;margin-bottom:.8rem"></div>
+          <div class="skel" style="height:30px;width:35%;margin-bottom:1rem"></div>
           <div class="skel" style="height:80px;margin-bottom:1rem"></div>
-          <div class="skel" style="height:44px;width:50%"></div>
+          <div class="skel" style="height:50px;width:60%"></div>
         </div>
       </div>
     </div>
 
+    <!-- Not Found -->
     <div id="pdNotFound" class="empty hidden">
       <div style="font-size:4rem;margin-bottom:1rem">🕯️</div>
-      <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem" data-i18n="pd_notfound">😕 المنتج مش موجود</h2>
-      <a href="index.html" class="btn" style="margin-top:1rem" data-i18n="nav_home">الرئيسية</a>
+      <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem">😕 المنتج غير متاح</h2>
+      <p style="color:var(--mut)">عذراً، لم نتمكن من العثور على هذا المنتج</p>
+      <a href="index.html#products" class="btn" style="margin-top:1rem">تصفح المنتجات</a>
     </div>
 
+    <!-- Product Content -->
     <div id="pdWrap" class="hidden">
       <div class="pd-grid">
 
-        <div>
-          <div class="pd-img">
+        <!-- ═══ Gallery ═══ -->
+        <div class="pd-gallery">
+          <div class="pd-img" id="pdImgWrap">
             <img id="pdImg" src="" alt="" loading="eager" decoding="async" onload="this.classList.add('loaded')">
+            <div class="zoom-hint">🔍 تكبير</div>
           </div>
           <div class="pd-thumbs" id="pdThumbs"></div>
         </div>
 
+        <!-- ═══ Info ═══ -->
         <div class="pd-info">
           <div id="pdBadge"></div>
           <h1 id="pdName" class="fd"></h1>
+          
           <div id="pdRatingSummary"></div>
+          
+          <div id="pdStockInfo"></div>
+
           <div class="pd-price">
             <span id="pdPrice"></span>
             <del id="pdOld" style="display:none"></del>
+            <span class="save-badge" id="pdSave" style="display:none"></span>
           </div>
-          <p id="pdDesc" style="color:var(--mut);line-height:1.8;margin-bottom:1rem"></p>
 
+          <p class="pd-desc" id="pdDesc"></p>
+
+          <!-- Scent Picker -->
           <div class="opt-t">
-            <span data-i18n="pd_scent_t">🌸 اختاري العطر:</span>
-            <span class="scent-required" data-i18n="scent_req">مطلوب</span>
+            <span>🌸 اختاري العطر:</span>
+            <span class="scent-required">مطلوب</span>
           </div>
           <div class="scents-pick" id="pdScents"></div>
 
-          <div class="opt-t" data-i18n="pd_qty_t">الكمية:</div>
-          <div class="qty">
-            <button id="pdQMinus" aria-label="تقليل الكمية">−</button>
-            <b id="pdQVal">1</b>
-            <button id="pdQPlus" aria-label="زيادة الكمية">+</button>
+          <!-- Quantity + Actions -->
+          <div class="opt-t">الكمية:</div>
+          <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap">
+            <div class="qty">
+              <button id="pdQMinus" aria-label="تقليل">−</button>
+              <b id="pdQVal">1</b>
+              <button id="pdQPlus" aria-label="زيادة">+</button>
+            </div>
           </div>
 
           <div class="pd-actions">
-            <button class="btn" id="pdAddBtn" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
-            <button class="btn wa" id="pdBuyBtn" data-i18n="pd_buy">اطلبي عبر واتساب</button>
+            <button class="btn" id="pdAddBtn">🛍️ أضيفي للسلة</button>
+            <button class="btn wa" id="pdBuyBtn">💬 اطلبي عبر واتساب</button>
+            <button class="pd-wish" id="pdWishBtn" aria-label="أضف للمفضلة">🤍</button>
           </div>
 
+          <!-- Payment Info -->
+          <div class="pay-info">
+            <div class="pay-row">
+              <span class="pay-icon">💳</span>
+              <div>
+                <div class="pay-title">الدفع عبر InstaPay</div>
+                <div class="pay-desc">قيمة المنتجات تُدفع مقدماً عند تأكيد الطلب</div>
+              </div>
+            </div>
+            <div class="pay-row">
+              <span class="pay-icon">🚚</span>
+              <div>
+                <div class="pay-title">الشحن كاش عند الاستلام</div>
+                <div class="pay-desc">تكلفة التوصيل تُدفع لمندوب الشحن عند وصول الطلب</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Handmade Note -->
           <div class="handmade-note">
-            <span>✦</span>
-            <span data-i18n="handmade_note">قطعة يدوية تُجهّز بعناية عند الطلب</span>
+            <span class="hm-icon">✦</span>
+            <span>قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة</span>
           </div>
 
+          <!-- Info Boxes -->
+          <div class="info-boxes">
+            <div class="info-box">
+              <span class="ib-icon">🚚</span>
+              <div class="ib-title">توصيل لكل مصر</div>
+              <div class="ib-desc">شحن آمن لباب البيت</div>
+            </div>
+            <div class="info-box">
+              <span class="ib-icon">🔁</span>
+              <div class="ib-title">ضمان استبدال</div>
+              <div class="ib-desc">خلال 3 أيام</div>
+            </div>
+            <div class="info-box">
+              <span class="ib-icon">🎁</span>
+              <div class="ib-title">تغليف مجاني</div>
+              <div class="ib-desc">جاهز للإهداء</div>
+            </div>
+          </div>
 
+          <!-- Share -->
           <div class="share-row" id="pdShare"></div>
         </div>
 
       </div>
 
-      <div style="margin-top:3rem">
-        <h2 class="fd" style="color:var(--gold2);margin-bottom:1rem" data-i18n="pd_rev_h2">مراجعات المنتج</h2>
-        <div id="pdReviews"></div>
-        <div class="rv-form">
-          <h3 class="fd" style="color:var(--gold2);margin-bottom:.8rem" data-i18n="pd_form_t">ضيفي مراجعتك ⭐</h3>
-          <div class="row">
-            <input id="rvName" data-i18n-ph="pd_name_ph" placeholder="اسمك">
-            <div class="starpick" id="starPick">
-              <button data-v="1">★</button>
-              <button data-v="2">★</button>
-              <button data-v="3">★</button>
-              <button data-v="4">★</button>
-              <button data-v="5" class="lit">★</button>
+      <!-- ═══════ Tabs ═══════ -->
+      <div class="pd-tabs">
+        <div class="tabs-nav" id="tabsNav">
+          <button class="on" data-tab="desc">📝 الوصف</button>
+          <button data-tab="specs">📋 المواصفات</button>
+          <button data-tab="reviews">⭐ المراجعات (<span id="revCount">0</span>)</button>
+        </div>
+
+        <!-- Tab: Description -->
+        <div class="tab-pane on" id="tab-desc">
+          <div id="pdDescFull" style="color:var(--mut);line-height:1.9;font-size:.95rem"></div>
+        </div>
+
+        <!-- Tab: Specs -->
+        <div class="tab-pane" id="tab-specs">
+          <table class="specs-table">
+            <tr>
+              <td>⏱️ مدة الاشتعال</td>
+              <td id="specHours">—</td>
+            </tr>
+            <tr>
+              <td>🌸 العطور المتاحة</td>
+              <td id="specScents">—</td>
+            </tr>
+            <tr>
+              <td>📦 التصنيف</td>
+              <td id="specCat">—</td>
+            </tr>
+            <tr>
+              <td>🤲 الصناعة</td>
+              <td>يدوية 100% بخامات طبيعية</td>
+            </tr>
+            <tr>
+              <td>🕯️ نوع الشمع</td>
+              <td>صويا طبيعي نقي</td>
+            </tr>
+            <tr>
+              <td>🧵 الفتيل</td>
+              <td>قطن / خشب طبيعي</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Tab: Reviews -->
+        <div class="tab-pane" id="tab-reviews">
+          <div id="pdReviews"></div>
+          
+          <div class="rv-form">
+            <h3 class="fd" style="color:var(--gold2);margin-bottom:.8rem">ضيفي مراجعتك ⭐</h3>
+            <div class="row">
+              <input id="rvName" placeholder="اسمك">
+              <div class="starpick" id="starPick">
+                <button data-v="1">★</button>
+                <button data-v="2">★</button>
+                <button data-v="3">★</button>
+                <button data-v="4">★</button>
+                <button data-v="5" class="lit">★</button>
+              </div>
             </div>
+            <textarea id="rvText" rows="3" placeholder="اكتبي رأيك بالتفصيل..."></textarea>
+            <button class="btn" id="rvSubmit" style="margin-top:.8rem">إرسال المراجعة</button>
+            <small style="display:block;margin-top:.5rem;color:var(--dim)">
+              ✓ المراجعة بتظهر بعد الموافقة من الإدارة
+            </small>
           </div>
-          <textarea id="rvText" rows="3" data-i18n-ph="pd_text_ph" placeholder="اكتبي رأيك..."></textarea>
-          <button class="btn" id="rvSubmit" style="margin-top:.8rem" data-i18n="pd_submit">إرسال</button>
-          <small data-i18n="pd_note" style="display:block;margin-top:.5rem">المراجعة بتظهر بعد الموافقة</small>
         </div>
       </div>
 
-      <div style="margin-top:2.5rem">
-        <h2 class="fd" style="color:var(--gold2);margin-bottom:1rem" data-i18n="pd_rel_h2">منتجات هتعجبك</h2>
+      <!-- ═══════ Related Products ═══════ -->
+      <div style="margin-top:3rem">
+        <h2 class="fd" style="color:var(--gold2);margin-bottom:1rem">✨ منتجات هتعجبك</h2>
         <div class="rel-grid" id="pdRelated"></div>
       </div>
 
@@ -161,55 +509,132 @@
   </div>
 </main>
 
+<!-- ═══════════════════════════════════════
+     ZOOM MODAL
+     ═══════════════════════════════════════ -->
+<div class="zoom-modal" id="zoomModal">
+  <button class="zoom-close" id="zoomClose">✕</button>
+  <button class="zoom-nav prev" id="zoomPrev">‹</button>
+  <img id="zoomImg" src="" alt="">
+  <button class="zoom-nav next" id="zoomNext">›</button>
+</div>
+
+<!-- ═══════════════════════════════════════
+     FOOTER (كامل)
+     ═══════════════════════════════════════ -->
 <footer>
   <div class="wrap">
-    <div style="text-align:center;margin-bottom:1.5rem">
-      <div class="kick" style="margin-bottom:.3rem">VELALIGHT • LUXURY CANDLE STUDIO</div>
-    </div>
-    <div class="fbot">
-      <span data-i18n="foot_rights">© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</span>
+    <div class="fgrid">
       <div>
-        <a href="track.html" data-i18n="mn_track">📦 تتبع الطلب</a>
-        &nbsp;·&nbsp;
-        <a href="exchange-policy.html" data-i18n="foot_exchange">سياسة الاستبدال</a>
+        <a class="logo" href="index.html">
+          <span class="flame"></span>
+          <div><b>VelaLight</b><small>Luxury Candle Studio</small></div>
+        </a>
+        <p style="margin-top:1rem;color:var(--mut);font-size:.88rem">
+          شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب
+        </p>
+      </div>
+      <div>
+        <h4>روابط سريعة</h4>
+        <a href="index.html">الرئيسية</a>
+        <a href="index.html#products">تسوق</a>
+        <a href="wishlist.html" style="color:var(--gold2)">❤️ المفضلة</a>
+        <a href="my-orders.html">📦 طلباتي</a>
+        <a href="index.html#about-us">من نحن</a>
+        <a href="contact.html">تواصل معنا</a>
+      </div>
+      <div>
+        <h4>تصنيفات الشموع</h4>
+        <a href="index.html#products" data-cat="wood">شموع خشبية</a>
+        <a href="index.html#products" data-cat="glass">شموع زجاجية</a>
+        <a href="index.html#products" data-cat="crystal">شموع كريستالية</a>
+        <a href="index.html#products" data-cat="massage">شموع المساج</a>
+        <a href="index.html#products" data-cat="gift">الهدايا</a>
+        <a href="index.html#products" data-cat="bride">بوكس العروسة</a>
+      </div>
+      <div>
+        <h4>الدفع والشحن</h4>
+        <div class="paybox">
+          <b>InstaPay — تحويل مقدم</b>
+          <p style="margin-top:.5rem">
+            قيمة المنتجات بتتحول مقدمًا عبر InstaPay، أما تكلفة الشحن فتُدفع كاش لمندوب الشحن وقت الاستلام.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="fbot">
+      <span>© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</span>
+      <div>
+        <a href="exchange-policy.html">سياسة الاستبدال</a>
+        <a href="privacy.html">سياسة الخصوصية</a>
+        <a href="terms.html">شروط الاستخدام</a>
       </div>
     </div>
   </div>
+
+  <!-- ═══ Developer Signature ═══ -->
+  <style>
+  .dev-signature{margin-top:2rem;padding:1.1rem 1rem;background:linear-gradient(135deg,var(--panel) 0%,var(--panel2) 100%);border:1px solid var(--line);border-radius:16px;text-align:center}
+  .dev-line{width:40px;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);margin:0 auto .6rem}
+  .dev-label{color:var(--dim);font-size:.75rem;margin-bottom:.7rem}
+  .dev-team{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;max-width:640px;margin:0 auto .8rem}
+  .dev-card{display:flex;align-items:center;gap:.6rem;padding:.7rem .8rem;background:var(--bg);border:1px solid var(--line);border-radius:12px;text-decoration:none;color:inherit;transition:.25s;text-align:start}
+  .dev-card:hover{transform:translateY(-2px);border-color:var(--gold2);box-shadow:0 6px 18px -6px rgba(217,171,95,.3)}
+  .dev-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:1.15rem;font-weight:700;flex-shrink:0}
+  .dev-info{display:flex;flex-direction:column;gap:.1rem;min-width:0}
+  .dev-info b{font-family:var(--fd);font-size:.82rem;color:var(--gold2)}
+  .dev-info span{font-size:.72rem;color:var(--dark);direction:ltr;text-align:start}
+  .dev-info small{font-size:.65rem;color:var(--dim)}
+  .dev-cta{font-size:.78rem;color:var(--mut);margin:0;padding-top:.7rem;border-top:1px dashed var(--line)}
+  .dev-cta strong{color:var(--gold2);font-family:var(--fd)}
+  @media(max-width:600px){.dev-team{grid-template-columns:1fr}}
+  </style>
+  <div class="dev-signature">
+    <div class="dev-line"></div>
+    <p class="dev-label">🛠️ صُمم وصُنع بحب بواسطة</p>
+    <div class="dev-team">
+      <a href="https://wa.me/201226690050?text=%D8%A3%D9%87%D9%84%D8%A7%20%D8%A3%D8%B3%D8%AA%D8%A7%D8%B0%20Wagdy%20%F0%9F%91%8B%0A%D8%B4%D9%81%D8%AA%20%D9%85%D9%88%D9%82%D9%87%20velalight.github.io%20%D9%88%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D9%85%D9%84%20%D9%85%D9%88%D9%82%D9%87%20%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A%20%D8%B2%D9%8A%D9%87" class="dev-card" target="_blank" rel="noopener">
+        <div class="dev-avatar">W</div>
+        <div class="dev-info"><b>Wagdy</b><span>📞 01226690050</span><small>💬 واتساب</small></div>
+      </a>
+      <a href="https://wa.me/201277741748?text=%D8%A3%D9%87%D9%84%D8%A7%20%D8%A3%D8%B3%D8%AA%D8%A7%D8%B0%20Philopater%20%F0%9F%91%8B%0A%D8%B4%D9%81%D8%AA%20%D9%85%D9%88%D9%82%D9%87%20velalight.github.io%20%D9%88%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D9%85%D9%84%20%D9%85%D9%88%D9%82%D9%87%20%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A%20%D8%B2%D9%8A%D9%87" class="dev-card" target="_blank" rel="noopener">
+        <div class="dev-avatar">P</div>
+        <div class="dev-info"><b>Philopater</b><span>📞 01277741748</span><small>💬 واتساب</small></div>
+      </a>
+    </div>
+    <p class="dev-cta">⚡ عايز موقع احترافي زي ده لمشروعك؟ <strong>تواصل معانا النهاردة</strong></p>
+  </div>
 </footer>
+
+<!-- Floating WhatsApp -->
+<a href="#" class="float-wa" id="floatWa" aria-label="تواصل عبر واتساب">💬</a>
 
 <div id="toasts"></div>
 
+<!-- ═══════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════ -->
 <script src="data.js"></script>
 <script type="module" src="firebase.js"></script>
+<script src="app.js"></script>
+<script type="module" src="auth.js"></script>
 
 <script>
 (function(){
 "use strict";
 
-/* ═══════ VELA SCENTS (fix missing scents) ═══════ */
+/* ═══════ VELA SCENTS ═══════ */
 const VELA_SCENTS=[
-["فانيلا","Vanilla"],
-["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
-["لافندر","Lavender"],
-["موكا","Mocha"],
-["كراميل","Caramel"],
-["كاريبيان فروت","Caribbean Fruit"],
-["فل","Jasmine Sambac"],
-["ياسمين","Jasmine"],
-["اناناس","Pineapple"],
-["شيكولاتة","Chocolate"],
-["كوكونات","Coconut"],
-["كاسيليا","Cassilia — Massage"],
-["اينتو زانايت","Into Zanaite — Massage"],
-["بوكيت روز","Bouquet Rose"],
-["ورد بلدى","Egyptian Rose"],
-["تيوليب","Tulip"],
-["قهوة","Coffee"],
-["قهوة فانيلا","Vanilla Coffee"],
-["قهوة بندق","Hazelnut Coffee"],
-["عود فانيليا","Vanilla Oud"],
-["عنبر","Amber"],
-["فراولة","Strawberry"],
+["فانيلا","Vanilla"],["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
+["لافندر","Lavender"],["موكا","Mocha"],["كراميل","Caramel"],
+["كاريبيان فروت","Caribbean Fruit"],["فل","Jasmine Sambac"],
+["ياسمين","Jasmine"],["اناناس","Pineapple"],["شيكولاتة","Chocolate"],
+["كوكونات","Coconut"],["كاسيليا","Cassilia — Massage"],
+["اينتو زانايت","Into Zanaite — Massage"],["بوكيت روز","Bouquet Rose"],
+["ورد بلدى","Egyptian Rose"],["تيوليب","Tulip"],["قهوة","Coffee"],
+["قهوة فانيلا","Vanilla Coffee"],["قهوة بندق","Hazelnut Coffee"],
+["عود فانيليا","Vanilla Oud"],["عنبر","Amber"],["فراولة","Strawberry"],
 ["عود خشب صندل","Sandalwood Oud"]
 ];
 
@@ -218,53 +643,44 @@ const velaScentTr=name=>{
   return f?(LANG==="en"?f[1]:f[0]):(name||"");
 };
 
-/* ═══════ FILL MISSING TRANSLATIONS ═══════ */
-(function fillMissingI18n(){
-  if(typeof I18N==="undefined")return;
-  const add={
-    ar:{
-      ship_note:"🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
-      pay_products_note:"💳 قيمة المنتجات تُدفع مقدمًا عبر InstaPay.",
-      t_scentwarn:"⚠️ من فضلك اختاري العطر الأول.",
-      scent_req:"مطلوب",
-      handmade_note:"قطعة يدوية تُجهّز بعناية عند الطلب"
-    },
-    en:{
-      ship_note:"🚚 Shipping: paid cash to courier on delivery.",
-      pay_products_note:"💳 Products paid upfront via InstaPay.",
-      t_scentwarn:"⚠️ Please choose a scent first.",
-      scent_req:"Required",
-      handmade_note:"Handmade piece prepared with care upon order"
-    }
-  };
-  Object.keys(add).forEach(L=>{
-    if(!I18N[L])I18N[L]={};
-    Object.keys(add[L]).forEach(k=>{
-      if(!I18N[L][k])I18N[L][k]=add[L][k];
-    });
-  });
-})();
+/* ═══════ Helpers ═══════ */
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
 
-const scentWarnMsg=()=>t("t_scentwarn");
+const getWishlist=()=>{
+  try{return JSON.parse(localStorage.getItem("vl_wishlist")||"[]")}catch(e){return[]}
+};
+const saveWishlist=(l)=>localStorage.setItem("vl_wishlist",JSON.stringify(l));
+const isInWishlist=(id)=>getWishlist().includes(id);
+const toggleWishlist=(id)=>{
+  let l=getWishlist();
+  const i=l.indexOf(id);
+  if(i===-1){l.push(id);if(typeof toast==="function")toast("❤️ تمت الإضافة للمفضلة")}
+  else{l.splice(i,1);if(typeof toast==="function")toast("💔 تمت الإزالة من المفضلة")}
+  saveWishlist(l);
+  return l.includes(id);
+};
 
-let P=null,qty=1,selScent="",selRating=5;
+let P=null, qty=1, selScent="", selRating=5;
 let productPid="";
 let cloudCatalog=[];
+let zoomImages=[];
+let zoomIndex=0;
 
+/* ═══════ INIT ═══════ */
 document.addEventListener("DOMContentLoaded",()=>{
   initLang();
-  cartBadge();
+  if(typeof cartBadge==="function")cartBadge();
   buildStars();
-
-  if(typeof loadAll==="function"){
-    loadAll().then(()=>{
-      if(P){renderReviews();renderRelated();}
-    }).catch(()=>{});
-  }
+  initTabs();
+  initZoom();
+  initNav();
+  initWishButton();
 
   productPid=new URLSearchParams(location.search).get("p")||"";
   if(!productPid){showNotFound();return}
 
+  // Try cache first
   let cached=null;
   try{
     const cache=JSON.parse(localStorage.getItem("vl_products_cache_v1")||"[]");
@@ -272,8 +688,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       cached=cache.find(x=>
         String(x.id)===String(productPid)||
         String(x.id_)===String(productPid)||
-        String(x.slug)===String(productPid)||
-        String(x.pid)===String(productPid)
+        String(x.slug)===String(productPid)
       )||null;
     }
   }catch(e){}
@@ -285,30 +700,42 @@ document.addEventListener("DOMContentLoaded",()=>{
   const first=cached||local;
   if(first){P={...first};render();}
 
+  // Load from cloud
   const sync=()=>loadCloudCatalog(productPid);
   if(window.FB&&typeof window.FB.list==="function")sync();
   else window.addEventListener("fb-ready",sync,{once:true});
 
   setTimeout(()=>{if(!P)showNotFound()},5000);
+
+  // Float WhatsApp
+  $("#floatWa")?.addEventListener("click",(e)=>{
+    e.preventDefault();
+    if(P&&typeof CFG!=="undefined"&&CFG.WHATSAPP){
+      const msg=`أهلاً VelaLight! 👋\nعايز أسأل عن: ${pname(P)}\n${location.href}`;
+      window.open(`https://wa.me/${CFG.WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
+    }
+  });
 });
 
-async function loadCloudCatalog(pid){
-  try{
-    const cloud=await DB.list("products");
-    cloudCatalog=cloud||[];
-    const found=cloud.find(x=>
-      String(x.id)===String(pid)||
-      String(x.id_)===String(pid)||
-      String(x.slug)===String(pid)||
-      String(x.pid)===String(pid)
-    );
-    if(found&&found.active!==false){P={...P,...found};render();}
-    else if(found&&found.active===false){showNotFound();}
-  }catch(e){
-    console.warn("Cloud load failed, using local",e);
-  }
+/* ═══════ NAV ═══════ */
+function initNav(){
+  $("#navToggle")?.addEventListener("click",()=>{
+    $("#mnav")?.classList.toggle("open");
+    $("#ovl")?.classList.toggle("open");
+  });
+  $("#ovl")?.addEventListener("click",()=>{
+    $("#mnav")?.classList.remove("open");
+    $("#ovl")?.classList.remove("open");
+  });
+  $$(".mnav a").forEach(a=>{
+    a.addEventListener("click",()=>{
+      $("#mnav")?.classList.remove("open");
+      $("#ovl")?.classList.remove("open");
+    });
+  });
 }
 
+/* ═══════ LANG ═══════ */
 function initLang(){
   applyI18n();
   $("#langBtn")?.addEventListener("click",()=>{
@@ -330,16 +757,58 @@ function applyI18n(){
     const k=el.dataset.i18nPh,v=t(k);
     if(v&&v!==k)el.placeholder=v;
   });
-  const mq=$("#mqTrack");
-  if(mq){
-    const txt=t("mq");
-    mq.innerHTML=`<span>${txt}</span><span>${txt}</span>`;
+}
+
+/* ═══════ CLOUD CATALOG ═══════ */
+async function loadCloudCatalog(pid){
+  try{
+    const cloud=await DB.list("products");
+    cloudCatalog=cloud||[];
+    const found=cloud.find(x=>
+      String(x.id)===String(pid)||
+      String(x.id_)===String(pid)||
+      String(x.slug)===String(pid)
+    );
+    if(found&&found.active!==false){P={...P,...found};render();}
+    else if(found&&found.active===false){showNotFound();}
+  }catch(e){
+    console.warn("Cloud load failed",e);
   }
 }
 
-function showNotFound(){
-  $("#pdLoading").classList.add("hidden");
-  $("#pdNotFound").classList.remove("hidden");
+/* ═══════ RENDER ═══════ */
+function pname(p){
+  if(typeof window.pnameRef==="function")return window.pnameRef(p);
+  return LANG==="en"?(p.nameEn||p.name||"Product"):(p.name||p.nameEn||"Product");
+}
+
+function pdesc(p){
+  return LANG==="en"?(p.descEn||p.desc||""):(p.desc||p.descEn||"");
+}
+
+function imgOf(p){
+  if(typeof window.imgOfRef==="function")return window.imgOfRef(p);
+  if(typeof CDN==="function"&&p.img)return CDN(p.img);
+  return p.img||"";
+}
+
+function money(n){
+  if(typeof window.moneyRef==="function")return window.moneyRef(n);
+  return (n||0)+" ج.م";
+}
+
+function cat(c){
+  if(typeof window.catRef==="function")return window.catRef(c);
+  const map={wood:"شموع خشبية",glass:"شموع زجاجية",crystal:"شموع كريستالية",metal:"شموع معدنية",massage:"شموع المساج",gift:"الهدايا",bride:"بوكس العروسة"};
+  return map[c]||c||"";
+}
+
+function getImages(p){
+  let imgs=[];
+  if(Array.isArray(p.images)&&p.images.length){imgs=p.images;}
+  else if(Array.isArray(p.gallery)&&p.gallery.length){imgs=p.gallery;}
+  else if(p.img){imgs=[p.img];}
+  return imgs;
 }
 
 function render(){
@@ -347,24 +816,44 @@ function render(){
   $("#pdNotFound").classList.add("hidden");
   $("#pdWrap").classList.remove("hidden");
 
-  document.title=pname(P)+" | VelaLight";
-  $("#crumbName").textContent=pname(P);
-  $("#pdName").textContent=pname(P);
-  $("#pdDesc").textContent=pdesc(P);
+  const name=pname(P);
+  document.title=name+" | VelaLight";
+  
+  // Update meta
+  let ogTitle=document.querySelector('meta[property="og:title"]');
+  if(ogTitle)ogTitle.content=name;
+  let ogDesc=document.querySelector('meta[property="og:description"]');
+  if(ogDesc)ogDesc.content=pdesc(P).slice(0,160);
+  
+  // JSON-LD
+  updateJsonLd();
+  
+  $("#crumbName").textContent=name;
+  $("#pdName").textContent=name;
+  
+  const desc=pdesc(P);
+  $("#pdDesc").textContent=desc;
+  $("#pdDescFull").innerHTML=desc.split("\n").map(p=>`<p style="margin-bottom:.8rem">${p}</p>`).join("")||desc;
 
+  // Images
+  const imgs=getImages(P);
+  zoomImages=imgs;
   const mainImg=$("#pdImg");
-  mainImg.onerror=()=>mainImg.removeAttribute("src");
-  mainImg.src=imgOf(P);
-  mainImg.alt=pname(P);
+  mainImg.onerror=()=>{mainImg.src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>"};
+  mainImg.src=imgs[0]?CDN(imgs[0]):"";
+  mainImg.alt=name;
 
-  const reviewSummary=prodReviews(P.id);
+  // Rating summary
+  const reviewSummary=(typeof prodReviews==="function")?prodReviews(P.id):[];
   const ratingBox=$("#pdRatingSummary");
+  $("#revCount").textContent=reviewSummary.length;
   if(ratingBox){
     if(reviewSummary.length){
       const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
       ratingBox.innerHTML=
-        `<span class="stars">★★★★★</span><b>${avg.toFixed(1)}</b>`+
-        `<span>(${reviewSummary.length} ${LANG==="en"?"reviews":"مراجعة"})</span>`;
+        `<span class="stars">${"★".repeat(Math.round(avg))}</span><b>${avg.toFixed(1)}</b>`+
+        `<span>(${reviewSummary.length} ${LANG==="en"?"reviews":"مراجعة"})</span>`+
+        `<a href="#tab-reviews" style="color:var(--gold2);margin-inline-start:.5rem;font-size:.8rem">اقرئي الكل</a>`;
     }else{
       ratingBox.innerHTML=
         `<span class="stars muted">★★★★★</span>`+
@@ -372,50 +861,84 @@ function render(){
     }
   }
 
-  const badge=pbadge(P);
+  // Stock info
+  renderStock();
+
+  // Badge
+  const badge=(typeof pbadge==="function")?pbadge(P):"";
   $("#pdBadge").innerHTML=badge
-    ?`<span class="p-badge" style="position:static;display:inline-block">${badge}</span>`
+    ?`<span class="p-badge" style="position:static;display:inline-block;margin-bottom:.5rem">${badge}</span>`
     :"";
 
+  // Price
   $("#pdPrice").textContent=money(P.price);
-  $("#pdOld").textContent=P.old>P.price?money(P.old):"";
-  $("#pdOld").style.display=P.old>P.price?"inline":"none";
+  if(P.old&&P.old>P.price){
+    $("#pdOld").textContent=money(P.old);
+    $("#pdOld").style.display="inline";
+    const savePercent=Math.round(((P.old-P.price)/P.old)*100);
+    $("#pdSave").textContent="−"+savePercent+"%";
+    $("#pdSave").style.display="inline-block";
+  }else{
+    $("#pdOld").style.display="none";
+    $("#pdSave").style.display="none";
+  }
 
-  const hoursEl=$("#pdHours");
-  if(hoursEl)hoursEl.textContent=phours(P);
+  // Specs
+  $("#specHours").textContent=(typeof phours==="function"?phours(P):P.hours)||"غير محدد";
+  $("#specCat").textContent=cat(P.cat);
+  const scents=getProductScents();
+  $("#specScents").textContent=scents.map(velaScentTr).join(" • ");
 
-  renderThumbs();
+  renderThumbs(imgs);
   renderScents();
   renderReviews();
   renderRelated();
   renderShare();
   bindEvents();
+  updateWishButton();
 }
 
-function renderThumbs(){
+function renderStock(){
+  const box=$("#pdStockInfo");
+  if(!box)return;
+  const s=Number(P.stock);
+  if(P.stock===undefined||P.stock===null||P.stock===""||isNaN(s)){
+    box.innerHTML=`<span class="stock-info ok">✓ متوفر</span>`;
+  }else if(s===0){
+    box.innerHTML=`<span class="stock-info out">✕ نفدت الكمية</span>`;
+    $("#pdAddBtn").disabled=true;
+    $("#pdAddBtn").textContent="نفدت الكمية";
+    $("#pdBuyBtn").disabled=true;
+  }else if(s<=5){
+    box.innerHTML=`<span class="stock-info low">⚡ باقي ${s} فقط — اطلبي الآن!</span>`;
+  }else{
+    box.innerHTML=`<span class="stock-info ok">✓ متوفر (${s} قطعة)</span>`;
+  }
+}
+
+function renderThumbs(imgs){
   const thumbs=$("#pdThumbs");
   if(!thumbs)return;
-  const imgs=imgsOf(P);
+  if(imgs.length<=1){thumbs.innerHTML="";return;}
   thumbs.innerHTML=imgs.map((u,i)=>
-    `<img src="${CDN(u)}" class="${i===0?"on":""}" data-src="${CDN(u)}" alt="${pname(P)} ${i+1}" loading="lazy" decoding="async">`
+    `<img src="${CDN(u)}" class="${i===0?"on":""}" data-src="${CDN(u)}" data-idx="${i}" alt="${pname(P)} ${i+1}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">`
   ).join("");
   thumbs.querySelectorAll("img").forEach(img=>{
     img.addEventListener("click",()=>{
       thumbs.querySelectorAll("img").forEach(x=>x.classList.remove("on"));
       img.classList.add("on");
       const main=$("#pdImg");
+      main.classList.remove("loaded");
       main.src=img.dataset.src;
-      main.classList.add("loaded");
     });
   });
 }
 
-/* ═══════ SCENTS — never empty ═══════ */
+/* ═══════ SCENTS ═══════ */
 function getProductScents(){
   const cloudP=(cloudCatalog||[]).find(x=>
     String(x.id)===String(P.id)||
-    String(x.id_)===String(P.id)||
-    String(x.slug)===String(P.id)
+    String(x.id_)===String(P.id)
   );
   if(cloudP&&Array.isArray(cloudP.scents)&&cloudP.scents.length)return cloudP.scents;
   if(Array.isArray(P.scents)&&P.scents.length)return P.scents;
@@ -439,30 +962,61 @@ function renderScents(){
   selScent="";
 }
 
+/* ═══════ EVENTS ═══════ */
 function bindEvents(){
   $("#pdQMinus")?.addEventListener("click",()=>{
     if(qty>1){qty--;$("#pdQVal").textContent=qty;}
   });
   $("#pdQPlus")?.addEventListener("click",()=>{
-    qty++;$("#pdQVal").textContent=qty;
+    const maxStock=Number(P.stock)||999;
+    if(qty<maxStock){qty++;$("#pdQVal").textContent=qty;}
+    else if(typeof toast==="function")toast("⚠️ وصلتِ للحد الأقصى المتاح");
   });
   $("#pdAddBtn")?.addEventListener("click",()=>{
-    if(!selScent){toast(scentWarnMsg());return;}
-    addToCart(P,{scent:selScent,qty});
-    track("add_to_cart",{items:[{item_id:P.id,item_name:P.name,price:P.price,quantity:qty}]});
+    if(!selScent){if(typeof toast==="function")toast("⚠️ من فضلك اختاري العطر الأول");return;}
+    if(typeof addToCart==="function"){
+      addToCart(P,{scent:selScent,qty});
+      if(typeof track==="function")track("add_to_cart",{items:[{item_id:P.id,item_name:P.name,price:P.price,quantity:qty}]});
+    }
   });
   $("#pdBuyBtn")?.addEventListener("click",()=>{
-    if(!selScent){toast(scentWarnMsg());return;}
+    if(!selScent){if(typeof toast==="function")toast("⚠️ من فضلك اختاري العطر الأول");return;}
     const msg=
-      `${t("wa_head")}\n\n`+
-      `${t("wa_item")} ${pname(P)}\n`+
-      `${t("wa_scent")}: ${velaScentTr(selScent)}\n`+
-      `${LANG==="en"?"Quantity:":"الكمية:"} ${qty}\n`+
-      `${t("wa_total")} ${money(P.price*qty)}`;
-    window.open(`https://wa.me/${CFG.WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
+      `✨ أهلاً VelaLight!\n\n`+
+      `عايزة أطلب:\n`+
+      `🕯️ ${pname(P)}\n`+
+      `🌸 العطر: ${velaScentTr(selScent)}\n`+
+      `📦 الكمية: ${qty}\n`+
+      `💰 الإجمالي: ${money(P.price*qty)}`;
+    const wa=typeof CFG!=="undefined"?CFG.WHATSAPP:"";
+    if(wa)window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,"_blank");
   });
 }
 
+/* ═══════ WISHLIST BUTTON ═══════ */
+function initWishButton(){
+  $("#pdWishBtn")?.addEventListener("click",()=>{
+    if(!P)return;
+    toggleWishlist(P.id);
+    updateWishButton();
+  });
+}
+
+function updateWishButton(){
+  const btn=$("#pdWishBtn");
+  if(!btn||!P)return;
+  if(isInWishlist(P.id)){
+    btn.textContent="❤️";
+    btn.classList.add("on");
+    btn.setAttribute("aria-label","إزالة من المفضلة");
+  }else{
+    btn.textContent="🤍";
+    btn.classList.remove("on");
+    btn.setAttribute("aria-label","أضف للمفضلة");
+  }
+}
+
+/* ═══════ STARS PICKER ═══════ */
 function buildStars(){
   const pick=$("#starPick");
   if(!pick)return;
@@ -476,35 +1030,121 @@ function buildStars(){
   });
 }
 
+/* ═══════ TABS ═══════ */
+function initTabs(){
+  $$("#tabsNav button").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      $$("#tabsNav button").forEach(b=>b.classList.remove("on"));
+      btn.classList.add("on");
+      $$(".tab-pane").forEach(p=>p.classList.remove("on"));
+      $("#tab-"+btn.dataset.tab)?.classList.add("on");
+    });
+  });
+}
+
+/* ═══════ ZOOM ═══════ */
+function initZoom(){
+  $("#pdImgWrap")?.addEventListener("click",()=>{
+    if(!zoomImages.length)return;
+    const mainImg=$("#pdImg");
+    const currentSrc=mainImg.src;
+    zoomIndex=zoomImages.findIndex((u,i)=>CDN(u)===currentSrc);
+    if(zoomIndex===-1)zoomIndex=0;
+    openZoom();
+  });
+  $("#zoomClose")?.addEventListener("click",closeZoom);
+  $("#zoomModal")?.addEventListener("click",(e)=>{
+    if(e.target.id==="zoomModal")closeZoom();
+  });
+  $("#zoomPrev")?.addEventListener("click",()=>{
+    zoomIndex=(zoomIndex-1+zoomImages.length)%zoomImages.length;
+    updateZoom();
+  });
+  $("#zoomNext")?.addEventListener("click",()=>{
+    zoomIndex=(zoomIndex+1)%zoomImages.length;
+    updateZoom();
+  });
+  document.addEventListener("keydown",(e)=>{
+    if(!$("#zoomModal").classList.contains("open"))return;
+    if(e.key==="Escape")closeZoom();
+    if(e.key==="ArrowLeft")$("#zoomNext").click();
+    if(e.key==="ArrowRight")$("#zoomPrev").click();
+  });
+}
+
+function openZoom(){
+  $("#zoomModal").classList.add("open");
+  document.body.style.overflow="hidden";
+  updateZoom();
+}
+
+function closeZoom(){
+  $("#zoomModal").classList.remove("open");
+  document.body.style.overflow="";
+}
+
+function updateZoom(){
+  if(!zoomImages[zoomIndex])return;
+  $("#zoomImg").src=CDN(zoomImages[zoomIndex]);
+}
+
+/* ═══════ REVIEWS ═══════ */
 function renderReviews(){
   const box=$("#pdReviews");
   if(!box)return;
-  const revs=prodReviews(P.id);
+  const revs=(typeof prodReviews==="function")?prodReviews(P.id):[];
   if(!revs.length){
-    box.innerHTML=`<p style="color:var(--dim)">${t("pd_first")}</p>`;
+    box.innerHTML=`<p style="color:var(--dim);text-align:center;padding:1rem">
+      ${LANG==="en"?"No reviews yet. Be the first!":"لسة مفيش مراجعات. كوني أول من يشارك رأيه! ✨"}
+    </p>`;
     return;
   }
-  box.innerHTML=revs.map(r=>`
+  box.innerHTML=revs.map(r=>{
+    const date=r.createdAt?new Date(r.createdAt).toLocaleDateString("ar-EG"):"";
+    return `
     <div class="rv-item">
-      <div style="display:flex;justify-content:space-between;margin-bottom:.3rem">
-        <b>${r.name||"Anonymous"}</b>
-        <span class="stars">${"★".repeat(r.rating||5)}</span>
+      <div class="rv-head">
+        <b>${r.name||"عميلة"}</b>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <span class="stars">${"★".repeat(r.rating||5)}</span>
+          <span class="rv-date">${date}</span>
+        </div>
       </div>
       <p>${r.text||""}</p>
       ${r.photo?`<img class="rv-photo" src="${r.photo}" loading="lazy">`:""}
     </div>
-  `).join("");
+  `}).join("");
 }
 
+$("#rvSubmit")?.addEventListener("click",async()=>{
+  const name=$("#rvName")?.value.trim();
+  const text=$("#rvText")?.value.trim();
+  if(!name||!text){if(typeof toast==="function")toast("⚠️ اكتبي اسمك ومراجعتك");return;}
+  const review={productSlug:P.id,name,text,rating:selRating,createdAt:Date.now(),approved:false};
+  try{
+    await DB.add("reviews",review);
+    if(typeof toast==="function")toast("✅ تم إرسال المراجعة — هتظهر بعد الموافقة");
+    $("#rvName").value="";
+    $("#rvText").value="";
+    selRating=5;
+    $$("#starPick button").forEach((b,i)=>b.classList.toggle("lit",i<5));
+  }catch(e){
+    if(typeof toast==="function")toast("⚠️ حدث خطأ أثناء الإرسال");
+  }
+});
+
+/* ═══════ RELATED ═══════ */
 function renderRelated(){
   const box=$("#pdRelated");
   if(!box)return;
-  const list=(typeof ALL_PRODUCTS!=="undefined"?ALL_PRODUCTS:[])
-    .filter(x=>x.cat===P.cat&&x.id!==P.id)
-    .slice(0,4);
-  if(!list.length){box.innerHTML="";return;}
+  const all=window.ALL_PRODUCTS_REF?window.ALL_PRODUCTS_REF():(typeof ALL_PRODUCTS!=="undefined"?ALL_PRODUCTS:[]);
+  let list=all.filter(x=>x.cat===P.cat&&x.id!==P.id).slice(0,4);
+  if(list.length<4){
+    list=[...list,...all.filter(x=>x.cat!==P.cat&&x.id!==P.id&&!list.find(y=>y.id===x.id))].slice(0,4);
+  }
+  if(!list.length){box.innerHTML=`<p style="color:var(--dim);text-align:center">لا توجد منتجات مشابهة حالياً</p>`;return;}
   box.innerHTML=list.map(p=>`
-    <a href="product.html?p=${p.id}" class="p-card" style="text-decoration:none">
+    <a href="product.html?p=${p.id}" class="p-card">
       <div class="p-media">
         <img src="${imgOf(p)}" alt="${pname(p)}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">
       </div>
@@ -516,32 +1156,81 @@ function renderRelated(){
   `).join("");
 }
 
+/* ═══════ SHARE ═══════ */
 function renderShare(){
   const box=$("#pdShare");
   if(!box)return;
   const url=location.href;
+  const text=`شوفي ${pname(P)} من VelaLight ✨`;
   box.innerHTML=`
-    <b style="font-size:.85rem;color:var(--dim)">${t("pd_share")}</b>
-    <a href="https://wa.me/?text=${encodeURIComponent(url)}" target="_blank" rel="noopener">WhatsApp</a>
+    <b>🔗 مشاركة:</b>
+    <a href="https://wa.me/?text=${encodeURIComponent(text+" "+url)}" target="_blank" rel="noopener">WhatsApp</a>
     <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener">Facebook</a>
-    <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}" target="_blank" rel="noopener">Twitter</a>
+    <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}" target="_blank" rel="noopener">Twitter</a>
+    <button type="button" id="copyLink">📋 نسخ الرابط</button>
   `;
+  $("#copyLink")?.addEventListener("click",async()=>{
+    try{
+      await navigator.clipboard.writeText(url);
+      if(typeof toast==="function")toast("✅ تم نسخ الرابط");
+    }catch(e){
+      if(typeof toast==="function")toast("⚠️ فشل النسخ");
+    }
+  });
 }
 
-document.addEventListener("DOMContentLoaded",()=>{
-  $("#rvSubmit")?.addEventListener("click",async()=>{
-    const name=$("#rvName")?.value.trim();
-    const text=$("#rvText")?.value.trim();
-    if(!name||!text){toast(t("t_revwarn"));return;}
-    const review={productSlug:P.id,name,text,rating:selRating,createdAt:Date.now(),approved:false};
-    try{
-      await DB.add("reviews",review);
-      toast(t("t_revok"));
-      $("#rvName").value="";
-      $("#rvText").value="";
-    }catch(e){toast("Error");}
-  });
-});
+/* ═══════ JSON-LD SEO ═══════ */
+function updateJsonLd(){
+  const ld=$("#pdJsonLd");
+  if(!ld||!P)return;
+  const imgs=getImages(P).map(u=>CDN(u));
+  const data={
+    "@context":"https://schema.org",
+    "@type":"Product",
+    "name":pname(P),
+    "image":imgs.length?imgs:[imgOf(P)],
+    "description":pdesc(P).slice(0,500),
+    "brand":{"@type":"Brand","name":"VelaLight"},
+    "offers":{
+      "@type":"Offer",
+      "priceCurrency":"EGP",
+      "price":P.price||0,
+      "availability":Number(P.stock)===0
+        ?"https://schema.org/OutOfStock"
+        :"https://schema.org/InStock"
+    }
+  };
+  const revs=(typeof prodReviews==="function")?prodReviews(P.id):[];
+  if(revs.length){
+    const avg=revs.reduce((a,r)=>a+Number(r.rating||5),0)/revs.length;
+    data.aggregateRating={
+      "@type":"AggregateRating",
+      "ratingValue":avg.toFixed(1),
+      "reviewCount":revs.length
+    };
+  }
+  ld.textContent=JSON.stringify(data,null,2);
+}
+
+/* ═══════ NOT FOUND ═══════ */
+function showNotFound(){
+  $("#pdLoading").classList.add("hidden");
+  $("#pdNotFound").classList.remove("hidden");
+}
+
+/* ═══════ FALLBACKS ═══════ */
+if(typeof CDN!=="function"){
+  window.CDN=(u)=>{
+    if(!u)return"";
+    if(u.startsWith("http"))return u;
+    return "https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2F"+encodeURIComponent(u)+"&w=800&q=75&output=webp";
+  };
+}
+if(typeof phours!=="function"){window.phours=(p)=>p.hours||"";}
+if(typeof pbadge!=="function"){window.pbadge=(p)=>p.badge||"";}
+if(typeof prodReviews!=="function"){window.prodReviews=()=>[];}
+if(typeof toast!=="function"){window.toast=(m)=>alert(m);}
+if(typeof t!=="function"){window.t=(k)=>k;}
 
 })();
 </script>
