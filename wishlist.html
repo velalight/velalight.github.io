@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>المفضلة | VelaLight</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+.wl-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.2rem 0;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:1.5rem}
+.wl-top h1{font-family:var(--fd);color:var(--gold2);font-size:1.6rem;margin:0}
+.wl-count{background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:.3rem .9rem;font-size:.85rem;color:var(--mut)}
+.wl-count b{color:var(--gold2);font-family:var(--fd)}
+.wl-wrap{padding-bottom:4rem}
+.wl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.2rem}
+.wl-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:.2s;position:relative;box-shadow:var(--sh)}
+.wl-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px -10px rgba(0,0,0,.15)}
+.wl-card .wl-img{width:100%;aspect-ratio:1;object-fit:cover;background:var(--panel2)}
+.wl-card .wl-body{padding:1rem}
+.wl-card .wl-cat{font-size:.7rem;color:var(--dim);margin-bottom:.2rem;display:block}
+.wl-card h3{font-family:var(--fd);font-size:1rem;margin:0 0 .5rem;color:var(--dark)}
+.wl-card h3 a{color:inherit;text-decoration:none}
+.wl-card .wl-price{font-family:var(--fd);color:var(--gold2);font-size:1.1rem;margin:.5rem 0;display:flex;gap:.5rem;align-items:center}
+.wl-card del{color:var(--dim);font-size:.85rem;font-weight:400}
+.wl-actions{display:flex;gap:.4rem;margin-top:.8rem}
+.wl-actions .btn{flex:1;padding:.55rem;font-size:.8rem}
+.wl-remove{position:absolute;top:.6rem;left:.6rem;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.95);border:1px solid var(--line);cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:.2s;z-index:2}
+.wl-remove:hover{background:#fee;color:#e74c3c;border-color:#e74c3c;transform:scale(1.1)}
+.wl-empty{text-align:center;padding:4rem 1rem;background:var(--panel);border:1px solid var(--line);border-radius:22px}
+.wl-empty h2{font-family:var(--fd);color:var(--gold2);margin-bottom:.6rem}
+.wl-empty p{color:var(--mut);margin-bottom:1.2rem;font-size:.95rem}
+@media(max-width:480px){
+  .wl-grid{grid-template-columns:repeat(2,1fr);gap:.8rem}
+  .wl-card .wl-body{padding:.7rem}
+  .wl-card h3{font-size:.88rem}
+  .wl-actions{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="wl-top">
+    <h1>❤️ المفضلة</h1>
+    <div style="display:flex;gap:.5rem;align-items:center">
+      <span class="wl-count"><b id="wlCount">0</b> منتج</span>
+      <a class="btn ghost sm" href="index.html">↩ المتجر</a>
+    </div>
+  </div>
+
+  <div class="wl-wrap" id="wlContainer">
+    <div class="wl-grid" id="wlGrid"></div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script type="module" src="firebase.js"></script>
+<script src="app.js"></script>
+
+<script>
+(function(){
+"use strict";
+
+let renderAttempts = 0;
+const MAX_ATTEMPTS = 50;
+
+function tryRender(){
+  if(typeof window.getWishlist === "function" && typeof window.ALL_PRODUCTS_REF === "function"){
+    renderWishlistPage();
+    window.addEventListener("data-refresh", renderWishlistPage);
+    window.addEventListener("wishlist-change", renderWishlistPage);
+  } else if(renderAttempts < MAX_ATTEMPTS){
+    renderAttempts++;
+    setTimeout(tryRender, 200);
+  } else {
+    document.getElementById("wlContainer").innerHTML = '<div class="wl-empty"><h2>⏳</h2><p>جاري التحميل...</p></div>';
+  }
+}
+
+function renderWishlistPage(){
+  if(typeof window.getWishlist !== "function") return;
+  
+  const wishlist = window.getWishlist();
+  const products = window.ALL_PRODUCTS_REF();
+  const grid = document.getElementById("wlGrid");
+  const container = document.getElementById("wlContainer");
+  const countEl = document.getElementById("wlCount");
+  
+  if(countEl) countEl.textContent = wishlist.length;
+  
+  if(!grid || !container) return;
+  
+  if(!wishlist.length){
+    grid.style.display = "none";
+    container.innerHTML = `
+      <div class="wl-empty">
+        <h2>💔 قائمتك فاضية</h2>
+        <p>لسه مفيش منتجات في المفضلة. دوّر على منتجاتك المفضلة واضغط على ❤️</p>
+        <a class="btn" href="index.html#products">🛍️ ابدأ التسوق</a>
+      </div>
+    `;
+    return;
+  }
+  
+  const wishlistProducts = wishlist
+    .map(id => products.find(p => p.id === id))
+    .filter(Boolean);
+  
+  if(!wishlistProducts.length){
+    grid.innerHTML = '<div class="wl-empty"><p>⚠️ المنتجات المحفوظة مش موجودة حالياً</p></div>';
+    return;
+  }
+  
+  grid.style.display = "grid";
+  grid.innerHTML = wishlistProducts.map(p => {
+    const img = window.imgOfRef ? window.imgOfRef(p) : (p.img || "");
+    const name = window.pnameRef ? window.pnameRef(p) : (p.name || "");
+    const cat = window.catRef ? window.catRef(p.cat) : (p.cat || "");
+    const price = window.moneyRef ? window.moneyRef(p.price || 0) : (p.price || 0);
+    const oldPrice = p.old && p.old > p.price ? (window.moneyRef ? window.moneyRef(p.old) : p.old) : null;
+    const outOfStock = Number(p.stock) === 0;
+    
+    return `
+      <article class="wl-card" data-id="${p.id}">
+        <button class="wl-remove" data-remove="${p.id}" title="إزالة من المفضلة" aria-label="إزالة">❤️</button>
+        <a href="product.html?p=${p.id}">
+          <img class="wl-img" src="${img}" alt="${name}" loading="lazy">
+        </a>
+        <div class="wl-body">
+          <span class="wl-cat">${cat}</span>
+          <h3><a href="product.html?p=${p.id}">${name}</a></h3>
+          <div class="wl-price">
+            ${price}
+            ${oldPrice ? `<del>${oldPrice}</del>` : ""}
+          </div>
+          <div class="wl-actions">
+            <button class="btn sm ${outOfStock ? "ghost" : ""}" data-add="${p.id}" ${outOfStock ? "disabled" : ""}>
+              ${outOfStock ? "نفدت الكمية" : "🛍️ أضف للسلة"}
+            </button>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join("");
+  
+  /* Event delegation */
+  grid.addEventListener("click", handleWishlistClick);
+}
+
+function handleWishlistClick(e){
+  const removeBtn = e.target.closest("[data-remove]");
+  const addBtn = e.target.closest("[data-add]");
+  
+  if(removeBtn){
+    e.preventDefault();
+    const id = removeBtn.dataset.remove;
+    if(id && window.toggleWishlist){
+      window.toggleWishlist(id);
+    }
+  } else if(addBtn && !addBtn.disabled){
+    e.preventDefault();
+    const id = addBtn.dataset.add;
+    const products = window.ALL_PRODUCTS_REF();
+    const p = products.find(x => x.id === id);
+    if(p){
+      if(window.openQuickAddRef){
+        window.openQuickAddRef(p);
+      } else if(window.addToCartRef){
+        window.addToCartRef(p, {qty: 1});
+        if(window.toastRef) window.toastRef("✅ تمت الإضافة للسلة");
+      }
+    }
+  }
+}
+
+/* Override toggleWishlist to trigger re-render */
+const origToggle = window.toggleWishlist;
+if(origToggle){
+  window.toggleWishlist = function(id){
+    const result = origToggle(id);
+    window.dispatchEvent(new Event("wishlist-change"));
+    return result;
+  };
+}
+
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", tryRender);
+} else {
+  tryRender();
+}
+
+})();
+</script>
+</body>
+</html>
