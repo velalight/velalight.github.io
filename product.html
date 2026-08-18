@@ -1311,30 +1311,52 @@ function renderStock(){
   }
 }
 
-/* ═══════ THUMBS ═══════ */
+/* ═══════ ✨ ENHANCED THUMBS + GALLERY COUNTER ═══════ */
 function renderThumbs(){
   const thumbs=$("#pdThumbs");
+  const counter=$("#galleryCounter");
   if(!thumbs) return;
+  
+  /* Update counter */
+  if(counter){
+    if(zoomImages.length>1){
+      counter.textContent=`📸 ${zoomImages.length} صور`;
+      counter.style.display="block";
+    }else{
+      counter.style.display="none";
+    }
+  }
+  
   if(zoomImages.length<=1){thumbs.innerHTML="";return;}
+  
   thumbs.innerHTML=zoomImages.map((u,i)=>{
     const src=CDN(u);
     return `<img src="${src}" class="${i===0?"on":""}" data-src="${src}" data-idx="${i}" alt="${pname(P)} ${i+1}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">`;
   }).join("");
+  
   thumbs.querySelectorAll("img").forEach(img=>{
     img.addEventListener("click",()=>{
       thumbs.querySelectorAll("img").forEach(x=>x.classList.remove("on"));
       img.classList.add("on");
+      
       const main=$("#pdImg");
-      main.classList.remove("loaded");
-      main.onload=()=>main.classList.add("loaded");
+      main.style.opacity="0";
+      main.onload=()=>{
+        main.style.opacity="1";
+        main.classList.add("loaded");
+      };
       main.src=img.dataset.src;
+      
+      /* Scroll thumb into view */
+      img.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
+      
       /* Open zoom at this index */
       const idx=parseInt(img.dataset.idx)||0;
       openZoomAt(idx);
     });
   });
 }
-
+     
 /* ═══════ SCENTS ═══════ */
 function getProductScents(){
   const cloudP=(cloudCatalog||[]).find(x=>String(x.id)===String(P.id)||String(x.id_)===String(P.id));
