@@ -582,14 +582,18 @@
 /* ═══════ FALLBACKS FIRST ═══════ */
 if(typeof $!=="function"){window.$=s=>document.querySelector(s);}
 if(typeof $$!=="function"){window.$$=s=>document.querySelectorAll(s);}
+
+/* ✨ لا نعيد تعريف CDN — هنستخدم اللي من data.js (اللي بيشتغل صح) */
+/* فقط لو data.js مش حمّل CDN، نضيف fallback بسيط */
 if(typeof CDN!=="function"){
   window.CDN=(u)=>{
     if(!u)return"";
     if(u.startsWith("http"))return u;
     if(u.startsWith("data:"))return u;
-    return "https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2F"+encodeURIComponent(u)+"&w=1000&q=80&output=webp&we";
+    return "https://velalight.github.io/"+u;
   };
 }
+
 if(typeof toast!=="function"){window.toast=(m)=>{
   const t=document.createElement("div");
   t.textContent=m;
@@ -751,8 +755,13 @@ const isInWishlist=(id)=>getWishlist().includes(id);
 const toggleWishlist=(id)=>{
   let l=getWishlist();
   const i=l.indexOf(id);
-  if(i===-1){l.push(id);toast("❤️ "+t_local("pd_add").replace(/[^\s]+\s/,"")+" — "+LANG==="en"?"Added to wishlist":"تمت الإضافة للمفضلة");}
-  else{l.splice(i,1);toast("💔 "+(LANG==="en"?"Removed from wishlist":"تمت الإزالة من المفضلة"));}
+  if(i===-1){
+    l.push(id);
+    toast("❤️ "+(LANG==="en"?"Added to wishlist":"تمت الإضافة للمفضلة"));
+  }else{
+    l.splice(i,1);
+    toast("💔 "+(LANG==="en"?"Removed from wishlist":"تمت الإزالة من المفضلة"));
+  }
   saveWishlist(l);
   return l.includes(id);
 };
@@ -790,17 +799,23 @@ function pbadge(p){
   return b||"";
 }
 
-/* ═══════ IMAGES (smart) ═══════ */
+/* ═══════ ✨ IMAGES (smart) — تستخدم imgsOf من data.js ═══════ */
 function getImages(p){
-  let imgs=[];
-  // Try multiple sources
-  if(Array.isArray(p.images)&&p.images.length)imgs=p.images;
-  else if(Array.isArray(p.gallery)&&p.gallery.length)imgs=p.gallery;
-  else if(Array.isArray(p.photos)&&p.photos.length)imgs=p.photos;
-  // Fallback to single img
-  if(!imgs.length&&p.img){imgs=[p.img];}
-  // Default fallback
-  if(!imgs.length)imgs=["RR.jpg"];
+  /* ✨ الأولوية لـ imgsOf من data.js (اللي بتتعامل مع imgs و images) */
+  if(typeof imgsOf === "function"){
+    try{
+      const arr = imgsOf(p);
+      if(Array.isArray(arr) && arr.length) return arr;
+    }catch(e){}
+  }
+  /* Fallback يدوي لو imgsOf مش موجودة */
+  let imgs = [];
+  if(Array.isArray(p.imgs) && p.imgs.length) imgs = p.imgs;
+  else if(Array.isArray(p.images) && p.images.length) imgs = p.images;
+  else if(Array.isArray(p.gallery) && p.gallery.length) imgs = p.gallery;
+  else if(Array.isArray(p.photos) && p.photos.length) imgs = p.photos;
+  if(!imgs.length && p.img) imgs = [p.img];
+  if(!imgs.length) imgs = ["RR.jpg"];
   return imgs;
 }
 
@@ -887,17 +902,38 @@ function applyI18nStatic(){
   });
 }
 
-/* ✨ لا نعمل toggle هنا — app.js بيقلب اللغة. إحنا بس نعيد الـ render بعده. */
+/* ✨ لا نعمل toggle هنا — app.js بيقلب اللغة.
+   إحنا بس نراقب التغيير ونعيد الرسم */
 $("#langBtn")?.addEventListener("click",()=>{
+  /* نستنى app.js يقلب اللغة الأول (setTimeout 0) */
   setTimeout(()=>{
     document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
     document.documentElement.lang=LANG;
     applyI18nStatic();
     updateLangBtn();
-    if(P)render();
-  },0);
+    if(P) render();
+    renderRelated();
+    renderReviews();
+    renderScents();
+  }, 50);
 });
-  
+
+/* مراقبة إضافية للتغيير من أي مصدر */
+let lastLang = LANG;
+setInterval(() => {
+  if(typeof LANG !== "undefined" && LANG !== lastLang){
+    lastLang = LANG;
+    applyI18nStatic();
+    updateLangBtn();
+    if(P){
+      render();
+      renderRelated();
+      renderReviews();
+      renderScents();
+    }
+  }
+}, 200);
+
 /* ═══════ CLOUD CATALOG ═══════ */
 async function loadCloudCatalog(pid){
   try{
@@ -939,13 +975,16 @@ function render(){
   $("#pdDesc").textContent=desc;
   $("#pdDescFull").innerHTML=desc.split("\n").filter(Boolean).map(p=>`<p style="margin-bottom:.8rem">${p}</p>`).join("")||`<p>${desc}</p>`;
 
-  // Images (smart with loading state)
+  // ✨ Images (نستخدم getImages اللي بتقرأ imgs صح)
   const imgs=getImages(P);
   zoomImages=imgs;
   const mainImg=$("#pdImg");
   mainImg.classList.remove("loaded");
   mainImg.classList.add("loading");
-  mainImg.onerror=()=>{mainImg.src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>";mainImg.classList.add("loaded");};
+  mainImg.onerror=()=>{
+    mainImg.src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>";
+    mainImg.classList.add("loaded");
+  };
   mainImg.onload=()=>mainImg.classList.add("loaded");
   mainImg.src=CDN(imgs[0]);
   mainImg.alt=name;
@@ -1214,7 +1253,7 @@ $("#rvSubmit")?.addEventListener("click",async()=>{
   }catch(e){toast("⚠️ Error");}
 });
 
-/* ═══════ RELATED ═══════ */
+/* ═══════ ✨ RELATED — استخدام imgOf من data.js ═══════ */
 function renderRelated(){
   const box=$("#pdRelated");
   if(!box||!P)return;
@@ -1222,11 +1261,20 @@ function renderRelated(){
   let list=all.filter(x=>x.cat===P.cat&&x.id!==P.id).slice(0,4);
   if(list.length<4)list=[...list,...all.filter(x=>x.cat!==P.cat&&x.id!==P.id&&!list.find(y=>y.id===x.id))].slice(0,4);
   if(!list.length){box.innerHTML=`<p style="color:var(--dim);text-align:center">${LANG==="en"?"No similar products":"لا توجد منتجات مشابهة"}</p>`;return;}
-  box.innerHTML=list.map(p=>`
+  box.innerHTML=list.map(p=>{
+    /* ✨ استخدام imgOf من data.js لو موجودة */
+    let imgSrc = "";
+    if(typeof imgOf === "function"){
+      imgSrc = imgOf(p);
+    } else {
+      imgSrc = CDN(p.img || "RR.jpg");
+    }
+    return `
     <a href="product.html?p=${p.id}" class="p-card">
-      <div class="p-media"><img src="${CDN(p.img||"RR.jpg")}" alt="${pname(p)}" loading="lazy" decoding="async"></div>
+      <div class="p-media"><img src="${imgSrc}" alt="${pname(p)}" loading="lazy" decoding="async"></div>
       <div class="p-body"><h3>${pname(p)}</h3><div class="p-price">${money(p.price)}</div></div>
-    </a>`).join("");
+    </a>`;
+  }).join("");
 }
 
 /* ═══════ SHARE ═══════ */
