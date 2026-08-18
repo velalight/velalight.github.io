@@ -74,7 +74,7 @@
   position:relative;
   z-index:2;
 }
-     .pd-img img.loaded{opacity:1}
+.pd-img img.loaded{opacity:1}
 .pd-img .zoom-hint{
   position:absolute;
   bottom:16px;
@@ -109,6 +109,7 @@
   letter-spacing:.5px;
 }
 
+/* ═══ Thumbs ═══ */
 .pd-thumbs{
   display:flex;
   gap:.6rem;
@@ -122,8 +123,6 @@
 .pd-thumbs::-webkit-scrollbar{height:4px}
 .pd-thumbs::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
 .pd-thumbs::-webkit-scrollbar-track{background:var(--line);border-radius:4px}
-     .pd-thumbs::-webkit-scrollbar{height:4px}
-.pd-thumbs::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
 .pd-thumbs img{
   width:72px;
   height:72px;
@@ -131,14 +130,20 @@
   object-fit:cover;
   border:2px solid var(--line);
   cursor:pointer;
-  transition:.25s;
+  transition:all .25s ease;
   flex-shrink:0;
   background:var(--panel2);
+  scroll-snap-align:start;
 }
-.pd-thumbs img:hover{border-color:var(--gold);transform:translateY(-3px)}
+.pd-thumbs img:hover{
+  border-color:var(--gold);
+  transform:translateY(-3px);
+  box-shadow:0 4px 12px -2px rgba(217,171,95,.3);
+}
 .pd-thumbs img.on{
   border-color:var(--gold2);
-  box-shadow:0 4px 14px -4px rgba(217,171,95,.5);
+  border-width:3px;
+  box-shadow:0 4px 16px -4px rgba(217,171,95,.5);
 }
 
 /* ═══ Info Panel ═══ */
@@ -560,7 +565,11 @@
   box-shadow:0 20px 60px rgba(0,0,0,.5);
   user-select:none;
   -webkit-user-drag:none;
+  transition:transform .3s ease, opacity .3s ease;
+  cursor:zoom-in;
+  touch-action:pan-x pan-y;
 }
+.zoom-modal img:active{cursor:grabbing}
 .zoom-close{
   position:absolute;
   top:20px;
@@ -787,7 +796,7 @@
           </div>
           <div class="pd-thumbs" id="pdThumbs"></div>
         </div>
-           
+
         <!-- ═══ Info Panel ═══ -->
         <div class="pd-info">
           <div id="pdBadge"></div>
@@ -1088,32 +1097,31 @@ document.addEventListener("DOMContentLoaded",()=>{
     ?PRODUCTS.find(x=>String(x.id)===String(productPid))
     :null;
 
-/* ✨ Use cache v2 (updated from cloud) or v1 (legacy) */
-let cachedV2=null;
-try{
-  const cache2=JSON.parse(localStorage.getItem("vl_products_cache_v2")||"[]");
-  if(Array.isArray(cache2)){
-    cachedV2=cache2.find(x=>
-      String(x.id)===String(productPid)||
-      String(x.id_)===String(productPid)
-    )||null;
-  }
-}catch(e){}
+  /* ✨ Use cache v2 (updated from cloud) or v1 (legacy) */
+  let cachedV2=null;
+  try{
+    const cache2=JSON.parse(localStorage.getItem("vl_products_cache_v2")||"[]");
+    if(Array.isArray(cache2)){
+      cachedV2=cache2.find(x=>
+        String(x.id)===String(productPid)||
+        String(x.id_)===String(productPid)
+      )||null;
+    }
+  }catch(e){}
 
-const first=cachedV2||cached||local;
-if(first){P={...first};render();}
+  const first=cachedV2||cached||local;
+  if(first){P={...first};render();}
 
-/* ✨ Load from cloud THEN load reviews */
-const sync=async ()=>{
-  await loadCloudCatalog(productPid);
-  await loadAllReviews();
-};
+  /* ✨ Load from cloud THEN load reviews */
+  const sync=async ()=>{
+    await loadCloudCatalog(productPid);
+    await loadAllReviews();
+  };
 
-if(window.FB&&typeof window.FB.list==="function") sync();
-else window.addEventListener("fb-ready",sync,{once:true});
+  if(window.FB&&typeof window.FB.list==="function") sync();
+  else window.addEventListener("fb-ready",sync,{once:true});
 
-setTimeout(()=>{if(!P)showNotFound()},5000);
-     
+  setTimeout(()=>{if(!P)showNotFound()},5000);
 });
 
 /* ═══════ NAV ═══════ */
@@ -1134,7 +1142,7 @@ function initNav(){
   });
 }
 
-/* ═══════ LANG WATCHER — observes LANG changes from app.js ═══════ */
+/* ═══════ LANG WATCHER ═══════ */
 function initLangWatcher(){
   let lastLang=LANG;
   setInterval(()=>{
@@ -1145,18 +1153,15 @@ function initLangWatcher(){
   },150);
 }
 
-
-     /* ═══════ ✨ LOAD ALL REVIEWS FROM FIREBASE ═══════ */
+/* ═══════ LOAD ALL REVIEWS FROM FIREBASE ═══════ */
 async function loadAllReviews(){
   try{
     const revs=await DB.list("reviews");
     if(Array.isArray(revs)){
       window.ALL_REVIEWS=[...(typeof SEED_REVIEWS!=="undefined"?SEED_REVIEWS:[]),...revs];
     }
-    /* Re-render reviews if product is loaded */
     if(P){
       renderReviews();
-      /* Update rating summary */
       const reviewSummary=(typeof prodReviews==="function")?prodReviews(P.id):[];
       $("#revCount").textContent=reviewSummary.length;
       const ratingBox=$("#pdRatingSummary");
@@ -1180,7 +1185,7 @@ async function loadAllReviews(){
   }
 }
 
-/* ═══════ ✨ CLOUD CATALOG WITH CACHE UPDATE ═══════ */
+/* ═══════ CLOUD CATALOG WITH CACHE UPDATE ═══════ */
 async function loadCloudCatalog(pid){
   try{
     const cloud=await DB.list("products");
@@ -1192,7 +1197,7 @@ async function loadCloudCatalog(pid){
     );
     
     if(found&&found.active!==false){
-      /* ✨ UPDATE CACHE — Next visit will use new price instantly */
+      /* ✨ UPDATE CACHE */
       try{
         const cacheKey="vl_products_cache_v2";
         let cache=[];
@@ -1205,7 +1210,6 @@ async function loadCloudCatalog(pid){
         if(idx>=0) cache[idx]={...found,id:pid};
         else cache.push({...found,id:pid});
         
-        /* Keep only last 100 products */
         localStorage.setItem(cacheKey,JSON.stringify(cache.slice(-100)));
       }catch(e){console.warn("Cache update failed",e)}
       
@@ -1218,7 +1222,7 @@ async function loadCloudCatalog(pid){
     console.warn("Cloud load failed",e);
   }
 }
-     
+
 /* ═══════ RENDER ═══════ */
 function render(){
   $("#pdLoading").classList.add("hidden");
@@ -1228,7 +1232,6 @@ function render(){
   const name=pname(P);
   document.title=name+" | VelaLight";
 
-  /* Update meta tags */
   let ogTitle=document.querySelector('meta[property="og:title"]');
   if(ogTitle) ogTitle.content=name;
   let ogDesc=document.querySelector('meta[property="og:description"]');
@@ -1245,7 +1248,6 @@ function render(){
     .map(p=>`<p style="margin-bottom:.9rem">${p}</p>`).join("")
     ||`<p>${desc}</p>`;
 
-  /* Images */
   zoomImages=imgsOf(P);
   const mainImg=$("#pdImg");
   mainImg.classList.remove("loaded");
@@ -1257,7 +1259,6 @@ function render(){
   mainImg.src=CDN(zoomImages[0])||imgOf(P);
   mainImg.alt=name;
 
-  /* Reviews */
   const reviewSummary=(typeof prodReviews==="function")?prodReviews(P.id):[];
   $("#revCount").textContent=reviewSummary.length;
   const ratingBox=$("#pdRatingSummary");
@@ -1278,13 +1279,11 @@ function render(){
 
   renderStock();
 
-  /* Badge */
   const badge=pbadge(P);
   $("#pdBadge").innerHTML=badge
     ?`<span class="p-badge" style="position:static;display:inline-block;margin-bottom:.6rem">${badge}</span>`
     :"";
 
-  /* Price */
   $("#pdPrice").textContent=money(P.price);
   if(P.old&&P.old>P.price){
     $("#pdOld").textContent=money(P.old);
@@ -1297,7 +1296,6 @@ function render(){
     $("#pdSave").style.display="none";
   }
 
-  /* Specs */
   $("#specHours").textContent=phours(P);
   $("#specCat").textContent=catName(P.cat);
   const scents=getProductScents();
@@ -1331,13 +1329,12 @@ function renderStock(){
   }
 }
 
-/* ═══════ ✨ ENHANCED THUMBS + GALLERY COUNTER ═══════ */
+/* ═══════ ENHANCED THUMBS + GALLERY COUNTER ═══════ */
 function renderThumbs(){
   const thumbs=$("#pdThumbs");
   const counter=$("#galleryCounter");
   if(!thumbs) return;
   
-  /* Update counter */
   if(counter){
     if(zoomImages.length>1){
       counter.textContent=`📸 ${zoomImages.length} صور`;
@@ -1367,16 +1364,14 @@ function renderThumbs(){
       };
       main.src=img.dataset.src;
       
-      /* Scroll thumb into view */
       img.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
       
-      /* Open zoom at this index */
       const idx=parseInt(img.dataset.idx)||0;
       openZoomAt(idx);
     });
   });
 }
-     
+
 /* ═══════ SCENTS ═══════ */
 function getProductScents(){
   const cloudP=(cloudCatalog||[]).find(x=>String(x.id)===String(P.id)||String(x.id_)===String(P.id));
@@ -1493,7 +1488,8 @@ function initTabs(){
     });
   });
 }
-     /* ═══════════════════════════════════════════════════════════
+
+/* ═══════════════════════════════════════════════════════════
    ✨ ZOOM MODAL — PROFESSIONAL EDITION
    Swipe + Double Tap + Preload + Smooth Transitions
    ═══════════════════════════════════════════════════════════ */
@@ -1502,15 +1498,12 @@ let zoomTouchStartY=0;
 let zoomTouchStartTime=0;
 let zoomIsZoomed=false;
 let zoomScale=1;
-let zoomTranslateX=0;
-let zoomTranslateY=0;
 
 function initZoom(){
   const modal=$("#zoomModal");
   const img=$("#zoomImg");
   if(!modal||!img) return;
 
-  /* Click handlers */
   $("#zoomHint")?.addEventListener("click",e=>{
     e.stopPropagation();
     openZoomAt(zoomIndex);
@@ -1520,14 +1513,9 @@ function initZoom(){
   modal.addEventListener("click",e=>{
     if(e.target===modal) closeZoom();
   });
-  $("#zoomPrev")?.addEventListener("click",()=>{
-    navigateZoom(-1);
-  });
-  $("#zoomNext")?.addEventListener("click",()=>{
-    navigateZoom(1);
-  });
+  $("#zoomPrev")?.addEventListener("click",()=>navigateZoom(-1));
+  $("#zoomNext")?.addEventListener("click",()=>navigateZoom(1));
 
-  /* Keyboard navigation */
   document.addEventListener("keydown",e=>{
     if(!modal.classList.contains("open")) return;
     if(e.key==="Escape") closeZoom();
@@ -1549,27 +1537,31 @@ function initZoom(){
     const deltaY=e.changedTouches[0].clientY-zoomTouchStartY;
     const deltaTime=Date.now()-zoomTouchStartTime;
     
-    /* Swipe threshold: 50px in less than 300ms */
     if(Math.abs(deltaX)>50&&Math.abs(deltaX)>Math.abs(deltaY)&&deltaTime<300){
-      if(deltaX<0) navigateZoom(1);  /* Swipe left = next */
-      else navigateZoom(-1);          /* Swipe right = prev */
+      if(deltaX<0) navigateZoom(1);
+      else navigateZoom(-1);
     }
   },{passive:true});
 
-  /* ✨ Double Tap to Zoom */
+  /* ✨ Double Tap to Zoom — مع حماية من false trigger */
   let lastTapTime=0;
   img.addEventListener("click",e=>{
     const now=Date.now();
+    /* ✨ FIX: لا تبدأ العد إلا بعد أول click (عشان تتجنب false double-tap) */
+    if(lastTapTime===0){
+      lastTapTime=now;
+      return;
+    }
     if(now-lastTapTime<300){
-      /* Double tap detected */
       e.preventDefault();
       toggleImageZoom(e);
+      lastTapTime=0; /* Reset after successful double-tap */
+    }else{
+      lastTapTime=now;
     }
-    lastTapTime=now;
   });
 }
 
-/* ✨ Navigate with direction (-1 = prev, 1 = next) */
 function navigateZoom(direction){
   if(!zoomImages.length) return;
   zoomIndex=(zoomIndex+direction+zoomImages.length)%zoomImages.length;
@@ -1597,28 +1589,21 @@ function updateZoom(){
   if(!zoomImages[zoomIndex]) return;
   const img=$("#zoomImg");
   
-  /* Fade out */
   img.style.opacity="0";
   img.style.transform="scale(0.95)";
   
-  /* Update src */
   img.src=CDN(zoomImages[zoomIndex]);
   
-  /* Fade in on load */
   img.onload=()=>{
     img.style.transition="opacity .3s ease, transform .3s ease";
     img.style.opacity="1";
     img.style.transform="scale(1)";
   };
   
-  /* Update counter */
   $("#zoomCounter").textContent=`${zoomIndex+1} / ${zoomImages.length}`;
-  
-  /* Update dots if exist */
   updateZoomDots();
 }
 
-/* ✨ Preload adjacent images for instant navigation */
 function preloadAdjacentImages(){
   if(!zoomImages.length) return;
   const prevIdx=(zoomIndex-1+zoomImages.length)%zoomImages.length;
@@ -1630,11 +1615,9 @@ function preloadAdjacentImages(){
   });
 }
 
-/* ✨ Toggle image zoom (double tap) */
 function toggleImageZoom(e){
   const img=$("#zoomImg");
   if(!zoomIsZoomed){
-    /* Zoom in to tap position */
     const rect=img.getBoundingClientRect();
     const x=((e.clientX-rect.left)/rect.width)*100;
     const y=((e.clientY-rect.top)/rect.height)*100;
@@ -1645,12 +1628,10 @@ function toggleImageZoom(e){
     img.style.transform=`scale(${zoomScale})`;
     img.style.cursor="zoom-out";
   }else{
-    /* Zoom out */
     resetImageTransform();
   }
 }
 
-/* ✨ Reset image transform */
 function resetImageTransform(){
   const img=$("#zoomImg");
   zoomIsZoomed=false;
@@ -1660,7 +1641,6 @@ function resetImageTransform(){
   img.style.cursor="zoom-in";
 }
 
-/* ✨ Zoom dots (optional visual indicator) */
 function updateZoomDots(){
   let dots=$("#zoomDots");
   if(!dots){
@@ -1674,7 +1654,6 @@ function updateZoomDots(){
     `<span style="width:8px;height:8px;border-radius:50%;background:${i===zoomIndex?"var(--gold)":"rgba(255,255,255,.4)"};transition:.3s"></span>`
   ).join("");
 }
-     
 
 /* ═══════ REVIEWS ═══════ */
 function renderReviews(){
