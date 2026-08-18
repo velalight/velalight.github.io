@@ -109,26 +109,41 @@
   letter-spacing:.5px;
 }
 
-/* ═══ Thumbs — with !important to override style.css ═══ */
-.pd-gallery .pd-thumbs{
+/* ═══════════════════════════════════════════════════════════
+   ✨ THUMBS — FORCE OVERRIDE (ID selector أقوى من أي class)
+   ═══════════════════════════════════════════════════════════ */
+#pdThumbs{
   display:flex !important;
+  flex-direction:row !important;
+  flex-wrap:nowrap !important;
   gap:.6rem !important;
   margin-top:1rem !important;
-  flex-wrap:nowrap !important;
   overflow-x:auto !important;
   padding-bottom:6px !important;
-  scrollbar-width:thin !important;
   width:100% !important;
   max-width:100% !important;
   position:relative !important;
-  z-index:2 !important;
+  z-index:5 !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  height:auto !important;
+  max-height:none !important;
+  min-height:72px !important;
+  scrollbar-width:thin !important;
+  scroll-snap-type:x mandatory !important;
+  background:transparent !important;
 }
-.pd-gallery .pd-thumbs::-webkit-scrollbar{height:4px}
-.pd-gallery .pd-thumbs::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
-.pd-gallery .pd-thumbs::-webkit-scrollbar-track{background:var(--line);border-radius:4px}
-.pd-gallery .pd-thumbs img{
+#pdThumbs::-webkit-scrollbar{height:4px}
+#pdThumbs::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
+#pdThumbs::-webkit-scrollbar-track{background:var(--line);border-radius:4px}
+#pdThumbs img{
+  display:block !important;
   width:72px !important;
   height:72px !important;
+  min-width:72px !important;
+  min-height:72px !important;
+  max-width:72px !important;
+  max-height:72px !important;
   border-radius:12px !important;
   object-fit:cover !important;
   border:2px solid var(--line) !important;
@@ -136,15 +151,18 @@
   transition:all .25s ease !important;
   flex-shrink:0 !important;
   background:var(--panel2) !important;
-  display:block !important;
   opacity:1 !important;
+  visibility:visible !important;
+  scroll-snap-align:start !important;
+  padding:0 !important;
+  margin:0 !important;
 }
-.pd-gallery .pd-thumbs img:hover{
+#pdThumbs img:hover{
   border-color:var(--gold) !important;
   transform:translateY(-3px) !important;
   box-shadow:0 4px 12px -2px rgba(217,171,95,.3) !important;
 }
-.pd-gallery .pd-thumbs img.on{
+#pdThumbs img.on{
   border-color:var(--gold2) !important;
   border-width:3px !important;
   box-shadow:0 4px 16px -4px rgba(217,171,95,.5) !important;
@@ -152,10 +170,26 @@
 
 /* ═══ Responsive for thumbs ═══ */
 @media(max-width:768px){
-  .pd-gallery .pd-thumbs img{width:62px !important;height:62px !important}
+  #pdThumbs img{
+    width:62px !important;
+    height:62px !important;
+    min-width:62px !important;
+    min-height:62px !important;
+    max-width:62px !important;
+    max-height:62px !important;
+  }
+  #pdThumbs{min-height:62px !important}
 }
 @media(max-width:480px){
-  .pd-gallery .pd-thumbs img{width:56px !important;height:56px !important}
+  #pdThumbs img{
+    width:56px !important;
+    height:56px !important;
+    min-width:56px !important;
+    min-height:56px !important;
+    max-width:56px !important;
+    max-height:56px !important;
+  }
+  #pdThumbs{min-height:56px !important}
 }
      
 /* ═══ Info Panel ═══ */
@@ -656,15 +690,12 @@
   .zoom-nav.prev{left:10px}
   .zoom-nav.next{right:10px}
   .zoom-counter{bottom:16px;font-size:.8rem;padding:.35rem .8rem}
-  
-  .pd-thumbs img{width:62px;height:62px}
 }
 
 @media(max-width:480px){
   .pd-info h1{font-size:1.5rem}
   .pd-price .price-main{font-size:1.7rem}
   .rv-form .row{grid-template-columns:1fr}
-  .pd-thumbs img{width:56px;height:56px}
   
   .zoom-modal{padding:.5rem}
   .zoom-close{top:8px;right:8px;width:40px;height:40px;font-size:1.2rem}
@@ -1555,11 +1586,10 @@ function initZoom(){
     }
   },{passive:true});
 
-  /* ✨ Double Tap to Zoom — مع حماية من false trigger */
+  /* ✨ Double Tap to Zoom */
   let lastTapTime=0;
   img.addEventListener("click",e=>{
     const now=Date.now();
-    /* ✨ FIX: لا تبدأ العد إلا بعد أول click (عشان تتجنب false double-tap) */
     if(lastTapTime===0){
       lastTapTime=now;
       return;
@@ -1567,7 +1597,7 @@ function initZoom(){
     if(now-lastTapTime<300){
       e.preventDefault();
       toggleImageZoom(e);
-      lastTapTime=0; /* Reset after successful double-tap */
+      lastTapTime=0;
     }else{
       lastTapTime=now;
     }
