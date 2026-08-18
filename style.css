@@ -1121,13 +1121,19 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  to{opacity:1}
 }
 .zoom-modal img{
- max-width:90vw;
- max-height:90vh;
- border-radius:16px;
- object-fit:contain;
- box-shadow:0 20px 60px rgba(0,0,0,.5);
- user-select:none;
- -webkit-user-drag:none;
+  max-width:90vw;
+  max-height:90vh;
+  border-radius:16px;
+  object-fit:contain;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  user-select:none;
+  -webkit-user-drag:none;
+  transition:transform .3s ease, opacity .3s ease;
+  cursor:zoom-in;
+  touch-action:pan-x pan-y;
+}
+.zoom-modal img:active{
+  cursor:grabbing;
 }
 .zoom-close{
  position:absolute;
