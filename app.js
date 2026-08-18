@@ -282,6 +282,9 @@ function activeCat(){
   return c?c.dataset.cat:"all";
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ renderProducts مع نظام المخزون الكامل
+   ═══════════════════════════════════════════════════════════ */
 function renderProducts(){
   const grid=$("#pgrid");
   if(!grid)return;
@@ -338,7 +341,7 @@ function renderProducts(){
         <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
           <img ${imgAttrs}>
           ${badge?`<span class="p-badge">${badge}</span>`:""}
-                    ${stockBadge(p)}
+          ${stockBadge(p)}
           <span class="p-quick">${t("view_details")}</span>
         </a>
         <div class="p-body">
@@ -353,7 +356,7 @@ function renderProducts(){
               ${p.old>p.price?`<del>${money(p.old)}</del>`:""}
             </div>
             <button class="p-add" data-id="${p.id}" ${Number(p.stock)===0?"disabled":""} aria-label="${t("add_cart")} ${pname(p)}">${Number(p.stock)===0?(LANG==="en"?"Out of stock":"نفدت الكمية"):t("add_cart")}</button>
-            </div>
+          </div>
         </div>
       </article>
     `);
@@ -373,8 +376,7 @@ function handleProductGridClick(e){
   const id = addBtn.dataset.id;
   const p = ALL_PRODUCTS.find(x => x.id === id);
   if(p && Number(p.stock)!==0){
-    
-  addBtn.style.transform = 'scale(0.95)';
+    addBtn.style.transform = 'scale(0.95)';
     setTimeout(() => { addBtn.style.transform = ''; }, 150);
     openQuickAdd(p);
   }
@@ -795,7 +797,9 @@ async function checkout(){
   };
 
   try{await DB.add("orders",orderData);}
-      catch(e){console.warn("Order save warning:",e);}
+  catch(e){console.warn("Order save warning:",e);}
+  
+  /* ✨ تقليل المخزون تلقائياً */
   decrementStock(c);
   
   const u=getSavedUser();
@@ -831,7 +835,6 @@ async function checkout(){
     toast(t("t_order"));
   }
   
-  /* فتح واتساب للعميل */
   openWhatsAppConfirmation(orderData);
 }
 
@@ -845,7 +848,6 @@ function waTotalLabel(){
    ═══════════════════════════════════════════════════════════ */
 const WEB3FORMS_KEY = "a23e1d50-37ee-4aec-a465-aeeb819c02a1";
 
-/* ═══ 1. إرسال إيميل تأكيد للأدمن عبر Web3Forms ═══ */
 async function sendOrderConfirmationEmail(orderData) {
   try {
     const itemsText = (orderData.items || []).map(item => {
@@ -919,7 +921,6 @@ ${itemsText}
   }
 }
 
-/* ═══ 2. فتح WhatsApp للعميل ═══ */
 function openWhatsAppConfirmation(orderData) {
   if (!CFG || !CFG.WHATSAPP) return;
   
@@ -1162,7 +1163,10 @@ function closeModal(id){
     document.body.style.overflow = '';
   }
 }
-/* ═══ ✨ المخزون ═══ */
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ نظام المخزون التلقائي
+   ═══════════════════════════════════════════════════════════ */
 function stockBadge(p){
   if(p.stock===undefined||p.stock===null||p.stock==="")return"";
   const s=Number(p.stock);
@@ -1185,5 +1189,5 @@ async function decrementStock(items){
     }catch(e){console.warn("stock update failed",e);}
   }
 }
-  
+
 })();
