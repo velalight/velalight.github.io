@@ -1123,48 +1123,53 @@ document.addEventListener("DOMContentLoaded",()=>{
   productPid=new URLSearchParams(location.search).get("p")||"";
   if(!productPid){showNotFound();return}
 
-  /* Try cache first */
-  let cached=null;
-  try{
-    const cache=JSON.parse(localStorage.getItem("vl_products_cache_v1")||"[]");
-    if(Array.isArray(cache)){
-      cached=cache.find(x=>
-        String(x.id)===String(productPid)||
-        String(x.id_)===String(productPid)||
-        String(x.slug)===String(productPid)
-      )||null;
+  // ✨ FIX: Do NOT render from cache immediately to prevent "Flash of Old Content"
+  // We will wait for the cloud. If cloud fails, we fallback to cache after a timeout.
+
+  const sync = async () => {
+    try {
+      await loadCloudCatalog(productPid);
+      await loadAllReviews();
+    } catch (e) {
+      console.warn("Sync failed", e);
     }
-  }catch(e){}
-
-  const local=(typeof PRODUCTS!=="undefined")
-    ?PRODUCTS.find(x=>String(x.id)===String(productPid))
-    :null;
-
-  /* ✨ Use cache v2 (updated from cloud) or v1 (legacy) */
-  let cachedV2=null;
-  try{
-    const cache2=JSON.parse(localStorage.getItem("vl_products_cache_v2")||"[]");
-    if(Array.isArray(cache2)){
-      cachedV2=cache2.find(x=>
-        String(x.id)===String(productPid)||
-        String(x.id_)===String(productPid)
-      )||null;
-    }
-  }catch(e){}
-
-  const first=cachedV2||cached||local;
-  if(first){P={...first};render();}
-
-  /* ✨ Load from cloud THEN load reviews */
-  const sync=async ()=>{
-    await loadCloudCatalog(productPid);
-    await loadAllReviews();
   };
 
-  if(window.FB&&typeof window.FB.list==="function") sync();
-  else window.addEventListener("fb-ready",sync,{once:true});
+  if (window.FB && typeof window.FB.list === "function") {
+    sync();
+  } else {
+    window.addEventListener("fb-ready", sync, { once: true });
+    // Safety net: if fb-ready doesn't fire, try sync anyway after a short delay
+    setTimeout(() => {
+      if (!P && window.FB && typeof window.FB.list === "function") sync();
+    }, 1000);
+  }
 
-  setTimeout(()=>{if(!P)showNotFound()},5000);
+  // ✨ FALLBACK: If cloud takes too long (> 2.5s), show cached data to prevent infinite loading
+  setTimeout(() => {
+    if (!P) {
+      try {
+        const cache2 = JSON.parse(localStorage.getItem("vl_products_cache_v2") || "[]");
+        if (Array.isArray(cache2)) {
+          const cachedV2 = cache2.find(x =>
+            String(x.id) === String(productPid) || String(x.id_) === String(productPid)
+          ) || null;
+          
+          if (cachedV2) {
+            P = { ...cachedV2 };
+            render();
+            if (typeof toast === "function") toast("⚠️ عرض البيانات المحفوظة مؤقتاً (تأكد من الإنترنت)");
+          } else {
+            showNotFound();
+          }
+        } else {
+          showNotFound();
+        }
+      } catch (e) {
+        showNotFound();
+      }
+    }
+  }, 2500);
 });
 
 /* ═══════ NAV ═══════ */
@@ -1240,7 +1245,7 @@ async function loadCloudCatalog(pid){
     );
     
     if(found&&found.active!==false){
-      /* ✨ UPDATE CACHE */
+      // ✨ UPDATE CACHE immediately with fresh data
       try{
         const cacheKey="vl_products_cache_v2";
         let cache=[];
@@ -1256,13 +1261,24 @@ async function loadCloudCatalog(pid){
         localStorage.setItem(cacheKey,JSON.stringify(cache.slice(-100)));
       }catch(e){console.warn("Cache update failed",e)}
       
-      P={...P,...found};
+      // ✨ Assign fresh data and render (Skeleton will hide here)
+      P={...found};
       render();
     }else if(found&&found.active===false){
       showNotFound();
+    }else{
+      // Not found in cloud, check local PRODUCTS as absolute last resort
+      const local=(typeof PRODUCTS!=="undefined")?PRODUCTS.find(x=>String(x.id)===String(pid)):null;
+      if(local){
+        P={...local};
+        render();
+      }else{
+        showNotFound();
+      }
     }
   }catch(e){
     console.warn("Cloud load failed",e);
+    // If cloud fails completely, the 2.5s timeout in INIT will handle the fallback
   }
 }
 
