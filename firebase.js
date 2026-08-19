@@ -26,7 +26,7 @@ import {
    ========================================================= */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",
+  apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXIh3teGuiE8y8o",
   authDomain: "velalight.firebaseapp.com",
   projectId: "velalight",
   storageBucket: "velalight.firebasestorage.app",
@@ -37,12 +37,12 @@ const firebaseConfig = {
 
 
 /* =========================================================
-   Initialize Firebase
+   Firebase Initialization
    ========================================================= */
 
-let app;
-let db;
-let auth;
+let app = null;
+let db = null;
+let auth = null;
 
 try {
 
@@ -54,59 +54,78 @@ try {
 
 
   /* =======================================================
-     Firebase Interface
+     Firebase Database Interface
      ======================================================= */
 
-  window.FB = {
+  const FirebaseDB = {
+
+    /* -------------------------------------------------------
+       Direct Firebase instances
+       ------------------------------------------------------- */
 
     db,
-
     auth,
 
 
-    /* =========================
-       FIRESTORE - LIST
-       ========================= */
+    /* =====================================================
+       FIRESTORE - LIST COLLECTION
+       ===================================================== */
 
     list: async (collectionName) => {
+
+      if (!collectionName) {
+        throw new Error("Collection name is required.");
+      }
 
       const snapshot = await getDocs(
         collection(db, collectionName)
       );
 
-      return snapshot.docs.map((d) => ({
-        id: d.id,
-        ...d.data()
+      return snapshot.docs.map((item) => ({
+        id: item.id,
+        ...item.data()
       }));
-
     },
 
 
-    /* =========================
-       FIRESTORE - SINGLE DOCUMENT
-       ========================= */
+    /* =====================================================
+       FIRESTORE - GET DOCUMENT
+       ===================================================== */
 
     get: async (collectionName, id) => {
+
+      if (!collectionName || id === undefined || id === null) {
+        throw new Error("Collection name and document ID are required.");
+      }
 
       const snapshot = await getDoc(
         doc(db, collectionName, String(id))
       );
 
-      if(!snapshot.exists()) return null;
+      if (!snapshot.exists()) {
+        return null;
+      }
 
       return {
         id: snapshot.id,
         ...snapshot.data()
       };
-
     },
 
 
-    /* =========================
-       FIRESTORE - REALTIME
-       ========================= */
+    /* =====================================================
+       FIRESTORE - REALTIME WATCH
+       ===================================================== */
 
     watch: (collectionName, callback, onError) => {
+
+      if (!collectionName) {
+        throw new Error("Collection name is required.");
+      }
+
+      if (typeof callback !== "function") {
+        throw new Error("Watch callback must be a function.");
+      }
 
       return onSnapshot(
 
@@ -114,147 +133,188 @@ try {
 
         (snapshot) => {
 
-          const data = snapshot.docs.map((d) => ({
-            id: d.id,
-            ...d.data()
+          const data = snapshot.docs.map((item) => ({
+            id: item.id,
+            ...item.data()
           }));
 
           callback(data);
-
         },
 
         (error) => {
 
           console.error(
-            "Firebase realtime error [" +
-            collectionName +
-            "]:",
+            `Firebase realtime error [${collectionName}]:`,
             error
           );
 
           if (typeof onError === "function") {
             onError(error);
           }
-
         }
 
       );
-
     },
 
 
-    /* =========================
-       FIRESTORE - ADD
-       ========================= */
+    /* =====================================================
+       FIRESTORE - ADD DOCUMENT
+       ===================================================== */
 
-    add: (collectionName, data) => {
+    add: async (collectionName, data) => {
 
-      return addDoc(
+      if (!collectionName) {
+        throw new Error("Collection name is required.");
+      }
+
+      if (!data || typeof data !== "object") {
+        throw new Error("Document data must be an object.");
+      }
+
+      return await addDoc(
         collection(db, collectionName),
         data
       );
-
     },
 
 
-    /* =========================
-       FIRESTORE - SET
-       ========================= */
+    /* =====================================================
+       FIRESTORE - SET DOCUMENT
+       ===================================================== */
 
-    set: (collectionName, id, data) => {
+    set: async (collectionName, id, data) => {
 
-      return setDoc(
-        doc(db, collectionName, id),
+      if (!collectionName || id === undefined || id === null) {
+        throw new Error("Collection name and document ID are required.");
+      }
+
+      if (!data || typeof data !== "object") {
+        throw new Error("Document data must be an object.");
+      }
+
+      return await setDoc(
+        doc(db, collectionName, String(id)),
         data,
-        { merge: true }
+        {
+          merge: true
+        }
       );
-
     },
 
 
-    /* =========================
-       FIRESTORE - UPDATE
-       ========================= */
+    /* =====================================================
+       FIRESTORE - UPDATE DOCUMENT
+       ===================================================== */
 
-    update: (collectionName, id, data) => {
+    update: async (collectionName, id, data) => {
 
-      return updateDoc(
-        doc(db, collectionName, id),
+      if (!collectionName || id === undefined || id === null) {
+        throw new Error("Collection name and document ID are required.");
+      }
+
+      if (!data || typeof data !== "object") {
+        throw new Error("Document data must be an object.");
+      }
+
+      return await updateDoc(
+        doc(db, collectionName, String(id)),
         data
       );
-
     },
 
 
-    /* =========================
-       FIRESTORE - DELETE
-       ========================= */
+    /* =====================================================
+       FIRESTORE - DELETE DOCUMENT
+       ===================================================== */
 
-    remove: (collectionName, id) => {
+    remove: async (collectionName, id) => {
 
-      return deleteDoc(
-        doc(db, collectionName, id)
+      if (!collectionName || id === undefined || id === null) {
+        throw new Error("Collection name and document ID are required.");
+      }
+
+      return await deleteDoc(
+        doc(db, collectionName, String(id))
       );
-
     },
 
 
-    /* =========================
+    /* =====================================================
        AUTH - LOGIN
-       ========================= */
+       ===================================================== */
 
-    admin: (email, password) => {
+    admin: async (email, password) => {
 
-      return signInWithEmailAndPassword(
+      if (!email || !password) {
+        throw new Error("Email and password are required.");
+      }
+
+      return await signInWithEmailAndPassword(
         auth,
-        email,
+        String(email).trim(),
         password
       );
-
     },
 
 
-    /* =========================
+    /* =====================================================
        AUTH - CURRENT USER
-       ========================= */
+       ===================================================== */
 
     authUser: () => {
 
-      return auth.currentUser;
-
+      return auth.currentUser || null;
     },
 
 
-    /* =========================
-       AUTH - STATE
-       ========================= */
+    /* =====================================================
+       AUTH - STATE LISTENER
+       ===================================================== */
 
     onAuthStateChanged: (callback) => {
+
+      if (typeof callback !== "function") {
+        throw new Error("Auth callback must be a function.");
+      }
 
       return onAuthStateChanged(
         auth,
         callback
       );
-
     },
 
 
-    /* =========================
+    /* =====================================================
        AUTH - LOGOUT
-       ========================= */
+       ===================================================== */
 
-    logout: () => {
+    logout: async () => {
 
-      return signOut(auth);
-
+      return await signOut(auth);
     }
 
   };
 
 
-  /* =======================================================
+  /* =========================================================
+     IMPORTANT COMPATIBILITY LAYER
+     
+     Your other VelaLight files use BOTH:
+     
+       window.FB
+       DB
+     
+     So we expose the same Firebase interface under both.
+     ========================================================= */
+
+  window.FB = FirebaseDB;
+
+  window.DB = FirebaseDB;
+
+
+  /* =========================================================
      AUTH STATE MONITOR
-     ======================================================= */
+     ========================================================= */
 
   onAuthStateChanged(auth, (user) => {
 
@@ -274,13 +334,11 @@ try {
   });
 
 
-  /* =======================================================
+  /* =========================================================
      FIREBASE READY
-     ======================================================= */
+     ========================================================= */
 
-  console.log(
-    "✅ Firebase connected successfully"
-  );
+  console.log("✅ Firebase connected successfully");
 
   window.dispatchEvent(
     new Event("fb-ready")
