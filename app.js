@@ -455,7 +455,7 @@ function renderProducts(){
       
       article.innerHTML = `
         <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
-          <img src="${imgSrc}" alt="${pname(p)}" loading="${loadingAttr}" decoding="async" fetchpriority="${fetchPriority}" width="400" height="400" onload="this.classList.add('loaded')" onerror="this.onerror=null;this.src='${placeholderSvg}'">
+          <img src="${imgSrc}" alt="${pname(p)}" loading="${loadingAttr}" decoding="async" fetchpriority="${fetchPriority}" width="400" height="400" onload="this.classList.add('loaded')" onerror="window.handleImageError(this, '${p.id}')">
           ${badge?`<span class="p-badge">${badge}</span>`:""}
           ${stockBadg}
           <span class="p-quick">${t("view_details")}</span>
@@ -711,7 +711,7 @@ function renderCart(){
     item.className = 'citem';
     item.innerHTML = `
       <div class="citem-media">
-        <img src="${it.img||''}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy" width="62" height="62" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 62 62\\'><rect fill=\\'%23f5efe5\\' width=\\'62\\' height=\\'62\\'/></svg>'">
+        <img src="${it.img||''}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy" width="62" height="62" onerror="window.handleImageError(this, '${it.id}')">
       </div>
       <div class="citem-info">
         <h5>${pname({name:it.name,nameEn:it.nameEn})}</h5>
@@ -1283,7 +1283,7 @@ function performSearch(q){
   
   w.innerHTML=res.map(p=>`
     <div class="sr-item" data-id="${p.id}">
-      <img src="${imgOf(p)}" alt="" loading="lazy" width="50" height="50" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 50 50\\'><rect fill=\\'%23f5efe5\\' width=\\'50\\' height=\\'50\\'/></svg>'">
+      <img src="${imgOf(p)}" alt="" loading="lazy" width="50" height="50" onerror="window.handleImageError(this, '${p.id}')">
       <div><b>${pname(p)}</b><br><small>${money(p.price)}</small></div>
     </div>
   `).join("");
