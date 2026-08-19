@@ -110,8 +110,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 </style>
 </head>
   
-</head>
-
 <body>
 
 <!-- ================= LOGIN ================= -->
@@ -186,7 +184,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
 </div>
 
-
 <!-- ================= STATS ================= -->
 
 <div class="adm-head" id="statsRow">
@@ -218,7 +215,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   </div>
 
 </div>
-
 
 <!-- ================= TABS ================= -->
 
@@ -267,7 +263,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   </button>
 
 </div>
-
 
 <!-- ================= ORDERS ================= -->
 
@@ -323,7 +318,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
 </div>
 
-
 <!-- ================= PRODUCTS ================= -->
 
 <div id="tab-products" class="hidden">
@@ -371,7 +365,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
     يمكنك إضافة عدد غير محدود عمليًا من المنتجات؛ المنتجات الجديدة تُحفظ في Firebase وتظهر للموقع من قاعدة البيانات.
   </p>
 
-
   <div
     class="pform hidden"
     id="productForm"
@@ -383,7 +376,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
     >
       منتج جديد
     </h3>
-
 
     <div class="g">
 
@@ -398,7 +390,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </div>
 
     </div>
-
 
     <div class="g">
 
@@ -419,7 +410,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </div>
 
     </div>
-
 
     <!-- ═══ ✨ حقل المخزون (جديد) ═══ -->
     <div class="g">
@@ -473,7 +463,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
     </div>
 
-
     <div class="g">
 
       <div>
@@ -499,7 +488,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
     </div>
 
-
     <!-- ═══ ✨ حقل الصور الإضافية (Gallery) ═══ -->
     <div class="g" style="grid-column:1/-1">
       <div style="grid-column:1/-1">
@@ -509,7 +497,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         <div class="gallery-preview" id="galleryPreview"></div>
       </div>
     </div>
-
 
     <div class="g">
 
@@ -524,12 +511,10 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
       </div>
 
-
       <div>
       </div>
 
     </div>
-
 
     <label>الوصف العربي</label>
 
@@ -538,7 +523,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       rows="3"
     ></textarea>
 
-
     <label>الوصف الإنجليزي</label>
 
     <textarea
@@ -546,14 +530,12 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       rows="2"
     ></textarea>
 
-
     <label>العطور المتاحة (افصل بفاصلة)</label>
 
     <input
       id="pf_scents"
       placeholder="عود, فانيليا, مسك أبيض"
     >
-
 
     <div
       style="display:flex;gap:.6rem;margin-top:1rem"
@@ -579,7 +561,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
   </div>
 
-
   <!-- ═══ ✨ جدول المنتجات (مع عمود الصور الجديد) ═══ -->
   <table class="adm">
 
@@ -603,7 +584,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   </table>
 
 </div>
-
 
 <!-- ═══════════════════════════════════════════════════════════
      ✨ جديد: COUPONS TAB (الكوبونات)
@@ -704,7 +684,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
 </div>
 
-
 <!-- ================= REVIEWS ================= -->
 
 <div id="tab-reviews" class="hidden">
@@ -752,11 +731,9 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
 "use strict";
 
-
 let loggedIn = false;
 let ALL_USERS = []; /* ═══ ✨ جديد: تخزين العملاء ═══ */
 let ALL_COUPONS = []; /* ═══ ✨ جديد: تخزين الكوبونات ═══ */
-
 
 /* =========================================================
    DOM READY
@@ -772,7 +749,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-
 /* =========================================================
    FIREBASE READY
 ========================================================= */
@@ -784,7 +760,6 @@ window.addEventListener("fb-ready", () => {
   checkAuth();
 
 });
-
 
 /* =========================================================
    FIREBASE ERROR
@@ -807,7 +782,6 @@ window.addEventListener("fb-error", (event) => {
   }
 
 });
-
 
 /* =========================================================
    AUTH STATE
@@ -833,7 +807,6 @@ window.addEventListener("fb-auth-state", (event) => {
   }
 
 });
-
 
 /* =========================================================
    CHECK AUTH
@@ -862,7 +835,6 @@ function checkAuth(){
 
 }
 
-
 /* =========================================================
    SHOW LOGIN
 ========================================================= */
@@ -890,7 +862,6 @@ function showLogin(){
   }
 
 }
-
 
 /* =========================================================
    SHOW ADMIN
@@ -929,7 +900,6 @@ function showAdmin(){
     .getElementById("adminScreen")
     .classList.remove("hidden");
 
-
   loadOrders();
 
   loadProducts();
@@ -941,7 +911,6 @@ function showAdmin(){
   loadCoupons(); /* ═══ ✨ جديد ═══ */
 
 }
-
 
 /* =========================================================
    LOGIN
@@ -955,7 +924,6 @@ document.addEventListener("click", async (event) => {
 
   }
 
-
   const emailInput =
     document.getElementById("loginEmail");
 
@@ -968,13 +936,11 @@ document.addEventListener("click", async (event) => {
   const loginErr =
     document.getElementById("loginErr");
 
-
   const email =
     emailInput.value.trim();
 
   const pass =
     passInput.value;
-
 
   if(!email || !pass){
 
@@ -984,7 +950,6 @@ document.addEventListener("click", async (event) => {
     return;
 
   }
-
 
   if(
     !window.FB ||
@@ -998,14 +963,12 @@ document.addEventListener("click", async (event) => {
 
   }
 
-
   loginErr.textContent = "";
 
   loginBtn.disabled = true;
 
   loginBtn.textContent =
     "⏳ جاري الدخول...";
-
 
   try{
 
@@ -1015,17 +978,14 @@ document.addEventListener("click", async (event) => {
         pass
       );
 
-
     console.log(
       "LOGIN SUCCESS:",
       result.user.email
     );
 
-
     loggedIn = false;
 
     showAdmin();
-
 
   }catch(error){
 
@@ -1034,10 +994,8 @@ document.addEventListener("click", async (event) => {
       error
     );
 
-
     let message =
       "❌ حدث خطأ أثناء تسجيل الدخول";
-
 
     switch(error.code){
 
@@ -1048,14 +1006,12 @@ document.addEventListener("click", async (event) => {
 
         break;
 
-
       case "auth/invalid-email":
 
         message =
           "❌ صيغة الإيميل غير صحيحة";
 
         break;
-
 
       case "auth/user-disabled":
 
@@ -1064,14 +1020,12 @@ document.addEventListener("click", async (event) => {
 
         break;
 
-
       case "auth/user-not-found":
 
         message =
           "❌ هذا الإيميل غير موجود في Firebase";
 
         break;
-
 
       case "auth/wrong-password":
 
@@ -1080,14 +1034,12 @@ document.addEventListener("click", async (event) => {
 
         break;
 
-
       case "auth/too-many-requests":
 
         message =
           "⏳ تم إجراء محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى";
 
         break;
-
 
       case "auth/network-request-failed":
 
@@ -1096,14 +1048,12 @@ document.addEventListener("click", async (event) => {
 
         break;
 
-
       case "auth/operation-not-allowed":
 
         message =
           "⚠️ تسجيل الدخول بالإيميل غير مفعّل في Firebase";
 
         break;
-
 
       case "auth/api-key-not-valid":
 
@@ -1112,7 +1062,6 @@ document.addEventListener("click", async (event) => {
 
         break;
 
-
       case "auth/invalid-api-key":
 
         message =
@@ -1120,14 +1069,12 @@ document.addEventListener("click", async (event) => {
 
         break;
 
-
       case "auth/app-deleted":
 
         message =
           "⚠️ اتصال Firebase غير صحيح";
 
         break;
-
 
       default:
 
@@ -1141,9 +1088,7 @@ document.addEventListener("click", async (event) => {
 
     }
 
-
     loginErr.textContent = message;
-
 
   }finally{
 
@@ -1155,7 +1100,6 @@ document.addEventListener("click", async (event) => {
   }
 
 });
-
 
 /* =========================================================
    ENTER KEY LOGIN
@@ -1179,7 +1123,6 @@ document.addEventListener("keydown", (event) => {
 
 });
 
-
 /* =========================================================
    LOGOUT
 ========================================================= */
@@ -1191,7 +1134,6 @@ document.addEventListener("click", async (event) => {
     return;
 
   }
-
 
   try{
 
@@ -1221,13 +1163,11 @@ document.addEventListener("click", async (event) => {
 
   }
 
-
   loggedIn = false;
 
   showLogin();
 
 });
-
 
 /* =========================================================
    TABS (✨ معدّل: دعم users + coupons)
@@ -1251,15 +1191,12 @@ function initTabs(){
 
             });
 
-
           button.classList.add("on");
 
           button.classList.remove("ghost");
 
-
           const tab =
             button.dataset.tab;
-
 
           $("#tab-orders")
             .classList.toggle(
@@ -1267,14 +1204,12 @@ function initTabs(){
               tab !== "orders"
             );
 
-
           /* ═══ ✨ جديد ═══ */
           $("#tab-users")
             .classList.toggle(
               "hidden",
               tab !== "users"
             );
-
 
           $("#tab-products")
             .classList.toggle(
@@ -1289,7 +1224,6 @@ function initTabs(){
               tab !== "coupons"
             );
 
-
           $("#tab-reviews")
             .classList.toggle(
               "hidden",
@@ -1302,7 +1236,6 @@ function initTabs(){
     });
 
 }
-
 
 /* =========================================================
    ORDERS
@@ -1319,7 +1252,6 @@ function loadOrders(){
 
   }
 
-
   window.FB.watch(
     "orders",
     orders => {
@@ -1330,10 +1262,8 @@ function loadOrders(){
           (a.createdAt || 0)
       );
 
-
       $("#stOrders").textContent =
         orders.length;
-
 
 /* ✨ الإصلاح: احسب الإيرادات من الطلبات غير الملغية فقط */
 const revenue =
@@ -1349,7 +1279,6 @@ const revenue =
       $("#stRevenue").textContent =
         money(revenue);
 
-
       $("#ordersBody").innerHTML =
         orders.map(order => {
 
@@ -1359,7 +1288,6 @@ const revenue =
                   order.createdAt
                 ).toLocaleDateString("ar-EG")
               : "-";
-
 
           const statusOptions =
             STATUS
@@ -1372,7 +1300,6 @@ const revenue =
                   }>${status}</option>`
               )
               .join("");
-
 
           return `
             <tr>
@@ -1412,7 +1339,6 @@ const revenue =
 
         })
         .join("");
-
 
       $$("#ordersBody select")
         .forEach(select => {
@@ -1467,7 +1393,6 @@ const revenue =
   );
 
 }
-
 
 /* ═══════════════════════════════════════════════════════════
    ✨ جديد: USERS - عرض العملاء المسجلين
@@ -1579,7 +1504,6 @@ document.addEventListener("click", (e) => {
   URL.revokeObjectURL(url);
   toast("✅ تم تصدير العملاء بنجاح (" + ALL_USERS.length + " عميل)");
 });
-
 
 /* =========================================================
    PRODUCTS
@@ -1754,7 +1678,6 @@ function renderAdminProducts(){
 
 }
 
-
 function loadProducts(){
 
   if(
@@ -1826,13 +1749,11 @@ function loadProducts(){
 
 }
 
-
 /* =========================================================
    PRODUCT ACTIONS
 ========================================================= */
 
 function bindProductActions(list){
-
 
   $$("#productsBody [data-edit]")
     .forEach(button => {
@@ -1848,7 +1769,6 @@ function bindProductActions(list){
                 button.dataset.edit
             );
 
-
           if(product){
 
             openProductForm(product);
@@ -1859,7 +1779,6 @@ function bindProductActions(list){
       );
 
     });
-
 
   $$("#productsBody [data-toggle]")
     .forEach(button => {
@@ -1876,7 +1795,6 @@ function bindProductActions(list){
 
           const newActive =
             button.dataset.active !== "true";
-
 
           if(fid){
 
@@ -1948,7 +1866,6 @@ function bindProductActions(list){
 
     });
 
-
   $$("#productsBody [data-del]")
     .forEach(button => {
 
@@ -1966,13 +1883,11 @@ function bindProductActions(list){
 
           }
 
-
           const fid =
             button.dataset.fid;
 
           const id =
             button.dataset.del;
-
 
           if(fid){
 
@@ -2042,7 +1957,6 @@ function bindProductActions(list){
 
 }
 
-
 /* =========================================================
    PRODUCT FORM (✨ مع الصور المتعددة)
 ========================================================= */
@@ -2064,13 +1978,11 @@ function initProductForm(){
 
   });
 
-
   $("#addProductBtn")
     ?.addEventListener(
       "click",
       () => openProductForm(null)
     );
-
 
   $("#cancelProductBtn")
     ?.addEventListener(
@@ -2084,7 +1996,6 @@ function initProductForm(){
       }
     );
 
-
   /* ═══ ✨ Gallery Preview — يعرض الصور اللي كتبتها ═══ */
   const updatePreview = () => {
     const mainImg = $("#pf_img").value.trim();
@@ -2095,13 +2006,12 @@ function initProductForm(){
     if(!all.length){ preview.innerHTML = ""; return; }
     preview.innerHTML = all.map(u => {
       const src = (typeof CDN === "function") ? CDN(u) : u;
-      return `<img src="${src}" alt="">`;
+      return `<img src="${src}" alt="" onerror="this.style.display='none'">`;
     }).join("");
   };
   
   $("#pf_img")?.addEventListener("input", updatePreview);
   $("#pf_images")?.addEventListener("input", updatePreview);
-
 
   $("#saveProductBtn")
     ?.addEventListener(
@@ -2113,18 +2023,15 @@ function initProductForm(){
             .value
             .trim();
 
-
         const nameEn =
           $("#pf_nameEn")
             .value
             .trim();
 
-
         const price =
           Number(
             $("#pf_price").value || 0
           );
-
 
         if(
           !name ||
@@ -2140,12 +2047,10 @@ function initProductForm(){
 
         }
 
-
         const existingId =
           $("#productForm")
             .dataset
             .editId || "";
-
 
         const scents =
           $("#pf_scents")
@@ -2155,7 +2060,6 @@ function initProductForm(){
               scent => scent.trim()
             )
             .filter(Boolean);
-
 
         /* ═══ ✨ الإصلاح: المخزون كخاصية منفصلة ═══ */
         const stockVal = $("#pf_stock").value;
@@ -2215,12 +2119,10 @@ function initProductForm(){
 
         };
 
-
         if(existingId){
 
           data.id_ =
             existingId;
-
 
           window.FB
             .set(
@@ -2263,18 +2165,14 @@ function initProductForm(){
               .toString(16)
               .slice(2,5);
 
-
           data.id_ =
             newId;
-
 
           data.createdAt =
             Date.now();
 
-
           data.sold =
             0;
-
 
           window.FB
             .set(
@@ -2315,9 +2213,8 @@ function initProductForm(){
 
 }
 
-
 /* =========================================================
-   OPEN PRODUCT FORM (✨ مع تعبئة الصور الإضافية)
+   OPEN PRODUCT FORM (✨ مع تعبئة الصور الإضافية بدقة)
 ========================================================= */
 
 function openProductForm(product){
@@ -2325,35 +2222,28 @@ function openProductForm(product){
   const form =
     $("#productForm");
 
-
   form.classList.remove(
     "hidden"
   );
-
 
   if(product){
 
     form.dataset.editId =
       product.id;
 
-
     $("#formTitle")
       .textContent =
       "تعديل: " +
       (product.name || "");
 
-
     $("#pf_name").value =
       product.name || "";
-
 
     $("#pf_nameEn").value =
       product.nameEn || "";
 
-
     $("#pf_price").value =
       product.price || "";
-
 
     $("#pf_old").value =
       product.old || "";
@@ -2362,56 +2252,50 @@ function openProductForm(product){
     $("#pf_stock").value =
       (product.stock===null||product.stock===undefined)?"":product.stock;
 
-
     $("#pf_cat").value =
       product.cat || "wood";
-
 
     $("#pf_img").value =
       product.img || "";
 
-    /* ═══ ✨ تعبئة الصور الإضافية من product.imgs أو product.images ═══ */
-    $("#pf_images").value = 
-      Array.isArray(product.imgs)
-        ? product.imgs.filter(x => x !== product.img).join(", ")
-        : (Array.isArray(product.images)
-            ? product.images.filter(x => x !== product.img).join(", ")
-            : "");
-
+    /* ═══ ✨ تعبئة الصور الإضافية من product.imgs أو product.images (معالجة آمنة) ═══ */
+    let extraImgsArr = [];
+    if (Array.isArray(product.imgs)) {
+        extraImgsArr = product.imgs.filter(x => x && String(x).trim() !== String(product.img || "").trim());
+    } else if (Array.isArray(product.images)) {
+        extraImgsArr = product.images.filter(x => x && String(x).trim() !== String(product.img || "").trim());
+    }
+    $("#pf_images").value = extraImgsArr.join(", ");
 
     $("#pf_badge").value =
       product.badge || "";
 
-
     $("#pf_hours").value =
       product.hours || "";
-
 
     $("#pf_desc").value =
       product.desc || "";
 
-
     $("#pf_descEn").value =
       product.descEn || "";
-
 
     $("#pf_scents").value =
       (product.scents || [])
         .join(", ");
 
     /* Trigger preview للصور */
-    $("#pf_img").dispatchEvent(new Event("input"));
+    if (typeof updatePreview === "function") {
+        updatePreview();
+    }
 
   }else{
 
     form.dataset.editId =
       "";
 
-
     $("#formTitle")
       .textContent =
       "منتج جديد";
-
 
     [
       "pf_name",
@@ -2437,19 +2321,16 @@ function openProductForm(product){
     const preview = $("#galleryPreview");
     if(preview) preview.innerHTML = "";
 
-
     $("#pf_cat").value =
       "wood";
 
   }
-
 
   form.scrollIntoView({
     behavior:"smooth"
   });
 
 }
-
 
 /* ═══════════════════════════════════════════════════════════
    ✨ جديد: COUPONS - إدارة الكوبونات
@@ -2688,7 +2569,6 @@ function saveCoupon(){
   }
 }
 
-
 /* =========================================================
    REVIEWS
 ========================================================= */
@@ -2704,14 +2584,12 @@ function loadReviews(){
 
   }
 
-
   window.FB
     .list("reviews")
     .then(reviews => {
 
       $("#stReviews").textContent =
         reviews.length;
-
 
       $("#reviewsBody").innerHTML =
         reviews
@@ -2776,7 +2654,6 @@ function loadReviews(){
                     `
                 }
 
-
                 <button
                   class="btn sm danger"
                   data-delrev="${review.id}"
@@ -2791,7 +2668,6 @@ function loadReviews(){
 
           `)
           .join("");
-
 
       $$("#reviewsBody [data-approve]")
         .forEach(button => {
@@ -2832,7 +2708,6 @@ function loadReviews(){
 
         });
 
-
       $$("#reviewsBody [data-delrev]")
         .forEach(button => {
 
@@ -2849,7 +2724,6 @@ function loadReviews(){
                 return;
 
               }
-
 
               window.FB
                 .remove(
@@ -2895,7 +2769,6 @@ function loadReviews(){
     });
 
 }
-
 
 })();
 
