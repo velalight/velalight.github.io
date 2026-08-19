@@ -11,7 +11,7 @@ service cloud.firestore {
       return signedIn()
         && (
           request.auth.token.email == "wagdyme@aol.com"
-          || request.auth.token.email == "itswag@gmail.com"
+          || request.auth.token.email == "itswagdy@gmail.com"
         );
     }
 
@@ -21,51 +21,7 @@ service cloud.firestore {
     }
 
     match /orders/{orderId} {
-
-      // Guest checkout is allowed,
-      // but the submitted order must have the expected structure.
-      allow create: if
-        request.resource.data.keys().hasAll([
-          "orderId",
-          "customer",
-          "products",
-          "total",
-          "productsTotal",
-          "discount",
-          "status",
-          "createdAt"
-        ])
-        && request.resource.data.orderId is string
-        && request.resource.data.orderId.size() >= 5
-        && request.resource.data.orderId.size() <= 30
-        && request.resource.data.customer is map
-        && request.resource.data.customer.keys().hasAll([
-          "name",
-          "phone",
-          "address"
-        ])
-        && request.resource.data.customer.name is string
-        && request.resource.data.customer.name.size() >= 2
-        && request.resource.data.customer.name.size() <= 100
-        && request.resource.data.customer.phone is string
-        && request.resource.data.customer.phone.size() >= 7
-        && request.resource.data.customer.phone.size() <= 30
-        && request.resource.data.customer.address is string
-        && request.resource.data.customer.address.size() >= 5
-        && request.resource.data.customer.address.size() <= 500
-        && request.resource.data.products is list
-        && request.resource.data.products.size() >= 1
-        && request.resource.data.products.size() <= 50
-        && request.resource.data.total is number
-        && request.resource.data.total >= 0
-        && request.resource.data.productsTotal is number
-        && request.resource.data.productsTotal >= 0
-        && request.resource.data.discount is number
-        && request.resource.data.discount >= 0
-        && request.resource.data.status is string
-        && request.resource.data.status.size() <= 50
-        && request.resource.data.createdAt is number;
-
+      allow create: if true;
       allow read, update, delete: if admin();
     }
 
