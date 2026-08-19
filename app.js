@@ -311,10 +311,11 @@ function applyI18n(){
       // لا تفعل شيء - اترك المحتوى اليدوي
     } else {
       // إذا كان فارغاً أو به عنصرين فقط، استخدم الترجمة وكررها
-      const txt=t("mq");
+      const txt=t("mq") || "توصيل سريع لكل محافظات مصر";
       mq.innerHTML = Array(8).fill(`<span>${txt}</span>`).join("");
     }
   }
+} // <--- هنا كان ينقص القوس، وتم إضافته الآن!
 
 function initMarquee(){}
 
