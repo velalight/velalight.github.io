@@ -1160,40 +1160,59 @@ ${itemsSummary}
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ ACCOUNT — Smart View (Logged In vs Guest)
+   ✨ ACCOUNT — Smart View (Logged In vs Guest) - FIXED & FAST
    ═══════════════════════════════════════════════════════════ */
 function initAccount() {
-  // ملء قائمة المحافظات لنموذج الضيوف فقط
   if (typeof fillCitySelect === "function") {
     fillCitySelect($("#accCity"));
   }
 
-  $("#accBtn")?.addEventListener("click", async () => {
-    // التحقق مما إذا كان المستخدم مسجلاً دخول عبر Firebase
-    const isLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
+  $("#accBtn")?.addEventListener("click", () => {
+    const loggedInView = $("#loggedInView");
+    const guestView = $("#guestView");
+    
+    // 1. فحص فوري: هل يوجد مستخدم مسجل في Firebase؟
+    const isFirebaseLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
+    
+    // 2. فحص بديل: هل يوجد بيانات محفوظة محلياً في المتصفح؟
+    const localUser = getSavedUser();
+    const hasLocalData = localUser && localUser.name;
 
-    if (isLogged) {
-      // حالة مسجل الدخول: اخفاء نموذج الضيف، وإظهار بيانات الحساب
-      await loadUserData(true);
-      const loggedInView = $("#loggedInView");
-      const guestView = $("#guestView");
+    console.log("🔍 فحص الحساب -> Firebase:", !!isFirebaseLogged, "| بيانات محلية:", !!hasLocalData);
+
+    if (isFirebaseLogged) {
+      // ✅ الحالة الأولى: مسجل دخول بالإيميل (أظهر بياناته فوراً)
       if (loggedInView) loggedInView.classList.remove("hidden");
       if (guestView) guestView.classList.add("hidden");
-    } else {
-      // حالة الضيف: التحقق إذا كان هناك بيانات محفوظة محلياً مسبقاً
-      const u = getSavedUser();
-      if (u.name) { $("#accName").value = u.name; }
-      if (u.phone) { $("#accPhone").value = u.phone; }
-      if (u.city) { $("#accCity").value = u.city; }
-      if (u.addr) { $("#accAddr").value = u.addr; }
-      if (u.orders) { $("#ordCount").textContent = u.orders; }
       
-      const loggedInView = $("#loggedInView");
-      const guestView = $("#guestView");
+      // جلب البيانات التفصيلية في الخلفية وتحديث الشاشة
+      if (typeof VL_GetCurrentUser === "function") {
+        VL_GetCurrentUser().then(userData => {
+          if (userData) {
+            const elName = $("#displayName"); if(elName) elName.textContent = userData.name || "عميلنا العزيز";
+            const elEmail = $("#displayEmail"); if(elEmail) elEmail.textContent = userData.email || "غير متوفر";
+            const elPhone = $("#displayPhone"); if(elPhone) elPhone.textContent = userData.phone || "غير متوفر";
+            const elOrders = $("#ordCountLoggedIn"); if(elOrders) elOrders.textContent = userData.ordersCount || 0;
+          }
+        }).catch(err => console.warn("⚠️ خطأ في جلب بيانات المستخدم:", err));
+      }
+    } else if (hasLocalData) {
+      // ✅ الحالة الثانية: زائر حفظ بياناته سابقاً (أظهر نموذج التعبئة)
+      $("#accName").value = localUser.name || "";
+      $("#accPhone").value = localUser.phone || "";
+      $("#accCity").value = localUser.city || "";
+      $("#accAddr").value = localUser.addr || "";
+      $("#ordCount").textContent = localUser.orders || 0;
+      
+      if (loggedInView) loggedInView.classList.add("hidden");
+      if (guestView) guestView.classList.remove("hidden");
+    } else {
+      // ✅ الحالة الثالثة: زائر جديد تماماً (أظهر نموذج التعبئة فارغاً)
       if (loggedInView) loggedInView.classList.add("hidden");
       if (guestView) guestView.classList.remove("hidden");
     }
     
+    // فتح النافذة
     openDrawer("accOv");
   });
 
@@ -1202,7 +1221,7 @@ function initAccount() {
     if (e.target.id === "accOv") { closeModal("accOv"); }
   });
 
-  // زر الحفظ يعمل فقط للضيوف
+  // زر الحفظ (يعمل فقط للضيوف)
   $("#saveAccBtn")?.addEventListener("click", () => {
     const name = $("#accName").value.trim();
     const phone = $("#accPhone").value.trim();
@@ -1219,9 +1238,7 @@ function initAccount() {
       console.warn("⚠️ Failed to save account:", e);
     }
     
-    // تحديث بيانات السلة إذا كانت الدالة موجودة
     if (typeof fillCartForm === "function") fillCartForm();
-    
     toast("✅ تم حفظ البيانات بنجاح");
     closeModal("accOv");
   });
@@ -1238,7 +1255,6 @@ function initAccount() {
     }
     toast("✅ تم تسجيل الخروج بنجاح");
     closeModal("accOv");
-    // إعادة تحميل الصفحة لضمان تحديث حالة الهيدر والأيقونات
     setTimeout(() => window.location.reload(), 500); 
   });
 }
