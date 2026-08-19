@@ -1160,59 +1160,43 @@ ${itemsSummary}
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ ACCOUNT — Smart View (Logged In vs Guest) - FIXED & FAST
+   ✨ ACCOUNT — Simplified Guest View + Login Button
    ═══════════════════════════════════════════════════════════ */
 function initAccount() {
-  if (typeof fillCitySelect === "function") {
-    fillCitySelect($("#accCity"));
-  }
-
   $("#accBtn")?.addEventListener("click", () => {
     const loggedInView = $("#loggedInView");
     const guestView = $("#guestView");
     
-    // 1. فحص فوري: هل يوجد مستخدم مسجل في Firebase؟
     const isFirebaseLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
-    
-    // 2. فحص بديل: هل يوجد بيانات محفوظة محلياً في المتصفح؟
     const localUser = getSavedUser();
     const hasLocalData = localUser && localUser.name;
 
-    console.log("🔍 فحص الحساب -> Firebase:", !!isFirebaseLogged, "| بيانات محلية:", !!hasLocalData);
-
     if (isFirebaseLogged) {
-      // ✅ الحالة الأولى: مسجل دخول بالإيميل (أظهر بياناته فوراً)
       if (loggedInView) loggedInView.classList.remove("hidden");
       if (guestView) guestView.classList.add("hidden");
       
-      // جلب البيانات التفصيلية في الخلفية وتحديث الشاشة
       if (typeof VL_GetCurrentUser === "function") {
         VL_GetCurrentUser().then(userData => {
           if (userData) {
-            const elName = $("#displayName"); if(elName) elName.textContent = userData.name || "عميلنا العزيز";
+            const elName = $("#displayName"); if(elName) elName.textContent = userData.name || localUser.name || "عميلنا العزيز";
             const elEmail = $("#displayEmail"); if(elEmail) elEmail.textContent = userData.email || "غير متوفر";
-            const elPhone = $("#displayPhone"); if(elPhone) elPhone.textContent = userData.phone || "غير متوفر";
+            const elPhone = $("#displayPhone"); if(elPhone) elPhone.textContent = userData.phone || localUser.phone || "غير متوفر";
             const elOrders = $("#ordCountLoggedIn"); if(elOrders) elOrders.textContent = userData.ordersCount || 0;
           }
         }).catch(err => console.warn("⚠️ خطأ في جلب بيانات المستخدم:", err));
       }
     } else if (hasLocalData) {
-      // ✅ الحالة الثانية: زائر حفظ بياناته سابقاً (أظهر نموذج التعبئة)
       $("#accName").value = localUser.name || "";
       $("#accPhone").value = localUser.phone || "";
-      $("#accCity").value = localUser.city || "";
-      $("#accAddr").value = localUser.addr || "";
       $("#ordCount").textContent = localUser.orders || 0;
       
       if (loggedInView) loggedInView.classList.add("hidden");
       if (guestView) guestView.classList.remove("hidden");
     } else {
-      // ✅ الحالة الثالثة: زائر جديد تماماً (أظهر نموذج التعبئة فارغاً)
       if (loggedInView) loggedInView.classList.add("hidden");
       if (guestView) guestView.classList.remove("hidden");
     }
     
-    // فتح النافذة
     openDrawer("accOv");
   });
 
@@ -1221,19 +1205,17 @@ function initAccount() {
     if (e.target.id === "accOv") { closeModal("accOv"); }
   });
 
-  // زر الحفظ (يعمل فقط للضيوف)
+  // ✨ زر الحفظ: الاسم والموبايل فقط (بدون عنوان)
   $("#saveAccBtn")?.addEventListener("click", () => {
     const name = $("#accName").value.trim();
     const phone = $("#accPhone").value.trim();
-    const city = $("#accCity").value;
-    const addr = $("#accAddr").value.trim();
 
     if (!name) { toast("⚠️ اكتب الاسم."); return; }
     if (!phone) { toast("⚠️ اكتب رقم الموبايل."); return; }
 
     const old = getSavedUser();
     try {
-      localStorage.setItem("vl_user", JSON.stringify({ ...old, name, phone, city, addr, orders: old.orders || 0 }));
+      localStorage.setItem("vl_user", JSON.stringify({ ...old, name, phone, orders: old.orders || 0 }));
     } catch (e) {
       console.warn("⚠️ Failed to save account:", e);
     }
@@ -1241,6 +1223,16 @@ function initAccount() {
     if (typeof fillCartForm === "function") fillCartForm();
     toast("✅ تم حفظ البيانات بنجاح");
     closeModal("accOv");
+  });
+
+  // ✨ زر تسجيل الدخول للضيوف
+  $("#guestLoginBtn")?.addEventListener("click", () => {
+    if (typeof openAuthModal === "function") {
+      closeModal("accOv"); // إغلاق نافذة الضيف
+      openAuthModal();     // فتح نافذة تسجيل الدخول الحقيقية
+    } else {
+      toast("⚠️ يرجى تسجيل الدخول من الصفحة الرئيسية");
+    }
   });
 
   // زر تسجيل الخروج
@@ -1258,7 +1250,7 @@ function initAccount() {
     setTimeout(() => window.location.reload(), 500); 
   });
 }
-
+   
 async function loadUserData(isLoggedIn) {
   if (isLoggedIn && typeof VL_GetCurrentUser === "function") {
     const userData = await VL_GetCurrentUser();
