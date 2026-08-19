@@ -1159,89 +1159,104 @@ ${itemsSummary}
   }, 1500);
 }
 
-function initAccount(){
-  fillCitySelect($("#accCity"));
-  const u=getSavedUser();
-  if(u.name){$("#accName").value=u.name;}
-  if(u.phone){$("#accPhone").value=u.phone;}
-  if(u.city){$("#accCity").value=u.city;}
-  if(u.addr){$("#accAddr").value=u.addr;}
-  if(u.orders){$("#ordCount").textContent=u.orders;}
+/* ═══════════════════════════════════════════════════════════
+   ✨ ACCOUNT — Smart View (Logged In vs Guest)
+   ═══════════════════════════════════════════════════════════ */
+function initAccount() {
+  // ملء قائمة المحافظات لنموذج الضيوف فقط
+  if (typeof fillCitySelect === "function") {
+    fillCitySelect($("#accCity"));
+  }
 
-  $("#accBtn")?.addEventListener("click", async ()=>{
-    if(window.FB && window.FB.auth && window.FB.auth.currentUser){
-      await loadUserData();
-      openDrawer("accOv");
-    }else{
-      if(typeof openAuthModal === "function"){
-        openAuthModal();
-      }else{
-        openDrawer("accOv");
-      }
+  $("#accBtn")?.addEventListener("click", async () => {
+    // التحقق مما إذا كان المستخدم مسجلاً دخول عبر Firebase
+    const isLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
+
+    if (isLogged) {
+      // حالة مسجل الدخول: اخفاء نموذج الضيف، وإظهار بيانات الحساب
+      await loadUserData(true);
+      const loggedInView = $("#loggedInView");
+      const guestView = $("#guestView");
+      if (loggedInView) loggedInView.classList.remove("hidden");
+      if (guestView) guestView.classList.add("hidden");
+    } else {
+      // حالة الضيف: التحقق إذا كان هناك بيانات محفوظة محلياً مسبقاً
+      const u = getSavedUser();
+      if (u.name) { $("#accName").value = u.name; }
+      if (u.phone) { $("#accPhone").value = u.phone; }
+      if (u.city) { $("#accCity").value = u.city; }
+      if (u.addr) { $("#accAddr").value = u.addr; }
+      if (u.orders) { $("#ordCount").textContent = u.orders; }
+      
+      const loggedInView = $("#loggedInView");
+      const guestView = $("#guestView");
+      if (loggedInView) loggedInView.classList.add("hidden");
+      if (guestView) guestView.classList.remove("hidden");
     }
-  });
-  $("#closeAcc")?.addEventListener("click",()=>closeModal("accOv"));
-  $("#accOv")?.addEventListener("click",e=>{
-    if(e.target.id==="accOv"){closeModal("accOv");}
+    
+    openDrawer("accOv");
   });
 
-  $("#saveAccBtn")?.addEventListener("click", async ()=>{
-    const name=$("#accName").value.trim();
-    const phone=$("#accPhone").value.trim();
-    const city=$("#accCity").value;
-    const addr=$("#accAddr").value.trim();
-    if(!name){toast(LANG==="en"?"⚠️ Enter your name.":"⚠️ اكتب الاسم.");return;}
-    if(!phone){toast(LANG==="en"?"⚠️ Enter your phone.":"⚠️ اكتب رقم الموبايل.");return;}
+  $("#closeAcc")?.addEventListener("click", () => closeModal("accOv"));
+  $("#accOv")?.addEventListener("click", e => {
+    if (e.target.id === "accOv") { closeModal("accOv"); }
+  });
 
-    if(window.FB && window.FB.auth && window.FB.auth.currentUser && typeof VL_UpdateProfile === "function"){
-      const result = await VL_UpdateProfile({name, phone, city, address: addr});
-      if(result.success){
-        toast(t("t_saved"));
-        closeModal("accOv");
-        return;
-      }
-    }
+  // زر الحفظ يعمل فقط للضيوف
+  $("#saveAccBtn")?.addEventListener("click", () => {
+    const name = $("#accName").value.trim();
+    const phone = $("#accPhone").value.trim();
+    const city = $("#accCity").value;
+    const addr = $("#accAddr").value.trim();
 
-    const old=getSavedUser();
+    if (!name) { toast("⚠️ اكتب الاسم."); return; }
+    if (!phone) { toast("⚠️ اكتب رقم الموبايل."); return; }
+
+    const old = getSavedUser();
     try {
-      localStorage.setItem("vl_user",JSON.stringify({...old,name,phone,city,addr,orders:old.orders||0}));
-    } catch(e) {
+      localStorage.setItem("vl_user", JSON.stringify({ ...old, name, phone, city, addr, orders: old.orders || 0 }));
+    } catch (e) {
       console.warn("⚠️ Failed to save account:", e);
     }
-    fillCartForm();
-    toast(t("t_saved"));
+    
+    // تحديث بيانات السلة إذا كانت الدالة موجودة
+    if (typeof fillCartForm === "function") fillCartForm();
+    
+    toast("✅ تم حفظ البيانات بنجاح");
     closeModal("accOv");
   });
 
-  $("#logoutBtn")?.addEventListener("click", async ()=>{
-    if(window.FB && window.FB.auth && window.FB.auth.currentUser && typeof VL_Logout === "function"){
+  // زر تسجيل الخروج
+  $("#logoutBtn")?.addEventListener("click", async () => {
+    if (window.FB && window.FB.auth && typeof VL_Logout === "function") {
       await VL_Logout();
     }
     try {
       localStorage.removeItem("vl_user");
-    } catch(e) {
+    } catch (e) {
       console.warn("⚠️ Failed to clear user:", e);
     }
-    $("#accName").value="";
-    $("#accPhone").value="";
-    $("#accAddr").value="";
-    if($("#accCity")){$("#accCity").value="";}
-    $("#ordCount").textContent="0";
-    toast(t("t_saved"));
+    toast("✅ تم تسجيل الخروج بنجاح");
     closeModal("accOv");
+    // إعادة تحميل الصفحة لضمان تحديث حالة الهيدر والأيقونات
+    setTimeout(() => window.location.reload(), 500); 
   });
 }
 
-async function loadUserData(){
-  if(typeof VL_GetCurrentUser !== "function") return;
-  const userData = await VL_GetCurrentUser();
-  if(!userData) return;
-
-  if($("#accName"))  $("#accName").value  = userData.name     || "";
-  if($("#accPhone")) $("#accPhone").value = userData.phone    || "";
-  if($("#accCity"))  $("#accCity").value  = userData.city     || "";
-  if($("#accAddr"))  $("#accAddr").value  = userData.address  || "";
-  if($("#ordCount")) $("#ordCount").textContent = userData.ordersCount || 0;
+async function loadUserData(isLoggedIn) {
+  if (isLoggedIn && typeof VL_GetCurrentUser === "function") {
+    const userData = await VL_GetCurrentUser();
+    if (userData) {
+      const displayNameEl = $("#displayName");
+      if(displayNameEl) displayNameEl.textContent = userData.name || "عميلنا العزيز";
+      const displayEmailEl = $("#displayEmail");
+      if(displayEmailEl) displayEmailEl.textContent = userData.email || "غير متوفر";
+      const displayPhoneEl = $("#displayPhone");
+      if(displayPhoneEl) displayPhoneEl.textContent = userData.phone || "غير متوفر";
+      const ordCountLoggedInEl = $("#ordCountLoggedIn");
+      if(ordCountLoggedInEl) ordCountLoggedInEl.textContent = userData.ordersCount || 0;
+    }
+  }
 }
 
 function fillCitySelect(sel){
