@@ -339,43 +339,24 @@ function initReveal(){
     $$(".rv").forEach(el => el.classList.add("on"));
     return;
   }
-  const io=new IntersectionObserver(es=>{
-    es.forEach(e=>{
+  
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => {
       if(e.isIntersecting){
         e.target.classList.add("on");
         io.unobserve(e.target);
       }
     });
-  },{threshold:.08, rootMargin:"0px 0px -50px 0px"});
-  $$(".rv").forEach(el=>io.observe(el));
-}
+  }, { threshold: 0.05, rootMargin: "0px 0px 100px 0px" }); // ✨ تغيير هام هنا
 
-function renderChips(){
-  const w=$("#chips");
-  if(!w)return;
-  w.style.display="none";
-  w.setAttribute("aria-hidden","true");
-  const keys=["all","wood","glass","crystal","metal","massage","gift","bride"];
-  const frag = document.createDocumentFragment();
-  keys.forEach(k => {
-    const btn = document.createElement('button');
-    btn.className = 'chip' + (k==="all" ? " on" : "");
-    btn.dataset.cat = k;
-    btn.textContent = cat(k);
-    btn.addEventListener("click",()=>{
-      w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
-      btn.classList.add("on");
-      renderProducts();
-    });
-    frag.appendChild(btn);
+  $$(".rv").forEach(el => {
+    // ✨ إصلاح جذري: لو القسم ظاهر بالفعل في الشاشة أول ما تفتح، اظهره فوراً بدون انتظار سكرول
+    if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+      el.classList.add("on");
+    } else {
+      io.observe(el);
+    }
   });
-  w.innerHTML = '';
-  w.appendChild(frag);
-}
-
-function activeCat(){
-  const c=$("#chips .chip.on");
-  return c?c.dataset.cat:"all";
 }
 
 /* ═══════════════════════════════════════════════════════════
