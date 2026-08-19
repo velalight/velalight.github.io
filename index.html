@@ -1300,7 +1300,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 </div>
 
 <!-- ═══════════════════════════════════════════════
-     ACCOUNT
+     ACCOUNT (محدّث ليدعم حالتين: مسجل دخول / ضيف)
      ═══════════════════════════════════════════════ -->
 
 <div class="modal" id="accOv">
@@ -1311,22 +1311,37 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     <h3 class="fd" data-i18n="acc_title">حسابي 👤</h3>
 
-    <p style="color:var(--mut);font-size:.85rem;margin:.5rem 0 1rem" data-i18n="acc_sub">
-      سجّل بياناتك مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة.
-    </p>
+    <!-- ═══ الحالة الأولى: المستخدم مسجل دخول بالفعل ═══ -->
+    <div id="loggedInView" class="hidden">
+      <p style="color:var(--gold2); font-size:1.1rem; margin-bottom:1rem;">
+        أهلاً بك، <b id="displayName">...</b> 👋
+      </p>
+      <div style="background:var(--panel2); padding:1rem; border-radius:12px; margin-bottom:1rem; font-size:0.9rem; line-height:1.8;">
+        <p>📧 <span id="displayEmail">...</span></p>
+        <p>📱 <span id="displayPhone">...</span></p>
+        <p>📦 عدد طلباتك: <b id="ordCountLoggedIn">0</b></p>
+      </div>
+      <a href="my-orders.html" class="btn sm" style="width:100%; margin-bottom:0.5rem; text-decoration:none; text-align:center; display:block;">📦 تتبع طلباتي</a>
+      <button class="btn ghost sm" id="logoutBtn" style="width:100%" data-i18n="logout">تسجيل خروج</button>
+    </div>
 
-    <div class="co-form">
-      <input id="accName" data-i18n-ph="ph_name" placeholder="الاسم بالكامل *">
-      <input id="accPhone" type="tel" data-i18n-ph="ph_phone" placeholder="رقم الموبايل *">
-      <select id="accCity"></select>
-      <input id="accAddr" data-i18n-ph="ph_addr" placeholder="العنوان بالتفصيل *">
-      <button class="btn" id="saveAccBtn" data-i18n="save_acc">حفظ</button>
+    <!-- ═══ الحالة الثانية: المستخدم غير مسجل (ضيف) ═══ -->
+    <div id="guestView" class="hidden">
+      <p style="color:var(--mut);font-size:.85rem;margin:.5rem 0 1rem" data-i18n="acc_sub">
+        سجّل بياناتك مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة.
+      </p>
+      <div class="co-form">
+        <input id="accName" data-i18n-ph="ph_name" placeholder="الاسم بالكامل *">
+        <input id="accPhone" type="tel" data-i18n-ph="ph_phone" placeholder="رقم الموبايل *">
+        <select id="accCity"></select>
+        <input id="accAddr" data-i18n-ph="ph_addr" placeholder="العنوان بالتفصيل *">
+        <button class="btn" id="saveAccBtn" data-i18n="save_acc" style="width:100%">حفظ البيانات</button>
+      </div>
       <p style="color:var(--dim);font-size:.8rem;margin-top:.5rem">
         <span data-i18n="orders_count">عدد طلباتك:</span>
         <b id="ordCount">0</b>
       </p>
       <a href="my-orders.html" class="btn sm" style="width:100%;margin-bottom:.5rem;text-decoration:none;text-align:center;display:block">📦 طلباتي</a>
-      <button class="btn ghost sm" id="logoutBtn" data-i18n="logout">تسجيل خروج</button>
     </div>
 
   </div>
