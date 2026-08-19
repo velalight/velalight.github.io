@@ -927,8 +927,6 @@
         <!-- Tab: Specs -->
         <div class="tab-pane" id="tab-specs">
           <table class="specs-table">
-            <tr>
-              <td>⏱️ مدة الاشتعال</td>
               <td id="specHours">—</td>
             </tr>
             <tr>
@@ -1336,7 +1334,6 @@ function render(){
     $("#pdSave").style.display="none";
   }
 
-  $("#specHours").textContent=phours(P);
   $("#specCat").textContent=catName(P.cat);
   const scents=getProductScents();
   $("#specScents").textContent=scents.map(velaScentTr).join(" • ");
