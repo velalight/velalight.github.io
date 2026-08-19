@@ -911,6 +911,11 @@
               <div class="ib-desc">شحن آمن لباب البيت</div>
             </div>
             <div class="info-box">
+              <span class="ib-icon">🔁</span>
+              <div class="ib-title">ضمان استبدال</div>
+              <div class="ib-desc">خلال 3 أيام</div>
+            </div>
+            <div class="info-box">
               <span class="ib-icon">🎁</span>
               <div class="ib-title">تغليف مجاني</div>
               <div class="ib-desc">جاهز للإهداء</div>
@@ -945,7 +950,11 @@
               <td>⏱️ مدة الاشتعال</td>
               <td id="specHours">—</td>
             </tr>
-                     <tr>
+            <tr>
+              <td>🌸 العطور المتاحة</td>
+              <td id="specScents">—</td>
+            </tr>
+            <tr>
               <td>📦 التصنيف</td>
               <td id="specCat">—</td>
             </tr>
@@ -1346,6 +1355,7 @@ function render(){
     $("#pdSave").style.display="none";
   }
 
+  $("#specHours").textContent=phours(P);
   $("#specCat").textContent=catName(P.cat);
   const scents=getProductScents();
   $("#specScents").textContent=scents.map(velaScentTr).join(" • ");
