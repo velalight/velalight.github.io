@@ -1826,7 +1826,20 @@ function bindProductActions(list){
                 );
 
               });
+    $("#pf_scents").value =
+      (product.scents || [])
+        .join(", ");
 
+    /* Trigger preview للصور */
+    if (typeof updatePreview === "function") {
+        updatePreview();
+    }
+
+  }else{
+
+    form.dataset.editId =
+      "";
+            
           }else{
 
             window.FB
