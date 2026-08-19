@@ -183,13 +183,22 @@ async function loadAll(){
     if(p&&p.id) map.set(p.id,{...p});
   });
   
-  /* 3. امزج بيانات Firebase */
+  /* 3. امزج بيانات Firebase (التعديل الجراحي هنا) */
   dbProductsCache.forEach(d=>{
     const slug=d.id_||d.slug||d.pid||d.id;
     if(!slug) return;
     if(d.active===false){map.delete(slug);return;}
     const existing=map.get(slug)||{};
-    map.set(slug,{...existing,...d,id:slug,_fid:d.id});
+    
+    // إصلاح جذري: نسمح فقط للبيانات الديناميكية بالتحديث من Firebase
+    // ونمنع البيانات القديمة من الكتابة فوق الصور والأسعار المحدثة في ملف data.js
+    map.set(slug,{
+      ...existing, // نحتفظ بالبيانات الأساسية الجديدة (الصور، الأسعار، الأسماء)
+      sold: d.sold !== undefined ? d.sold : existing.sold,
+      stock: d.stock !== undefined ? d.stock : existing.stock,
+      active: d.active !== undefined ? d.active : existing.active,
+      _fid: d.id || null
+    });
   });
   
   ALL_PRODUCTS=[...map.values()];
