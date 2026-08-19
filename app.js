@@ -306,10 +306,15 @@ function applyI18n(){
   });
   const mq=$("#mqTrack");
   if(mq){
-    const txt=t("mq");
-    mq.innerHTML=`<span>${txt}</span><span>${txt}</span>`;
+    // ✨ إذا كان هناك محتوى يدوي في HTML (أكثر من 2 span)، اتركه كما هو
+    if(mq.children.length > 2){
+      // لا تفعل شيء - اترك المحتوى اليدوي
+    } else {
+      // إذا كان فارغاً أو به عنصرين فقط، استخدم الترجمة وكررها
+      const txt=t("mq");
+      mq.innerHTML = Array(8).fill(`<span>${txt}</span>`).join("");
+    }
   }
-}
 
 function initMarquee(){}
 
