@@ -1770,18 +1770,33 @@ $("#rvSubmit")?.addEventListener("click",async()=>{
 function renderRelated(){
   const box=$("#pdRelated");
   if(!box||!P) return;
-  const all=typeof ALL_PRODUCTS!=="undefined"?ALL_PRODUCTS:
-            (typeof PRODUCTS!=="undefined"?PRODUCTS:[]);
-  let list=all.filter(x=>x.cat===P.cat&&x.id!==P.id).slice(0,4);
-  if(list.length<4){
-    list=[...list,...all.filter(x=>x.cat!==P.cat&&x.id!==P.id&&!list.find(y=>y.id===x.id))].slice(0,4);
+  
+  // ✨ FIX: استخدم cloudCatalog (من الفايربيز) أولاً، ثم البيانات المحلية كـ fallback
+  let all = [];
+  if (cloudCatalog && cloudCatalog.length > 0) {
+    all = cloudCatalog;
+  } else if (typeof ALL_PRODUCTS !== "undefined") {
+    all = ALL_PRODUCTS;
+  } else if (typeof PRODUCTS !== "undefined") {
+    all = PRODUCTS;
   }
+  
+  let list = all.filter(x => x.cat === P.cat && x.id !== P.id).slice(0, 4);
+  
+  if(list.length < 4){
+    list = [...list, ...all.filter(x => x.cat !== P.cat && x.id !== P.id && !list.find(y => y.id === x.id))].slice(0, 4);
+  }
+  
   if(!list.length){
-    box.innerHTML=`<p style="color:var(--dim);text-align:center;padding:1.5rem">${LANG==="en"?"No similar products":"لا توجد منتجات مشابهة"}</p>`;
+    box.innerHTML = `<p style="color:var(--dim);text-align:center;padding:1.5rem">${LANG==="en"?"No similar products":"لا توجد منتجات مشابهة"}</p>`;
     return;
   }
-  box.innerHTML=list.map(p=>{
-    const imgSrc=(typeof imgOf==="function")?imgOf(p):CDN(p.img||"RR.jpg");
+  
+  box.innerHTML = list.map(p => {
+    // ✨ استخدم الصور من الفايربيز أولاً
+    const pImgs = p.images || p.imgs || (p.img ? [p.img] : []);
+    const imgSrc = pImgs.length ? CDN(pImgs[0]) : CDN(p.img || "RR.jpg");
+    
     return `
     <a href="product.html?p=${p.id}" class="p-card" style="text-decoration:none">
       <div class="p-media">
@@ -1794,7 +1809,6 @@ function renderRelated(){
     </a>`;
   }).join("");
 }
-
 /* ═══════ SHARE ═══════ */
 function renderShare(){
   const box=$("#pdShare");
