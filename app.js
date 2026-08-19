@@ -346,10 +346,16 @@ function initReveal(){
         io.unobserve(e.target);
       }
     });
-  },{threshold:.08, rootMargin:"0px 0px -50px 0px"});
-  $$(".rv").forEach(el=>io.observe(el));
+  },{threshold:.05, rootMargin:"0px 0px 100px 0px"});
+  
+  $$(".rv").forEach(el=>{
+    if (el.getBoundingClientRect().top < window.innerHeight + 100) {
+      el.classList.add("on");
+    } else {
+      io.observe(el);
+    }
+  });
 }
-
 function renderChips(){
   const w=$("#chips");
   if(!w)return;
