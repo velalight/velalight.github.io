@@ -109,8 +109,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 }
 </style>
 </head>
-  
-</head>
 
 <body>
 
@@ -515,7 +513,9 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
       <div>
 
-        <label>مدة الاشتعال</label>
+        <label>
+          مدة الاشتعال
+        </label>
 
         <input
           id="pf_hours"
@@ -1770,20 +1770,7 @@ function loadProducts(){
 
       const map = new Map();
 
-      (PRODUCTS || []).forEach(product => {
-
-        if(!product || !product.id){
-          return;
-        }
-
-        map.set(product.id, {
-          ...product,
-          _fid:null,
-          active:true
-        });
-
-      });
-
+      /* ═══ ✨ الإصلاح: نبدأ ببيانات السحابة أولاً لمنع وميض السعر ═══ */
       (cloud || []).forEach(data => {
 
         const slug =
@@ -1797,17 +1784,32 @@ function loadProducts(){
         }
 
         if(data.active === false){
-          map.delete(slug);
           return;
         }
 
         map.set(slug, {
-          ...(map.get(slug) || {}),
           ...data,
           id:slug,
           _fid:data.id || null,
           active:data.active !== false
         });
+
+      });
+
+      /* ═══ ✨ ندمج المحلية فقط لو مش موجودة في السحابة ═══ */
+      (PRODUCTS || []).forEach(product => {
+
+        if(!product || !product.id){
+          return;
+        }
+
+        if(!map.has(product.id)){
+          map.set(product.id, {
+            ...product,
+            _fid:null,
+            active:true
+          });
+        }
 
       });
 
@@ -2160,10 +2162,23 @@ function initProductForm(){
         /* ═══ ✨ الإصلاح: المخزون كخاصية منفصلة ═══ */
         const stockVal = $("#pf_stock").value;
 
-        /* ═══ ✨ معالجة الصور المتعددة ═══ */
-        const mainImgVal = $("#pf_img").value.trim();
-        const extraImgs = $("#pf_images").value.split(",").map(s=>s.trim()).filter(Boolean);
-        const imagesArr = [mainImgVal, ...extraImgs].filter(Boolean);
+        /* ═══ ✨✨ الإصلاح الذكي: معالجة الصور المتعددة ومنع الفواصل في الرئيسية ═══ */
+        let rawMainImg = $("#pf_img").value.trim();
+        const extraImgs = $("#pf_images").value.split(",").map(s => s.trim()).filter(Boolean);
+        
+        let finalMainImg = rawMainImg;
+        let finalImagesArr = [...extraImgs];
+
+        /* لو المستخدم كتب فواصل في حقل الصورة الرئيسية بالغلط، نفصلها */
+        if (rawMainImg.includes(",")) {
+          const splitMain = rawMainImg.split(",").map(s => s.trim()).filter(Boolean);
+          finalMainImg = splitMain[0];
+          finalImagesArr = [...splitMain.slice(1), ...finalImagesArr];
+        }
+
+        /* نشيل التكرار */
+        finalImagesArr = [...new Set(finalImagesArr.filter(img => img !== finalMainImg))];
+        const imagesArr = [finalMainImg, ...finalImagesArr].filter(Boolean);
 
         const data = {
 
@@ -2185,7 +2200,7 @@ function initProductForm(){
             $("#pf_cat").value,
 
           img:
-            mainImgVal || (imagesArr[0] || ""),
+            finalMainImg,
 
           /* ═══ ✨ حقل imgs (اللي data.js بيقرا منه) ═══ */
           imgs:
@@ -2317,7 +2332,7 @@ function initProductForm(){
 
 
 /* =========================================================
-   OPEN PRODUCT FORM (✨ مع تعبئة الصور الإضافية)
+   OPEN PRODUCT FORM (✨ مع تعبئة الصور الإضافية + إصلاح الفواصل)
 ========================================================= */
 
 function openProductForm(product){
@@ -2367,16 +2382,28 @@ function openProductForm(product){
       product.cat || "wood";
 
 
-    $("#pf_img").value =
-      product.img || "";
+    /* ═══ ✨✨ الإصلاح الذكي للصور: فصل الفواصل لو موجودة في img ═══ */
+    let mainImg = product.img || "";
+    let extraImgsArr = [];
+    
+    if (Array.isArray(product.imgs)) {
+      extraImgsArr = product.imgs.filter(x => x !== mainImg);
+    } else if (Array.isArray(product.images)) {
+      extraImgsArr = product.images.filter(x => x !== mainImg);
+    }
+    
+    /* لو الصورة الرئيسية فيها فواصل بالغلط، نفصلها */
+    if (mainImg.includes(",")) {
+      const splitImgs = mainImg.split(",").map(s => s.trim()).filter(Boolean);
+      mainImg = splitImgs[0];
+      extraImgsArr = [...splitImgs.slice(1), ...extraImgsArr];
+    }
 
-    /* ═══ ✨ تعبئة الصور الإضافية من product.imgs أو product.images ═══ */
+    $("#pf_img").value =
+      mainImg;
+
     $("#pf_images").value = 
-      Array.isArray(product.imgs)
-        ? product.imgs.filter(x => x !== product.img).join(", ")
-        : (Array.isArray(product.images)
-            ? product.images.filter(x => x !== product.img).join(", ")
-            : "");
+      extraImgsArr.join(", ");
 
 
     $("#pf_badge").value =
@@ -2400,7 +2427,7 @@ function openProductForm(product){
         .join(", ");
 
     /* Trigger preview للصور */
-    $("#pf_img").dispatchEvent(new Event("input"));
+    setTimeout(() => $("#pf_img").dispatchEvent(new Event("input")), 100);
 
   }else{
 
@@ -2577,6 +2604,11 @@ function initCouponForm(){
   });
   
   $("#saveCouponBtn")?.addEventListener("click", saveCoupon);
+  
+  /* ═══ ✨ تحويل الأحرف لكبيرة تلقائي في كود الكوبون ═══ */
+  $("#cf_code")?.addEventListener("input", (e) => {
+    e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  });
 }
 
 function openCouponForm(coupon){
