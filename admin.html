@@ -2254,21 +2254,21 @@ function openProductForm(product){
 
     $("#pf_cat").value =
       product.cat || "wood";
+    $("#pf_img").value = product.img || "";
 
-    $("#pf_img").value =
-      product.img || "";
-
-    /* ═══ ✨ تعبئة الصور الإضافية من product.imgs أو product.images (معالجة آمنة) ═══ */
+    /* ═══ ✨ تعبئة الصور الإضافية (معالجة آمنة تمنع أخطاء undefined) ═══ */
     let extraImgsArr = [];
+    const currentMainImg = String(product.img || "").trim();
+    
     if (Array.isArray(product.imgs)) {
-        extraImgsArr = product.imgs.filter(x => x && String(x).trim() !== String(product.img || "").trim());
+        extraImgsArr = product.imgs.filter(x => x && String(x).trim() !== currentMainImg);
     } else if (Array.isArray(product.images)) {
-        extraImgsArr = product.images.filter(x => x && String(x).trim() !== String(product.img || "").trim());
+        extraImgsArr = product.images.filter(x => x && String(x).trim() !== currentMainImg);
     }
+    
     $("#pf_images").value = extraImgsArr.join(", ");
 
-    $("#pf_badge").value =
-      product.badge || "";
+    $("#pf_badge").value = product.badge || "";
 
     $("#pf_hours").value =
       product.hours || "";
@@ -2479,6 +2479,12 @@ function openCouponForm(coupon){
     } else {
       $("#cf_expires").value = "";
     }
+      /* تشغيل معاينة الصور فوراً عند فتح المنتج للتعديل */
+    if (typeof updatePreview === "function") {
+        updatePreview();
+    }
+
+  }else{
   } else {
     form.dataset.editId = "";
     $("#couponFormTitle").textContent = "كوبون جديد";
