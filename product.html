@@ -1350,7 +1350,6 @@ function render(){
     $("#pdSave").style.display="none";
   }
 
-  $("#specHours").textContent=phours(P);
   $("#specCat").textContent=catName(P.cat);
   const scents=getProductScents();
   $("#specScents").textContent=scents.map(velaScentTr).join(" • ");
