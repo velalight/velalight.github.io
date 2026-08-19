@@ -1587,6 +1587,39 @@ document.addEventListener("click", (e) => {
 
 let PRODUCTS_ADMIN_CACHE = [];
 
+/* ═══ ✨✨ دالة تنظيف الصور: تفصل الفواصل لو موجودة في img ═══ */
+function cleanProductImages(product){
+  if(!product) return product;
+  
+  /* لو img فيه فواصل، نفصلها */
+  if(typeof product.img === "string" && product.img.includes(",")){
+    const parts = product.img.split(",").map(s => s.trim()).filter(Boolean);
+    if(parts.length > 0){
+      product.img = parts[0]; /* أول صورة هي الرئيسية */
+      /* الباقي نضيفه لـ imgs لو مش موجود */
+      if(!Array.isArray(product.imgs) || product.imgs.length === 0){
+        product.imgs = parts.slice(1);
+      } else {
+        /* ندمج الصور بدون تكرار */
+        const existing = new Set(product.imgs);
+        parts.slice(1).forEach(p => {
+          if(!existing.has(p)){
+            product.imgs.push(p);
+            existing.add(p);
+          }
+        });
+      }
+    }
+  }
+  
+  /* لو imgs مش موجود لكن img موجود، ننشئه */
+  if(!Array.isArray(product.imgs) && product.img){
+    product.imgs = [product.img];
+  }
+  
+  return product;
+}
+
 function renderAdminProducts(){
 
   const search =
@@ -1813,7 +1846,8 @@ function loadProducts(){
 
       });
 
-      PRODUCTS_ADMIN_CACHE = [...map.values()];
+      /* ═══ ✨✨ تنظيف الصور لكل المنتجات ═══ */
+      PRODUCTS_ADMIN_CACHE = [...map.values()].map(cleanProductImages);
 
       renderAdminProducts();
 
