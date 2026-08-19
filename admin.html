@@ -2479,15 +2479,10 @@ function openCouponForm(coupon){
     } else {
       $("#cf_expires").value = "";
     }
-      /* تشغيل معاينة الصور فوراً عند فتح المنتج للتعديل */
-    if (typeof updatePreview === "function") {
-        updatePreview();
-    }
-
-  }else{
   } else {
     form.dataset.editId = "";
     $("#couponFormTitle").textContent = "كوبون جديد";
+    
     $("#cf_code").value = "";
     $("#cf_type").value = "percent";
     $("#cf_value").value = "";
