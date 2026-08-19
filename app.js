@@ -315,7 +315,7 @@ function applyI18n(){
       mq.innerHTML = Array(8).fill(`<span>${txt}</span>`).join("");
     }
   }
-} // <--- هنا كان ينقص القوس، وتم إضافته الآن!
+}
 
 function initMarquee(){}
 
@@ -450,9 +450,28 @@ function renderProducts(){
       if (!imgSrc) imgSrc = placeholderSvg;
       
       const inWishlist = isInWishlist(p.id);
-      const stockNum = Number(p.stock);
-      const isOutOfStock = !isNaN(stockNum) && stockNum === 0;
-      const stockBadg = (typeof stockBadge === "function") ? stockBadge(p) : "";
+      
+      /* ✨ SMART STOCK LOGIC: إذا كان الحقل فارغاً، يعتبر متاحاً ولا يظهر "نفدت" */
+      let isOutOfStock = false;
+      let stockBadg = "";
+      const stockVal = p.stock;
+
+      if (stockVal === undefined || stockVal === null || stockVal === "") {
+        isOutOfStock = false; // متاح
+        stockBadg = ""; // لا نضع شارة عند الفراغ
+      } else {
+        const s = Number(stockVal);
+        if (isNaN(s) || s === 0) {
+          isOutOfStock = true;
+          stockBadg = '<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>';
+        } else if (s <= 5) {
+          isOutOfStock = false;
+          stockBadg = `<span class="p-badge" style="background:#e67e22">باقي ${s} فقط</span>`;
+        } else {
+          isOutOfStock = false;
+          stockBadg = '<span class="p-badge" style="background:#27ae60">متاح</span>';
+        }
+      }
       
       /* ✨ Build card using DOM API (faster than innerHTML for many cards) */
       const article = document.createElement('article');
@@ -513,10 +532,23 @@ function handleProductGridClick(e){
   const id = addBtn.dataset.id;
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   const p = products.find(x => x.id === id);
-  if(p && Number(p.stock)!==0){
-    addBtn.style.transform = 'scale(0.95)';
-    setTimeout(() => { addBtn.style.transform = ''; }, 150);
-    openQuickAdd(p);
+  
+  if(p) {
+    /* ✨ تطبيق نفس منطق المخزون الذكي هنا لمنع الإضافة إذا كان 0 */
+    const stockVal = p.stock;
+    let isAvailable = true;
+    if (stockVal !== undefined && stockVal !== null && stockVal !== "") {
+      const s = Number(stockVal);
+      if (isNaN(s) || s === 0) {
+        isAvailable = false;
+      }
+    }
+    
+    if(isAvailable){
+      addBtn.style.transform = 'scale(0.95)';
+      setTimeout(() => { addBtn.style.transform = ''; }, 150);
+      openQuickAdd(p);
+    }
   }
 }
 
@@ -1403,12 +1435,13 @@ function closeModal(id){
 
 function stockBadge(p){
   if(!p) return "";
-  if(p.stock===undefined||p.stock===null||p.stock==="")return"";
-  const s=Number(p.stock);
-  if(isNaN(s))return"";
-  if(s===0)return`<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>`;
-  if(s<=5)return`<span class="p-badge" style="background:#e67e22">باقي ${s} فقط</span>`;
-  return"";
+  const stockVal = p.stock;
+  // ✨ نفس المنطق الذكي: فارغ = لا شارة، 0 = نفدت، <=5 = باقي، >5 = متاح
+  if(stockVal === undefined || stockVal === null || stockVal === "") return "";
+  const s = Number(stockVal);
+  if(isNaN(s) || s === 0) return `<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>`;
+  if(s <= 5) return `<span class="p-badge" style="background:#e67e22">باقي ${s} فقط</span>`;
+  return `<span class="p-badge" style="background:#27ae60">متاح</span>`;
 }
 
 async function decrementStock(items){
@@ -1417,6 +1450,7 @@ async function decrementStock(items){
   for(const it of items){
     const p=products.find(x=>x.id===it.id);
     if(!p)continue;
+    // ✨ لا تنقص المخزون إذا كان الحقل فارغاً أو غير محدد
     if(p.stock===undefined||p.stock===null||p.stock===""||isNaN(Number(p.stock)))continue;
     const newStock=Math.max(0,Number(p.stock)-Number(it.qty||1));
     try{
