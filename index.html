@@ -944,59 +944,265 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 </section>
 
 <!-- ═══════════════════════════════════════════════
-     REVIEWS
+     TESTIMONIALS — لحظات VelaLight (جدارية الذكريات)
      ═══════════════════════════════════════════════ -->
-
-<section id="reviews" class="sec">
-
+<section id="testimonials" class="sec" style="background: linear-gradient(180deg, var(--c-cream) 0%, #fdf5ed 100%); padding: 5rem 0; overflow: hidden;">
   <div class="wrap">
-
-    <div class="sec-head rv">
-      <div class="kick">Testimonials</div>
-      <h2 data-i18n="rev_h2">آراء عملائنا</h2>
-      <p data-i18n="rev_sub">ثقتكم أجمل هدية لنا</p>
+    <div class="sec-head rv" style="text-align: center; margin-bottom: 3.5rem;">
+      <div class="kick" style="color: var(--gold2); font-size: 1rem; letter-spacing: 1px;">💛 ثقة تصنع الفرق</div>
+      <h2 style="font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 0.5rem; font-family: var(--fd);">لحظات دفأت قلوب عملائنا</h2>
+      <p style="color: var(--mut); max-width: 600px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">
+        أكثر من 500 عميلة اختارت VelaLight لتضيء لحظاتهم الخاصة. شوفوا إيه اللي قالوه وعاشوه معانا.
+      </p>
     </div>
 
-    <div class="rev-row rv">
-
-      <div class="rev-card">
-        <img src="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2Freview1.jpg&w=400&q=70&output=webp" alt="Review" width="400" height="500" loading="lazy" decoding="async">
-        <div class="rb">
-          <b data-i18n="rev_verified">عميلة موثّقة</b>
-          <span class="stars">★★★★★</span>
-        </div>
-      </div>
-
-      <div class="rev-card">
-        <img src="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2Freview2.jpg&w=400&q=70&output=webp" alt="Review" width="400" height="500" loading="lazy" decoding="async">
-        <div class="rb">
-          <b data-i18n="rev_verified">عميلة موثّقة</b>
-          <span class="stars">★★★★★</span>
-        </div>
-      </div>
-
-      <div class="rev-card">
-        <img src="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2Freview3.jpg&w=400&q=70&output=webp" alt="Review" width="400" height="500" loading="lazy" decoding="async">
-        <div class="rb">
-          <b data-i18n="rev_verified">عميلة موثّقة</b>
-          <span class="stars">★★★★★</span>
-        </div>
-      </div>
-
-      <div class="rev-card">
-        <img src="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2Freview4.jpg&w=400&q=70&output=webp" alt="Review" width="400" height="500" loading="lazy" decoding="async">
-        <div class="rb">
-          <b data-i18n="rev_verified">عميلة موثّقة</b>
-          <span class="stars">★★★★★</span>
-        </div>
-      </div>
-
+    <!-- حاوية الجدارية (Masonry Grid) -->
+    <div class="testimonials-masonry rv" id="testimonialsGrid">
+      <!-- سيتم ملء هذا الجزء تلقائياً بواسطة JavaScript من ملف data.js -->
     </div>
-
+    
+    <div style="text-align: center; margin-top: 3rem;">
+      <p style="color: var(--dim); font-size: 0.95rem;">
+        ✨ جربتي سحرنا؟ <a href="https://wa.me/201223526105" target="_blank" style="color: var(--gold2); font-weight: 700; text-decoration: none; border-bottom: 1px dashed var(--gold2);">ابعتيلنا تجربتك على الواتساب</a>
+      </p>
+    </div>
   </div>
-
 </section>
 
+<style>
+/* ═══ تصميم جدارية اللحظات الفاخر ═══ */
+.testimonials-masonry {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.testimonial-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.6);
+}
+
+.testimonial-media {
+  width: 100%;
+  height: 220px;
+  position: relative;
+  background: var(--panel2);
+  overflow: hidden;
+}
+
+.testimonial-media img, 
+.testimonial-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.testimonial-card:hover .testimonial-media img,
+.testimonial-card:hover .testimonial-media video {
+  transform: scale(1.08);
+}
+
+/* بادج نوع المحتوى (فيديو / صوت) */
+.media-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.testimonial-content {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex-grow: 1;
+}
+
+.testimonial-stars {
+  color: #f1c40f;
+  font-size: 1rem;
+  letter-spacing: 2px;
+}
+
+.testimonial-text {
+  color: var(--dark);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  font-style: italic;
+  margin: 0;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.author-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), #b8863f);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.author-info h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--dark);
+  font-weight: 700;
+}
+
+.author-info span {
+  font-size: 0.75rem;
+  color: var(--dim);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* تصميم خاص للفويس نوت */
+.voice-note-ui {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(212, 175, 55, 0.1);
+  padding: 10px 15px;
+  border-radius: 30px;
+  margin-top: 5px;
+}
+.voice-wave {
+  flex-grow: 1;
+  height: 20px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--gold2) 0px,
+    var(--gold2) 3px,
+    transparent 3px,
+    transparent 6px
+  );
+  opacity: 0.6;
+  border-radius: 10px;
+}
+.voice-duration {
+  font-size: 0.8rem;
+  color: var(--dark);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .testimonials-masonry {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+  }
+  .testimonial-media { height: 200px; }
+}
+</style>
+
+<script>
+// ═══════════════════════════════════════════════
+// ✨ دالة عرض جدارية اللحظات (تقرأ من data.js)
+// ═══════════════════════════════════════════════
+function renderTestimonials() {
+  const grid = document.getElementById('testimonialsGrid');
+  if (!grid || typeof TESTIMONIALS_DATA === 'undefined') return;
+
+  grid.innerHTML = TESTIMONIALS_DATA.map(item => {
+    const initial = item.name.charAt(0);
+    const stars = "★".repeat(item.rating || 5);
+    
+    // تحديد نوع الميديا وعرضها
+    let mediaHTML = '';
+    const mediaUrl = item.media ? `https://velalight.github.io/testimonials/${item.media}` : '';
+    
+    if (item.type === 'video') {
+      mediaHTML = `
+        <div class="testimonial-media">
+          <video src="${mediaUrl}" muted loop playsinline poster="https://velalight.github.io/RR.jpg"></video>
+          <div class="media-badge">▶ فيديو</div>
+        </div>`;
+    } else if (item.type === 'voice') {
+      mediaHTML = `
+        <div class="testimonial-media" style="display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, #fdf5ed, #fff);">
+          <div style="text-align:center; padding:1rem;">
+            <div style="font-size:2.5rem; margin-bottom:0.5rem;">🎙️</div>
+            <div class="voice-note-ui">
+              <div class="voice-wave"></div>
+              <span class="voice-duration">${item.duration || '0:15'}</span>
+            </div>
+          </div>
+          <div class="media-badge">🎧 صوتي</div>
+        </div>`;
+    } else {
+      mediaHTML = `
+        <div class="testimonial-media">
+          <img src="${mediaUrl}" alt="مراجعة ${item.name}" loading="lazy" onerror="this.src='https://velalight.github.io/RR.jpg'">
+        </div>`;
+    }
+
+    return `
+      <div class="testimonial-card rv">
+        ${mediaHTML}
+        <div class="testimonial-content">
+          <div class="testimonial-stars">${stars}</div>
+          <p class="testimonial-text">"${item.text}"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">${initial}</div>
+            <div class="author-info">
+              <h4>${item.name}</h4>
+              <span>عميلة موثّقة <span style="color:#27ae60">✓</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // تفعيل تشغيل الفيديو عند المرور عليه (Hover)
+  grid.querySelectorAll('video').forEach(video => {
+    video.parentElement.addEventListener('mouseenter', () => video.play());
+    video.parentElement.addEventListener('mouseleave', () => video.pause());
+  });
+}
+
+// تشغيل الدالة عند تحميل الصفحة
+document.addEventListener("DOMContentLoaded", renderTestimonials);
+</script>
+  
 <!-- ═══════════════════════════════════════════════
      FOOTER
      ═══════════════════════════════════════════════ -->
