@@ -464,6 +464,7 @@ function renderProducts(){
             </div>
             <button class="p-add" data-id="${p.id}" ${isOutOfStock?"disabled":""} aria-label="${t("add_cart")} ${pname(p)}">${isOutOfStock?(LANG==="en"?"Out of stock":"نفدت الكمية"):t("add_cart")}</button>
             <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist?'#fee':'none'};border:1px solid ${inWishlist?'#e74c3c':'var(--line)'};border-radius:10px;padding:.4rem .6rem;cursor:pointer;font-size:1rem;transition:.2s;color:${inWishlist?'#e74c3c':'inherit'}">${inWishlist?"❤️":"🤍"}</button>
+            <button class="p-share" data-id="${p.id}" data-name="${pname(p)}" type="button" aria-label="مشاركة المنتج" style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.4rem .6rem;cursor:pointer;font-size:1rem;transition:.2s;" title="مشاركة">📤</button>
           </div>
         </div>
       `;
@@ -480,6 +481,29 @@ function renderProducts(){
 }
 
 function handleProductGridClick(e){
+  // ✨ 1. منطق زر المشاركة الذكي
+  const shareBtn = e.target.closest('.p-share');
+  if (shareBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const pId = shareBtn.dataset.id;
+    const pName = shareBtn.dataset.name;
+    const shareUrl = `${window.location.origin}/product.html?p=${pId}`;
+    
+    if (navigator.share) {
+      navigator.share({
+        title: `VelaLight - ${pName}`,
+        text: `شوفي الشمعة الفاخرة دي من VelaLight 🕯️✨`,
+        url: shareUrl
+      }).catch(err => console.log('Share canceled'));
+    } else {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        toast("🔗 تم نسخ رابط المنتج للمشاركة!");
+      });
+    }
+    return;
+  }
+
   const wishBtn = e.target.closest('.p-wish');
   if (wishBtn) {
     e.preventDefault();
@@ -675,6 +699,20 @@ function initCart(){
       if(e.target.matches(selector)){saveCustomer();}
     });
   });
+
+  // ✨ 2. إضافة إشارات الثقة (Trust Signals) أسفل زر الدفع في السلة
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  if (checkoutBtn && !document.getElementById('trustBadges')) {
+    const badges = document.createElement('div');
+    badges.id = 'trustBadges';
+    badges.style.cssText = 'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
+    badges.innerHTML = `
+      <span style="display:flex; align-items:center; gap:4px;">🔒 دفع آمن</span>
+      <span style="display:flex; align-items:center; gap:4px;">🔄 ضمان استرجاع</span>
+      <span style="display:flex; align-items:center; gap:4px;">🚚 توصيل موثوق</span>
+    `;
+    checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
+  }
 }
 
 function renderCart(){
@@ -736,7 +774,6 @@ function renderCart(){
   w.innerHTML = '';
   w.appendChild(frag);
 
-  // ✨ 1. إضافة منتج مقترح (فواحة دولاب) ديناميكياً
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   const suggestedProduct = products.find(p => (p.name && (p.name.includes("فواحة") || p.name.includes("دولاب"))) || (p.nameEn && p.nameEn.toLowerCase().includes("freshener")));
   
@@ -765,7 +802,6 @@ function renderCart(){
     }, 0);
   }
 
-  // ✨ 2. حقن صفوف الخصومات والشحن المجاني ديناميكياً في Footer السلة
   const dfoot = document.querySelector("#cartDrawer .dfoot");
   if (dfoot) {
     if (!document.getElementById('qtyDiscountRow')) {
@@ -837,7 +873,6 @@ function handleCartChange(e){
 function updateTotals(c){
   const sub=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
   
-  // ✨ حساب خصم 5% على أي منتج بكمية 3 قطع أو أكثر
   let qtyDiscount = 0;
   c.forEach(it => {
     if (Number(it.qty) >= 3) {
@@ -851,7 +886,6 @@ function updateTotals(c){
 
   if($("#cartSub")){$("#cartSub").textContent=money(sub);}
   
-  // عرض خصم الكمية لو موجود
   const qtyDiscRow = $("#qtyDiscountRow");
   if (qtyDiscRow) {
     if (qtyDiscount > 0) {
@@ -867,7 +901,6 @@ function updateTotals(c){
   if($("#cartDiscount")){$("#cartDiscount").textContent="-"+money(couponDisc);}
   if($("#couponCodeLbl")&&appliedCoupon){$("#couponCodeLbl").textContent=appliedCoupon.code;}
   
-  // ✨ عرض شحن مجاني لو الفاتورة 3000 أو أكثر
   const freeShipRow = $("#freeShippingRow");
   if (freeShipRow) {
     if (sub >= 3000) {
@@ -967,7 +1000,6 @@ async function checkout(){
   const orderId=genOrderId();
   const subTotal=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
   
-  // ✨ حساب خصم الكمية هنا أيضاً ليظهر في رسالة الواتساب
   let qtyDiscount = 0;
   c.forEach(it => {
     if (Number(it.qty) >= 3) {
@@ -1003,7 +1035,6 @@ async function checkout(){
 
   msg+=`━━━━━━━━━━━━━━━━━━━━\n`;
   
-  // ✨ عرض خصم الكمية في رسالة الواتساب لو موجود
   if(qtyDiscount > 0){
     msg+=`🎁 خصم الكمية (3+ قطع): -${money(qtyDiscount)}\n`;
   }
@@ -1013,8 +1044,6 @@ async function checkout(){
   msg+=`🎁 هدية ليك: كود THANKS10 لخصم 10% على طلبك الجاي\n`;
   
   msg+=`${waTotalLabel()} ${money(total)}\n`;
-  
-  // ✨ تعديل نص الدفع ليتم عبر الواتساب
   msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.\n`;
   
   msg+=`${t("ship_note")}\n\n`;
