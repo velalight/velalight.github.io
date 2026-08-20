@@ -1,24 +1,23 @@
-const CFG={
-  WHATSAPP:"201223526105",
-  INSTAPAY:"",
-  ADMIN_PIN:"2846",
-  REPO:"velalight/velalight.github.io@main",
-  FIREBASE:{
-    apiKey:"AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",
-    authDomain:"velalight.firebaseapp.com",
-    projectId:"velalight",
-    storageBucket:"velalight.firebasestorage.app",
-    messagingSenderId:"1095485535268",
-    appId:"1:1095485535268:web:4d17ee9de6f5acdacbd4b1"
+const CFG = {
+  WHATSAPP: "201223526105",
+  INSTAPAY: "",
+  REPO: "velalight/velalight.github.io@main",
+  FIREBASE: {
+    apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",
+    authDomain: "velalight.firebaseapp.com",
+    projectId: "velalight",
+    storageBucket: "velalight.firebasestorage.app",
+    messagingSenderId: "1095485535268",
+    appId: "1:1095485535268:web:4d17ee9de6f5acdacbd4b1"
   },
-  GA4_ID:"G-XXXXXXXXXX",
-  META_PIXEL_ID:"YOUR_META_PIXEL_ID",
-  TIKTOK_PIXEL_ID:"YOUR_TIKTOK_PIXEL_ID"
+  GA4_ID: "G-XXXXXXXXXX",
+  META_PIXEL_ID: "YOUR_META_PIXEL_ID",
+  TIKTOK_PIXEL_ID: "YOUR_TIKTOK_PIXEL_ID"
 };
 
 /* ═══ Analytics (unchanged) ═══ */
 (function(){
-  if(CFG.GA4_ID.indexOf("G-")===0&&CFG.GA4_ID!=="G-XXXXXXXXXX"){
+  if(CFG.GA4_ID.indexOf("G-")===0 && CFG.GA4_ID!=="G-XXXXXXXXXX"){
     var s=document.createElement("script");s.async=1;s.src="https://www.googletagmanager.com/gtag/js?id="+CFG.GA4_ID;document.head.appendChild(s);
     window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};
     gtag("js",new Date());gtag("config",CFG.GA4_ID);
@@ -43,7 +42,7 @@ let LANG=localStorage.getItem("vl_lang")||"ar";
 const money=n=>Number(n||0).toLocaleString("en-US")+" "+(LANG==="en"?"EGP":"ج.م");
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ CDN — مباشر من GitHub Pages (سريع جداً، بدون weserv.nl)
+   ✨ CDN — مباشر من GitHub Pages (سريع جداً)
    ═══════════════════════════════════════════════════════════ */
 const CDN=u=>{
   if(!u) return "";
@@ -99,24 +98,14 @@ function ph(p){
   return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(s);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ imgsOf — بسيطة وواضحة 100%
-   ترجع مصفوفة الصور بالترتيب: imgs (من Firebase/الأدمن) → images → img
-   ═══════════════════════════════════════════════════════════ */
 const imgsOf=p=>{
   if(!p) return [];
-  
-  /* 1. لو imgs موجودة وطويلة (Firebase/الأدمن الجديد) */
   if(Array.isArray(p.imgs) && p.imgs.length > 0){
     return p.imgs.filter(x=>x && String(x).trim());
   }
-  
-  /* 2. لو images موجودة (Legacy من Firebase القديم) */
   if(Array.isArray(p.images) && p.images.length > 0){
     return p.images.filter(x=>x && String(x).trim());
   }
-  
-  /* 3. لو img موجودة كـ string (يمكن فيه فواصل) */
   if(p.img){
     const str=String(p.img).trim();
     if(str.includes(",")){
@@ -124,14 +113,9 @@ const imgsOf=p=>{
     }
     return [str];
   }
-  
   return [];
 };
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ imgOf — مباشرة من GitHub (بدون weserv.nl البطيء)
-   السرعة: 10x أسرع من النسخة القديمة
-   ═══════════════════════════════════════════════════════════ */
 const imgOf=p=>{
   const a=imgsOf(p);
   if(!a.length) return ph(p);
@@ -164,11 +148,7 @@ window.addEventListener("fb-ready",()=>{
 
 let ALL_PRODUCTS=[],ALL_REVIEWS=[],dbProductsCache=[];
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ loadAll — محصنة ضد فشل Firebase + Cache ذكي
-   ═══════════════════════════════════════════════════════════ */
 async function loadAll(){
-  /* 1. حاول تجيب من Firebase */
   try{
     dbProductsCache=await DB.list("products");
     if(!Array.isArray(dbProductsCache)) dbProductsCache=[];
@@ -177,23 +157,18 @@ async function loadAll(){
     dbProductsCache=[];
   }
   
-  /* 2. ابنِ الماب من PRODUCTS المحلي */
   const map=new Map();
   PRODUCTS.forEach(p=>{
     if(p&&p.id) map.set(p.id,{...p});
   });
   
-  /* 3. امزج بيانات Firebase (التعديل الجراحي هنا) */
   dbProductsCache.forEach(d=>{
     const slug=d.id_||d.slug||d.pid||d.id;
     if(!slug) return;
     if(d.active===false){map.delete(slug);return;}
     const existing=map.get(slug)||{};
-    
-    // إصلاح جذري: نسمح فقط للبيانات الديناميكية بالتحديث من Firebase
-    // ونمنع البيانات القديمة من الكتابة فوق الصور والأسعار المحدثة في ملف data.js
     map.set(slug,{
-      ...existing, // نحتفظ بالبيانات الأساسية الجديدة (الصور، الأسعار، الأسماء)
+      ...existing,
       sold: d.sold !== undefined ? d.sold : existing.sold,
       stock: d.stock !== undefined ? d.stock : existing.stock,
       active: d.active !== undefined ? d.active : existing.active,
@@ -203,38 +178,29 @@ async function loadAll(){
   
   ALL_PRODUCTS=[...map.values()];
   
-  /* 4. ✨ احفظ في cache v3 (نظيف) */
   try{
     localStorage.setItem("vl_products_v3",JSON.stringify(ALL_PRODUCTS.slice(0,200)));
     localStorage.setItem("vl_products_v3_time",String(Date.now()));
   }catch(e){}
   
-  /* 5. المراجعات */
   let dr=[];
   try{dr=await DB.list("reviews")}catch(e){}
   ALL_REVIEWS=[...(typeof SEED_REVIEWS!=="undefined"?SEED_REVIEWS:[]),...dr];
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ loadFromCache — للسرعة (الصفحة الرئيسية)
-   ═══════════════════════════════════════════════════════════ */
 function loadFromCache(){
   try{
     const cached=JSON.parse(localStorage.getItem("vl_products_v3")||"[]");
     const cachedTime=Number(localStorage.getItem("vl_products_v3_time")||"0");
-    /* Cache صالح لو أقل من ساعة */
     if(Array.isArray(cached) && cached.length>0 && (Date.now()-cachedTime)<3600000){
       ALL_PRODUCTS=cached;
       return true;
     }
   }catch(e){}
-  
-  /* لو مفيش cache صالح، استخدم PRODUCTS */
   ALL_PRODUCTS=[...PRODUCTS];
   return false;
 }
 
-/* ✨ استدعاء تلقائي للـ cache عند التحميل */
 loadFromCache();
 
 const prodReviews=s=>ALL_REVIEWS.filter(r=>(r.productSlug||r.pid)===String(s)&&r.approved!==false);
@@ -268,15 +234,15 @@ function addToCart(p,opt={}){
 const I18N={
   ar:{
     docTitle:"VelaLight | شموع يدوية فاخرة",docDesc:"VelaLight — شموع يدوية فاخرة",
-    mq:"🚚 توصيل سريع &nbsp;•&nbsp; 🏷️ خصومات &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; ✨ ضمان استبدال &nbsp;•&nbsp;",
+    mq:"🚚 توصيل سريع &nbsp;•&nbsp; 🏷️ خصومات &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; 📦 شحن آمن &nbsp;•&nbsp;",
     nav_home:"الرئيسية",nav_shop:"تسوق",nav_about:"من نحن",nav_faq:"الأسئلة الشائعة",nav_contact:"تواصل معنا",
     cat_all:"كل الشموع",cat_wood:"شموع خشبية",cat_glass:"شموع زجاجية",cat_crystal:"شموع كريستالية",cat_metal:"شموع معدنية",cat_massage:"شموع المساج",cat_gift:"الهدايا",cat_bride:"بوكس العروسة",
     mn_cats:"تصنيفات الشموع",mn_explore:"اكتشف",mn_scents:"العطور الفاخرة",mn_occ:"المناسبات والهدايا",mn_why:"لماذا VelaLight؟",mn_rev:"آراء عملائنا",mn_track:"📦 تتبع الطلب",mn_contact:"تواصل",
     hero_kick:"✦ شموع يدوية فاخرة · صناعة مصرية",hero_a:"ضوء يُحكى…",hero_b:"وبريق يليق بكِ",
     hero_lead:"في VelaLight كل شمعة اتصنعت يدويًا بعناية.",
     cta_shop:"اكتشفي The Collection ✨",cta_story:"Our Story",
-    hero_eyebrow:"✦ شموع يدوية فاخرة",hero_t1:"ضوءٌ",hero_t2:"يُشبهكِ.",hero_desc:"شموع تُضيء… لتنير يومكِ بلحظاتٍ تستحقينها.",hero_btn1:"اكتشفي السحر ✨",hero_btn2:"رحلة العطور",hero_s1_v:"23",hero_s1_t:"نوتة",hero_s2:"صناعة يدوية",hero_s3:"فنٌ يُقتنى",hero_card:"إVelaLight",
-    trust1:"🚚 توصيل لكل مصر",trust2:"🤲 100% صناعة يدوية",trust3:"🎁 تغليف هدايا مجاني",trust4:"🔁 استبدال خلال 3 أيام",
+    hero_eyebrow:"✦ شموع يدوية فاخرة",hero_t1:"ضوءٌ",hero_t2:"يُشبهكِ.",hero_desc:"شموع تُضيء… لتنير يومكِ بلحظاتٍ تستحقينها.",hero_btn1:"اكتشفي السحر ✨",hero_btn2:"رحلة العطور",hero_s1_v:"23",hero_s1_t:"نوتة",hero_s2:"صناعة يدوية",hero_s3:"فنٌ يُقتنى",hero_card:"VelaLight",
+    trust1:"🚚 توصيل لكل مصر",trust2:"🤲 100% صناعة يدوية",trust3:"🎁 تغليف هدايا مجاني",trust4:"📦 شحن آمن وموثوق",
     prod_h2:"اختار قطعتك المفضلة",price_lbl:"💰 السعر:",from_ph:"من",to_ph:"إلى",sort_lbl:"ترتيب:",
     sort_new:"الأحدث",sort_asc:"الأرخص أولًا",sort_desc:"الأغلى أولًا",sort_rating:"الأعلى تقييمًا",sort_best:"الأكثر مبيعًا",sort_disc:"أكبر خصم",
     prod_word:"منتج",add_cart:"+ أضيفي للسلة",view_details:"👁️ عرض التفاصيل",no_products:"🕯️ مفيش منتجات",
@@ -295,12 +261,12 @@ const I18N={
     feat2t:"خامات طبيعية 100%",feat2d:"شمع طبيعي.",
     feat3t:"صناعة يدوية",feat3d:"ساعات من العناية.",
     feat4t:"تغليف فاخر",feat4d:"تنسيق راقٍ.",
-    feat5t:"ضمان استبدال",feat5d:"خلال 3 أيام.",
+    feat5t:"جودة عالية",feat5d:"نهتم بأدق التفاصيل لتقديم أفضل تجربة.",
     feat6t:"دعم دائم",feat6d:"هنساعدك تختاري.",
     faq_h2:"الأسئلة الشائعة",
     faq1q:"كام مدة التوصيل؟",faq1a:"3–7 أيام عمل.",
     faq2q:"إزاي بيتم الدفع؟",faq2a:"InstaPay مقدمًا، والشحن كاش.",
-    faq3q:"أقدر أستبدل المنتج؟",faq3a:"نعم، خلال 3 أيام.",
+    faq3q:"هل الخامات آمنة على الصحة؟",faq3a:"نعم، نستخدم شمع طبيعي 100% وفتائل قطنية وخشبية آمنة تماماً.",
     faq4q:"الخامات طبيعية؟",faq4a:"100% شمع طبيعي.",
     faq5q:"الشمعة تعيش قد إيه؟",faq5a:"من 72 إلى 96 ساعة.",
     faq6q:"أقدر أختار العطر؟",faq6a:"طبعًا! كل العطور متاحة.",
@@ -310,7 +276,7 @@ const I18N={
     pay_title:"InstaPay — تحويل مقدم",
     foot_pay_note:"قيمة المنتجات InstaPay، والشحن كاش عند الاستلام.",
     foot_rights:"© 2026 - 2030 VelaLight — جميع الحقوق محفوظة",
-    foot_exchange:"سياسة الاستبدال",foot_privacy:"سياسة الخصوصية",foot_terms:"شروط الاستخدام",
+    foot_exchange:"سياسة الشحن",foot_privacy:"سياسة الخصوصية",foot_terms:"شروط الاستخدام",
     shipping:"الشحن",ship_all:"— لكل المحافظات",egp:"ج.م",subtotal:"المجموع",total:"الإجمالي",
     cart_title:"🛍️ سلة الشراء",delivery_h:"بيانات التوصيل",
     ph_name:"الاسم بالكامل *",ph_phone:"رقم الموبايل *",ph_phone2:"رقم الموبايل",ph_city:"اختاري المحافظة",ph_addr:"العنوان بالتفصيل *",ph_addr2:"العنوان",ph_notes:"ملاحظات",
@@ -326,7 +292,7 @@ const I18N={
     pd_scent_t:"🌸 اختاري العطر:",pd_qty_t:"الكمية:",pd_add:"🛍️ أضيفي للسلة",pd_buy:"اطلبي عبر واتساب",
     pd_hours:"مدة الاشتعال:",pd_materials:"الخامات:",pd_ship:"التوصيل:",pd_ship_v:"3–7 أيام",
     pd_materials_v:"شمع طبيعي 100%",pd_gift:"تغليف هدايا مجاني",pd_gift_v:"مع كل طلب",
-    pd_exchange:"ضمان استبدال",pd_exchange_v:"خلال 3 أيام",crumb_home:"الرئيسية",
+    pd_exchange:"جودة عالية",pd_exchange_v:"خامات طبيعية وآمنة",crumb_home:"الرئيسية",
     pd_rev_h2:"مراجعات المنتج",pd_first:"كوني أول من تراجع",
     pd_form_t:"ضيفي مراجعتك ⭐",pd_name_ph:"اسمك",pd_text_ph:"اكتبي رأيك...",pd_photo_ph:"رابط صورة",pd_submit:"إرسال",pd_note:"المراجعة بتظهر بعد الموافقة",
     pd_rel_h2:"منتجات هتعجبك",pd_share:"مشاركة:",pd_notfound:"😕 المنتج مش موجود",pd_sold:"تم بيعه",pd_times:"مرة",
@@ -347,7 +313,7 @@ const I18N={
   },
   en:{
     docTitle:"VelaLight | Luxury Candles",docDesc:"Luxury handmade candles.",
-    mq:"🚚 Fast delivery &nbsp;•&nbsp; 🏷️ Discounts &nbsp;•&nbsp; 🎁 Free wrapping &nbsp;•&nbsp; ✨ Guarantee &nbsp;•&nbsp;",
+    mq:"🚚 Fast delivery &nbsp;•&nbsp; 🏷️ Discounts &nbsp;•&nbsp; 🎁 Free wrapping &nbsp;•&nbsp; 📦 Safe shipping &nbsp;•&nbsp;",
     nav_home:"Home",nav_shop:"Shop",nav_about:"Our Story",nav_faq:"FAQ",nav_contact:"Contact",
     cat_all:"All Candles",cat_wood:"Wooden",cat_glass:"Glass",cat_crystal:"Crystal",cat_metal:"Metal",cat_massage:"Massage",cat_gift:"Gifts",cat_bride:"Bride Box",
     mn_cats:"Categories",mn_explore:"Explore",mn_scents:"Scents",mn_occ:"Occasions",mn_why:"Why VelaLight?",mn_rev:"Reviews",mn_track:"📦 Track",mn_contact:"Contact",
@@ -355,7 +321,7 @@ const I18N={
     hero_lead:"Every candle is handcrafted with care.",
     cta_shop:"Discover The Collection ✨",cta_story:"Our Story",
     hero_eyebrow:"✦ Luxury Handmade Candles",hero_t1:"A Light",hero_t2:"That Resembles You.",hero_desc:"Candles that shine… to brighten your day with moments you deserve.",hero_btn1:"Discover the Magic ✨",hero_btn2:"Fragrance Journey",hero_s1_v:"23",hero_s1_t:"Notes",hero_s2:"Handmade",hero_s3:"Art to Own",hero_card:"VelaLight",
-    trust1:"🚚 Delivery all over Egypt",trust2:"🤲 100% Handmade",trust3:"🎁 Free wrapping",trust4:"🔁 3-day replacement",
+    trust1:"🚚 Delivery all over Egypt",trust2:"🤲 100% Handmade",trust3:"🎁 Free wrapping",trust4:"📦 Safe & Reliable Shipping",
     prod_h2:"Choose Your Favorite",price_lbl:"💰 Price:",from_ph:"From",to_ph:"To",sort_lbl:"Sort:",
     sort_new:"Newest",sort_asc:"Low to High",sort_desc:"High to Low",sort_rating:"Top Rated",sort_best:"Best Selling",sort_disc:"Biggest Discount",
     prod_word:"products",add_cart:"+ Add to Cart",view_details:"👁️ View",no_products:"🕯️ No products",
@@ -374,12 +340,12 @@ const I18N={
     feat2t:"100% Natural",feat2d:"Pure natural wax.",
     feat3t:"Handmade",feat3d:"Hours of care.",
     feat4t:"Luxury Wrapping",feat4d:"Elegant arrangement.",
-    feat5t:"Replacement",feat5d:"Within 3 days.",
+    feat5t:"Premium Quality",feat5d:"We care about every detail for the best experience.",
     feat6t:"Support",feat6d:"We'll help you choose.",
     faq_h2:"FAQs",
     faq1q:"How long delivery?",faq1a:"3-7 business days.",
     faq2q:"Payment?",faq2a:"InstaPay upfront, shipping cash.",
-    faq3q:"Exchange?",faq3a:"Yes, 3 days.",
+    faq3q:"Are the materials safe?",faq3a:"Yes, 100% natural wax and safe cotton/wood wicks.",
     faq4q:"Natural?",faq4a:"100% natural wax.",
     faq5q:"Burn time?",faq5a:"72-96 hours.",
     faq6q:"Choose scent?",faq6a:"Yes, all 19 available.",
@@ -388,7 +354,7 @@ const I18N={
     foot_quick:"Quick Links",foot_shop:"Shop",foot_admin:"Admin",foot_pay_h:"Payment & Shipping",
     pay_title:"InstaPay",foot_pay_note:"InstaPay upfront, shipping cash.",
     foot_rights:"© 2026 - 2030 VelaLight",
-    foot_exchange:"Exchange",foot_privacy:"Privacy",foot_terms:"Terms",
+    foot_exchange:"Shipping Policy",foot_privacy:"Privacy",foot_terms:"Terms",
     shipping:"Shipping",ship_all:"all governorates",egp:"EGP",subtotal:"Subtotal",total:"Total",
     cart_title:"🛍️ Cart",delivery_h:"Delivery Details",
     ph_name:"Full name *",ph_phone:"Mobile *",ph_phone2:"Mobile",ph_city:"Governorate",ph_addr:"Address *",ph_addr2:"Address",ph_notes:"Notes",
@@ -403,7 +369,7 @@ const I18N={
     pd_scent_t:"🌸 Scent:",pd_qty_t:"Quantity:",pd_add:"🛍️ Add to Cart",pd_buy:"Order via WhatsApp",
     pd_hours:"Burn time:",pd_materials:"Materials:",pd_ship:"Delivery:",pd_ship_v:"3-7 days",
     pd_materials_v:"100% natural wax",pd_gift:"Free wrapping",pd_gift_v:"with every order",
-    pd_exchange:"Replacement",pd_exchange_v:"within 3 days",crumb_home:"Home",
+    pd_exchange:"Premium Quality",pd_exchange_v:"100% Natural & Safe",crumb_home:"Home",
     pd_rev_h2:"Reviews",pd_first:"Be the first",
     pd_form_t:"Add review ⭐",pd_name_ph:"Your name",pd_text_ph:"Your opinion...",pd_photo_ph:"Photo URL",pd_submit:"Submit",pd_note:"Reviews appear after approval",
     pd_rel_h2:"You may also like",pd_share:"Share:",pd_notfound:"😕 Not found",pd_sold:"Sold",pd_times:"times",
@@ -426,19 +392,14 @@ const I18N={
 
 const t=k=>(I18N[LANG]&&I18N[LANG][k])||I18N.ar[k]||k;
 
-/* ═══ تنسيق فقرات "من نحن" ═══ */
 (function(){
   var s=document.createElement("style");
   s.textContent=".about p{white-space:pre-line}";
   (document.head||document.documentElement).appendChild(s);
 })();
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ تنظيف الـ Cache القديم (مرة واحدة)
-   ═══════════════════════════════════════════════════════════ */
 (function cleanupOldCache(){
   try{
-    /* امسح الـ caches القديمة اللي فيها بيانات غلط */
     localStorage.removeItem("vl_products_cache_v1");
     localStorage.removeItem("vl_products_cache_v2");
     console.log("🧹 Old cache cleaned");
