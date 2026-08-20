@@ -32,6 +32,36 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="apple-touch-icon" href="RR.jpg">
 
+<!-- ═══ TRACKING CODES (GA4 & Meta Pixel) - أضف معرفاتك هنا ═══ -->
+<!-- 1. Google Analytics 4 (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  // ⚠️ استبدل G-XXXXXXXXXX بمعرف القياس (Measurement ID) الخاص بك من لوحة تحكم Google Analytics
+  gtag('config', 'G-XXXXXXXXXX'); 
+</script>
+
+<!-- 2. Meta Pixel (Facebook Pixel) -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  // ⚠️ استبدل YOUR_PIXEL_ID برقم البيكسل الخاص بك من مدير الأحداث في فيسبوك
+  fbq('init', 'YOUR_PIXEL_ID'); 
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"
+/></noscript>
+<!-- ═══ End Tracking Codes ═══ -->
+
 <!-- ═══ Preconnect for Speed ═══ -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
@@ -93,15 +123,17 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     <span>🚚 توصيل سريع لكل محافظات مصر</span>
     <span>🏷️ خصومات حصرية على مجموعات مختارة</span>
     <span>🎁 تغليف هدايا مجاني مع كل طلب</span>
+    <span>✨ ضمان استبدال خلال 3 أيام</span>
     <span>🤲 صناعة يدوية 100% بخامات طبيعية</span>
-    <span>🕯️ أكثر من 23 عطر فاخر متاح</span>
+    <span>🕯️ أكثر من 19 عطر فاخر متاح</span>
     <span>📦 شحن آمن من الورشة لحد باب بيتك</span>
     <span>💬 دعم فني يومي لخدمتك</span>
     <span>🚚 توصيل سريع لكل محافظات مصر</span>
     <span>🏷️ خصومات حصرية على مجموعات مختارة</span>
     <span>🎁 تغليف هدايا مجاني مع كل طلب</span>
+    <span>✨ ضمان استبدال خلال 3 أيام</span>
     <span>🤲 صناعة يدوية 100% بخامات طبيعية</span>
-    <span>🕯️ أكثر من 23 عطر فاخر متاح</span>
+    <span>🕯️ أكثر من 19 عطر فاخر متاح</span>
     <span>📦 شحن آمن من الورشة لحد باب بيتك</span>
     <span>💬 دعم فني يومي لخدمتك</span>
   </div>
@@ -833,6 +865,14 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     <div class="feat-grid rv">
 
+      <div class="feat">
+        <div class="fi">🚚</div>
+        <div>
+          <h4 data-i18n="feat1t">توصيل لكل المحافظات</h4>
+          <p data-i18n="feat1d">بنوصل طلبك أينما كنتِ في مصر، بتغليف آمن يحافظ على شمعتك من الورشة لحد باب بيتك.</p>
+        </div>
+        <span class="n">01</span>
+      </div>
 
       <div class="feat">
         <div class="fi">🌿</div>
@@ -852,6 +892,23 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         <span class="n">03</span>
       </div>
 
+      <div class="feat">
+        <div class="fi">🎁</div>
+        <div>
+          <h4 data-i18n="feat4t">تغليف فاخر</h4>
+          <p data-i18n="feat4d">كل شمعة تُغلّف بعناية في تنسيقٍ راقٍ يعكس جمالها، لتصلك جاهزة للإهداء.</p>
+        </div>
+        <span class="n">04</span>
+      </div>
+
+      <div class="feat">
+        <div class="fi">🔁</div>
+        <div>
+          <h4 data-i18n="feat5t">ضمان استبدال</h4>
+          <p data-i18n="feat5d">واثقين انك هتقع فى حب المنتج من اول لحظه وإن لم تكن راضيًا تمامًا، فسنحرص على استبداله.</p>
+        </div>
+        <span class="n">05</span>
+      </div>
 
       <div class="feat">
         <div class="fi">💬</div>
@@ -1273,7 +1330,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 </div>
 
 <!-- ═══════════════════════════════════════════════
-     ACCOUNT (محدّث ليدعم حالتين: مسجل دخول / ضيف)
+     ACCOUNT
      ═══════════════════════════════════════════════ -->
 
 <div class="modal" id="accOv">
@@ -1284,43 +1341,26 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
     <h3 class="fd" data-i18n="acc_title">حسابي 👤</h3>
 
-    <!-- ═══ الحالة الأولى: المستخدم مسجل دخول بالفعل ═══ -->
-    <div id="loggedInView" class="hidden">
-      <p style="color:var(--gold2); font-size:1.1rem; margin-bottom:1rem;">
-        أهلاً بك، <b id="displayName">...</b> 👋
-      </p>
-      <div style="background:var(--panel2); padding:1rem; border-radius:12px; margin-bottom:1rem; font-size:0.9rem; line-height:1.8;">
-        <p>📧 <span id="displayEmail">...</span></p>
-        <p>📱 <span id="displayPhone">...</span></p>
-        <p>📦 عدد طلباتك: <b id="ordCountLoggedIn">0</b></p>
-      </div>
-      <a href="my-orders.html" class="btn sm" style="width:100%; margin-bottom:0.5rem; text-decoration:none; text-align:center; display:block;">📦 تتبع طلباتي</a>
-      <button class="btn ghost sm" id="logoutBtn" style="width:100%" data-i18n="logout">تسجيل خروج</button>
-    </div>
+    <p style="color:var(--mut);font-size:.85rem;margin:.5rem 0 1rem" data-i18n="acc_sub">
+      سجّل بياناتك مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة.
+    </p>
 
-    <!-- ═══ الحالة الثانية: المستخدم غير مسجل (ضيف) - مبسط جداً ═══ -->
-    <div id="guestView" class="hidden">
-      <p style="color:var(--mut);font-size:.85rem;margin:.5rem 0 1rem" data-i18n="acc_sub">
-        سجّل بياناتك الأساسية مرة واحدة وهنفضل نفتكرها ليكي في كل زيارة.
-      </p>
-      <div class="co-form">
-        <input id="accName" data-i18n-ph="ph_name" placeholder="الاسم بالكامل *">
-        <input id="accPhone" type="tel" data-i18n-ph="ph_phone" placeholder="رقم الموبايل *">
-        <button class="btn" id="saveAccBtn" data-i18n="save_acc" style="width:100%">حفظ البيانات</button>
-      </div>
-      
-      <p style="color:var(--dim);font-size:.8rem;margin-top:.8rem; text-align:center;">
-        <span data-i18n="orders_count">عدد طلباتك:</span> <b id="ordCount">0</b>
+    <div class="co-form">
+      <input id="accName" data-i18n-ph="ph_name" placeholder="الاسم بالكامل *">
+      <input id="accPhone" type="tel" data-i18n-ph="ph_phone" placeholder="رقم الموبايل *">
+      <select id="accCity"></select>
+      <input id="accAddr" data-i18n-ph="ph_addr" placeholder="العنوان بالتفصيل *">
+      <button class="btn" id="saveAccBtn" data-i18n="save_acc">حفظ</button>
+      <p style="color:var(--dim);font-size:.8rem;margin-top:.5rem">
+        <span data-i18n="orders_count">عدد طلباتك:</span>
+        <b id="ordCount">0</b>
       </p>
       <a href="my-orders.html" class="btn sm" style="width:100%;margin-bottom:.5rem;text-decoration:none;text-align:center;display:block">📦 طلباتي</a>
-
-      <!-- ✨ زر جديد للضيوف للدخول لحسابهم -->
-      <div style="margin-top: 1.2rem; padding-top: 1rem; border-top: 1px dashed var(--line); text-align: center;">
-        <p style="font-size: 0.85rem; color: var(--mut); margin-bottom: 0.5rem;">لديك حساب بالفعل؟</p>
-        <button class="btn ghost sm" id="guestLoginBtn" style="width: 100%; border-color: var(--gold2); color: var(--gold2);">تسجيل الدخول بحسابك</button>
-      </div>
+      <button class="btn ghost sm" id="logoutBtn" data-i18n="logout">تسجيل خروج</button>
     </div>
-    
+
+  </div>
+
 </div>
 
 <!-- ═══════════════════════════════════════════════
