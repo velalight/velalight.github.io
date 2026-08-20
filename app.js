@@ -463,8 +463,16 @@ function renderProducts(){
               ${p.old>p.price?`<del>${money(p.old)}</del>`:""}
             </div>
             <button class="p-add" data-id="${p.id}" ${isOutOfStock?"disabled":""} aria-label="${t("add_cart")} ${pname(p)}">${isOutOfStock?(LANG==="en"?"Out of stock":"نفدت الكمية"):t("add_cart")}</button>
-            <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist?'#fee':'none'};border:1px solid ${inWishlist?'#e74c3c':'var(--line)'};border-radius:10px;padding:.4rem .6rem;cursor:pointer;font-size:1rem;transition:.2s;color:${inWishlist?'#e74c3c':'inherit'}">${inWishlist?"❤️":"🤍"}</button>
-            <button class="p-share" data-id="${p.id}" data-name="${pname(p)}" type="button" aria-label="مشاركة المنتج" style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.4rem .6rem;cursor:pointer;font-size:1rem;transition:.2s;" title="مشاركة">📤</button>
+            
+            <!-- ✨ حاوية مرنة تجبر الأزرار على البقاء جنباً إلى جنب دائماً -->
+            <div style="display:flex; gap:4px; flex-shrink:0; align-items:center;">
+              <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist?'#fee':'none'};border:1px solid ${inWishlist?'#e74c3c':'var(--line)'};border-radius:10px;cursor:pointer;font-size:1.1rem;transition:.2s;color:${inWishlist?'#e74c3c':'inherit'}; display:flex; align-items:center; justify-content:center; width:38px; height:38px; padding:0;">${inWishlist?"❤️":"🤍"}</button>
+              
+              <button class="p-share" data-id="${p.id}" data-name="${pname(p)}" type="button" aria-label="مشاركة المنتج" style="background:var(--bg);border:1px solid var(--line);border-radius:10px;cursor:pointer;transition:.2s; display:flex; align-items:center; justify-content:center; width:38px; height:38px; padding:0; color:var(--dark);" title="مشاركة">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+              </button>
+            </div>
+            
           </div>
         </div>
       `;
