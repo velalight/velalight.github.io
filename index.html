@@ -39,7 +39,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  // ⚠️ استبدل G-XXXXXXXXXX بمعرف القياس (Measurement ID) الخاص بك من لوحة تحكم Google Analytics
   gtag('config', 'G-XXXXXXXXXX'); 
 </script>
 
@@ -53,7 +52,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  // ⚠️ استبدل YOUR_PIXEL_ID برقم البيكسل الخاص بك من مدير الأحداث في فيسبوك
   fbq('init', 'YOUR_PIXEL_ID'); 
   fbq('track', 'PageView');
 </script>
@@ -123,7 +121,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     <span>🚚 توصيل سريع لكل محافظات مصر</span>
     <span>🏷️ خصومات حصرية على مجموعات مختارة</span>
     <span>🎁 تغليف هدايا مجاني مع كل طلب</span>
-    <span>✨ ضمان استبدال خلال 3 أيام</span>
     <span>🤲 صناعة يدوية 100% بخامات طبيعية</span>
     <span>🕯️ أكثر من 19 عطر فاخر متاح</span>
     <span>📦 شحن آمن من الورشة لحد باب بيتك</span>
@@ -131,7 +128,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     <span>🚚 توصيل سريع لكل محافظات مصر</span>
     <span>🏷️ خصومات حصرية على مجموعات مختارة</span>
     <span>🎁 تغليف هدايا مجاني مع كل طلب</span>
-    <span>✨ ضمان استبدال خلال 3 أيام</span>
     <span>🤲 صناعة يدوية 100% بخامات طبيعية</span>
     <span>🕯️ أكثر من 19 عطر فاخر متاح</span>
     <span>📦 شحن آمن من الورشة لحد باب بيتك</span>
@@ -263,7 +259,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         <span class="badge" id="cartCount" aria-live="polite">0</span>
       </button>
 
-            <a href="wishlist.html" class="icobtn" aria-label="المفضلة" style="text-decoration:none;display:inline-flex">
+      <a href="wishlist.html" class="icobtn" aria-label="المفضلة" style="text-decoration:none;display:inline-flex">
         ❤️
       </a>
       
@@ -363,7 +359,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     آراء عملائنا
   </a>
 
-    <a href="wishlist.html" style="color:var(--gold2);font-weight:700">
+  <a href="wishlist.html" style="color:var(--gold2);font-weight:700">
     ❤️ المفضلة
   </a>
 
@@ -373,10 +369,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
   <a href="contact.html" data-i18n="nav_contact">
     تواصل معنا
-  </a>
-
-  <a href="exchange-policy.html" data-i18n="foot_exchange">
-    سياسة الاستبدال
   </a>
 
   <a href="privacy.html" data-i18n="foot_privacy">
@@ -401,7 +393,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   <div class="vl-chroma-container">
     <div class="vl-chroma-grid">
 
-      <!-- Content Side (شمال في RTL = يظهر تاني في CSS لكن order يخليه أول على الموبايل) -->
+      <!-- Content Side -->
       <div class="vl-chroma-content">
         <div class="vl-badge-premium" data-i18n="hero_eyebrow">
           ✦ شموع يدوية فاخرة
@@ -427,7 +419,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       </div>
 
-      <!-- Image Side (يمين في RTL = يظهر أول في CSS لكن order يخليه تاني على الموبايل) -->
+      <!-- Image Side -->
       <div class="vl-chroma-visual">
         <div class="visual-wrapper">
           <div class="visual-glow"></div>
@@ -670,24 +662,22 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
   .vl-badge-premium { font-size: .65rem !important; padding: 4px 10px !important; margin-bottom: 8px !important; }
   
-  /* ✨ التعديل الجذري للعنوان في الموبايل */
   .vl-chroma-title { 
     font-size: clamp(1.5rem, 6vw, 2rem) !important; 
     margin-bottom: 8px !important; 
     line-height: 1.3 !important;
   }
   .vl-chroma-title span { 
-    display: inline !important; /* جعل الكلمتين على نفس السطر جنب بعض */
+    display: inline !important;
   }
   
   .text-gradient {
-    /* ✨ تدرج ذهبي أكثر كثافة ووضوحاً للموبايل (أقل بياضاً، أكثر ذهوباً) مع ظل خفيف للتباين */
     background: linear-gradient(135deg, #b68d2e 0%, #ffd700 30%, #d4af37 60%, #b68d2e 100%) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     background-size: 200% auto !important;
     animation: chromaFlow 3s linear infinite !important;
-    filter: drop-shadow(0 2px 4px rgba(182, 141, 46, 0.5)) !important; /* ظل لزيادة الوضوح */
+    filter: drop-shadow(0 2px 4px rgba(182, 141, 46, 0.5)) !important;
   }
 
   .vl-chroma-lead { font-size: .85rem !important; margin-bottom: 12px !important; max-width: 100% !important; line-height: 1.5 !important; }
@@ -728,7 +718,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       <h2 data-i18n="prod_h2">اختاري قطعتك المفضلة</h2>
     </div>
 
-    <!-- Chips مخفية (التصنيفات في الـ menu بس) -->
     <div class="chips" id="chips" aria-hidden="true" style="display:none"></div>
 
     <div class="pgrid rv" id="pgrid"></div>
@@ -921,21 +910,12 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       </div>
 
       <div class="feat">
-        <div class="fi">🔁</div>
-        <div>
-          <h4 data-i18n="feat5t">ضمان استبدال</h4>
-          <p data-i18n="feat5d">واثقين انك هتقع فى حب المنتج من اول لحظه وإن لم تكن راضيًا تمامًا، فسنحرص على استبداله.</p>
-        </div>
-        <span class="n">05</span>
-      </div>
-
-      <div class="feat">
         <div class="fi">💬</div>
         <div>
           <h4 data-i18n="feat6t">دعم دائم لعملائنا</h4>
           <p data-i18n="feat6d">محتار تختار إيه؟ سيبها علينا. هنسمع فكرتك ونرشح لك الهدية والعطر الأنسب.</p>
         </div>
-        <span class="n">06</span>
+        <span class="n">05</span>
       </div>
 
     </div>
@@ -1084,7 +1064,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     <div class="fbot">
       <span data-i18n="foot_rights">© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</span>
       <div>
-        <a href="exchange-policy.html" data-i18n="foot_exchange">سياسة الاستبدال</a>
         <a href="privacy.html" data-i18n="foot_privacy">سياسة الخصوصية</a>
         <a href="terms.html" data-i18n="foot_terms">شروط الاستخدام</a>
       </div>
@@ -1094,7 +1073,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   
   <!-- ═══════════════════════════════════════════════════════════
        ✨ Developer Signature — Compact v2
-       ✨ أصغر + الأسماء إنجليزي بس (Wagdy, Philopater)
        ═══════════════════════════════════════════════════════════ -->
   <style>
   .dev-signature{
@@ -1209,12 +1187,11 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     
     <p class="dev-label">
       <span class="dev-emoji">🛠️</span>
-      صُمم وصُنع بحب بواسطة
+      صُمم وصُنع بواسطة
     </p>
     
     <div class="dev-team">
       
-      <!-- ═══ Wagdy (English only) ═══ -->
       <a href="https://wa.me/201226690050?text=%D8%A3%D9%87%D9%84%D8%A7%20%D8%A3%D8%B3%D8%AA%D8%A7%D8%B0%20Wagdy%20%F0%9F%91%8B%0A%D8%B4%D9%81%D8%AA%20%D9%85%D9%88%D9%82%D9%87%20velalight.github.io%20%D9%88%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D9%85%D9%84%20%D9%85%D9%88%D9%82%D9%87%20%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A%20%D8%B2%D9%8A%D9%87.%0A%D9%85%D9%85%D9%83%D9%86%20%D9%86%D8%AA%D9%83%D9%84%D9%85%D8%9F" 
          class="dev-card" target="_blank" rel="noopener">
         <div class="dev-avatar">W</div>
@@ -1225,7 +1202,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         </div>
       </a>
       
-      <!-- ═══ Philopater (English only) ═══ -->
       <a href="https://wa.me/201277741748?text=%D8%A3%D9%87%D9%84%D8%A7%20%D8%A3%D8%B3%D8%AA%D8%A7%D8%B0%20Philopater%20%F0%9F%91%8B%0A%D8%B4%D9%81%D8%AA%20%D9%85%D9%88%D9%82%D9%87%20velalight.github.io%20%D9%88%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D9%85%D9%84%20%D9%85%D9%88%D9%82%D9%87%20%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A%20%D8%B2%D9%8A%D9%87.%0A%D9%85%D9%85%D9%83%D9%86%20%D9%86%D8%AA%D9%83%D9%84%D9%85%D8%9F" 
          class="dev-card" target="_blank" rel="noopener">
         <div class="dev-avatar">P</div>
@@ -1421,7 +1397,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 <!-- ═══ Back to Top + Service Worker + Image Loader ═══ -->
 <script>
-/* ═══ Back to Top ═══ */
 const btt = document.getElementById("backToTop");
 if(btt){
   window.addEventListener("scroll", () => {
@@ -1432,7 +1407,6 @@ if(btt){
   });
 }
 
-/* ═══ Service Worker Registration ═══ */
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
@@ -1441,7 +1415,6 @@ if('serviceWorker' in navigator){
   });
 }
 
-/* ═══ Image Fade-in Fix ═══ */
 document.addEventListener('load', function(e){
   if(e.target && e.target.tagName === 'IMG'){
     e.target.classList.add('loaded');
