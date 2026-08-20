@@ -464,7 +464,6 @@ function renderProducts(){
             </div>
             <button class="p-add" data-id="${p.id}" ${isOutOfStock?"disabled":""} aria-label="${t("add_cart")} ${pname(p)}">${isOutOfStock?(LANG==="en"?"Out of stock":"نفدت الكمية"):t("add_cart")}</button>
             
-            <!-- ✨ حاوية مرنة تجبر الأزرار على البقاء جنباً إلى جنب دائماً -->
             <div style="display:flex; gap:4px; flex-shrink:0; align-items:center;">
               <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist?'#fee':'none'};border:1px solid ${inWishlist?'#e74c3c':'var(--line)'};border-radius:10px;cursor:pointer;font-size:1.1rem;transition:.2s;color:${inWishlist?'#e74c3c':'inherit'}; display:flex; align-items:center; justify-content:center; width:38px; height:38px; padding:0;">${inWishlist?"❤️":"🤍"}</button>
               
@@ -489,7 +488,6 @@ function renderProducts(){
 }
 
 function handleProductGridClick(e){
-  // ✨ 1. منطق زر المشاركة الذكي
   const shareBtn = e.target.closest('.p-share');
   if (shareBtn) {
     e.preventDefault();
@@ -708,7 +706,6 @@ function initCart(){
     });
   });
 
-  // ✨ 2. إضافة إشارات الثقة (Trust Signals) أسفل زر الدفع في السلة
   const checkoutBtn = document.getElementById('checkoutBtn');
   if (checkoutBtn && !document.getElementById('trustBadges')) {
     const badges = document.createElement('div');
@@ -972,9 +969,6 @@ function genOrderId(){
   return "VL-"+s;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ checkout — محصّنة بـ Error Handling شامل + Retry
-   ═══════════════════════════════════════════════════════════ */
 async function checkout(){
   const c=getCart();
 
@@ -1293,9 +1287,6 @@ ${itemsSummary}
   }, 1500);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ ACCOUNT — Simplified Guest View + Login Button
-   ═══════════════════════════════════════════════════════════ */
 function initAccount() {
   $("#accBtn")?.addEventListener("click", () => {
     const loggedInView = $("#loggedInView");
@@ -1536,24 +1527,53 @@ function stockBadge(p){
   return"";
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ decrementStock — محسّن بـ runTransaction (Atomic Operation)
+   ✨ يمنع Race Conditions: لا يمكن بيع نفس القطعة مرتين
+   ═══════════════════════════════════════════════════════════ */
 async function decrementStock(items){
-  if(!window.FB||typeof window.FB.update!=="function")return;
+  if(!window.FB || !window.FB.db) return;
+  
+  // استيراد runTransaction و doc من Firestore
+  const { runTransaction, doc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+  const db = window.FB.db;
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
+  
   for(const it of items){
-    const p=products.find(x=>x.id===it.id);
-    if(!p)continue;
-    if(p.stock===undefined||p.stock===null||p.stock===""||isNaN(Number(p.stock)))continue;
-    const newStock=Math.max(0,Number(p.stock)-Number(it.qty||1));
-    try{
-      if(p._fid){await window.FB.update("products",p._fid,{stock:newStock});}
-      else{await window.FB.set("products",p.id,{id_:p.id,stock:newStock});}
-    }catch(e){console.warn("⚠️ stock update failed",e);}
+    const p = products.find(x => x.id === it.id);
+    if(!p) continue;
+    
+    // تخطي إذا لم يكن هناك مخزون محدد
+    if(p.stock === undefined || p.stock === null || p.stock === "" || isNaN(Number(p.stock))) continue;
+    
+    const docId = p._fid || p.id;
+    const docRef = doc(db, "products", docId);
+    const qtyToSubtract = Number(it.qty || 1);
+    
+    try {
+      // ✨ runTransaction يضمن أن العملية ذرية (Atomic)
+      // إذا حاول عميلان تحديث نفس المنتج في نفس الوقت، أحدهما سينتظر الآخر
+      await runTransaction(db, async (transaction) => {
+        const sfDoc = await transaction.get(docRef);
+        
+        if (!sfDoc.exists()) {
+          throw new Error("Product document does not exist!");
+        }
+        
+        const currentStock = Number(sfDoc.data().stock || 0);
+        const newStock = Math.max(0, currentStock - qtyToSubtract);
+        
+        // تحديث المخزون داخل الـ transaction
+        transaction.update(docRef, { stock: newStock });
+      });
+      
+      console.log(`✅ Stock updated for ${p.id}: ${qtyToSubtract} subtracted`);
+    } catch(e) {
+      console.warn("⚠️ stock transaction failed for", p.id, e);
+    }
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   نظام الكوبونات
-   ═══════════════════════════════════════════════════════════ */
 let appliedCoupon=null;
 
 function calcCouponDiscount(sub){
@@ -1600,7 +1620,6 @@ async function consumeCoupon(){
   if($("#couponInput"))$("#couponInput").value="";
 }
 
-/* ═══ تصدير الدوال عالمياً ═══ */
 window.getWishlist = getWishlist;
 window.toggleWishlist = toggleWishlist;
 window.isInWishlist = isInWishlist;
