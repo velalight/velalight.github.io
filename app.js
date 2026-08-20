@@ -4,7 +4,7 @@
 /* ═══════════════════════════════════════════════════════════
    ✨ TRACKING DATA CAPTURE (UTM & Click IDs)
    يلتقط بيانات الإعلان ويحفظها في المتصفح لربطها بالطلب لاحقاً
-   ═══════════════════════════════════════════════════════════ */
+   ══════════════════════════════════════════════════════════ */
 function captureTrackingData() {
   const params = new URLSearchParams(window.location.search);
   const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'fbclid', 'gclid', 'ttclid'];
@@ -41,7 +41,7 @@ function saveWishlist(list) {
   try {
     localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
   } catch(e) {
-    console.warn("⚠️ Failed to save wishlist:", e);
+    console.warn("️ Failed to save wishlist:", e);
   }
 }
 
@@ -129,7 +129,7 @@ const velaScentTr=name=>{
       handmade_note:"قطعة يدوية تُجهّز بعناية عند الطلب"
     },
     en:{
-      ship_note:"🚚 Shipping: paid cash to courier on delivery.",
+      ship_note:" Shipping: paid cash to courier on delivery.",
       pay_products_note:"💳 Payment details (InstaPay / Wallet / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
       t_scentwarn:"⚠️ Please choose a scent first.",
       scent_req:"Required",
@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     initProductRealtimeSync();
     requestIdle(() => prefetchProductPages());
   }).catch(err => {
-    console.warn("⚠️ loadAll failed:", err);
+    console.warn("️ loadAll failed:", err);
     if (typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)) {
       if (typeof ALL_PRODUCTS === "undefined" || !ALL_PRODUCTS.length) {
         window.ALL_PRODUCTS = [...PRODUCTS];
@@ -496,7 +496,7 @@ function renderProducts(){
       
       frag.appendChild(article);
     } catch(e) {
-      console.warn("⚠️ Failed to render product:", p.id, e);
+      console.warn("️ Failed to render product:", p.id, e);
     }
   });
 
@@ -852,7 +852,7 @@ function renderCart(){
       qtyRow.id = 'qtyDiscountRow';
       qtyRow.className = 'trow';
       qtyRow.style.cssText = 'display:none; margin-top:0.5rem; color:var(--ok);';
-      qtyRow.innerHTML = `<span>🎁 خصم الكمية (3+ قطع من نفس المنتج):</span><b id="qtyDiscountVal">-0</b>`;
+      qtyRow.innerHTML = `<span> خصم الكمية (3+ قطع من نفس المنتج):</span><b id="qtyDiscountVal">-0</b>`;
       const subRow = dfoot.querySelector('.trow'); 
       if (subRow) dfoot.insertBefore(qtyRow, subRow);
       else dfoot.appendChild(qtyRow);
@@ -1031,7 +1031,7 @@ async function checkout(){
     $("#coName")?.focus();return;
   }
   if(!phone){
-    toast(LANG==="en"?"⚠️ Please enter your mobile number.":"⚠️ من فضلك اكتب رقم الموبايل.");
+    toast(LANG==="en"?"️ Please enter your mobile number.":"️ من فضلك اكتب رقم الموبايل.");
     $("#coPhone")?.focus();return;
   }
   if(!addr){
@@ -1091,7 +1091,7 @@ async function checkout(){
     msg+=`🎁 خصم الكمية (3+ قطع): -${money(qtyDiscount)}\n`;
   }
   if(couponDiscount>0&&appliedCoupon){
-    msg+=`🎟️ كوبون ${appliedCoupon.code}: -${money(couponDiscount)}\n`;
+    msg+=`️ كوبون ${appliedCoupon.code}: -${money(couponDiscount)}\n`;
   }
   msg+=`🎁 هدية ليك: كود THANKS10 لخصم 10% على طلبك الجاي\n`;
   
@@ -1164,7 +1164,7 @@ async function checkout(){
   try {
     await decrementStock(c);
   } catch(e) {
-    console.warn("⚠️ Stock decrement failed:", e);
+    console.warn("️ Stock decrement failed:", e);
   }
   
   try {
@@ -1246,7 +1246,7 @@ async function checkout(){
 
 function waTotalLabel(){
   if(I18N&&I18N[LANG]&&I18N[LANG].wa_total){return I18N[LANG].wa_total;}
-  return LANG==="en"?"💰 Products Total:":"💰 إجمالي المنتجات:";
+  return LANG==="en"?" Products Total:":"💰 إجمالي المنتجات:";
 }
 
 const WEB3FORMS_KEY = "a23e1d50-37ee-4aec-a465-aeeb819c02a1";
@@ -1262,8 +1262,8 @@ async function sendOrderConfirmationEmail(orderData) {
     }).join("\n") || "منتجات متعددة";
     
     let discountText = "";
-    if(orderData.qtyDiscount > 0) discountText += `🎁 خصم الكمية: -${orderData.qtyDiscount} جنيه\n`;
-    if(orderData.couponDiscount > 0) discountText += `🎟️ كوبون ${orderData.couponCode}: -${orderData.couponDiscount} جنيه\n`;
+    if(orderData.qtyDiscount > 0) discountText += ` خصم الكمية: -${orderData.qtyDiscount} جنيه\n`;
+    if(orderData.couponDiscount > 0) discountText += `️ كوبون ${orderData.couponCode}: -${orderData.couponDiscount} جنيه\n`;
 
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
@@ -1297,7 +1297,7 @@ async function sendOrderConfirmationEmail(orderData) {
 ${itemsText}
 
 ═══════════════════════════════════════
-💰 الإجمالي: ${orderData.total} جنيه
+ الإجمالي: ${orderData.total} جنيه
 ${discountText ? discountText : ""}
 ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
 ═══════════════════════════════════════
@@ -1309,7 +1309,7 @@ ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
 • الشحن: كاش للمندوب عند الاستلام.
 ═══════════════════════════════════════
 
-⏳ الحالة: قيد المراجعة
+ الحالة: قيد المراجعة
 
 — VelaLight Admin Panel
         `.trim()
@@ -1345,7 +1345,7 @@ function openWhatsAppConfirmation(orderData) {
   
   let discountText = "";
   if(orderData.qtyDiscount > 0) discountText += `🎁 خصم الكمية: -${orderData.qtyDiscount} جنيه\n`;
-  if(orderData.couponDiscount > 0) discountText += `🎟️ كوبون ${orderData.couponCode}: -${orderData.couponDiscount} جنيه\n`;
+  if(orderData.couponDiscount > 0) discountText += `️ كوبون ${orderData.couponCode}: -${orderData.couponDiscount} جنيه\n`;
 
   const message = `✨ أهلاً VelaLight!
 
@@ -1355,14 +1355,14 @@ function openWhatsAppConfirmation(orderData) {
 👤 الاسم: ${orderData.name}
 💰 الإجمالي: ${orderData.total} جنيه
 ${discountText}
-${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
+${orderData.shippingIncluded ? " الشحن: مجاني\n" : ""}
 📍 العنوان:
 ${orderData.city || ""} - ${orderData.address}
 
-🛍️ المنتجات:
+️ المنتجات:
 ${itemsSummary}
 
-🎁 هدية: كود THANKS10 لخصم 10% على طلبك الجاي
+ هدية: كود THANKS10 لخصم 10% على طلبك الجاي
 
 ⏳ في انتظار إرسال تفاصيل الدفع وتأكيد الطلب 📱
 
@@ -1391,29 +1391,40 @@ function initAccount() {
       return;
     }
 
-    // ✨ جلب بيانات المستخدم المحدثة مباشرة من Firebase لضمان عدم ظهور الحقول فارغة
-    if (typeof VL_GetCurrentUser === "function") {
-      const userData = await VL_GetCurrentUser();
-      if (userData) {
-        if ($("#accName")) $("#accName").value = userData.name || "";
-        if ($("#accPhone")) $("#accPhone").value = userData.phone || "";
-        if ($("#accCity")) $("#accCity").value = userData.city || "";
-        if ($("#accAddr")) $("#accAddr").value = userData.address || "";
-        if ($("#ordCount")) $("#ordCount").textContent = userData.ordersCount || 0;
-        
-        // تحديث التخزين المحلي لضمان توافق بيانات السلة
-        localStorage.setItem("vl_user", JSON.stringify({
-          uid: userData.uid,
-          email: userData.email || "",
-          name: userData.name || "",
-          phone: userData.phone || "",
-          city: userData.city || "",
-          addr: userData.address || "",
-          orders: userData.ordersCount || 0
-        }));
+    // ✨ جلب بيانات المستخدم المحدثة مباشرة من Firebase
+    try {
+      if (typeof VL_GetCurrentUser === "function") {
+        const userData = await VL_GetCurrentUser();
+        if (userData) {
+          if ($("#accName")) $("#accName").value = userData.name || "";
+          if ($("#accPhone")) $("#accPhone").value = userData.phone || "";
+          if ($("#accCity")) $("#accCity").value = userData.city || "";
+          if ($("#accAddr")) $("#accAddr").value = userData.address || "";
+          if ($("#ordCount")) $("#ordCount").textContent = userData.ordersCount || 0;
+          
+          // تحديث التخزين المحلي لضمان توافق بيانات السلة
+          localStorage.setItem("vl_user", JSON.stringify({
+            uid: userData.uid,
+            email: userData.email || "",
+            name: userData.name || "",
+            phone: userData.phone || "",
+            city: userData.city || "",
+            addr: userData.address || "",
+            orders: userData.ordersCount || 0
+          }));
+        }
+      } else {
+        // Fallback في حالة عدم توفر الدالة
+        const localUser = getSavedUser();
+        if (localUser) {
+          if ($("#accName")) $("#accName").value = localUser.name || "";
+          if ($("#accPhone")) $("#accPhone").value = localUser.phone || "";
+          if ($("#ordCount")) $("#ordCount").textContent = localUser.orders || 0;
+        }
       }
-    } else {
-      // Fallback في حالة عدم توفر الدالة
+    } catch (error) {
+      console.warn("⚠️ Error loading user data:", error);
+      // في حالة الخطأ، نستخدم البيانات المحلية
       const localUser = getSavedUser();
       if (localUser) {
         if ($("#accName")) $("#accName").value = localUser.name || "";
@@ -1669,7 +1680,7 @@ async function decrementStock(items){
       
       console.log(`✅ Stock updated for ${p.id}: ${qtyToSubtract} subtracted`);
     } catch(e) {
-      console.warn("⚠️ stock transaction failed for", p.id, e);
+      console.warn("️ stock transaction failed for", p.id, e);
     }
   }
 }
@@ -1737,7 +1748,7 @@ if (typeof window.addToCart === "function") {
   };
 }
 
-/* ═══ تصدير الدوال عالمياً ═══ */
+/* ═══ تصدير الدوال عالمياً ══ */
 window.getWishlist = getWishlist;
 window.toggleWishlist = toggleWishlist;
 window.isInWishlist = isInWishlist;
