@@ -468,12 +468,12 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 .vl-chroma-hero {
   position: relative;
-  min-height: auto;              /* ✨ شيلنا الـ 65vh */
+  min-height: auto;
   display: flex;
   align-items: center;
   overflow: hidden;
   background: var(--c-cream);
-  padding: 24px 0;               /* ✨ كان 40px */
+  padding: 24px 0;
 }
 
 .vl-chroma-bg { position: absolute; inset: 0; z-index: 0; }
@@ -505,7 +505,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 32px;                     /* ✨ كان 40px */
+  gap: 32px;
   direction: ltr;
 }
 
@@ -519,15 +519,15 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   border-radius: 50px;
   font-size: 0.8rem;
   font-weight: 700;
-  margin-bottom: 16px;           /* ✨ كان 20px */
+  margin-bottom: 16px;
   border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .vl-chroma-title {
   font-family: "El Messiri", serif;
-  font-size: clamp(2.6rem, 4.5vw, 3.8rem);  /* ✨ أصغر شوية */
+  font-size: clamp(2.6rem, 4.5vw, 3.8rem);
   line-height: 1.1;
-  margin: 0 0 14px;              /* ✨ كان 20px */
+  margin: 0 0 14px;
   color: var(--c-dark);
 }
 
@@ -545,9 +545,9 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 @keyframes chromaFlow { to { background-position: 200% center; } }
 
 .vl-chroma-lead {
-  font-size: 1.1rem;             /* ✨ كان 1.2rem */
+  font-size: 1.1rem;
   color: #5a4a3f;
-  margin-bottom: 22px;           /* ✨ كان 30px */
+  margin-bottom: 22px;
   max-width: 500px;
 }
 
@@ -556,7 +556,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 .btn-primary-lux {
   background: var(--c-dark);
   color: #fff;
-  padding: 12px 28px;            /* ✨ كان 14px 32px */
+  padding: 12px 28px;
   border-radius: 12px;
   text-decoration: none;
   font-weight: 700;
@@ -572,7 +572,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   font-weight: 700;
   display: flex;
   align-items: center;
-  padding: 12px 0;               /* ✨ كان 14px */
+  padding: 12px 0;
   border-bottom: 2px solid transparent;
   transition: 0.3s;
 }
@@ -584,7 +584,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 .visual-wrapper {
   position: relative;
   width: 100%;
-  max-width: 360px;              /* ✨ كان 420px */
+  max-width: 360px;
   aspect-ratio: 1;
 }
 
@@ -620,11 +620,11 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   bottom: 10%;
   left: -5%;
   background: #fff;
-  padding: 12px 24px;            /* ✨ كان 14px 30px */
+  padding: 12px 24px;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(212,175,55,0.1);
   font-family: 'El Messiri', serif;
-  font-size: 1.15rem;            /* ✨ كان 1.25rem */
+  font-size: 1.15rem;
   font-weight: 700;
   color: #1a1512;
   letter-spacing: 0.5px;
@@ -643,7 +643,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ موبايل: الشمعة يمين + الكلام شمال (جنب بعض)
+   ✨ موبايل: تحسين وضوح العنوان وجعل الكلمتين على نفس السطر
    ═══════════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
   .vl-chroma-hero {
@@ -651,17 +651,16 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     padding: 16px 0 12px !important;
   }
   .vl-chroma-grid {
-    /* ✨ جنب-ب-جنب: عمود الكلام (يسار في RTL) + عمود الشمعة (يمين في RTL) */
     grid-template-columns: 1fr 1.1fr !important;
     gap: 14px !important;
     align-items: center !important;
   }
   .vl-chroma-content {
-    order: 1 !important;          /* الكلام في العمود الأول (شمال بصرياً في RTL) */
+    order: 1 !important;
     text-align: right !important;
   }
   .vl-chroma-visual {
-    order: 2 !important;          /* الشمعة في العمود التاني (يمين بصرياً في RTL) */
+    order: 2 !important;
   }
   .visual-wrapper {
     max-width: 100% !important;
@@ -670,12 +669,32 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   }
 
   .vl-badge-premium { font-size: .65rem !important; padding: 4px 10px !important; margin-bottom: 8px !important; }
-  .vl-chroma-title  { font-size: clamp(1.3rem, 5vw, 1.8rem) !important; margin-bottom: 6px !important; }
-  .vl-chroma-lead   { font-size: .78rem !important; margin-bottom: 10px !important; max-width: 100% !important; line-height: 1.4 !important; }
+  
+  /* ✨ التعديل الجذري للعنوان في الموبايل */
+  .vl-chroma-title { 
+    font-size: clamp(1.5rem, 6vw, 2rem) !important; 
+    margin-bottom: 8px !important; 
+    line-height: 1.3 !important;
+  }
+  .vl-chroma-title span { 
+    display: inline !important; /* جعل الكلمتين على نفس السطر جنب بعض */
+  }
+  
+  .text-gradient {
+    /* ✨ تدرج ذهبي أكثر كثافة ووضوحاً للموبايل (أقل بياضاً، أكثر ذهوباً) مع ظل خفيف للتباين */
+    background: linear-gradient(135deg, #b68d2e 0%, #ffd700 30%, #d4af37 60%, #b68d2e 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-size: 200% auto !important;
+    animation: chromaFlow 3s linear infinite !important;
+    filter: drop-shadow(0 2px 4px rgba(182, 141, 46, 0.5)) !important; /* ظل لزيادة الوضوح */
+  }
 
-  .vl-chroma-actions { flex-direction: column !important; align-items: stretch !important; gap: 6px !important; }
-  .btn-primary-lux  { width: 100% !important; padding: 9px 12px !important; font-size: .82rem !important; text-align: center !important; }
-  .btn-link-lux     { justify-content: center !important; padding: 5px 0 !important; font-size: .82rem !important; }
+  .vl-chroma-lead { font-size: .85rem !important; margin-bottom: 12px !important; max-width: 100% !important; line-height: 1.5 !important; }
+
+  .vl-chroma-actions { flex-direction: column !important; align-items: stretch !important; gap: 8px !important; }
+  .btn-primary-lux { width: 100% !important; padding: 10px 12px !important; font-size: .85rem !important; text-align: center !important; }
+  .btn-link-lux { justify-content: center !important; padding: 6px 0 !important; font-size: .85rem !important; }
 
   .floating-card {
     bottom: 3% !important;
@@ -689,8 +708,8 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 @media (max-width: 480px) {
   .vl-chroma-hero { padding: 14px 0 10px !important; }
   .vl-chroma-grid { gap: 10px !important; }
-  .vl-chroma-title { font-size: 1.25rem !important; margin-bottom: 5px !important; }
-  .vl-chroma-lead  { font-size: .74rem !important; margin-bottom: 8px !important; }
+  .vl-chroma-title { font-size: 1.35rem !important; margin-bottom: 6px !important; }
+  .vl-chroma-lead  { font-size: .8rem !important; margin-bottom: 10px !important; }
   .vl-badge-premium { font-size: .6rem !important; padding: 3px 9px !important; }
   .floating-card { font-size: .72rem !important; padding: 5px 10px !important; }
 }
@@ -1080,40 +1099,40 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   <style>
   .dev-signature{
     margin-top:2rem;
-    padding:1.1rem 1rem;           /* ✨ كان 2rem 1.2rem */
+    padding:1.1rem 1rem;
     background:linear-gradient(135deg, var(--panel) 0%, var(--panel2) 100%);
     border:1px solid var(--line);
-    border-radius:16px;            /* ✨ كان 22px */
+    border-radius:16px;
     text-align:center;
   }
   .dev-line{
-    width:40px;                    /* ✨ كان 60px */
+    width:40px;
     height:2px;
     background:linear-gradient(90deg, transparent, var(--gold2), transparent);
-    margin:0 auto .6rem;           /* ✨ كان 1rem */
+    margin:0 auto .6rem;
   }
   .dev-label{
     color:var(--dim);
-    font-size:.75rem;              /* ✨ كان .85rem */
-    margin-bottom:.7rem;           /* ✨ كان 1.2rem */
+    font-size:.75rem;
+    margin-bottom:.7rem;
     letter-spacing:.3px;
   }
   .dev-emoji{ font-size:.9rem; margin-inline-end:.3rem; }
   .dev-team{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:.7rem;                     /* ✨ كان 1rem */
+    gap:.7rem;
     max-width:640px;
-    margin:0 auto .8rem;           /* ✨ كان 1.5rem */
+    margin:0 auto .8rem;
   }
   .dev-card{
     display:flex;
     align-items:center;
-    gap:.6rem;                     /* ✨ كان .8rem */
-    padding:.7rem .8rem;           /* ✨ كان 1rem */
+    gap:.6rem;
+    padding:.7rem .8rem;
     background:var(--bg);
     border:1px solid var(--line);
-    border-radius:12px;            /* ✨ كان 16px */
+    border-radius:12px;
     text-decoration:none;
     color:inherit;
     transition:.25s ease;
@@ -1125,7 +1144,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     box-shadow:0 6px 18px -6px rgba(217,171,95,.3);
   }
   .dev-avatar{
-    width:38px;                    /* ✨ كان 48px */
+    width:38px;
     height:38px;
     border-radius:50%;
     background:linear-gradient(135deg, var(--gold), #b8863f);
@@ -1134,7 +1153,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     align-items:center;
     justify-content:center;
     font-family:var(--fd);
-    font-size:1.15rem;             /* ✨ كان 1.4rem */
+    font-size:1.15rem;
     font-weight:700;
     flex-shrink:0;
     box-shadow:0 3px 10px -3px rgba(217,171,95,.5);
@@ -1142,31 +1161,31 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   .dev-info{
     display:flex;
     flex-direction:column;
-    gap:.1rem;                     /* ✨ كان .15rem */
+    gap:.1rem;
     min-width:0;
   }
   .dev-info b{
     font-family:var(--fd);
-    font-size:.82rem;              /* ✨ كان .92rem */
+    font-size:.82rem;
     color:var(--gold2);
     line-height:1.2;
   }
   .dev-info span{
-    font-size:.72rem;              /* ✨ كان .8rem */
+    font-size:.72rem;
     color:var(--dark);
     direction:ltr;
     text-align:start;
   }
   .dev-info small{
-    font-size:.65rem;              /* ✨ كان .7rem */
+    font-size:.65rem;
     color:var(--dim);
     margin-top:.1rem;
   }
   .dev-cta{
-    font-size:.78rem;              /* ✨ كان .88rem */
+    font-size:.78rem;
     color:var(--mut);
     margin:0;
-    padding-top:.7rem;             /* ✨ كان 1rem */
+    padding-top:.7rem;
     border-top:1px dashed var(--line);
   }
   .dev-cta strong{
@@ -1256,7 +1275,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
       <textarea id="coNotes" rows="2" data-i18n-ph="ph_notes" placeholder="ملاحظات / طلبات إضافية"></textarea>
     </div>
 
-        <!-- ═══ ✨ الكوبونات ═══ -->
     <div style="display:flex;gap:.5rem;margin-top:.8rem">
       <input id="couponInput" placeholder="🎟️ كود الكوبون" style="flex:1">
       <button class="btn ghost sm" id="applyCouponBtn" type="button">تطبيق</button>
