@@ -106,7 +106,7 @@ const velaScentTr=name=>{
     ar:{
       ship_note:"🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
       pay_products_note:"💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.",
-      t_scentwarn:"⚠️ من فضلك اختار العطر الأول.",
+      t_scentwarn:"⚠️ من فضلك اختار العطر أولاً.",
       scent_req:"مطلوب",
       handmade_note:"قطعة يدوية تُجهّز بعناية عند الطلب"
     },
@@ -550,6 +550,13 @@ function initQuickAdd(){
   });
   $("#scentModalAdd")?.addEventListener("click",()=>{
     if(!quickAddProduct)return;
+    
+    // قراءة العطر من القائمة المنسدلة الجديدة
+    const modalSelect = $("#modalScentSelect");
+    if(modalSelect && !quickAddScent) {
+        quickAddScent = modalSelect.value;
+    }
+    
     if(!quickAddScent){toast(t("t_scentwarn"));return;}
     if(addToCart(quickAddProduct,{scent:quickAddScent,qty:quickAddQty})){
       closeModal("scentOv");
@@ -571,22 +578,18 @@ function openQuickAdd(p){
   const w=$("#scentModalScents");
   if(!w)return;
 
-  const frag = document.createDocumentFragment();
-  VELA_SCENTS.forEach(s => {
-    const btn = document.createElement('button');
-    btn.className = 'chip';
-    btn.type = 'button';
-    btn.dataset.s = s[0];
-    btn.textContent = velaScentTr(s[0]);
-    btn.addEventListener('click', () => {
-      w.querySelectorAll('.chip').forEach(x => x.classList.remove('on'));
-      btn.classList.add('on');
-      quickAddScent = s[0];
-    });
-    frag.appendChild(btn);
+  // ✨ تحويل العطور من أزرار متناثرة إلى قائمة منسدلة أنيقة وسهلة
+  w.innerHTML = `
+    <select id="modalScentSelect" style="width:100%; padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:1rem; cursor:pointer; outline:none;">
+      <option value="">${LANG==="en"?"Choose a scent...":"اختار العطر..."}</option>
+      ${VELA_SCENTS.map(s => `<option value="${s[0]}">${velaScentTr(s[0])}</option>`).join('')}
+    </select>
+  `;
+
+  // تحديث القيمة عند التغيير
+  $("#modalScentSelect").addEventListener("change", (e) => {
+    quickAddScent = e.target.value;
   });
-  w.innerHTML = '';
-  w.appendChild(frag);
 
   openDrawer("scentOv");
 }
@@ -779,8 +782,29 @@ function renderCart(){
   w.innerHTML = '';
   w.appendChild(frag);
 
+  /* ═══════════════════════════════════════════════════════════
+     ✨ اقتراح منتج تكميلي — بحث موسع في الاسم + الوصف + التصنيف
+     ═══════════════════════════════════════════════════════════ */
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
-  const suggestedProduct = products.find(p => (p.name && (p.name.includes("فواحة") || p.name.includes("دولاب"))) || (p.nameEn && p.nameEn.toLowerCase().includes("freshener")));
+  const cartProductIds = c.map(it => it.id);
+  
+  const suggestedProduct = products.find(p => {
+    if (!p || cartProductIds.includes(p.id)) return false; // لا تقترح منتج موجود بالفعل في السلة
+    if (p.active === false) return false; // لا تقترح منتج غير نشط
+    
+    const searchText = [
+      p.name || "",
+      p.nameEn || "",
+      p.desc || "",
+      p.descEn || "",
+      p.cat || ""
+    ].join(" ").toLowerCase();
+    
+    return searchText.includes("فواحة") || 
+           searchText.includes("دولاب") || 
+           searchText.includes("freshener") ||
+           searchText.includes("closet");
+  });
   
   if (suggestedProduct) {
     const suggestDiv = document.createElement('div');
@@ -1534,7 +1558,6 @@ function stockBadge(p){
 async function decrementStock(items){
   if(!window.FB || !window.FB.db) return;
   
-  // استيراد runTransaction و doc من Firestore
   const { runTransaction, doc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
   const db = window.FB.db;
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
@@ -1543,7 +1566,6 @@ async function decrementStock(items){
     const p = products.find(x => x.id === it.id);
     if(!p) continue;
     
-    // تخطي إذا لم يكن هناك مخزون محدد
     if(p.stock === undefined || p.stock === null || p.stock === "" || isNaN(Number(p.stock))) continue;
     
     const docId = p._fid || p.id;
@@ -1551,8 +1573,6 @@ async function decrementStock(items){
     const qtyToSubtract = Number(it.qty || 1);
     
     try {
-      // ✨ runTransaction يضمن أن العملية ذرية (Atomic)
-      // إذا حاول عميلان تحديث نفس المنتج في نفس الوقت، أحدهما سينتظر الآخر
       await runTransaction(db, async (transaction) => {
         const sfDoc = await transaction.get(docRef);
         
@@ -1563,7 +1583,6 @@ async function decrementStock(items){
         const currentStock = Number(sfDoc.data().stock || 0);
         const newStock = Math.max(0, currentStock - qtyToSubtract);
         
-        // تحديث المخزون داخل الـ transaction
         transaction.update(docRef, { stock: newStock });
       });
       
@@ -1620,6 +1639,7 @@ async function consumeCoupon(){
   if($("#couponInput"))$("#couponInput").value="";
 }
 
+/* ═══ تصدير الدوال عالمياً ═══ */
 window.getWishlist = getWishlist;
 window.toggleWishlist = toggleWishlist;
 window.isInWishlist = isInWishlist;
