@@ -551,7 +551,6 @@ function initQuickAdd(){
   $("#scentModalAdd")?.addEventListener("click",()=>{
     if(!quickAddProduct)return;
     
-    // قراءة العطر من القائمة المنسدلة الجديدة
     const modalSelect = $("#modalScentSelect");
     if(modalSelect && !quickAddScent) {
         quickAddScent = modalSelect.value;
@@ -578,7 +577,6 @@ function openQuickAdd(p){
   const w=$("#scentModalScents");
   if(!w)return;
 
-  // ✨ تحويل العطور من أزرار متناثرة إلى قائمة منسدلة أنيقة وسهلة (Dropdown)
   w.innerHTML = `
     <select id="modalScentSelect" style="width:100%; padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:1rem; cursor:pointer; outline:none;">
       <option value="">${LANG==="en"?"Choose a scent...":"اختار العطر..."}</option>
@@ -586,7 +584,6 @@ function openQuickAdd(p){
     </select>
   `;
 
-  // تحديث القيمة عند التغيير
   $("#modalScentSelect").addEventListener("change", (e) => {
     quickAddScent = e.target.value;
   });
@@ -782,9 +779,6 @@ function renderCart(){
   w.innerHTML = '';
   w.appendChild(frag);
 
-  /* ═══════════════════════════════════════════════════════════
-     ✨ اقتراح منتج تكميلي — تم تعديل النص وإصلاح التحديث الفوري
-     ═══════════════════════════════════════════════════════════ */
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   const cartProductIds = c.map(it => it.id);
   
@@ -826,7 +820,6 @@ function renderCart(){
       if(btn) {
         btn.addEventListener('click', () => {
           addToCart(suggestedProduct, {scent: suggestedProduct.scent || "بدون عطر", qty: 1});
-          // ✨ إصلاح التحديث الفوري للسلة دون الحاجة لإغلاقها وفتحها
           renderCart();
           cartBadge();
         });
@@ -933,17 +926,16 @@ function updateTotals(c){
   if($("#cartDiscount")){$("#cartDiscount").textContent="-"+money(couponDisc);}
   if($("#couponCodeLbl")&&appliedCoupon){$("#couponCodeLbl").textContent=appliedCoupon.code;}
   
-  // ✨ إخفاء سطر "الشحن كاش" تماماً إذا كان العميل مؤهلاً للشحن المجاني
   const freeShipRow = $("#freeShippingRow");
   const shipNote = document.querySelector('.cart-shipping-note');
   
   if (freeShipRow && shipNote) {
     if (sub >= 3000) {
       freeShipRow.style.display = "flex";
-      shipNote.style.display = "none"; // يختفي سطر الشحن المدفوع
+      shipNote.style.display = "none";
     } else {
       freeShipRow.style.display = "none";
-      shipNote.style.display = "block"; // يظهر سطر الشحن المدفوع
+      shipNote.style.display = "block";
     }
   }
 
@@ -1044,6 +1036,15 @@ async function checkout(){
   const couponDiscount=(typeof calcCouponDiscount==="function")?calcCouponDiscount(subTotal):0;
   const totalDiscount = qtyDiscount + couponDiscount;
   const total=Math.max(0,subTotal-totalDiscount);
+  
+  // ✨ Meta Pixel: InitiateCheckout Event
+  if (typeof fbq === "function") {
+    fbq("track", "InitiateCheckout", {
+      value: total,
+      currency: "EGP",
+      num_items: c.length
+    });
+  }
   
   let userId = null;
   let userEmail = null;
@@ -1323,17 +1324,15 @@ function initAccount() {
   $("#accBtn")?.addEventListener("click", () => {
     const isFirebaseLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
 
-    // ✨ إذا لم يكن مسجلاً، افتح نافذة الدخول البسيطة فوراً ولا تظهر نموذج البيانات المعقد
     if (!isFirebaseLogged) {
       if (typeof openAuthModal === "function") {
         openAuthModal();
       } else {
         toast("⚠️ يرجى تسجيل الدخول أولاً");
       }
-      return; // توقف هنا
+      return;
     }
 
-    // إذا كان مسجلاً، اعرض بياناته
     const localUser = getSavedUser();
     if (localUser) {
       if($("#accName")) $("#accName").value = localUser.name || "";
@@ -1545,10 +1544,6 @@ function stockBadge(p){
   return"";
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ decrementStock — محسّن بـ runTransaction (Atomic Operation)
-   ✨ يمنع Race Conditions: لا يمكن بيع نفس القطعة مرتين
-   ═══════════════════════════════════════════════════════════ */
 async function decrementStock(items){
   if(!window.FB || !window.FB.db) return;
   
@@ -1631,6 +1626,28 @@ async function consumeCoupon(){
   }
   appliedCoupon=null;
   if($("#couponInput"))$("#couponInput").value="";
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ Meta Pixel Tracking Wrapper for AddToCart
+   هذه الخدعة البرمجية تراقب دالة addToCart العالمية وترسل الحدث تلقائياً
+   سواء تمت الإضافة من الصفحة الرئيسية أو من صفحة المنتج
+   ═══════════════════════════════════════════════════════════ */
+if (typeof window.addToCart === "function") {
+  const _originalAddToCart = window.addToCart;
+  window.addToCart = function(product, options) {
+    const result = _originalAddToCart(product, options);
+    if (result && typeof fbq === "function") {
+      fbq("track", "AddToCart", {
+        content_ids: [product.id],
+        content_name: product.name,
+        content_category: product.cat,
+        value: Number(product.price) * Number(options?.qty || 1),
+        currency: "EGP"
+      });
+    }
+    return result;
+  };
 }
 
 /* ═══ تصدير الدوال عالمياً ═══ */
