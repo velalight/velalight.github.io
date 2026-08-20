@@ -315,14 +315,11 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  100%{background-position:0% 50%}
 }
 
-.p-media img{
- width:100%;
- height:100%;
- object-fit:cover;
- transition:transform .6s ease, opacity .4s ease;
- opacity:1;
- position:relative;
- z-index:1;
+.p-media img {
+  width: 100%;
+  height: 300px; /* ثبّت ارتفاع مناسب */
+  object-fit: contain; /* عشان الصورة تظهر كاملة */
+  background: #f5efe5; /* لون خلفية بسيط */
 }
 .p-media img:not([src]),
 .p-media img[src=""]{
