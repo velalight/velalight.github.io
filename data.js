@@ -415,24 +415,4 @@ const REVIEWS_IMAGES = [
   "rev2.jpg",    // غيّر هذا لاسم صورتك الثانية
   "rev3.jpg",    // يدعم jpg, png, webp
   "rev4.jpg"     // أضف سطر جديد لكل صورة جديدة
-  "rev5.jpg"     
-  "rev6.jpg"     
-  "rev7.jpg"  
-  "rev8.jpg"     
-  "rev9.jpg"     
-  "rev10.jpg" 
-  "rev11.jpg" 
-  "rev12.jpg" 
-  "rev13.jpg" 
-  "rev14.jpg" 
-  "rev15.jpg" 
-  "rev16.jpg" 
-  "rev17.jpg" 
-  "rev18.jpg" 
-  "rev19.jpg" 
-  "rev20.jpg" 
-
-
-
-
 ];
