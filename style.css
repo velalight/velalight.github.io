@@ -317,7 +317,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 
 .p-media img {
   width: 100%;
-  height: 300px; /* ثبّت ارتفاع مناسب */
+  height: 200px; /* ثبّت ارتفاع مناسب */
   object-fit: contain; /* عشان الصورة تظهر كاملة */
   background: #f5efe5; /* لون خلفية بسيط */
 }
@@ -602,19 +602,37 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  scrollbar-width:none;
 }
 .rev-row::-webkit-scrollbar{display:none}
+
 .rev-card{
- flex:0 0 280px;
+ flex:0 0 300px; /* زدنا العرض قليلاً ليستوعب السكرين شوت */
  scroll-snap-align:start;
  background:var(--panel);
  border:1px solid var(--line);
  border-radius:18px;
  overflow:hidden;
  transition:.3s;
+ display: flex;       /* إضافة جديدة */
+ flex-direction: column; /* إضافة جديدة */
 }
 .rev-card:hover{transform:translateY(-4px);box-shadow:var(--sh)}
-.rev-card img{aspect-ratio:4/5;object-fit:cover;width:100%}
-.rev-card .rb{padding:.8rem 1rem;display:flex;justify-content:space-between;align-items:center}
 
+/* التصحيح الجذري هنا: */
+.rev-card img{
+  width: 100%;
+  height: auto; /* نسمح للطول أن يكون طبيعياً حسب الصورة */
+  max-height: 500px; /* نضع حداً أقصى للطول عشان ميطولش أوي */
+  object-fit: contain; /* نغيرها من cover إلى contain عشان الصورة تبان كاملة 100% من غير قص */
+  background: #fff; /* خلفية بيضاء عشان لو الصورة فيها حواف شفافة تبان حلوة */
+  display: block;
+}
+
+.rev-card .rb{
+  padding:.8rem 1rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top: auto; /* يدفع النص للأسفل لو الصورة قصيرة */
+}
 /* ═══ Footer ═══ */
 footer{
  background:#1a1512;
