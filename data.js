@@ -413,6 +413,6 @@ const t=k=>(I18N[LANG]&&I18N[LANG][k])||I18N.ar[k]||k;
 const REVIEWS_IMAGES = [
   "rev1.jpg",    // غيّر هذا لاسم صورتك الأولى
   "rev2.jpg",    // غيّر هذا لاسم صورتك الثانية
-  "rev3.png",    // يدعم jpg, png, webp
+  "rev3.jpg",    // يدعم jpg, png, webp
   "rev4.jpg"     // أضف سطر جديد لكل صورة جديدة
 ];
