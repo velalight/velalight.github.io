@@ -578,7 +578,7 @@ function openQuickAdd(p){
   const w=$("#scentModalScents");
   if(!w)return;
 
-  // ✨ تحويل العطور من أزرار متناثرة إلى قائمة منسدلة أنيقة وسهلة
+  // ✨ تحويل العطور من أزرار متناثرة إلى قائمة منسدلة أنيقة وسهلة (Dropdown)
   w.innerHTML = `
     <select id="modalScentSelect" style="width:100%; padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:1rem; cursor:pointer; outline:none;">
       <option value="">${LANG==="en"?"Choose a scent...":"اختار العطر..."}</option>
@@ -783,14 +783,14 @@ function renderCart(){
   w.appendChild(frag);
 
   /* ═══════════════════════════════════════════════════════════
-     ✨ اقتراح منتج تكميلي — بحث موسع في الاسم + الوصف + التصنيف
+     ✨ اقتراح منتج تكميلي — تم تعديل النص وإصلاح التحديث الفوري
      ═══════════════════════════════════════════════════════════ */
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   const cartProductIds = c.map(it => it.id);
   
   const suggestedProduct = products.find(p => {
-    if (!p || cartProductIds.includes(p.id)) return false; // لا تقترح منتج موجود بالفعل في السلة
-    if (p.active === false) return false; // لا تقترح منتج غير نشط
+    if (!p || cartProductIds.includes(p.id)) return false;
+    if (p.active === false) return false;
     
     const searchText = [
       p.name || "",
@@ -814,7 +814,7 @@ function renderCart(){
       <div style="display:flex; align-items:center; gap:1rem;">
         <img src="${suggestedProduct.img || ''}" style="width:60px; height:60px; object-fit:cover; border-radius:8px;" onerror="this.style.display='none'">
         <div style="flex:1">
-          <div style="font-weight:700; font-size:0.9rem;">💡 اكتملي عطرك: ${pname(suggestedProduct)}</div>
+          <div style="font-weight:700; font-size:0.9rem;">💡 أرشح لك فوحات شمع معطره لدولابك: ${pname(suggestedProduct)}</div>
           <div style="font-size:0.8rem; color:var(--mut); margin:0.2rem 0;">${money(suggestedProduct.price)} فقط</div>
           <button class="btn sm" id="addSuggestBtn" style="margin-top:0.3rem; width:100%;">أضف للسلة</button>
         </div>
@@ -826,6 +826,9 @@ function renderCart(){
       if(btn) {
         btn.addEventListener('click', () => {
           addToCart(suggestedProduct, {scent: suggestedProduct.scent || "بدون عطر", qty: 1});
+          // ✨ إصلاح التحديث الفوري للسلة دون الحاجة لإغلاقها وفتحها
+          renderCart();
+          cartBadge();
         });
       }
     }, 0);
@@ -930,12 +933,17 @@ function updateTotals(c){
   if($("#cartDiscount")){$("#cartDiscount").textContent="-"+money(couponDisc);}
   if($("#couponCodeLbl")&&appliedCoupon){$("#couponCodeLbl").textContent=appliedCoupon.code;}
   
+  // ✨ إخفاء سطر "الشحن كاش" تماماً إذا كان العميل مؤهلاً للشحن المجاني
   const freeShipRow = $("#freeShippingRow");
-  if (freeShipRow) {
+  const shipNote = document.querySelector('.cart-shipping-note');
+  
+  if (freeShipRow && shipNote) {
     if (sub >= 3000) {
       freeShipRow.style.display = "flex";
+      shipNote.style.display = "none"; // يختفي سطر الشحن المدفوع
     } else {
       freeShipRow.style.display = "none";
+      shipNote.style.display = "block"; // يظهر سطر الشحن المدفوع
     }
   }
 
@@ -1313,39 +1321,25 @@ ${itemsSummary}
 
 function initAccount() {
   $("#accBtn")?.addEventListener("click", () => {
-    const loggedInView = $("#loggedInView");
-    const guestView = $("#guestView");
-    
     const isFirebaseLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
-    const localUser = getSavedUser();
-    const hasLocalData = localUser && localUser.name;
 
-    if (isFirebaseLogged) {
-      if (loggedInView) loggedInView.classList.remove("hidden");
-      if (guestView) guestView.classList.add("hidden");
-      
-      if (typeof VL_GetCurrentUser === "function") {
-        VL_GetCurrentUser().then(userData => {
-          if (userData) {
-            const elName = $("#displayName"); if(elName) elName.textContent = userData.name || localUser.name || "عميلنا العزيز";
-            const elEmail = $("#displayEmail"); if(elEmail) elEmail.textContent = userData.email || "غير متوفر";
-            const elPhone = $("#displayPhone"); if(elPhone) elPhone.textContent = userData.phone || localUser.phone || "غير متوفر";
-            const elOrders = $("#ordCountLoggedIn"); if(elOrders) elOrders.textContent = userData.ordersCount || 0;
-          }
-        }).catch(err => console.warn("⚠️ خطأ في جلب بيانات المستخدم:", err));
+    // ✨ إذا لم يكن مسجلاً، افتح نافذة الدخول البسيطة فوراً ولا تظهر نموذج البيانات المعقد
+    if (!isFirebaseLogged) {
+      if (typeof openAuthModal === "function") {
+        openAuthModal();
+      } else {
+        toast("⚠️ يرجى تسجيل الدخول أولاً");
       }
-    } else if (hasLocalData) {
-      $("#accName").value = localUser.name || "";
-      $("#accPhone").value = localUser.phone || "";
-      $("#ordCount").textContent = localUser.orders || 0;
-      
-      if (loggedInView) loggedInView.classList.add("hidden");
-      if (guestView) guestView.classList.remove("hidden");
-    } else {
-      if (loggedInView) loggedInView.classList.add("hidden");
-      if (guestView) guestView.classList.remove("hidden");
+      return; // توقف هنا
     }
-    
+
+    // إذا كان مسجلاً، اعرض بياناته
+    const localUser = getSavedUser();
+    if (localUser) {
+      if($("#accName")) $("#accName").value = localUser.name || "";
+      if($("#accPhone")) $("#accPhone").value = localUser.phone || "";
+      if($("#ordCount")) $("#ordCount").textContent = localUser.orders || 0;
+    }
     openDrawer("accOv");
   });
 
