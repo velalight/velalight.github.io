@@ -2,6 +2,25 @@
 "use strict";
 
 /* ═══════════════════════════════════════════════════════════
+   ✨ TRACKING DATA CAPTURE (UTM & Click IDs)
+   يلتقط بيانات الإعلان ويحفظها في المتصفح لربطها بالطلب لاحقاً
+   ═══════════════════════════════════════════════════════════ */
+function captureTrackingData() {
+  const params = new URLSearchParams(window.location.search);
+  const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'fbclid', 'gclid', 'ttclid'];
+  const trackingData = {};
+  
+  keys.forEach(key => {
+    const val = params.get(key) || localStorage.getItem('vl_' + key) || '';
+    trackingData[key] = val;
+    if (val) localStorage.setItem('vl_' + key, val);
+  });
+  return trackingData;
+}
+// تشغيل الالتقاط فور تحميل الصفحة
+const sessionTracking = captureTrackingData();
+
+/* ═══════════════════════════════════════════════════════════
    ✨ WISHLIST — مع Cache للأداء
    ═══════════════════════════════════════════════════════════ */
 const WISHLIST_KEY = "vl_wishlist";
@@ -1089,6 +1108,17 @@ async function checkout(){
   msg+=`${t("wa_addr")} ${addr}\n`;
   if(notes){msg+=`${t("wa_notes")} ${notes}\n`;}
 
+  // ✨ جلب بيانات التتبع المحفوظة لربطها بالطلب
+  const trackingData = {
+    utm_source: localStorage.getItem('vl_utm_source') || '',
+    utm_medium: localStorage.getItem('vl_utm_medium') || '',
+    utm_campaign: localStorage.getItem('vl_utm_campaign') || '',
+    utm_content: localStorage.getItem('vl_utm_content') || '',
+    fbclid: localStorage.getItem('vl_fbclid') || '',
+    gclid: localStorage.getItem('vl_gclid') || '',
+    ttclid: localStorage.getItem('vl_ttclid') || ''
+  };
+
   const orderData={
     orderId,
     userId,
@@ -1112,6 +1142,7 @@ async function checkout(){
     shippingPayment:"Cash to courier",
     shippingIncluded: subTotal >= 3000,
     status:"قيد المراجعة",statusEn:"Under Review",
+    tracking: trackingData, // ✨ حفظ مصدر الطلب هنا
     createdAt:Date.now(),
     orderDate:new Date().toISOString()
   };
@@ -1187,6 +1218,35 @@ async function checkout(){
   }
   
   openWhatsAppConfirmation(orderData);
+
+  // ✨ إطلاق أحداث الشراء النهائية (Purchase Events) لـ GA4 و Meta Pixel
+  try {
+    if (typeof gtag === "function") {
+      gtag("event", "purchase", {
+        transaction_id: orderId,
+        value: total,
+        currency: "EGP",
+        items: c.map(it => ({
+          item_id: it.id,
+          item_name: it.name,
+          price: it.price,
+          quantity: it.qty
+        }))
+      });
+    }
+    if (typeof fbq === "function") {
+      fbq("track", "Purchase", {
+        value: total,
+        currency: "EGP",
+        content_ids: c.map(it => it.id),
+        num_items: c.length
+      });
+    }
+    // مسح بيانات التتبع بعد الشراء الناجح لتجنب نسب زيارات مستقبلية لنفس الإعلان
+    ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
+  } catch (e) {
+    console.warn("Tracking event fire failed:", e);
+  }
 }
 
 function waTotalLabel(){
