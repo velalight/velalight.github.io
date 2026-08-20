@@ -413,31 +413,23 @@ const t=k=>(I18N[LANG]&&I18N[LANG][k])||I18N.ar[k]||k;
    ═══════════════════════════════════════════════════════════ */
 const TESTIMONIALS_DATA = [
   {
-    name: "سارة أحمد",
-    text: "الشمعة دي غيرت جو الأوضة تماماً! ريحتها بتثبت ومبتخلصش بسرعة. التغليف كان تحفة فنية.",
-    media: "review1.jpg", 
+    media: "rev1.jpg", 
     type: "image",
     rating: 5
   },
   {
-    name: "نور الهدى",
-    text: "طلبت بوكس العروسة وكان أحلى من المتوقع بكتير. التفاصيل الصغيرة هي اللي بتفرق. شكراً فيلا لايت!",
-    media: "review2.jpg",
+    media: "rev2.jpg",
     type: "image",
     rating: 5
   },
   {
-    name: "مريم خالد",
-    text: "شمعة المساج تجربة فاخرة جداً. البشرة بتبقى ناعمة والريحة بتهدّي الأعصاب.",
-    media: "unboxing.mp4", 
-    type: "video",
+    media: "rev3.jpg", 
+    type: "image",
     rating: 5
   },
   {
-    name: "هدى محمود",
-    text: "أفضل هدية ممكن تقدميها لصحبتك. الصديقتي عشقت البوكس وشكرتني جداً.",
-    media: "voice1", 
-    type: "voice",
+    media: "rev4.jpg", 
+    type: "image",
     duration: "0:22", 
     rating: 5
   }
