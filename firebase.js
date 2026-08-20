@@ -20,6 +20,14 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ App Check — حماية قاعدة البيانات من الطلبات الوهمية
+   ═══════════════════════════════════════════════════════════ */
+import {
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check.js";
+
 
 /* =========================================================
    VelaLight Firebase Configuration
@@ -43,10 +51,19 @@ const firebaseConfig = {
 let app;
 let db;
 let auth;
+let appCheck; // ✨ إضافة متغير App Check
 
 try {
 
   app = initializeApp(firebaseConfig);
+
+  /* ═══════════════════════════════════════════════════════════
+     ✨ تهيئة App Check مع reCAPTCHA Enterprise
+     ═══════════════════════════════════════════════════════════ */
+  appCheck = initializeAppCheck(app, {
+    provider: new ReCaptchaEnterpriseProvider("6LcDZ48tAAAAAMnCK3u6Z9iepwN5iJPjUdIXkY2I"),
+    isTokenAutoRefreshEnabled: true
+  });
 
   db = getFirestore(app);
 
@@ -62,6 +79,8 @@ try {
     db,
 
     auth,
+
+    appCheck, // ✨ إضافة appCheck للواجهة
 
 
     /* =========================
@@ -281,6 +300,10 @@ try {
   console.log(
     "✅ Firebase connected successfully"
   );
+
+  console.log(
+    "🛡️ App Check initialized with reCAPTCHA Enterprise"
+  ); // ✨ رسالة تأكيد تشغيل الحماية
 
   window.dispatchEvent(
     new Event("fb-ready")
