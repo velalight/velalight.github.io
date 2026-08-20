@@ -3,10 +3,12 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // دالة للتحقق من أن المستخدم مسجل دخول
     function signedIn() {
       return request.auth != null;
     }
 
+    // دالة للتحقق من أن المستخدم هو المدير (Admin)
     function admin() {
       return signedIn()
         && (
@@ -15,22 +17,32 @@ service cloud.firestore {
         );
     }
 
+    // قواعد المنتجات: القراءة للجميع، التعديل للمدير فقط
     match /products/{productId} {
       allow read: if true;
       allow create, update, delete: if admin();
     }
 
+    // قواعد الطلبات: (هنا كان الخلل وتم إصلاحه)
     match /orders/{orderId} {
-      allow create: if true;
+      // 1. السماح بإنشاء الطلب فقط للمستخدمين المسجلين (يمنع السبام والطلبات الوهمية)
+      allow create: if signedIn();
+      
+      // 2. السماح للمديرين بالقراءة، التعديل، والحذف لأي طلب
       allow read, update, delete: if admin();
+      
+      // 3. السماح للعميل العادي بقراءة طلباته هو فقط (بناءً على حقل userId المخزن داخل الطلب)
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
     }
 
+    // قواعد التقييمات: القراءة للجميع، الإنشاء للمسجلين فقط، التعديل للمدير
     match /reviews/{reviewId} {
-      allow create: if true;
+      allow create: if signedIn();
       allow read: if true;
       allow update, delete: if admin();
     }
 
+    // قاعدة أمان شاملة: منع القراءة أو الكتابة لأي مجموعة بيانات أخرى لم يتم التصريح بها صراحة
     match /{document=**} {
       allow read, write: if false;
     }
