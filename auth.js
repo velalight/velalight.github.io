@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
-   VelaLight — نظام تسجيل دخول العملاء الكامل
-   النسخة المصححة (Fix: Data Persistence Bug)
+   VelaLight — نظام تسجيل دخول العملاء (النسخة المبسطة والذكية)
+   ✨ لا يطلب عنواناً عند التسجيل | ✨ يحفظ الإيميل لتسهيل الدخول القادم
    ═══════════════════════════════════════════════════════════ */
 import {
   createUserWithEmailAndPassword,
@@ -28,6 +28,9 @@ const googleProvider = new GoogleAuthProvider();
 function createAuthModal() {
   if (document.getElementById("authOv")) return;
 
+  // ✨ جلب الإيميل المحفوظ مسبقاً لتسهيل الدخول
+  const savedEmail = localStorage.getItem("vl_saved_email") || "";
+
   const modal = document.createElement("div");
   modal.id = "authOv";
   modal.className = "ovl";
@@ -38,9 +41,9 @@ function createAuthModal() {
       
       <h2 id="authTitle" style="color:var(--gold2);font-family:var(--fd);margin-bottom:1.5rem;text-align:center">تسجيل الدخول</h2>
 
-      <!-- ═══ نموذج تسجيل الدخول ═══ -->
+      <!-- ═══ نموذج تسجيل الدخول (سريع ومباشر) ═══ -->
       <div id="vlLoginForm">
-        <input type="email" id="vlLoginEmail" placeholder="الإيميل" style="margin-bottom:.8rem">
+        <input type="email" id="vlLoginEmail" placeholder="الإيميل" value="${savedEmail}" style="margin-bottom:.8rem">
         <input type="password" id="vlLoginPass" placeholder="كلمة المرور" style="margin-bottom:.8rem">
         
         <button class="btn" style="width:100%;margin-bottom:.8rem" id="vlLoginBtn">
@@ -56,21 +59,24 @@ function createAuthModal() {
         <p id="vlLoginError" style="color:var(--bad);font-size:.85rem;text-align:center;margin-top:.8rem;min-height:1.2em"></p>
 
         <div style="text-align:center;margin-top:1rem;font-size:.88rem">
-          مش عندك حساب؟ 
-          <a href="#" id="vlShowReg" style="color:var(--gold2);font-weight:700">سجّل الآن</a>
+          عميل جديد؟ 
+          <a href="#" id="vlShowReg" style="color:var(--gold2);font-weight:700">أنشئ حسابك في ثوانٍ</a>
         </div>
         <div style="text-align:center;margin-top:.5rem;font-size:.82rem">
           <a href="#" id="vlForgotPass" style="color:var(--dim)">نسيت كلمة المرور؟</a>
         </div>
       </div>
 
-      <!-- ═══ نموذج إنشاء حساب جديد ═══ -->
+      <!-- ═══ نموذج إنشاء حساب جديد (مبسّط جداً: لا نطلب عنواناً هنا) ═══ -->
       <div id="vlRegForm" style="display:none">
-        <input type="text" id="vlRegName" placeholder="الاسم الكامل *" style="margin-bottom:.8rem">
+        <input type="text" id="vlRegName" placeholder="الاسم (اختياري)" style="margin-bottom:.8rem">
         <input type="email" id="vlRegEmail" placeholder="الإيميل *" style="margin-bottom:.8rem">
-        <input type="tel" id="vlRegPhone" placeholder="رقم الموبايل" style="margin-bottom:.8rem">
         <input type="password" id="vlRegPass" placeholder="كلمة المرور (6 أحرف على الأقل) *" style="margin-bottom:.8rem">
         
+        <p style="font-size:.75rem;color:var(--dim);margin-bottom:.8rem;text-align:center">
+          💡 لا تقلق، يمكننا إضافة عنوان الشحن ورقم الموبايل لاحقاً عند إتمام أول طلب بكل راحة.
+        </p>
+
         <button class="btn" style="width:100%;margin-bottom:.8rem" id="vlRegBtn">
           ✨ إنشاء حساب جديد
         </button>
@@ -78,7 +84,7 @@ function createAuthModal() {
         <p id="vlRegError" style="color:var(--bad);font-size:.85rem;text-align:center;margin-top:.8rem;min-height:1.2em"></p>
 
         <div style="text-align:center;margin-top:1rem;font-size:.88rem">
-          عندك حساب؟ 
+          عندك حساب بالفعل؟ 
           <a href="#" id="vlShowLogin" style="color:var(--gold2);font-weight:700">تسجيل الدخول</a>
         </div>
       </div>
@@ -160,7 +166,7 @@ async function handleLogin() {
 
   if (result.success) {
     closeAuthModal();
-    if (typeof toast === "function") toast("✅ تم تسجيل الدخول بنجاح");
+    if (typeof toast === "function") toast("✅ أهلاً بعودتك!");
     await syncUserData();
     updateAccountUI();
   } else {
@@ -172,18 +178,17 @@ async function handleLogin() {
 async function handleRegister() {
   const name = document.getElementById("vlRegName").value.trim();
   const email = document.getElementById("vlRegEmail").value.trim();
-  const phone = document.getElementById("vlRegPhone").value.trim();
   const pass = document.getElementById("vlRegPass").value;
   const errBox = document.getElementById("vlRegError");
   const btn = document.getElementById("vlRegBtn");
 
-  if (!name || !email || !pass) {
-    errBox.textContent = "⚠️ كمّل الحقول المطلوبة (*)";
+  if (!email || !pass) {
+    errBox.textContent = "⚠️ الإيميل وكلمة المرور حقول مطلوبة (*)";
     return;
   }
 
   if (pass.length < 6) {
-    errBox.textContent = "⚠️ كلمة المرور لازم 6 أحرف على الأقل";
+    errBox.textContent = "⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل";
     return;
   }
 
@@ -191,14 +196,14 @@ async function handleRegister() {
   btn.textContent = "⏳ جاري إنشاء الحساب...";
   errBox.textContent = "";
 
-  const result = await VL_Register(email, pass, name, phone);
+  const result = await VL_Register(email, pass, name);
 
   btn.disabled = false;
   btn.textContent = "✨ إنشاء حساب جديد";
 
   if (result.success) {
     closeAuthModal();
-    if (typeof toast === "function") toast("✅ تم إنشاء الحساب بنجاح!");
+    if (typeof toast === "function") toast("✅ تم إنشاء الحساب بنجاح! يمكنك إكمال بياناتك عند الطلب.");
     await syncUserData();
     updateAccountUI();
   } else {
@@ -229,7 +234,7 @@ async function handleGoogleLogin() {
 
 /* ═══════ إعادة تعيين كلمة المرور ═══════ */
 async function handleResetPassword() {
-  const email = prompt("اكتب إيميلك لإرسال رابط إعادة التعيين:");
+  const email = document.getElementById("vlLoginEmail").value.trim() || prompt("اكتب إيميلك لإرسال رابط إعادة التعيين:");
   if (!email) return;
 
   const result = await VL_ResetPassword(email);
@@ -250,7 +255,7 @@ function updateAccountUI() {
     const userData = JSON.parse(localStorage.getItem("vl_user") || "{}");
     const displayName = userData.name || user.displayName || user.email.split("@")[0];
     accBtn.textContent = "👤";
-    accBtn.title = displayName;
+    accBtn.title = `مرحباً، ${displayName}`;
   } else {
     accBtn.textContent = "👤";
     accBtn.title = "حسابي";
@@ -258,7 +263,7 @@ function updateAccountUI() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ إصلاح رئيسي: مزامنة بيانات المستخدم
+   ✨ مزامنة بيانات المستخدم من Firestore إلى المتصفح
    ═══════════════════════════════════════════════════════════ */
 async function syncUserData() {
   if (!window.FB || !window.FB.auth || !window.FB.auth.currentUser) return;
@@ -270,17 +275,19 @@ async function syncUserData() {
     
     if (userSnap.exists()) {
       const data = userSnap.data();
+      
+      // ✨ نحفظ البيانات الأساسية فقط في localStorage
       localStorage.setItem("vl_user", JSON.stringify({
         uid: data.uid || user.uid,
         email: data.email || user.email || "",
         name: data.name || user.displayName || "",
         phone: data.phone || "",
         city: data.city || "",
-        addr: data.address || "",
+        addr: data.address || "", // نستخدم addr ليتوافق مع كود السلة
         orders: data.ordersCount || 0
       }));
       
-      /* تحديث حقول الحساب في الـ modal */
+      // تحديث الحقول في نافذة "حسابي" إذا كانت مفتوحة
       const accName = document.getElementById("accName");
       const accPhone = document.getElementById("accPhone");
       const accCity = document.getElementById("accCity");
@@ -299,26 +306,28 @@ async function syncUserData() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   دوال Firebase Authentication
+   دوال Firebase Authentication (مصدّرة للنافذة العامة)
    ═══════════════════════════════════════════════════════════ */
 
-/* ═══ إنشاء حساب جديد — نسخة محسّنة ═══ */
-window.VL_Register = async function(email, password, name, phone) {
+/* ═══ إنشاء حساب جديد ═══ */
+window.VL_Register = async function(email, password, name) {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       window.FB.auth, email, password
     );
 
-    /* حدّث اسم المستخدم في Firebase Auth */
-    await updateProfile(userCredential.user, { displayName: name });
+    // تحديث الاسم في نظام المصادقة
+    if (name) {
+      await updateProfile(userCredential.user, { displayName: name });
+    }
 
-    /* ═══ ✨ الإصلاح: احفظ البيانات كاملة في Firestore ═══ */
+    // ✨ حفظ بيانات أساسية فقط في Firestore (بدون عنوان أو مدينة إجبارية)
     const userRef = doc(window.FB.db, "users", userCredential.user.uid);
     await setDoc(userRef, {
       uid: userCredential.user.uid,
       email: email,
       name: name || "",
-      phone: phone || "",
+      phone: "",
       city: "",
       address: "",
       provider: "password",
@@ -329,16 +338,8 @@ window.VL_Register = async function(email, password, name, phone) {
       lastLogin: serverTimestamp()
     });
 
-    /* ═══ ✨ احفظ في localStorage مباشرة ═══ */
-    localStorage.setItem("vl_user", JSON.stringify({
-      uid: userCredential.user.uid,
-      email: email,
-      name: name,
-      phone: phone,
-      city: "",
-      addr: "",
-      orders: 0
-    }));
+    // ✨ حفظ الإيميل لتسهيل الدخول في المرة القادمة
+    localStorage.setItem("vl_saved_email", email);
 
     return { success: true, user: userCredential.user };
   } catch (error) {
@@ -347,22 +348,24 @@ window.VL_Register = async function(email, password, name, phone) {
   }
 };
 
-/* ═══ تسجيل الدخول — نسخة محسّنة (تحافظ على البيانات) ═══ */
+/* ═══ تسجيل الدخول ═══ */
 window.VL_Login = async function(email, password) {
   try {
     const userCredential = await signInWithEmailAndPassword(
       window.FB.auth, email, password
     );
 
-    /* ✨ الإصلاح: حدّث lastLogin فقط، متعملش overwrite للبيانات */
+    // ✨ حفظ الإيميل لتسهيل الدخول في المرة القادمة
+    localStorage.setItem("vl_saved_email", email);
+
+    // تحديث وقت آخر دخول فقط بدون مسح البيانات الأخرى
     const userRef = doc(window.FB.db, "users", userCredential.user.uid);
     const userSnap = await getDoc(userRef);
     
     if (userSnap.exists()) {
-      /* المستخدم موجود → حدّث lastLogin بس */
       await updateDoc(userRef, { lastLogin: serverTimestamp() });
     } else {
-      /* المستخدم مش موجود (حالة نادرة) → اعمل document جديد */
+      // حالة نادرة: المستخدم موجود في Auth لكن ليس في Firestore
       await setDoc(userRef, {
         uid: userCredential.user.uid,
         email: email,
@@ -391,12 +394,10 @@ window.VL_LoginGoogle = async function() {
   try {
     const result = await signInWithPopup(window.FB.auth, googleProvider);
     
-    /* ✨ فحص وجود المستخدم في Firestore */
     const userRef = doc(window.FB.db, "users", result.user.uid);
     const userSnap = await getDoc(userRef);
     
     if (!userSnap.exists()) {
-      /* مستخدم جديد من Google → اعمل document جديد */
       await setDoc(userRef, {
         uid: result.user.uid,
         email: result.user.email || "",
@@ -415,6 +416,8 @@ window.VL_LoginGoogle = async function() {
       await updateDoc(userRef, { lastLogin: serverTimestamp() });
     }
 
+    localStorage.setItem("vl_saved_email", result.user.email || "");
+
     return { success: true, user: result.user };
   } catch (error) {
     console.error("VL_LoginGoogle error:", error);
@@ -426,9 +429,11 @@ window.VL_LoginGoogle = async function() {
 window.VL_Logout = async function() {
   try {
     await signOut(window.FB.auth);
+    
+    // ✨ نمسح بيانات الجلسة الحالية فقط، ونحتفظ بـ vl_saved_email لتسهيل الدخول القادم
     localStorage.removeItem("vl_user");
     
-    /* مسح حقول الحساب */
+    // تصفير حقول العرض
     const accName = document.getElementById("accName");
     const accPhone = document.getElementById("accPhone");
     const accCity = document.getElementById("accCity");
@@ -443,6 +448,10 @@ window.VL_Logout = async function() {
     
     updateAccountUI();
     if (typeof toast === "function") toast("✅ تم تسجيل الخروج");
+    
+    // إعادة تحميل الصفحة لضمان تحديث كل الواجهات
+    setTimeout(() => window.location.reload(), 500);
+    
     return { success: true };
   } catch (error) {
     return { success: false, error: error.message };
@@ -470,7 +479,7 @@ window.VL_GetCurrentUser = async function() {
   return userSnap.exists() ? { id: userSnap.id, ...userSnap.data() } : null;
 };
 
-/* ═══ تحديث بيانات المستخدم ═══ */
+/* ═══ تحديث بيانات المستخدم (يُستخدم عند إتمام الطلب لأول مرة) ═══ */
 window.VL_UpdateProfile = async function(data) {
   if (!window.FB || !window.FB.auth || !window.FB.auth.currentUser) {
     return { success: false, error: "غير مسجل" };
@@ -480,13 +489,13 @@ window.VL_UpdateProfile = async function(data) {
     const user = window.FB.auth.currentUser;
     const userRef = doc(window.FB.db, "users", user.uid);
     
-    /* ✨ استخدام merge: true عشان نحافظ على البيانات التانية */
+    // ✨ merge: true يضمن أننا نضيف العنوان والاسم دون مسح أي بيانات أخرى
     await setDoc(userRef, data, { merge: true });
 
-    /* تحديث localStorage */
+    // تحديث localStorage ليعكس التغييرات فوراً في السلة
     const old = JSON.parse(localStorage.getItem("vl_user") || "{}");
     const updated = { ...old, ...data };
-    if (data.address) updated.addr = data.address;
+    if (data.address) updated.addr = data.address; // توحيد المصطلحات مع كود السلة
     localStorage.setItem("vl_user", JSON.stringify(updated));
 
     return { success: true };
@@ -499,18 +508,18 @@ window.VL_UpdateProfile = async function(data) {
 /* ═══════ ترجمة أخطاء Firebase للعربي ═══════ */
 function translateError(code) {
   const errors = {
-    "auth/email-already-in-use": "الإيميل ده مسجل قبل كده",
+    "auth/email-already-in-use": "الإيميل ده مسجل قبل كده، جرب تسجيل الدخول",
     "auth/invalid-email": "الإيميل غير صحيح",
     "auth/weak-password": "كلمة المرور ضعيفة (6 أحرف على الأقل)",
     "auth/user-not-found": "الإيميل مش مسجل",
     "auth/wrong-password": "كلمة المرور غير صحيحة",
     "auth/invalid-credential": "الإيميل أو كلمة المرور غير صحيحة",
-    "auth/too-many-requests": "محاولات كتير، استنى شوية",
+    "auth/too-many-requests": "محاولات كتير، استنى شوية وحاول تاني",
     "auth/network-request-failed": "مشكلة في الاتصال بالإنترنت",
     "auth/popup-closed-by-user": "تم إغلاق نافذة تسجيل الدخول",
-    "auth/popup-blocked": "المتصفح منع النافذة المنبثقة"
+    "auth/popup-blocked": "المتصفح منع النافذة المنبثقة، يرجى السماح بها"
   };
-  return errors[code] || "حدث خطأ: " + (code || "غير معروف");
+  return errors[code] || "حدث خطأ غير متوقع";
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -535,10 +544,9 @@ function setupAuthListener() {
     }));
 
     if (user) {
-      /* ✨ الإصلاح: syncUserData بدل الاعتماد على البيانات الجزئية */
       await syncUserData();
     } else {
-      /* المستخدم سجل خروج → امسح البيانات */
+      // عند تسجيل الخروج، نمسح بيانات الجلسة فقط
       localStorage.removeItem("vl_user");
     }
     updateAccountUI();
