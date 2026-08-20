@@ -17,7 +17,6 @@ function captureTrackingData() {
   });
   return trackingData;
 }
-// تشغيل الالتقاط فور تحميل الصفحة
 const sessionTracking = captureTrackingData();
 
 /* ═══════════════════════════════════════════════════════════
@@ -1056,7 +1055,6 @@ async function checkout(){
   const totalDiscount = qtyDiscount + couponDiscount;
   const total=Math.max(0,subTotal-totalDiscount);
   
-  // ✨ Meta Pixel: InitiateCheckout Event
   if (typeof fbq === "function") {
     fbq("track", "InitiateCheckout", {
       value: total,
@@ -1108,7 +1106,6 @@ async function checkout(){
   msg+=`${t("wa_addr")} ${addr}\n`;
   if(notes){msg+=`${t("wa_notes")} ${notes}\n`;}
 
-  // ✨ جلب بيانات التتبع المحفوظة لربطها بالطلب
   const trackingData = {
     utm_source: localStorage.getItem('vl_utm_source') || '',
     utm_medium: localStorage.getItem('vl_utm_medium') || '',
@@ -1142,7 +1139,7 @@ async function checkout(){
     shippingPayment:"Cash to courier",
     shippingIncluded: subTotal >= 3000,
     status:"قيد المراجعة",statusEn:"Under Review",
-    tracking: trackingData, // ✨ حفظ مصدر الطلب هنا
+    tracking: trackingData,
     createdAt:Date.now(),
     orderDate:new Date().toISOString()
   };
@@ -1219,7 +1216,6 @@ async function checkout(){
   
   openWhatsAppConfirmation(orderData);
 
-  // ✨ إطلاق أحداث الشراء النهائية (Purchase Events) لـ GA4 و Meta Pixel
   try {
     if (typeof gtag === "function") {
       gtag("event", "purchase", {
@@ -1242,7 +1238,6 @@ async function checkout(){
         num_items: c.length
       });
     }
-    // مسح بيانات التتبع بعد الشراء الناجح لتجنب نسب زيارات مستقبلية لنفس الإعلان
     ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
   } catch (e) {
     console.warn("Tracking event fire failed:", e);
@@ -1380,8 +1375,11 @@ ${itemsSummary}
   }, 1500);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ اصلاح جذري لحساب المستخدم: يجلب البيانات من Firebase مباشرة
+   ═══════════════════════════════════════════════════════════ */
 function initAccount() {
-  $("#accBtn")?.addEventListener("click", () => {
+  $("#accBtn")?.addEventListener("click", async () => {
     const isFirebaseLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
 
     if (!isFirebaseLogged) {
@@ -1393,12 +1391,37 @@ function initAccount() {
       return;
     }
 
-    const localUser = getSavedUser();
-    if (localUser) {
-      if($("#accName")) $("#accName").value = localUser.name || "";
-      if($("#accPhone")) $("#accPhone").value = localUser.phone || "";
-      if($("#ordCount")) $("#ordCount").textContent = localUser.orders || 0;
+    // ✨ جلب بيانات المستخدم المحدثة مباشرة من Firebase لضمان عدم ظهور الحقول فارغة
+    if (typeof VL_GetCurrentUser === "function") {
+      const userData = await VL_GetCurrentUser();
+      if (userData) {
+        if ($("#accName")) $("#accName").value = userData.name || "";
+        if ($("#accPhone")) $("#accPhone").value = userData.phone || "";
+        if ($("#accCity")) $("#accCity").value = userData.city || "";
+        if ($("#accAddr")) $("#accAddr").value = userData.address || "";
+        if ($("#ordCount")) $("#ordCount").textContent = userData.ordersCount || 0;
+        
+        // تحديث التخزين المحلي لضمان توافق بيانات السلة
+        localStorage.setItem("vl_user", JSON.stringify({
+          uid: userData.uid,
+          email: userData.email || "",
+          name: userData.name || "",
+          phone: userData.phone || "",
+          city: userData.city || "",
+          addr: userData.address || "",
+          orders: userData.ordersCount || 0
+        }));
+      }
+    } else {
+      // Fallback في حالة عدم توفر الدالة
+      const localUser = getSavedUser();
+      if (localUser) {
+        if ($("#accName")) $("#accName").value = localUser.name || "";
+        if ($("#accPhone")) $("#accPhone").value = localUser.phone || "";
+        if ($("#ordCount")) $("#ordCount").textContent = localUser.orders || 0;
+      }
     }
+    
     openDrawer("accOv");
   });
 
@@ -1407,18 +1430,27 @@ function initAccount() {
     if (e.target.id === "accOv") { closeModal("accOv"); }
   });
 
-  $("#saveAccBtn")?.addEventListener("click", () => {
+  $("#saveAccBtn")?.addEventListener("click", async () => {
     const name = $("#accName").value.trim();
     const phone = $("#accPhone").value.trim();
+    const city = $("#accCity")?.value || "";
+    const addr = $("#accAddr")?.value.trim() || "";
 
     if (!name) { toast("⚠️ اكتب الاسم."); return; }
     if (!phone) { toast("⚠️ اكتب رقم الموبايل."); return; }
 
     const old = getSavedUser();
-    try {
-      localStorage.setItem("vl_user", JSON.stringify({ ...old, name, phone, orders: old.orders || 0 }));
-    } catch (e) {
-      console.warn("⚠️ Failed to save account:", e);
+    const newData = { name, phone, city, address: addr };
+    
+    // حفظ في Firebase إذا كان مسجلاً
+    if (typeof VL_UpdateProfile === "function") {
+      await VL_UpdateProfile(newData);
+    } else {
+      try {
+        localStorage.setItem("vl_user", JSON.stringify({ ...old, ...newData, orders: old.orders || 0 }));
+      } catch (e) {
+        console.warn("⚠️ Failed to save account:", e);
+      }
     }
     
     if (typeof fillCartForm === "function") fillCartForm();
@@ -1688,11 +1720,6 @@ async function consumeCoupon(){
   if($("#couponInput"))$("#couponInput").value="";
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ Meta Pixel Tracking Wrapper for AddToCart
-   هذه الخدعة البرمجية تراقب دالة addToCart العالمية وترسل الحدث تلقائياً
-   سواء تمت الإضافة من الصفحة الرئيسية أو من صفحة المنتج
-   ═══════════════════════════════════════════════════════════ */
 if (typeof window.addToCart === "function") {
   const _originalAddToCart = window.addToCart;
   window.addToCart = function(product, options) {
