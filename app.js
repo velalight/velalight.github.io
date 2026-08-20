@@ -887,6 +887,7 @@ function handleCartClick(e){
     c.splice(+rmBtn.dataset.i, 1);
     saveCart(c);
     renderCart();
+    cartBadge();
   } else if(plusBtn){
     const idx = +plusBtn.dataset.i;
     c[idx].qty = Number(c[idx].qty || 1) + 1;
