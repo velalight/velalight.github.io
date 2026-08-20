@@ -237,7 +237,7 @@ const I18N={
     mq:"🚚 توصيل سريع &nbsp;•&nbsp; 🏷️ خصومات &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; 📦 شحن آمن &nbsp;•&nbsp;",
     nav_home:"الرئيسية",nav_shop:"تسوق",nav_about:"من نحن",nav_faq:"الأسئلة الشائعة",nav_contact:"تواصل معنا",
     cat_all:"كل الشموع",cat_wood:"شموع خشبية",cat_glass:"شموع زجاجية",cat_crystal:"شموع كريستالية",cat_metal:"شموع معدنية",cat_massage:"شموع المساج",cat_gift:"الهدايا",cat_bride:"بوكس العروسة",
-    mn_cats:"تصنيفات الشموع",mn_explore:"اكتشف",mn_scents:"العطور الفاخرة",mn_occ:"المناسبات والهدايا",mn_why:"لماذا VelaLight؟",mn_rev:"لحظات عملائنا",mn_track:"📦 تتبع الطلب",mn_contact:"تواصل",
+    mn_cats:"تصنيفات الشموع",mn_explore:"اكتشف",mn_scents:"العطور الفاخرة",mn_occ:"المناسبات والهدايا",mn_why:"لماذا VelaLight؟",mn_rev:"آراء عملائنا",mn_track:"📦 تتبع الطلب",mn_contact:"تواصل",
     hero_kick:"✦ شموع يدوية فاخرة · صناعة مصرية",hero_a:"ضوء يُحكى…",hero_b:"وبريق يليق بكِ",
     hero_lead:"في VelaLight كل شمعة اتصنعت يدويًا بعناية.",
     cta_shop:"اكتشفي The Collection ✨",cta_story:"Our Story",
@@ -316,7 +316,7 @@ const I18N={
     mq:"🚚 Fast delivery &nbsp;•&nbsp; 🏷️ Discounts &nbsp;•&nbsp; 🎁 Free wrapping &nbsp;•&nbsp; 📦 Safe shipping &nbsp;•&nbsp;",
     nav_home:"Home",nav_shop:"Shop",nav_about:"Our Story",nav_faq:"FAQ",nav_contact:"Contact",
     cat_all:"All Candles",cat_wood:"Wooden",cat_glass:"Glass",cat_crystal:"Crystal",cat_metal:"Metal",cat_massage:"Massage",cat_gift:"Gifts",cat_bride:"Bride Box",
-    mn_cats:"Categories",mn_explore:"Explore",mn_scents:"Scents",mn_occ:"Occasions",mn_why:"Why VelaLight?",mn_rev:"Customer Moments",mn_track:"📦 Track",mn_contact:"Contact",
+    mn_cats:"Categories",mn_explore:"Explore",mn_scents:"Scents",mn_occ:"Occasions",mn_why:"Why VelaLight?",mn_rev:"Reviews",mn_track:"📦 Track",mn_contact:"Contact",
     hero_kick:"✦ Luxury Handmade Candles",hero_a:"A Light That Tells a Story…",hero_b:"& a Sparkle That Suits You",
     hero_lead:"Every candle is handcrafted with care.",
     cta_shop:"Discover The Collection ✨",cta_story:"Our Story",
@@ -405,33 +405,3 @@ const t=k=>(I18N[LANG]&&I18N[LANG][k])||I18N.ar[k]||k;
     console.log("🧹 Old cache cleaned");
   }catch(e){}
 })();
-
-/* ═══════════════════════════════════════════════════════════
-   ✨ بيانات جدارية اللحظات (Testimonials)
-   النوع: 'image' (لصور)، 'video' (لفيديو)، 'voice' (لفويس نوت)
-   الميديا: اسم الملف الموجود في مجلد testimonials/ على GitHub
-   ═══════════════════════════════════════════════════════════ */
-const TESTIMONIALS_DATA = [
-  {
-    media: "rev1.jpg", 
-    type: "image",
-    rating: 5
-  },
-  {
-    media: "rev2.jpg",
-    type: "image",
-    rating: 5
-  },
-  {
-    media: "rev3.jpg", 
-    type: "image",
-    rating: 5
-  },
-  {
-    media: "rev4.jpg", 
-    type: "image",
-    duration: "0:22", 
-    rating: 5
-  }
-  // ✨ انسخ القوس { ... } وأضف الـ 46 مراجعة الأخرى هنا بنفس الطريقة
-];
