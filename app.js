@@ -18,7 +18,6 @@ if ('serviceWorker' in navigator) {
   }
 }
 
-
 /* ═══════════════════════════════════════════════════════════
    ✨ FIX: Global Image Error Handler (يمنع اختفاء المنتجات)
    ═══════════════════════════════════════════════════════════ */
@@ -182,7 +181,7 @@ const velaScentTr=name=>{
 })();
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ INIT — مع حل جذري لمنع الوميض والتبديل (Double Rendering)
+   ✨ INIT — مع الحل الجذري والنهائي لمنع الوميض (Double Rendering Fix)
    ═══════════════════════════════════════════════════════════ */
 document.addEventListener("DOMContentLoaded", () => {
   initLang();
@@ -193,12 +192,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1. حمّل الكاش بصمت في الخلفية (يُستخدم فقط كطوارئ إذا انقطع الإنترنت)
   const hasCache = (typeof loadFromCache === "function") && loadFromCache();
 
-  // 2. الحل الجذري: اعرض "هيكل تحميل" أنيق بدلاً من عرض البيانات القديمة التي ستتغير فوراً
+  // 2. الحل الجذري: اعرض "هيكل تحميل" أنيق فوراً لمنع أي وميض للبيانات القديمة
   const grid = $("#pgrid");
   if (grid) {
     grid.innerHTML = `
       <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.4rem; padding:1rem;">
-        ${Array(4).fill(`<div class="skel" style="height:380px;border-radius:18px;"></div>`).join('')}
+        ${Array(6).fill(`<div class="skel" style="height:380px;border-radius:18px;"></div>`).join('')}
       </div>
     `;
   }
@@ -210,11 +209,13 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProducts();
     renderScents();
     renderFAQ();
+    
+    // 5. تفعيل المزامنة الحية بعد الرسم الأول لمنع أي إعادة رسم مزدوجة
     initProductRealtimeSync();
     requestIdle(() => prefetchProductPages());
   }).catch(err => {
     console.warn("⚠️ loadAll failed, falling back to cache:", err);
-    // 5. فقط إذا فشل الاتصال بـ Firebase تماماً، نعرض الكاش كحل أخير
+    // 6. فقط إذا فشل الاتصال بـ Firebase تماماً، نعرض الكاش كحل أخير
     if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
       renderChips();
       renderProducts();
@@ -264,30 +265,35 @@ let productRealtimeStarted=false;
 let productRealtimeUnsubscribe=null;
 
 function initProductRealtimeSync(){
-  if(productRealtimeStarted)return;
-  if(typeof DB==="undefined"||typeof DB.watch!=="function")return;
-  productRealtimeStarted=true;
+  if(productRealtimeStarted) return;
+  if(typeof DB==="undefined" || typeof DB.watch!=="function") return;
+  productRealtimeStarted = true;
   
-  let lastHash = "";
+  let isFirstCall = true; // 🛑 الحل السحري: تجاهل أول دفعة بيانات لأن loadAll() قد رسمها بالفعل
   
-  productRealtimeUnsubscribe=DB.watch("products",cloud=>{
-    const hash = JSON.stringify(cloud||[]).length + "-" + (cloud||[]).length;
-    if (hash === lastHash) return; // منع إعادة الرسم إذا لم تتغير البيانات فعلياً (يمنع الوميض)
-    lastHash = hash;
+  productRealtimeUnsubscribe = DB.watch("products", cloud => {
+    // تجاهل الدفعة الأولية من Firebase لمنع إعادة الرسم المزدوج (الوميض)
+    if (isFirstCall) {
+      isFirstCall = false;
+      return; 
+    }
     
-    const map=new Map(
-      (typeof PRODUCTS!=="undefined"?PRODUCTS:[]).map(p=>[p.id,{...p}])
-    );
-    (cloud||[]).forEach(d=>{
-      const slug=d.id_||d.slug||d.pid||d.id;
-      if(!slug)return;
-      if(d.active===false){map.delete(slug);return;}
-      map.set(slug,{...(map.get(slug)||{}),...d,id:slug,_fid:d.id||null});
+    const map = new Map((typeof PRODUCTS !== "undefined" ? PRODUCTS : []).map(p => [p.id, {...p}]));
+    (cloud || []).forEach(d => {
+      const slug = d.id_ || d.slug || d.pid || d.id;
+      if (!slug) return;
+      if (d.active === false) { map.delete(slug); return; }
+      map.set(slug, { ...(map.get(slug) || {}), ...d, id: slug, _fid: d.id || null });
     });
-    ALL_PRODUCTS=[...map.values()];
-    window.dispatchEvent(new Event("data-refresh"));
-  },error=>{
-    console.warn("⚠️ Products realtime sync error:",error);
+    
+    const newProducts = [...map.values()];
+    // تحديث فقط إذا تغيرت البيانات فعلياً في قاعدة البيانات
+    if (JSON.stringify(newProducts) !== JSON.stringify(ALL_PRODUCTS)) {
+      ALL_PRODUCTS = newProducts;
+      window.dispatchEvent(new Event("data-refresh"));
+    }
+  }, error => {
+    console.warn("⚠️ Products realtime sync error:", error);
   });
 }
 
