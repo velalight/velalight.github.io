@@ -164,25 +164,30 @@ const velaScentTr=name=>{
 })();
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ INIT — مع Cache-First Strategy
+   ✨ INIT — مع حل جذري لمنع الوميض والتبديل (Double Rendering)
    ═══════════════════════════════════════════════════════════ */
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded", () => {
   initLang();
   initMarquee();
   initEmbers();
   initReveal();
-  
+
+  // 1. حمّل الكاش بصمت في الخلفية (يُستخدم فقط كطوارئ إذا انقطع الإنترنت)
   const hasCache = (typeof loadFromCache === "function") && loadFromCache();
-  
-  if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
-    renderChips();
-    renderProducts();
-    renderScents();
-    renderFAQ();
-    console.log("⚡ Products rendered from cache");
+
+  // 2. الحل الجذري: اعرض "هيكل تحميل" أنيق بدلاً من عرض البيانات القديمة التي ستتغير فوراً
+  const grid = $("#pgrid");
+  if (grid) {
+    grid.innerHTML = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.4rem; padding:1rem;">
+        ${Array(4).fill(`<div class="skel" style="height:380px;border-radius:18px;"></div>`).join('')}
+      </div>
+    `;
   }
-  
-  loadAll().then(()=>{
+
+  // 3. اطلب البيانات الجديدة من Firebase
+  loadAll().then(() => {
+    // 4. ارسم المنتجات مرة واحدة فقط بالبيانات المحدثة والصحيحة (لا وميض، لا تبديل)
     renderChips();
     renderProducts();
     renderScents();
@@ -190,18 +195,18 @@ document.addEventListener("DOMContentLoaded",()=>{
     initProductRealtimeSync();
     requestIdle(() => prefetchProductPages());
   }).catch(err => {
-    console.warn("⚠️ loadAll failed:", err);
-    if (typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)) {
-      if (typeof ALL_PRODUCTS === "undefined" || !ALL_PRODUCTS.length) {
-        window.ALL_PRODUCTS = [...PRODUCTS];
-      }
+    console.warn("⚠️ loadAll failed, falling back to cache:", err);
+    // 5. فقط إذا فشل الاتصال بـ Firebase تماماً، نعرض الكاش كحل أخير
+    if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
       renderChips();
       renderProducts();
       renderScents();
       renderFAQ();
+    } else {
+      if (grid) grid.innerHTML = `<div class="empty">⚠️ تعذر تحميل المنتجات، يرجى التحقق من اتصال الإنترنت</div>`;
     }
   });
-  
+
   initCart();
   initAccount();
   initSearch();
