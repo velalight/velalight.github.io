@@ -1791,3 +1791,55 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   .dev-info b{font-size:.85rem;}
   .dev-cta{font-size:.82rem;}
 }
+/* ═══════════════════════════════════════════════════════════
+   ✨ الحل الذكي والآمن للموبايل فقط (لن يؤثر على اللابتوب إطلاقاً)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  
+  /* 1. حاوية الصورة الرئيسية: نتحكم فيها كـ "صندوق" ذكي */
+  .pd-img {
+    width: 100% !important;
+    max-height: 50vh !important; /* الحد الأقصى للارتفاع عشان متطولش */
+    aspect-ratio: 4 / 5 !important; /* النسبة المطلوبة */
+    display: flex !important;
+    align-items: center !important; /* توسيط الصورة عمودياً داخل الصندوق */
+    justify-content: center !important; /* توسيط الصورة أفقياً داخل الصندوق */
+    background-color: var(--panel2) !important; /* لون خلفية يملأ الفراغات بأناقة لو الصورة مش 4/5 */
+    padding: 15px !important; /* مسافة تنفس عشان الصورة متلصقش في الحواف */
+    box-sizing: border-box !important;
+  }
+
+  /* 2. الصورة نفسها: تملأ الصندوق بذكاء بدون أي قص */
+  .pd-img img {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 50vh !important;
+    object-fit: contain !important; /* تظهر كاملة 100% بدون أي قص */
+    display: block !important;
+  }
+
+  /* 3. الثمنيلز (الصور المصغرة): تثبيت الحجم عند 50px بالضبط ومنع الانكماش */
+  #pdThumbs {
+    gap: 8px !important;
+    padding: 10px 0 !important;
+    justify-content: flex-start !important;
+  }
+  
+  #pdThumbs img {
+    width: 50px !important;
+    height: 50px !important;
+    min-width: 50px !important; /* حارس يمنع المتصفح من تصغيرها */
+    min-height: 50px !important; /* حارس يمنع المتصفح من تصغيرها */
+    max-width: 50px !important;
+    max-height: 50px !important;
+    object-fit: contain !important; /* تظهر تفاصيل الصورة المصغرة */
+    border-radius: 8px !important;
+    flex-shrink: 0 !important; /* أمر حاسم: يمنع انكماش العنصر داخل الـ flex */
+    border: 1px solid var(--line) !important;
+  }
+
+  /* حالة الثمنيل النشط (المختار) */
+  #pdThumbs img.on {
+    border: 2px solid var(--gold2) !important;
+  }
+}
