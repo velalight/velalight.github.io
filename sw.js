@@ -1,4 +1,4 @@
-const CACHE_NAME = 'velalight-v4'; // ترقية الإصدار لحذف كل شيء قديم فوراً
+const CACHE_NAME = 'velalight-v4';
 const ASSETS = [
   '/',
   '/index.html',
@@ -21,22 +21,20 @@ self.addEventListener('activate', e => {
     caches.keys().then(keys =>
       Promise.all(
         keys.filter(k => k !== CACHE_NAME)
-            .map(k => caches.delete(k)) // حذف كل الكاش القديم (v3 وأقل) فوراً
+            .map(k => caches.delete(k))
       )
-    ).then(() => self.clients.claim()) // إجبار كل التبويبات المفتوحة على استخدام هذا الكود الجديد فوراً
+    ).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', e => {
-  // 1. تجاهل Firebase تماماً
   if (e.request.url.includes('firebase') || e.request.url.includes('firestore') || e.request.url.includes('firebasestorage')) {
     return;
   }
   
-  // 2. ☢️ الحل النووي للصور: منع المتصفح من قراءة أو حفظ الصور في الكاش
   if (e.request.destination === 'image' || e.request.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) {
     e.respondWith(
-      fetch(e.request, { cache: 'no-store' }) // no-store تمنع المتصفح من لمس الكاش نهائياً للصور
+      fetch(e.request, { cache: 'no-store' })
         .then(res => {
           if (res.ok) {
             const clone = res.clone();
@@ -44,12 +42,11 @@ self.addEventListener('fetch', e => {
           }
           return res;
         })
-        .catch(() => caches.match(e.request)) // فقط إذا انقطع الإنترنت تماماً نستخدم الكاش كملاذ أخير
+        .catch(() => caches.match(e.request))
     );
     return;
   }
 
-  // 3. باقي الملفات (JS, CSS, HTML)
   e.respondWith(
     fetch(e.request, { cache: 'no-cache' })
       .then(res => {
