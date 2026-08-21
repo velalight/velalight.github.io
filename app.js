@@ -1,31 +1,23 @@
 (function(){
 "use strict";
 
-// ☢️ تنظيف ذاتي آمن...
-
-// ☢️ تنظيف ذاتي لمرة واحدة: إلغاء تسجيل أي Service Worker قديم عالق
+// ☢️ تنظيف ذاتي آمن: إلغاء تسجيل أي Service Worker قديم عالق ومسح الكاش التالف
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(function(registrations) {
     for(let registration of registrations) {
-      if (registration.scope.includes('velalight')) {
-        registration.unregister();
-      }
+      registration.unregister();
     }
   });
-  // مسح كل ذاكرة الكاش القديمة فوراً
-  caches.keys().then(function(names) {
-    for (let name of names) {
-      if (name !== 'velalight-v4') {
+  
+  if ('caches' in window) {
+    caches.keys().then(function(names) {
+      for (let name of names) {
         caches.delete(name);
       }
-    }
-  });
+    });
+  }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ FIX: Global Image Error Handler (يمنع اختفاء المنتجات)
-   ... (باقي الكود كما هو)
-   
 /* ═══════════════════════════════════════════════════════════
    ✨ FIX: Global Image Error Handler (يمنع اختفاء المنتجات)
    ═══════════════════════════════════════════════════════════ */
