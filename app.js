@@ -730,6 +730,9 @@ function initCart(){
     badges.id = 'trustBadges';
     badges.style.cssText = 'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
     badges.innerHTML = `
+      <span style="display:flex; align-items:center; gap:4px;">🔒 دفع آمن</span>
+      <span style="display:flex; align-items:center; gap:4px;">🔄 ضمان استرجاع</span>
+      <span style="display:flex; align-items:center; gap:4px;">🚚 توصيل موثوق</span>
     `;
     checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
   }
@@ -884,7 +887,6 @@ function handleCartClick(e){
     c.splice(+rmBtn.dataset.i, 1);
     saveCart(c);
     renderCart();
-    cartBadge();
   } else if(plusBtn){
     const idx = +plusBtn.dataset.i;
     c[idx].qty = Number(c[idx].qty || 1) + 1;
