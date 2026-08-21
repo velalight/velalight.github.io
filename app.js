@@ -1,7 +1,7 @@
 (function(){
 "use strict";
-(function(){
-"use strict";
+
+// ☢️ تنظيف ذاتي آمن...
 
 // ☢️ تنظيف ذاتي لمرة واحدة: إلغاء تسجيل أي Service Worker قديم عالق
 if ('serviceWorker' in navigator) {
