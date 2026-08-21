@@ -317,8 +317,8 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 
 .p-media img {
   width: 100%;
-  height: 100%; /* ✅ يملأ الحاوية بالكامل */
-  object-fit: cover; /* ✅ يغطي المساحة كلها من غير مساحات فاضية */
+  height: 100%;
+  object-fit: cover;
   background: #f5efe5;
 }
 .p-media img:not([src]),
@@ -604,25 +604,24 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 .rev-row::-webkit-scrollbar{display:none}
 
 .rev-card{
- flex:0 0 300px; /* زدنا العرض قليلاً ليستوعب السكرين شوت */
+ flex:0 0 300px;
  scroll-snap-align:start;
  background:var(--panel);
  border:1px solid var(--line);
  border-radius:18px;
  overflow:hidden;
  transition:.3s;
- display: flex;       /* إضافة جديدة */
- flex-direction: column; /* إضافة جديدة */
+ display: flex;
+ flex-direction: column;
 }
 .rev-card:hover{transform:translateY(-4px);box-shadow:var(--sh)}
 
-/* التصحيح الجذري هنا: */
 .rev-card img{
   width: 100%;
-  height: auto; /* نسمح للطول أن يكون طبيعياً حسب الصورة */
-  max-height: 500px; /* نضع حداً أقصى للطول عشان ميطولش أوي */
-  object-fit: contain; /* نغيرها من cover إلى contain عشان الصورة تبان كاملة 100% من غير قص */
-  background: #fff; /* خلفية بيضاء عشان لو الصورة فيها حواف شفافة تبان حلوة */
+  height: auto;
+  max-height: 500px;
+  object-fit: contain;
+  background: #fff;
   display: block;
 }
 
@@ -631,7 +630,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-top: auto; /* يدفع النص للأسفل لو الصورة قصيرة */
+  margin-top: auto;
 }
 /* ═══ Footer ═══ */
 footer{
@@ -676,7 +675,7 @@ footer{
 .crumb{font-size:.8rem;color:var(--dim);margin-bottom:1.4rem}
 .crumb a:hover{color:var(--gold2)}
 
-/* ═══ Product detail ═══ */
+/* ══ Product detail ═══ */
 .pd-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:3rem;align-items:start}
 /* ✨ ZOOM: cursor: zoom-in */
 .pd-img{
@@ -687,10 +686,21 @@ footer{
  cursor:zoom-in;
  position:relative;
  transition:transform .3s;
+ width:100%;
+ max-width:100%;
 }
 .pd-img:hover{transform:scale(1.01)}
 .pd-img:active{transform:scale(.99)}
-.pd-img img{width:100%;aspect-ratio:1;object-fit:cover;pointer-events:none}
+.pd-img img{
+  width:100%;
+  max-width:100%;
+  height:auto;
+  max-height:600px;
+  object-fit:contain;
+  pointer-events:none;
+  display:block;
+  margin:0 auto;
+}
 /* ✨ ZOOM: Thumbs cursor */
 .pd-thumbs{
  display:flex;
@@ -978,7 +988,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
 }
 .mnav a:active{background:rgba(217,171,95,.06)}
 
-/* ═══ Chat ═══ */
+/* ══ Chat ═══ */
 #chatFab{
  position:fixed;
  bottom:20px;
@@ -1389,6 +1399,17 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .pd-img{
   border-radius:18px;
   cursor:zoom-in;
+  width:100%;
+  max-width:100%;
+ }
+ .pd-img img{
+  width:100%;
+  max-width:100%;
+  height:auto;
+  max-height:500px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto;
  }
  .pd-thumbs img{
   width:58px;
@@ -1561,8 +1582,21 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   padding:.25rem .6rem;
  }
  
- /* ✨ Product Detail - Small Mobile */
- .pd-img{border-radius:14px}
+ /*  Product Detail - Small Mobile */
+ .pd-img{
+  border-radius:14px;
+  width:100%;
+  max-width:100%;
+ }
+ .pd-img img{
+  width:100%;
+  max-width:100%;
+  height:auto;
+  max-height:400px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto;
+ }
  .pd-thumbs img{
   width:52px;
   height:52px;
@@ -1583,6 +1617,9 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .p-add{font-size:.7rem;padding:.4rem .6rem}
  
  /* ✨ Product Detail - Extra Small */
+ .pd-img img{
+  max-height:300px;
+ }
  .pd-thumbs img{
   width:48px;
   height:48px;
@@ -1622,7 +1659,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .icobtn:active{background:rgba(217,171,95,.1)}
 }
 
-/* ═══ Reduced Motion ═══ */
+/* ═══ Reduced Motion ══ */
 @media(prefers-reduced-motion:reduce){
  *,
  *::before,
@@ -1633,7 +1670,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  }
 }
 
-/* ═══ Print ═══ */
+/* ═══ Print ══ */
 @media print{
  header,.topbar,#chatFab,#backToTop,#toasts,.mnav,.drawer,.ovl,.zoom-modal{display:none!important}
  body{background:#fff;color:#000}
