@@ -42,12 +42,16 @@ let LANG=localStorage.getItem("vl_lang")||"ar";
 const money=n=>Number(n||0).toLocaleString("en-US")+" "+(LANG==="en"?"EGP":"ج.م");
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ CDN — مباشر من GitHub Pages (سريع جداً)
+   ✨ CDN — مع آلية كسر الكاش (Cache Busting) للصور
+   ملاحظة للأدمن: عند استبدال صورة بنفس الاسم، غيّر الرقم في IMG_CACHE_VERSION
    ═══════════════════════════════════════════════════════════ */
+const IMG_CACHE_VERSION = "v3"; 
+
 const CDN=u=>{
   if(!u) return "";
   if(u.startsWith("data:")||u.startsWith("http")) return u;
-  return `https://velalight.github.io/${u}`;
+  // إضافة رقم الإصدار لإجبار المتصفح على جلب النسخة المحدثة من GitHub
+  return `https://velalight.github.io/${u}?v=${IMG_CACHE_VERSION}`;
 };
 
 function toast(m){
@@ -406,29 +410,9 @@ const t=k=>(I18N[LANG]&&I18N[LANG][k])||I18N.ar[k]||k;
   }catch(e){}
 })();
 
-/* ═══════════════════════════════════════════════════════════
-    قائمة صور آراء العملاء (سكرين شوتات)
-   كل ما عليك هو رفع الصورة في مجلد testimonials وكتابة اسمها هنا
-   ═══════════════════════════════════════════════════════════ */
 const REVIEWS_IMAGES = [
-  "rev1.jpg",
-  "rev2.jpg",
-  "rev3.jpg",
-  "rev4.jpg",
-  "rev5.jpg",
-  "rev6.jpg",
-  "rev7.jpg",
-  "rev8.jpg",
-  "rev9.jpg",
-  "rev10.jpg",
-  "rev11.jpg",
-  "rev12.jpg",
-  "rev13.jpg",
-  "rev14.jpg",
-  "rev15.jpg",
-  "rev16.jpg",
-  "rev17.jpg",
-  "rev18.jpg",
-  "rev19.jpg",
-  "rev20.jpg"
+  "rev1.jpg", "rev2.jpg", "rev3.jpg", "rev4.jpg", "rev5.jpg",
+  "rev6.jpg", "rev7.jpg", "rev8.jpg", "rev9.jpg", "rev10.jpg",
+  "rev11.jpg", "rev12.jpg", "rev13.jpg", "rev14.jpg", "rev15.jpg",
+  "rev16.jpg", "rev17.jpg", "rev18.jpg", "rev19.jpg", "rev20.jpg"
 ];
