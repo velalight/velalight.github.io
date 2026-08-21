@@ -317,9 +317,9 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 
 .p-media img {
   width: 100%;
-  height: 200px; /* ثبّت ارتفاع مناسب */
-  object-fit: contain; /* عشان الصورة تظهر كاملة */
-  background: #f5efe5; /* لون خلفية بسيط */
+  height: 200px;
+  object-fit: contain;
+  background: #f5efe5;
 }
 .p-media img:not([src]),
 .p-media img[src=""]{
@@ -604,25 +604,24 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 .rev-row::-webkit-scrollbar{display:none}
 
 .rev-card{
- flex:0 0 300px; /* زدنا العرض قليلاً ليستوعب السكرين شوت */
+ flex:0 0 300px;
  scroll-snap-align:start;
  background:var(--panel);
  border:1px solid var(--line);
  border-radius:18px;
  overflow:hidden;
  transition:.3s;
- display: flex;       /* إضافة جديدة */
- flex-direction: column; /* إضافة جديدة */
+ display: flex;
+ flex-direction: column;
 }
 .rev-card:hover{transform:translateY(-4px);box-shadow:var(--sh)}
 
-/* التصحيح الجذري هنا: */
 .rev-card img{
   width: 100%;
-  height: auto; /* نسمح للطول أن يكون طبيعياً حسب الصورة */
-  max-height: 500px; /* نضع حداً أقصى للطول عشان ميطولش أوي */
-  object-fit: contain; /* نغيرها من cover إلى contain عشان الصورة تبان كاملة 100% من غير قص */
-  background: #fff; /* خلفية بيضاء عشان لو الصورة فيها حواف شفافة تبان حلوة */
+  height: auto;
+  max-height: 500px;
+  object-fit: contain;
+  background: #fff;
   display: block;
 }
 
@@ -631,8 +630,9 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-top: auto; /* يدفع النص للأسفل لو الصورة قصيرة */
+  margin-top: auto;
 }
+
 /* ═══ Footer ═══ */
 footer{
  background:#1a1512;
@@ -678,7 +678,6 @@ footer{
 
 /* ═══ Product detail ═══ */
 .pd-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:3rem;align-items:start}
-/* ✨ ZOOM: cursor: zoom-in */
 .pd-img{
  border-radius:24px;
  overflow:hidden;
@@ -691,7 +690,7 @@ footer{
 .pd-img:hover{transform:scale(1.01)}
 .pd-img:active{transform:scale(.99)}
 .pd-img img{width:100%;aspect-ratio:1;object-fit:cover;pointer-events:none}
-/* ✨ ZOOM: Thumbs cursor */
+
 .pd-thumbs{
  display:flex;
  gap:.5rem;
@@ -1255,9 +1254,17 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   transition:transform .2s, border-color .2s;
  }
  
- .p-media img{
-  opacity:1 !important;
-  transition:transform .3s ease;
+ /* ✨ التعديل المطلوب: الموبايل - نسبة 4/5، contain، وأقصى ارتفاع 50vh */
+ .p-media img,
+ .pd-img img {
+  opacity: 1 !important;
+  transition: transform .3s ease;
+  aspect-ratio: 4/5 !important;
+  object-fit: contain !important;
+  max-height: 50vh !important;
+  width: 100% !important;
+  height: auto !important;
+  background: #f5efe5;
  }
  
  .p-quick{
@@ -1358,7 +1365,6 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  
  .toast{font-size:.8rem;padding:.6rem 1.2rem}
  
- /* ✨ ZOOM MODAL — Mobile Responsive */
  .zoom-modal{padding:1rem}
  .zoom-modal img{
   max-width:95vw;
@@ -1385,15 +1391,17 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   padding:.3rem .7rem;
  }
  
- /* ✨ Product Detail - Mobile */
  .pd-img{
   border-radius:18px;
   cursor:zoom-in;
  }
+ 
+ /* ✨ التعديل المطلوب: تصغير الثمبنيلز لـ 50px */
  .pd-thumbs img{
-  width:58px;
-  height:58px;
-  border-radius:10px;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 8px;
+  object-fit: contain;
  }
 }
 
@@ -1539,7 +1547,6 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  #toasts{bottom:18px}
  .toast{font-size:.76rem;padding:.55rem 1.1rem}
  
- /* ✨ ZOOM MODAL — Small Mobile */
  .zoom-modal{padding:.5rem}
  .zoom-close{
   top:8px;
@@ -1561,12 +1568,13 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   padding:.25rem .6rem;
  }
  
- /* ✨ Product Detail - Small Mobile */
  .pd-img{border-radius:14px}
+ 
+ /* تثبيت حجم الثمبنيلز عند 50px للشاشات الصغيرة أيضاً */
  .pd-thumbs img{
-  width:52px;
-  height:52px;
-  border-radius:8px;
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 8px;
  }
 }
 
@@ -1582,10 +1590,9 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .p-price{font-size:.82rem}
  .p-add{font-size:.7rem;padding:.4rem .6rem}
  
- /* ✨ Product Detail - Extra Small */
  .pd-thumbs img{
-  width:48px;
-  height:48px;
+  width: 50px !important;
+  height: 50px !important;
  }
 }
 
@@ -1639,7 +1646,6 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  body{background:#fff;color:#000}
  .p-card{break-inside:avoid}
 }
-
 
 /* ═══════════════════════════════════════════════════════════
    ═══ FLOATING CARD — LOGO STYLE (VelaLight) ═══
