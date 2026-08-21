@@ -1842,3 +1842,47 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
     background-color: #f5efe5; /* لون خلفية أنيق يملأ أي فراغات جانبية بشكل متناسق */
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ إصلاح جذري: معاملة جميع المنتجات مثل المنتج رقم 1
+   (إزالة القص الإجباري والسماح للأبعاد الطبيعية للصورة)
+   ═══════════════════════════════════════════════════════════ */
+
+/* 1. إصلاح شبكة المنتجات الرئيسية (الصفحة الرئيسية) */
+.p-media {
+  aspect-ratio: auto !important; /* إلغاء إجبار الشكل المربع */
+  height: auto !important;       /* السماح للارتفاع أن يكون طبيعياً */
+  background: #f5efe5 !important; /* خلفية أنيقة تملأ أي فراغ بشكل طبيعي */
+}
+
+.p-media img {
+  height: auto !important;       /* إلغاء الارتفاع الثابت الذي يسبب التشوه */
+  aspect-ratio: auto !important;
+  object-fit: contain !important; /* منع القص تماماً وإظهار الصورة كاملة 100% */
+  width: 100% !important;
+  display: block !important;
+}
+
+/* 2. إصلاح صفحة تفاصيل المنتج (Product Detail Page) للموبايل والديسكتوب */
+.pd-img {
+  aspect-ratio: auto !important;
+  height: auto !important;
+  max-height: 60vh !important; /* منع الصورة من أن تكون أطول من شاشة الموبايل */
+  background: #f5efe5 !important;
+}
+
+.pd-img img {
+  aspect-ratio: auto !important;
+  height: auto !important;
+  max-height: 60vh !important;
+  object-fit: contain !important; /* منع القص تماماً */
+  width: 100% !important;
+}
+
+/* 3. الحفاظ على الصور المصغرة (Thumbnails) مربعة وأنيقة (لأنها صغيرة) */
+.pd-thumbs img {
+  aspect-ratio: 1 !important;
+  object-fit: cover !important;
+  width: 68px !important;
+  height: 68px !important;
+}
