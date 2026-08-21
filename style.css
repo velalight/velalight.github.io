@@ -317,9 +317,9 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 
 .p-media img {
   width: 100%;
-  height: 200px; /* ثبّت ارتفاع مناسب */
-  object-fit: contain; /* عشان الصورة تظهر كاملة */
-  background: #f5efe5; /* لون خلفية بسيط */
+  height: 100%; /* ✅ يملأ الحاوية بالكامل */
+  object-fit: cover; /* ✅ يغطي المساحة كلها من غير مساحات فاضية */
+  background: #f5efe5;
 }
 .p-media img:not([src]),
 .p-media img[src=""]{
