@@ -67,7 +67,9 @@
 .pd-img img{
   width:100%;
   height:100%;
-  object-fit:cover;
+  /* ✨ إصلاح: contain بدل cover عشان الصورة تتعرض كاملة من غير ما
+     يتقص جزء منها (خصوصًا الصور الطولية اللي بييجي بيها الموبايل) */
+  object-fit:contain;
   display:block;
   opacity:0;
   transition:opacity .5s, transform .3s ease;
@@ -1281,6 +1283,21 @@ async function loadCloudCatalog(pid){
       );
       
       if(found&&found.active!==false){
+        // ✨ إصلاح: مصفوفة PRODUCTS (المصدر الأصلي في data.js) هي المرجع
+        // الوحيد للصور/الاسم/السعر/الوصف. فايربيز بيغيّر بس حالة المخزون
+        // (sold/stock/active) — بالظبط زي المنطق في data.js نفسه، عشان
+        // أي صورة قديمة اتخزنت قبل كده في فايربيز متبقاش تطغى على آخر
+        // تحديث فعلي رفعته على GitHub.
+        const localBase=(typeof PRODUCTS!=="undefined")?PRODUCTS.find(x=>String(x.id)===String(pid)):null;
+        const merged={
+          ...(localBase||found),
+          sold: found.sold !== undefined ? found.sold : (localBase?localBase.sold:undefined),
+          stock: found.stock !== undefined ? found.stock : (localBase?localBase.stock:undefined),
+          active: found.active !== undefined ? found.active : (localBase?localBase.active:undefined),
+          id: pid,
+          _fid: found.id || null
+        };
+
         try{
           const cacheKey="vl_products_cache_v2";
           let cache=[];
@@ -1290,13 +1307,13 @@ async function loadCloudCatalog(pid){
           const idx=cache.findIndex(x=>
             String(x.id)===String(pid)||String(x.id_)===String(pid)
           );
-          if(idx>=0) cache[idx]={...found,id:pid};
-          else cache.push({...found,id:pid});
+          if(idx>=0) cache[idx]={...merged};
+          else cache.push({...merged});
           
           localStorage.setItem(cacheKey,JSON.stringify(cache.slice(-100)));
         }catch(e){console.warn("Cache update failed",e)}
         
-        P={...found};
+        P={...merged};
         render();
       }else if(found&&found.active===false){
         showNotFound();

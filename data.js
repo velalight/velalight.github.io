@@ -193,15 +193,27 @@ async function loadAll(){
 }
 
 function loadFromCache(){
+  // ✨ إصلاح "فلاش الصور القديمة": الأساس دايمًا هو مصفوفة PRODUCTS الطازة
+  // (اللي بتيجي مع كل تحديث GitHub)، مش أي نسخة قديمة متخزنة عند الزبون.
+  // الكاش المحلي هنا بيتستخدم فقط عشان نعرف آخر حالة "مخزون/كمية" معروفة
+  // لحظة انقطاع النت، مش عشان يجيب صور أو أسماء أو أسعار قديمة.
+  ALL_PRODUCTS=[...PRODUCTS];
   try{
     const cached=JSON.parse(localStorage.getItem("vl_products_v3")||"[]");
     const cachedTime=Number(localStorage.getItem("vl_products_v3_time")||"0");
     if(Array.isArray(cached) && cached.length>0 && (Date.now()-cachedTime)<3600000){
-      ALL_PRODUCTS=cached;
+      const map=new Map(ALL_PRODUCTS.map(p=>[p.id,p]));
+      cached.forEach(c=>{
+        if(!c||!c.id) return;
+        const existing=map.get(c.id);
+        if(!existing) return; // منتج مش موجود في المصدر الحالي؟ اتجاهله
+        if(c.sold!==undefined) existing.sold=c.sold;
+        if(c.stock!==undefined) existing.stock=c.stock;
+        if(c.active!==undefined) existing.active=c.active;
+      });
       return true;
     }
   }catch(e){}
-  ALL_PRODUCTS=[...PRODUCTS];
   return false;
 }
 
