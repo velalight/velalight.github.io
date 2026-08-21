@@ -15,7 +15,7 @@ const CFG = {
   TIKTOK_PIXEL_ID: "YOUR_TIKTOK_PIXEL_ID"
 };
 
-/* ═══ Analytics ═══ */
+/* ═══ Analytics (unchanged) ═══ */
 (function(){
   if(CFG.GA4_ID.indexOf("G-")===0 && CFG.GA4_ID!=="G-XXXXXXXXXX"){
     var s=document.createElement("script");s.async=1;s.src="https://www.googletagmanager.com/gtag/js?id="+CFG.GA4_ID;document.head.appendChild(s);
@@ -74,7 +74,6 @@ const GOVS_EN=["Cairo","Giza","Alexandria","Qalyubia","Dakahlia","Sharqia","Ghar
 const STATUS=["قيد المراجعة","جاري التجهيز","تم الشحن","تم التسليم","ملغي"];
 
 const D=864e5,NOW=Date.now();
-
 const PRODUCTS=[
   {id:"1",name:"الشمعة الفاخرة (مجموعة 3 شموع)",nameEn:"Luxury Candle Set (3 Candles)",cat:"wood",price:650,old:750,badge:"خصم",badgeEn:"Sale",hours:"3 شموع × 72 ساعة",hoursEn:"3 candles × 72h",scents:["عود","فانيليا","مسك أبيض"],img:"RRRR.jpg",imgs:["RRRR.jpg","RRRRR.jpg","RRRRRR.jpg","RR.jpg","RRR.jpg"],sold:0,createdAt:NOW-1*D,desc:"ثلاث شموع فاخرة في مجموعة واحدة، صُممت لتتناغم معًا كسيمفونية من الضوء والعطر.",descEn:"Three luxury candles in one curated set."},
   {id:"2",name:"شمعة نبضين",nameEn:"Two Heartbeats Candle",cat:"wood",price:650,old:750,badge:"خصم",badgeEn:"Sale",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["ورد","فانيليا","مسك أبيض"],img:"heart2.jpg",imgs:["heart2.jpg","heart3.jpg","heart1.jpg"],sold:0,createdAt:NOW-2*D,desc:"ليست مجرد شمعة... بل قطعة تُحاكي المشاعر.",descEn:"More than a candle — a piece that echoes emotions."},
@@ -158,65 +157,26 @@ async function loadAll(){
     dbProductsCache=[];
   }
   
-  // ✨ إصلاح جذري: ترحيل تلقائي للمنتجات الثابتة (ذات الأرقام) إلى Firebase لتوحيد الـ IDs
-  if (CLOUD && typeof window.FB?.set === "function") {
-    for (const p of PRODUCTS) {
-      if (/^\d+$/.test(String(p.id))) {
-        // التحقق مما إذا كان المنتج قد تم ترحيله مسبقاً (بالبحث عن الاسم لتجنب التكرار)
-        const isMigrated = dbProductsCache.some(fbP => fbP.name === p.name || (p.nameEn && fbP.nameEn === p.nameEn));
-        if (!isMigrated) {
-          const newId = "p" + Date.now().toString(36) + Math.random().toString(16).slice(2, 5);
-          const fbData = { 
-            ...p, 
-            id_: newId, 
-            createdAt: p.createdAt || Date.now(), 
-            active: true 
-          };
-          delete fbData.id; // حذف الـ ID القديم لتجنب التعارض
-          
-          try {
-            await window.FB.set("products", newId, fbData);
-            console.log(`✅ تم ترحيل المنتج تلقائياً: "${p.name}" -> ID: ${newId}`);
-            dbProductsCache.push(fbData); // إضافته للكاش المحلي ليظهر فوراً في هذه الجلسة
-          } catch(e) {
-            console.warn(`⚠️ فشل ترحيل المنتج "${p.name}"`, e);
-          }
-        }
-      }
-    }
-  }
-
-  const map = new Map();
+  const map=new Map();
+  PRODUCTS.forEach(p=>{
+    if(p&&p.id) map.set(p.id,{...p});
+  });
   
-  // 1. بناء الخريطة من Firebase أولاً (بما في ذلك المنتجات التي تم ترحيلها للتو)
-  dbProductsCache.forEach(d => {
-    const slug = d.id_ || d.slug || d.pid || d.id;
-    if (!slug) return;
-    if (d.active === false) return;
-    
-    map.set(slug, {
-      ...d,
-      id: slug, // توحيد الـ ID النهائي ليكون هو الـ slug
+  dbProductsCache.forEach(d=>{
+    const slug=d.id_||d.slug||d.pid||d.id;
+    if(!slug) return;
+    if(d.active===false){map.delete(slug);return;}
+    const existing=map.get(slug)||{};
+    map.set(slug,{
+      ...existing,
+      sold: d.sold !== undefined ? d.sold : existing.sold,
+      stock: d.stock !== undefined ? d.stock : existing.stock,
+      active: d.active !== undefined ? d.active : existing.active,
       _fid: d.id || null
     });
   });
-
-  // 2. إضافة المنتجات الثابتة كـ Fallback آمن فقط إذا لم يتم ترحيلها
-  PRODUCTS.forEach(p => {
-    if (!p || !p.id) return;
-    
-    const isMigrated = dbProductsCache.some(fbP => fbP.name === p.name || (p.nameEn && fbP.nameEn === p.nameEn));
-    
-    // إذا لم يتم ترحيله، نضيفه كـ Fallback (لضمان عدم اختفاء المنتجات في حال فشل الاتصال)
-    if (!isMigrated) {
-      const slug = p.id_ || p.id;
-      if (!map.has(slug)) {
-        map.set(slug, { ...p, id: slug });
-      }
-    }
-  });
   
-  ALL_PRODUCTS = [...map.values()];
+  ALL_PRODUCTS=[...map.values()];
   
   try{
     localStorage.setItem("vl_products_v3",JSON.stringify(ALL_PRODUCTS.slice(0,200)));
