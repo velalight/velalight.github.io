@@ -1,4 +1,4 @@
-const CACHE_NAME = 'velalight-v5-final'; // هذا الرقم يضمن مسح أي كاش قديم عالق لمرة واحدة وأخيرة
+const CACHE_NAME = 'velalight-v6-final'; // إصدار جديد لمسح أي كاش عالق
 const ASSETS = [
   '/',
   '/index.html',
@@ -21,27 +21,25 @@ self.addEventListener('activate', e => {
     caches.keys().then(keys =>
       Promise.all(
         keys.filter(k => k !== CACHE_NAME)
-            .map(k => caches.delete(k)) // مسح كل الكاش القديم نهائياً
+            .map(k => caches.delete(k))
       )
     ).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', e => {
-  // 1. تجاهل طلبات Firebase تماماً
   if (e.request.url.includes('firebase') || e.request.url.includes('firestore') || e.request.url.includes('firebasestorage')) {
     return;
   }
   
-  // 2. الحل الجذري: منع تخزين أو قراءة أي صورة من الكاش نهائياً
+  // منع تخزين أو قراءة أي صورة من الكاش نهائياً
   if (e.request.destination === 'image' || e.request.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) {
     e.respondWith(
-      fetch(e.request, { cache: 'no-store' }) // يجبر المتصفح على جلب الصورة الجديدة من السيرفر دائماً
+      fetch(e.request, { cache: 'no-store' })
     );
     return;
   }
 
-  // 3. تخزين ملفات الموقع الأساسية (HTML, CSS, JS) فقط للسرعة
   e.respondWith(
     fetch(e.request, { cache: 'no-cache' })
       .then(res => {
