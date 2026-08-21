@@ -45,7 +45,7 @@ const money=n=>Number(n||0).toLocaleString("en-US")+" "+(LANG==="en"?"EGP":"ج.�
    ✨ CDN — مع آلية كسر الكاش (Cache Busting) للصور
    ملاحظة للأدمن: عند استبدال صورة بنفس الاسم، غيّر الرقم في IMG_CACHE_VERSION
    ═══════════════════════════════════════════════════════════ */
-const IMG_CACHE_VERSION = "v3"; 
+const IMG_CACHE_VERSION = "v4"; 
 
 const CDN=u=>{
   if(!u) return "";
