@@ -245,7 +245,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 .langbtn:active{transform:scale(.95)}
 #navToggle{display:none}
 
-/* ═══ Chips (container hidden, chip styled for modals) ═══ */
+/* ═══ Chips (container hidden, chip styled for modals) ══ */
 .chips{display:none;gap:.55rem;flex-wrap:wrap}
 .chip{
  display:inline-flex;
@@ -301,25 +301,19 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 .p-media{
  position:relative;
  overflow:hidden;
- aspect-ratio:1;
  display:block;
- background:linear-gradient(135deg,#f5efe5 0%,#faf6ef 50%,#f5efe5 100%);
- background-size:200% 200%;
- animation:shimmer 2.5s ease-in-out infinite;
+ background:var(--bg2);
  text-decoration:none;
  -webkit-tap-highlight-color:transparent;
-}
-@keyframes shimmer{
- 0%{background-position:0% 50%}
- 50%{background-position:100% 50%}
- 100%{background-position:0% 50%}
 }
 
 .p-media img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  background: #f5efe5;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
+  background: var(--bg2);
+  display: block;
 }
 .p-media img:not([src]),
 .p-media img[src=""]{
@@ -333,7 +327,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  from{opacity:0;transform:scale(.98)}
  to{opacity:1;transform:scale(1)}
 }
-.p-card:hover .p-media img{transform:scale(1.05)}
+.p-card:hover .p-media img{transform:scale(1.02)}
 
 .p-quick{
  position:absolute;
@@ -502,7 +496,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 .scent b{font-size:.88rem;display:block;color:var(--ink)}
 .scent small{font-size:.68rem}
 
-/* ═══ Occasions ═══ */
+/* ═══ Occasions ══ */
 .occ-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.3rem}
 .occ{
  background:var(--panel);
@@ -591,7 +585,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 }
 .faq-a div{padding:0 1.4rem 1.2rem}
 
-/* ═══ Reviews ═══ */
+/* ══ Reviews ═══ */
 .rev-row{
  display:flex;
  gap:1.2rem;
@@ -632,7 +626,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
   align-items:center;
   margin-top: auto;
 }
-/* ═══ Footer ═══ */
+/* ═══ Footer ══ */
 footer{
  background:#1a1512;
  border-top:1px solid rgba(217,171,95,.2);
@@ -675,9 +669,8 @@ footer{
 .crumb{font-size:.8rem;color:var(--dim);margin-bottom:1.4rem}
 .crumb a:hover{color:var(--gold2)}
 
-/* ══ Product detail ═══ */
+/* ═══ Product detail ═══ */
 .pd-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:3rem;align-items:start}
-/* ✨ ZOOM: cursor: zoom-in */
 .pd-img{
  border-radius:24px;
  overflow:hidden;
@@ -688,6 +681,7 @@ footer{
  transition:transform .3s;
  width:100%;
  max-width:100%;
+ background: var(--bg2);
 }
 .pd-img:hover{transform:scale(1.01)}
 .pd-img:active{transform:scale(.99)}
@@ -701,7 +695,6 @@ footer{
   display:block;
   margin:0 auto;
 }
-/* ✨ ZOOM: Thumbs cursor */
 .pd-thumbs{
  display:flex;
  gap:.5rem;
@@ -988,7 +981,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
 }
 .mnav a:active{background:rgba(217,171,95,.06)}
 
-/* ══ Chat ═══ */
+/* ═══ Chat ═══ */
 #chatFab{
  position:fixed;
  bottom:20px;
@@ -1223,7 +1216,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ═══ RESPONSIVE — MOBILE FIRST ENHANCEMENTS ═══
+   ═══ RESPONSIVE — MOBILE FIRST ENHANCEMENTS ══
    ═══════════════════════════════════════════════════════════ */
 
 /* ═══ Tablets & Large Mobiles ═══ */
@@ -1268,6 +1261,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .p-media img{
   opacity:1 !important;
   transition:transform .3s ease;
+  max-height: 280px;
  }
  
  .p-quick{
@@ -1401,12 +1395,13 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   cursor:zoom-in;
   width:100%;
   max-width:100%;
+  background: var(--bg2);
  }
  .pd-img img{
   width:100%;
   max-width:100%;
   height:auto;
-  max-height:500px;
+  max-height:70vh;
   object-fit:contain;
   display:block;
   margin:0 auto;
@@ -1446,6 +1441,10 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  
  .p-media{
   border-radius:12px 12px 0 0;
+ }
+ 
+ .p-media img{
+  max-height: 220px;
  }
  
  .p-quick{
@@ -1582,17 +1581,18 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   padding:.25rem .6rem;
  }
  
- /*  Product Detail - Small Mobile */
+ /* Product Detail - Small Mobile */
  .pd-img{
   border-radius:14px;
   width:100%;
   max-width:100%;
+  background: var(--bg2);
  }
  .pd-img img{
   width:100%;
   max-width:100%;
   height:auto;
-  max-height:400px;
+  max-height:60vh;
   object-fit:contain;
   display:block;
   margin:0 auto;
@@ -1616,9 +1616,8 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .p-price{font-size:.82rem}
  .p-add{font-size:.7rem;padding:.4rem .6rem}
  
- /* ✨ Product Detail - Extra Small */
  .pd-img img{
-  max-height:300px;
+  max-height:50vh;
  }
  .pd-thumbs img{
   width:48px;
@@ -1626,7 +1625,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  }
 }
 
-/* ═══ Very Small Screens (landscape or tiny devices) ═══ */
+/* ══ Very Small Screens (landscape or tiny devices) ══ */
 @media(max-height:500px) and (orientation:landscape){
  .sec{padding:2.5rem 0}
  #chatFab{width:46px;height:46px;font-size:1.1rem}
@@ -1670,13 +1669,12 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  }
 }
 
-/* ═══ Print ══ */
+/* ═══ Print ═══ */
 @media print{
  header,.topbar,#chatFab,#backToTop,#toasts,.mnav,.drawer,.ovl,.zoom-modal{display:none!important}
  body{background:#fff;color:#000}
  .p-card{break-inside:avoid}
 }
-
 
 /* ═══════════════════════════════════════════════════════════
    ═══ FLOATING CARD — LOGO STYLE (VelaLight) ═══
@@ -1827,62 +1825,4 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   .dev-avatar{width:42px;height:42px;font-size:1.2rem;}
   .dev-info b{font-size:.85rem;}
   .dev-cta{font-size:.82rem;}
-}
-/* ═══ إصلاح قص الصور والوصف في الموبايل ═══ */
-@media (max-width: 768px) {
-  .pd-img {
-    aspect-ratio: auto !important;
-    max-height: 50vh !important; /* يمنع الصورة من الاستحواذ على كامل الشاشة */
-  }
-  .pd-img img {
-    aspect-ratio: auto !important;
-    height: auto !important;
-    max-height: 50vh !important;
-    object-fit: contain !important; /* يضمن ظهور الصورة كاملة 100% بدون أي قص */
-    background-color: #f5efe5; /* لون خلفية أنيق يملأ أي فراغات جانبية بشكل متناسق */
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   ✨ إصلاح جذري: معاملة جميع المنتجات مثل المنتج رقم 1
-   (إزالة القص الإجباري والسماح للأبعاد الطبيعية للصورة)
-   ═══════════════════════════════════════════════════════════ */
-
-/* 1. إصلاح شبكة المنتجات الرئيسية (الصفحة الرئيسية) */
-.p-media {
-  aspect-ratio: auto !important; /* إلغاء إجبار الشكل المربع */
-  height: auto !important;       /* السماح للارتفاع أن يكون طبيعياً */
-  background: #f5efe5 !important; /* خلفية أنيقة تملأ أي فراغ بشكل طبيعي */
-}
-
-.p-media img {
-  height: auto !important;       /* إلغاء الارتفاع الثابت الذي يسبب التشوه */
-  aspect-ratio: auto !important;
-  object-fit: contain !important; /* منع القص تماماً وإظهار الصورة كاملة 100% */
-  width: 100% !important;
-  display: block !important;
-}
-
-/* 2. إصلاح صفحة تفاصيل المنتج (Product Detail Page) للموبايل والديسكتوب */
-.pd-img {
-  aspect-ratio: auto !important;
-  height: auto !important;
-  max-height: 60vh !important; /* منع الصورة من أن تكون أطول من شاشة الموبايل */
-  background: #f5efe5 !important;
-}
-
-.pd-img img {
-  aspect-ratio: auto !important;
-  height: auto !important;
-  max-height: 60vh !important;
-  object-fit: contain !important; /* منع القص تماماً */
-  width: 100% !important;
-}
-
-/* 3. الحفاظ على الصور المصغرة (Thumbnails) مربعة وأنيقة (لأنها صغيرة) */
-.pd-thumbs img {
-  aspect-ratio: 1 !important;
-  object-fit: cover !important;
-  width: 68px !important;
-  height: 68px !important;
 }
