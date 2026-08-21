@@ -1828,3 +1828,17 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   .dev-info b{font-size:.85rem;}
   .dev-cta{font-size:.82rem;}
 }
+/* ═══ إصلاح قص الصور والوصف في الموبايل ═══ */
+@media (max-width: 768px) {
+  .pd-img {
+    aspect-ratio: auto !important;
+    max-height: 50vh !important; /* يمنع الصورة من الاستحواذ على كامل الشاشة */
+  }
+  .pd-img img {
+    aspect-ratio: auto !important;
+    height: auto !important;
+    max-height: 50vh !important;
+    object-fit: contain !important; /* يضمن ظهور الصورة كاملة 100% بدون أي قص */
+    background-color: #f5efe5; /* لون خلفية أنيق يملأ أي فراغات جانبية بشكل متناسق */
+  }
+}
