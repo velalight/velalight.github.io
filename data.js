@@ -193,15 +193,28 @@ async function loadAll(){
 }
 
 function loadFromCache(){
+  // ✨ إصلاح فلاش الصور القديمة عند الريفرش:
+  // الأساس دايمًا مصفوفة PRODUCTS الطازة (بتيجي مع كل تحديث على GitHub)،
+  // مش أي نسخة قديمة كانت متخزنة عند الزبون من زيارة سابقة.
+  // الكاش المحلي هنا بيدّي بس "الكمية/حالة التوفر" من آخر مرة اتصل فيها
+  // بفايربيز، من غير ما يلمس الصور أو الاسم أو السعر خالص.
+  ALL_PRODUCTS=[...PRODUCTS];
   try{
     const cached=JSON.parse(localStorage.getItem("vl_products_v3")||"[]");
     const cachedTime=Number(localStorage.getItem("vl_products_v3_time")||"0");
     if(Array.isArray(cached) && cached.length>0 && (Date.now()-cachedTime)<3600000){
-      ALL_PRODUCTS=cached;
+      const map=new Map(ALL_PRODUCTS.map(p=>[p.id,p]));
+      cached.forEach(c=>{
+        if(!c||!c.id) return;
+        const existing=map.get(c.id);
+        if(!existing) return;
+        if(c.sold!==undefined) existing.sold=c.sold;
+        if(c.stock!==undefined) existing.stock=c.stock;
+        if(c.active!==undefined) existing.active=c.active;
+      });
       return true;
     }
   }catch(e){}
-  ALL_PRODUCTS=[...PRODUCTS];
   return false;
 }
 
