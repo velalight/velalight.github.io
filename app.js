@@ -145,37 +145,43 @@ const velaScentTr=name=>{
 })();
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ INIT — إصلاح جذري للوميض (Single Render Strategy)
+   ✨ INIT — مع Cache-First Strategy
    ═══════════════════════════════════════════════════════════ */
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded",()=>{
   initLang();
   initMarquee();
   initEmbers();
   initReveal();
   
-  // ✨ الإصلاح: ننتظر اكتمال جلب ودمج البيانات (من الكاش أو Firebase) قبل أي رسم
-  try {
-    await loadAll(); 
-    
-    // نرسم مرة واحدة فقط بعد التأكد من أن البيانات جاهزة ومحدثة
+  const hasCache = (typeof loadFromCache === "function") && loadFromCache();
+  
+  if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
     renderChips();
     renderProducts();
     renderScents();
     renderFAQ();
-    
+    console.log("⚡ Products rendered from cache");
+  }
+  
+  loadAll().then(()=>{
+    renderChips();
+    renderProducts();
+    renderScents();
+    renderFAQ();
     initProductRealtimeSync();
     requestIdle(() => prefetchProductPages());
-  } catch (err) {
+  }).catch(err => {
     console.warn("⚠️ loadAll failed:", err);
-    // Fallback آمن في حالة انقطاع الشبكة تماماً
     if (typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)) {
-      window.ALL_PRODUCTS = [...PRODUCTS];
+      if (typeof ALL_PRODUCTS === "undefined" || !ALL_PRODUCTS.length) {
+        window.ALL_PRODUCTS = [...PRODUCTS];
+      }
       renderChips();
       renderProducts();
       renderScents();
       renderFAQ();
     }
-  }
+  });
   
   initCart();
   initAccount();
@@ -723,7 +729,8 @@ function initCart(){
     const badges = document.createElement('div');
     badges.id = 'trustBadges';
     badges.style.cssText = 'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
-    badges.innerHTML = ``;
+    badges.innerHTML = `
+    `;
     checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
   }
 }
@@ -1373,11 +1380,13 @@ function initAccount() {
   $("#accBtn")?.addEventListener("click", async () => {
     const isFirebaseLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
 
+    // التحكم في إظهار/إخفاء الحقول بناءً على حالة تسجيل الدخول
     const fieldsToToggle = ["accName", "accPhone", "accCity", "accAddr", "saveAccBtn"];
     const accSub = document.querySelector('[data-i18n="acc_sub"]');
     let welcomeMsg = document.getElementById("accWelcomeMsg");
 
     if (!isFirebaseLogged) {
+      // حالة عدم تسجيل الدخول: إظهار الحقول وإخفاء رسالة الترحيب
       fieldsToToggle.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = "";
@@ -1393,6 +1402,7 @@ function initAccount() {
       return;
     }
 
+    // ✨ حالة تسجيل الدخول: إخفاء الحقول المعقدة وإظهار ملخص بسيط فقط
     fieldsToToggle.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = "none";
@@ -1467,6 +1477,7 @@ function initAccount() {
     if (e.target.id === "accOv") { closeModal("accOv"); }
   });
 
+  // زر الحفظ (مخفي الآن عند تسجيل الدخول، لكن نتركه كـ fallback أمان)
   $("#saveAccBtn")?.addEventListener("click", async () => {
     const name = $("#accName")?.value.trim();
     const phone = $("#accPhone")?.value.trim();
