@@ -315,11 +315,14 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  100%{background-position:0% 50%}
 }
 
-.p-media img {
-  width: 100%;
-  height: 200px; /* ثبّت ارتفاع مناسب */
-  object-fit: contain; /* عشان الصورة تظهر كاملة */
-  background: #f5efe5; /* لون خلفية بسيط */
+.p-media img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ transition:transform .6s ease, opacity .4s ease;
+ opacity:1;
+ position:relative;
+ z-index:1;
 }
 .p-media img:not([src]),
 .p-media img[src=""]{
@@ -602,37 +605,19 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  scrollbar-width:none;
 }
 .rev-row::-webkit-scrollbar{display:none}
-
 .rev-card{
- flex:0 0 300px; /* زدنا العرض قليلاً ليستوعب السكرين شوت */
+ flex:0 0 280px;
  scroll-snap-align:start;
  background:var(--panel);
  border:1px solid var(--line);
  border-radius:18px;
  overflow:hidden;
  transition:.3s;
- display: flex;       /* إضافة جديدة */
- flex-direction: column; /* إضافة جديدة */
 }
 .rev-card:hover{transform:translateY(-4px);box-shadow:var(--sh)}
+.rev-card img{aspect-ratio:4/5;object-fit:cover;width:100%}
+.rev-card .rb{padding:.8rem 1rem;display:flex;justify-content:space-between;align-items:center}
 
-/* التصحيح الجذري هنا: */
-.rev-card img{
-  width: 100%;
-  height: auto; /* نسمح للطول أن يكون طبيعياً حسب الصورة */
-  max-height: 500px; /* نضع حداً أقصى للطول عشان ميطولش أوي */
-  object-fit: contain; /* نغيرها من cover إلى contain عشان الصورة تبان كاملة 100% من غير قص */
-  background: #fff; /* خلفية بيضاء عشان لو الصورة فيها حواف شفافة تبان حلوة */
-  display: block;
-}
-
-.rev-card .rb{
-  padding:.8rem 1rem;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top: auto; /* يدفع النص للأسفل لو الصورة قصيرة */
-}
 /* ═══ Footer ═══ */
 footer{
  background:#1a1512;
@@ -1790,56 +1775,4 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   .dev-avatar{width:42px;height:42px;font-size:1.2rem;}
   .dev-info b{font-size:.85rem;}
   .dev-cta{font-size:.82rem;}
-}
-/* ═══════════════════════════════════════════════════════════
-   ✨ الحل الذكي والآمن للموبايل فقط (لن يؤثر على اللابتوب إطلاقاً)
-   ═══════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  
-  /* 1. حاوية الصورة الرئيسية: نتحكم فيها كـ "صندوق" ذكي */
-  .pd-img {
-    width: 100% !important;
-    max-height: 50vh !important; /* الحد الأقصى للارتفاع عشان متطولش */
-    aspect-ratio: 4 / 5 !important; /* النسبة المطلوبة */
-    display: flex !important;
-    align-items: center !important; /* توسيط الصورة عمودياً داخل الصندوق */
-    justify-content: center !important; /* توسيط الصورة أفقياً داخل الصندوق */
-    background-color: var(--panel2) !important; /* لون خلفية يملأ الفراغات بأناقة لو الصورة مش 4/5 */
-    padding: 15px !important; /* مسافة تنفس عشان الصورة متلصقش في الحواف */
-    box-sizing: border-box !important;
-  }
-
-  /* 2. الصورة نفسها: تملأ الصندوق بذكاء بدون أي قص */
-  .pd-img img {
-    width: 100% !important;
-    height: 100% !important;
-    max-height: 50vh !important;
-    object-fit: contain !important; /* تظهر كاملة 100% بدون أي قص */
-    display: block !important;
-  }
-
-  /* 3. الثمنيلز (الصور المصغرة): تثبيت الحجم عند 50px بالضبط ومنع الانكماش */
-  #pdThumbs {
-    gap: 8px !important;
-    padding: 10px 0 !important;
-    justify-content: flex-start !important;
-  }
-  
-  #pdThumbs img {
-    width: 50px !important;
-    height: 50px !important;
-    min-width: 50px !important; /* حارس يمنع المتصفح من تصغيرها */
-    min-height: 50px !important; /* حارس يمنع المتصفح من تصغيرها */
-    max-width: 50px !important;
-    max-height: 50px !important;
-    object-fit: contain !important; /* تظهر تفاصيل الصورة المصغرة */
-    border-radius: 8px !important;
-    flex-shrink: 0 !important; /* أمر حاسم: يمنع انكماش العنصر داخل الـ flex */
-    border: 1px solid var(--line) !important;
-  }
-
-  /* حالة الثمنيل النشط (المختار) */
-  #pdThumbs img.on {
-    border: 2px solid var(--gold2) !important;
-  }
 }
