@@ -2,8 +2,27 @@
 "use strict";
 
 /* ═══════════════════════════════════════════════════════════
+   ✨ FIX: Global Image Error Handler (يمنع اختفاء المنتجات)
+   ═══════════════════════════════════════════════════════════ */
+window.handleImageError = function(imgElement, productId) {
+  if (!imgElement) return;
+  if (imgElement.dataset.fallback === "true") return; // منع الحلقات اللانهائية
+  
+  console.warn(`⚠️ Image failed to load for product: ${productId}. Applying fallback.`);
+  imgElement.dataset.fallback = "true";
+  
+  const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
+  const p = products.find(x => x.id === productId);
+  
+  if (p && typeof ph === "function") {
+    imgElement.src = ph(p);
+  } else {
+    imgElement.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>";
+  }
+};
+
+/* ═══════════════════════════════════════════════════════════
    ✨ TRACKING DATA CAPTURE (UTM & Click IDs)
-   يلتقط بيانات الإعلان ويحفظها في المتصفح لربطها بالطلب لاحقاً
    ═══════════════════════════════════════════════════════════ */
 function captureTrackingData() {
   const params = new URLSearchParams(window.location.search);
@@ -230,7 +249,7 @@ function initProductRealtimeSync(){
   
   productRealtimeUnsubscribe=DB.watch("products",cloud=>{
     const hash = JSON.stringify(cloud||[]).length + "-" + (cloud||[]).length;
-    if (hash === lastHash) return;
+    if (hash === lastHash) return; // منع إعادة الرسم إذا لم تتغير البيانات فعلياً (يمنع الوميض)
     lastHash = hash;
     
     const map=new Map(
@@ -730,6 +749,9 @@ function initCart(){
     badges.id = 'trustBadges';
     badges.style.cssText = 'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
     badges.innerHTML = `
+      <span style="display:flex; align-items:center; gap:4px;">🔒 دفع آمن</span>
+      <span style="display:flex; align-items:center; gap:4px;">🔄 ضمان استرجاع</span>
+      <span style="display:flex; align-items:center; gap:4px;">🚚 توصيل موثوق</span>
     `;
     checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
   }
@@ -1380,13 +1402,11 @@ function initAccount() {
   $("#accBtn")?.addEventListener("click", async () => {
     const isFirebaseLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
 
-    // التحكم في إظهار/إخفاء الحقول بناءً على حالة تسجيل الدخول
     const fieldsToToggle = ["accName", "accPhone", "accCity", "accAddr", "saveAccBtn"];
     const accSub = document.querySelector('[data-i18n="acc_sub"]');
     let welcomeMsg = document.getElementById("accWelcomeMsg");
 
     if (!isFirebaseLogged) {
-      // حالة عدم تسجيل الدخول: إظهار الحقول وإخفاء رسالة الترحيب
       fieldsToToggle.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = "";
@@ -1402,7 +1422,6 @@ function initAccount() {
       return;
     }
 
-    // ✨ حالة تسجيل الدخول: إخفاء الحقول المعقدة وإظهار ملخص بسيط فقط
     fieldsToToggle.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = "none";
@@ -1477,7 +1496,6 @@ function initAccount() {
     if (e.target.id === "accOv") { closeModal("accOv"); }
   });
 
-  // زر الحفظ (مخفي الآن عند تسجيل الدخول، لكن نتركه كـ fallback أمان)
   $("#saveAccBtn")?.addEventListener("click", async () => {
     const name = $("#accName")?.value.trim();
     const phone = $("#accPhone")?.value.trim();
