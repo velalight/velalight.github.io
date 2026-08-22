@@ -869,6 +869,7 @@
     <!-- ═══ Gallery — Enhanced ═══ -->
     <div class="pd-gallery">
       <div class="pd-img" id="pdImgWrap">
+
         <img
           id="pdImg"
           src=""
@@ -882,31 +883,48 @@
           class="zoom-hint"
           id="zoomHint"
           data-i18n="pd_zoom"
-        >🔍 Zoom</div>
+        >🔍 تكبير</div>
 
+        <!-- JavaScript يضع عدد الصور هنا -->
         <div
           class="gallery-counter"
           id="galleryCounter"
-          data-i18n="pd_gallery_count"
         ></div>
+
       </div>
 
-      <div class="pd-thumbs" id="pdThumbs"></div>
+      <div
+        class="pd-thumbs"
+        id="pdThumbs"
+      ></div>
     </div>
+
 
     <!-- ═══ Info Panel ═══ -->
     <div class="pd-info">
 
       <div id="pdBadge"></div>
 
-      <h1 id="pdName" class="fd"></h1>
+      <h1
+        id="pdName"
+        class="fd"
+      ></h1>
 
-      <div class="pd-rating" id="pdRatingSummary"></div>
+      <div
+        class="pd-rating"
+        id="pdRatingSummary"
+      ></div>
 
       <div id="pdStockInfo"></div>
 
+
+      <!-- ═══ Price ═══ -->
       <div class="pd-price">
-        <span class="price-main" id="pdPrice"></span>
+
+        <span
+          class="price-main"
+          id="pdPrice"
+        ></span>
 
         <del
           id="pdOld"
@@ -918,18 +936,29 @@
           id="pdSave"
           style="display:none"
         ></span>
+
       </div>
 
-      <p class="pd-desc" id="pdDesc"></p>
+
+      <!-- ═══ Description ═══ -->
+      <p
+        class="pd-desc"
+        id="pdDesc"
+      ></p>
+
 
       <!-- ═══ Scent Picker ═══ -->
       <div class="opt-title">
-        <span data-i18n="pd_scent_t">🌸 Scent:</span>
+
+        <span
+          data-i18n="pd_scent_t"
+        >🌸 اختاري العطر:</span>
 
         <span
           class="req-tag"
           data-i18n="pd_required"
-        >Required</span>
+        >مطلوب</span>
+
       </div>
 
       <div
@@ -937,33 +966,39 @@
         id="pdScents"
       ></div>
 
+
       <!-- ═══ Quantity ═══ -->
       <div
         class="opt-title"
         data-i18n="pd_qty_t"
-      >Quantity:</div>
+      >الكمية:</div>
 
       <div class="qty-wrap">
+
         <div class="qty">
 
           <button
             id="pdQMinus"
-            aria-label="Decrease"
+            type="button"
+            aria-label="تقليل الكمية"
             data-i18n-title="pd_decrease"
-            title="Decrease"
+            title="تقليل الكمية"
           >−</button>
 
           <b id="pdQVal">1</b>
 
           <button
             id="pdQPlus"
-            aria-label="Increase"
+            type="button"
+            aria-label="زيادة الكمية"
             data-i18n-title="pd_increase"
-            title="Increase"
+            title="زيادة الكمية"
           >+</button>
 
         </div>
+
       </div>
+
 
       <!-- ═══ Actions ═══ -->
       <div class="pd-actions">
@@ -971,28 +1006,33 @@
         <button
           class="btn"
           id="pdAddBtn"
+          type="button"
           data-i18n="pd_add"
-        >🛍️ Add to Cart</button>
+        >🛍️ أضيفي للسلة</button>
 
         <button
           class="btn wa"
           id="pdBuyBtn"
+          type="button"
           data-i18n="pd_buy"
-        >💬 Order via WhatsApp</button>
+        >💬 اطلبي عبر واتساب</button>
 
         <button
           class="wish-btn"
           id="pdWishBtn"
-          aria-label="Add to favorites"
+          type="button"
+          aria-label="إضافة إلى المفضلة"
           data-i18n-title="pd_wishlist"
-          title="Add to favorites"
+          title="إضافة إلى المفضلة"
         >🤍</button>
 
       </div>
 
+
       <!-- ═══ Payment Info ═══ -->
       <div class="pay-info">
 
+        <!-- Payment -->
         <div class="pay-row">
 
           <span class="pay-icon">💳</span>
@@ -1007,12 +1047,14 @@
             <div
               class="pay-desc"
               data-i18n="paymethod_d"
-            >InstaPay upfront, shipping cash.</div>
+            >InstaPay مقدمًا، والشحن كاش عند الاستلام.</div>
 
           </div>
 
         </div>
 
+
+        <!-- Shipping -->
         <div class="pay-row">
 
           <span class="pay-icon">🚚</span>
@@ -1022,12 +1064,12 @@
             <div
               class="pay-title"
               data-i18n="pd_ship"
-            >Shipping</div>
+            >التوصيل:</div>
 
             <div
               class="pay-desc"
               data-i18n="pd_ship_v"
-            >3–7 days</div>
+            >3–7 أيام</div>
 
           </div>
 
@@ -1035,16 +1077,18 @@
 
       </div>
 
+
       <!-- ═══ Handmade Note ═══ -->
       <div class="handmade-note">
 
         <span class="hm-icon">✦</span>
 
-        <span data-i18n="pd_handmade_note">
-          Handmade piece prepared with care upon order — every candle is unique and special
+        <span data-i18n="handmade_note">
+          قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة
         </span>
 
       </div>
+
 
       <!-- ═══ Share ═══ -->
       <div
@@ -1056,6 +1100,7 @@
 
   </div>
 </div>
+       
        
       <!-- ═══════════════════════════════════════════════════════════
            TABS — Description / Specs / Reviews
