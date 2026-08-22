@@ -290,6 +290,14 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
           </div>
         </div>
 
+        <!-- ✨ حقل التثبيت (Pin) الجديد ✨ -->
+        <div class="g" style="align-items:center; margin-top: 0.5rem;">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <input type="checkbox" id="pf_pinned" style="width:20px; height:20px; cursor:pointer;">
+            <label for="pf_pinned" style="margin:0; font-weight:700; color:var(--gold2); cursor:pointer;">📌 تثبيت هذا المنتج (سيظهر أولاً في الصفحة الرئيسية)</label>
+          </div>
+        </div>
+
         <label>الوصف العربي</label>
         <textarea id="pf_desc" rows="3"></textarea>
 
@@ -703,10 +711,11 @@ function renderAdminProducts(){
   
   body.innerHTML = list.map(product => {
     const imgsCount = (Array.isArray(product.imgs) && product.imgs.length) ? product.imgs.length : (Array.isArray(product.images) && product.images.length ? product.images.length : 1);
+    const pinIcon = product.pinned ? ' 📌' : ''; // ✨ أيقونة التثبيت
     return `
     <tr>
       <td><img class="adm-thumb" src="${imgOf(product)}" alt="" loading="lazy"></td>
-      <td><b>${product.name || ""}</b><br><small style="color:var(--dim);font-size:.7rem">ID: ${product.id}</small></td>
+      <td><b>${product.name || ""}${pinIcon}</b><br><small style="color:var(--dim);font-size:.7rem">ID: ${product.id}</small></td>
       <td>${CATS.ar[product.cat] || product.cat || ""}</td>
       <td>${money(product.price || 0)}</td>
       <td>${(product.stock===null||product.stock===undefined||product.stock==="")?"∞":product.stock}</td>
@@ -831,7 +840,8 @@ function initProductForm(){
       cat: $("#pf_cat").value,
       img: mainImgVal || (imagesArr[0] || ""),
       imgs: imagesArr.length ? imagesArr : null,
-      video: $("#pf_video").value.trim() || null, // ✨ حفظ الفيديو
+      video: $("#pf_video").value.trim() || null,
+      pinned: document.getElementById("pf_pinned").checked, // ✨ حفظ حالة التثبيت
       badge: $("#pf_badge").value.trim(),
       badgeEn: $("#pf_badge").value.trim(),
       hours: $("#pf_hours").value.trim(),
@@ -870,7 +880,8 @@ function openProductForm(product){
     $("#pf_stock").value = (product.stock===null||product.stock===undefined)?"":product.stock;
     $("#pf_cat").value = product.cat || "wood";
     $("#pf_img").value = product.img || "";
-    $("#pf_video").value = product.video || ""; // ✨ تعبئة الفيديو
+    $("#pf_video").value = product.video || "";
+    $("#pf_pinned").checked = product.pinned === true; // ✨ تعبئة حالة التثبيت
     $("#pf_images").value = Array.isArray(product.imgs) ? product.imgs.filter(x => x !== product.img).join(", ") : (Array.isArray(product.images) ? product.images.filter(x => x !== product.img).join(", ") : "");
     $("#pf_badge").value = product.badge || "";
     $("#pf_hours").value = product.hours || "";
@@ -882,6 +893,7 @@ function openProductForm(product){
     form.dataset.editId = "";
     $("#formTitle").textContent = "منتج جديد";
     ["pf_name", "pf_nameEn", "pf_price", "pf_old", "pf_stock", "pf_img", "pf_video", "pf_images", "pf_badge", "pf_hours", "pf_desc", "pf_descEn", "pf_scents"].forEach(id => { $("#" + id).value = ""; });
+    document.getElementById("pf_pinned").checked = false; // ✨ تفريغ حالة التثبيت
     const preview = $("#galleryPreview");
     if(preview) preview.innerHTML = "";
     $("#pf_cat").value = "wood";
