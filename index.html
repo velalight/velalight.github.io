@@ -1293,13 +1293,9 @@ document.addEventListener("DOMContentLoaded", initCinematicReviews);
 <style>
 .dev-signature{
   margin:2rem auto 0;
-  padding:1.1rem 1rem .9rem;
   max-width:760px;
-  background:linear-gradient(
-    135deg,
-    var(--panel) 0%,
-    var(--panel2) 100%
-  );
+  padding:1.15rem 1rem .9rem;
+  background:linear-gradient(135deg,var(--panel),var(--panel2));
   border:1px solid var(--line);
   border-radius:16px;
   text-align:center;
@@ -1309,24 +1305,15 @@ document.addEventListener("DOMContentLoaded", initCinematicReviews);
   width:44px;
   height:2px;
   margin:0 auto .65rem;
-  background:linear-gradient(
-    90deg,
-    transparent,
-    var(--gold2),
-    transparent
-  );
+  background:linear-gradient(90deg,transparent,var(--gold2),transparent);
 }
 
 .dev-label{
-  margin:0 0 .8rem;
+  margin:0 0 .85rem;
   color:var(--dim);
-  font-size:.75rem;
-  letter-spacing:.3px;
+  font-size:.76rem;
   line-height:1.5;
-}
-
-.dev-emoji{
-  margin-inline-end:.3rem;
+  letter-spacing:.2px;
 }
 
 .dev-team{
@@ -1348,10 +1335,7 @@ document.addEventListener("DOMContentLoaded", initCinematicReviews);
   text-decoration:none;
   color:inherit;
   text-align:start;
-  transition:
-    transform .2s ease,
-    border-color .2s ease,
-    box-shadow .2s ease;
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
 }
 
 .dev-card:hover{
@@ -1365,11 +1349,7 @@ document.addEventListener("DOMContentLoaded", initCinematicReviews);
   height:38px;
   flex:0 0 38px;
   border-radius:50%;
-  background:linear-gradient(
-    135deg,
-    var(--gold),
-    #b8863f
-  );
+  background:linear-gradient(135deg,var(--gold),#b8863f);
   color:#fff;
   display:flex;
   align-items:center;
@@ -1427,7 +1407,6 @@ document.addEventListener("DOMContentLoaded", initCinematicReviews);
   .dev-signature{
     margin-top:1.5rem;
     padding:.9rem .7rem .8rem;
-    border-radius:14px;
   }
 
   .dev-team{
@@ -1465,82 +1444,55 @@ document.addEventListener("DOMContentLoaded", initCinematicReviews);
 }
 </style>
 
-
 <div class="dev-signature">
 
   <div class="dev-line"></div>
 
-  <p
-    class="dev-label"
-    data-i18n="dev_label"
-  >
-    <span
-      class="dev-emoji"
-      aria-hidden="true"
-    >🛠️</span>
-    صُمم وصُنع بواسطة
+  <p class="dev-label" data-i18n="dev_label">
+    🛠️ صُمم وصُنع بواسطة
   </p>
-
 
   <div class="dev-team">
 
     <!-- ═══ Wagdy ═══ -->
     <a
-      href="https://wa.me/201226690050?text=%D8%A3%D9%87%D9%84%D8%A7%20%D8%A3%D8%B3%D8%AA%D8%A7%D8%B0%20Wagdy%20%F0%9F%91%8B%0A%D8%B4%D9%81%D8%AA%20%D9%85%D9%88%D9%82%D8%B9%20VelaLight%20%D9%88%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D9%85%D9%84%20%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A%20%D8%B2%D9%8A%D9%87.%0A%D9%85%D9%85%D9%83%D9%86%20%D9%86%D8%AA%D9%83%D9%84%D9%85%D8%9F"
       class="dev-card"
+      href="https://wa.me/201226690050"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Wagdy WhatsApp"
     >
-
-      <div
-        class="dev-avatar"
-        aria-hidden="true"
-      >W</div>
+      <div class="dev-avatar" aria-hidden="true">W</div>
 
       <div class="dev-info">
         <b>Wagdy</b>
         <span>📞 01226690050</span>
-
-        <small data-i18n="dev_whatsapp">
-          💬 واتساب
-        </small>
+        <small data-i18n="dev_whatsapp">💬 واتساب</small>
       </div>
-
     </a>
 
 
     <!-- ═══ Philopater ═══ -->
     <a
-      href="https://wa.me/201277741748?text=%D8%A3%D9%87%D9%84%D8%A7%20%D8%A3%D8%B3%D8%AA%D8%A7%D8%B0%20Philopater%20%F0%9F%91%8B%0A%D8%B4%D9%81%D8%AA%20%D9%85%D9%88%D9%82%D8%B9%20VelaLight%20%D9%88%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D9%85%D9%84%20%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A%20%D8%B2%D9%8A%D9%87.%0A%D9%85%D9%85%D9%83%D9%86%20%D9%86%D8%AA%D9%83%D9%84%D9%85%D8%9F"
       class="dev-card"
+      href="https://wa.me/201277741748"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Philopater WhatsApp"
     >
-
-      <div
-        class="dev-avatar"
-        aria-hidden="true"
-      >P</div>
+      <div class="dev-avatar" aria-hidden="true">P</div>
 
       <div class="dev-info">
         <b>Philopater</b>
         <span>📞 01277741748</span>
-
-        <small data-i18n="dev_whatsapp">
-          💬 واتساب
-        </small>
+        <small data-i18n="dev_whatsapp">💬 واتساب</small>
       </div>
-
     </a>
 
   </div>
 
 
-  <!-- ═══ CTA ═══ -->
   <p class="dev-cta">
-
     <span data-i18n="dev_cta">
       ⚡ عايز موقع احترافي زي ده لمشروعك؟
     </span>
@@ -1548,7 +1500,6 @@ document.addEventListener("DOMContentLoaded", initCinematicReviews);
     <strong data-i18n="dev_cta_link">
       تواصل معانا النهاردة
     </strong>
-
   </p>
 
 </div>
