@@ -18,13 +18,12 @@ if ('serviceWorker' in navigator) {
   }
 }
 
-
 /* ═══════════════════════════════════════════════════════════
    ✨ FIX: Global Image Error Handler (يمنع اختفاء المنتجات)
    ═══════════════════════════════════════════════════════════ */
 window.handleImageError = function(imgElement, productId) {
   if (!imgElement) return;
-  if (imgElement.dataset.fallback === "true") return; // منع الحلقات اللانهائية
+  if (imgElement.dataset.fallback === "true") return; 
   
   console.warn(`⚠️ Image failed to load for product: ${productId}. Applying fallback.`);
   imgElement.dataset.fallback = "true";
@@ -182,18 +181,18 @@ const velaScentTr=name=>{
 })();
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ INIT — مع حل جذري لمنع الوميض والتبديل (Double Rendering)
+   ✨ INIT — الحل الجذري النهائي: منع الوميض وتوحيد البيانات
    ═══════════════════════════════════════════════════════════ */
+let isFirstRenderComplete = false;
+let pendingDataRefresh = false;
+
 document.addEventListener("DOMContentLoaded", () => {
   initLang();
   initMarquee();
   initEmbers();
   initReveal();
 
-  // 1. حمّل الكاش بصمت في الخلفية (يُستخدم فقط كطوارئ إذا انقطع الإنترنت)
-  const hasCache = (typeof loadFromCache === "function") && loadFromCache();
-
-  // 2. الحل الجذري: اعرض "هيكل تحميل" أنيق بدلاً من عرض البيانات القديمة التي ستتغير فوراً
+  // 1. اعرض هيكل التحميل فوراً لمنع ظهور أي بيانات قديمة
   const grid = $("#pgrid");
   if (grid) {
     grid.innerHTML = `
@@ -203,19 +202,37 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
-  // 3. اطلب البيانات الجديدة من Firebase
+  // 2. اطلب البيانات الجديدة من Firebase مباشرة
   loadAll().then(() => {
-    // 4. ارسم المنتجات مرة واحدة فقط بالبيانات المحدثة والصحيحة (لا وميض، لا تبديل)
-    renderChips();
-    renderProducts();
+    // 3. حفظ البيانات الجديدة في الكاش الآن (هذا يضمن تطابق الصفحة الرئيسية مع صفحة المنتج)
+    try {
+      localStorage.setItem("vl_products_v3", JSON.stringify(ALL_PRODUCTS.slice(0, 200)));
+      localStorage.setItem("vl_products_v3_time", String(Date.now()));
+    } catch(e) {}
+
+    // 4. السماح بالتحديثات اللاحقة
+    isFirstRenderComplete = true;
+
+    // 5. الرسم الأولي
+    if (pendingDataRefresh) {
+      pendingDataRefresh = false;
+      renderProducts();
+    } else {
+      renderChips();
+      renderProducts();
+    }
+    
     renderScents();
     renderFAQ();
     initProductRealtimeSync();
     requestIdle(() => prefetchProductPages());
+    
   }).catch(err => {
     console.warn("⚠️ loadAll failed, falling back to cache:", err);
-    // 5. فقط إذا فشل الاتصال بـ Firebase تماماً، نعرض الكاش كحل أخير
+    // في حالة فشل Firebase فقط، نستخدم الكاش كملاذ أخير
+    const hasCache = (typeof loadFromCache === "function") && loadFromCache();
     if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
+      isFirstRenderComplete = true;
       renderChips();
       renderProducts();
       renderScents();
@@ -234,7 +251,12 @@ document.addEventListener("DOMContentLoaded", () => {
   initHeroIntro();
 });
 
-window.addEventListener("data-refresh",()=>{
+// التعامل مع تحديثات Firebase اللاحقة (Realtime)
+window.addEventListener("data-refresh", () => {
+  if (!isFirstRenderComplete) {
+    pendingDataRefresh = true; // انتظر حتى ينتهي التحميل الأولي
+    return;
+  }
   renderProducts();
 });
 
@@ -272,7 +294,7 @@ function initProductRealtimeSync(){
   
   productRealtimeUnsubscribe=DB.watch("products",cloud=>{
     const hash = JSON.stringify(cloud||[]).length + "-" + (cloud||[]).length;
-    if (hash === lastHash) return; // منع إعادة الرسم إذا لم تتغير البيانات فعلياً (يمنع الوميض)
+    if (hash === lastHash) return; 
     lastHash = hash;
     
     const map=new Map(
