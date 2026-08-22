@@ -1496,8 +1496,14 @@ function renderVideo(){
   const BRIDE_BOX_VIDEO = "box.mp4";
 
   /* الفيديو لهذا المنتج فقط */
-  const currentId = String(P?.id || P?.id_ || productPid || "").trim();
-
+const currentId = String(
+  P?.id ||
+  P?.id_ ||
+  P?.pid ||
+  P?.slug ||
+  ""
+).trim();
+     
   if(currentId !== BRIDE_BOX_ID){
     return;
   }
