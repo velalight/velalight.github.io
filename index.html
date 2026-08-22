@@ -1286,233 +1286,272 @@ document.addEventListener("DOMContentLoaded", initCinematicReviews);
     </div>
 
   </div>
-    <!-- ═══════════════════════════════════════════════════════════
-       ✨ Developer Signature — Compact v2
-       ═══════════════════════════════════════════════════════════ -->
-  <style>
+<!-- ═══════════════════════════════════════════════════════════
+     ✨ Developer Signature
+     ═══════════════════════════════════════════════════════════ -->
+
+<style>
+.dev-signature{
+  margin:2rem auto 0;
+  padding:1.1rem 1rem .9rem;
+  max-width:760px;
+  background:linear-gradient(
+    135deg,
+    var(--panel) 0%,
+    var(--panel2) 100%
+  );
+  border:1px solid var(--line);
+  border-radius:16px;
+  text-align:center;
+}
+
+.dev-line{
+  width:44px;
+  height:2px;
+  margin:0 auto .65rem;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    var(--gold2),
+    transparent
+  );
+}
+
+.dev-label{
+  margin:0 0 .8rem;
+  color:var(--dim);
+  font-size:.75rem;
+  letter-spacing:.3px;
+  line-height:1.5;
+}
+
+.dev-emoji{
+  margin-inline-end:.3rem;
+}
+
+.dev-team{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:.7rem;
+  max-width:640px;
+  margin:0 auto .85rem;
+}
+
+.dev-card{
+  display:flex;
+  align-items:center;
+  gap:.65rem;
+  padding:.7rem .8rem;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:13px;
+  text-decoration:none;
+  color:inherit;
+  text-align:start;
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.dev-card:hover{
+  transform:translateY(-2px);
+  border-color:var(--gold2);
+  box-shadow:0 6px 18px -7px rgba(217,171,95,.35);
+}
+
+.dev-avatar{
+  width:38px;
+  height:38px;
+  flex:0 0 38px;
+  border-radius:50%;
+  background:linear-gradient(
+    135deg,
+    var(--gold),
+    #b8863f
+  );
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--fd);
+  font-size:1.1rem;
+  font-weight:700;
+  box-shadow:0 3px 10px -3px rgba(217,171,95,.45);
+}
+
+.dev-info{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:.12rem;
+}
+
+.dev-info b{
+  color:var(--gold2);
+  font-family:var(--fd);
+  font-size:.82rem;
+  line-height:1.2;
+}
+
+.dev-info span{
+  color:var(--dark);
+  direction:ltr;
+  text-align:start;
+  font-size:.72rem;
+  line-height:1.3;
+}
+
+.dev-info small{
+  color:var(--dim);
+  font-size:.64rem;
+  line-height:1.2;
+}
+
+.dev-cta{
+  margin:0;
+  padding-top:.7rem;
+  border-top:1px dashed var(--line);
+  color:var(--mut);
+  font-size:.76rem;
+  line-height:1.6;
+}
+
+.dev-cta strong{
+  color:var(--gold2);
+  font-family:var(--fd);
+}
+
+@media(max-width:600px){
+
   .dev-signature{
-    margin-top:2rem;
-    padding:1.1rem 1rem;
-    background:linear-gradient(135deg,var(--panel) 0%,var(--panel2) 100%);
-    border:1px solid var(--line);
-    border-radius:16px;
-    text-align:center;
-  }
-
-  .dev-line{
-    width:40px;
-    height:2px;
-    background:linear-gradient(90deg,transparent,var(--gold2),transparent);
-    margin:0 auto .6rem;
-  }
-
-  .dev-label{
-    color:var(--dim);
-    font-size:.75rem;
-    margin-bottom:.7rem;
-    letter-spacing:.3px;
-  }
-
-  .dev-emoji{
-    font-size:.9rem;
-    margin-inline-end:.3rem;
+    margin-top:1.5rem;
+    padding:.9rem .7rem .8rem;
+    border-radius:14px;
   }
 
   .dev-team{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:.7rem;
-    max-width:640px;
-    margin:0 auto .8rem;
+    grid-template-columns:1fr;
+    gap:.5rem;
   }
 
   .dev-card{
-    display:flex;
-    align-items:center;
-    gap:.6rem;
-    padding:.7rem .8rem;
-    background:var(--bg);
-    border:1px solid var(--line);
-    border-radius:12px;
-    text-decoration:none;
-    color:inherit;
-    transition:.25s ease;
-    text-align:start;
-  }
-
-  .dev-card:hover{
-    transform:translateY(-2px);
-    border-color:var(--gold2);
-    box-shadow:0 6px 18px -6px rgba(217,171,95,.3);
+    padding:.65rem .7rem;
   }
 
   .dev-avatar{
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    background:linear-gradient(135deg,var(--gold),#b8863f);
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-family:var(--fd);
-    font-size:1.15rem;
-    font-weight:700;
-    flex-shrink:0;
-    box-shadow:0 3px 10px -3px rgba(217,171,95,.5);
-  }
-
-  .dev-info{
-    display:flex;
-    flex-direction:column;
-    gap:.1rem;
-    min-width:0;
+    width:35px;
+    height:35px;
+    flex-basis:35px;
+    font-size:1rem;
   }
 
   .dev-info b{
-    font-family:var(--fd);
-    font-size:.82rem;
-    color:var(--gold2);
-    line-height:1.2;
+    font-size:.78rem;
   }
 
   .dev-info span{
-    font-size:.72rem;
-    color:var(--dark);
-    direction:ltr;
-    text-align:start;
+    font-size:.69rem;
   }
 
   .dev-info small{
-    font-size:.65rem;
-    color:var(--dim);
-    margin-top:.1rem;
+    font-size:.61rem;
   }
 
   .dev-cta{
-    font-size:.78rem;
-    color:var(--mut);
-    margin:0;
-    padding-top:.7rem;
-    border-top:1px dashed var(--line);
+    font-size:.71rem;
+    padding-top:.6rem;
   }
+}
+</style>
 
-  .dev-cta strong{
-    color:var(--gold2);
-    font-family:var(--fd);
-  }
 
-  @media(max-width:600px){
-    .dev-signature{
-      padding:.9rem .7rem;
-    }
+<div class="dev-signature">
 
-    .dev-team{
-      grid-template-columns:1fr;
-      gap:.5rem;
-    }
+  <div class="dev-line"></div>
 
-    .dev-card{
-      padding:.6rem .7rem;
-    }
+  <p
+    class="dev-label"
+    data-i18n="dev_label"
+  >
+    <span
+      class="dev-emoji"
+      aria-hidden="true"
+    >🛠️</span>
+    صُمم وصُنع بواسطة
+  </p>
 
-    .dev-avatar{
-      width:34px;
-      height:34px;
-      font-size:1rem;
-    }
 
-    .dev-info b{
-      font-size:.78rem;
-    }
+  <div class="dev-team">
 
-    .dev-info span{
-      font-size:.7rem;
-    }
-
-    .dev-info small{
-      font-size:.62rem;
-    }
-
-    .dev-cta{
-      font-size:.72rem;
-      padding-top:.6rem;
-    }
-  }
-  </style>
-
-  <div class="dev-signature">
-
-    <div class="dev-line"></div>
-
-    <p
-      class="dev-label"
-      data-i18n="dev_label"
+    <!-- ═══ Wagdy ═══ -->
+    <a
+      href="https://wa.me/201226690050?text=%D8%A3%D9%87%D9%84%D8%A7%20%D8%A3%D8%B3%D8%AA%D8%A7%D8%B0%20Wagdy%20%F0%9F%91%8B%0A%D8%B4%D9%81%D8%AA%20%D9%85%D9%88%D9%82%D8%B9%20VelaLight%20%D9%88%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D9%85%D9%84%20%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A%20%D8%B2%D9%8A%D9%87.%0A%D9%85%D9%85%D9%83%D9%86%20%D9%86%D8%AA%D9%83%D9%84%D9%85%D8%9F"
+      class="dev-card"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Wagdy WhatsApp"
     >
-      <span class="dev-emoji">🛠️</span>
-      صُمم وصُنع بواسطة
-    </p>
 
-    <div class="dev-team">
+      <div
+        class="dev-avatar"
+        aria-hidden="true"
+      >W</div>
 
-      <!-- ═══ Wagdy ═══ -->
-      <a
-        href="https://wa.me/201226690050?text=%D8%A3%D9%87%D9%84%D8%A7%20%D8%A3%D8%B3%D8%AA%D8%A7%D8%B0%20Wagdy%20%F0%9F%91%8B%0A%D8%B4%D9%81%D8%AA%20%D9%85%D9%88%D9%82%D9%87%20velalight.github.io%20%D9%88%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D9%85%D9%84%20%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A%20%D8%B2%D9%8A%D9%87.%0A%D9%85%D9%85%D9%83%D9%86%20%D9%86%D8%AA%D9%83%D9%84%D9%85%D8%9F"
-        class="dev-card"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Wagdy WhatsApp"
-      >
-        <div class="dev-avatar">W</div>
+      <div class="dev-info">
+        <b>Wagdy</b>
+        <span>📞 01226690050</span>
 
-        <div class="dev-info">
-          <b>Wagdy</b>
-          <span>📞 01226690050</span>
+        <small data-i18n="dev_whatsapp">
+          💬 واتساب
+        </small>
+      </div>
 
-          <small data-i18n="dev_whatsapp">
-            💬 واتساب
-          </small>
-        </div>
-      </a>
+    </a>
 
 
-      <!-- ═══ Philopater ═══ -->
-      <a
-        href="https://wa.me/201277741748?text=%D8%A3%D9%87%D9%84%D8%A7%20%D8%A3%D8%B3%D8%AA%D8%A7%D8%B0%20Philopater%20%F0%9F%91%8B%0A%D8%B4%D9%81%D8%AA%20%D9%85%D9%88%D9%82%D9%87%20velalight.github.io%20%D9%88%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D9%85%D9%84%20%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A%20%D8%B2%D9%8A%D9%87.%0A%D9%85%D9%85%D9%83%D9%86%20%D9%86%D8%AA%D9%83%D9%84%D9%85%D8%9F"
-        class="dev-card"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Philopater WhatsApp"
-      >
-        <div class="dev-avatar">P</div>
+    <!-- ═══ Philopater ═══ -->
+    <a
+      href="https://wa.me/201277741748?text=%D8%A3%D9%87%D9%84%D8%A7%20%D8%A3%D8%B3%D8%AA%D8%A7%D8%B0%20Philopater%20%F0%9F%91%8B%0A%D8%B4%D9%81%D8%AA%20%D9%85%D9%88%D9%82%D8%B9%20VelaLight%20%D9%88%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D9%85%D9%84%20%D9%85%D9%88%D9%82%D8%B9%20%D8%A7%D8%AD%D8%AA%D8%B1%D8%A7%D9%81%D9%8A%20%D8%B2%D9%8A%D9%87.%0A%D9%85%D9%85%D9%83%D9%86%20%D9%86%D8%AA%D9%83%D9%84%D9%85%D8%9F"
+      class="dev-card"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Philopater WhatsApp"
+    >
 
-        <div class="dev-info">
-          <b>Philopater</b>
-          <span>📞 01277741748</span>
+      <div
+        class="dev-avatar"
+        aria-hidden="true"
+      >P</div>
 
-          <small data-i18n="dev_whatsapp">
-            💬 واتساب
-          </small>
-        </div>
-      </a>
+      <div class="dev-info">
+        <b>Philopater</b>
+        <span>📞 01277741748</span>
 
-    </div>
+        <small data-i18n="dev_whatsapp">
+          💬 واتساب
+        </small>
+      </div>
 
-
-    <!-- ═══ CTA ═══ -->
-    <p class="dev-cta">
-
-      <span data-i18n="dev_cta">
-        ⚡ عايز موقع احترافي زي ده لمشروعك؟
-      </span>
-
-      <strong data-i18n="dev_cta_link">
-        تواصل معانا النهاردة
-      </strong>
-
-    </p>
+    </a>
 
   </div>
+
+
+  <!-- ═══ CTA ═══ -->
+  <p class="dev-cta">
+
+    <span data-i18n="dev_cta">
+      ⚡ عايز موقع احترافي زي ده لمشروعك؟
+    </span>
+
+    <strong data-i18n="dev_cta_link">
+      تواصل معانا النهاردة
+    </strong>
+
+  </p>
+
+</div>
 
 </footer>
   
