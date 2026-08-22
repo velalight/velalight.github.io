@@ -181,10 +181,9 @@ const velaScentTr=name=>{
 })();
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ INIT — الحل الجذري النهائي: منع الوميض وتوحيد البيانات
+   ✨ INIT — الحل الجذري والنهائي لمنع الوميض (No Flicker)
    ═══════════════════════════════════════════════════════════ */
-let isFirstRenderComplete = false;
-let pendingDataRefresh = false;
+let isInitialLoadComplete = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   initLang();
@@ -202,26 +201,14 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
-  // 2. اطلب البيانات الجديدة من Firebase مباشرة
+  // 2. اطلب البيانات الجديدة من Firebase
   loadAll().then(() => {
-    // 3. حفظ البيانات الجديدة في الكاش الآن (هذا يضمن تطابق الصفحة الرئيسية مع صفحة المنتج)
-    try {
-      localStorage.setItem("vl_products_v3", JSON.stringify(ALL_PRODUCTS.slice(0, 200)));
-      localStorage.setItem("vl_products_v3_time", String(Date.now()));
-    } catch(e) {}
-
-    // 4. السماح بالتحديثات اللاحقة
-    isFirstRenderComplete = true;
-
-    // 5. الرسم الأولي
-    if (pendingDataRefresh) {
-      pendingDataRefresh = false;
-      renderProducts();
-    } else {
-      renderChips();
-      renderProducts();
-    }
+    // 3. الآن فقط نسمح بعرض البيانات، لأن التحميل الأولي اكتمل بنجاح
+    // هذا يمنع أي حدث data-refresh مبكر من رسم البيانات القديمة
+    isInitialLoadComplete = true;
     
+    renderChips();
+    renderProducts();
     renderScents();
     renderFAQ();
     initProductRealtimeSync();
@@ -229,10 +216,11 @@ document.addEventListener("DOMContentLoaded", () => {
     
   }).catch(err => {
     console.warn("⚠️ loadAll failed, falling back to cache:", err);
-    // في حالة فشل Firebase فقط، نستخدم الكاش كملاذ أخير
+    // نسمح بالعرض حتى في حالة الفشل لتجنب تعليق الصفحة
+    isInitialLoadComplete = true;
+    
     const hasCache = (typeof loadFromCache === "function") && loadFromCache();
     if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
-      isFirstRenderComplete = true;
       renderChips();
       renderProducts();
       renderScents();
@@ -253,8 +241,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // التعامل مع تحديثات Firebase اللاحقة (Realtime)
 window.addEventListener("data-refresh", () => {
-  if (!isFirstRenderComplete) {
-    pendingDataRefresh = true; // انتظر حتى ينتهي التحميل الأولي
+  // 🛡️ الدرع الواقي: تجاهل أي محاولة للرسم قبل اكتمال التحميل الأولي
+  // هذا يمنع وميض البيانات القديمة الناتج عن حدث fb-ready المبكر في data.js
+  if (!isInitialLoadComplete) {
     return;
   }
   renderProducts();
