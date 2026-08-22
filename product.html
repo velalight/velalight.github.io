@@ -1488,17 +1488,19 @@ function renderThumbs(){
   });
 }
 
-/* ═══════ VIDEO — يحل محل الصورة الرئيسية (Autoplay + Loop) ═══════ */
+/* ═══════ VIDEO — يحل محل الصورة الرئيسية مع تشخيص ذاتي للأخطاء ═══════ */
 function renderVideo(){
   if(!P || !P.video || String(P.video).trim() === "") return;
   
   const imgWrap = $("#pdImgWrap");
   if(!imgWrap) return;
   
-  const videoUrl = (typeof CDN === "function") ? CDN(P.video) : `https://velalight.github.io/${P.video}?v=5`;
+  const cleanVideoName = String(P.video).trim();
+  const videoUrl = (typeof CDN === "function") ? CDN(cleanVideoName) : `https://velalight.github.io/${cleanVideoName}?v=5`;
   const posterUrl = (typeof CDN === "function" ? CDN(zoomImages[0]) : zoomImages[0]) || (P.img || "");
   
-  // نستبدل محتوى حاوية الصورة بالفيديو مع تشغيل تلقائي وتكرار
+  console.log("🎥 محاولة تشغيل الفيديو:", videoUrl);
+  
   imgWrap.innerHTML = `
     <video 
       id="pdMainVideo"
@@ -1510,18 +1512,25 @@ function renderVideo(){
       controls
       preload="auto"
       poster="${posterUrl}"
+      onerror="console.error('❌ فشل تحميل الفيديو. تأكد من: 1.اسم الملف مطابق تماماً (حساس لحالة الأحرف) 2.الترميز H.264')"
     >
       متصفحك لا يدعم تشغيل الفيديو.
     </video>
     <div class="video-caption">▶️ شاهد المنتج</div>
   `;
   
-  // نخفي زر التكبير والعداد لأن الفيديو لا يحتاجهما
   const zoomHint = $("#zoomHint");
   if(zoomHint) zoomHint.style.display = "none";
   
   const counter = $("#galleryCounter");
   if(counter) counter.style.display = "none";
+
+  const vid = document.getElementById("pdMainVideo");
+  if(vid){
+    vid.play().catch(error => {
+      console.warn("⚠️ المتصفح منع التشغيل التلقائي:", error);
+    });
+  }
 }
 
 /* ═══════ SCENTS — ✨ تم التعديل هنا لتحويلها إلى قائمة منسدلة (Dropdown) ✨ ═══════ */
