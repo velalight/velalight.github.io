@@ -484,59 +484,60 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 .stat b{font-family:var(--fd);font-size:2rem;color:var(--gold2);display:block}
 .stat span{font-size:.8rem;color:var(--dim)}
 
-/* ═══ Scents ═══ */
-.scent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.8rem}
+/* ═══ Scents — Compact Professional ═══ */
+.scent-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+ gap:.55rem;
+}
+
 .scent{
  display:flex;
- gap:.7rem;
+ gap:.6rem;
  align-items:center;
  background:var(--panel);
  border:1px solid var(--line);
- border-radius:14px;
- padding:.75rem 1rem;
- transition:.25s;
+ border-radius:12px;
+ padding:.58rem .75rem;
+ min-height:52px;
+ transition:.22s ease;
  -webkit-tap-highlight-color:transparent;
 }
-.scent:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:var(--sh)}
-.scent:active{transform:translateY(-1px)}
+
+.scent:hover{
+ border-color:var(--gold);
+ transform:translateY(-2px);
+ box-shadow:0 5px 14px -7px rgba(100,70,30,.16);
+}
+
+.scent:active{
+ transform:translateY(0);
+}
+
 .scent i{
  font-style:normal;
- width:26px;
- height:26px;
- border-radius:8px;
+ width:24px;
+ height:24px;
+ border-radius:7px;
  background:rgba(217,171,95,.12);
  color:var(--gold2);
  display:grid;
  place-items:center;
- font-size:.7rem;
+ font-size:.65rem;
  font-weight:800;
  flex:0 0 auto;
 }
-.scent b{font-size:.88rem;display:block;color:var(--ink)}
-.scent small{font-size:.68rem}
 
-/* ═══ Occasions ══ */
-.occ-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.3rem}
-.occ{
- background:var(--panel);
- border:1px solid var(--line);
- border-radius:20px;
- padding:1.8rem 1.5rem;
- position:relative;
- overflow:hidden;
- transition:.35s;
- -webkit-tap-highlight-color:transparent;
+.scent b{
+ font-size:.82rem;
+ display:block;
+ color:var(--ink);
+ line-height:1.25;
 }
-.occ:hover{transform:translateY(-4px);border-color:rgba(217,171,95,.35);box-shadow:var(--sh)}
-.occ:active{transform:translateY(-2px)}
-.occ .num{
- font-family:var(--fd);
- font-size:3.2rem;
- color:transparent;
- -webkit-text-stroke:1px rgba(217,171,95,.4);
- position:absolute;
- top:.6rem;
- inset-inline-end:1rem;
+
+.scent small{
+ font-size:.64rem;
+ line-height:1.2;
 }
 .occ h3{font-family:var(--fd);margin-bottom:.5rem;color:var(--gold2)}
 .occ p{font-size:.88rem;color:var(--mut)}
