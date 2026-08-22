@@ -155,37 +155,267 @@ const velaScentTr=name=>{
 
 /* ═══ FILL MISSING TRANSLATIONS ═══ */
 (function fillMissingI18n(){
-  if(typeof I18N==="undefined")return;
-  const add={
-    ar:{
-      ship_note:"🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
-      pay_products_note:"💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.",
-      t_scentwarn:"⚠️ من فضلك اختار العطر أولاً.",
-      scent_req:"مطلوب",
-      handmade_note:"قطعة يدوية تُجهّز بعناية عند الطلب",
-pd_desc_tab:"📝 الوصف",
-pd_specs_tab:"📋 المواصفات",
-pd_reviews_tab:"⭐ المراجعات"
-    },
-    en:{
-      ship_note:"🚚 Shipping: paid cash to courier on delivery.",
-      pay_products_note:"💳 Payment details (InstaPay / Wallet / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
-      t_scentwarn:"⚠️ Please choose a scent first.",
-      scent_req:"Required",
-      handmade_note:"Handmade piece prepared with care upon order",
-pd_desc_tab:"📝 Description",
-pd_specs_tab:"📋 Specifications",
-pd_reviews_tab:"⭐ Reviews"
-    }
-  };
-  Object.keys(add).forEach(L=>{
-    if(!I18N[L])I18N[L]={};
-    Object.keys(add[L]).forEach(k=>{
-      if(!I18N[L][k])I18N[L][k]=add[L][k];
-    });
-  });
-})();
 
+  if(typeof I18N==="undefined") return;
+
+  const add={
+
+    /* ═══════════════════════════════════════
+       🇪🇬 ARABIC
+       ═══════════════════════════════════════ */
+    ar:{
+
+      /* Shipping & Payment */
+      ship_note:
+        "🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
+
+      pay_products_note:
+        "💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.",
+
+
+      /* Scent */
+      t_scentwarn:
+        "⚠️ من فضلك اختاري العطر أولاً.",
+
+      scent_req:
+        "مطلوب",
+
+
+      /* Handmade */
+      handmade_note:
+        "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
+
+
+      /* Product tabs */
+      pd_desc_tab:
+        "📝 الوصف",
+
+      pd_specs_tab:
+        "📋 المواصفات",
+
+      pd_reviews_tab:
+        "⭐ المراجعات",
+
+
+      /* Product gallery */
+      pd_zoom:
+        "🔍 تكبير",
+
+      pd_gallery_count:
+        "الصور",
+
+      
+      /* Product options */
+      pd_scent_t:
+        "🌸 اختاري العطر:",
+
+      pd_qty_t:
+        "الكمية:",
+
+      pd_required:
+        "مطلوب",
+
+      pd_decrease:
+        "تقليل الكمية",
+
+      pd_increase:
+        "زيادة الكمية",
+
+      pd_wishlist:
+        "إضافة إلى المفضلة",
+
+
+      /* Product actions */
+      pd_add:
+        "🛍️ أضيفي للسلة",
+
+      pd_buy:
+        "💬 اطلبي عبر واتساب",
+
+
+      /* Product information */
+      pd_hours:
+        "مدة الاشتعال:",
+
+      pd_materials:
+        "الخامات:",
+
+      pd_ship:
+        "التوصيل:",
+
+      pd_ship_v:
+        "3–7 أيام",
+
+
+      /* Reviews */
+      pd_review_word:
+        "مراجعة",
+
+      pd_read_all:
+        "اقرئي الكل",
+
+      pd_first_review:
+        "كوني أول من يشارك رأيه",
+
+
+      /* Related products */
+      pd_rel_h2:
+        "✨ منتجات هتعجبك",
+
+
+      /* Share */
+      pd_share:
+        "مشاركة:",
+
+      pd_copy_link:
+        "📋 نسخ الرابط"
+    },
+
+
+    /* ═══════════════════════════════════════
+       🇬🇧 ENGLISH
+       ═══════════════════════════════════════ */
+    en:{
+
+      /* Shipping & Payment */
+      ship_note:
+        "🚚 Shipping: paid cash to the courier on delivery.",
+
+      pay_products_note:
+        "💳 Payment details (InstaPay / Wallet / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
+
+
+      /* Scent */
+      t_scentwarn:
+        "⚠️ Please choose a scent first.",
+
+      scent_req:
+        "Required",
+
+
+      /* Handmade */
+      handmade_note:
+        "Handmade piece prepared with care upon order — every candle is unique and special",
+
+
+      /* Product tabs */
+      pd_desc_tab:
+        "📝 Description",
+
+      pd_specs_tab:
+        "📋 Specifications",
+
+      pd_reviews_tab:
+        "⭐ Reviews",
+
+
+      /* Product gallery */
+      pd_zoom:
+        "🔍 Zoom",
+
+      pd_gallery_count:
+        "Images",
+
+
+      /* Product options */
+      pd_scent_t:
+        "🌸 Scent:",
+
+      pd_qty_t:
+        "Quantity:",
+
+      pd_required:
+        "Required",
+
+      pd_decrease:
+        "Decrease quantity",
+
+      pd_increase:
+        "Increase quantity",
+
+      pd_wishlist:
+        "Add to favorites",
+
+
+      /* Product actions */
+      pd_add:
+        "🛍️ Add to Cart",
+
+      pd_buy:
+        "💬 Order via WhatsApp",
+
+
+      /* Product information */
+      pd_hours:
+        "Burn time:",
+
+      pd_materials:
+        "Materials:",
+
+      pd_ship:
+        "Delivery:",
+
+      pd_ship_v:
+        "3–7 days",
+
+
+      /* Reviews */
+      pd_review_word:
+        "reviews",
+
+      pd_read_all:
+        "Read all",
+
+      pd_first_review:
+        "Be the first to review",
+
+
+      /* Related products */
+      pd_rel_h2:
+        "✨ You May Also Like",
+
+
+      /* Share */
+      pd_share:
+        "Share:",
+
+      pd_copy_link:
+        "📋 Copy Link"
+    }
+
+  };
+
+
+  /* ═══════════════════════════════════════
+     ADD ONLY MISSING KEYS
+     ═══════════════════════════════════════ */
+
+  Object.keys(add).forEach(function(L){
+
+    if(!I18N[L]){
+      I18N[L]={};
+    }
+
+    Object.keys(add[L]).forEach(function(k){
+
+      /*
+       * لا نستبدل أي ترجمة موجودة بالفعل.
+       * نضيف فقط المفاتيح الناقصة.
+       */
+      if(
+        I18N[L][k]===undefined ||
+        I18N[L][k]===null ||
+        I18N[L][k]===""
+      ){
+        I18N[L][k]=add[L][k];
+      }
+
+    });
+
+  });
+
+})();
+  
 /* ═══════════════════════════════════════════════════════════
    ✨ INIT — الحل الجذري النهائي: منع الوميض وتوحيد البيانات
    ═══════════════════════════════════════════════════════════ */
