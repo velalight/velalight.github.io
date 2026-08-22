@@ -860,91 +860,203 @@
       <a href="index.html#products" class="btn">تصفح المنتجات</a>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════
-         PRODUCT CONTENT
-         ═══════════════════════════════════════════════════════════ -->
-    <div id="pdWrap" class="hidden">
-      <div class="pd-grid">
+   <!-- ═══════════════════════════════════════════════════════════
+     PRODUCT CONTENT
+     ═══════════════════════════════════════════════════════════ -->
+<div id="pdWrap" class="hidden">
+  <div class="pd-grid">
 
-        <!-- ═══ Gallery — Enhanced ═══ -->
-        <div class="pd-gallery">
-          <div class="pd-img" id="pdImgWrap">
-            <img id="pdImg" src="" alt="" loading="eager" decoding="async" fetchpriority="high">
-            <div class="zoom-hint" id="zoomHint">🔍 تكبير</div>
-            <div class="gallery-counter" id="galleryCounter"></div>
+    <!-- ═══ Gallery — Enhanced ═══ -->
+    <div class="pd-gallery">
+      <div class="pd-img" id="pdImgWrap">
+        <img
+          id="pdImg"
+          src=""
+          alt=""
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        >
+
+        <div
+          class="zoom-hint"
+          id="zoomHint"
+          data-i18n="pd_zoom"
+        >🔍 Zoom</div>
+
+        <div
+          class="gallery-counter"
+          id="galleryCounter"
+          data-i18n="pd_gallery_count"
+        ></div>
+      </div>
+
+      <div class="pd-thumbs" id="pdThumbs"></div>
+    </div>
+
+    <!-- ═══ Info Panel ═══ -->
+    <div class="pd-info">
+
+      <div id="pdBadge"></div>
+
+      <h1 id="pdName" class="fd"></h1>
+
+      <div class="pd-rating" id="pdRatingSummary"></div>
+
+      <div id="pdStockInfo"></div>
+
+      <div class="pd-price">
+        <span class="price-main" id="pdPrice"></span>
+
+        <del
+          id="pdOld"
+          style="display:none"
+        ></del>
+
+        <span
+          class="save-badge"
+          id="pdSave"
+          style="display:none"
+        ></span>
+      </div>
+
+      <p class="pd-desc" id="pdDesc"></p>
+
+      <!-- ═══ Scent Picker ═══ -->
+      <div class="opt-title">
+        <span data-i18n="pd_scent_t">🌸 Scent:</span>
+
+        <span
+          class="req-tag"
+          data-i18n="pd_required"
+        >Required</span>
+      </div>
+
+      <div
+        class="scents-pick"
+        id="pdScents"
+      ></div>
+
+      <!-- ═══ Quantity ═══ -->
+      <div
+        class="opt-title"
+        data-i18n="pd_qty_t"
+      >Quantity:</div>
+
+      <div class="qty-wrap">
+        <div class="qty">
+
+          <button
+            id="pdQMinus"
+            aria-label="Decrease"
+            data-i18n-title="pd_decrease"
+            title="Decrease"
+          >−</button>
+
+          <b id="pdQVal">1</b>
+
+          <button
+            id="pdQPlus"
+            aria-label="Increase"
+            data-i18n-title="pd_increase"
+            title="Increase"
+          >+</button>
+
+        </div>
+      </div>
+
+      <!-- ═══ Actions ═══ -->
+      <div class="pd-actions">
+
+        <button
+          class="btn"
+          id="pdAddBtn"
+          data-i18n="pd_add"
+        >🛍️ Add to Cart</button>
+
+        <button
+          class="btn wa"
+          id="pdBuyBtn"
+          data-i18n="pd_buy"
+        >💬 Order via WhatsApp</button>
+
+        <button
+          class="wish-btn"
+          id="pdWishBtn"
+          aria-label="Add to favorites"
+          data-i18n-title="pd_wishlist"
+          title="Add to favorites"
+        >🤍</button>
+
+      </div>
+
+      <!-- ═══ Payment Info ═══ -->
+      <div class="pay-info">
+
+        <div class="pay-row">
+
+          <span class="pay-icon">💳</span>
+
+          <div>
+
+            <div
+              class="pay-title"
+              data-i18n="pay_title"
+            >InstaPay</div>
+
+            <div
+              class="pay-desc"
+              data-i18n="paymethod_d"
+            >InstaPay upfront, shipping cash.</div>
+
           </div>
-          <div class="pd-thumbs" id="pdThumbs"></div>
+
         </div>
 
-        <!-- ═══ Info Panel ═══ -->
-        <div class="pd-info">
-          <div id="pdBadge"></div>
-          <h1 id="pdName" class="fd"></h1>
-          <div class="pd-rating" id="pdRatingSummary"></div>
-          <div id="pdStockInfo"></div>
+        <div class="pay-row">
 
-          <div class="pd-price">
-            <span class="price-main" id="pdPrice"></span>
-            <del id="pdOld" style="display:none"></del>
-            <span class="save-badge" id="pdSave" style="display:none"></span>
+          <span class="pay-icon">🚚</span>
+
+          <div>
+
+            <div
+              class="pay-title"
+              data-i18n="pd_ship"
+            >Shipping</div>
+
+            <div
+              class="pay-desc"
+              data-i18n="pd_ship_v"
+            >3–7 days</div>
+
           </div>
 
-          <p class="pd-desc" id="pdDesc"></p>
-
-          <!-- Scent Picker -->
-          <div class="opt-title">
-            <span>🌸 اختاري العطر:</span>
-            <span class="req-tag">مطلوب</span>
-          </div>
-          <div class="scents-pick" id="pdScents"></div>
-
-          <!-- Quantity -->
-          <div class="opt-title">الكمية:</div>
-          <div class="qty-wrap">
-            <div class="qty">
-              <button id="pdQMinus" aria-label="تقليل">−</button>
-              <b id="pdQVal">1</b>
-              <button id="pdQPlus" aria-label="زيادة">+</button>
-            </div>
-          </div>
-
-          <!-- Actions -->
-          <div class="pd-actions">
-            <button class="btn" id="pdAddBtn">🛍️ أضيفي للسلة</button>
-            <button class="btn wa" id="pdBuyBtn">💬 اطلبي عبر واتساب</button>
-            <button class="wish-btn" id="pdWishBtn" aria-label="أضف للمفضلة">🤍</button>
-          </div>
-
-          <!-- Payment Info -->
-          <div class="pay-info">
-            <div class="pay-row">
-              <span class="pay-icon">💳</span>
-              <div>
-                <div class="pay-title">الدفع عبر InstaPay</div>
-                <div class="pay-desc">قيمة المنتجات تُدفع مقدماً عند تأكيد الطلب</div>
-              </div>
-            </div>
-            <div class="pay-row">
-              <span class="pay-icon">🚚</span>
-              <div>
-                <div class="pay-title">الشحن كاش عند الاستلام</div>
-                <div class="pay-desc">تكلفة التوصيل تُدفع لمندوب الشحن عند وصول الطلب</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Handmade Note -->
-          <div class="handmade-note">
-            <span class="hm-icon">✦</span>
-            <span>قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة</span>
-          </div>
-
-          <!-- Share -->
-          <div class="share-row" id="pdShare"></div>
         </div>
 
       </div>
 
+      <!-- ═══ Handmade Note ═══ -->
+      <div class="handmade-note">
+
+        <span class="hm-icon">✦</span>
+
+        <span data-i18n="pd_handmade_note">
+          Handmade piece prepared with care upon order — every candle is unique and special
+        </span>
+
+      </div>
+
+      <!-- ═══ Share ═══ -->
+      <div
+        class="share-row"
+        id="pdShare"
+      ></div>
+
+    </div>
+
+  </div>
+</div>
+       
       <!-- ═══════════════════════════════════════════════════════════
            TABS — Description / Specs / Reviews
            ═══════════════════════════════════════════════════════════ -->
@@ -1282,48 +1394,172 @@ function initNav(){
 /* ═══════ LANG WATCHER ═══════ */
 function initLangWatcher(){
   let lastLang=(typeof LANG !== "undefined") ? LANG : "ar";
+
   setInterval(()=>{
-    if((typeof LANG !== "undefined") && LANG!==lastLang){
+    if(
+      (typeof LANG !== "undefined") &&
+      LANG!==lastLang
+    ){
       lastLang=LANG;
+
       if(P) render();
+
+      /* تحديث ترجمة عناصر صفحة المنتج بعد تغيير اللغة */
+      if(typeof window.applyProductTranslations==="function"){
+        window.applyProductTranslations();
+      }
+
+      /* إعادة رسم المراجعات باللغة الجديدة */
+      if(typeof renderReviews==="function"){
+        renderReviews();
+      }
+
+      /* إعادة رسم تقييم المنتج */
+      if(P && typeof updateProductRating==="function"){
+        updateProductRating();
+      }
     }
   },150);
 }
 
+
 /* ═══════ LOAD ALL REVIEWS FROM FIREBASE ═══════ */
 async function loadAllReviews(){
-  try{
-    if(typeof DB !== "undefined" && typeof DB.list === "function") {
-      const revs=await DB.list("reviews");
-      if(Array.isArray(revs)){
-        window.ALL_REVIEWS=[...(typeof SEED_REVIEWS!=="undefined"?SEED_REVIEWS:[]),...revs];
-      }
-    }
-    if(P){
-      if(typeof renderReviews === "function") renderReviews();
-      const reviewSummary=(typeof prodReviews==="function")?prodReviews(P.id):[];
-      $("#revCount").textContent=reviewSummary.length;
-      const ratingBox=$("#pdRatingSummary");
-      if(ratingBox){
-        if(reviewSummary.length){
-          const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
-          ratingBox.innerHTML=
-            `<span class="stars">${"★".repeat(Math.round(avg))}</span>`+
-            `<b>${avg.toFixed(1)}</b>`+
-            `<span>(${reviewSummary.length} ${(typeof LANG !== "undefined" && LANG==="en")?"reviews":"مراجعة"})</span>`+
-            `<a href="#tab-reviews">${(typeof LANG !== "undefined" && LANG==="en")?"Read all":"اقرئي الكل"}</a>`;
-        }else{
-          ratingBox.innerHTML=
-            `<span class="stars" style="opacity:.4">★★★★★</span>`+
-            `<span>${(typeof LANG !== "undefined" && LANG==="en")?"Be the first to review":"كوني أول من يشارك رأيه"}</span>`;
-        }
-      }
-    }
-  }catch(e){
-    console.warn("Reviews load failed",e);
-  }
-}
 
+  try{
+
+    /* تحميل المراجعات */
+    if(
+      typeof DB !== "undefined" &&
+      typeof DB.list === "function"
+    ){
+
+      const revs=await DB.list("reviews");
+
+      if(Array.isArray(revs)){
+
+        window.ALL_REVIEWS=[
+          ...(typeof SEED_REVIEWS!=="undefined"
+            ? SEED_REVIEWS
+            : []
+          ),
+          ...revs
+        ];
+
+      }
+
+    }
+
+
+    /* ═══ تحديث صفحة المنتج ═══ */
+    if(P){
+
+      /* إعادة رسم قسم المراجعات */
+      if(typeof renderReviews==="function"){
+        renderReviews();
+      }
+
+
+      /* حساب المراجعات الخاصة بالمنتج */
+      const reviewSummary=
+        (typeof prodReviews==="function")
+          ? prodReviews(P.id)
+          : [];
+
+
+      /* عدد المراجعات */
+      const revCount=$("#revCount");
+
+      if(revCount){
+        revCount.textContent=reviewSummary.length;
+      }
+
+
+      /* ═══ تقييم المنتج ═══ */
+      const ratingBox=$("#pdRatingSummary");
+
+      if(ratingBox){
+
+        if(reviewSummary.length){
+
+          const avg=
+            reviewSummary.reduce(
+              (a,r)=>a+Number(r.rating||5),
+              0
+            ) /
+            reviewSummary.length;
+
+
+          const reviewWord=
+            typeof t==="function"
+              ? t("pd_review_word")
+              : (
+                  typeof LANG!=="undefined" &&
+                  LANG==="en"
+                    ? "reviews"
+                    : "مراجعة"
+                );
+
+
+          const readAll=
+            typeof t==="function"
+              ? t("pd_read_all")
+              : (
+                  typeof LANG!=="undefined" &&
+                  LANG==="en"
+                    ? "Read all"
+                    : "اقرئي الكل"
+                );
+
+
+          ratingBox.innerHTML=
+            `<span class="stars">${
+              "★".repeat(Math.round(avg))
+            }</span>`+
+
+            `<b>${avg.toFixed(1)}</b>`+
+
+            `<span>(${reviewSummary.length} ${reviewWord})</span>`+
+
+            `<a href="#tab-reviews">${readAll}</a>`;
+
+        }else{
+
+          const firstReview=
+            typeof t==="function"
+              ? t("pd_first_review")
+              : (
+                  typeof LANG!=="undefined" &&
+                  LANG==="en"
+                    ? "Be the first to review"
+                    : "كوني أول من يشارك رأيه"
+                );
+
+
+          ratingBox.innerHTML=
+            `<span class="stars" style="opacity:.4">
+              ★★★★★
+            </span>`+
+
+            `<span>${firstReview}</span>`;
+
+        }
+
+      }
+
+    }
+
+  }catch(e){
+
+    console.warn(
+      "Reviews load failed",
+      e
+    );
+
+  }
+
+}
+     
 /* ═══════ CLOUD CATALOG WITH CACHE UPDATE ═══════ */
 async function loadCloudCatalog(pid){
   try{
@@ -1462,21 +1698,26 @@ function render(){
 function renderStock(){
   const box=$("#pdStockInfo");
   if(!box) return;
+
   const s=Number(P.stock);
+
   if(P.stock===undefined||P.stock===null||P.stock===""||isNaN(s)){
-    box.innerHTML=`<span class="stock-badge ok">✓ متوفر</span>`;
+    box.innerHTML=`<span class="stock-badge ok" data-i18n="stock_available">✓ متوفر</span>`;
+
   }else if(s===0){
-    box.innerHTML=`<span class="stock-badge out">✕ نفدت الكمية</span>`;
+    box.innerHTML=`<span class="stock-badge out" data-i18n="stock_out">✕ نفدت الكمية</span>`;
     $("#pdAddBtn").disabled=true;
-    $("#pdAddBtn").textContent="نفدت الكمية";
+    $("#pdAddBtn").textContent=t("stock_out");
     $("#pdBuyBtn").disabled=true;
+
   }else if(s<=5){
-    box.innerHTML=`<span class="stock-badge low">⚡ باقي ${s} فقط — اطلبي الآن!</span>`;
+    box.innerHTML=`<span class="stock-badge low">⚡ ${t("stock_remaining").replace("{n}",s)}</span>`;
+
   }else{
-    box.innerHTML=`<span class="stock-badge ok">✓ متوفر (${s} قطعة)</span>`;
+    box.innerHTML=`<span class="stock-badge ok">✓ ${t("stock_available_count").replace("{n}",s)}</span>`;
   }
 }
-
+     
 /* ═══════ ENHANCED THUMBS + GALLERY COUNTER ═══════ */
 function renderThumbs(){
   const thumbs=$("#pdThumbs");
