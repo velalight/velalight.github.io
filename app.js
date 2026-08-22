@@ -472,14 +472,23 @@ function renderProducts(){
     return true;
   });
 
-  switch(sort){
-    case "asc":list.sort((a,b)=>(a.price||0)-(b.price||0));break;
-    case "desc":list.sort((a,b)=>(b.price||0)-(a.price||0));break;
-    case "rating":list.sort((a,b)=>((typeof ratingOf==="function"?ratingOf(b.id)?.avg:0)||0)-((typeof ratingOf==="function"?ratingOf(a.id)?.avg:0)||0));break;
-    case "best":list.sort((a,b)=>(b.sold||0)-(a.sold||0));break;
-    case "disc":list.sort((a,b)=>((b.old-b.price)/Math.max(b.old,1))-((a.old-a.price)/Math.max(a.old,1)));break;
-    default:list.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-  }
+  // ✨ منطق الترتيب الجديد: المنتجات المثبتة تأتي أولاً دائماً
+  list.sort((a, b) => {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    if (a.pinned && b.pinned) {
+      return (b.pinnedAt || 0) - (a.pinnedAt || 0);
+    }
+    
+    switch(sort){
+      case "asc": return (a.price||0) - (b.price||0);
+      case "desc": return (b.price||0) - (a.price||0);
+      case "rating": return ((typeof ratingOf==="function"?ratingOf(b.id)?.avg:0)||0) - ((typeof ratingOf==="function"?ratingOf(a.id)?.avg:0)||0);
+      case "best": return (b.sold||0) - (a.sold||0);
+      case "disc": return ((b.old-b.price)/Math.max(b.old,1)) - ((a.old-a.price)/Math.max(a.old,1));
+      default: return (b.createdAt||0) - (a.createdAt||0);
+    }
+  });
 
   const cnt=$("#prodCount");
   if(cnt){cnt.textContent=list.length+" "+t("prod_word");}
@@ -500,7 +509,11 @@ function renderProducts(){
   list.forEach((p, index) => {
     try {
       const r=(typeof ratingOf==="function")?ratingOf(p.id):null;
-      const badge=(typeof pbadge==="function")?pbadge(p):"";
+      
+      // ✨ إضافة شارة التثبيت
+      const pinBadge = p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : "";
+      const badge = (typeof pbadge === "function") ? pbadge(p) : "";
+      
       const rawDesc=LANG==="en"?(p.descEn||p.desc||""):(p.desc||p.descEn||"");
       const productDesc=String(rawDesc).trim();
       
@@ -529,7 +542,8 @@ function renderProducts(){
       article.innerHTML = `
         <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
           <img src="${imgSrc}" alt="${pname(p)}" loading="${loadingAttr}" decoding="async" fetchpriority="${fetchPriority}" width="400" height="400" onload="this.classList.add('loaded')" onerror="window.handleImageError(this, '${p.id}')">
-          ${badge?`<span class="p-badge">${badge}</span>`:""}
+          ${pinBadge}
+          ${badge ? `<span class="p-badge">${badge}</span>` : ""}
           ${stockBadg}
           <span class="p-quick">${t("view_details")}</span>
         </a>
