@@ -539,14 +539,54 @@ function renderProducts(){
       article.className = 'p-card';
       article.dataset.id = p.id;
       
-      article.innerHTML = `
+      const isBrideBox = String(p.id) === "pmt2u7xq749e";
+
+const brideVideoUrl = "https://velalight.github.io/box.mp4?v=v5";
+
+const mediaContent = isBrideBox
+  ? `
+    <video
+      src="${brideVideoUrl}"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster="${imgSrc}"
+      style="
+        width:100%;
+        height:100%;
+        object-fit:contain;
+        background:#000;
+        display:block;
+        border-radius:inherit;
+      "
+      aria-label="${pname(p)}"
+    ></video>
+  `
+  : `
+    <img
+      src="${imgSrc}"
+      alt="${pname(p)}"
+      loading="${loadingAttr}"
+      decoding="async"
+      fetchpriority="${fetchPriority}"
+      width="400"
+      height="400"
+      onload="this.classList.add('loaded')"
+      onerror="window.handleImageError(this, '${p.id}')"
+    >
+  `;
+
+article.innerHTML = `
         <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
-          <img src="${imgSrc}" alt="${pname(p)}" loading="${loadingAttr}" decoding="async" fetchpriority="${fetchPriority}" width="400" height="400" onload="this.classList.add('loaded')" onerror="window.handleImageError(this, '${p.id}')">
+          ${mediaContent}
           ${pinBadge}
           ${badge ? `<span class="p-badge">${badge}</span>` : ""}
           ${stockBadg}
           <span class="p-quick">${t("view_details")}</span>
         </a>
+        
         <div class="p-body">
           <span class="p-cat">${cat(p.cat)}</span>
           <h3><a href="product.html?p=${p.id}">${pname(p)}</a></h3>
