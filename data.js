@@ -166,18 +166,19 @@ async function loadAll(){
     if(p&&p.id) map.set(p.id,{...p});
   });
   
+  // ✨ إصلاح ومضة الصور القديمة عند الريفرش:
+  // الدمج هنا لازم يكون مطابق تمامًا لدمج initProductRealtimeSync() في app.js
+  // (اللي بياخد بيانات فايربيز كاملة: صورة/اسم/سعر/وصف... مش بس الكمية).
+  // قبل كده كانت الدالة دي بتاخد بس sold/stock/active من فايربيز وتسيب
+  // باقي البيانات زي ما هي في PRODUCTS (القديمة) — فكانت الصفحة بترسم
+  // أول مرة بالصورة القديمة (هنا)، وبعدها المستمع اللحظي initProductRealtimeSync
+  // كان بيصحح الصورة على الصح (بالدمج الكامل) — وده بالظبط سبب "الومضة".
+  // دلوقتي الاتنين بيطلعوا نفس النتيجة من أول مرة، فمفيش تعارض ومفيش ومضة.
   dbProductsCache.forEach(d=>{
     const slug=d.id_||d.slug||d.pid||d.id;
     if(!slug) return;
     if(d.active===false){map.delete(slug);return;}
-    const existing=map.get(slug)||{};
-    map.set(slug,{
-      ...existing,
-      sold: d.sold !== undefined ? d.sold : existing.sold,
-      stock: d.stock !== undefined ? d.stock : existing.stock,
-      active: d.active !== undefined ? d.active : existing.active,
-      _fid: d.id || null
-    });
+    map.set(slug,{...(map.get(slug)||{}),...d,id:slug,_fid:d.id||null});
   });
   
   ALL_PRODUCTS=[...map.values()];
