@@ -950,9 +950,9 @@
            ═══════════════════════════════════════════════════════════ -->
       <div class="pd-tabs">
         <div class="tabs-nav" id="tabsNav">
-          <button class="on" data-tab="desc">📝 الوصف</button>
-          <button data-tab="specs">📋 المواصفات</button>
-          <button data-tab="reviews">⭐ المراجعات (<span id="revCount">0</span>)</button>
+          <button class="on" data-tab="desc"><span data-i18n="pd_description">📝 الوصف</span></button>
+          <button data-tab="specs"><span data-i18n="pd_specs">📋 المواصفات</span></button>
+          <button data-tab="reviews"><span data-i18n="pd_reviews">⭐ المراجعات</span> (<span id="revCount">0</span>)</button>
         </div>
 
         <!-- Tab: Description -->
@@ -2089,6 +2089,79 @@ function showNotFound(){
 
 })();
 </script>
+<script>
+(function () {
+  "use strict";
 
+  function applyProductTranslations() {
+
+    if (typeof t !== "function") return;
+
+    var lang = localStorage.getItem("vl_lang") || "ar";
+
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
+
+    /* النصوص */
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+
+      var key = el.getAttribute("data-i18n");
+      if (!key) return;
+
+      var value = t(key);
+
+      if (value && value !== key && el.textContent !== value) {
+        el.textContent = value;
+      }
+
+    });
+
+    /* Placeholder */
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
+
+      var key = el.getAttribute("data-i18n-placeholder");
+      if (!key) return;
+
+      var value = t(key);
+
+      if (value && value !== key && el.getAttribute("placeholder") !== value) {
+        el.setAttribute("placeholder", value);
+      }
+
+    });
+
+    /* Title */
+    document.querySelectorAll("[data-i18n-title]").forEach(function (el) {
+
+      var key = el.getAttribute("data-i18n-title");
+      if (!key) return;
+
+      var value = t(key);
+
+      if (value && value !== key && el.getAttribute("title") !== value) {
+        el.setAttribute("title", value);
+      }
+
+    });
+
+  }
+
+  window.applyProductTranslations = applyProductTranslations;
+
+  /* أول تحميل */
+  if (document.readyState === "loading") {
+
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(applyProductTranslations, 100);
+    });
+
+  } else {
+
+    setTimeout(applyProductTranslations, 100);
+
+  }
+
+})();
+</script>
 </body>
 </html>
