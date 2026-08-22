@@ -826,14 +826,14 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 </section>
 
 <!-- ═══════════════════════════════════════════════
-     SCENTS
+     SCENTS — Compact Luxury Layout
      ═══════════════════════════════════════════════ -->
 
-<section id="scents" class="sec">
+<section id="scents" class="sec vl-compact-section">
 
   <div class="wrap">
 
-    <div class="sec-head rv">
+    <div class="sec-head rv vl-compact-head">
 
       <div class="kick">
         Signature Scents
@@ -855,43 +855,78 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </section>
 
+
 <!-- ═══════════════════════════════════════════════
-     OCCASIONS
+     OCCASIONS — Compact Luxury Layout
      ═══════════════════════════════════════════════ -->
 
-<section id="occasions" class="sec">
+<section id="occasions" class="sec vl-compact-section">
 
   <div class="wrap">
 
-    <div class="sec-head rv">
-      <div class="kick">Gifts & Occasions</div>
-      <h2 data-i18n="occ_h2">هدية لكل مناسبة</h2>
+    <div class="sec-head rv vl-compact-head">
+
+      <div class="kick">
+        Gifts &amp; Occasions
+      </div>
+
+      <h2 data-i18n="occ_h2">
+        هدية لكل مناسبة
+      </h2>
+
     </div>
 
     <div class="occ-grid rv">
 
       <div class="occ">
         <span class="num">01</span>
-        <h3 data-i18n="occ1t">أعياد الميلاد</h3>
-        <p data-i18n="occ1d">صُممت لتكون هدية استثنائية تحمل أعمق المشاعر، وتمنح كل لحظة دفئًا يلامس القلب.</p>
+
+        <h3 data-i18n="occ1t">
+          أعياد الميلاد
+        </h3>
+
+        <p data-i18n="occ1d">
+          صُممت لتكون هدية استثنائية تحمل أعمق المشاعر، وتمنح كل لحظة دفئًا يلامس القلب.
+        </p>
       </div>
+
 
       <div class="occ">
         <span class="num">02</span>
-        <h3 data-i18n="occ2t">الزفاف والخطوبة</h3>
-        <p data-i18n="occ2d">لأن التفاصيل هي سرّ الجمال، ابتكرنا توزيعات رومانسية ولمسات راقية تُضفي على يومك سحرًا استثنائيًا.</p>
+
+        <h3 data-i18n="occ2t">
+          الزفاف والخطوبة
+        </h3>
+
+        <p data-i18n="occ2d">
+          لأن التفاصيل هي سرّ الجمال، ابتكرنا توزيعات رومانسية ولمسات راقية تُضفي على يومك سحرًا استثنائيًا.
+        </p>
       </div>
+
 
       <div class="occ">
         <span class="num">03</span>
-        <h3 data-i18n="occ3t">ركن المنزل</h3>
-        <p data-i18n="occ3d">ركنٌ صغير... لكنه كفيل بأن يغيّر شعور المكان بأكمله؛ دفءٌ يحتضن التفاصيل، وعطرٌ ينعش الروح.</p>
+
+        <h3 data-i18n="occ3t">
+          ركن المنزل
+        </h3>
+
+        <p data-i18n="occ3d">
+          ركنٌ صغير... لكنه كفيل بأن يغيّر شعور المكان بأكمله؛ دفءٌ يحتضن التفاصيل، وعطرٌ ينعش الروح.
+        </p>
       </div>
+
 
       <div class="occ">
         <span class="num">04</span>
-        <h3 data-i18n="occ4t">بوكسات الهدايا</h3>
-        <p data-i18n="occ4d">لأن الهدية الراقية تبدأ من التفاصيل، نُنسّق بوكساتنا بعناية لتجسّد ذوقك.</p>
+
+        <h3 data-i18n="occ4t">
+          بوكسات الهدايا
+        </h3>
+
+        <p data-i18n="occ4d">
+          لأن الهدية الراقية تبدأ من التفاصيل، نُنسّق بوكساتنا بعناية لتجسّد ذوقك.
+        </p>
       </div>
 
     </div>
@@ -900,6 +935,42 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </section>
 
+
+<!-- ═══════════════════════════════════════════════
+     COMPACT SECTIONS — SPACING ONLY
+     لا يغيّر المحتوى أو الوظائف
+     ═══════════════════════════════════════════════ -->
+
+<style>
+  /*
+   * VelaLight Compact Sections
+   * الهدف: تقليل الفراغ الرأسي فقط
+   * بدون تغيير الـHTML structure أو الـJavaScript
+   */
+
+  .vl-compact-section{
+    padding-top:3rem !important;
+    padding-bottom:3rem !important;
+  }
+
+  .vl-compact-head{
+    margin-bottom:1.5rem !important;
+  }
+
+  @media(max-width:700px){
+
+    .vl-compact-section{
+      padding-top:2.2rem !important;
+      padding-bottom:2.2rem !important;
+    }
+
+    .vl-compact-head{
+      margin-bottom:1.1rem !important;
+    }
+
+  }
+</style>
+  
 <!-- ═══════════════════════════════════════════════
      FEATURES
      ═══════════════════════════════════════════════ -->
