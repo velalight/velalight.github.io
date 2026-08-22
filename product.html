@@ -1488,7 +1488,7 @@ function renderThumbs(){
   });
 }
 
-/* ═══════ VIDEO — يحل محل الصورة الرئيسية ═══════ */
+/* ═══════ VIDEO — يحل محل الصورة الرئيسية (Autoplay + Loop) ═══════ */
 function renderVideo(){
   if(!P || !P.video || String(P.video).trim() === "") return;
   
@@ -1498,16 +1498,17 @@ function renderVideo(){
   const videoUrl = (typeof CDN === "function") ? CDN(P.video) : `https://velalight.github.io/${P.video}?v=5`;
   const posterUrl = (typeof CDN === "function" ? CDN(zoomImages[0]) : zoomImages[0]) || (P.img || "");
   
-  // نستبدل محتوى حاوية الصورة بالفيديو
+  // نستبدل محتوى حاوية الصورة بالفيديو مع تشغيل تلقائي وتكرار
   imgWrap.innerHTML = `
     <video 
       id="pdMainVideo"
       src="${videoUrl}" 
-      controls 
-      playsinline 
-      muted 
-      loop 
-      preload="metadata"
+      autoplay
+      muted
+      loop
+      playsinline
+      controls
+      preload="auto"
       poster="${posterUrl}"
     >
       متصفحك لا يدعم تشغيل الفيديو.
