@@ -1490,7 +1490,10 @@ function renderThumbs(){
 
 /* ═══════ VIDEO — يحل محل الصورة الرئيسية مع تشخيص ذاتي للأخطاء ═══════ */
 function renderVideo(){
-  if(!P || !P.video || String(P.video).trim() === "") return;
+  if(!P || !P.video || String(P.video).trim() === "") {
+    console.log("⚠️ لا يوجد فيديو لهذا المنتج");
+    return;
+  }
   
   const imgWrap = $("#pdImgWrap");
   if(!imgWrap) return;
@@ -1499,12 +1502,13 @@ function renderVideo(){
   const videoUrl = (typeof CDN === "function") ? CDN(cleanVideoName) : `https://velalight.github.io/${cleanVideoName}?v=5`;
   const posterUrl = (typeof CDN === "function" ? CDN(zoomImages[0]) : zoomImages[0]) || (P.img || "");
   
-  console.log("🎥 محاولة تشغيل الفيديو:", videoUrl);
+  console.log("🎥 رابط الفيديو:", videoUrl);
   
   imgWrap.innerHTML = `
     <video 
       id="pdMainVideo"
       src="${videoUrl}" 
+      type="video/mp4"
       autoplay
       muted
       loop
@@ -1512,11 +1516,12 @@ function renderVideo(){
       controls
       preload="auto"
       poster="${posterUrl}"
-      onerror="console.error('❌ فشل تحميل الفيديو. تأكد من: 1.اسم الملف مطابق تماماً (حساس لحالة الأحرف) 2.الترميز H.264')"
+      style="width:100%; height:100%; object-fit:contain; background:#000;"
+      onerror="this.parentElement.innerHTML='<div style=\\'display:grid;place-items:center;height:100%;background:#111;color:#fff;text-align:center;padding:1rem\\'><h3>⚠️ فشل تحميل الفيديو</h3><p style=\\'font-size:0.8rem;margin-top:0.5rem\\'>تأكد من:<br>1. اسم الملف مطابق تماماً (حساس لحالة الأحرف: box.mp4)<br>2. الفيديو بصيغة MP4 (ترميز H.264)<br>3. الملف مرفوع في مجلد الريبو الرئيسي</p></div>';"
     >
       متصفحك لا يدعم تشغيل الفيديو.
     </video>
-    <div class="video-caption">▶️ شاهد المنتج</div>
+    <div class="video-caption" style="position:absolute;bottom:0;inset-inline:0;background:rgba(0,0,0,.7);color:#fff;padding:.5rem;text-align:center;font-size:.8rem;z-index:5;border-radius:0 0 22px 22px;">▶️ شاهد المنتج</div>
   `;
   
   const zoomHint = $("#zoomHint");
@@ -1528,7 +1533,7 @@ function renderVideo(){
   const vid = document.getElementById("pdMainVideo");
   if(vid){
     vid.play().catch(error => {
-      console.warn("⚠️ المتصفح منع التشغيل التلقائي:", error);
+      console.warn("⚠️ المتصفح منع التشغيل التلقائي (هذا طبيعي، يمكن للمستخدم الضغط على تشغيل):", error);
     });
   }
 }
