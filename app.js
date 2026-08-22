@@ -162,14 +162,20 @@ const velaScentTr=name=>{
       pay_products_note:"💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.",
       t_scentwarn:"⚠️ من فضلك اختار العطر أولاً.",
       scent_req:"مطلوب",
-      handmade_note:"قطعة يدوية تُجهّز بعناية عند الطلب"
+      handmade_note:"قطعة يدوية تُجهّز بعناية عند الطلب",
+pd_desc_tab:"📝 الوصف",
+pd_specs_tab:"📋 المواصفات",
+pd_reviews_tab:"⭐ المراجعات"
     },
     en:{
       ship_note:"🚚 Shipping: paid cash to courier on delivery.",
       pay_products_note:"💳 Payment details (InstaPay / Wallet / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
       t_scentwarn:"⚠️ Please choose a scent first.",
       scent_req:"Required",
-      handmade_note:"Handmade piece prepared with care upon order"
+      handmade_note:"Handmade piece prepared with care upon order",
+pd_desc_tab:"📝 Description",
+pd_specs_tab:"📋 Specifications",
+pd_reviews_tab:"⭐ Reviews"
     }
   };
   Object.keys(add).forEach(L=>{
