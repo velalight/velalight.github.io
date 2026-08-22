@@ -1489,12 +1489,96 @@ function renderThumbs(){
 }
 
 /* ═══════ VIDEO — يحل محل الصورة الرئيسية مع تشخيص ذاتي للأخطاء ═══════ */
+/* ═══════ VIDEO — Bride Box فقط ═══════ */
 function renderVideo(){
-  if(!P || !P.video || String(P.video).trim() === "") {
-    console.log("⚠️ لا يوجد فيديو لهذا المنتج");
+
+  const BRIDE_BOX_ID = "pmt2u7xq749e";
+  const BRIDE_BOX_VIDEO = "box.mp4";
+
+  /* الفيديو لهذا المنتج فقط */
+  const currentId = String(P?.id || P?.id_ || productPid || "").trim();
+
+  if(currentId !== BRIDE_BOX_ID){
     return;
   }
-  
+
+  const imgWrap = $("#pdImgWrap");
+  if(!imgWrap) return;
+
+  const videoUrl = `https://velalight.github.io/${BRIDE_BOX_VIDEO}?v=v5`;
+
+  const posterUrl =
+    (typeof CDN === "function" && zoomImages[0])
+      ? CDN(zoomImages[0])
+      : (zoomImages[0] || P.img || "");
+
+  console.log("🎥 Bride Box Video:", videoUrl);
+
+  imgWrap.innerHTML = `
+    <video
+      id="pdMainVideo"
+      src="${videoUrl}"
+      autoplay
+      muted
+      loop
+      playsinline
+      controls
+      preload="auto"
+      poster="${posterUrl}"
+      style="
+        width:100%;
+        height:100%;
+        object-fit:contain;
+        background:#000;
+        border-radius:22px;
+        display:block;
+      "
+    >
+      متصفحك لا يدعم تشغيل الفيديو.
+    </video>
+
+    <div
+      class="video-caption"
+      style="
+        position:absolute;
+        bottom:0;
+        inset-inline:0;
+        background:rgba(0,0,0,.7);
+        color:#fff;
+        padding:.5rem;
+        text-align:center;
+        font-size:.8rem;
+        z-index:5;
+        border-radius:0 0 22px 22px;
+      "
+    >
+      ▶️ شاهد المنتج
+    </div>
+  `;
+
+  const zoomHint = $("#zoomHint");
+  if(zoomHint) zoomHint.style.display = "none";
+
+  const counter = $("#galleryCounter");
+  if(counter) counter.style.display = "none";
+
+  const vid = document.getElementById("pdMainVideo");
+
+  if(vid){
+    const tryPlay = () => {
+      vid.play().catch(error => {
+        console.warn(
+          "⚠️ التشغيل التلقائي مرفوض من المتصفح:",
+          error
+        );
+      });
+    };
+
+    tryPlay();
+
+    vid.addEventListener("loadeddata", tryPlay, {once:true});
+  }
+}  
   const imgWrap = $("#pdImgWrap");
   if(!imgWrap) return;
   
