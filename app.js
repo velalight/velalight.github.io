@@ -155,15 +155,14 @@ const velaScentTr=name=>{
 
 /* ═══ FILL MISSING TRANSLATIONS ═══ */
 (function fillMissingI18n(){
-
   if(typeof I18N==="undefined") return;
 
-  const add={
+  const add = {
 
     /* ═══════════════════════════════════════
        🇪🇬 ARABIC
        ═══════════════════════════════════════ */
-    ar:{
+    ar: {
 
       /* Shipping & Payment */
       ship_note:
@@ -171,6 +170,12 @@ const velaScentTr=name=>{
 
       pay_products_note:
         "💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.",
+
+      pay_title:
+        "الدفع عبر InstaPay",
+
+      paymethod_d:
+        "قيمة المنتجات تُدفع مقدماً عند تأكيد الطلب.",
 
 
       /* Scent */
@@ -183,6 +188,9 @@ const velaScentTr=name=>{
 
       /* Handmade */
       handmade_note:
+        "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
+
+      pd_handmade_note:
         "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
 
 
@@ -204,7 +212,7 @@ const velaScentTr=name=>{
       pd_gallery_count:
         "الصور",
 
-      
+
       /* Product options */
       pd_scent_t:
         "🌸 اختاري العطر:",
@@ -258,7 +266,7 @@ const velaScentTr=name=>{
         "كوني أول من يشارك رأيه",
 
 
-      /* Related products */
+      /* Related Products */
       pd_rel_h2:
         "✨ منتجات هتعجبك",
 
@@ -268,14 +276,69 @@ const velaScentTr=name=>{
         "مشاركة:",
 
       pd_copy_link:
-        "📋 نسخ الرابط"
+        "📋 نسخ الرابط",
+
+
+      /* Product Not Found */
+      pd_product:
+        "المنتج",
+
+      pd_not_found_title:
+        "😕 المنتج غير متاح",
+
+      pd_not_found_desc:
+        "عذراً، لم نتمكن من العثور على هذا المنتج",
+
+      pd_browse_products:
+        "تصفح المنتجات",
+
+
+      /* ═══ Homepage Reviews ═══ */
+      reviews_kicker:
+        "💛 كلامكم أحلى هدية",
+
+      reviews_title:
+        "آراء عملائنا",
+
+      reviews_desc:
+        "مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.",
+
+      reviews_cta:
+        "✨ جربتي سحرنا؟",
+
+      reviews_cta_link:
+        "ابعتيلنا رأيك على الواتساب",
+
+
+      /* ═══ Top Marquee ═══ */
+      mq_delivery:
+        "🚚 توصيل سريع لكل محافظات مصر",
+
+      mq_discounts:
+        "🏷️ خصومات حصرية على مجموعات مختارة",
+
+      mq_gift:
+        "🎁 تغليف هدايا مجاني مع كل طلب",
+
+      mq_handmade:
+        "🤲 صناعة يدوية 100% بخامات طبيعية",
+
+      mq_scents:
+        "🕯️ أكثر من 23 عطر فاخر متاح",
+
+      mq_shipping:
+        "📦 شحن آمن من الورشة لحد باب بيتك",
+
+      mq_support:
+        "💬 دعم فني يومي لخدمتك"
+
     },
 
 
     /* ═══════════════════════════════════════
        🇬🇧 ENGLISH
        ═══════════════════════════════════════ */
-    en:{
+    en: {
 
       /* Shipping & Payment */
       ship_note:
@@ -283,6 +346,12 @@ const velaScentTr=name=>{
 
       pay_products_note:
         "💳 Payment details (InstaPay / Wallet / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
+
+      pay_title:
+        "Payment via InstaPay",
+
+      paymethod_d:
+        "Product payment is made upfront upon order confirmation.",
 
 
       /* Scent */
@@ -295,6 +364,9 @@ const velaScentTr=name=>{
 
       /* Handmade */
       handmade_note:
+        "Handmade piece prepared with care upon order — every candle is unique and special",
+
+      pd_handmade_note:
         "Handmade piece prepared with care upon order — every candle is unique and special",
 
 
@@ -370,7 +442,7 @@ const velaScentTr=name=>{
         "Be the first to review",
 
 
-      /* Related products */
+      /* Related Products */
       pd_rel_h2:
         "✨ You May Also Like",
 
@@ -380,34 +452,82 @@ const velaScentTr=name=>{
         "Share:",
 
       pd_copy_link:
-        "📋 Copy Link"
+        "📋 Copy Link",
+
+
+      /* Product Not Found */
+      pd_product:
+        "Product",
+
+      pd_not_found_title:
+        "😕 Product Not Available",
+
+      pd_not_found_desc:
+        "Sorry, we couldn't find this product",
+
+      pd_browse_products:
+        "Browse Products",
+
+
+      /* ═══ Homepage Reviews ═══ */
+      reviews_kicker:
+        "💛 Your Words Mean the Most",
+
+      reviews_title:
+        "Our Customers' Reviews",
+
+      reviews_desc:
+        "We don't just write claims — we show the real experience. These are genuine screenshots from our customers after receiving their orders.",
+
+      reviews_cta:
+        "✨ Tried our candles?",
+
+      reviews_cta_link:
+        "Send us your review on WhatsApp",
+
+
+      /* ═══ Top Marquee ═══ */
+      mq_delivery:
+        "🚚 Fast delivery across Egypt",
+
+      mq_discounts:
+        "🏷️ Exclusive discounts on selected collections",
+
+      mq_gift:
+        "🎁 Free gift wrapping with every order",
+
+      mq_handmade:
+        "🤲 100% handmade with natural materials",
+
+      mq_scents:
+        "🕯️ More than 23 luxury scents available",
+
+      mq_shipping:
+        "📦 Safe shipping from our workshop to your door",
+
+      mq_support:
+        "💬 Daily customer support"
+
     }
 
   };
 
 
-  /* ═══════════════════════════════════════
-     ADD ONLY MISSING KEYS
-     ═══════════════════════════════════════ */
+  /* ═══ Add only missing keys — never overwrite existing translations ═══ */
+  Object.keys(add).forEach(L => {
 
-  Object.keys(add).forEach(function(L){
-
-    if(!I18N[L]){
-      I18N[L]={};
+    if(!I18N[L]) {
+      I18N[L] = {};
     }
 
-    Object.keys(add[L]).forEach(function(k){
+    Object.keys(add[L]).forEach(k => {
 
-      /*
-       * لا نستبدل أي ترجمة موجودة بالفعل.
-       * نضيف فقط المفاتيح الناقصة.
-       */
       if(
-        I18N[L][k]===undefined ||
-        I18N[L][k]===null ||
-        I18N[L][k]===""
+        I18N[L][k] === undefined ||
+        I18N[L][k] === null ||
+        I18N[L][k] === ""
       ){
-        I18N[L][k]=add[L][k];
+        I18N[L][k] = add[L][k];
       }
 
     });
