@@ -939,40 +939,36 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </section>
 
-<!-- ═══════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════════
      REVIEWS — Customer Reviews
-     ═══════════════════════════════════════════════ -->
+     ═══════════════════════════════════════════════════════════ -->
 <section
   id="reviews"
   class="sec"
-  style="background: linear-gradient(180deg, var(--c-cream) 0%, #fdf5ed 100%); padding: 5rem 0; overflow: hidden;"
+  style="background:linear-gradient(180deg,var(--c-cream) 0%,#fdf5ed 100%);padding:5rem 0;overflow:hidden;"
 >
-
   <div class="wrap">
 
+    <!-- Section Header -->
     <div
       class="sec-head rv"
-      style="text-align: center; margin-bottom: 3rem;"
+      style="text-align:center;margin-bottom:3rem;"
     >
 
       <div
         class="kick"
-        data-i18n="reviews_kick"
-        style="color: var(--gold2); font-size: 1rem; letter-spacing: 1px;"
-      >
-        💛 كلامكم أحلى هدية
-      </div>
+        style="color:var(--gold2);font-size:1rem;letter-spacing:1px;"
+        data-i18n="reviews_kicker"
+      >💛 كلامكم أحلى هدية</div>
 
       <h2
-        data-i18n="rev_h2"
-        style="font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 0.5rem; font-family: var(--fd);"
-      >
-        آراء عملائنا
-      </h2>
+        style="font-size:clamp(2rem,5vw,2.8rem);margin-bottom:.5rem;font-family:var(--fd);"
+        data-i18n="reviews_title"
+      >آراء عملائنا</h2>
 
       <p
+        style="color:var(--mut);max-width:600px;margin:0 auto;font-size:1.1rem;line-height:1.6;"
         data-i18n="reviews_desc"
-        style="color: var(--mut); max-width: 600px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;"
       >
         مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.
       </p>
@@ -980,34 +976,34 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
     </div>
 
 
-    <!-- ═══ Reviews Gallery ═══ -->
+    <!-- ═══ Reviews Slider ═══ -->
     <div class="cinematic-reviews-container rv">
 
       <div
         class="reviews-slider"
         id="reviewsSlider"
       >
-        <!-- الصور هتتضاف هنا أوتوماتيك من ملف data.js -->
+        <!-- الصور تُضاف تلقائياً من data.js -->
       </div>
 
-      <!-- ═══ Navigation Dots ═══ -->
+      <!-- Navigation Dots -->
       <div
         class="reviews-dots"
         id="reviewsDots"
+        aria-label="Reviews navigation"
       ></div>
 
     </div>
 
 
-    <!-- ═══ WhatsApp Review CTA ═══ -->
+    <!-- ═══ WhatsApp CTA ═══ -->
     <div
-      style="text-align: center; margin-top: 3rem;"
+      style="text-align:center;margin-top:3rem;"
     >
 
       <p
-        style="color: var(--dim); font-size: 0.95rem;"
+        style="color:var(--dim);font-size:.95rem;"
       >
-
         <span data-i18n="reviews_cta">
           ✨ جربتي سحرنا؟
         </span>
@@ -1015,21 +1011,17 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
         <a
           href="https://wa.me/201223526105"
           target="_blank"
-          rel="noopener"
-          data-i18n="reviews_whatsapp"
-          style="color: var(--gold2); font-weight: 700; text-decoration: none; border-bottom: 1px dashed var(--gold2);"
-        >
-          ابعتيلنا رأيك على الواتساب
-        </a>
-
+          rel="noopener noreferrer"
+          style="color:var(--gold2);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--gold2);"
+          data-i18n="reviews_cta_link"
+        >ابعتيلنا رأيك على الواتساب</a>
       </p>
 
     </div>
 
   </div>
-
 </section>
-
+  
 <style>
   /* ═══ تصميم ألبوم الذكريات السينمائي ═══ */
 .cinematic-reviews-container {
