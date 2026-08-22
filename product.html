@@ -784,92 +784,307 @@
 <!-- ═══ HEADER ═══ -->
 <header>
   <div class="wrap hrow">
-    <a class="logo" href="index.html" aria-label="VelaLight - الرئيسية">
+
+    <a
+      class="logo"
+      href="index.html"
+      aria-label="VelaLight"
+    >
       <span class="flame"></span>
-      <div><b>VelaLight</b><small>Luxury Candle Studio</small></div>
-    </a>
-    <nav class="mainnav" aria-label="القائمة الرئيسية">
-      <div><a href="index.html" data-i18n="nav_home">الرئيسية</a></div>
       <div>
-        <a href="index.html#products" data-i18n="nav_shop">تسوق</a>
-        <a href="index.html#products">▾</a>
+        <b>VelaLight</b>
+        <small>Luxury Candle Studio</small>
+      </div>
+    </a>
+
+    <nav
+      class="mainnav"
+      aria-label="Main navigation"
+    >
+
+      <div>
+        <a
+          href="index.html"
+          data-i18n="nav_home"
+        >الرئيسية</a>
+      </div>
+
+      <div>
+
+        <a
+          href="index.html#products"
+          data-i18n="nav_shop"
+        >تسوق</a>
+
+        <a
+          href="index.html#products"
+          aria-label="Open shop categories"
+        >▾</a>
+
         <div class="dd">
-          <a href="index.html#products" data-cat="all">كل الشموع</a>
-          <a href="index.html#products" data-cat="wood">شموع خشبية</a>
-          <a href="index.html#products" data-cat="glass">شموع زجاجية</a>
-          <a href="index.html#products" data-cat="crystal">شموع كريستالية</a>
-          <a href="index.html#products" data-cat="metal">شموع معدنية</a>
-          <a href="index.html#products" data-cat="massage">شموع المساج</a>
-          <a href="index.html#products" data-cat="gift">الهدايا</a>
-          <a href="index.html#products" data-cat="bride">بوكس العروسة</a>
+
+          <a href="index.html#products" data-cat="all" data-i18n="cat_all">كل الشموع</a>
+          <a href="index.html#products" data-cat="wood" data-i18n="cat_wood">شموع خشبية</a>
+          <a href="index.html#products" data-cat="glass" data-i18n="cat_glass">شموع زجاجية</a>
+          <a href="index.html#products" data-cat="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
+          <a href="index.html#products" data-cat="metal" data-i18n="cat_metal">شموع معدنية</a>
+          <a href="index.html#products" data-cat="massage" data-i18n="cat_massage">شموع المساج</a>
+          <a href="index.html#products" data-cat="gift" data-i18n="cat_gift">الهدايا</a>
+          <a href="index.html#products" data-cat="bride" data-i18n="cat_bride">بوكس العروسة</a>
+
         </div>
       </div>
-      <div><a href="index.html#about-us" data-i18n="nav_about">من نحن</a></div>
-      <div><a href="index.html#faq-section" data-i18n="nav_faq">الأسئلة الشائعة</a></div>
-      <div><a href="contact.html" data-i18n="nav_contact">تواصل معنا</a></div>
+
+      <div>
+        <a
+          href="index.html#about-us"
+          data-i18n="nav_about"
+        >من نحن</a>
+      </div>
+
+      <div>
+        <a
+          href="index.html#faq-section"
+          data-i18n="nav_faq"
+        >الأسئلة الشائعة</a>
+      </div>
+
+      <div>
+        <a
+          href="contact.html"
+          data-i18n="nav_contact"
+        >تواصل معنا</a>
+      </div>
+
     </nav>
+
+
     <div class="hact">
-      <button class="langbtn" id="langBtn" aria-label="تغيير اللغة">EN</button>
-      <button class="icobtn" id="cartBtn" aria-label="سلة الشراء">
-        🛍️<span class="badge" id="cartCount">0</span>
+
+      <button
+        class="langbtn"
+        id="langBtn"
+        type="button"
+        aria-label="تغيير اللغة"
+      >EN</button>
+
+      <button
+        class="icobtn"
+        id="cartBtn"
+        type="button"
+        aria-label="سلة الشراء"
+      >
+        🛍️
+        <span
+          class="badge"
+          id="cartCount"
+        >0</span>
       </button>
+
     </div>
+
   </div>
 </header>
 
-<nav class="mnav" id="mnav" aria-label="قائمة الموبايل">
-  <h5>تصنيفات الشموع</h5>
-  <a href="index.html#products" data-cat="all">كل الشموع</a>
-  <a href="index.html#products" data-cat="wood">شموع خشبية</a>
-  <a href="index.html#products" data-cat="glass">شموع زجاجية</a>
-  <a href="index.html#products" data-cat="crystal">شموع كريستالية</a>
-  <a href="index.html#products" data-cat="metal">شموع معدنية</a>
-  <a href="index.html#products" data-cat="massage">شموع المساج</a>
-  <a href="index.html#products" data-cat="gift">الهدايا</a>
-  <a href="index.html#products" data-cat="bride">بوكس العروسة</a>
-  <h5>اكتشف</h5>
-  <a href="index.html#about-us" data-i18n="nav_about">من نحن</a>
-  <a href="index.html#scents">العطور الفاخرة</a>
-  <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
-</nav>
-<div class="ovl" id="ovl"></div>
 
+<!-- ═══ MOBILE NAVIGATION ═══ -->
+<nav
+  class="mnav"
+  id="mnav"
+  aria-label="Mobile navigation"
+>
+
+  <h5 data-i18n="mn_cats">تصنيفات الشموع</h5>
+
+  <a
+    href="index.html#products"
+    data-cat="all"
+    data-i18n="cat_all"
+  >كل الشموع</a>
+
+  <a
+    href="index.html#products"
+    data-cat="wood"
+    data-i18n="cat_wood"
+  >شموع خشبية</a>
+
+  <a
+    href="index.html#products"
+    data-cat="glass"
+    data-i18n="cat_glass"
+  >شموع زجاجية</a>
+
+  <a
+    href="index.html#products"
+    data-cat="crystal"
+    data-i18n="cat_crystal"
+  >شموع كريستالية</a>
+
+  <a
+    href="index.html#products"
+    data-cat="metal"
+    data-i18n="cat_metal"
+  >شموع معدنية</a>
+
+  <a
+    href="index.html#products"
+    data-cat="massage"
+    data-i18n="cat_massage"
+  >شموع المساج</a>
+
+  <a
+    href="index.html#products"
+    data-cat="gift"
+    data-i18n="cat_gift"
+  >الهدايا</a>
+
+  <a
+    href="index.html#products"
+    data-cat="bride"
+    data-i18n="cat_bride"
+  >بوكس العروسة</a>
+
+
+  <h5 data-i18n="mn_explore">اكتشف</h5>
+
+  <a
+    href="index.html#about-us"
+    data-i18n="nav_about"
+  >من نحن</a>
+
+  <a
+    href="index.html#scents"
+    data-i18n="mn_scents"
+  >العطور الفاخرة</a>
+
+  <a
+    href="contact.html"
+    data-i18n="nav_contact"
+  >تواصل معنا</a>
+
+</nav>
+
+<div
+  class="ovl"
+  id="ovl"
+></div>
+     
 <!-- ═══════════════════════════════════════════════════════════
      MAIN CONTENT — Product Page
      ═══════════════════════════════════════════════════════════ -->
 <main class="sec pd-hero">
   <div class="wrap">
 
-    <!-- Breadcrumb -->
+    <!-- ═══ Breadcrumb ═══ -->
     <div class="crumb">
       <a href="index.html" data-i18n="nav_home">الرئيسية</a>
+
       <span class="sep">›</span>
+
       <a href="index.html#products" data-i18n="nav_shop">تسوق</a>
+
       <span class="sep">›</span>
-      <span class="current" id="crumbName">المنتج</span>
+
+      <span
+        class="current"
+        id="crumbName"
+        data-i18n="pd_product"
+      >المنتج</span>
     </div>
 
-    <!-- ═══ Loading Skeleton ═══ -->
+
+    <!-- ═══════════════════════════════════════════════════════
+         LOADING SKELETON
+         ═══════════════════════════════════════════════════════ -->
     <div id="pdLoading">
+
       <div class="pd-grid">
-        <div class="skel" style="aspect-ratio:1;border-radius:22px"></div>
+
+        <!-- Image Skeleton -->
+        <div
+          class="skel"
+          style="aspect-ratio:1;border-radius:22px"
+          aria-hidden="true"
+        ></div>
+
+        <!-- Info Skeleton -->
         <div>
-          <div class="skel" style="height:22px;width:45%;margin-bottom:1rem"></div>
-          <div class="skel" style="height:40px;width:80%;margin-bottom:1rem"></div>
-          <div class="skel" style="height:30px;width:35%;margin-bottom:1.5rem"></div>
-          <div class="skel" style="height:90px;margin-bottom:1.2rem"></div>
-          <div class="skel" style="height:50px;width:60%"></div>
+
+          <div
+            class="skel"
+            style="height:22px;width:45%;margin-bottom:1rem"
+            aria-hidden="true"
+          ></div>
+
+          <div
+            class="skel"
+            style="height:40px;width:80%;margin-bottom:1rem"
+            aria-hidden="true"
+          ></div>
+
+          <div
+            class="skel"
+            style="height:30px;width:35%;margin-bottom:1.5rem"
+            aria-hidden="true"
+          ></div>
+
+          <div
+            class="skel"
+            style="height:90px;margin-bottom:1.2rem"
+            aria-hidden="true"
+          ></div>
+
+          <div
+            class="skel"
+            style="height:50px;width:60%"
+            aria-hidden="true"
+          ></div>
+
         </div>
+
       </div>
+
     </div>
 
-    <!-- ═══ Not Found ═══ -->
-    <div id="pdNotFound" class="empty hidden">
-      <div style="font-size:4rem;margin-bottom:1rem">🕯️</div>
-      <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem">😕 المنتج غير متاح</h2>
-      <p style="color:var(--mut);margin-bottom:1.5rem">عذراً، لم نتمكن من العثور على هذا المنتج</p>
-      <a href="index.html#products" class="btn">تصفح المنتجات</a>
+
+    <!-- ═══════════════════════════════════════════════════════
+         PRODUCT NOT FOUND
+         ═══════════════════════════════════════════════════════ -->
+    <div
+      id="pdNotFound"
+      class="empty hidden"
+      role="alert"
+      aria-live="polite"
+    >
+
+      <div
+        style="font-size:4rem;margin-bottom:1rem"
+        aria-hidden="true"
+      >🕯️</div>
+
+      <h2
+        class="fd"
+        style="color:var(--gold2);margin-bottom:.5rem"
+        data-i18n="pd_not_found_title"
+      >😕 المنتج غير متاح</h2>
+
+      <p
+        style="color:var(--mut);margin-bottom:1.5rem"
+        data-i18n="pd_not_found_desc"
+      >عذراً، لم نتمكن من العثور على هذا المنتج</p>
+
+      <a
+        href="index.html#products"
+        class="btn"
+        data-i18n="pd_browse_products"
+      >تصفح المنتجات</a>
+
     </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         PRODUCT CONTENT
+         ═══════════════════════════════════════════════════════ -->
 
    <!-- ═══════════════════════════════════════════════════════════
      PRODUCT CONTENT
