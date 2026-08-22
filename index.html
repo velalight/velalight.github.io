@@ -940,38 +940,98 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 </section>
 
 <!-- ═══════════════════════════════════════════════
-     REVIEWS — ألبوم الذكريات اراء عملائنا (سكرين شوتات حقيقية)
+     REVIEWS — Customer Reviews
      ═══════════════════════════════════════════════ -->
-<section id="reviews" class="sec" style="background: linear-gradient(180deg, var(--c-cream) 0%, #fdf5ed 100%); padding: 5rem 0; overflow: hidden;">
+<section
+  id="reviews"
+  class="sec"
+  style="background: linear-gradient(180deg, var(--c-cream) 0%, #fdf5ed 100%); padding: 5rem 0; overflow: hidden;"
+>
+
   <div class="wrap">
-    <div class="sec-head rv" style="text-align: center; margin-bottom: 3rem;">
-      <div class="kick" style="color: var(--gold2); font-size: 1rem; letter-spacing: 1px;">💛 كلامكم أحلى هدية</div>
-      <h2 style="font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 0.5rem; font-family: var(--fd);">أراء عملائنا</h2>
-      <p style="color: var(--mut); max-width: 600px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">
+
+    <div
+      class="sec-head rv"
+      style="text-align: center; margin-bottom: 3rem;"
+    >
+
+      <div
+        class="kick"
+        data-i18n="reviews_kick"
+        style="color: var(--gold2); font-size: 1rem; letter-spacing: 1px;"
+      >
+        💛 كلامكم أحلى هدية
+      </div>
+
+      <h2
+        data-i18n="rev_h2"
+        style="font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 0.5rem; font-family: var(--fd);"
+      >
+        آراء عملائنا
+      </h2>
+
+      <p
+        data-i18n="reviews_desc"
+        style="color: var(--mut); max-width: 600px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;"
+      >
         مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.
       </p>
+
     </div>
 
-    <!-- الحاوية السينمائية للصور -->
+
+    <!-- ═══ Reviews Gallery ═══ -->
     <div class="cinematic-reviews-container rv">
-      <div class="reviews-slider" id="reviewsSlider">
+
+      <div
+        class="reviews-slider"
+        id="reviewsSlider"
+      >
         <!-- الصور هتتضاف هنا أوتوماتيك من ملف data.js -->
       </div>
-      
-      <!-- مؤشرات التنقل (النقط) -->
-      <div class="reviews-dots" id="reviewsDots"></div>
+
+      <!-- ═══ Navigation Dots ═══ -->
+      <div
+        class="reviews-dots"
+        id="reviewsDots"
+      ></div>
+
     </div>
-    
-    <div style="text-align: center; margin-top: 3rem;">
-      <p style="color: var(--dim); font-size: 0.95rem;">
-        ✨ جربتي سحرنا؟ <a href="https://wa.me/201223526105" target="_blank" style="color: var(--gold2); font-weight: 700; text-decoration: none; border-bottom: 1px dashed var(--gold2);">ابعتيلنا رأيك على الواتساب</a>
+
+
+    <!-- ═══ WhatsApp Review CTA ═══ -->
+    <div
+      style="text-align: center; margin-top: 3rem;"
+    >
+
+      <p
+        style="color: var(--dim); font-size: 0.95rem;"
+      >
+
+        <span data-i18n="reviews_cta">
+          ✨ جربتي سحرنا؟
+        </span>
+
+        <a
+          href="https://wa.me/201223526105"
+          target="_blank"
+          rel="noopener"
+          data-i18n="reviews_whatsapp"
+          style="color: var(--gold2); font-weight: 700; text-decoration: none; border-bottom: 1px dashed var(--gold2);"
+        >
+          ابعتيلنا رأيك على الواتساب
+        </a>
+
       </p>
+
     </div>
+
   </div>
+
 </section>
 
 <style>
-/* ═══ تصميم ألبوم الذكريات السينمائي ═══ */
+  /* ═══ تصميم ألبوم الذكريات السينمائي ═══ */
 .cinematic-reviews-container {
   max-width: 500px;
   margin: 0 auto;
