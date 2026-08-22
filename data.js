@@ -42,15 +42,14 @@ let LANG=localStorage.getItem("vl_lang")||"ar";
 const money=n=>Number(n||0).toLocaleString("en-US")+" "+(LANG==="en"?"EGP":"ج.م");
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ CDN — مع آلية كسر الكاش (Cache Busting) للصور
-   ملاحظة للأدمن: عند استبدال صورة بنفس الاسم، غيّر الرقم في IMG_CACHE_VERSION
+   ✨ CDN — مع آلية كسر الكاش (Cache Busting)
+   ملاحظة للأدمن: تم رفع الإصدار إلى v5 لدعم الفيديو والتثبيت
    ═══════════════════════════════════════════════════════════ */
-const IMG_CACHE_VERSION = "v4"; 
+const IMG_CACHE_VERSION = "v5"; 
 
 const CDN=u=>{
   if(!u) return "";
   if(u.startsWith("data:")||u.startsWith("http")) return u;
-  // إضافة رقم الإصدار لإجبار المتصفح على جلب النسخة المحدثة من GitHub
   return `https://velalight.github.io/${u}?v=${IMG_CACHE_VERSION}`;
 };
 
@@ -92,7 +91,8 @@ const PRODUCTS=[
   {id:"11",name:"فانيليا (جلاس)",nameEn:"Vanilla (Glass)",cat:"glass",price:400,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["فانيليا","كراميل","موكا"],img:"candle11.jpg",imgs:["candle11.jpg"],sold:0,createdAt:NOW-11*D,desc:"شمعة زجاجية بعطر الفانيلا الكلاسيكي.",descEn:"A glass candle with classic vanilla scent."},
   {id:"12",name:"شمعة مساج ريلاكس",nameEn:"Relax Massage Candle",cat:"massage",price:380,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["لافندر","فل","مسك أبيض"],img:"candle19.jpg",imgs:["candle19.jpg"],sold:0,createdAt:NOW-12*D,desc:"شمعة مساج بعطر اللافندر المهدئ.",descEn:"A massage candle with calming lavender scent."},
   {id:"13",name:"بوكس هدية فاخر",nameEn:"Luxury Gift Box",cat:"gift",price:850,old:0,badge:"",badgeEn:"",hours:"شمعة + إكسسوارات",hoursEn:"Candle + accessories",scents:["عود","عنبر","ورد"],img:"gifta.jpg",imgs:["gifta.jpg"],sold:0,createdAt:NOW-13*D,desc:"بوكس هدايا فاخر بتغليف ملكي.",descEn:"A luxury gift box with royal wrapping."},
-  {id:"14",name:"بوكس العروسة",nameEn:"Bride Box",cat:"bride",price:1500,old:0,badge:"الأكثر طلبًا",badgeEn:"Most Requested",hours:"بوكس متكامل",hoursEn:"Complete box",scents:["ورد","ياسمين","مسك أبيض","فانيليا"],img:"box1.jpg",imgs:["box1.jpg"],sold:0,createdAt:NOW-14*D,desc:"أفخم بوكس عروسة.",descEn:"The most luxurious bride box."}
+  // ✨ تم إضافة video, pinned, pinnedAt كنموذج محلي (Fallback) لبوكس العروسة
+  {id:"14",name:"بوكس العروسة",nameEn:"Bride Box",cat:"bride",price:1500,old:0,badge:"الأكثر طلبًا",badgeEn:"Most Requested",hours:"بوكس متكامل",hoursEn:"Complete box",scents:["ورد","ياسمين","مسك أبيض","فانيليا"],img:"box1.jpg",imgs:["box1.jpg"],video:"box.mp4", pinned:true, pinnedAt:Date.now(), sold:0,createdAt:NOW-14*D,desc:"أفخم بوكس عروسة.",descEn:"The most luxurious bride box."}
 ];
 
 /* ═══ Placeholder SVG (للصور المكسورة) ═══ */
@@ -166,14 +166,7 @@ async function loadAll(){
     if(p&&p.id) map.set(p.id,{...p});
   });
   
-  // ✨ إصلاح ومضة الصور القديمة عند الريفرش:
-  // الدمج هنا لازم يكون مطابق تمامًا لدمج initProductRealtimeSync() في app.js
-  // (اللي بياخد بيانات فايربيز كاملة: صورة/اسم/سعر/وصف... مش بس الكمية).
-  // قبل كده كانت الدالة دي بتاخد بس sold/stock/active من فايربيز وتسيب
-  // باقي البيانات زي ما هي في PRODUCTS (القديمة) — فكانت الصفحة بترسم
-  // أول مرة بالصورة القديمة (هنا)، وبعدها المستمع اللحظي initProductRealtimeSync
-  // كان بيصحح الصورة على الصح (بالدمج الكامل) — وده بالظبط سبب "الومضة".
-  // دلوقتي الاتنين بيطلعوا نفس النتيجة من أول مرة، فمفيش تعارض ومفيش ومضة.
+  // ✨ الدمج الكامل يضمن مرور حقول video, pinned, pinnedAt من Firebase بسلاسة
   dbProductsCache.forEach(d=>{
     const slug=d.id_||d.slug||d.pid||d.id;
     if(!slug) return;
@@ -194,11 +187,6 @@ async function loadAll(){
 }
 
 function loadFromCache(){
-  // ✨ إصلاح فلاش الصور القديمة عند الريفرش:
-  // الأساس دايمًا مصفوفة PRODUCTS الطازة (بتيجي مع كل تحديث على GitHub)،
-  // مش أي نسخة قديمة كانت متخزنة عند الزبون من زيارة سابقة.
-  // الكاش المحلي هنا بيدّي بس "الكمية/حالة التوفر" من آخر مرة اتصل فيها
-  // بفايربيز، من غير ما يلمس الصور أو الاسم أو السعر خالص.
   ALL_PRODUCTS=[...PRODUCTS];
   try{
     const cached=JSON.parse(localStorage.getItem("vl_products_v3")||"[]");
@@ -209,9 +197,15 @@ function loadFromCache(){
         if(!c||!c.id) return;
         const existing=map.get(c.id);
         if(!existing) return;
+        // تحديث الحقول الديناميكية فقط للحفاظ على بيانات GitHub الطازجة
         if(c.sold!==undefined) existing.sold=c.sold;
         if(c.stock!==undefined) existing.stock=c.stock;
         if(c.active!==undefined) existing.active=c.active;
+        
+        // ✨ إضافة دعم حقول التثبيت والفيديو من الكاش المحلي
+        if(c.pinned!==undefined) existing.pinned=c.pinned;
+        if(c.pinnedAt!==undefined) existing.pinnedAt=c.pinnedAt;
+        if(c.video!==undefined) existing.video=c.video;
       });
       return true;
     }
