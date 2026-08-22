@@ -1495,18 +1495,28 @@ function renderVideo(){
   const BRIDE_BOX_VIDEO = "box.mp4";
 
   const currentId = String(
-    P?.id ||
-    P?.id_ ||
-    P?.pid ||
-    P?.slug ||
-    ""
-  ).trim();
+  P?.id ||
+  P?.id_ ||
+  P?.pid ||
+  P?.slug ||
+  ""
+).trim();
 
-  /* الفيديو يظهر لبوكس العروسة فقط */
-  if(currentId !== BRIDE_BOX_ID){
-    return;
-  }
+const urlParams = new URLSearchParams(window.location.search);
+const urlProductId = String(
+  urlParams.get("p") ||
+  urlParams.get("id") ||
+  ""
+).trim();
 
+const isBrideBox =
+  currentId === BRIDE_BOX_ID ||
+  urlProductId === BRIDE_BOX_ID;
+
+if(!isBrideBox){
+  return;
+}
+     
   const imgWrap = $("#pdImgWrap");
   if(!imgWrap){
     console.warn("⚠️ لم يتم العثور على #pdImgWrap");
