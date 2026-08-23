@@ -1468,190 +1468,81 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 
 <!-- ═══════════════════════════════════════════════════════════
-     REVIEWS — Customer Reviews
+     REVIEWS — Customer Reviews (High-Converting Trust Wall)
      ═══════════════════════════════════════════════════════════ -->
-  <section
-  id="reviews"
-  class="sec"
-  style="background:linear-gradient(180deg,var(--c-cream) 0%,#fdf5ed 100%);padding:5rem 0;overflow:hidden;"
->
+<section id="reviews" class="sec" style="background:linear-gradient(180deg,var(--c-cream) 0%,#fdf5ed 100%);padding:5rem 0;overflow:hidden;">
   <div class="wrap">
 
     <!-- Section Header -->
-    <div
-      class="sec-head rv"
-      style="text-align:center;margin-bottom:3rem;"
-    >
-
-      <div
-        class="kick"
-        style="color:var(--gold2);font-size:1rem;letter-spacing:1px;"
-        data-i18n="reviews_kicker"
-      >💛 كلامكم أحلى هدية</div>
-
-      <h2
-        style="font-size:clamp(2rem,5vw,2.8rem);margin-bottom:.5rem;font-family:var(--fd);"
-        data-i18n="reviews_title"
-      >آراء عملائنا</h2>
-
-      <p
-        style="color:var(--mut);max-width:600px;margin:0 auto;font-size:1.1rem;line-height:1.6;"
-        data-i18n="reviews_desc"
-      >مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.</p>
-
-    </div>
-
-    <!-- ═══ Reviews Slider ═══ -->
-    <div class="cinematic-reviews-container rv">
-
-      <div
-        class="reviews-slider"
-        id="reviewsSlider"
-      >
-        <!-- الصور تُضاف تلقائياً من data.js -->
-      </div>
-
-      <div
-        class="reviews-dots"
-        id="reviewsDots"
-        aria-label="Reviews navigation"
-      ></div>
-
-    </div>
-
-    <!-- ═══ WhatsApp CTA ═══ -->
-    <div style="text-align:center;margin-top:3rem;">
-
-      <p style="color:var(--dim);font-size:.95rem;">
-
-        <span data-i18n="reviews_cta">✨ جربتي سحرنا؟</span>
-
-        <a
-          href="https://wa.me/201223526105"
-          target="_blank"
-          rel="noopener noreferrer"
-          style="color:var(--gold2);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--gold2);"
-          data-i18n="reviews_cta_link"
-        >ابعتيلنا رأيك على الواتساب</a>
-
+    <div class="sec-head rv" style="text-align:center;margin-bottom:3rem;">
+      <div class="kick" style="color:var(--gold2);font-size:1rem;letter-spacing:1px;" data-i18n="reviews_kicker">💛 كلامكم أحلى هدية</div>
+      <h2 style="font-size:clamp(2rem,5vw,2.8rem);margin-bottom:.5rem;font-family:var(--fd);" data-i18n="reviews_title">آراء عملائنا</h2>
+      <p style="color:var(--mut);max-width:600px;margin:0 auto;font-size:1.1rem;line-height:1.6;" data-i18n="reviews_desc">
+        مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.
       </p>
+    </div>
 
+    <!-- ═══ Reviews Slider (Cinematic + Click to Zoom) ═══ -->
+    <div class="cinematic-reviews-container rv">
+      <div class="reviews-slider" id="reviewsSlider">
+        <!-- الصور تُضاف تلقائياً من data.js مع تحسين السرعة -->
+      </div>
+      <div class="reviews-dots" id="reviewsDots" aria-label="Reviews navigation"></div>
+      
+      <!-- ✨ إضافة شارة الثقة الإجمالية -->
+      <div style="text-align:center; margin-top:1.5rem; display:flex; align-items:center; justify-content:center; gap:8px; color:var(--dark); font-size:0.9rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span>أكثر من <strong>500+</strong> عميلة موثقة تثق في VelaLight</span>
+      </div>
+    </div>
+
+    <!-- ═══ Strong CTA After Social Proof ═══ -->
+    <div style="text-align:center;margin-top:3rem;">
+      <a href="#products" class="btn-primary-lux" style="display:inline-flex; align-items:center; gap:8px; padding:14px 32px; font-size:1.1rem; text-decoration:none;">
+        🕯️ جربي السحر الآن - اطلبي شمعتك
+      </a>
+      <p style="color:var(--dim);font-size:.9rem; margin-top:1.2rem;">
+        <span data-i18n="reviews_cta">✨ جربتي سحرنا؟</span>
+        <a href="https://wa.me/201223526105?text=مرحباً،%20أرغب%20في%20إرسال%20رأيي%20عن%20منتجات%20VelaLight%20🕯️" target="_blank" rel="noopener noreferrer" style="color:var(--gold2);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--gold2);" data-i18n="reviews_cta_link">ابعتيلنا رأيك على الواتساب</a>
+      </p>
     </div>
 
   </div>
 </section>
-  
-<style>
-  /* ═══ تصميم ألبوم الذكريات السينمائي ═══ */
-.cinematic-reviews-container {
-  max-width: 500px;
-  margin: 0 auto;
-  position: relative;
-  padding: 2rem 0;
-}
 
-.reviews-slider {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 9/16; /* نسبة أبعاد مناسبة لسكرين شوتات الموبايل */
-  max-height: 600px;
-  border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-  background: #fff;
-  padding: 15px; /* إطار أبيض زي صورة البولارويد */
-  box-sizing: border-box;
-}
+<!-- ═══ Lightbox Modal for Reviews (Click to Zoom) ═══ -->
+<div id="reviewLightbox" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:10000; justify-content:center; align-items:center; padding:20px; cursor:zoom-out;" onclick="this.style.display='none'">
+  <img id="lightboxImg" src="" alt="رأي عميل مكبر" style="max-width:100%; max-height:90vh; border-radius:12px; box-shadow:0 20px 50px rgba(0,0,0,0.5); object-fit:contain;">
+  <button style="position:absolute; top:20px; right:20px; background:none; border:none; color:#fff; font-size:2.5rem; cursor:pointer; line-height:1;">&times;</button>
+</div>
 
-/* تأثير الدبوس في الأعلى */
-.reviews-slider::before {
-  content: "📌";
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2rem;
-  z-index: 10;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
-}
-
-.review-slide {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
-  opacity: 0;
-  transform: translateY(20px) scale(0.95) rotate(-1deg);
-  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border-radius: 12px;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.review-slide.active {
-  opacity: 1;
-  transform: translateY(0) scale(1) rotate(0deg);
-  pointer-events: auto;
-  z-index: 2;
-}
-
-.review-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* أو contain لو عايز تظهر الصورة كاملة بدون قص */
-  border-radius: 8px;
-}
-
-/* النقاط السفلية */
-.reviews-dots {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 2rem;
-}
-
-.review-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(212, 175, 55, 0.3);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.review-dot.active {
-  background: var(--gold2);
-  transform: scale(1.3);
-}
-
-@media (max-width: 768px) {
-  .reviews-slider {
-    aspect-ratio: 9/16;
-    max-height: 800px;
-  }
-}
-</style>
-
+<!-- ═══════════════════════════════════════════════
+     ✨ منطق العرض السينمائي المحسّن (سرعة + تفاعل)
+     ═══════════════════════════════════════════════ -->
 <script>
-// ═══════════════════════════════════════════════
-// ✨ منطق العرض السينمائي التلقائي
-// ═══════════════════════════════════════════════
 function initCinematicReviews() {
   const slider = document.getElementById('reviewsSlider');
   const dotsContainer = document.getElementById('reviewsDots');
   
-  // لو مفيش بيانات، اخرج
   if (typeof REVIEWS_IMAGES === 'undefined' || REVIEWS_IMAGES.length === 0) return;
 
-  // إنشاء الشرائح والنقاط
   REVIEWS_IMAGES.forEach((imgName, index) => {
-    // الشريحة
+    // استخدام دالة CDN المحسّنة لتحويل الصور لـ WebP وتقليل حجمها تلقائياً
+    const imgUrl = typeof CDN === "function" ? CDN(`testimonials/${imgName}`) : `https://velalight.github.io/testimonials/${imgName}`;
+    
     const slide = document.createElement('div');
     slide.className = `review-slide ${index === 0 ? 'active' : ''}`;
-    slide.innerHTML = `<img src="https://velalight.github.io/testimonials/${imgName}" alt="رأي عميل" loading="lazy">`;
+    
+    // إضافة شارة "عميلة موثقة" + خاصية التكبير عند الضغط
+    slide.innerHTML = `
+      <div style="position:absolute; top:15px; right:15px; background:rgba(39,174,96,0.95); color:#fff; padding:5px 12px; border-radius:20px; font-size:0.75rem; font-weight:700; z-index:5; display:flex; align-items:center; gap:5px; box-shadow:0 2px 8px rgba(0,0,0,0.2);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        عميلة موثقة
+      </div>
+      <img src="${imgUrl}" alt="رأي عميل VelaLight" loading="lazy" decoding="async" style="cursor:zoom-in; transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onclick="document.getElementById('reviewLightbox').style.display='flex'; document.getElementById('lightboxImg').src='${imgUrl}';">
+    `;
     slider.appendChild(slide);
 
-    // النقطة
     const dot = document.createElement('div');
     dot.className = `review-dot ${index === 0 ? 'active' : ''}`;
     dot.addEventListener('click', () => goToSlide(index));
@@ -1685,10 +1576,15 @@ function initCinematicReviews() {
 
   function resetInterval() {
     clearInterval(slideInterval);
-    slideInterval = setInterval(nextSlide, 3000); // تغيير كل 3 ثواني
+    slideInterval = setInterval(nextSlide, 4000); // 4 ثواني للقراءة المريحة
   }
 
-  // بدء التشغيل التلقائي
+  // إيقاف التحريك عند مرور الماوس أو اللمس للقراءة (تحسين تجربة المستخدم)
+  slider.addEventListener('mouseenter', () => clearInterval(slideInterval));
+  slider.addEventListener('mouseleave', resetInterval);
+  slider.addEventListener('touchstart', () => clearInterval(slideInterval), {passive: true});
+  slider.addEventListener('touchend', resetInterval, {passive: true});
+
   resetInterval();
 }
 
