@@ -1400,34 +1400,18 @@ document.addEventListener("DOMContentLoaded", initTrustGrid);
      SCENTS — Minimal Luxury
      ═══════════════════════════════════════════════ -->
 
-<section id="scents" class="sec vl-scents">
-
+<section id="scents" class="sec vl-scents" style="padding: 2rem 0;">
   <div class="wrap">
-
-    <div class="scents-head">
-
-      <div>
-        <div class="kick">
-          Signature Scents
-        </div>
-
-        <h2 data-i18n="scents_h2">
-          العطور الفاخرة
-        </h2>
-      </div>
-
-      <p data-i18n="scents_sub">
-        كل العطور متاحة تختار منهم في أي منتج من منتجاتنا
-      </p>
-
+    <div class="scents-head" style="text-align:center; margin-bottom:1.5rem;">
+      <div class="kick" style="font-size:0.9rem;">Signature Scents</div>
+      <h2 data-i18n="scents_h2" style="font-size:1.8rem; margin:0.5rem 0;">العطور الفاخرة</h2>
+      <p data-i18n="scents_sub" style="color:var(--mut); font-size:0.9rem;">كل العطور متاحة في أي منتج</p>
     </div>
-
-    <div class="scent-grid" id="scentGrid"></div>
-
+    <!-- شبكة مضغوطة جداً -->
+    <div class="scent-grid" id="scentGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:8px;"></div>
   </div>
-
 </section>
-
+  
 <!-- ═══════════════════════════════════════════════
      VELALIGHT — BRAND PROMISE
      ═══════════════════════════════════════════════ -->
