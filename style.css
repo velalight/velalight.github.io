@@ -701,66 +701,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
     font-size:.46rem;
   }
 }
-/* ═══ Gifts & Occasions — Ultra Compact ═══ */
 
-.occ-grid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:.5rem;
-}
-
-.occ{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:.55rem .45rem;
-  text-align:center;
-  transition:.2s ease;
-}
-
-.occ:hover{
-  border-color:rgba(217,171,95,.35);
-  transform:translateY(-1px);
-}
-
-.occ .num{
-  display:none;
-}
-
-.occ h3{
-  font-family:var(--fd);
-  font-size:.72rem;
-  margin:0 0 .15rem;
-  color:var(--gold2);
-  line-height:1.25;
-}
-
-.occ p{
-  font-size:.6rem;
-  color:var(--mut);
-  line-height:1.25;
-  margin:0;
-}
-
-@media(max-width:480px){
-  .occ-grid{
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:.35rem;
-  }
-
-  .occ{
-    padding:.45rem .25rem;
-    border-radius:8px;
-  }
-
-  .occ h3{
-    font-size:.62rem;
-  }
-
-  .occ p{
-    font-size:.54rem;
-  }
-}
 /* ═══════════════════════════════════════════════════════════
    VELALIGHT — BRAND PROMISE
    Compact Luxury Layout
@@ -1991,105 +1932,184 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   line-height:1.3;
 }
  
-/* ═══ FEATURES — Mobile Horizontal Scroll ═══ */
+/* ═══════════════════════════════════════════════════════════
+   FEATURES — Ultra Compact / 5 Cards
+   Mobile + Desktop
+   ═══════════════════════════════════════════════════════════ */
 
- .feat-grid{
-  display:flex;
-  flex-wrap:nowrap;
-  gap:.55rem;
-  overflow-x:auto;
-  overflow-y:hidden;
+.feat-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:.5rem;
   width:100%;
   max-width:100%;
-  padding:.1rem .1rem .6rem;
   box-sizing:border-box;
-  scrollbar-width:none;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior-x:contain;
- }
+}
 
- .feat-grid::-webkit-scrollbar{
-  display:none;
- }
+.feat{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  text-align:center;
 
- .feat{
-  flex:0 0 165px;
-  width:165px;
-  min-width:165px;
-  max-width:165px;
-  padding:.7rem;
-  border-radius:12px;
+  min-width:0;
+  width:100%;
   box-sizing:border-box;
- }
 
- .feat .fi{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:10px;
+
+  padding:.6rem .4rem;
+
+  transition:.2s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.feat:hover{
+  border-color:rgba(217,171,95,.35);
+  transform:translateY(-1px);
+  box-shadow:0 5px 14px -7px rgba(100,70,30,.16);
+}
+
+.feat:active{
+  transform:translateY(-1px);
+}
+
+.feat .fi{
   width:30px;
   height:30px;
   flex:0 0 30px;
+
   border-radius:8px;
+  background:rgba(217,171,95,.12);
+
+  display:grid;
+  place-items:center;
+
   font-size:.8rem;
- }
+  margin-bottom:.3rem;
+}
 
- .feat h4{
+.feat h4{
+  font-family:var(--fd);
+  color:var(--gold2);
+
+  margin:0 0 .12rem;
+
   font-size:.68rem;
-  line-height:1.3;
- }
+  line-height:1.25;
 
- .feat p{
-  font-size:.58rem;
-  line-height:1.35;
- }
- 
- .faq-item{border-radius:12px;margin-bottom:.7rem}
- .faq-q{padding:.9rem 1.1rem;font-size:.9rem}
- .faq-q span:last-child{font-size:1.05rem}
- .faq-a{font-size:.84rem}
- .faq-a div{padding:0 1.1rem 1rem}
- 
- .rev-card{flex:0 0 240px;border-radius:14px}
- .rev-card .rb{padding:.65rem .85rem}
- 
- footer{padding:2.5rem 0 1.2rem;margin-top:2rem}
- .fgrid{gap:1.5rem}
- .fgrid h4{font-size:1rem;margin-bottom:.7rem}
- .fgrid a{font-size:.82rem;padding:.35rem 0}
- .paybox{padding:.7rem .8rem;font-size:.72rem}
- .fbot{margin-top:2rem;padding-top:1rem;font-size:.72rem}
- 
- .drawer{width:100vw}
- .dhead{padding:.75rem 1rem}
- .dhead h3{font-size:1rem}
- .dbody{padding:.85rem 1rem}
- .dfoot{padding:.85rem 1rem calc(.85rem + env(safe-area-inset-bottom))}
- 
- .citem{padding:.55rem;gap:.55rem;border-radius:12px}
- .citem-media{flex:0 0 50px;width:50px;height:50px;border-radius:8px}
- .citem-media img{width:50px;height:50px}
- .citem-info h5{font-size:.78rem;margin-bottom:.2rem}
- .citem .cs{font-size:.7rem}
- .cart-scent-label{font-size:.65rem}
- .cart-scent-select{font-size:.75rem;padding:.4rem .5rem}
- .cart-line-total{font-size:.72rem;margin-top:.3rem;padding-top:.3rem}
- .citem .qty button{width:28px;height:28px;font-size:.9rem}
- .citem .qty b{min-width:28px;font-size:.8rem}
- .citem .rm{top:.4rem;inset-inline-end:.4rem;font-size:.75rem}
- 
- .mnav{width:100vw;padding:1rem}
- .mnav h5{font-size:.7rem;margin:1rem 0 .4rem}
- .mnav a{font-size:.9rem;padding:.65rem 0;min-height:42px}
- 
- #chatFab{width:50px;height:50px;font-size:1.2rem;bottom:14px;inset-inline-start:14px}
- #chatOv{bottom:75px;inset-inline-start:14px;width:calc(100vw - 28px)}
- .chat-h{padding:.85rem 1rem}
- .chat-h b{font-size:1rem}
- .chat-h small{font-size:.65rem}
- #chatMsgs{height:260px;padding:.85rem;gap:.5rem}
- .msg{font-size:.78rem;padding:.55rem .8rem}
- .chat-q{padding:.6rem;gap:.35rem}
- .chat-q button{font-size:.68rem;padding:.3rem .65rem}
- 
- #toasts{bottom:18px}
- .toast{font-size:.76rem;padding:.55rem 1.1rem}
+  width:100%;
+  overflow-wrap:anywhere;
+}
+
+.feat p{
+  font-size:.57rem;
+  color:var(--mut);
+
+  line-height:1.3;
+  margin:0;
+
+  width:100%;
+  overflow-wrap:anywhere;
+}
+
+.feat .n{
+  display:none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   FEATURES — MOBILE
+   Keep all 5 visible
+   ═══════════════════════════════════════════════════════════ */
+
+@media(max-width:600px){
+
+  .feat-grid{
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:.35rem;
+
+    width:100%;
+    max-width:100%;
+
+    overflow:visible;
+    box-sizing:border-box;
+  }
+
+  .feat{
+    width:100%;
+    min-width:0;
+    max-width:none;
+
+    padding:.5rem .25rem;
+    border-radius:8px;
+
+    overflow:hidden;
+  }
+
+  .feat .fi{
+    width:25px;
+    height:25px;
+    flex-basis:25px;
+
+    border-radius:7px;
+    font-size:.68rem;
+
+    margin-bottom:.25rem;
+  }
+
+  .feat h4{
+    font-size:.56rem;
+    line-height:1.2;
+
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+
+  .feat p{
+    font-size:.48rem;
+    line-height:1.25;
+
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   FEATURES — VERY SMALL PHONES
+   ═══════════════════════════════════════════════════════════ */
+
+@media(max-width:400px){
+
+  .feat-grid{
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:.25rem;
+  }
+
+  .feat{
+    padding:.45rem .2rem;
+  }
+
+  .feat .fi{
+    width:23px;
+    height:23px;
+    flex-basis:23px;
+    font-size:.62rem;
+  }
+
+  .feat h4{
+    font-size:.52rem;
+  }
+
+  .feat p{
+    font-size:.44rem;
+  }
+}
  
  /* ✨ ZOOM MODAL — Small Mobile */
  .zoom-modal{padding:.5rem}
