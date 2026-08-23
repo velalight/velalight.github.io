@@ -1094,35 +1094,7 @@ function renderFAQ(){
 
   });
 }
-      w.querySelectorAll(".faq-item").forEach(other => {
 
-        other.classList.remove("open");
-
-        const otherAnswer = other.querySelector(".faq-a");
-        const otherButton = other.querySelector(".faq-q");
-
-        otherAnswer.style.maxHeight = null;
-        otherButton.setAttribute("aria-expanded", "false");
-
-      });
-
-
-      /* فتح السؤال المحدد */
-      if(!wasOpen){
-
-        item.classList.add("open");
-
-        answer.style.maxHeight = answer.scrollHeight + "px";
-
-        button.setAttribute("aria-expanded", "true");
-
-      }
-
-    });
-
-  });
-}
-  
 function initCart(){
   cartBadge();
   fillCitySelect($("#coCity"));
@@ -1133,8 +1105,10 @@ function initCart(){
     renderCart();
     openDrawer("cartDrawer","cartOv");
   });
+
   $("#closeCart")?.addEventListener("click",closeDrawers);
   $("#cartOv")?.addEventListener("click",closeDrawers);
+
   renderCart();
 
   if(new URLSearchParams(location.search).get("cart")==="1"){
@@ -1153,30 +1127,44 @@ function initCart(){
   $("#applyCouponBtn")?.addEventListener("click",applyCoupon);
 
   const saveCustomer = debounce(() => saveCartCustomer(), 500);
-  
+
   ["#coName","#coPhone","#coEmail","#coCity","#coAddr","#coNotes"].forEach(selector=>{
+
     document.addEventListener("input",e=>{
-      if(e.target.matches(selector)){saveCustomer();}
+      if(e.target.matches(selector)){
+        saveCustomer();
+      }
     });
+
     document.addEventListener("change",e=>{
-      if(e.target.matches(selector)){saveCustomer();}
+      if(e.target.matches(selector)){
+        saveCustomer();
+      }
     });
+
   });
 
   const checkoutBtn = document.getElementById('checkoutBtn');
+
   if (checkoutBtn && !document.getElementById('trustBadges')) {
+
     const badges = document.createElement('div');
+
     badges.id = 'trustBadges';
-    badges.style.cssText = 'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
+
+    badges.style.cssText =
+      'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
+
     badges.innerHTML = `
       <span style="display:flex; align-items:center; gap:4px;">🔒 دفع آمن</span>
       <span style="display:flex; align-items:center; gap:4px;">🔄 ضمان استرجاع</span>
       <span style="display:flex; align-items:center; gap:4px;">🚚 توصيل موثوق</span>
     `;
+
     checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
   }
 }
-
+      
 function renderCart(){
   const c=getCart();
   const w=$("#cartItems");
