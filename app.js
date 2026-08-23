@@ -308,7 +308,30 @@ const velaScentTr=name=>{
 
       reviews_cta_link:
         "ابعتيلنا رأيك على الواتساب",
+/* ═══ Brand Promise ═══ */
+brand_promise_title:
+  "تفاصيل تصنع الفرق",
 
+brand_promise_desc:
+  "شموع يدوية فاخرة، عطور مختارة، وهدايا مصممة لتضيف لمسة خاصة لكل لحظة.",
+
+brand_point1_title:
+  "صناعة يدوية",
+
+brand_point1_desc:
+  "كل قطعة تُصنع وتُجهّز بعناية.",
+
+brand_point2_title:
+  "هدية لكل مناسبة",
+
+brand_point2_desc:
+  "اختيارات تليق بكل لحظة واحتفال.",
+
+brand_point3_title:
+  "اختيار يناسبك",
+
+brand_point3_desc:
+  "نساعدك تختاري الرائحة والتفاصيل المناسبة.",
 
       /* ═══ Top Marquee ═══ */
       mq_delivery:
@@ -485,7 +508,30 @@ const velaScentTr=name=>{
       reviews_cta_link:
         "Send us your review on WhatsApp",
 
+/* ═══ Brand Promise ═══ */
+brand_promise_title:
+  "Details That Make the Difference",
 
+brand_promise_desc:
+  "Handcrafted candles, carefully selected scents, and thoughtful gifts made for every special moment.",
+
+brand_point1_title:
+  "Handcrafted",
+
+brand_point1_desc:
+  "Every piece is made and prepared with care.",
+
+brand_point2_title:
+  "A Gift for Every Occasion",
+
+brand_point2_desc:
+  "Thoughtful choices for every moment and celebration.",
+
+brand_point3_title:
+  "Made for You",
+
+brand_point3_desc:
+  "We help you choose the right scent and details for your taste.",
       /* ═══ Top Marquee ═══ */
       mq_delivery:
         "🚚 Fast delivery across Egypt",
