@@ -603,19 +603,21 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
   }
 }
 /* ═══════════════════════════════════════════════════════════
-   FEATURES — Ultra Compact Professional
+   FEATURES — Ultra Compact | 5 Items Always in One Row
    ═══════════════════════════════════════════════════════════ */
 
 .feat-grid{
- display:grid;
- grid-template-columns:repeat(5,minmax(0,1fr));
+ display:grid !important;
+ grid-template-columns:repeat(5,minmax(0,1fr)) !important;
  gap:.5rem;
+ width:100%;
 }
 
 .feat{
  display:flex;
  align-items:flex-start;
  gap:.5rem;
+ min-width:0;
  background:var(--panel);
  border:1px solid var(--line);
  border-radius:10px;
@@ -664,6 +666,102 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  display:none;
 }
 
+
+/* ═══ Tablet ═══ */
+
+@media(max-width:1000px){
+
+ .feat-grid{
+   grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+   gap:.4rem;
+ }
+
+ .feat{
+   padding:.55rem .4rem;
+   gap:.4rem;
+ }
+
+ .feat .fi{
+   width:28px;
+   height:28px;
+   flex-basis:28px;
+   font-size:.8rem;
+ }
+
+ .feat h4{
+   font-size:.66rem;
+ }
+
+ .feat p{
+   font-size:.56rem;
+ }
+}
+
+
+/* ═══ Mobile ═══ */
+
+@media(max-width:600px){
+
+ .feat-grid{
+   grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+   gap:.25rem;
+ }
+
+ .feat{
+   padding:.4rem .2rem;
+   border-radius:8px;
+   gap:.25rem;
+ }
+
+ .feat .fi{
+   width:24px;
+   height:24px;
+   flex-basis:24px;
+   border-radius:6px;
+   font-size:.7rem;
+ }
+
+ .feat h4{
+   font-size:.55rem;
+   line-height:1.2;
+ }
+
+ .feat p{
+   font-size:.48rem;
+   line-height:1.2;
+ }
+}
+
+
+/* ═══ Very Small Phones ═══ */
+
+@media(max-width:400px){
+
+ .feat-grid{
+   grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+   gap:.18rem;
+ }
+
+ .feat{
+   padding:.35rem .15rem;
+   gap:.2rem;
+ }
+
+ .feat .fi{
+   width:21px;
+   height:21px;
+   flex-basis:21px;
+   font-size:.62rem;
+ }
+
+ .feat h4{
+   font-size:.5rem;
+ }
+
+ .feat p{
+   font-size:.43rem;
+ }
+}
 
 /* ═══ Tablet ═══ */
 
