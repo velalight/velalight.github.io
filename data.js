@@ -703,19 +703,31 @@ faq8a:"نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، 
     feat6d:"We'll help you choose.",
 
     faq_h2:"Frequently Asked Questions",
-    faq1q:"How long does delivery take?",
-    faq1a:"3–7 business days.",
-    faq2q:"How do I pay?",
-    faq2a:"InstaPay upfront, shipping cash on delivery.",
-    faq3q:"Are the materials safe?",
-    faq3a:"Yes, we use 100% natural wax and completely safe cotton and wooden wicks.",
-    faq4q:"Are the materials natural?",
-    faq4a:"100% natural wax.",
-    faq5q:"How long does the candle burn?",
-    faq5a:"72 to 96 hours.",
-    faq6q:"Can I choose the scent?",
-    faq6a:"Absolutely! All scents are available.",
 
+faq1q:"How can I place an order and what payment methods are available?",
+faq1a:"You can add your selected products to the cart and complete your order easily. Product payment is made upfront via InstaPay, Vodafone Cash, or bank transfer, while the shipping fee is paid in cash to the courier upon delivery.",
+
+faq2q:"Do you ship to all governorates in Egypt?",
+faq2a:"Yes, we deliver safely and reliably to all governorates across Egypt.",
+
+faq3q:"How long does it take to prepare and ship my order?",
+faq3a:"Because VelaLight products are carefully handmade, preparation usually takes 3 to 7 business days, in addition to the shipping time depending on your governorate.",
+
+faq4q:"Are VelaLight candles made from soy wax?",
+faq4a:"Yes, we use 100% natural soy wax. It burns more slowly and cleanly and helps the fragrance diffuse effectively.",
+
+faq5q:"How long does a candle burn, and how can I get the best performance?",
+faq5a:"Burn time varies depending on the candle's weight and size, as detailed in each product description. For the best results, during the first use, allow the wax to melt completely across the surface and reach the edges to prevent tunneling and ensure an even burn.",
+
+faq6q:"How can I choose the right scent?",
+faq6a:"We offer a variety of luxurious fragrances. If you're unsure which one to choose, contact us via WhatsApp and we'll be happy to help you select the perfect scent based on your taste, occasion, and desired atmosphere.",
+
+faq7q:"Do you offer gift wrapping?",
+faq7a:"Yes. All VelaLight products come in elegant, luxurious packaging that is ready for gifting.",
+
+faq8q:"What is your return and exchange policy?",
+faq8a:"Due to the nature of our handmade products, returns or exchanges are not accepted after the product has been opened or used, or due to a change of mind after the order has been confirmed. If your order arrives with a manufacturing defect or shipping damage, please contact us within 24 hours of delivery and we will be happy to resolve the issue.",
+    
     rev_h2:"Our Customers' Reviews",
     rev_sub:"Your Words Are the Best Gift",
     rev_verified:"Verified Customer",
