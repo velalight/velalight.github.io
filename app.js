@@ -1307,6 +1307,8 @@ function renderFAQ(){
     const button = item.querySelector(".faq-q");
     const answer = item.querySelector(".faq-a");
 
+    if(!button || !answer) return;
+
     button.addEventListener("click", () => {
       const wasOpen = item.classList.contains("open");
 
@@ -1322,27 +1324,33 @@ function renderFAQ(){
 
         if(otherButton){
           otherButton.setAttribute("aria-expanded", "false");
+
+          const otherIcon = otherButton.querySelector(".faq-icon");
+          if(otherIcon){
+            otherIcon.textContent = "+";
+          }
         }
       });
 
       if(!wasOpen){
         item.classList.add("open");
-
-        if(answer){
-          answer.style.maxHeight = answer.scrollHeight + "px";
-        }
-
+        answer.style.maxHeight = answer.scrollHeight + "px";
         button.setAttribute("aria-expanded", "true");
+
+        const icon = button.querySelector(".faq-icon");
+        if(icon){
+          icon.textContent = "−";
+        }
       }
     });
   });
 }
-  
+
 function initCart(){
   cartBadge();
   fillCitySelect($("#coCity"));
   fillCartForm();
-
+  
   $("#cartBtn")?.addEventListener("click",()=>{
     fillCartForm();
     renderCart();
