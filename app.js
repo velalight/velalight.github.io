@@ -914,15 +914,11 @@ function applyI18n(){
   }
 
   /* ═══ FAQ ═══ */
-const faqWrap = $("#faqWrap");
+  const faqWrap=$("#faqWrap");
 
-if (faqWrap && typeof renderFAQ === "function") {
-  renderFAQ();
-
-  /* التأكد أن جميع الأسئلة مغلقة عند تحميل الصفحة */
-  faqWrap.querySelectorAll("details.faq-item").forEach(item => {
-    item.removeAttribute("open");
-  });
+  if(faqWrap&&typeof renderFAQ==="function"){
+    renderFAQ();
+  }
 }
 
 function initMarquee(){}

@@ -925,10 +925,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 }
 
 
-/* ═══════════════════════════════════════════════════════════
-   VELALIGHT — FAQ ITEMS
-   Accordion — مغلق افتراضيًا ولا يظهر الجواب إلا عند الضغط
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ FAQ ITEMS ═══ */
 
 .faq-list{
   display:grid;
@@ -943,7 +940,11 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
   transition:border-color .25s ease,box-shadow .25s ease;
 }
 
-/* السؤال */
+.faq-item[open]{
+  border-color:rgba(217,171,95,.45);
+  box-shadow:0 6px 18px -10px rgba(100,70,30,.18);
+}
+
 .faq-item summary{
   display:flex;
   align-items:center;
@@ -960,22 +961,15 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
   -webkit-tap-highlight-color:transparent;
 }
 
-/* إزالة سهم المتصفح */
 .faq-item summary::-webkit-details-marker{
   display:none;
 }
 
-.faq-item summary::marker{
-  display:none;
-}
-
-/* تركيز لوحة المفاتيح */
 .faq-item summary:focus-visible{
   outline:2px solid var(--gold);
   outline-offset:-2px;
 }
 
-/* علامة + */
 .faq-icon{
   flex:0 0 auto;
   width:24px;
@@ -989,15 +983,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
   font-size:1rem;
   font-weight:400;
   line-height:1;
-  transition:
-    transform .25s ease,
-    background .25s ease;
-}
-
-/* حالة السؤال المفتوح */
-.faq-item[open]{
-  border-color:rgba(217,171,95,.45);
-  box-shadow:0 6px 18px -10px rgba(100,70,30,.18);
+  transition:transform .25s ease,background .25s ease;
 }
 
 .faq-item[open] .faq-icon{
@@ -1006,7 +992,6 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
   color:#fff;
 }
 
-/* الإجابة */
 .faq-answer{
   padding:0 1rem 1rem;
   color:var(--mut);
@@ -1020,9 +1005,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 }
 
 
-/* ═══════════════════════════════════════════════════════════
-   MOBILE
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ MOBILE ═══ */
 
 @media(max-width:700px){
 
@@ -1072,9 +1055,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 }
 
 
-/* ═══════════════════════════════════════════════════════════
-   VERY SMALL PHONES
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ VERY SMALL PHONES ═══ */
 
 @media(max-width:400px){
 
@@ -1107,7 +1088,6 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
     font-size:.82rem;
   }
 }
-
 
 /* ═══ Footer ══ */
 footer{
