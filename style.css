@@ -484,64 +484,223 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 .stat b{font-family:var(--fd);font-size:2rem;color:var(--gold2);display:block}
 .stat span{font-size:.8rem;color:var(--dim)}
 
-/* ═══ Scents — Compact Professional ═══ */
+/* ═══════════════════════════════════════════════════════════
+   VELALIGHT — SIGNATURE SCENTS
+   Minimal Luxury Layout
+   ═══════════════════════════════════════════════════════════ */
+
+.vl-scents{
+  padding-top:2.4rem;
+  padding-bottom:2.4rem;
+}
+
+.scents-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:2rem;
+
+  padding-bottom:1.15rem;
+  margin-bottom:1rem;
+
+  border-bottom:1px solid var(--line);
+}
+
+.scents-head h2{
+  margin:0;
+  font-size:clamp(1.35rem,2.5vw,1.8rem);
+  line-height:1.2;
+}
+
+.scents-head .kick{
+  margin-bottom:.35rem;
+}
+
+.scents-head > p{
+  max-width:380px;
+  margin:0;
+
+  color:var(--mut);
+  font-size:.72rem;
+  line-height:1.5;
+  text-align:end;
+}
+
+
+/* ═══ SCENT ITEMS ═══ */
+
 .scent-grid{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
- gap:.55rem;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:0;
+
+  width:100%;
 }
 
 .scent{
- display:flex;
- gap:.6rem;
- align-items:center;
- background:var(--panel);
- border:1px solid var(--line);
- border-radius:12px;
- padding:.58rem .75rem;
- min-height:52px;
- transition:.22s ease;
- -webkit-tap-highlight-color:transparent;
+  display:flex;
+  align-items:center;
+  gap:.65rem;
+
+  min-width:0;
+  padding:.75rem 1rem;
+
+  background:transparent;
+  border:0;
+  border-inline-start:1px solid var(--line);
+  border-radius:0;
+
+  transition:.2s ease;
+}
+
+.scent:first-child{
+  border-inline-start:0;
 }
 
 .scent:hover{
- border-color:var(--gold);
- transform:translateY(-2px);
- box-shadow:0 5px 14px -7px rgba(100,70,30,.16);
+  background:rgba(217,171,95,.04);
+  transform:none;
+  box-shadow:none;
 }
 
 .scent:active{
- transform:translateY(0);
+  transform:none;
 }
 
 .scent i{
- font-style:normal;
- width:24px;
- height:24px;
- border-radius:7px;
- background:rgba(217,171,95,.12);
- color:var(--gold2);
- display:grid;
- place-items:center;
- font-size:.65rem;
- font-weight:800;
- flex:0 0 auto;
+  font-style:normal;
+
+  width:28px;
+  height:28px;
+  flex:0 0 28px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:8px;
+  background:rgba(217,171,95,.09);
+
+  color:var(--gold2);
+  font-size:.62rem;
 }
 
 .scent b{
- font-size:.82rem;
- display:block;
- color:var(--ink);
- line-height:1.25;
+  display:block;
+
+  color:var(--ink);
+  font-family:var(--fd);
+
+  font-size:.76rem;
+  line-height:1.3;
 }
 
 .scent small{
- font-size:.64rem;
- line-height:1.2;
-}
-.occ h3{font-family:var(--fd);margin-bottom:.5rem;color:var(--gold2)}
-.occ p{font-size:.88rem;color:var(--mut)}
+  display:block;
 
+  margin-top:.1rem;
+
+  color:var(--mut);
+  font-size:.6rem;
+  line-height:1.3;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE
+   ═══════════════════════════════════════════════════════════ */
+
+@media(max-width:700px){
+
+  .vl-scents{
+    padding-top:1.7rem;
+    padding-bottom:1.7rem;
+  }
+
+  .scents-head{
+    display:block;
+    text-align:center;
+
+    padding-bottom:.9rem;
+    margin-bottom:.4rem;
+  }
+
+  .scents-head .kick{
+    margin-bottom:.25rem;
+  }
+
+  .scents-head h2{
+    font-size:1.3rem;
+  }
+
+  .scents-head > p{
+    max-width:500px;
+
+    margin:.35rem auto 0;
+
+    font-size:.64rem;
+    line-height:1.4;
+    text-align:center;
+  }
+
+  .scent-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+
+  .scent{
+    gap:.4rem;
+    padding:.65rem .5rem;
+  }
+
+  .scent i{
+    width:24px;
+    height:24px;
+    flex-basis:24px;
+
+    border-radius:7px;
+    font-size:.55rem;
+  }
+
+  .scent b{
+    font-size:.62rem;
+  }
+
+  .scent small{
+    font-size:.5rem;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   VERY SMALL PHONES
+   ═══════════════════════════════════════════════════════════ */
+
+@media(max-width:400px){
+
+  .vl-scents{
+    padding-top:1.4rem;
+    padding-bottom:1.4rem;
+  }
+
+  .scent{
+    gap:.3rem;
+    padding:.55rem .35rem;
+  }
+
+  .scent i{
+    width:21px;
+    height:21px;
+    flex-basis:21px;
+    font-size:.48rem;
+  }
+
+  .scent b{
+    font-size:.56rem;
+  }
+
+  .scent small{
+    font-size:.46rem;
+  }
+}
 /* ═══ Gifts & Occasions — Ultra Compact ═══ */
 
 .occ-grid{
