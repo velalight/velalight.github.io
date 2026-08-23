@@ -664,6 +664,100 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  display:none;
 }
 
+
+/* ═══ Tablet ═══ */
+
+@media(max-width:1000px){
+ .feat-grid{
+   grid-template-columns:repeat(5,minmax(0,1fr));
+   gap:.4rem;
+ }
+
+ .feat{
+   padding:.55rem .4rem;
+   gap:.4rem;
+ }
+
+ .feat .fi{
+   width:28px;
+   height:28px;
+   flex-basis:28px;
+   font-size:.8rem;
+ }
+
+ .feat h4{
+   font-size:.66rem;
+ }
+
+ .feat p{
+   font-size:.56rem;
+ }
+}
+
+
+/* ═══ Mobile ═══ */
+
+@media(max-width:600px){
+ .feat-grid{
+   grid-template-columns:repeat(5,minmax(0,1fr));
+   gap:.3rem;
+ }
+
+ .feat{
+   padding:.45rem .25rem;
+   border-radius:8px;
+   gap:.3rem;
+ }
+
+ .feat .fi{
+   width:26px;
+   height:26px;
+   flex-basis:26px;
+   border-radius:7px;
+   font-size:.75rem;
+ }
+
+ .feat h4{
+   font-size:.58rem;
+   line-height:1.2;
+ }
+
+ .feat p{
+   font-size:.5rem;
+   line-height:1.25;
+ }
+}
+
+
+/* ═══ Very Small Phones ═══ */
+
+@media(max-width:400px){
+ .feat-grid{
+   gap:.2rem;
+ }
+
+ .feat{
+   padding:.4rem .2rem;
+   gap:.25rem;
+ }
+
+ .feat .fi{
+   width:22px;
+   height:22px;
+   flex-basis:22px;
+   font-size:.65rem;
+   border-radius:6px;
+ }
+
+ .feat h4{
+   font-size:.53rem;
+ }
+
+ .feat p{
+   font-size:.46rem;
+ }
+}
+
 /* ═══════════════════════════════════════════════════════════
    FAQ — Compact Professional
    ═══════════════════════════════════════════════════════════ */
@@ -728,38 +822,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 
 /* ═══ Responsive ═══ */
 
-@media(max-width:1000px){
- .feat-grid{
-   grid-template-columns:repeat(2,minmax(0,1fr));
- }
-}
-
 @media(max-width:600px){
- .feat-grid{
-   grid-template-columns:1fr;
-   gap:.55rem;
- }
-
- .feat{
-   padding:.8rem;
-   border-radius:12px;
- }
-
- .feat .fi{
-   width:36px;
-   height:36px;
-   flex-basis:36px;
-   border-radius:9px;
-   font-size:.95rem;
- }
-
- .feat h4{
-   font-size:.84rem;
- }
-
- .feat p{
-   font-size:.72rem;
- }
 
  .faq-item{
    border-radius:11px;
@@ -783,6 +846,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
    padding:0 .9rem .85rem;
  }
 }
+
 /* ══ Reviews ═══ */
 .rev-row{
  display:flex;
