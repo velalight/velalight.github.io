@@ -1312,47 +1312,82 @@ function renderScents(){
 }
 
 function renderFAQ(){
-  const w=$("#faqWrap");
-  if(!w)return;
-  const items=[
-    [t("faq1q"),t("faq1a")],
-    [t("faq2q"),t("faq2a")],
-    [t("faq3q"),t("faq3a")],
-    [t("faq4q"),t("faq4a")],
-    [t("faq5q"),t("faq5a")],
-    [t("faq6q"),t("faq6a")]
+  const w = $("#faqWrap");
+  if(!w) return;
+
+  const items = [
+    [t("faq1q"), t("faq1a")],
+    [t("faq2q"), t("faq2a")],
+    [t("faq3q"), t("faq3a")],
+    [t("faq4q"), t("faq4a")],
+    [t("faq5q"), t("faq5a")],
+    [t("faq6q"), t("faq6a")],
+    [t("faq7q"), t("faq7a")],
+    [t("faq8q"), t("faq8a")]
   ];
+
   const frag = document.createDocumentFragment();
-  items.forEach(q => {
-    const item = document.createElement('div');
-    item.className = 'faq-item';
+
+  items.forEach(([question, answer]) => {
+    const item = document.createElement("div");
+    item.className = "faq-item";
+
     item.innerHTML = `
-      <button class="faq-q" aria-expanded="false"><span>${q[0]}</span><span>+</span></button>
-      <div class="faq-a"><div>${q[1]}</div></div>
+      <button
+        class="faq-q"
+        type="button"
+        aria-expanded="false"
+      >
+        <span>${question}</span>
+        <span class="faq-icon" aria-hidden="true">+</span>
+      </button>
+
+      <div class="faq-a">
+        <div>${answer}</div>
+      </div>
     `;
+
     frag.appendChild(item);
   });
-  w.innerHTML = '';
+
+  w.innerHTML = "";
   w.appendChild(frag);
-  
-  w.querySelectorAll(".faq-item").forEach(item=>{
-    item.querySelector(".faq-q").addEventListener("click",()=>{
-      const was=item.classList.contains("open");
-      w.querySelectorAll(".faq-item").forEach(x=>{
-        x.classList.remove("open");
-        x.querySelector(".faq-a").style.maxHeight=null;
-        x.querySelector(".faq-q").setAttribute("aria-expanded","false");
+
+  w.querySelectorAll(".faq-item").forEach(item => {
+    const button = item.querySelector(".faq-q");
+    const answer = item.querySelector(".faq-a");
+
+    button.addEventListener("click", () => {
+      const wasOpen = item.classList.contains("open");
+
+      w.querySelectorAll(".faq-item").forEach(other => {
+        other.classList.remove("open");
+
+        const otherAnswer = other.querySelector(".faq-a");
+        const otherButton = other.querySelector(".faq-q");
+
+        if(otherAnswer){
+          otherAnswer.style.maxHeight = null;
+        }
+
+        if(otherButton){
+          otherButton.setAttribute("aria-expanded", "false");
+        }
       });
-      if(!was){
+
+      if(!wasOpen){
         item.classList.add("open");
-        const a=item.querySelector(".faq-a");
-        a.style.maxHeight=a.scrollHeight+"px";
-        item.querySelector(".faq-q").setAttribute("aria-expanded","true");
+
+        if(answer){
+          answer.style.maxHeight = answer.scrollHeight + "px";
+        }
+
+        button.setAttribute("aria-expanded", "true");
       }
     });
   });
 }
-
+  
 function initCart(){
   cartBadge();
   fillCitySelect($("#coCity"));
