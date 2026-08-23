@@ -678,47 +678,50 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 }
 
 
-/* ═══ Mobile ═══ */
+/* ═══ Mobile — Show All 5 Features ═══ */
 
 @media(max-width:600px){
 
  .feat-grid{
-   display:flex;
-   overflow-x:auto;
-   overflow-y:hidden;
-   gap:.6rem;
+   display:grid;
+   grid-template-columns:repeat(5,minmax(0,1fr));
+   gap:.35rem;
    width:100%;
    max-width:100%;
-   padding:.15rem .1rem .6rem;
-   scroll-snap-type:x mandatory;
-   -webkit-overflow-scrolling:touch;
-   scrollbar-width:none;
- }
-
- .feat-grid::-webkit-scrollbar{
-   display:none;
+   overflow:visible;
+   padding:0;
  }
 
  .feat{
-   flex:0 0 175px;
-   width:175px;
-   min-width:175px;
-   scroll-snap-align:start;
-   padding:.7rem;
+   min-width:0;
+   width:auto;
+   padding:.5rem .35rem;
+   border-radius:9px;
+   gap:.3rem;
+   display:flex;
+   flex-direction:column;
+   align-items:center;
+   text-align:center;
  }
 
  .feat .fi{
-   width:32px;
-   height:32px;
-   flex-basis:32px;
+   width:28px;
+   height:28px;
+   flex:0 0 28px;
+   border-radius:7px;
+   font-size:.75rem;
  }
 
  .feat h4{
-   font-size:.72rem;
+   font-size:.58rem;
+   line-height:1.25;
+   margin:0;
  }
 
  .feat p{
-   font-size:.62rem;
+   font-size:.5rem;
+   line-height:1.25;
+   margin:0;
  }
 }
 
@@ -727,18 +730,28 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 
 @media(max-width:400px){
 
- .feat{
-   flex-basis:165px;
-   width:165px;
-   min-width:165px;
+ .feat-grid{
+   grid-template-columns:repeat(5,minmax(0,1fr));
+   gap:.25rem;
  }
 
- .feat h4{
+ .feat{
+   padding:.45rem .25rem;
+ }
+
+ .feat .fi{
+   width:25px;
+   height:25px;
+   flex-basis:25px;
    font-size:.68rem;
  }
 
+ .feat h4{
+   font-size:.53rem;
+ }
+
  .feat p{
-   font-size:.59rem;
+   font-size:.46rem;
  }
 }
 
