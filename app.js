@@ -159,7 +159,7 @@ const velaScentTr=name=>{
 
   const add = {
 
-    /* ═══════════════════════════════════════
+       /* ═══════════════════════════════════════
        🇪🇬 ARABIC
        ═══════════════════════════════════════ */
     ar: {
@@ -308,54 +308,84 @@ const velaScentTr=name=>{
 
       reviews_cta_link:
         "ابعتيلنا رأيك على الواتساب",
-/* ═══ Brand Promise ═══ */
-brand_promise_title:
-  "تفاصيل تصنع الفرق",
 
-brand_promise_desc:
-  "شموع يدوية فاخرة، عطور مختارة، وهدايا مصممة لتضيف لمسة خاصة لكل لحظة.",
 
-brand_point1_title:
-  "صناعة يدوية",
+      /* ═══ Brand Promise ═══ */
+      brand_promise_title:
+        "تفاصيل تصنع الفرق",
 
-brand_point1_desc:
-  "كل قطعة تُصنع وتُجهّز بعناية.",
+      brand_promise_desc:
+        "شموع يدوية فاخرة، عطور مختارة، وهدايا مصممة لتضيف لمسة خاصة لكل لحظة.",
 
-brand_point2_title:
-  "هدية لكل مناسبة",
+      brand_point1_title:
+        "صناعة يدوية",
 
-brand_point2_desc:
-  "اختيارات تليق بكل لحظة واحتفال.",
+      brand_point1_desc:
+        "كل قطعة تُصنع وتُجهّز بعناية.",
 
-brand_point3_title:
-  "اختيار يناسبك",
+      brand_point2_title:
+        "هدية لكل مناسبة",
 
-brand_point3_desc:
-  "نساعدك تختاري الرائحة والتفاصيل المناسبة.",
-/* ═══ FAQ ═══ */
-faq1q: "كيف يمكنني الطلب وما طرق الدفع المتاحة؟",
-faq1a: "يمكنك إضافة المنتجات إلى سلة الشراء وإتمام طلبك بسهولة. يتم دفع قيمة المنتجات مقدمًا عبر InstaPay أو Vodafone Cash أو تحويل بنكي، بينما تُدفع تكلفة الشحن نقدًا لمندوب التوصيل عند الاستلام.",
+      brand_point2_desc:
+        "اختيارات تليق بكل لحظة واحتفال.",
 
-faq2q: "هل تقومون بالشحن إلى جميع محافظات مصر؟",
-faq2a: "نعم، نوفر خدمة التوصيل إلى جميع محافظات مصر، مع الحرص على وصول طلبك بأمان.",
+      brand_point3_title:
+        "اختيار يناسبك",
 
-faq3q: "كم تستغرق مدة تجهيز وشحن الطلب؟",
-faq3a: "لأن منتجات VelaLight تُصنع يدويًا بعناية، تستغرق مدة التجهيز عادةً من 3 إلى 7 أيام عمل، بالإضافة إلى مدة الشحن حسب المحافظة.",
+      brand_point3_desc:
+        "نساعدك تختاري الرائحة والتفاصيل المناسبة.",
 
-faq4q: "هل شموع VelaLight مصنوعة من شمع الصويا؟",
-faq4a: "نعم، نستخدم شمع الصويا الطبيعي 100%، الذي يتميز باحتراق أبطأ وأنظف ويساعد على انتشار العطر بكفاءة.",
 
-faq5q: "كم تبلغ مدة احتراق الشمعة وكيف أحافظ على أفضل أداء لها؟",
-faq5a: "تختلف مدة الاحتراق حسب وزن وحجم كل شمعة، وستجدين التفاصيل في وصف المنتج. ولأفضل نتيجة، عند الاستخدام الأول اتركي الشمعة حتى يذوب سطح الشمع بالكامل ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.",
+      /* ═══ FAQ ═══ */
+      faq1q:
+        "كيف يمكنني الطلب وما طرق الدفع المتاحة؟",
 
-faq6q: "كيف أختار العطر المناسب؟",
-faq6a: "لدينا تشكيلة متنوعة من العطور الفاخرة. وإذا كنتِ محتارة، تواصلي معنا عبر WhatsApp وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلينها.",
+      faq1a:
+        "يمكنك إضافة المنتجات إلى سلة الشراء وإتمام طلبك بسهولة. يتم دفع قيمة المنتجات مقدمًا عبر InstaPay أو Vodafone Cash أو تحويل بنكي، بينما تُدفع تكلفة الشحن نقدًا لمندوب التوصيل عند الاستلام.",
 
-faq7q: "هل تتوفر خدمة تغليف الهدايا؟",
-faq7a: "نعم، جميع منتجات VelaLight تأتي بتغليف أنيق وفاخر وجاهز للإهداء.",
+      faq2q:
+        "هل تقومون بالشحن إلى جميع محافظات مصر؟",
 
-faq8q: "ما سياسة الاستبدال والاسترجاع؟",
-faq8a: "نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب. وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.",      
+      faq2a:
+        "نعم، نوفر خدمة التوصيل إلى جميع محافظات مصر، مع الحرص على وصول طلبك بأمان.",
+
+      faq3q:
+        "كم تستغرق مدة تجهيز وشحن الطلب؟",
+
+      faq3a:
+        "لأن منتجات VelaLight تُصنع يدويًا بعناية، تستغرق مدة التجهيز عادةً من 3 إلى 7 أيام عمل، بالإضافة إلى مدة الشحن حسب المحافظة.",
+
+      faq4q:
+        "هل شموع VelaLight مصنوعة من شمع الصويا؟",
+
+      faq4a:
+        "نعم، نستخدم شمع الصويا الطبيعي 100%، الذي يتميز باحتراق أبطأ وأنظف ويساعد على انتشار العطر بكفاءة.",
+
+      faq5q:
+        "كم تبلغ مدة احتراق الشمعة وكيف أحافظ على أفضل أداء لها؟",
+
+      faq5a:
+        "تختلف مدة الاحتراق حسب وزن وحجم كل شمعة، وستجدين التفاصيل في وصف المنتج. ولأفضل نتيجة، عند الاستخدام الأول اتركي الشمعة حتى يذوب سطح الشمع بالكامل ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.",
+
+      faq6q:
+        "كيف أختار العطر المناسب؟",
+
+      faq6a:
+        "لدينا تشكيلة متنوعة من العطور الفاخرة. وإذا كنتِ محتارة، تواصلي معنا عبر WhatsApp وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلينها.",
+
+      faq7q:
+        "هل تتوفر خدمة تغليف الهدايا؟",
+
+      faq7a:
+        "نعم، جميع منتجات VelaLight تأتي بتغليف أنيق وفاخر وجاهز للإهداء.",
+
+      faq8q:
+        "ما سياسة الاستبدال والاسترجاع؟",
+
+      faq8a:
+        "نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب. وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.",
+
+
       /* ═══ Top Marquee ═══ */
       mq_delivery:
         "🚚 توصيل سريع لكل محافظات مصر",
@@ -531,6 +561,107 @@ faq8a: "نظرًا لطبيعة منتجاتنا المصنوعة يدويًا،
       reviews_cta_link:
         "Send us your review on WhatsApp",
 
+
+      /* ═══ Brand Promise ═══ */
+      brand_promise_title:
+        "Details Make the Difference",
+
+      brand_promise_desc:
+        "Luxury handmade candles, carefully selected fragrances, and thoughtfully designed gifts made to add a special touch to every moment.",
+
+      brand_point1_title:
+        "Handcrafted",
+
+      brand_point1_desc:
+        "Every piece is carefully made and prepared.",
+
+      brand_point2_title:
+        "A Gift for Every Occasion",
+
+      brand_point2_desc:
+        "Beautiful choices for every moment and celebration.",
+
+      brand_point3_title:
+        "Made for You",
+
+      brand_point3_desc:
+        "We help you choose the right scent and details for your taste.",
+
+
+      /* ═══ FAQ ═══ */
+      faq1q:
+        "How can I place an order and what payment methods are available?",
+
+      faq1a:
+        "Add your chosen products to the cart and complete your order easily. Product payment is made upfront via InstaPay, Vodafone Cash, or bank transfer, while the delivery fee is paid in cash to the courier upon delivery.",
+
+      faq2q:
+        "Do you deliver to all governorates in Egypt?",
+
+      faq2a:
+        "Yes, we deliver safely and reliably to all governorates across Egypt.",
+
+      faq3q:
+        "How long does it take to prepare and deliver my order?",
+
+      faq3a:
+        "Since every VelaLight piece is carefully handcrafted, preparation usually takes 3 to 7 business days, in addition to the delivery time depending on your governorate.",
+
+      faq4q:
+        "Are VelaLight candles made from soy wax?",
+
+      faq4a:
+        "Yes. We use 100% natural soy wax, which offers a slower and cleaner burn and helps the fragrance spread beautifully and efficiently.",
+
+      faq5q:
+        "How long does a candle burn, and how can I get the best performance?",
+
+      faq5a:
+        "Burn time varies depending on the candle's size and weight, as detailed in each product description. For the best results, allow the entire wax surface to melt evenly to the edges during the first burn. This helps prevent tunneling and ensures a more even burn.",
+
+      faq6q:
+        "How can I choose the right scent?",
+
+      faq6a:
+        "We offer a variety of luxurious fragrances. If you're unsure which one to choose, contact us via WhatsApp and we'll be happy to recommend a scent based on your taste, occasion, and the atmosphere you want to create.",
+
+      faq7q:
+        "Do you offer gift wrapping?",
+
+      faq7a:
+        "Absolutely. All VelaLight products come in elegant, luxurious packaging that is ready for gifting.",
+
+      faq8q:
+        "What is your return and exchange policy?",
+
+      faq8a:
+        "Due to the handmade nature of our products, returns or exchanges are not accepted after a product has been opened or used, or due to a change of mind after the order has been confirmed. If your order arrives with a manufacturing defect or is damaged during shipping, please contact us within 24 hours of delivery and we will be happy to resolve the issue.",
+
+
+      /* ═══ Top Marquee ═══ */
+      mq_delivery:
+        "🚚 Fast delivery across all Egypt",
+
+      mq_discounts:
+        "🏷️ Exclusive discounts on selected collections",
+
+      mq_gift:
+        "🎁 Free gift wrapping with every order",
+
+      mq_handmade:
+        "🤲 100% handcrafted with natural materials",
+
+      mq_scents:
+        "🕯️ More than 23 luxurious scents available",
+
+      mq_shipping:
+        "📦 Safe delivery from our workshop to your door",
+
+      mq_support:
+        "💬 Daily customer support at your service"
+
+    },
+    
 /* ═══ Brand Promise ═══ */
 brand_promise_title:
   "Details That Make the Difference",
