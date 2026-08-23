@@ -1645,19 +1645,40 @@ function updateTotals(c){
   if($("#cartDiscount")){$("#cartDiscount").textContent="-"+money(couponDisc);}
   if($("#couponCodeLbl")&&appliedCoupon){$("#couponCodeLbl").textContent=appliedCoupon.code;}
   
+    // ✨ تكتيك زيادة المبيعات: شريط الشحن المجاني التفاعلي
+  const freeShippingThreshold = 3000; // حد الشحن المجاني
+  const remaining = Math.max(0, freeShippingThreshold - sub);
+  const progressPercent = Math.min(100, (sub / freeShippingThreshold) * 100);
+
   const freeShipRow = $("#freeShippingRow");
   const shipNote = document.querySelector('.cart-shipping-note');
   
   if (freeShipRow && shipNote) {
-    if (sub >= 3000) {
+    if (sub >= freeShippingThreshold) {
+      // حالة تحقيق الشحن المجاني
       freeShipRow.style.display = "flex";
+      freeShipRow.innerHTML = `<span style="color:#27ae60; font-weight:700;">🎉 مبروك! طلبك مؤهل لشحن مجاني</span>`;
       shipNote.style.display = "none";
     } else {
-      freeShipRow.style.display = "none";
-      shipNote.style.display = "block";
+      // حالة عدم تحقيق الشحن المجاني (عرض الشريط التحفيزي)
+      freeShipRow.style.display = "block";
+      freeShipRow.style.background = "#fdf5ed";
+      freeShipRow.style.padding = "1rem";
+      freeShipRow.style.borderRadius = "12px";
+      freeShipRow.style.border = "1px solid var(--c-gold)";
+      
+      freeShipRow.innerHTML = `
+        <div style="text-align:center; margin-bottom:0.5rem; font-size:0.85rem; color:var(--dark);">
+          أضف <strong style="color:#d4af37;">${money(remaining)}</strong> للحصول على <strong>شحن مجاني! 🚚</strong>
+        </div>
+        <div style="background:#e0d6c8; height:8px; border-radius:4px; overflow:hidden;">
+          <div style="background:linear-gradient(90deg, #d4af37, #f9d877); height:100%; width:${progressPercent}%; transition:width 0.5s ease-in-out; border-radius:4px;"></div>
+        </div>
+      `;
+      shipNote.style.display = "none"; // إخفاء ملاحظة الشحن العادية لاستبدالها بالشريط التحفيزي
     }
   }
-
+  
   if($("#cartTotal")){$("#cartTotal").textContent=money(total);}
 }
 
