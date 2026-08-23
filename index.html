@@ -1185,28 +1185,32 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
-     REVIEWS — Compact & Mobile Optimized
+     REVIEWS — Compact Preview (3 Reviews Only)
      ═══════════════════════════════════════════════════════════ -->
-<section id="reviews" class="sec" style="background:var(--c-cream); padding: 2.5rem 0;">
+<section id="reviews" class="sec" style="background:var(--c-cream); padding: 2rem 0;">
   <div class="wrap">
     <div class="sec-head rv" style="text-align:center; margin-bottom:1.5rem;">
-      <div class="kick" style="color:var(--gold2); font-size:0.9rem;">💛 كلامكم أحلى هدية</div>
-      <h2 style="font-size:1.8rem; margin-bottom:0.5rem; font-family:var(--fd);">آراء عملائنا</h2>
-      <p style="color:var(--mut); font-size:0.95rem; max-width:500px; margin:0 auto;">
-        <strong style="color:var(--gold2);">عملاء وثقوا في VelaLight</strong>
+      <div class="kick" style="color:var(--gold2); font-size:0.85rem;">💛 كلامكم أحلى هدية</div>
+      <h2 style="font-size:1.6rem; margin:0.5rem 0; font-family:var(--fd);">آراء عملائنا</h2>
+      <p style="color:var(--mut); font-size:0.9rem;">
+        عملاء وثقوا في <strong style="color:var(--gold2);">VelaLight</strong>
       </p>
     </div>
 
-    <!-- Horizontal Scroll for Mobile (يوفر مساحة ضخمة) -->
-    <div style="display:flex; gap:12px; overflow-x:auto; padding:10px 5px 20px; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none;">
-      <div id="reviewsCompactContainer" style="display:flex; gap:12px;"></div>
+    <!-- 3 Reviews Only - Horizontal Scroll -->
+    <div style="display:flex; gap:10px; overflow-x:auto; padding:10px 5px 15px; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none;">
+      <div id="reviewsPreview" style="display:flex; gap:10px;"></div>
     </div>
 
-    <!-- Compact CTA Block -->
-    <div style="text-align:center; margin-top:1rem; padding:1.5rem; background:#fff; border-radius:12px; border:1px solid var(--line);">
-      <button id="viewAllReviews" style="background:transparent; border:1px solid var(--gold2); color:var(--gold2); padding:8px 20px; border-radius:8px; font-size:0.9rem; cursor:pointer; margin-bottom:1rem; font-weight:700;">
+    <!-- View All Button - Link to Separate Page -->
+    <div style="text-align:center; margin-top:1rem;">
+      <a href="reviews.html" style="display:inline-block; background:var(--c-dark); color:#fff; padding:10px 24px; border-radius:8px; text-decoration:none; font-size:0.9rem; font-weight:600;">
         📸 شوف كل الآراء (20+ صورة)
-      </button>
+      </a>
+    </div>
+
+    <!-- CTA -->
+    <div style="text-align:center; margin-top:1.5rem; padding:1.5rem; background:#fff; border-radius:12px; border:1px solid var(--line);">
       <h3 style="font-size:1.1rem; color:var(--dark); margin-bottom:0.5rem;">جاهزة تجربي السحر؟</h3>
       <p style="color:var(--mut); font-size:0.9rem; margin-bottom:1rem;">انضمي لعائلة VelaLight</p>
       <a href="#products" class="btn-primary-lux" style="display:inline-flex; align-items:center; gap:6px; padding:10px 24px; font-size:0.95rem; text-decoration:none;">
@@ -1216,62 +1220,32 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
   </div>
 </section>
 
-<!-- Modal & Lightbox (مخفي ويظهر عند الضغط) -->
-<div id="reviewsModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:10000; overflow-y:auto; padding:20px;" onclick="if(event.target===this)this.style.display='none'">
-  <div style="max-width:1200px; margin:0 auto;">
-    <button onclick="document.getElementById('reviewsModal').style.display='none'" style="position:fixed; top:15px; right:15px; background:#fff; border:none; width:36px; height:36px; border-radius:50%; font-size:1.2rem; cursor:pointer; z-index:10001;">✕</button>
-    <h2 style="color:#fff; text-align:center; margin:1rem 0; font-size:1.5rem;">📸 كل آراء عملائنا</h2>
-    <div id="fullGalleryGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:8px; padding:10px;"></div>
-  </div>
-</div>
-
-<div id="reviewLightbox" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:10002; justify-content:center; align-items:center; padding:20px; cursor:zoom-out;" onclick="this.style.display='none'">
-  <img id="lightboxImg" src="" alt="رأي عميل" style="max-width:100%; max-height:90vh; border-radius:8px;">
-</div>
-
 <script>
-function initCompactReviews() {
-  const container = document.getElementById('reviewsCompactContainer');
-  const modalGrid = document.getElementById('fullGalleryGrid');
+function initReviewsPreview() {
+  const container = document.getElementById('reviewsPreview');
   if (typeof REVIEWS_IMAGES === 'undefined' || REVIEWS_IMAGES.length === 0) return;
 
-  // عرض أول 5 صور فقط في السلايدر الأفقي المضغوط
-  REVIEWS_IMAGES.slice(0, 5).forEach((imgName, index) => {
+  // عرض أول 3 آراء فقط
+  REVIEWS_IMAGES.slice(0, 3).forEach((imgName, index) => {
     const imgUrl = typeof CDN === "function" ? CDN(`testimonials/${imgName}`) : `https://velalight.github.io/testimonials/${imgName}`;
     
     const item = document.createElement('div');
-    // تصميم سطر واحد: صورة صغيرة + نص بجانبها (بدون مربعات)
-    item.style.cssText = `flex:0 0 260px; display:flex; align-items:center; gap:10px; background:#fff; padding:8px; border-radius:10px; border:1px solid var(--line); scroll-snap-align:center; cursor:pointer;`;
-    item.onclick = () => { document.getElementById('reviewLightbox').style.display='flex'; document.getElementById('lightboxImg').src=imgUrl; };
+    item.style.cssText = `flex:0 0 240px; background:#fff; padding:10px; border-radius:10px; border:1px solid var(--line); scroll-snap-align:center;`;
     
     item.innerHTML = `
-      <img src="${imgUrl}" loading="lazy" style="width:55px; height:55px; object-fit:cover; border-radius:8px; flex-shrink:0;">
-      <div style="display:flex; flex-direction:column; gap:2px;">
-        <span style="font-size:0.75rem; color:#27ae60; font-weight:700; display:flex; align-items:center; gap:3px;">✅ موثقة</span>
-        <span style="font-size:0.8rem; color:var(--dark); font-weight:600;">عميلة سعيدة #${index + 1}</span>
-        <span style="font-size:0.7rem; color:var(--gold2);">⭐⭐⭐⭐⭐</span>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+        <img src="${imgUrl}" loading="lazy" style="width:50px; height:50px; object-fit:cover; border-radius:8px;">
+        <div>
+          <span style="font-size:0.75rem; color:#27ae60; font-weight:700; display:flex; align-items:center; gap:3px;">✅ موثقة</span>
+          <span style="font-size:0.8rem; color:var(--dark); font-weight:600;">عميلة سعيدة #${index + 1}</span>
+        </div>
       </div>
+      <div style="color:var(--gold2); font-size:0.85rem;">⭐⭐⭐⭐⭐</div>
     `;
     container.appendChild(item);
   });
-
-  // عرض كل الصور في المودال
-  REVIEWS_IMAGES.forEach(imgName => {
-    const imgUrl = typeof CDN === "function" ? CDN(`testimonials/${imgName}`) : `https://velalight.github.io/testimonials/${imgName}`;
-    const img = document.createElement('img');
-    img.src = imgUrl;
-    img.loading = "lazy";
-    img.style.cssText = "width:100%; height:180px; object-fit:cover; border-radius:8px; cursor:zoom-in;";
-    img.onclick = (e) => { e.stopPropagation(); document.getElementById('reviewLightbox').style.display='flex'; document.getElementById('lightboxImg').src=imgUrl; };
-    modalGrid.appendChild(img);
-  });
-
-  document.getElementById('viewAllReviews').onclick = () => {
-    document.getElementById('reviewsModal').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-  };
 }
-document.addEventListener("DOMContentLoaded", initCompactReviews);
+document.addEventListener("DOMContentLoaded", initReviewsPreview);
 </script>
   
 <!-- ═══ Full Gallery Modal (Popup) ══ -->
