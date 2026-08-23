@@ -1014,154 +1014,6 @@ article.innerHTML = `
         </div>
       `;
       
-      frag.appendChild(article);
-    } catch(e) {
-      console.warn("⚠️ Failed to render product:", p.id, e);
-    }
-  });
-
-  grid.innerHTML = '';
-  grid.appendChild(frag);
-  grid.addEventListener('click', handleProductGridClick);
-}
-
-function handleProductGridClick(e){
-  const shareBtn = e.target.closest('.p-share');
-  if (shareBtn) {
-    e.preventDefault();
-    e.stopPropagation();
-    const pId = shareBtn.dataset.id;
-    const pName = shareBtn.dataset.name;
-    const shareUrl = `${window.location.origin}/product.html?p=${pId}`;
-    
-    if (navigator.share) {
-      navigator.share({
-        title: `VelaLight - ${pName}`,
-        text: `شوفي الشمعة الفاخرة دي من VelaLight 🕯️✨`,
-        url: shareUrl
-      }).catch(err => console.log('Share canceled'));
-    } else {
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        toast("🔗 تم نسخ رابط المنتج للمشاركة!");
-      });
-    }
-    return;
-  }
-
-  const wishBtn = e.target.closest('.p-wish');
-  if (wishBtn) {
-    e.preventDefault();
-    e.stopPropagation();
-    const pid = wishBtn.dataset.wish;
-    if (pid) toggleWishlist(pid);
-    return;
-  }
-  
-  const addBtn = e.target.closest('.p-add');
-  if(!addBtn) return;
-  
-  e.preventDefault();
-  e.stopPropagation();
-  
-  const id = addBtn.dataset.id;
-  const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
-  const p = products.find(x => x.id === id);
-  if(p && Number(p.stock)!==0){
-    addBtn.style.transform = 'scale(0.95)';
-    setTimeout(() => { addBtn.style.transform = ''; }, 150);
-    openQuickAdd(p);
-  }
-}
-
-function initQuickAdd(){
-  $("#closeScent")?.addEventListener("click",()=>closeModal("scentOv"));
-  $("#scentOv")?.addEventListener("click",e=>{
-    if(e.target.id==="scentOv"){closeModal("scentOv");}
-  });
-  $("#smQMinus")?.addEventListener("click",()=>{
-    if(quickAddQty>1){quickAddQty--;}
-    $("#smQVal").textContent=quickAddQty;
-  });
-  $("#smQPlus")?.addEventListener("click",()=>{
-    quickAddQty++;
-    $("#smQVal").textContent=quickAddQty;
-  });
-  $("#scentModalAdd")?.addEventListener("click",()=>{
-    if(!quickAddProduct)return;
-    
-    const modalSelect = $("#modalScentSelect");
-    if(modalSelect && !quickAddScent) {
-        quickAddScent = modalSelect.value;
-    }
-    
-    if(!quickAddScent){toast(t("t_scentwarn"));return;}
-    if(addToCart(quickAddProduct,{scent:quickAddScent,qty:quickAddQty})){
-      closeModal("scentOv");
-    }
-  });
-}
-
-function openQuickAdd(p){
-  quickAddProduct=p;
-  quickAddScent="";
-  quickAddQty=1;
-
-  const title=$("#scentModalTitle");
-  if(title){title.textContent=pname(p);}
-
-  const qv=$("#smQVal");
-  if(qv){qv.textContent="1";}
-
-  const w=$("#scentModalScents");
-  if(!w)return;
-
-  w.innerHTML = `
-    <select id="modalScentSelect" style="width:100%; padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:1rem; cursor:pointer; outline:none;">
-      <option value="">${LANG==="en"?"Choose a scent...":"اختار العطر..."}</option>
-      ${VELA_SCENTS.map(s => `<option value="${s[0]}">${velaScentTr(s[0])}</option>`).join('')}
-    </select>
-  `;
-
-  $("#modalScentSelect").addEventListener("change", (e) => {
-    quickAddScent = e.target.value;
-  });
-
-  openDrawer("scentOv");
-}
-
-const debouncedRenderProducts = debounce(renderProducts, 250);
-
-document.addEventListener("change",e=>{
-  if(e.target.id==="priceMin"||e.target.id==="priceMax"||e.target.id==="sortSel"){
-    renderProducts();
-  }
-});
-document.addEventListener("input",e=>{
-  if(e.target.id==="priceMin"||e.target.id==="priceMax"){
-    debouncedRenderProducts();
-  }
-});
-
-function renderScents(){
-  const w=$("#scentGrid");
-  if(!w)return;
-  const frag = document.createDocumentFragment();
-  VELA_SCENTS.forEach((s, i) => {
-    const div = document.createElement('div');
-    div.className = 'scent';
-    div.innerHTML = `
-      <i>${i+1}</i>
-      <div>
-        <b>${LANG==="en"?s[1]:s[0]}</b>
-        <small>${LANG==="en"?s[0]:s[1]}</small>
-      </div>
-    `;
-    frag.appendChild(div);
-  });
-  w.innerHTML = '';
-  w.appendChild(frag);
-}
-
 function renderFAQ(){
   const w = $("#faqWrap");
   if(!w) return;
@@ -1205,7 +1057,6 @@ function renderFAQ(){
   w.innerHTML = "";
   w.appendChild(frag);
 
-
   w.querySelectorAll(".faq-item").forEach(item => {
 
     const button = item.querySelector(".faq-q");
@@ -1216,6 +1067,33 @@ function renderFAQ(){
       const wasOpen = item.classList.contains("open");
 
       /* إغلاق جميع الأسئلة */
+      w.querySelectorAll(".faq-item").forEach(other => {
+
+        other.classList.remove("open");
+
+        const otherAnswer = other.querySelector(".faq-a");
+        const otherButton = other.querySelector(".faq-q");
+
+        otherAnswer.style.maxHeight = null;
+        otherButton.setAttribute("aria-expanded", "false");
+
+      });
+
+      /* فتح السؤال المحدد */
+      if(!wasOpen){
+
+        item.classList.add("open");
+
+        answer.style.maxHeight = answer.scrollHeight + "px";
+
+        button.setAttribute("aria-expanded", "true");
+
+      }
+
+    });
+
+  });
+}
       w.querySelectorAll(".faq-item").forEach(other => {
 
         other.classList.remove("open");
