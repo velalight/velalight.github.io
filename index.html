@@ -1491,176 +1491,61 @@ document.addEventListener("DOMContentLoaded", initTrustGrid);
      VELALIGHT — FAQ
      ═══════════════════════════════════════════════ -->
 
-<section id="faq-section" class="sec vl-faq">
 
+<section id="faq-section" class="sec vl-faq" style="padding: 2rem 0;">
   <div class="wrap">
-
     <div class="faq-inner">
+      <div class="faq-heading" style="text-align:center; margin-bottom:1.5rem;">
+        <div class="kick" style="font-size:0.9rem;">FAQ</div>
+        <h2 style="font-size:1.8rem;">الأسئلة الشائعة</h2>
+      </div>
+      <div class="faq-list" style="display:flex; flex-direction:column; gap:6px;">
+        <!-- تم تقليل المسافات والخطوط -->
+        <style>
+          .faq-item { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
+          .faq-item summary { padding: 12px 15px; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
+          .faq-item summary::-webkit-details-marker { display: none; }
+          .faq-item .faq-answer { padding: 0 15px 12px; font-size: 0.9rem; color: var(--mut); line-height: 1.5; }
+        </style>
+        
+        <details class="faq-item">
+          <summary><span>كيف يمكنني الطلب وما طرق الدفع؟</span><span>+</span></summary>
+          <div class="faq-answer">دفع قيمة المنتجات مقدمًا عبر InstaPay أو فودافون كاش، والشحن كاش عند الاستلام.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span>هل تشحنون لكل المحافظات؟</span><span>+</span></summary>
+          <div class="faq-answer">نعم، نوفر خدمة التوصيل الآمن لجميع محافظات مصر.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span>كم مدة تجهيز وشحن الطلب؟</span><span>+</span></summary>
+          <div class="faq-answer">التجهيز اليدوي يستغرق 3 إلى 7 أيام عمل، بالإضافة لمدة الشحن حسب المحافظة.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span>هل الشموع من شمع الصويا؟</span><span>+</span></summary>
+          <div class="faq-answer">نعم، نستخدم شمع صويا طبيعي 100% لاحتراق أنظف وأبطأ.</div>
+        </details>
+        <details class="faq-item">
+          <summary><span>هل تتوفر خدمة تغليف الهدايا؟</span><span>+</span></summary>
+          <div class="faq-answer">نعم، جميع منتجاتنا تأتي بتغليف أنيق وفاخر وجاهز للإهداء مجاناً.</div>
+        </details>
+<details class="faq-item">
+          <summary><span>هل تتوفر خدمة تغليف الهدايا؟</span><span>+</span></summary>
+          <div class="faq-answer">نعم، جميع منتجات VelaLight تأتي بتغليف أنيق وفاخر وجاهز للإهداء..</div>
+        </details>
+        <details class="faq-item">
+          <summary><span>ما سياسة الاستبدال والاسترجاع؟</span><span>+</span></summary>
+          <div class="faq-answer">نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب.
 
-      <div class="faq-heading">
+وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.
+.</div>
+        </details>
 
-        <div class="kick">
-          FAQ
-        </div>
-
-        <h2>
-          الأسئلة الشائعة
-        </h2>
-
-        <p>
-          كل ما تحتاجين معرفته عن الطلب، الشحن، الشموع والعطور.
-        </p>
 
       </div>
-
-
-      <div class="faq-list">
-
-        <details class="faq-item">
-
-          <summary>
-            <span>كيف يمكنني الطلب وما طرق الدفع المتاحة؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            يمكنك إضافة المنتجات إلى سلة الشراء وإتمام طلبك بسهولة.
-            يتم دفع قيمة المنتجات مقدمًا عبر
-            <strong>InstaPay أو Vodafone Cash أو تحويل بنكي</strong>،
-            بينما تُدفع تكلفة الشحن نقدًا لمندوب التوصيل عند الاستلام.
-          </div>
-
-        </details>
-
-
-        <details class="faq-item">
-
-          <summary>
-            <span>هل تقومون بالشحن إلى جميع محافظات مصر؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            نعم، نوفر خدمة التوصيل إلى
-            <strong>جميع محافظات مصر</strong>،
-            مع الحرص على وصول طلبك بأمان.
-          </div>
-
-        </details>
-
-
-        <details class="faq-item">
-
-          <summary>
-            <span>كم تستغرق مدة تجهيز وشحن الطلب؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            لأن منتجات VelaLight تُصنع يدويًا بعناية،
-            تستغرق مدة التجهيز عادةً
-            <strong>من 3 إلى 7 أيام عمل</strong>،
-            بالإضافة إلى مدة الشحن حسب المحافظة.
-          </div>
-
-        </details>
-
-
-        <details class="faq-item">
-
-          <summary>
-            <span>هل شموع VelaLight مصنوعة من شمع الصويا؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            نعم، نستخدم
-            <strong>شمع الصويا الطبيعي 100%</strong>،
-            الذي يتميز باحتراق أبطأ وأنظف ويساعد على انتشار العطر بكفاءة.
-          </div>
-
-        </details>
-
-
-        <details class="faq-item">
-
-          <summary>
-            <span>كم تبلغ مدة احتراق الشمعة وكيف أحافظ على أفضل أداء لها؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            تختلف مدة الاحتراق حسب وزن وحجم كل شمعة،
-            وستجدين التفاصيل في وصف المنتج.
-            ولأفضل نتيجة، عند الاستخدام الأول اتركي الشمعة حتى يذوب سطح الشمع بالكامل
-            ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.
-          </div>
-
-        </details>
-
-
-        <details class="faq-item">
-
-          <summary>
-            <span>كيف أختار العطر المناسب؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            لدينا تشكيلة متنوعة من العطور الفاخرة.
-            وإذا كنتِ محتارة، تواصلي معنا عبر
-            <strong>WhatsApp</strong>
-            وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلينها.
-          </div>
-
-        </details>
-
-
-        <details class="faq-item">
-
-          <summary>
-            <span>هل تتوفر خدمة تغليف الهدايا؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            نعم، جميع منتجات VelaLight تأتي
-            <strong>بتغليف أنيق وفاخر وجاهز للإهداء</strong>.
-          </div>
-
-        </details>
-
-
-        <details class="faq-item">
-
-          <summary>
-            <span>ما سياسة الاستبدال والاسترجاع؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            نظرًا لطبيعة منتجاتنا المصنوعة يدويًا،
-            لا يمكن الاستبدال أو الاسترجاع بعد
-            <strong>فتح المنتج أو استخدامه</strong>،
-            أو بسبب تغيير الرغبة بعد تأكيد الطلب.
-
-            <br><br>
-
-            وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن،
-            يرجى التواصل معنا
-            <strong>خلال 24 ساعة من الاستلام</strong>
-            وسنعمل على حل المشكلة.
-          </div>
-
-        </details>
-
-      </div>
-
     </div>
-
   </div>
-
 </section>
+
   
 <!-- ═══════════════════════════════════════════════
      FOOTER
