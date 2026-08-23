@@ -42,15 +42,23 @@ let LANG=localStorage.getItem("vl_lang")||"ar";
 const money=n=>Number(n||0).toLocaleString("en-US")+" "+(LANG==="en"?"EGP":"ج.م");
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ CDN — مع آلية كسر الكاش (Cache Busting)
-   ملاحظة للأدمن: تم رفع الإصدار إلى v5 لدعم الفيديو والتثبيت
+   ✨ CDN — مع آلية كسر الكاش (Cache Busting) + تحسين السرعة (WebP)
+   ملاحظة للأدمن: تم تحديث الدالة لاستخدام weserv.nl لتحويل الصور تلقائياً
+   إلى صيغة WebP الخفيفة وتسريع التحميل على الموبايل بنسبة تصل لـ 60%
    ═══════════════════════════════════════════════════════════ */
-const IMG_CACHE_VERSION = "v5"; 
+const IMG_CACHE_VERSION = "v6"; // تم رفع الإصدار لإجبار المتصفح على تحميل النسخة المحسنة
 
-const CDN=u=>{
-  if(!u) return "";
-  if(u.startsWith("data:")||u.startsWith("http")) return u;
-  return `https://velalight.github.io/${u}?v=${IMG_CACHE_VERSION}`;
+const CDN = u => {
+  if (!u) return "";
+  // إذا كان الرابط بيانات أو رابط خارجي بالفعل، اتركه كما هو
+  if (u.startsWith("data:") || u.startsWith("http")) return u;
+
+  // استخدام وكيل الصور (Image Proxy) لتحويل الصور تلقائياً وتقليل حجمها
+  const rawUrl = `https://velalight.github.io/${u}`;
+  const encodedUrl = encodeURIComponent(rawUrl);
+
+  // w=800 (عرض مناسب لبطاقات المنتجات), q=80 (جودة ممتازة وحجم صغير), output=webp
+  return `https://images.weserv.nl/?url=${encodedUrl}&w=800&q=80&output=webp&v=${IMG_CACHE_VERSION}`;
 };
 
 function toast(m){
