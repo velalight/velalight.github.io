@@ -867,20 +867,57 @@ function updateLangBtn(){
 
 function applyI18n(){
   document.title=t("docTitle");
+
+  /* ═══ Normal translations ═══ */
   $$("[data-i18n]").forEach(el=>{
-    const k=el.dataset.i18n,v=t(k);
-    if(v&&v!==k)el.textContent=v;
-  });
-  $$("[data-i18n-ph]").forEach(el=>{
-    const k=el.dataset.i18nPh,v=t(k);
-    if(v&&v!==k)el.placeholder=v;
-  });
-  const mq=$("#mqTrack");
-  if(mq){
-    if(mq.children.length > 2){} else {
-      const txt=t("mq") || "توصيل سريع لكل محافظات مصر";
-      mq.innerHTML = Array(8).fill(`<span>${txt}</span>`).join("");
+    const k=el.dataset.i18n;
+    const v=t(k);
+
+    if(v&&v!==k){
+      el.textContent=v;
     }
+  });
+
+  /* ═══ Placeholder translations ═══ */
+  $$("[data-i18n-ph]").forEach(el=>{
+    const k=el.dataset.i18nPh;
+    const v=t(k);
+
+    if(v&&v!==k){
+      el.placeholder=v;
+    }
+  });
+
+  /* ═══ Top Marquee ═══ */
+  const mq=$("#mqTrack");
+
+  if(mq){
+    const marqueeKeys=[
+      "mq_delivery",
+      "mq_discounts",
+      "mq_gift",
+      "mq_handmade",
+      "mq_scents",
+      "mq_shipping",
+      "mq_support"
+    ];
+
+    mq.innerHTML="";
+
+    for(let i=0;i<2;i++){
+      marqueeKeys.forEach(key=>{
+        const span=document.createElement("span");
+        span.textContent=t(key);
+        mq.appendChild(span);
+      });
+    }
+  }
+
+  /* ═══ FAQ ═══ */
+  const faqWrap=$("#faqWrap");
+
+  if(faqWrap&&typeof renderFAQ==="function"){
+    renderFAQ();
   }
 }
 
