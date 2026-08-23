@@ -927,7 +927,12 @@ faq8a:"Due to the nature of our handmade products, returns or exchanges are not 
   }
 };
 
-const t=k=>(I18N[LANG]&&I18N[LANG][k])||I18N.ar[k]||k;
+const t = k => {
+  const lang = LANG === "en" ? "en" : "ar";
+  return (I18N[lang] && I18N[lang][k] !== undefined)
+    ? I18N[lang][k]
+    : (I18N.ar && I18N.ar[k] !== undefined ? I18N.ar[k] : k);
+};
 
 (function(){
   var s=document.createElement("style");
