@@ -1822,11 +1822,54 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   line-height:1.3;
 }
  
- .feat-grid{grid-template-columns:1fr;gap:.9rem}
- .feat{padding:1rem;border-radius:14px}
- .feat .fi{width:40px;height:40px;border-radius:10px;font-size:1.05rem}
- .feat h4{font-size:1rem}
- .feat p{font-size:.8rem}
+/* ═══ FEATURES — Mobile Horizontal Scroll ═══ */
+
+ .feat-grid{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:.55rem;
+  overflow-x:auto;
+  overflow-y:hidden;
+  width:100%;
+  max-width:100%;
+  padding:.1rem .1rem .6rem;
+  box-sizing:border-box;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-x:contain;
+ }
+
+ .feat-grid::-webkit-scrollbar{
+  display:none;
+ }
+
+ .feat{
+  flex:0 0 165px;
+  width:165px;
+  min-width:165px;
+  max-width:165px;
+  padding:.7rem;
+  border-radius:12px;
+  box-sizing:border-box;
+ }
+
+ .feat .fi{
+  width:30px;
+  height:30px;
+  flex:0 0 30px;
+  border-radius:8px;
+  font-size:.8rem;
+ }
+
+ .feat h4{
+  font-size:.68rem;
+  line-height:1.3;
+ }
+
+ .feat p{
+  font-size:.58rem;
+  line-height:1.35;
+ }
  
  .faq-item{border-radius:12px;margin-bottom:.7rem}
  .faq-q{padding:.9rem 1.1rem;font-size:.9rem}
