@@ -109,12 +109,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 <body>
 
-<!-- ═══ MARKETING: Lead Generation Banner ═══ -->
-<div class="lead-banner">
-  <span>🎁 احصلي على خصم 10% على طلبك الأول!</span>
-  <button onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">تسوقي الآن</button>
-</div>
-
 <!-- ═══ Skip Link for Accessibility ═══ -->
 <a href="#products" class="skip-link">تخطي للمحتوى</a>
 
@@ -185,6 +179,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
   </div>
 </div>
+  
 
 <!-- ═══════════════════════════════════════════════
      HEADER (Slim & Elegant)
@@ -1164,6 +1159,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
       <div class="stats">
 
+       
         <div class="stat">
           <b>23</b>
           <span data-i18n="stat_scents">عطر مميز</span>
@@ -1188,38 +1184,660 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </section>
 
+<!-- ═══════════════════════════════════════════════════════════
+     REVIEWS — Premium Horizontal Preview
+     ═══════════════════════════════════════════════════════════ -->
+<section id="reviews" class="sec vl-reviews">
+  <div class="wrap">
+
+    <div class="vl-reviews-head rv">
+      <div class="kick" data-i18n="rev_eyebrow">💛 كلامكم أحلى هدية</div>
+      <h2 data-i18n="rev_title">آراء عملائنا</h2>
+      <p data-i18n="rev_body">
+        مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.
+      </p>
+    </div>
+
+    <div class="vl-reviews-shell">
+      <button
+        class="vl-review-arrow prev"
+        type="button"
+        data-review-dir="-1"
+        aria-label="Previous reviews"
+      >‹</button>
+
+      <div
+        class="vl-reviews-track"
+        id="reviewsTrack"
+        tabindex="0"
+        aria-label="Customer reviews"
+      ></div>
+
+      <button
+        class="vl-review-arrow next"
+        type="button"
+        data-review-dir="1"
+        aria-label="Next reviews"
+      >›</button>
+    </div>
+
+    <div class="vl-reviews-actions">
+      <a href="reviews.html" class="vl-reviews-all" id="reviewsAllLink">
+        <span class="review-ar">📸 شوفي كل آراء عملاء VelaLight</span>
+        <span class="review-en">📸 See All VelaLight Customer Reviews</span>
+      </a>
+    </div>
+
+    <div class="vl-review-cta">
+      <div>
+        <h3 data-i18n="rev_cta">✨ جربتي سحرنا؟</h3>
+        <p data-i18n="rev_cta_link">ابعتيلنا رأيك على الواتساب</p>
+      </div>
+      <a href="#products" class="btn-primary-lux vl-review-order" id="reviewOrderLink">
+        <span class="review-ar">اطلبي شمعتك الآن 🕯️</span>
+        <span class="review-en">Order Your Candle Now 🕯️</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- Review image lightbox: swipe/arrow navigation + reliable close -->
+<div class="vl-review-lightbox" id="reviewLightbox" aria-hidden="true">
+  <button class="vl-review-lightbox-close" id="reviewLightboxClose" type="button" aria-label="Close">✕</button>
+  <button class="vl-review-lightbox-arrow prev" id="reviewLightboxPrev" type="button" aria-label="Previous image">‹</button>
+  <div class="vl-review-lightbox-stage" id="reviewLightboxStage">
+    <img id="reviewLightboxImg" src="" alt="Customer review" draggable="false">
+  </div>
+  <button class="vl-review-lightbox-arrow next" id="reviewLightboxNext" type="button" aria-label="Next image">›</button>
+  <div class="vl-review-lightbox-counter" id="reviewLightboxCounter"></div>
+</div>
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   VELALIGHT — PREMIUM REVIEWS
+   Desktop + Mobile horizontal gallery
+   ═══════════════════════════════════════════════════════════ */
+.vl-reviews{
+  background:var(--c-cream,#fffcf9);
+  padding:clamp(2.2rem,5vw,3.8rem) 0;
+  overflow:hidden;
+}
+
+.vl-reviews-head{
+  text-align:center;
+  max-width:760px;
+  margin:0 auto 1.5rem;
+}
+
+.vl-reviews-head .kick{
+  color:var(--gold2,#b68d2e);
+  font-size:.82rem;
+  margin-bottom:.35rem;
+}
+
+.vl-reviews-head h2{
+  margin:.15rem 0 .45rem;
+  font-family:var(--fd,"El Messiri",serif);
+  font-size:clamp(1.55rem,3vw,2.1rem);
+  line-height:1.25;
+  color:var(--ink,#1a1512);
+}
+
+.vl-reviews-head p{
+  margin:0 auto;
+  max-width:680px;
+  color:var(--mut,#6f6257);
+  font-size:.82rem;
+  line-height:1.7;
+}
+
+.vl-reviews-shell{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:.65rem;
+  width:100%;
+}
+
+.vl-reviews-track{
+  display:flex;
+  flex:1 1 auto;
+  gap:16px;
+  min-width:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:8px 4px 18px;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  direction:ltr;
+  touch-action:pan-x;
+  cursor:grab;
+}
+
+.vl-reviews-track:active{cursor:grabbing}
+.vl-reviews-track::-webkit-scrollbar{display:none}
+
+.vl-review-card{
+  flex:0 0 clamp(220px,27vw,285px);
+  scroll-snap-align:start;
+  background:#fff;
+  border:1px solid rgba(120,90,55,.14);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 8px 26px rgba(60,40,20,.07);
+  transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
+  direction:rtl;
+}
+
+.vl-review-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 14px 34px rgba(60,40,20,.12);
+  border-color:rgba(217,171,95,.38);
+}
+
+.vl-review-media{
+  position:relative;
+  aspect-ratio:4 / 5;
+  background:#f4eee6;
+  overflow:hidden;
+  cursor:zoom-in;
+}
+
+.vl-review-media img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  transition:transform .45s ease;
+}
+
+.vl-review-card:hover .vl-review-media img{transform:scale(1.025)}
+
+.vl-review-verified{
+  position:absolute;
+  top:10px;
+  inset-inline-end:10px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.94);
+  color:#159447;
+  font-size:.68rem;
+  font-weight:800;
+  box-shadow:0 3px 12px rgba(0,0,0,.10);
+  backdrop-filter:blur(8px);
+}
+
+.vl-review-zoom{
+  position:absolute;
+  bottom:10px;
+  inset-inline-start:10px;
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:rgba(26,21,18,.78);
+  color:#fff;
+  font-size:.85rem;
+  box-shadow:0 3px 12px rgba(0,0,0,.18);
+}
+
+.vl-review-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:.7rem .8rem .75rem;
+  direction:rtl;
+}
+
+.vl-review-name{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:var(--ink,#1a1512);
+  font-size:.73rem;
+  font-weight:700;
+}
+
+.vl-review-stars{
+  flex:0 0 auto;
+  color:var(--gold2,#b68d2e);
+  font-size:.72rem;
+  letter-spacing:1px;
+  white-space:nowrap;
+}
+
+.vl-review-arrow{
+  flex:0 0 auto;
+  width:38px;
+  height:38px;
+  border:1px solid rgba(217,171,95,.35);
+  border-radius:50%;
+  background:#fff;
+  color:var(--gold2,#b68d2e);
+  display:grid;
+  place-items:center;
+  font-size:1.5rem;
+  line-height:1;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(60,40,20,.08);
+  transition:transform .2s ease,background .2s ease,color .2s ease;
+  z-index:2;
+}
+
+.vl-review-arrow:hover{
+  transform:scale(1.06);
+  background:var(--gold,#d9ab5f);
+  color:#fff;
+}
+
+.vl-reviews-actions{
+  display:flex;
+  justify-content:center;
+  margin-top:.55rem;
+}
+
+.vl-reviews-all{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  padding:.65rem 1.15rem;
+  border-radius:11px;
+  background:var(--c-dark,#1a1512);
+  color:#fff;
+  text-decoration:none;
+  font-size:.78rem;
+  font-weight:700;
+  box-shadow:0 8px 20px rgba(26,21,18,.12);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+
+.vl-reviews-all:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 26px rgba(26,21,18,.18);
+}
+
+.vl-review-cta{
+  margin:1.35rem auto 0;
+  max-width:980px;
+  padding:1rem 1.15rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 6px 20px rgba(60,40,20,.04);
+}
+
+.vl-review-cta h3{
+  margin:0 0 .2rem;
+  font-family:var(--fd,"El Messiri",serif);
+  font-size:1rem;
+  color:var(--ink,#1a1512);
+}
+
+.vl-review-cta p{
+  margin:0;
+  color:var(--mut,#6f6257);
+  font-size:.76rem;
+}
+
+.vl-review-order{
+  flex:0 0 auto;
+  padding:10px 18px;
+  white-space:nowrap;
+}
+
+/* ═══ LIGHTBOX ═══ */
+.vl-review-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:20000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:clamp(16px,3vw,32px);
+  background:rgba(15,11,8,.94);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+.vl-review-lightbox.is-open{display:flex}
+
+.vl-review-lightbox-stage{
+  position:relative;
+  width:min(92vw,900px);
+  height:min(88vh,900px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  touch-action:pan-x pan-y;
+}
+
+.vl-review-lightbox-stage img{
+  display:block;
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  border-radius:12px;
+  box-shadow:0 20px 70px rgba(0,0,0,.45);
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+.vl-review-lightbox-close{
+  position:fixed;
+  top:16px;
+  inset-inline-end:16px;
+  z-index:20003;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  color:#1a1512;
+  font-size:1.2rem;
+  cursor:pointer;
+  box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
+
+.vl-review-lightbox-arrow{
+  position:fixed;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:20003;
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  font-size:1.8rem;
+  cursor:pointer;
+  backdrop-filter:blur(8px);
+}
+
+.vl-review-lightbox-arrow.prev{inset-inline-start:18px}
+.vl-review-lightbox-arrow.next{inset-inline-end:18px}
+.vl-review-lightbox-arrow:hover{background:rgba(255,255,255,.22)}
+
+.vl-review-lightbox-counter{
+  position:fixed;
+  bottom:16px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:20003;
+  padding:5px 10px;
+  border-radius:999px;
+  background:rgba(0,0,0,.5);
+  color:#fff;
+  font-size:.72rem;
+}
+
+.review-en{display:none}
+
+html[lang="en"] .review-ar{display:none}
+html[lang="en"] .review-en{display:inline}
+
+@media(max-width:900px){
+  .vl-reviews{padding:2rem 0}
+  .vl-reviews-head{margin-bottom:1rem}
+  .vl-reviews-head p{font-size:.74rem;line-height:1.55}
+  .vl-reviews-shell{gap:.35rem}
+  .vl-review-arrow{display:none}
+  .vl-reviews-track{
+    gap:12px;
+    padding:6px 2px 14px;
+    scroll-padding-inline:2px;
+  }
+  .vl-review-card{
+    flex-basis:min(76vw,270px);
+    border-radius:15px;
+  }
+  .vl-review-meta{padding:.62rem .7rem .68rem}
+  .vl-review-name{font-size:.68rem}
+  .vl-review-stars{font-size:.64rem}
+  .vl-reviews-all{font-size:.72rem;min-height:42px;padding:.6rem .9rem}
+  .vl-review-cta{
+    flex-direction:column;
+    text-align:center;
+    padding:1rem .85rem;
+  }
+  .vl-review-order{width:100%;justify-content:center}
+  .vl-review-lightbox{padding:12px}
+  .vl-review-lightbox-stage{width:100%;height:84vh}
+  .vl-review-lightbox-arrow{display:none}
+  .vl-review-lightbox-close{top:10px;inset-inline-end:10px}
+}
+
+@media(max-width:400px){
+  .vl-review-card{flex-basis:82vw}
+  .vl-reviews-head h2{font-size:1.45rem}
+  .vl-review-meta{gap:6px}
+}
+</style>
+
+<script>
+(function(){
+  "use strict";
+
+  const track = document.getElementById("reviewsTrack");
+  const lightbox = document.getElementById("reviewLightbox");
+  const lightboxImg = document.getElementById("reviewLightboxImg");
+  const counter = document.getElementById("reviewLightboxCounter");
+  const closeBtn = document.getElementById("reviewLightboxClose");
+  const prevBtn = document.getElementById("reviewLightboxPrev");
+  const nextBtn = document.getElementById("reviewLightboxNext");
+
+  if(!track) return;
+
+  let images = [];
+  let currentIndex = 0;
+  let dragStartX = null;
+  let dragScrollLeft = 0;
+  let dragging = false;
+
+  function reviewUrl(name){
+    return typeof CDN === "function"
+      ? CDN("testimonials/" + name)
+      : "https://velalight.github.io/testimonials/" + name;
+  }
+
+  function text(key, fallbackAr, fallbackEn){
+    try{
+      if(typeof t === "function"){
+        const value = t(key);
+        if(value && value !== key) return value;
+      }
+    }catch(e){}
+    return document.documentElement.lang === "en" ? fallbackEn : fallbackAr;
+  }
+
+  function getImages(){
+    if(typeof REVIEWS_IMAGES === "undefined" || !Array.isArray(REVIEWS_IMAGES)) return [];
+    return REVIEWS_IMAGES.slice(0,6);
+  }
+
+  function render(){
+    images = getImages();
+    track.innerHTML = "";
+
+    if(!images.length){
+      track.innerHTML = '<div style="padding:1rem;color:var(--mut);text-align:center;width:100%;">—</div>';
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+
+    images.forEach(function(name,index){
+      const card = document.createElement("article");
+      card.className = "vl-review-card";
+      card.setAttribute("role","button");
+      card.setAttribute("tabindex","0");
+      card.setAttribute("aria-label", document.documentElement.lang === "en"
+        ? "Open customer review " + (index + 1)
+        : "فتح مراجعة العميلة " + (index + 1));
+
+      const img = reviewUrl(name);
+      const verified = text("rev_verified","عميلة موثّقة","Verified Customer");
+      const customer = document.documentElement.lang === "en"
+        ? "Customer #" + (index + 1)
+        : "عميلة سعيدة #" + (index + 1);
+
+      card.innerHTML = `
+        <div class="vl-review-media">
+          <img
+            src="${img}"
+            alt="${document.documentElement.lang === "en" ? "Customer review" : "رأي عميلة"}"
+            loading="lazy"
+            decoding="async"
+          >
+          <span class="vl-review-verified">✓ ${verified}</span>
+          <span class="vl-review-zoom" aria-hidden="true">⌕</span>
+        </div>
+        <div class="vl-review-meta">
+          <span class="vl-review-name">${customer}</span>
+          <span class="vl-review-stars" aria-label="5 stars">★★★★★</span>
+        </div>
+      `;
+
+      const open = function(){ openLightbox(index); };
+      card.addEventListener("click",open);
+      card.addEventListener("keydown",function(e){
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          open();
+        }
+      });
+      frag.appendChild(card);
+    });
+
+    track.appendChild(frag);
+  }
+
+  function openLightbox(index){
+    if(!images.length) return;
+    currentIndex = Math.max(0,Math.min(index,images.length-1));
+    updateLightbox();
+    lightbox.classList.add("is-open");
+    lightbox.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove("is-open");
+    lightbox.setAttribute("aria-hidden","true");
+    lightboxImg.src = "";
+    document.body.style.overflow = "";
+  }
+
+  function updateLightbox(){
+    const name = images[currentIndex];
+    if(!name) return;
+    lightboxImg.src = reviewUrl(name);
+    lightboxImg.alt = document.documentElement.lang === "en" ? "Customer review" : "رأي عميلة";
+    counter.textContent = (currentIndex + 1) + " / " + images.length;
+  }
+
+  function moveLightbox(dir){
+    if(!images.length) return;
+    currentIndex = (currentIndex + dir + images.length) % images.length;
+    updateLightbox();
+  }
+
+  document.querySelectorAll("[data-review-dir]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      const dir = Number(btn.dataset.reviewDir) || 1;
+      const first = track.querySelector(".vl-review-card");
+      const amount = first ? first.getBoundingClientRect().width + 16 : track.clientWidth * .8;
+      track.scrollBy({left: dir * amount, behavior:"smooth"});
+    });
+  });
+
+  closeBtn?.addEventListener("click",closeLightbox);
+  prevBtn?.addEventListener("click",function(){moveLightbox(-1)});
+  nextBtn?.addEventListener("click",function(){moveLightbox(1)});
+
+  lightbox?.addEventListener("click",function(e){
+    if(e.target === lightbox || e.target === document.getElementById("reviewLightboxStage")) closeLightbox();
+  });
+
+  document.addEventListener("keydown",function(e){
+    if(!lightbox.classList.contains("is-open")) return;
+    if(e.key === "Escape") closeLightbox();
+    if(e.key === "ArrowLeft") moveLightbox(-1);
+    if(e.key === "ArrowRight") moveLightbox(1);
+  });
+
+  /* Mouse drag on desktop + natural swipe on mobile */
+  track.addEventListener("pointerdown",function(e){
+    if(e.pointerType === "touch") return;
+    dragging = true;
+    dragStartX = e.clientX;
+    dragScrollLeft = track.scrollLeft;
+    track.setPointerCapture?.(e.pointerId);
+  });
+
+  track.addEventListener("pointermove",function(e){
+    if(!dragging || dragStartX === null) return;
+    track.scrollLeft = dragScrollLeft - (e.clientX - dragStartX);
+  });
+
+  track.addEventListener("pointerup",function(){
+    dragging = false;
+    dragStartX = null;
+  });
+
+  track.addEventListener("pointercancel",function(){
+    dragging = false;
+    dragStartX = null;
+  });
+
+  /* Keep the section translated whenever the language changes. */
+  const langObserver = new MutationObserver(function(){
+    render();
+  });
+  langObserver.observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+
+  document.addEventListener("DOMContentLoaded",render);
+})();
+</script>
+
 <!-- ═══════════════════════════════════════════════
      SCENTS — Minimal Luxury
      ═══════════════════════════════════════════════ -->
 
-<section id="scents" class="sec vl-scents">
-
+<section id="scents" class="sec vl-scents" style="padding: 2rem 0;">
   <div class="wrap">
-
-    <div class="scents-head">
-
-      <div>
-        <div class="kick">
-          Signature Scents
-        </div>
-
-        <h2 data-i18n="scents_h2">
-          العطور الفاخرة
-        </h2>
-      </div>
-
-      <p data-i18n="scents_sub">
-        كل العطور متاحة تختار منهم في أي منتج من منتجاتنا
-      </p>
-
+    <div class="scents-head" style="text-align:center; margin-bottom:1.5rem;">
+      <div class="kick" style="font-size:0.9rem;">Signature Scents</div>
+      <h2 data-i18n="scents_h2" style="font-size:1.8rem; margin:0.5rem 0;">العطور الفاخرة</h2>
+      <p data-i18n="scents_sub" style="color:var(--mut); font-size:0.9rem;">كل العطور متاحة في أي منتج</p>
     </div>
-
-    <div class="scent-grid" id="scentGrid"></div>
-
+    <!-- شبكة مضغوطة جداً -->
+    <div class="scent-grid" id="scentGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:8px;"></div>
   </div>
-
 </section>
-
+  
 <!-- ═══════════════════════════════════════════════
      VELALIGHT — BRAND PROMISE
      ═══════════════════════════════════════════════ -->
@@ -1260,6 +1878,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
         </div>
 
+
         <div class="brand-point">
 
           <strong data-i18n="brand_point2_title">
@@ -1271,6 +1890,7 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
           </span>
 
         </div>
+
 
         <div class="brand-point">
 
@@ -1292,404 +1912,73 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 
 </section>
 
+
 <!-- ═══════════════════════════════════════════════
      VELALIGHT — FAQ
      ═══════════════════════════════════════════════ -->
 
+
 <section id="faq-section" class="sec vl-faq">
-
   <div class="wrap">
-
     <div class="faq-inner">
 
       <div class="faq-heading">
-
-        <div class="kick">
-          FAQ
-        </div>
-
-        <h2>
-          الأسئلة الشائعة
-        </h2>
-
-        <p>
-          كل ما تحتاجين معرفته عن الطلب، الشحن، الشموع والعطور.
+        <div class="kick" data-i18n="faq_h2">FAQ</div>
+        <h2 data-i18n="faq_h2">الأسئلة الشائعة</h2>
+        <p class="faq-subtitle">
+          <span class="review-ar">كل ما تحتاجين معرفته عن الطلب، الشحن، الشموع والعطور.</span>
+          <span class="review-en">Everything you need to know about ordering, shipping, candles and scents.</span>
         </p>
-
       </div>
 
-      <div class="faq-list">
-
-        <details class="faq-item">
-
-          <summary>
-            <span>كيف يمكنني الطلب وما طرق الدفع المتاحة؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            يمكنك إضافة المنتجات إلى سلة الشراء وإتمام طلبك بسهولة.
-            يتم دفع قيمة المنتجات مقدمًا عبر
-            <strong>InstaPay أو Vodafone Cash أو تحويل بنكي</strong>،
-            بينما تُدفع تكلفة الشحن نقدًا لمندوب التوصيل عند الاستلام.
-          </div>
-
-        </details>
-
-        <details class="faq-item">
-
-          <summary>
-            <span>هل تقومون بالشحن إلى جميع محافظات مصر؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            نعم، نوفر خدمة التوصيل إلى
-            <strong>جميع محافظات مصر</strong>،
-            مع الحرص على وصول طلبك بأمان.
-          </div>
-
-        </details>
-
-        <details class="faq-item">
-
-          <summary>
-            <span>كم تستغرق مدة تجهيز وشحن الطلب؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            لأن منتجات VelaLight تُصنع يدويًا بعناية،
-            تستغرق مدة التجهيز عادةً
-            <strong>من 3 إلى 7 أيام عمل</strong>،
-            بالإضافة إلى مدة الشحن حسب المحافظة.
-          </div>
-
-        </details>
-
-        <details class="faq-item">
-
-          <summary>
-            <span>هل شموع VelaLight مصنوعة من شمع الصويا؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            نعم، نستخدم
-            <strong>شمع الصويا الطبيعي 100%</strong>،
-            الذي يتميز باحتراق أبطأ وأنظف ويساعد على انتشار العطر بكفاءة.
-          </div>
-
-        </details>
-
-        <details class="faq-item">
-
-          <summary>
-            <span>كم تبلغ مدة احتراق الشمعة وكيف أحافظ على أفضل أداء لها؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            تختلف مدة الاحتراق حسب وزن وحجم كل شمعة،
-            وستجدين التفاصيل في وصف المنتج.
-            ولأفضل نتيجة، عند الاستخدام الأول اتركي الشمعة حتى يذوب سطح الشمع بالكامل
-            ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.
-          </div>
-
-        </details>
-
-        <details class="faq-item">
-
-          <summary>
-            <span>كيف أختار العطر المناسب؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            لدينا تشكيلة متنوعة من العطور الفاخرة.
-            وإذا كنتِ محتارة، تواصلي معنا عبر
-            <strong>WhatsApp</strong>
-            وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلينها.
-          </div>
-
-        </details>
-
-        <details class="faq-item">
-
-          <summary>
-            <span>هل تتوفر خدمة تغليف الهدايا؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            نعم، جميع منتجات VelaLight تأتي
-            <strong>بتغليف أنيق وفاخر وجاهز للإهداء</strong>.
-          </div>
-
-        </details>
-
-        <details class="faq-item">
-
-          <summary>
-            <span>ما سياسة الاستبدال والاسترجاع؟</span>
-            <span class="faq-icon">+</span>
-          </summary>
-
-          <div class="faq-answer">
-            نظرًا لطبيعة منتجاتنا المصنوعة يدويًا،
-            لا يمكن الاستبدال أو الاسترجاع بعد
-            <strong>فتح المنتج أو استخدامه</strong>،
-            أو بسبب تغيير الرغبة بعد تأكيد الطلب.
-
-            <br><br>
-
-            وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن،
-            يرجى التواصل معنا
-            <strong>خلال 24 ساعة من الاستلام</strong>
-            وسنعمل على حل المشكلة.
-          </div>
-
-        </details>
-
-      </div>
+      <div class="faq-list" id="faqWrap" aria-live="polite"></div>
 
     </div>
-
-  </div>
-
-</section>
-
-<!-- ═══════════════════════════════════════════════════════════
-     REVIEWS — Customer Reviews
-     ═══════════════════════════════════════════════════════════ -->
-  <section
-  id="reviews"
-  class="sec"
-  style="background:linear-gradient(180deg,var(--c-cream) 0%,#fdf5ed 100%);padding:5rem 0;overflow:hidden;"
->
-  <div class="wrap">
-
-    <!-- Section Header -->
-    <div
-      class="sec-head rv"
-      style="text-align:center;margin-bottom:3rem;"
-    >
-
-      <div
-        class="kick"
-        style="color:var(--gold2);font-size:1rem;letter-spacing:1px;"
-        data-i18n="reviews_kicker"
-      >💛 كلامكم أحلى هدية</div>
-
-      <h2
-        style="font-size:clamp(2rem,5vw,2.8rem);margin-bottom:.5rem;font-family:var(--fd);"
-        data-i18n="reviews_title"
-      >آراء عملائنا</h2>
-
-      <p
-        style="color:var(--mut);max-width:600px;margin:0 auto;font-size:1.1rem;line-height:1.6;"
-        data-i18n="reviews_desc"
-      >مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.</p>
-
-    </div>
-
-    <!-- ═══ Reviews Slider ═══ -->
-    <div class="cinematic-reviews-container rv">
-
-      <div
-        class="reviews-slider"
-        id="reviewsSlider"
-      >
-        <!-- الصور تُضاف تلقائياً من data.js -->
-      </div>
-
-      <div
-        class="reviews-dots"
-        id="reviewsDots"
-        aria-label="Reviews navigation"
-      ></div>
-
-    </div>
-
-    <!-- ═══ WhatsApp CTA ═══ -->
-    <div style="text-align:center;margin-top:3rem;">
-
-      <p style="color:var(--dim);font-size:.95rem;">
-
-        <span data-i18n="reviews_cta">✨ جربتي سحرنا؟</span>
-
-        <a
-          href="https://wa.me/201223526105"
-          target="_blank"
-          rel="noopener noreferrer"
-          style="color:var(--gold2);font-weight:700;text-decoration:none;border-bottom:1px dashed var(--gold2);"
-          data-i18n="reviews_cta_link"
-        >ابعتيلنا رأيك على الواتساب</a>
-
-      </p>
-
-    </div>
-
   </div>
 </section>
-  
+
 <style>
-  /* ═══ تصميم ألبوم الذكريات السينمائي ═══ */
-.cinematic-reviews-container {
-  max-width: 500px;
-  margin: 0 auto;
-  position: relative;
-  padding: 2rem 0;
+/* ═══════════════════════════════════════════════════════════
+   VELALIGHT — FAQ SAFE ACCORDION
+   Answers are closed by default and opened only on click.
+   ═══════════════════════════════════════════════════════════ */
+.vl-faq{padding:2.2rem 0}
+.vl-faq .faq-inner{max-width:820px;margin:0 auto}
+.vl-faq .faq-heading{text-align:center;margin-bottom:1.25rem}
+.vl-faq .faq-heading .kick{margin-bottom:.35rem}
+.vl-faq .faq-heading h2{margin:0 0 .35rem;font-family:var(--fd,"El Messiri",serif);font-size:clamp(1.45rem,3vw,1.9rem);line-height:1.25}
+.vl-faq .faq-subtitle{margin:0;color:var(--mut);font-size:.75rem;line-height:1.6}
+.vl-faq .faq-list{display:grid;gap:.45rem}
+.vl-faq .faq-item{background:var(--panel,#fff);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:none;transition:border-color .22s ease,box-shadow .22s ease}
+.vl-faq .faq-item.open{border-color:rgba(217,171,95,.45);box-shadow:0 7px 20px rgba(80,50,20,.07)}
+.vl-faq .faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.82rem 1rem;border:0;background:transparent;color:var(--ink);font-family:var(--fd,"El Messiri",serif);font-size:.78rem;font-weight:700;line-height:1.5;text-align:start;cursor:pointer}
+.vl-faq .faq-q > span:first-child{min-width:0}
+.vl-faq .faq-plus{flex:0 0 auto;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:rgba(217,171,95,.10);color:var(--gold2);font-family:Arial,sans-serif;font-size:1rem;font-weight:400;line-height:1;transition:transform .22s ease,background .22s ease,color .22s ease}
+.vl-faq .faq-item.open .faq-plus{transform:rotate(45deg);background:var(--gold);color:#fff}
+.vl-faq .faq-a{max-height:0;overflow:hidden;opacity:0;transition:max-height .28s ease,opacity .22s ease}
+.vl-faq .faq-a-inner{padding:0 1rem 1rem;color:var(--mut);font-size:.72rem;line-height:1.75}
+.vl-faq .faq-item.open .faq-a{opacity:1}
+.vl-faq .faq-a-inner strong{color:var(--gold2)}
+@media(max-width:700px){
+  .vl-faq{padding:1.7rem 0}
+  .vl-faq .faq-heading{margin-bottom:1rem}
+  .vl-faq .faq-heading h2{font-size:1.3rem}
+  .vl-faq .faq-subtitle{font-size:.64rem;line-height:1.5}
+  .vl-faq .faq-list{gap:.35rem}
+  .vl-faq .faq-item{border-radius:10px}
+  .vl-faq .faq-q{padding:.72rem .75rem;font-size:.7rem;gap:.6rem}
+  .vl-faq .faq-plus{width:22px;height:22px;font-size:.9rem}
+  .vl-faq .faq-a-inner{padding:0 .75rem .8rem;font-size:.64rem;line-height:1.65}
 }
-
-.reviews-slider {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 9/16; /* نسبة أبعاد مناسبة لسكرين شوتات الموبايل */
-  max-height: 600px;
-  border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-  background: #fff;
-  padding: 15px; /* إطار أبيض زي صورة البولارويد */
-  box-sizing: border-box;
-}
-
-/* تأثير الدبوس في الأعلى */
-.reviews-slider::before {
-  content: "📌";
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2rem;
-  z-index: 10;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
-}
-
-.review-slide {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  bottom: 15px;
-  opacity: 0;
-  transform: translateY(20px) scale(0.95) rotate(-1deg);
-  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border-radius: 12px;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.review-slide.active {
-  opacity: 1;
-  transform: translateY(0) scale(1) rotate(0deg);
-  pointer-events: auto;
-  z-index: 2;
-}
-
-.review-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* أو contain لو عايز تظهر الصورة كاملة بدون قص */
-  border-radius: 8px;
-}
-
-/* النقاط السفلية */
-.reviews-dots {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 2rem;
-}
-
-.review-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(212, 175, 55, 0.3);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.review-dot.active {
-  background: var(--gold2);
-  transform: scale(1.3);
-}
-
-@media (max-width: 768px) {
-  .reviews-slider {
-    aspect-ratio: 9/16;
-    max-height: 800px;
-  }
+@media(max-width:400px){
+  .vl-faq{padding:1.4rem 0}
+  .vl-faq .faq-heading h2{font-size:1.2rem}
+  .vl-faq .faq-subtitle{font-size:.6rem}
+  .vl-faq .faq-q{padding:.65rem;font-size:.66rem}
+  .vl-faq .faq-a-inner{padding:0 .65rem .7rem;font-size:.6rem}
+  .vl-faq .faq-plus{width:20px;height:20px;font-size:.82rem}
 }
 </style>
-
-<script>
-// ═══════════════════════════════════════════════
-// ✨ منطق العرض السينمائي التلقائي
-// ═══════════════════════════════════════════════
-function initCinematicReviews() {
-  const slider = document.getElementById('reviewsSlider');
-  const dotsContainer = document.getElementById('reviewsDots');
-  
-  // لو مفيش بيانات، اخرج
-  if (typeof REVIEWS_IMAGES === 'undefined' || REVIEWS_IMAGES.length === 0) return;
-
-  // إنشاء الشرائح والنقاط
-  REVIEWS_IMAGES.forEach((imgName, index) => {
-    // الشريحة
-    const slide = document.createElement('div');
-    slide.className = `review-slide ${index === 0 ? 'active' : ''}`;
-    slide.innerHTML = `<img src="https://velalight.github.io/testimonials/${imgName}" alt="رأي عميل" loading="lazy">`;
-    slider.appendChild(slide);
-
-    // النقطة
-    const dot = document.createElement('div');
-    dot.className = `review-dot ${index === 0 ? 'active' : ''}`;
-    dot.addEventListener('click', () => goToSlide(index));
-    dotsContainer.appendChild(dot);
-  });
-
-  let currentSlide = 0;
-  const totalSlides = REVIEWS_IMAGES.length;
-  let slideInterval;
-
-  function goToSlide(index) {
-    const slides = document.querySelectorAll('.review-slide');
-    const dots = document.querySelectorAll('.review-dot');
-    
-    slides[currentSlide].classList.remove('active');
-    dots[currentSlide].classList.remove('active');
-    
-    currentSlide = index;
-    if (currentSlide >= totalSlides) currentSlide = 0;
-    if (currentSlide < 0) currentSlide = totalSlides - 1;
-    
-    slides[currentSlide].classList.add('active');
-    dots[currentSlide].classList.add('active');
-    
-    resetInterval();
-  }
-
-  function nextSlide() {
-    goToSlide(currentSlide + 1);
-  }
-
-  function resetInterval() {
-    clearInterval(slideInterval);
-    slideInterval = setInterval(nextSlide, 3000); // تغيير كل 3 ثواني
-  }
-
-  // بدء التشغيل التلقائي
-  resetInterval();
-}
-
-document.addEventListener("DOMContentLoaded", initCinematicReviews);
-</script>
-  
-<!-- ═══════════════════════════════════════════════
-     FOOTER
-     ═══════════════════════════════════════════════ -->
 
 <footer>
 
@@ -1760,222 +2049,22 @@ document.addEventListener("DOMContentLoaded", initCinematicReviews);
     </div>
 
   </div>
-<!-- ═══════════════════════════════════════════════════════════
-     ✨ Developer Signature
-     ═══════════════════════════════════════════════════════════ -->
-
-<style>
-.dev-signature{
-  margin:2rem auto 0;
-  max-width:760px;
-  padding:1.15rem 1rem .9rem;
-  background:linear-gradient(135deg,var(--panel),var(--panel2));
-  border:1px solid var(--line);
-  border-radius:16px;
-  text-align:center;
-}
-
-.dev-line{
-  width:44px;
-  height:2px;
-  margin:0 auto .65rem;
-  background:linear-gradient(90deg,transparent,var(--gold2),transparent);
-}
-
-.dev-label{
-  margin:0 0 .85rem;
-  color:var(--dim);
-  font-size:.76rem;
-  line-height:1.5;
-  letter-spacing:.2px;
-}
-
-.dev-team{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:.7rem;
-  max-width:640px;
-  margin:0 auto .85rem;
-}
-
-.dev-card{
-  display:flex;
-  align-items:center;
-  gap:.65rem;
-  padding:.7rem .8rem;
-  background:var(--bg);
-  border:1px solid var(--line);
-  border-radius:13px;
-  text-decoration:none;
-  color:inherit;
-  text-align:start;
-  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
-}
-
-.dev-card:hover{
-  transform:translateY(-2px);
-  border-color:var(--gold2);
-  box-shadow:0 6px 18px -7px rgba(217,171,95,.35);
-}
-
-.dev-avatar{
-  width:38px;
-  height:38px;
-  flex:0 0 38px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--gold),#b8863f);
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:var(--fd);
-  font-size:1.1rem;
-  font-weight:700;
-  box-shadow:0 3px 10px -3px rgba(217,171,95,.45);
-}
-
-.dev-info{
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  gap:.12rem;
-}
-
-.dev-info b{
-  color:var(--gold2);
-  font-family:var(--fd);
-  font-size:.82rem;
-  line-height:1.2;
-}
-
-.dev-info span{
-  color:var(--dark);
-  direction:ltr;
-  text-align:start;
-  font-size:.72rem;
-  line-height:1.3;
-}
-
-.dev-info small{
-  color:var(--dim);
-  font-size:.64rem;
-  line-height:1.2;
-}
-
-.dev-cta{
-  margin:0;
-  padding-top:.7rem;
-  border-top:1px dashed var(--line);
-  color:var(--mut);
-  font-size:.76rem;
-  line-height:1.6;
-}
-
-.dev-cta strong{
-  color:var(--gold2);
-  font-family:var(--fd);
-}
-
-@media(max-width:600px){
-
-  .dev-signature{
-    margin-top:1.5rem;
-    padding:.9rem .7rem .8rem;
-  }
-
-  .dev-team{
-    grid-template-columns:1fr;
-    gap:.5rem;
-  }
-
-  .dev-card{
-    padding:.65rem .7rem;
-  }
-
-  .dev-avatar{
-    width:35px;
-    height:35px;
-    flex-basis:35px;
-    font-size:1rem;
-  }
-
-  .dev-info b{
-    font-size:.78rem;
-  }
-
-  .dev-info span{
-    font-size:.69rem;
-  }
-
-  .dev-info small{
-    font-size:.61rem;
-  }
-
-  .dev-cta{
-    font-size:.71rem;
-    padding-top:.6rem;
-  }
-}
-</style>
-
-<div class="dev-signature">
-
-  <div class="dev-line"></div>
-
-  <p class="dev-label" data-i18n="dev_label">
-    🛠️ صُمم وصُنع بواسطة
-  </p>
-
-  <div class="dev-team">
-
-    <!-- ═══ Wagdy ═══ -->
-    <a
-      class="dev-card"
-      href="https://wa.me/201226690050"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Wagdy WhatsApp"
-    >
-      <div class="dev-avatar" aria-hidden="true">W</div>
-
-      <div class="dev-info">
-        <b>Wagdy</b>
-        <span>📞 01226690050</span>
-        <small data-i18n="dev_whatsapp">💬 واتساب</small>
+    <div class="fbot" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--line); display: flex; flex-direction: column; align-items: center; gap: 10px;">
+      <span data-i18n="foot_rights" style="font-size: 0.85rem; color: var(--dim);">© 2026 VelaLight — جميع الحقوق محفوظة</span>
+      
+      <!-- توقيع المطورين بشكل احترافي وغير مزعج -->
+      <div style="font-size: 0.8rem; color: var(--mut); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center;">
+        <span>صُمم وتطوير بعناية بواسطة</span>
+        <a href="https://wa.me/201226690050" target="_blank" style="color: var(--gold2); text-decoration: none; font-weight: 600;">Wagdy</a>
+        <span>&</span>
+        <a href="https://wa.me/201277741748" target="_blank" style="color: var(--gold2); text-decoration: none; font-weight: 600;">Philopater</a>
       </div>
-    </a>
 
-    <!-- ═══ Philopater ═══ -->
-    <a
-      class="dev-card"
-      href="https://wa.me/201277741748"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Philopater WhatsApp"
-    >
-      <div class="dev-avatar" aria-hidden="true">P</div>
-
-      <div class="dev-info">
-        <b>Philopater</b>
-        <span>📞 01277741748</span>
-        <small data-i18n="dev_whatsapp">💬 واتساب</small>
+      <div style="display: flex; gap: 15px; font-size: 0.8rem;">
+        <a href="privacy.html" data-i18n="foot_privacy" style="color: var(--dim); text-decoration: none;">سياسة الخصوصية</a>
+        <a href="terms.html" data-i18n="foot_terms" style="color: var(--dim); text-decoration: none;">شروط الاستخدام</a>
       </div>
-    </a>
-
-  </div>
-
-  <p class="dev-cta">
-    <span data-i18n="dev_cta">
-      ⚡ عايز موقع احترافي زي ده لمشروعك؟
-    </span>
-
-    <strong data-i18n="dev_cta_link">
-      تواصل معانا النهاردة
-    </strong>
-  </p>
-
-</div>
-
+    </div>
 </footer>
   
 <!-- ═══════════════════════════════════════════════
@@ -2142,23 +2231,146 @@ document.addEventListener("DOMContentLoaded", initCinematicReviews);
 <!-- ═══ Back to Top Button ═══ -->
 <button id="backToTop" aria-label="العودة للأعلى">↑</button>
 
-<!-- ═══ MARKETING: Floating WhatsApp Button ═══ -->
-<a href="https://wa.me/201223526105?text=مرحباً%20VelaLight%20✨%20أريد%20الاستفسار%20عن%20منتجاتكم%20الفاخرة" class="whatsapp-float" target="_blank" rel="noopener" aria-label="تواصل معنا عبر واتساب">
-  💬
+<!-- ═══════════════════════════════════════════════
+     ✨ إضافة زر واتساب العائم (لزيادة المبيعات والتحويل)
+     ═══════════════════════════════════════════════ -->
+<style>
+  .whatsapp-float {
+    position: fixed;
+    bottom: 25px;
+    left: 25px; /* على اليسار لتجنب التداخل مع أي عناصر أخرى على اليمين */
+    width: 60px;
+    height: 60px;
+    background-color: #25d366;
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 32px;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    animation: pulse-whatsapp 2s infinite;
+  }
+  .whatsapp-float:hover {
+    background-color: #128c7e;
+    transform: scale(1.1);
+  }
+  @keyframes pulse-whatsapp {
+    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+  }
+  /* تحسين العرض على الموبايل */
+  @media (max-width: 768px) {
+    .whatsapp-float {
+      bottom: 20px;
+      left: 20px;
+      width: 55px;
+      height: 55px;
+    }
+    .whatsapp-float svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
+</style>
+
+<a href="https://wa.me/201223526105?text=مرحباً،%20أرغب%20في%20الاستفسار%20عن%20منتجات%20VelaLight%20🕯️"
+   class="whatsapp-float"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="تواصل معنا عبر واتساب">
+  <!-- أيقونة واتساب SVG خفيفة وسريعة التحميل -->
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+  </svg>
 </a>
 
 <!-- ═══════════════════════════════════════════════
-     SCRIPTS (بالترتيب الصحيح)
+     SCRIPTS (بالترتيب الصحيح للأداء الأمثل)
      ═══════════════════════════════════════════════ -->
-
 <script src="data.js"></script>
 <script type="module" src="firebase.js"></script>
 <script src="app.js"></script>
+<script>
+(function(){
+  "use strict";
+  function faqText(key,fallback){
+    try{
+      if(typeof t === "function"){
+        const v=t(key);
+        if(v && v!==key) return v;
+      }
+    }catch(e){}
+    return fallback;
+  }
+
+  function renderEnhancedFAQ(){
+    const wrap=document.getElementById("faqWrap");
+    if(!wrap) return;
+
+    const items=[1,2,3,4,5,6,7,8].map(function(i){
+      return [
+        faqText("faq"+i+"q","FAQ"),
+        faqText("faq"+i+"a","")
+      ];
+    });
+
+    wrap.innerHTML=items.map(function(item,index){
+      return `
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">
+            <span>${item[0]}</span>
+            <span class="faq-plus" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">${item[1]}</div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    wrap.querySelectorAll(".faq-item").forEach(function(item){
+      const btn=item.querySelector(".faq-q");
+      const answer=item.querySelector(".faq-a");
+      btn.addEventListener("click",function(){
+        const shouldOpen=!item.classList.contains("open");
+        wrap.querySelectorAll(".faq-item.open").forEach(function(other){
+          other.classList.remove("open");
+          other.querySelector(".faq-q")?.setAttribute("aria-expanded","false");
+          other.querySelector(".faq-a").style.maxHeight="0px";
+        });
+        if(shouldOpen){
+          item.classList.add("open");
+          btn.setAttribute("aria-expanded","true");
+          answer.style.maxHeight=answer.scrollHeight+"px";
+        }
+      });
+    });
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",renderEnhancedFAQ);
+  }else{
+    renderEnhancedFAQ();
+  }
+
+  const obs=new MutationObserver(function(){
+    renderEnhancedFAQ();
+  });
+  obs.observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+})();
+</script>
 <script type="module" src="auth.js"></script>
 <script src="ai-chat.js"></script>
 
 <!-- ═══ Back to Top + Service Worker + Image Loader ═══ -->
 <script>
+// 1. Back to Top Logic
 const btt = document.getElementById("backToTop");
 if(btt){
   window.addEventListener("scroll", () => {
@@ -2169,6 +2381,7 @@ if(btt){
   });
 }
 
+// 2. Service Worker (PWA)
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
@@ -2177,6 +2390,7 @@ if('serviceWorker' in navigator){
   });
 }
 
+// 3. Image Loading Optimization
 document.addEventListener('load', function(e){
   if(e.target && e.target.tagName === 'IMG'){
     e.target.classList.add('loaded');
