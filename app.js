@@ -1761,6 +1761,10 @@ async function checkout(){
     $("#coAddr")?.focus();return;
   }
 
+  // نفتح تاب فاضي دلوقتي فورًا (لسه جوه نفس الـ click event) عشان نحجز إذن المتصفح
+  // لو فتحناه بعد كل الـ await (Firebase / الإيميل) المتصفح هيعتبره popup غير مرغوب فيه ويمنعه بصمت
+  const waWindow = window.open("", "_blank");
+
   saveUserFromCart(name,phone,email,city,addr,notes);
 
   const orderId=genOrderId();
@@ -1936,7 +1940,7 @@ async function checkout(){
     toast(t("t_order"));
   }
   
-  openWhatsAppConfirmation(orderData);
+  openWhatsAppConfirmation(orderData, waWindow);
 
   try {
     if (typeof gtag === "function") {
@@ -2051,7 +2055,7 @@ ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
   }
 }
 
-function openWhatsAppConfirmation(orderData) {
+function openWhatsAppConfirmation(orderData, waWindow) {
   if (!CFG || !CFG.WHATSAPP) return;
   
   const whatsappNumber = String(CFG.WHATSAPP).replace(/\D/g, "");
@@ -2091,10 +2095,14 @@ ${itemsSummary}
 شكراً لكم!`;
   
   const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-  
-  setTimeout(() => {
+
+  // نستخدم التاب اللي فتحناه بالفعل جوه الـ click event (waWindow) عشان المتصفح ما يمنعوش
+  if (waWindow && !waWindow.closed) {
+    waWindow.location.href = waUrl;
+  } else {
+    // fallback لو المتصفح قفل النافذة برضو (نادر) — نحاول نفتحها تاني
     window.open(waUrl, "_blank");
-  }, 1500);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
