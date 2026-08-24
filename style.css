@@ -2421,3 +2421,36 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
   font-weight: 700;
   color: var(--gold2);
 }
+
+/* ═══ FIX: Force Cart & Overlay to be hidden by default ═══ */
+.drawer {
+    transform: translateX(105%) !important;
+    visibility: hidden !important;
+    transition: transform 0.4s ease, visibility 0.4s ease !important;
+}
+
+.drawer.open {
+    transform: translateX(0) !important;
+    visibility: visible !important;
+}
+
+/* Fix for RTL/LTR directions */
+html[dir="ltr"] .drawer {
+    transform: translateX(-105%) !important;
+}
+html[dir="ltr"] .drawer.open {
+    transform: translateX(0) !important;
+}
+
+.ovl {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: opacity 0.3s ease, visibility 0.3s ease !important;
+}
+
+.ovl.open {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
