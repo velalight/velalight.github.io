@@ -1185,189 +1185,641 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
-     REVIEWS — Compact Preview (3 Reviews Only)
+     REVIEWS — Premium Horizontal Preview
      ═══════════════════════════════════════════════════════════ -->
-<section id="reviews" class="sec" style="background:var(--c-cream); padding: 2rem 0;">
+<section id="reviews" class="sec vl-reviews">
   <div class="wrap">
-    <div class="sec-head rv" style="text-align:center; margin-bottom:1.5rem;">
-      <div class="kick" style="color:var(--gold2); font-size:0.85rem;">💛 كلامكم أحلى هدية</div>
-      <h2 style="font-size:1.6rem; margin:0.5rem 0; font-family:var(--fd);">آراء عملائنا</h2>
-      <p style="color:var(--mut); font-size:0.9rem;">
-        عملاء وثقوا في <strong style="color:var(--gold2);">VelaLight</strong>
+
+    <div class="vl-reviews-head rv">
+      <div class="kick" data-i18n="rev_eyebrow">💛 كلامكم أحلى هدية</div>
+      <h2 data-i18n="rev_title">آراء عملائنا</h2>
+      <p data-i18n="rev_body">
+        مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.
       </p>
     </div>
 
-    <!-- 3 Reviews Only - Horizontal Scroll -->
-    <div style="display:flex; gap:10px; overflow-x:auto; padding:10px 5px 15px; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none;">
-      <div id="reviewsPreview" style="display:flex; gap:10px;"></div>
+    <div class="vl-reviews-shell">
+      <button
+        class="vl-review-arrow prev"
+        type="button"
+        data-review-dir="-1"
+        aria-label="Previous reviews"
+      >‹</button>
+
+      <div
+        class="vl-reviews-track"
+        id="reviewsTrack"
+        tabindex="0"
+        aria-label="Customer reviews"
+      ></div>
+
+      <button
+        class="vl-review-arrow next"
+        type="button"
+        data-review-dir="1"
+        aria-label="Next reviews"
+      >›</button>
     </div>
 
-    <!-- View All Button - Link to Separate Page -->
-    <div style="text-align:center; margin-top:1rem;">
-      <a href="reviews.html" style="display:inline-block; background:var(--c-dark); color:#fff; padding:10px 24px; border-radius:8px; text-decoration:none; font-size:0.9rem; font-weight:600;">
-        📸 شوف كل أراء عملاء VelaLight
+    <div class="vl-reviews-actions">
+      <a href="reviews.html" class="vl-reviews-all" id="reviewsAllLink">
+        <span class="review-ar">📸 شوفي كل آراء عملاء VelaLight</span>
+        <span class="review-en">📸 See All VelaLight Customer Reviews</span>
       </a>
     </div>
 
-    <!-- CTA -->
-    <div style="text-align:center; margin-top:1.5rem; padding:1.5rem; background:#fff; border-radius:12px; border:1px solid var(--line);">
-      <h3 style="font-size:1.1rem; color:var(--dark); margin-bottom:0.5rem;">جاهزة تجربي السحر؟</h3>
-      <p style="color:var(--mut); font-size:0.9rem; margin-bottom:1rem;">انضمي لعائلة VelaLight</p>
-      <a href="#products" class="btn-primary-lux" style="display:inline-flex; align-items:center; gap:6px; padding:10px 24px; font-size:0.95rem; text-decoration:none;">
-        اطلبي شمعتك الآن 🕯️
+    <div class="vl-review-cta">
+      <div>
+        <h3 data-i18n="rev_cta">✨ جربتي سحرنا؟</h3>
+        <p data-i18n="rev_cta_link">ابعتيلنا رأيك على الواتساب</p>
+      </div>
+      <a href="#products" class="btn-primary-lux vl-review-order" id="reviewOrderLink">
+        <span class="review-ar">اطلبي شمعتك الآن 🕯️</span>
+        <span class="review-en">Order Your Candle Now 🕯️</span>
       </a>
     </div>
+
   </div>
 </section>
 
-<script>
-function initReviewsPreview() {
-  const container = document.getElementById('reviewsPreview');
-  if (typeof REVIEWS_IMAGES === 'undefined' || REVIEWS_IMAGES.length === 0) return;
-
-  // عرض أول 3 آراء فقط
-  REVIEWS_IMAGES.slice(0, 3).forEach((imgName, index) => {
-    const imgUrl = typeof CDN === "function" ? CDN(`testimonials/${imgName}`) : `https://velalight.github.io/testimonials/${imgName}`;
-    
-    const item = document.createElement('div');
-    item.style.cssText = `flex:0 0 240px; background:#fff; padding:10px; border-radius:10px; border:1px solid var(--line); scroll-snap-align:center;`;
-    
-    item.innerHTML = `
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
-        <img src="${imgUrl}" loading="lazy" style="width:50px; height:50px; object-fit:cover; border-radius:8px;">
-        <div>
-          <span style="font-size:0.75rem; color:#27ae60; font-weight:700; display:flex; align-items:center; gap:3px;">✅ موثقة</span>
-          <span style="font-size:0.8rem; color:var(--dark); font-weight:600;">عميلة سعيدة #${index + 1}</span>
-        </div>
-      </div>
-      <div style="color:var(--gold2); font-size:0.85rem;">⭐⭐⭐⭐⭐</div>
-    `;
-    container.appendChild(item);
-  });
-}
-document.addEventListener("DOMContentLoaded", initReviewsPreview);
-</script>
-  
-<!-- ═══ Full Gallery Modal (Popup) ══ -->
-<div id="reviewsModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:10000;overflow-y:auto;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
-  <div style="max-width:1200px;margin:0 auto;">
-    <button onclick="document.getElementById('reviewsModal').style.display='none'" style="position:fixed;top:20px;right:20px;background:#fff;border:none;width:40px;height:40px;border-radius:50%;font-size:1.5rem;cursor:pointer;z-index:10001;">✕</button>
-    
-    <h2 style="color:#fff;text-align:center;margin:2rem 0 1rem;font-size:2rem;">📸 كل آراء عملائنا</h2>
-    <p style="color:rgba(255,255,255,0.8);text-align:center;margin-bottom:2rem;"> مراجعة حقيقية من عملاءنا</p>
-    
-    <div id="fullGalleryGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem;padding:1rem;"></div>
+<!-- Review image lightbox: swipe/arrow navigation + reliable close -->
+<div class="vl-review-lightbox" id="reviewLightbox" aria-hidden="true">
+  <button class="vl-review-lightbox-close" id="reviewLightboxClose" type="button" aria-label="Close">✕</button>
+  <button class="vl-review-lightbox-arrow prev" id="reviewLightboxPrev" type="button" aria-label="Previous image">‹</button>
+  <div class="vl-review-lightbox-stage" id="reviewLightboxStage">
+    <img id="reviewLightboxImg" src="" alt="Customer review" draggable="false">
   </div>
+  <button class="vl-review-lightbox-arrow next" id="reviewLightboxNext" type="button" aria-label="Next image">›</button>
+  <div class="vl-review-lightbox-counter" id="reviewLightboxCounter"></div>
 </div>
 
-<!-- Lightbox for Single Image -->
-<div id="reviewLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:10002;justify-content:center;align-items:center;padding:20px;cursor:zoom-out;" onclick="this.style.display='none'">
-  <img id="lightboxImg" src="" alt="رأي عميل" style="max-width:100%;max-height:90vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
-</div>
-
-<script>
-function initTrustGrid() {
-  const grid = document.querySelector('.reviews-grid');
-  const modalGrid = document.getElementById('fullGalleryGrid');
-  
-  if (typeof REVIEWS_IMAGES === 'undefined' || REVIEWS_IMAGES.length === 0) return;
-
-  // عرض أول 6 صور في الصفحة الرئيسية
-  const featuredImages = REVIEWS_IMAGES.slice(0, 6);
-  
-  featuredImages.forEach((imgName, index) => {
-    const imgUrl = typeof CDN === "function" ? CDN(`testimonials/${imgName}`) : `https://velalight.github.io/testimonials/${imgName}`;
-    
-    const card = document.createElement('div');
-    card.className = 'review-card';
-    card.style.cssText = `
-      background:#fff;
-      border-radius:16px;
-      overflow:hidden;
-      box-shadow:0 4px 20px rgba(0,0,0,0.08);
-      transition:transform 0.3s ease,box-shadow 0.3s ease;
-      cursor:pointer;
-    `;
-    card.onmouseover = () => {
-      card.style.transform = 'translateY(-5px)';
-      card.style.boxShadow = '0 8px 30px rgba(0,0,0,0.15)';
-    };
-    card.onmouseout = () => {
-      card.style.transform = 'translateY(0)';
-      card.style.boxShadow = '0 4px 20px rgba(0,0,0,0.08)';
-    };
-    
-    card.innerHTML = `
-      <div style="position:relative;">
-        <img src="${imgUrl}" alt="رأي عميل" loading="lazy" 
-             style="width:100%;height:350px;object-fit:cover;display:block;"
-             onclick="event.stopPropagation();document.getElementById('reviewLightbox').style.display='flex';document.getElementById('lightboxImg').src='${imgUrl}'">
-        
-        <!-- Verified Badge -->
-        <div style="position:absolute;top:12px;right:12px;background:rgba(39,174,96,0.95);color:#fff;padding:6px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;display:flex;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,0.2);">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-          موثقة
-        </div>
-        
-        <!-- Stars -->
-        <div style="position:absolute;bottom:12px;left:12px;background:rgba(255,255,255,0.95);padding:6px 10px;border-radius:8px;font-size:0.9rem;">
-          ⭐⭐⭐⭐⭐
-        </div>
-      </div>
-      
-      <div style="padding:1rem;text-align:center;">
-        <p style="color:var(--dim);font-size:0.85rem;margin:0;">عميلة سعيدة #${index + 1}</p>
-      </div>
-    `;
-    
-    card.onclick = () => {
-      document.getElementById('reviewLightbox').style.display = 'flex';
-      document.getElementById('lightboxImg').src = imgUrl;
-    };
-    
-    grid.appendChild(card);
-  });
-
-  // عرض كل الـ 20 صورة في الـ Modal
-  REVIEWS_IMAGES.forEach((imgName) => {
-    const imgUrl = typeof CDN === "function" ? CDN(`testimonials/${imgName}`) : `https://velalight.github.io/testimonials/${imgName}`;
-    
-    const imgCard = document.createElement('div');
-    imgCard.style.cssText = `
-      background:#fff;
-      border-radius:12px;
-      overflow:hidden;
-      cursor:pointer;
-      transition:transform 0.2s ease;
-    `;
-    imgCard.onmouseover = () => imgCard.style.transform = 'scale(1.03)';
-    imgCard.onmouseout = () => imgCard.style.transform = 'scale(1)';
-    
-    imgCard.innerHTML = `
-      <img src="${imgUrl}" alt="رأي عميل" loading="lazy" 
-           style="width:100%;height:280px;object-fit:cover;display:block;border-radius:12px;"
-           onclick="event.stopPropagation();document.getElementById('reviewLightbox').style.display='flex';document.getElementById('lightboxImg').src='${imgUrl}'">
-    `;
-    
-    modalGrid.appendChild(imgCard);
-  });
-
-  // فتح الـ Modal
-  document.getElementById('viewAllReviews').onclick = () => {
-    document.getElementById('reviewsModal').style.display = 'block';
-    document.body.style.overflow = 'hidden';
-  };
-
-  // إغلاق الـ Modal
-  document.getElementById('reviewsModal').onclick = (e) => {
-    if (e.target === document.getElementById('reviewsModal')) {
-      document.getElementById('reviewsModal').style.display = 'none';
-      document.body.style.overflow = '';
-    }
-  };
+<style>
+/* ═══════════════════════════════════════════════════════════
+   VELALIGHT — PREMIUM REVIEWS
+   Desktop + Mobile horizontal gallery
+   ═══════════════════════════════════════════════════════════ */
+.vl-reviews{
+  background:var(--c-cream,#fffcf9);
+  padding:clamp(2.2rem,5vw,3.8rem) 0;
+  overflow:hidden;
 }
 
-document.addEventListener("DOMContentLoaded", initTrustGrid);
+.vl-reviews-head{
+  text-align:center;
+  max-width:760px;
+  margin:0 auto 1.5rem;
+}
+
+.vl-reviews-head .kick{
+  color:var(--gold2,#b68d2e);
+  font-size:.82rem;
+  margin-bottom:.35rem;
+}
+
+.vl-reviews-head h2{
+  margin:.15rem 0 .45rem;
+  font-family:var(--fd,"El Messiri",serif);
+  font-size:clamp(1.55rem,3vw,2.1rem);
+  line-height:1.25;
+  color:var(--ink,#1a1512);
+}
+
+.vl-reviews-head p{
+  margin:0 auto;
+  max-width:680px;
+  color:var(--mut,#6f6257);
+  font-size:.82rem;
+  line-height:1.7;
+}
+
+.vl-reviews-shell{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:.65rem;
+  width:100%;
+}
+
+.vl-reviews-track{
+  display:flex;
+  flex:1 1 auto;
+  gap:16px;
+  min-width:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:8px 4px 18px;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  direction:ltr;
+  touch-action:pan-x;
+  cursor:grab;
+}
+
+.vl-reviews-track:active{cursor:grabbing}
+.vl-reviews-track::-webkit-scrollbar{display:none}
+
+.vl-review-card{
+  flex:0 0 clamp(220px,27vw,285px);
+  scroll-snap-align:start;
+  background:#fff;
+  border:1px solid rgba(120,90,55,.14);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 8px 26px rgba(60,40,20,.07);
+  transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
+  direction:rtl;
+}
+
+.vl-review-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 14px 34px rgba(60,40,20,.12);
+  border-color:rgba(217,171,95,.38);
+}
+
+.vl-review-media{
+  position:relative;
+  aspect-ratio:4 / 5;
+  background:#f4eee6;
+  overflow:hidden;
+  cursor:zoom-in;
+}
+
+.vl-review-media img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  transition:transform .45s ease;
+}
+
+.vl-review-card:hover .vl-review-media img{transform:scale(1.025)}
+
+.vl-review-verified{
+  position:absolute;
+  top:10px;
+  inset-inline-end:10px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.94);
+  color:#159447;
+  font-size:.68rem;
+  font-weight:800;
+  box-shadow:0 3px 12px rgba(0,0,0,.10);
+  backdrop-filter:blur(8px);
+}
+
+.vl-review-zoom{
+  position:absolute;
+  bottom:10px;
+  inset-inline-start:10px;
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:rgba(26,21,18,.78);
+  color:#fff;
+  font-size:.85rem;
+  box-shadow:0 3px 12px rgba(0,0,0,.18);
+}
+
+.vl-review-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:.7rem .8rem .75rem;
+  direction:rtl;
+}
+
+.vl-review-name{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:var(--ink,#1a1512);
+  font-size:.73rem;
+  font-weight:700;
+}
+
+.vl-review-stars{
+  flex:0 0 auto;
+  color:var(--gold2,#b68d2e);
+  font-size:.72rem;
+  letter-spacing:1px;
+  white-space:nowrap;
+}
+
+.vl-review-arrow{
+  flex:0 0 auto;
+  width:38px;
+  height:38px;
+  border:1px solid rgba(217,171,95,.35);
+  border-radius:50%;
+  background:#fff;
+  color:var(--gold2,#b68d2e);
+  display:grid;
+  place-items:center;
+  font-size:1.5rem;
+  line-height:1;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(60,40,20,.08);
+  transition:transform .2s ease,background .2s ease,color .2s ease;
+  z-index:2;
+}
+
+.vl-review-arrow:hover{
+  transform:scale(1.06);
+  background:var(--gold,#d9ab5f);
+  color:#fff;
+}
+
+.vl-reviews-actions{
+  display:flex;
+  justify-content:center;
+  margin-top:.55rem;
+}
+
+.vl-reviews-all{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  padding:.65rem 1.15rem;
+  border-radius:11px;
+  background:var(--c-dark,#1a1512);
+  color:#fff;
+  text-decoration:none;
+  font-size:.78rem;
+  font-weight:700;
+  box-shadow:0 8px 20px rgba(26,21,18,.12);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+
+.vl-reviews-all:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 26px rgba(26,21,18,.18);
+}
+
+.vl-review-cta{
+  margin:1.35rem auto 0;
+  max-width:980px;
+  padding:1rem 1.15rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 6px 20px rgba(60,40,20,.04);
+}
+
+.vl-review-cta h3{
+  margin:0 0 .2rem;
+  font-family:var(--fd,"El Messiri",serif);
+  font-size:1rem;
+  color:var(--ink,#1a1512);
+}
+
+.vl-review-cta p{
+  margin:0;
+  color:var(--mut,#6f6257);
+  font-size:.76rem;
+}
+
+.vl-review-order{
+  flex:0 0 auto;
+  padding:10px 18px;
+  white-space:nowrap;
+}
+
+/* ═══ LIGHTBOX ═══ */
+.vl-review-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:20000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:clamp(16px,3vw,32px);
+  background:rgba(15,11,8,.94);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+.vl-review-lightbox.is-open{display:flex}
+
+.vl-review-lightbox-stage{
+  position:relative;
+  width:min(92vw,900px);
+  height:min(88vh,900px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  touch-action:pan-x pan-y;
+}
+
+.vl-review-lightbox-stage img{
+  display:block;
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  object-fit:contain;
+  border-radius:12px;
+  box-shadow:0 20px 70px rgba(0,0,0,.45);
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+.vl-review-lightbox-close{
+  position:fixed;
+  top:16px;
+  inset-inline-end:16px;
+  z-index:20003;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  color:#1a1512;
+  font-size:1.2rem;
+  cursor:pointer;
+  box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
+
+.vl-review-lightbox-arrow{
+  position:fixed;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:20003;
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  font-size:1.8rem;
+  cursor:pointer;
+  backdrop-filter:blur(8px);
+}
+
+.vl-review-lightbox-arrow.prev{inset-inline-start:18px}
+.vl-review-lightbox-arrow.next{inset-inline-end:18px}
+.vl-review-lightbox-arrow:hover{background:rgba(255,255,255,.22)}
+
+.vl-review-lightbox-counter{
+  position:fixed;
+  bottom:16px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:20003;
+  padding:5px 10px;
+  border-radius:999px;
+  background:rgba(0,0,0,.5);
+  color:#fff;
+  font-size:.72rem;
+}
+
+.review-en{display:none}
+
+html[lang="en"] .review-ar{display:none}
+html[lang="en"] .review-en{display:inline}
+
+@media(max-width:900px){
+  .vl-reviews{padding:2rem 0}
+  .vl-reviews-head{margin-bottom:1rem}
+  .vl-reviews-head p{font-size:.74rem;line-height:1.55}
+  .vl-reviews-shell{gap:.35rem}
+  .vl-review-arrow{display:none}
+  .vl-reviews-track{
+    gap:12px;
+    padding:6px 2px 14px;
+    scroll-padding-inline:2px;
+  }
+  .vl-review-card{
+    flex-basis:min(76vw,270px);
+    border-radius:15px;
+  }
+  .vl-review-meta{padding:.62rem .7rem .68rem}
+  .vl-review-name{font-size:.68rem}
+  .vl-review-stars{font-size:.64rem}
+  .vl-reviews-all{font-size:.72rem;min-height:42px;padding:.6rem .9rem}
+  .vl-review-cta{
+    flex-direction:column;
+    text-align:center;
+    padding:1rem .85rem;
+  }
+  .vl-review-order{width:100%;justify-content:center}
+  .vl-review-lightbox{padding:12px}
+  .vl-review-lightbox-stage{width:100%;height:84vh}
+  .vl-review-lightbox-arrow{display:none}
+  .vl-review-lightbox-close{top:10px;inset-inline-end:10px}
+}
+
+@media(max-width:400px){
+  .vl-review-card{flex-basis:82vw}
+  .vl-reviews-head h2{font-size:1.45rem}
+  .vl-review-meta{gap:6px}
+}
+</style>
+
+<script>
+(function(){
+  "use strict";
+
+  const track = document.getElementById("reviewsTrack");
+  const lightbox = document.getElementById("reviewLightbox");
+  const lightboxImg = document.getElementById("reviewLightboxImg");
+  const counter = document.getElementById("reviewLightboxCounter");
+  const closeBtn = document.getElementById("reviewLightboxClose");
+  const prevBtn = document.getElementById("reviewLightboxPrev");
+  const nextBtn = document.getElementById("reviewLightboxNext");
+
+  if(!track) return;
+
+  let images = [];
+  let currentIndex = 0;
+  let dragStartX = null;
+  let dragScrollLeft = 0;
+  let dragging = false;
+
+  function reviewUrl(name){
+    return typeof CDN === "function"
+      ? CDN("testimonials/" + name)
+      : "https://velalight.github.io/testimonials/" + name;
+  }
+
+  function text(key, fallbackAr, fallbackEn){
+    try{
+      if(typeof t === "function"){
+        const value = t(key);
+        if(value && value !== key) return value;
+      }
+    }catch(e){}
+    return document.documentElement.lang === "en" ? fallbackEn : fallbackAr;
+  }
+
+  function getImages(){
+    if(typeof REVIEWS_IMAGES === "undefined" || !Array.isArray(REVIEWS_IMAGES)) return [];
+    return REVIEWS_IMAGES.slice(0,6);
+  }
+
+  function render(){
+    images = getImages();
+    track.innerHTML = "";
+
+    if(!images.length){
+      track.innerHTML = '<div style="padding:1rem;color:var(--mut);text-align:center;width:100%;">—</div>';
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+
+    images.forEach(function(name,index){
+      const card = document.createElement("article");
+      card.className = "vl-review-card";
+      card.setAttribute("role","button");
+      card.setAttribute("tabindex","0");
+      card.setAttribute("aria-label", document.documentElement.lang === "en"
+        ? "Open customer review " + (index + 1)
+        : "فتح مراجعة العميلة " + (index + 1));
+
+      const img = reviewUrl(name);
+      const verified = text("rev_verified","عميلة موثّقة","Verified Customer");
+      const customer = document.documentElement.lang === "en"
+        ? "Customer #" + (index + 1)
+        : "عميلة سعيدة #" + (index + 1);
+
+      card.innerHTML = `
+        <div class="vl-review-media">
+          <img
+            src="${img}"
+            alt="${document.documentElement.lang === "en" ? "Customer review" : "رأي عميلة"}"
+            loading="lazy"
+            decoding="async"
+          >
+          <span class="vl-review-verified">✓ ${verified}</span>
+          <span class="vl-review-zoom" aria-hidden="true">⌕</span>
+        </div>
+        <div class="vl-review-meta">
+          <span class="vl-review-name">${customer}</span>
+          <span class="vl-review-stars" aria-label="5 stars">★★★★★</span>
+        </div>
+      `;
+
+      const open = function(){ openLightbox(index); };
+      card.addEventListener("click",open);
+      card.addEventListener("keydown",function(e){
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          open();
+        }
+      });
+      frag.appendChild(card);
+    });
+
+    track.appendChild(frag);
+  }
+
+  function openLightbox(index){
+    if(!images.length) return;
+    currentIndex = Math.max(0,Math.min(index,images.length-1));
+    updateLightbox();
+    lightbox.classList.add("is-open");
+    lightbox.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove("is-open");
+    lightbox.setAttribute("aria-hidden","true");
+    lightboxImg.src = "";
+    document.body.style.overflow = "";
+  }
+
+  function updateLightbox(){
+    const name = images[currentIndex];
+    if(!name) return;
+    lightboxImg.src = reviewUrl(name);
+    lightboxImg.alt = document.documentElement.lang === "en" ? "Customer review" : "رأي عميلة";
+    counter.textContent = (currentIndex + 1) + " / " + images.length;
+  }
+
+  function moveLightbox(dir){
+    if(!images.length) return;
+    currentIndex = (currentIndex + dir + images.length) % images.length;
+    updateLightbox();
+  }
+
+  document.querySelectorAll("[data-review-dir]").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      const dir = Number(btn.dataset.reviewDir) || 1;
+      const first = track.querySelector(".vl-review-card");
+      const amount = first ? first.getBoundingClientRect().width + 16 : track.clientWidth * .8;
+      track.scrollBy({left: dir * amount, behavior:"smooth"});
+    });
+  });
+
+  closeBtn?.addEventListener("click",closeLightbox);
+  prevBtn?.addEventListener("click",function(){moveLightbox(-1)});
+  nextBtn?.addEventListener("click",function(){moveLightbox(1)});
+
+  lightbox?.addEventListener("click",function(e){
+    if(e.target === lightbox || e.target === document.getElementById("reviewLightboxStage")) closeLightbox();
+  });
+
+  document.addEventListener("keydown",function(e){
+    if(!lightbox.classList.contains("is-open")) return;
+    if(e.key === "Escape") closeLightbox();
+    if(e.key === "ArrowLeft") moveLightbox(-1);
+    if(e.key === "ArrowRight") moveLightbox(1);
+  });
+
+  /* Mouse drag on desktop + natural swipe on mobile */
+  track.addEventListener("pointerdown",function(e){
+    if(e.pointerType === "touch") return;
+    dragging = true;
+    dragStartX = e.clientX;
+    dragScrollLeft = track.scrollLeft;
+    track.setPointerCapture?.(e.pointerId);
+  });
+
+  track.addEventListener("pointermove",function(e){
+    if(!dragging || dragStartX === null) return;
+    track.scrollLeft = dragScrollLeft - (e.clientX - dragStartX);
+  });
+
+  track.addEventListener("pointerup",function(){
+    dragging = false;
+    dragStartX = null;
+  });
+
+  track.addEventListener("pointercancel",function(){
+    dragging = false;
+    dragStartX = null;
+  });
+
+  /* Keep the section translated whenever the language changes. */
+  const langObserver = new MutationObserver(function(){
+    render();
+  });
+  langObserver.observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+
+  document.addEventListener("DOMContentLoaded",render);
+})();
 </script>
 
 <!-- ═══════════════════════════════════════════════
@@ -1466,64 +1918,67 @@ document.addEventListener("DOMContentLoaded", initTrustGrid);
      ═══════════════════════════════════════════════ -->
 
 
-<section id="faq-section" class="sec vl-faq" style="padding: 2rem 0;">
+<section id="faq-section" class="sec vl-faq">
   <div class="wrap">
     <div class="faq-inner">
-      <div class="faq-heading" style="text-align:center; margin-bottom:1.5rem;">
-        <div class="kick" style="font-size:0.9rem;">FAQ</div>
-        <h2 style="font-size:1.8rem;">الأسئلة الشائعة</h2>
+
+      <div class="faq-heading">
+        <div class="kick" data-i18n="faq_h2">FAQ</div>
+        <h2 data-i18n="faq_h2">الأسئلة الشائعة</h2>
+        <p class="faq-subtitle">
+          <span class="review-ar">كل ما تحتاجين معرفته عن الطلب، الشحن، الشموع والعطور.</span>
+          <span class="review-en">Everything you need to know about ordering, shipping, candles and scents.</span>
+        </p>
       </div>
-      <div class="faq-list" style="display:flex; flex-direction:column; gap:6px;">
-        <!-- تم تقليل المسافات والخطوط -->
-        <style>
-          .faq-item { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
-          .faq-item summary { padding: 12px 15px; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
-          .faq-item summary::-webkit-details-marker { display: none; }
-          .faq-item .faq-answer { padding: 0 15px 12px; font-size: 0.9rem; color: var(--mut); line-height: 1.5; }
-        </style>
-        
-        <details class="faq-item">
-          <summary><span>كيف يمكنني الطلب وما طرق الدفع؟</span><span>+</span></summary>
-          <div class="faq-answer">دفع قيمة المنتجات مقدمًا عبر InstaPay أو فودافون كاش، والشحن كاش عند الاستلام.</div>
-        </details>
-        <details class="faq-item">
-          <summary><span>هل تشحنون لكل المحافظات؟</span><span>+</span></summary>
-          <div class="faq-answer">نعم، نوفر خدمة التوصيل الآمن لجميع محافظات مصر.</div>
-        </details>
-        <details class="faq-item">
-          <summary><span>كم مدة تجهيز وشحن الطلب؟</span><span>+</span></summary>
-          <div class="faq-answer">التجهيز اليدوي يستغرق 3 إلى 7 أيام عمل، بالإضافة لمدة الشحن حسب المحافظة.</div>
-        </details>
-        <details class="faq-item">
-          <summary><span>هل الشموع من شمع الصويا؟</span><span>+</span></summary>
-          <div class="faq-answer">نعم، نستخدم شمع صويا طبيعي 100% لاحتراق أنظف وأبطأ.</div>
-        </details>
-        <details class="faq-item">
-          <summary><span>هل تتوفر خدمة تغليف الهدايا؟</span><span>+</span></summary>
-          <div class="faq-answer">نعم، جميع منتجاتنا تأتي بتغليف أنيق وفاخر وجاهز للإهداء مجاناً.</div>
-        </details>
-<details class="faq-item">
-          <summary><span>هل تتوفر خدمة تغليف الهدايا؟</span><span>+</span></summary>
-          <div class="faq-answer">نعم، جميع منتجات VelaLight تأتي بتغليف أنيق وفاخر وجاهز للإهداء..</div>
-        </details>
-        <details class="faq-item">
-          <summary><span>ما سياسة الاستبدال والاسترجاع؟</span><span>+</span></summary>
-          <div class="faq-answer">نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب.
 
-وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.
-.</div>
-        </details>
+      <div class="faq-list" id="faqWrap" aria-live="polite"></div>
 
-
-      </div>
     </div>
   </div>
 </section>
 
-  
-<!-- ═══════════════════════════════════════════════
-     FOOTER
-     ═══════════════════════════════════════════════ -->
+<style>
+/* ═══════════════════════════════════════════════════════════
+   VELALIGHT — FAQ SAFE ACCORDION
+   Answers are closed by default and opened only on click.
+   ═══════════════════════════════════════════════════════════ */
+.vl-faq{padding:2.2rem 0}
+.vl-faq .faq-inner{max-width:820px;margin:0 auto}
+.vl-faq .faq-heading{text-align:center;margin-bottom:1.25rem}
+.vl-faq .faq-heading .kick{margin-bottom:.35rem}
+.vl-faq .faq-heading h2{margin:0 0 .35rem;font-family:var(--fd,"El Messiri",serif);font-size:clamp(1.45rem,3vw,1.9rem);line-height:1.25}
+.vl-faq .faq-subtitle{margin:0;color:var(--mut);font-size:.75rem;line-height:1.6}
+.vl-faq .faq-list{display:grid;gap:.45rem}
+.vl-faq .faq-item{background:var(--panel,#fff);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:none;transition:border-color .22s ease,box-shadow .22s ease}
+.vl-faq .faq-item.open{border-color:rgba(217,171,95,.45);box-shadow:0 7px 20px rgba(80,50,20,.07)}
+.vl-faq .faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.82rem 1rem;border:0;background:transparent;color:var(--ink);font-family:var(--fd,"El Messiri",serif);font-size:.78rem;font-weight:700;line-height:1.5;text-align:start;cursor:pointer}
+.vl-faq .faq-q > span:first-child{min-width:0}
+.vl-faq .faq-plus{flex:0 0 auto;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:rgba(217,171,95,.10);color:var(--gold2);font-family:Arial,sans-serif;font-size:1rem;font-weight:400;line-height:1;transition:transform .22s ease,background .22s ease,color .22s ease}
+.vl-faq .faq-item.open .faq-plus{transform:rotate(45deg);background:var(--gold);color:#fff}
+.vl-faq .faq-a{max-height:0;overflow:hidden;opacity:0;transition:max-height .28s ease,opacity .22s ease}
+.vl-faq .faq-a-inner{padding:0 1rem 1rem;color:var(--mut);font-size:.72rem;line-height:1.75}
+.vl-faq .faq-item.open .faq-a{opacity:1}
+.vl-faq .faq-a-inner strong{color:var(--gold2)}
+@media(max-width:700px){
+  .vl-faq{padding:1.7rem 0}
+  .vl-faq .faq-heading{margin-bottom:1rem}
+  .vl-faq .faq-heading h2{font-size:1.3rem}
+  .vl-faq .faq-subtitle{font-size:.64rem;line-height:1.5}
+  .vl-faq .faq-list{gap:.35rem}
+  .vl-faq .faq-item{border-radius:10px}
+  .vl-faq .faq-q{padding:.72rem .75rem;font-size:.7rem;gap:.6rem}
+  .vl-faq .faq-plus{width:22px;height:22px;font-size:.9rem}
+  .vl-faq .faq-a-inner{padding:0 .75rem .8rem;font-size:.64rem;line-height:1.65}
+}
+@media(max-width:400px){
+  .vl-faq{padding:1.4rem 0}
+  .vl-faq .faq-heading h2{font-size:1.2rem}
+  .vl-faq .faq-subtitle{font-size:.6rem}
+  .vl-faq .faq-q{padding:.65rem;font-size:.66rem}
+  .vl-faq .faq-a-inner{padding:0 .65rem .7rem;font-size:.6rem}
+  .vl-faq .faq-plus{width:20px;height:20px;font-size:.82rem}
+}
+</style>
 
 <footer>
 
@@ -1841,6 +2296,75 @@ document.addEventListener("DOMContentLoaded", initTrustGrid);
 <script src="data.js"></script>
 <script type="module" src="firebase.js"></script>
 <script src="app.js"></script>
+<script>
+(function(){
+  "use strict";
+  function faqText(key,fallback){
+    try{
+      if(typeof t === "function"){
+        const v=t(key);
+        if(v && v!==key) return v;
+      }
+    }catch(e){}
+    return fallback;
+  }
+
+  function renderEnhancedFAQ(){
+    const wrap=document.getElementById("faqWrap");
+    if(!wrap) return;
+
+    const items=[1,2,3,4,5,6,7,8].map(function(i){
+      return [
+        faqText("faq"+i+"q","FAQ"),
+        faqText("faq"+i+"a","")
+      ];
+    });
+
+    wrap.innerHTML=items.map(function(item,index){
+      return `
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false">
+            <span>${item[0]}</span>
+            <span class="faq-plus" aria-hidden="true">+</span>
+          </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">${item[1]}</div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    wrap.querySelectorAll(".faq-item").forEach(function(item){
+      const btn=item.querySelector(".faq-q");
+      const answer=item.querySelector(".faq-a");
+      btn.addEventListener("click",function(){
+        const shouldOpen=!item.classList.contains("open");
+        wrap.querySelectorAll(".faq-item.open").forEach(function(other){
+          other.classList.remove("open");
+          other.querySelector(".faq-q")?.setAttribute("aria-expanded","false");
+          other.querySelector(".faq-a").style.maxHeight="0px";
+        });
+        if(shouldOpen){
+          item.classList.add("open");
+          btn.setAttribute("aria-expanded","true");
+          answer.style.maxHeight=answer.scrollHeight+"px";
+        }
+      });
+    });
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",renderEnhancedFAQ);
+  }else{
+    renderEnhancedFAQ();
+  }
+
+  const obs=new MutationObserver(function(){
+    renderEnhancedFAQ();
+  });
+  obs.observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+})();
+</script>
 <script type="module" src="auth.js"></script>
 <script src="ai-chat.js"></script>
 
