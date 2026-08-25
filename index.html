@@ -2066,6 +2066,27 @@ html[lang="en"] .review-en{display:inline}
       </div>
     </div>
 </footer>
+
+  <!-- ═══════════════════════════════════════════════
+     FIRST ORDER DISCOUNT BANNER
+     ═══════════════════════════════════════════════ -->
+<section id="first-order-discount" class="sec" style="padding: 3rem 0; background: var(--bg2, #fdfbf7);">
+  <div class="wrap">
+    <div class="first-order-box" style="background: linear-gradient(135deg, #FFD700 0%, #FFC107 100%); color: #1a1a1a; padding: 2.5rem 2rem; border-radius: 20px; text-align: center; font-weight: bold; box-shadow: 0 10px 30px rgba(255, 193, 7, 0.3); border: 3px solid #FFB300; max-width: 900px; margin: 0 auto; position: relative; overflow: hidden;">
+      <!-- عناصر زخرفية للخلفية -->
+      <div style="position: absolute; top: -20px; left: -20px; width: 80px; height: 80px; background: rgba(255,255,255,0.3); border-radius: 50%;"></div>
+      <div style="position: absolute; bottom: -30px; right: -30px; width: 100px; height: 100px; background: rgba(255,255,255,0.2); border-radius: 50%;"></div>
+      
+      <div style="font-size: 1.6rem; margin-bottom: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 0.8rem; position: relative; z-index: 1;">
+        <span style="font-size: 2rem;">🎁</span>
+        <span data-i18n="first_order_banner_title">خصم 10% على أول أوردر لكِ!</span>
+      </div>
+      <div style="font-size: 1.1rem; font-weight: normal; opacity: 0.95; line-height: 1.6; position: relative; z-index: 1;" data-i18n="first_order_banner_sub">
+        يُطبق الخصم تلقائياً في سلة الشراء عند إدخال بياناتك (الاسم أو الموبايل أو الإيميل) لأول مرة.
+      </div>
+    </div>
+  </div>
+</section>
   
 <!-- ═══════════════════════════════════════════════
      CART
@@ -2105,6 +2126,10 @@ html[lang="en"] .review-en{display:inline}
       <span>🎟️ الخصم (<b id="couponCodeLbl"></b>)</span>
       <b id="cartDiscount">-0</b>
     </div>
+       <div class="trow" id="firstOrderDiscountRow" style="display:none;margin-top:.5rem;color:#d32f2f;font-weight:bold;">
+     <span>🎁 <span data-i18n="first_order_discount_lbl">خصم أول طلب (10%)</span></span>
+     <b id="firstOrderDiscVal">-0</b>
+   </div>
     
     <div class="trow" style="margin-top:.8rem">
       <span data-i18n="subtotal">قيمة المنتجات</span>
