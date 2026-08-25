@@ -1303,7 +1303,7 @@ function renderFAQ(){
   const w = $("#faqWrap");
   if(!w) return;
 
-   const items = [
+  const items = [
     [t("faq1q"), t("faq1a")],
     [t("faq2q"), t("faq2a")],
     [t("faq3q"), t("faq3a")],
@@ -1321,14 +1321,20 @@ function renderFAQ(){
     item.className = "faq-item";
 
     item.innerHTML = `
-      <button class="faq-q" type="button" aria-expanded="false">
+      <button
+        class="faq-q"
+        type="button"
+        aria-expanded="false"
+      >
         <span>${question}</span>
         <span class="faq-icon" aria-hidden="true">+</span>
       </button>
+
       <div class="faq-a">
         <div>${answer}</div>
       </div>
     `;
+
     frag.appendChild(item);
   });
 
@@ -1338,19 +1344,29 @@ function renderFAQ(){
   w.querySelectorAll(".faq-item").forEach(item => {
     const button = item.querySelector(".faq-q");
     const answer = item.querySelector(".faq-a");
+
     if(!button || !answer) return;
 
     button.addEventListener("click", () => {
       const wasOpen = item.classList.contains("open");
+
       w.querySelectorAll(".faq-item").forEach(other => {
         other.classList.remove("open");
+
         const otherAnswer = other.querySelector(".faq-a");
         const otherButton = other.querySelector(".faq-q");
-        if(otherAnswer) otherAnswer.style.maxHeight = null;
-        if(otherButton) {
+
+        if(otherAnswer){
+          otherAnswer.style.maxHeight = null;
+        }
+
+        if(otherButton){
           otherButton.setAttribute("aria-expanded", "false");
+
           const otherIcon = otherButton.querySelector(".faq-icon");
-          if(otherIcon) otherIcon.textContent = "+";
+          if(otherIcon){
+            otherIcon.textContent = "+";
+          }
         }
       });
 
@@ -1358,8 +1374,11 @@ function renderFAQ(){
         item.classList.add("open");
         answer.style.maxHeight = answer.scrollHeight + "px";
         button.setAttribute("aria-expanded", "true");
+
         const icon = button.querySelector(".faq-icon");
-        if(icon) icon.textContent = "−";
+        if(icon){
+          icon.textContent = "−";
+        }
       }
     });
   });
@@ -1395,9 +1414,14 @@ function initCart(){
   $("#applyCouponBtn")?.addEventListener("click",applyCoupon);
 
   const saveCustomer = debounce(() => saveCartCustomer(), 500);
+  
   ["#coName","#coPhone","#coEmail","#coCity","#coAddr","#coNotes"].forEach(selector=>{
-    document.addEventListener("input",e=>{ if(e.target.matches(selector)){saveCustomer();} });
-    document.addEventListener("change",e=>{ if(e.target.matches(selector)){saveCustomer();} });
+    document.addEventListener("input",e=>{
+      if(e.target.matches(selector)){saveCustomer();}
+    });
+    document.addEventListener("change",e=>{
+      if(e.target.matches(selector)){saveCustomer();}
+    });
   });
 
   const checkoutBtn = document.getElementById('checkoutBtn');
@@ -1420,12 +1444,19 @@ function renderCart(){
   if(!w)return;
 
   if(!c.length){
-    w.innerHTML=`<div class="empty" style="padding:2rem 0">${t("cart_empty")}<br><small>${t("cart_empty_sub")}</small></div>`;
+    w.innerHTML=`
+      <div class="empty" style="padding:2rem 0">
+        ${t("cart_empty")}
+        <br>
+        <small>${t("cart_empty_sub")}</small>
+      </div>
+    `;
     updateTotals(c);
     return;
   }
 
   const frag = document.createDocumentFragment();
+  
   c.forEach((it, i) => {
     const lineTotal=Number(it.price||0)*Number(it.qty||1);
     const item = document.createElement('div');
@@ -1440,7 +1471,11 @@ function renderCart(){
           <span class="cart-scent-label">🌸 ${t("scent_lbl")}</span>
           <select class="cart-scent-select" data-i="${i}" aria-label="${t("scent_lbl")}">
             <option value="">${LANG==="en"?"Choose a scent":"اختار العطر"}</option>
-            ${VELA_SCENTS.map(scent=>`<option value="${scent[0]}" ${String(it.scent||"")===String(scent[0])?"selected":""}>${velaScentTr(scent[0])}</option>`).join("")}
+            ${VELA_SCENTS.map(scent=>`
+              <option value="${scent[0]}" ${String(it.scent||"")===String(scent[0])?"selected":""}>
+                ${velaScentTr(scent[0])}
+              </option>
+            `).join("")}
           </select>
         </label>
         <div class="cs">${t("price_lbl")} <strong>${money(it.price)}</strong></div>
@@ -1464,10 +1499,23 @@ function renderCart(){
 
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   const cartProductIds = c.map(it => it.id);
+  
   const suggestedProduct = products.find(p => {
-    if (!p || cartProductIds.includes(p.id) || p.active === false) return false;
-    const searchText = [p.name||"", p.nameEn||"", p.desc||"", p.descEn||"", p.cat||""].join(" ").toLowerCase();
-    return searchText.includes("فواحة") || searchText.includes("دولاب") || searchText.includes("freshener") || searchText.includes("closet");
+    if (!p || cartProductIds.includes(p.id)) return false;
+    if (p.active === false) return false;
+    
+    const searchText = [
+      p.name || "",
+      p.nameEn || "",
+      p.desc || "",
+      p.descEn || "",
+      p.cat || ""
+    ].join(" ").toLowerCase();
+    
+    return searchText.includes("فواحة") || 
+           searchText.includes("دولاب") || 
+           searchText.includes("freshener") ||
+           searchText.includes("closet");
   });
   
   if (suggestedProduct) {
@@ -1504,9 +1552,10 @@ function renderCart(){
       qtyRow.id = 'qtyDiscountRow';
       qtyRow.className = 'trow';
       qtyRow.style.cssText = 'display:none; margin-top:0.5rem; color:var(--ok);';
-      qtyRow.innerHTML = `<span>🎁 خصم الكمية (3+ قطع):</span><b id="qtyDiscountVal">-0</b>`;
+      qtyRow.innerHTML = `<span>🎁 خصم الكمية (3+ قطع من نفس المنتج):</span><b id="qtyDiscountVal">-0</b>`;
       const subRow = dfoot.querySelector('.trow'); 
-      if (subRow) dfoot.insertBefore(qtyRow, subRow); else dfoot.appendChild(qtyRow);
+      if (subRow) dfoot.insertBefore(qtyRow, subRow);
+      else dfoot.appendChild(qtyRow);
     }
 
     if (!document.getElementById('freeShippingRow')) {
@@ -1516,461 +1565,15 @@ function renderCart(){
       shipRow.style.cssText = 'display:none; margin-top:0.5rem; color:#27ae60; font-weight:700; background:#eafaf1; padding:0.5rem; border-radius:8px; text-align:center;';
       shipRow.innerHTML = `<span>🚚 مبروك! طلبك مؤهل لشحن مجاني</span>`;
       const totalRow = dfoot.querySelector('.trow.total');
-      if (totalRow) totalRow.parentNode.insertBefore(shipRow, totalRow.nextSibling); else dfoot.appendChild(shipRow);
+      if (totalRow) totalRow.parentNode.insertBefore(shipRow, totalRow.nextSibling);
+      else dfoot.appendChild(shipRow);
     }
   }
 
   w.addEventListener('click', handleCartClick);
   w.addEventListener('change', handleCartChange);
   
-  // ✨ إضافة مراقبة حقول الإدخال لتفعيل خصم أول أوردر فوراً
-  ["coName", "coPhone", "coEmail"].forEach(id => {
-    const el = $(`#${id}`);
-    if (el) {
-      el.removeEventListener("input", checkFirstOrderStatus);
-      el.removeEventListener("change", checkFirstOrderStatus);
-      el.addEventListener("input", checkFirstOrderStatus);
-      el.addEventListener("change", checkFirstOrderStatus);
-    }
-  });
-  checkFirstOrderStatus(); // تشغيل التحقق فوراً عند فتح السلة
-  
   updateTotals(c);
-}
-
-function handleCartClick(e){
-  const rmBtn = e.target.closest('.rm');
-  const plusBtn = e.target.closest('.cq-plus');
-  const minusBtn = e.target.closest('.cq-minus');
-  const c = getCart();
-  
-  if(rmBtn){
-    c.splice(+rmBtn.dataset.i, 1);
-    saveCart(c); renderCart(); cartBadge();
-  } else if(plusBtn){
-    const idx = +plusBtn.dataset.i;
-    c[idx].qty = Number(c[idx].qty || 1) + 1;
-    saveCart(c); renderCart();
-  } else if(minusBtn){
-    const idx = +minusBtn.dataset.i;
-    c[idx].qty = Number(c[idx].qty || 1) - 1;
-    if(c[idx].qty <= 0){ c.splice(idx, 1); }
-    saveCart(c); renderCart();
-  }
-}
-
-function handleCartChange(e){
-  if(e.target.matches('.cart-scent-select')){
-    const select = e.target;
-    const idx = +select.dataset.i;
-    const c = getCart();
-    if(!c[idx]) return;
-    c[idx].scent = select.value;
-    saveCart(c); renderCart();
-  }
-}
-
-function updateTotals(c){
-  const sub = c.reduce((a,i) => a + (Number(i.price||0) * Number(i.qty||1)), 0);
-  
-  let qtyDiscount = 0;
-  c.forEach(it => {
-    if (Number(it.qty) >= 3) {
-      qtyDiscount += (Number(it.price||0) * Number(it.qty||1) * 0.05);
-    }
-  });
-
-  const couponDisc = (typeof calcCouponDiscount === "function") ? calcCouponDiscount(sub) : 0;
-  
-  let firstOrderDisc = 0;
-  if (cachedFirstOrderStatus === 'eligible' && sub > 0) {
-    firstOrderDisc = Math.round(sub * 0.10); // خصم 10%
-  }
-
-  const totalDisc = qtyDiscount + couponDisc + firstOrderDisc;
-  const total = Math.max(0, sub - totalDisc);
-
-  if($("#cartSub")) $("#cartSub").textContent = money(sub);
-  
-  const qtyRow = $("#qtyDiscountRow");
-  if(qtyRow){
-    if(qtyDiscount > 0){
-      qtyRow.style.display = "flex";
-      const valEl = $("#qtyDiscountVal");
-      if(valEl) valEl.textContent = "-" + money(qtyDiscount);
-    } else { 
-      qtyRow.style.display = "none"; 
-    }
-  }
-
-  const couponRow = $("#discountRow");
-  if(couponRow){
-    if(couponDisc > 0 && appliedCoupon){
-      couponRow.style.display = "flex";
-      const lbl = $("#couponCodeLbl");
-      if(lbl) lbl.textContent = appliedCoupon.code;
-      const valEl = $("#cartDiscount");
-      if(valEl) valEl.textContent = "-" + money(couponDisc);
-    } else { 
-      couponRow.style.display = "none"; 
-    }
-  }
-
-  const firstOrderRow = $("#firstOrderDiscountRow");
-  if(firstOrderRow){
-    if(firstOrderDisc > 0){
-      firstOrderRow.style.display = "flex";
-      const valEl = $("#firstOrderDiscVal");
-      if(valEl) valEl.textContent = "-" + money(firstOrderDisc);
-    } else { 
-      firstOrderRow.style.display = "none"; 
-    }
-  }
-
-  // شريط الشحن المجاني التفاعلي
-  const freeShippingThreshold = 3000;
-  const remaining = Math.max(0, freeShippingThreshold - sub);
-  const progressPercent = Math.min(100, (sub / freeShippingThreshold) * 100);
-  const freeShipRow = $("#freeShippingRow");
-  const shipNote = document.querySelector('.cart-shipping-note');
-  
-  if (freeShipRow && shipNote) {
-    if (sub >= freeShippingThreshold) {
-      freeShipRow.style.display = "flex";
-      freeShipRow.innerHTML = `<span style="color:#27ae60; font-weight:700;">🎉 مبروك! طلبك مؤهل لشحن مجاني</span>`;
-      shipNote.style.display = "none";
-    } else {
-      freeShipRow.style.display = "block";
-      freeShipRow.style.background = "#fdf5ed";
-      freeShipRow.style.padding = "1rem";
-      freeShipRow.style.borderRadius = "12px";
-      freeShipRow.style.border = "1px solid var(--c-gold)";
-      freeShipRow.innerHTML = `
-        <div style="text-align:center; margin-bottom:0.5rem; font-size:0.85rem; color:var(--dark);">
-          أضف <strong style="color:#d4af37;">${money(remaining)}</strong> للحصول على <strong>شحن مجاني! 🚚</strong>
-        </div>
-        <div style="background:#e0d6c8; height:8px; border-radius:4px; overflow:hidden;">
-          <div style="background:linear-gradient(90deg, #d4af37, #f9d877); height:100%; width:${progressPercent}%; transition:width 0.5s ease-in-out; border-radius:4px;"></div>
-        </div>
-      `;
-      shipNote.style.display = "none";
-    }
-  }
-  
-  if($("#cartTotal")) $("#cartTotal").textContent = money(total);
-}
-
-function getSavedUser(){
-  try { return JSON.parse(localStorage.getItem("vl_user")||"{}"); }
-  catch(e) { return {}; }
-}
-
-function fillCartForm(){
-  const u = getSavedUser();
-  if($("#coName")) $("#coName").value = u.name||"";
-  if($("#coPhone")) $("#coPhone").value = u.phone||"";
-  if($("#coEmail")) $("#coEmail").value = u.email||"";
-  if($("#coCity")) $("#coCity").value = u.city||"";
-  if($("#coAddr")) $("#coAddr").value = u.addr||"";
-  if($("#coNotes")) $("#coNotes").value = u.notes||"";
-}
-
-function saveUserFromCart(name,phone,email,city,addr,notes=""){
-  const old = getSavedUser();
-  const u = {...old, name, phone, email, city, addr, notes, orders: old.orders||0};
-  try { localStorage.setItem("vl_user", JSON.stringify(u)); } 
-  catch(e) { console.warn("⚠️ Failed to save user:", e); }
-  if($("#accName")) $("#accName").value = name;
-  if($("#accPhone")) $("#accPhone").value = phone;
-  if($("#accCity")) $("#accCity").value = city;
-  if($("#accAddr")) $("#accAddr").value = addr;
-}
-
-function saveCartCustomer(){
-  const name = $("#coName")?.value.trim()||"";
-  const phone = $("#coPhone")?.value.trim()||"";
-  const email = $("#coEmail")?.value.trim()||"";
-  const city = $("#coCity")?.value||"";
-  const addr = $("#coAddr")?.value.trim()||"";
-  const notes = $("#coNotes")?.value.trim()||"";
-  const old = getSavedUser();
-  try { localStorage.setItem("vl_user", JSON.stringify({...old, name, phone, email, city, addr, notes, orders: old.orders||0})); } 
-  catch(e) { console.warn("⚠️ Failed to save cart customer:", e); }
-}
-
-function genOrderId(){
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let s = "";
-  for(let i=0; i<6; i++){ s += chars[Math.floor(Math.random()*chars.length)]; }
-  return "VL-" + s;
-}
-
-async function checkout(){
-  const c = getCart();
-  if(!c.length){ toast(t("t_empty")); return; }
-
-  const missingScent = c.some(it => !it.scent || !String(it.scent).trim());
-  if(missingScent){ toast(t("t_scentwarn")); return; }
-
-  const name = $("#coName")?.value.trim()||"";
-  const phone = $("#coPhone")?.value.trim()||"";
-  const email = $("#coEmail")?.value.trim()||"";
-  const city = $("#coCity")?.value||"";
-  const addr = $("#coAddr")?.value.trim()||"";
-  const notes = $("#coNotes")?.value.trim()||"";
-
-  if(!name){ toast(LANG==="en"?"⚠️ Please enter your full name.":"⚠️ من فضلك اكتب الاسم بالكامل."); $("#coName")?.focus(); return; }
-  if(!phone){ toast(LANG==="en"?"⚠️ Please enter your mobile number.":"⚠️ من فضلك اكتب رقم الموبايل."); $("#coPhone")?.focus(); return; }
-  if(!addr){ toast(LANG==="en"?"⚠️ Please enter the detailed address.":"⚠️ من فضلك اكتب العنوان بالتفصيل."); $("#coAddr")?.focus(); return; }
-
-  const waWindow = window.open("", "_blank");
-  saveUserFromCart(name, phone, email, city, addr, notes);
-
-  const orderId = genOrderId();
-  const subTotal = c.reduce((a,i) => a + (Number(i.price||0) * Number(i.qty||1)), 0);
-  
-  let qtyDiscount = 0;
-  c.forEach(it => {
-    if (Number(it.qty) >= 3) {
-      qtyDiscount += (Number(it.price||0) * Number(it.qty||1) * 0.05);
-    }
-  });
-  
-  const couponDiscount = (typeof calcCouponDiscount === "function") ? calcCouponDiscount(subTotal) : 0;
-  
-  let firstOrderDisc = 0;
-  if (cachedFirstOrderStatus === 'eligible' && subTotal > 0) {
-    firstOrderDisc = Math.round(subTotal * 0.10);
-  }
-
-  const totalDiscount = qtyDiscount + couponDiscount + firstOrderDisc;
-  const total = Math.max(0, subTotal - totalDiscount);
-  
-  if (typeof fbq === "function") {
-    fbq("track", "InitiateCheckout", { value: total, currency: "EGP", num_items: c.length });
-  }
-  
-  let userId = null, userEmail = null;
-  if(window.FB && window.FB.auth && window.FB.auth.currentUser){
-    userId = window.FB.auth.currentUser.uid;
-    userEmail = window.FB.auth.currentUser.email;
-  }
-
-  let msg = `${t("wa_head")}\n${t("wa_order")} ${orderId}\n━━━━━━━━━━━━━━━━━━━━\n\n`;
-  c.forEach(it => {
-    const qty = Number(it.qty||1);
-    const unitPrice = Number(it.price||0);
-    const itemTotal = unitPrice * qty;
-    msg += `${t("wa_item")} ${pname({name:it.name,nameEn:it.nameEn})}\n`;
-    msg += `${t("wa_scent")}: ${velaScentTr(it.scent)}\n`;
-    msg += `${LANG==="en"?"Quantity:":"الكمية:"} ${qty}\n`;
-    msg += `${LANG==="en"?"Unit price:":"سعر الوحدة:"} ${money(unitPrice)}\n`;
-    msg += `${LANG==="en"?"Item total:":"إجمالي الصنف:"} ${money(itemTotal)}\n\n`;
-  });
-
-  msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-  if(qtyDiscount > 0) msg += `🎁 خصم الكمية (3+ قطع): -${money(qtyDiscount)}\n`;
-  if(couponDiscount > 0 && appliedCoupon) msg += `🎟️ كوبون ${appliedCoupon.code}: -${money(couponDiscount)}\n`;
-  if(firstOrderDisc > 0) msg += `🎉 خصم أول طلب (10%): -${money(firstOrderDisc)}\n`;
-  
-  msg += `🎁 هدية ليك: كود THANKS10 لخصم 10% على طلبك الجاي\n`;
-  msg += `${waTotalLabel()} ${money(total)}\n`;
-  msg += `💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.\n`;
-  msg += `${t("ship_note")}\n\n`;
-  msg += `${t("wa_name")} ${name}\n${t("wa_phone")} ${phone}\n`;
-  if(email) msg += `${LANG==="en"?"Email:":"الإيميل:"} ${email}\n`;
-  if(city) msg += `${t("wa_city")} ${city}\n`;
-  msg += `${t("wa_addr")} ${addr}\n`;
-  if(notes) msg += `${t("wa_notes")} ${notes}\n`;
-
-  const trackingData = {
-    utm_source: localStorage.getItem('vl_utm_source') || '',
-    utm_medium: localStorage.getItem('vl_utm_medium') || '',
-    utm_campaign: localStorage.getItem('vl_utm_campaign') || '',
-    utm_content: localStorage.getItem('vl_utm_content') || '',
-    fbclid: localStorage.getItem('vl_fbclid') || '',
-    gclid: localStorage.getItem('vl_gclid') || '',
-    ttclid: localStorage.getItem('vl_ttclid') || ''
-  };
-
-  const orderData = {
-    orderId, userId, userEmail,
-    customer: {name, phone, email, city, address: addr},
-    name, phone, email, city, address: addr, notes,
-    products: c.map(it => ({
-      id: it.id, name: it.name, nameEn: it.nameEn||"",
-      scent: it.scent, scentName: velaScentTr(it.scent),
-      quantity: Number(it.qty||1), price: Number(it.price||0),
-      total: Number(it.price||0) * Number(it.qty||1), img: it.img||""
-    })),
-    items: c,
-    total,
-    productsTotal: subTotal,
-    discount: totalDiscount,
-    qtyDiscount: qtyDiscount,
-    couponDiscount: couponDiscount,
-    firstOrderDiscount: firstOrderDisc,
-    couponCode: appliedCoupon ? appliedCoupon.code : "",
-    paymentMethod: "WhatsApp Confirmation",
-    shippingPayment: "Cash to courier",
-    shippingIncluded: subTotal >= 3000,
-    status: "قيد المراجعة", statusEn: "Under Review",
-    tracking: trackingData,
-    createdAt: Date.now(),
-    orderDate: new Date().toISOString()
-  };
-
-  let savedToFirebase = false;
-  let retries = 3;
-  while (retries > 0 && !savedToFirebase) {
-    try {
-      await DB.add("orders", orderData);
-      savedToFirebase = true;
-    } catch(e) {
-      console.warn(`⚠️ Order save attempt failed (${retries} left):`, e);
-      retries--;
-      if (retries > 0) await new Promise(r => setTimeout(r, 1000));
-    }
-  }
-  
-  if (!savedToFirebase) console.error("❌ Failed to save order to Firebase after retries");
-  
-  try { await decrementStock(c); } catch(e) { console.warn("⚠️ Stock decrement failed:", e); }
-  try { if (typeof consumeCoupon === "function") consumeCoupon(); } catch(e) { console.warn("⚠️ Coupon consume failed:", e); }
-  
-  const u = getSavedUser();
-  u.orders = (u.orders||0) + 1;
-  u.name = name; u.phone = phone; u.email = email; u.city = city; u.addr = addr; u.notes = notes;
-  try { localStorage.setItem("vl_user", JSON.stringify(u)); } catch(e) { console.warn("⚠️ Failed to save user:", e); }
-  
-  const oc = $("#ordCount");
-  if(oc) oc.textContent = u.orders;
-
-  if(userId && window.FB && window.FB.db){
-    try {
-      const { doc, updateDoc, increment } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
-      const userRef = doc(window.FB.db, "users", userId);
-      await updateDoc(userRef, { ordersCount: increment(1), totalSpent: increment(total) });
-    } catch(err) { console.warn("⚠️ Failed to update user order count:", err); }
-  }
-
-  saveCart([]);
-  renderCart();
-  cartBadge();
-  
-  let emailSent = false;
-  try { emailSent = await sendOrderConfirmationEmail(orderData); } catch (err) { console.warn("⚠️ Email notification failed:", err); }
-  
-  if (emailSent) {
-    toast(LANG==="en" ? "✅ Order placed! Check your email." : "✅ تم إرسال الطلب! تم إرسال تأكيد للأدمن.");
-  } else {
-    toast(t("t_order"));
-  }
-  
-  openWhatsAppConfirmation(orderData, waWindow);
-
-  try {
-    if (typeof gtag === "function") {
-      gtag("event", "purchase", {
-        transaction_id: orderId, value: total, currency: "EGP",
-        items: c.map(it => ({ item_id: it.id, item_name: it.name, price: it.price, quantity: it.qty }))
-      });
-    }
-    if (typeof fbq === "function") {
-      fbq("track", "Purchase", { value: total, currency: "EGP", content_ids: c.map(it => it.id), num_items: c.length });
-    }
-    ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
-  } catch (e) { console.warn("Tracking event fire failed:", e); }
-}
-
-function waTotalLabel(){
-  if(I18N && I18N[LANG] && I18N[LANG].wa_total) return I18N[LANG].wa_total;
-  return LANG==="en" ? "💰 Products Total:" : "💰 إجمالي المنتجات:";
-}
-
-const WEB3FORMS_KEY = "a23e1d50-37ee-4aec-a465-aeeb819c02a1";
-
-async function sendOrderConfirmationEmail(orderData) {
-  try {
-    const itemsText = (orderData.items || []).map(item => {
-      const name = item.name || item.title || "منتج";
-      const qty = item.qty || 1;
-      const price = Number(item.price || 0) * qty;
-      const scent = item.scent ? ` (${velaScentTr(item.scent)})` : "";
-      return `• ${name}${scent} × ${qty} = ${price} جنيه`;
-    }).join("\n") || "منتجات متعددة";
-    
-    let discountText = "";
-    if(orderData.qtyDiscount > 0) discountText += `🎁 خصم الكمية: -${orderData.qtyDiscount} جنيه\n`;
-    if(orderData.couponDiscount > 0) discountText += `🎟️ كوبون ${orderData.couponCode}: -${orderData.couponDiscount} جنيه\n`;
-    if(orderData.firstOrderDiscount > 0) discountText += `🎉 خصم أول طلب (10%): -${orderData.firstOrderDiscount} جنيه\n`;
-
-    const response = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify({
-        access_key: WEB3FORMS_KEY,
-        subject: `🛒 طلب جديد من VelaLight - ${orderData.orderId}`,
-        from_name: "VelaLight Store",
-        reply_to: orderData.email || orderData.phone || "",
-        message: `
-═══════════════════════════════════════
-🛒 طلب جديد من موقع VelaLight
-═══════════════════════════════════════
-رقم الطلب: ${orderData.orderId}
-التاريخ: ${new Date(orderData.createdAt).toLocaleString('ar-EG')}
-
-👤 بيانات العميل:
-الاسم: ${orderData.name}
-الموبايل: ${orderData.phone}
-${orderData.email ? "الإيميل: " + orderData.email : ""}
-المحافظة: ${orderData.city}
-العنوان: ${orderData.address}
-ملاحظات: ${orderData.notes || "لا يوجد"}
-
-🛍️ المنتجات:
-${itemsText}
-
-───────────────────────────────────────
-💰 الملخص المالي:
-إجمالي المنتجات: ${orderData.productsTotal} جنيه
-${discountText ? discountText.trim() + "\n" : ""}
-───────────────────────────────────────
-💵 الإجمالي النهائي: ${orderData.total} جنيه
-طريقة الدفع: ${orderData.paymentMethod}
-الشحن: ${orderData.shippingIncluded ? "مجاني" : "كاش عند الاستلام"}
-═══════════════════════════════════════
-`
-      })
-    });
-    return response.ok;
-  } catch (err) {
-    console.error("Email send error:", err);
-    return false;
-  }
-}
-  
-  ["coName", "coPhone", "coEmail"].forEach(id => {
-    const el = $(`#${id}`);
-    if (el) {
-      el.removeEventListener("input", checkFirstOrderStatus);
-      el.removeEventListener("change", checkFirstOrderStatus);
-      el.addEventListener("input", checkFirstOrderStatus);
-      el.addEventListener("change", checkFirstOrderStatus);
-    }
-  });
-  
-  updateTotals(c);
-  ["coName", "coPhone", "coEmail"].forEach(id => {
-  const el = $(`#${id}`);
-  if (el) {
-    el.removeEventListener("input", checkFirstOrderStatus);
-    el.removeEventListener("change", checkFirstOrderStatus);
-    el.addEventListener("input", checkFirstOrderStatus);
-    el.addEventListener("change", checkFirstOrderStatus);
-  }
-});
-checkFirstOrderStatus();
 }
 
 function handleCartClick(e){
@@ -2022,64 +1625,48 @@ function updateTotals(c){
   });
 
   const couponDisc = (typeof calcCouponDiscount === "function") ? calcCouponDiscount(sub) : 0;
-  
-  let firstOrderDisc = 0;
-  if (cachedFirstOrderStatus === 'eligible' && sub > 0) {
-    firstOrderDisc = Math.round(sub * 0.10); // خصم 10%
-  }
-
-  const totalDisc = qtyDiscount + couponDisc + firstOrderDisc;
+  const totalDisc = qtyDiscount + couponDisc;
   const total = Math.max(0, sub - totalDisc);
 
   if($("#cartSub")){$("#cartSub").textContent=money(sub);}
   
-  const qtyRow=$("#qtyDiscountRow");
-  if(qtyRow){
-    if(qtyDiscount>0){
-      qtyRow.style.display="flex";
-      const valEl=$("#qtyDiscountVal"); // تم تصحيح الاسم هنا
-      if(valEl) valEl.textContent="-"+money(qtyDiscount);
-    }else{ qtyRow.style.display="none"; }
+  const qtyDiscRow = $("#qtyDiscountRow");
+  if (qtyDiscRow) {
+    if (qtyDiscount > 0) {
+      qtyDiscRow.style.display = "flex";
+      if($("#qtyDiscountVal")) $("#qtyDiscountVal").textContent = "-" + money(qtyDiscount);
+    } else {
+      qtyDiscRow.style.display = "none";
+    }
   }
 
-  const couponRow=$("#discountRow");
-  if(couponRow){
-    if(couponDisc>0 && appliedCoupon){
-      couponRow.style.display="flex";
-      const lbl=$("#couponCodeLbl");
-      if(lbl) lbl.textContent=appliedCoupon.code;
-      const valEl=$("#cartDiscount");
-      if(valEl) valEl.textContent="-"+money(couponDisc);
-    }else{ couponRow.style.display="none"; }
-  }
-
-  const firstOrderRow=$("#firstOrderDiscountRow");
-  if(firstOrderRow){
-    if(firstOrderDisc>0){
-      firstOrderRow.style.display="flex";
-      const valEl=$("#firstOrderDiscVal");
-      if(valEl) valEl.textContent="-"+money(firstOrderDisc);
-    }else{ firstOrderRow.style.display="none"; }
-  }
-
-  // ✨ تكتيك زيادة المبيعات: شريط الشحن المجاني التفاعلي
-  const freeShippingThreshold = 3000;
+  const dRow=$("#discountRow");
+  if(dRow){dRow.style.display=couponDisc>0?"flex":"none";}
+  if($("#cartDiscount")){$("#cartDiscount").textContent="-"+money(couponDisc);}
+  if($("#couponCodeLbl")&&appliedCoupon){$("#couponCodeLbl").textContent=appliedCoupon.code;}
+  
+    // ✨ تكتيك زيادة المبيعات: شريط الشحن المجاني التفاعلي
+  const freeShippingThreshold = 3000; // حد الشحن المجاني
   const remaining = Math.max(0, freeShippingThreshold - sub);
   const progressPercent = Math.min(100, (sub / freeShippingThreshold) * 100);
+
   const freeShipRow = $("#freeShippingRow");
   const shipNote = document.querySelector('.cart-shipping-note');
   
   if (freeShipRow && shipNote) {
     if (sub >= freeShippingThreshold) {
+      // حالة تحقيق الشحن المجاني
       freeShipRow.style.display = "flex";
       freeShipRow.innerHTML = `<span style="color:#27ae60; font-weight:700;">🎉 مبروك! طلبك مؤهل لشحن مجاني</span>`;
       shipNote.style.display = "none";
     } else {
+      // حالة عدم تحقيق الشحن المجاني (عرض الشريط التحفيزي)
       freeShipRow.style.display = "block";
       freeShipRow.style.background = "#fdf5ed";
       freeShipRow.style.padding = "1rem";
       freeShipRow.style.borderRadius = "12px";
       freeShipRow.style.border = "1px solid var(--c-gold)";
+      
       freeShipRow.innerHTML = `
         <div style="text-align:center; margin-bottom:0.5rem; font-size:0.85rem; color:var(--dark);">
           أضف <strong style="color:#d4af37;">${money(remaining)}</strong> للحصول على <strong>شحن مجاني! 🚚</strong>
@@ -2088,7 +1675,7 @@ function updateTotals(c){
           <div style="background:linear-gradient(90deg, #d4af37, #f9d877); height:100%; width:${progressPercent}%; transition:width 0.5s ease-in-out; border-radius:4px;"></div>
         </div>
       `;
-      shipNote.style.display = "none";
+      shipNote.style.display = "none"; // إخفاء ملاحظة الشحن العادية لاستبدالها بالشريط التحفيزي
     }
   }
   
@@ -2174,6 +1761,8 @@ async function checkout(){
     $("#coAddr")?.focus();return;
   }
 
+  // نفتح تاب فاضي دلوقتي فورًا (لسه جوه نفس الـ click event) عشان نحجز إذن المتصفح
+  // لو فتحناه بعد كل الـ await (Firebase / الإيميل) المتصفح هيعتبره popup غير مرغوب فيه ويمنعه بصمت
   const waWindow = window.open("", "_blank");
 
   saveUserFromCart(name,phone,email,city,addr,notes);
@@ -2189,13 +1778,7 @@ async function checkout(){
   });
   
   const couponDiscount=(typeof calcCouponDiscount==="function")?calcCouponDiscount(subTotal):0;
-  
-  let firstOrderDisc = 0;
-  if (cachedFirstOrderStatus === 'eligible' && subTotal > 0) {
-    firstOrderDisc = Math.round(subTotal * 0.10);
-  }
-
-  const totalDiscount = qtyDiscount + couponDiscount + firstOrderDisc;
+  const totalDiscount = qtyDiscount + couponDiscount;
   const total=Math.max(0,subTotal-totalDiscount);
   
   if (typeof fbq === "function") {
@@ -2235,9 +1818,6 @@ async function checkout(){
   }
   if(couponDiscount>0&&appliedCoupon){
     msg+=`🎟️ كوبون ${appliedCoupon.code}: -${money(couponDiscount)}\n`;
-  }
-  if(firstOrderDisc > 0){
-    msg+=`🎁 خصم أول طلب (10%): -${money(firstOrderDisc)}\n`;
   }
   msg+=`🎁 هدية ليك: كود THANKS10 لخصم 10% على طلبك الجاي\n`;
   
@@ -2280,7 +1860,6 @@ async function checkout(){
     discount: totalDiscount,
     qtyDiscount: qtyDiscount,
     couponDiscount: couponDiscount,
-    firstOrderDiscount: firstOrderDisc,
     couponCode:appliedCoupon?appliedCoupon.code:"",
     paymentMethod:"WhatsApp Confirmation",
     shippingPayment:"Cash to courier",
@@ -2411,7 +1990,6 @@ async function sendOrderConfirmationEmail(orderData) {
     let discountText = "";
     if(orderData.qtyDiscount > 0) discountText += `🎁 خصم الكمية: -${orderData.qtyDiscount} جنيه\n`;
     if(orderData.couponDiscount > 0) discountText += `🎟️ كوبون ${orderData.couponCode}: -${orderData.couponDiscount} جنيه\n`;
-    if(orderData.firstOrderDiscount > 0) discountText += `🎉 خصم أول طلب (10%): -${orderData.firstOrderDiscount} جنيه\n`;
 
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
@@ -2860,39 +2438,7 @@ async function decrementStock(items){
 }
 
 let appliedCoupon=null;
-   let cachedFirstOrderStatus = null; 
 
-   async function checkFirstOrderStatus() {
-     const name = ($("#coName")?.value || "").trim().toLowerCase();
-     const phone = ($("#coPhone")?.value || "").trim();
-     const email = ($("#coEmail")?.value || "").trim().toLowerCase();
-
-     if (!name && !phone && !email) {
-       cachedFirstOrderStatus = null;
-       updateTotals(getCart());
-       return;
-     }
-
-     cachedFirstOrderStatus = 'checking';
-     try {
-       const orders = await window.FB.list("orders") || [];
-       const hasPreviousOrder = orders.some(order => {
-         const oName = (order.name || "").trim().toLowerCase();
-         const oPhone = (order.phone || "").trim();
-         const oEmail = (order.email || "").trim().toLowerCase();
-         if (name && oName && name === oName) return true;
-         if (phone && oPhone && phone === oPhone) return true;
-         if (email && oEmail && email === oEmail) return true;
-         return false;
-       });
-       cachedFirstOrderStatus = hasPreviousOrder ? 'not_eligible' : 'eligible';
-       updateTotals(getCart());
-     } catch (e) {
-       console.warn("⚠️ تعذر التحقق", e);
-       cachedFirstOrderStatus = 'not_eligible';
-       updateTotals(getCart());
-     }
-   }
 function calcCouponDiscount(sub){
   if(!appliedCoupon)return 0;
   let d=0;

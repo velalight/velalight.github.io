@@ -393,11 +393,8 @@ faq6a:"لدينا تشكيلة متنوعة من العطور الفاخرة. و
 faq7q:"هل تتوفر خدمة تغليف الهدايا؟",
 faq7a:"نعم، جميع منتجات VelaLight تأتي بتغليف أنيق وفاخر وجاهز للإهداء.",
 
-    faq8q:"ما سياسة الاستبدال والاسترجاع؟",
-    faq8a:"نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب. وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.",
-    first_order_banner_title: "خصم 10% على أول أوردر لكِ!",
-    first_order_banner_sub: "يُطبق الخصم تلقائياً في سلة الشراء عند إدخال بياناتك لأول مرة.",
-    first_order_discount_lbl: "خصم أول طلب (10%)",
+faq8q:"ما سياسة الاستبدال والاسترجاع؟",
+faq8a:"نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب. وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.",
     
     rev_h2:"آراء عملائنا",
     rev_sub:"ثقتكم أجمل هدية",
@@ -736,11 +733,8 @@ faq6a:"We offer a variety of luxurious fragrances. If you're unsure which one to
 faq7q:"Do you offer gift wrapping?",
 faq7a:"Yes. All VelaLight products come in elegant, luxurious packaging that is ready for gifting.",
 
-    faq8q:"What is your return and exchange policy?",
-    faq8a:"Due to the nature of our handmade products, returns or exchanges are not accepted after the product has been opened or used, or due to a change of mind after the order has been confirmed. If your order arrives with a manufacturing defect or shipping damage, please contact us within 24 hours of delivery and we will be happy to resolve the issue.",
-    first_order_banner_title: "10% OFF Your First Order!",
-    first_order_banner_sub: "Discount is automatically applied in the cart when you enter your details for the first time.",
-    first_order_discount_lbl: "First Order Discount (10%)",
+faq8q:"What is your return and exchange policy?",
+faq8a:"Due to the nature of our handmade products, returns or exchanges are not accepted after the product has been opened or used, or due to a change of mind after the order has been confirmed. If your order arrives with a manufacturing defect or shipping damage, please contact us within 24 hours of delivery and we will be happy to resolve the issue.",
     
     rev_h2:"Our Customers' Reviews",
     rev_sub:"Your Words Are the Best Gift",
