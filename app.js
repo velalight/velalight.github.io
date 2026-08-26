@@ -2526,28 +2526,8 @@ function initNav(){
       $("#ovl")?.classList.remove("open");
     });
   });
-
-  $$("[data-cat]").forEach(a => {
-  a.addEventListener("click", (e) => {
-    // منع الرابط الافتراضي لو href="#products"
-    if (a.getAttribute("href") === "#products") {
-      e.preventDefault();
-    }
-    
-    setTimeout(() => {
-      const chip = $(`#chips .chip[data-cat="${a.dataset.cat}"]`);
-      if (chip) {
-        chip.click(); // ده هيضغط على الـ Chip بتاع التصنيف
-      }
-      // سكرول ناعم لقسم المنتجات
-      const productsSection = document.getElementById("products");
-      if (productsSection) {
-        productsSection.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 100);
-  });
-});
-  
+  $$("[data-cat]").forEach(a=>{
+    if(a.closest(".mnav")||a.closest(".mainnav")||a.closest("footer")){
       a.addEventListener("click",()=>{
         setTimeout(()=>{
           const chip=$(`#chips .chip[data-cat="${a.dataset.cat}"]`);
