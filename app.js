@@ -1031,26 +1031,29 @@ function initHeroIntro(){
 
 
 /* ═══════════════════════════════════════════════════════════
-   PRODUCTS REALTIME SYNC
+   ⚡ PRODUCTS REALTIME SYNC — SMART & SAFE
+   تحديث المنتجات فورًا بدون تجاهل أي تعديل
    ═══════════════════════════════════════════════════════════ */
 
 let productRealtimeStarted = false;
 let productRealtimeUnsubscribe = null;
+let productRealtimeLastSignature = "";
 
 function initProductRealtimeSync(){
 
+  /* منع تشغيل المستمع أكثر من مرة */
   if (productRealtimeStarted) return;
 
+  /* لو Firebase غير متاح، لا نعمل أي شيء */
   if (
     typeof DB === "undefined" ||
     typeof DB.watch !== "function"
   ) {
+    console.warn("⚠️ Products realtime sync unavailable.");
     return;
   }
 
   productRealtimeStarted = true;
-
-  let lastHash = "";
 
   productRealtimeUnsubscribe = DB.watch(
     "products",
@@ -1062,84 +1065,246 @@ function initProductRealtimeSync(){
         : [];
 
       /*
-       * Lightweight change detection
+       * ═══════════════════════════════════════════════════════
+       * CHANGE DETECTION
+       *
+       * لا نعتمد على طول JSON فقط.
+       * أي تغيير فعلي في بيانات المنتجات سيؤدي إلى Signature جديد.
+       * ═══════════════════════════════════════════════════════
        */
 
-      const hash =
-        JSON.stringify(products).length +
-        "-" +
-        products.length;
+      let signature = "";
 
-      if (hash === lastHash) {
+      try {
+
+        signature = JSON.stringify(
+          products.map(p => {
+
+            if (!p || typeof p !== "object") {
+              return p;
+            }
+
+            /*
+             * ترتيب ثابت للحقول المهمة
+             * حتى يكون التحقق موثوقًا.
+             */
+            return {
+              id: p.id || "",
+              id_: p.id_ || "",
+              slug: p.slug || "",
+              pid: p.pid || "",
+
+              active:
+                p.active !== false,
+
+              price:
+                p.price ?? "",
+
+              oldPrice:
+                p.oldPrice ?? "",
+
+              stock:
+                p.stock ?? "",
+
+              quantity:
+                p.quantity ?? "",
+
+              name:
+                p.name ?? "",
+
+              nameAr:
+                p.nameAr ?? "",
+
+              nameEn:
+                p.nameEn ?? "",
+
+              title:
+                p.title ?? "",
+
+              titleAr:
+                p.titleAr ?? "",
+
+              titleEn:
+                p.titleEn ?? "",
+
+              image:
+                p.image ?? "",
+
+              images:
+                Array.isArray(p.images)
+                  ? p.images
+                  : [],
+
+              scent:
+                p.scent ?? "",
+
+              scents:
+                Array.isArray(p.scents)
+                  ? p.scents
+                  : [],
+
+              category:
+                p.category ?? "",
+
+              featured:
+                p.featured ?? false,
+
+              badge:
+                p.badge ?? "",
+
+              updatedAt:
+                p.updatedAt ?? "",
+              
+              updated_at:
+                p.updated_at ?? ""
+            };
+
+          })
+        );
+
+      } catch (e) {
+
+        /*
+         * في حالة وجود بيانات غير قابلة للتحويل،
+         * نعتبرها تغييرًا حتى لا نخاطر بتجاهل التحديث.
+         */
+        signature = String(Date.now());
+
+      }
+
+      /*
+       * لا تعيد الرسم إذا لم يحدث أي تغيير فعلي.
+       */
+      if (signature === productRealtimeLastSignature) {
         return;
       }
 
-      lastHash = hash;
+      productRealtimeLastSignature = signature;
+
 
       /* ═══════════════════════════════════════════════════════
-         MERGE LOCAL + CLOUD PRODUCTS
+         MERGE LOCAL PRODUCTS + FIREBASE PRODUCTS
          ═══════════════════════════════════════════════════════ */
 
-      const map = new Map(
+      const baseProducts =
+        typeof PRODUCTS !== "undefined" &&
+        Array.isArray(PRODUCTS)
+          ? PRODUCTS
+          : [];
 
-        (
-          typeof PRODUCTS !== "undefined"
-            ? PRODUCTS
-            : []
-        ).map(p => [
-          p.id,
-          { ...p }
-        ])
+      const map = new Map();
 
-      );
+      /*
+       * المنتجات الأساسية الموجودة في app.js
+       */
+      baseProducts.forEach(product => {
 
-      products.forEach(d => {
+        if (!product || !product.id) {
+          return;
+        }
 
-        if (!d) return;
+        map.set(
+          product.id,
+          {
+            ...product
+          }
+        );
+
+      });
+
+
+      /*
+       * دمج منتجات Firebase
+       */
+      products.forEach(product => {
+
+        if (!product) {
+          return;
+        }
 
         const slug =
-          d.id_ ||
-          d.slug ||
-          d.pid ||
-          d.id;
+          product.id_ ||
+          product.slug ||
+          product.pid ||
+          product.id;
 
-        if (!slug) return;
+        if (!slug) {
+          return;
+        }
+
 
         /*
-         * Inactive product
+         * المنتج غير نشط
+         * يتم حذفه من القائمة الظاهرة.
          */
-
-        if (d.active === false) {
+        if (product.active === false) {
 
           map.delete(slug);
 
           return;
         }
 
-        /*
-         * Merge cloud product
-         */
 
+        /*
+         * تحديث / إضافة المنتج
+         */
         map.set(
           slug,
           {
             ...(map.get(slug) || {}),
-            ...d,
+
+            ...product,
+
             id: slug,
-            _fid: d.id || null
+
+            _fid:
+              product.id || null
           }
         );
 
       });
 
-      ALL_PRODUCTS = [
-        ...map.values()
-      ];
 
       /*
-       * Notify the application
+       * تحديث القائمة الرئيسية
        */
+      ALL_PRODUCTS = Array.from(
+        map.values()
+      );
 
+
+      /*
+       * حفظ آخر نسخة في الكاش
+       * حتى تكون الصفحة الرئيسية وصفحة المنتج
+       * متقاربتين في البيانات.
+       */
+      try {
+
+        localStorage.setItem(
+          "vl_products_v3",
+          JSON.stringify(
+            ALL_PRODUCTS.slice(0, 200)
+          )
+        );
+
+        localStorage.setItem(
+          "vl_products_v3_time",
+          String(Date.now())
+        );
+
+      } catch (e) {
+
+        console.warn(
+          "⚠️ Products cache update failed:",
+          e
+        );
+
+      }
+
+
+      /*
+       * إبلاغ باقي التطبيق أن البيانات تغيرت.
+       */
       window.dispatchEvent(
         new Event("data-refresh")
       );
@@ -1158,7 +1323,6 @@ function initProductRealtimeSync(){
   );
 
 }
-
 
 /* ═══════════════════════════════════════════════════════════
    LANGUAGE INITIALIZATION
