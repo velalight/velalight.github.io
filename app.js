@@ -1550,21 +1550,87 @@ function updateLangBtn(){
 
   const btn = $("#langBtn");
 
-  if (btn) {
+  if (!btn) return;
 
-    btn.textContent =
-      LANG === "ar"
-        ? "EN"
-        : "ع";
-
-  }
+  btn.textContent =
+    LANG === "ar"
+      ? "EN"
+      : "ع";
 
 }
-  /* ═══ Top Marquee ═══ */
-  const mq=$("#mqTrack");
 
-  if(mq){
-    const marqueeKeys=[
+
+/* ═══════════════════════════════════════════════════════════
+   INTERNATIONALIZATION
+   تحديث النصوص الديناميكية + Marquee + FAQ
+   ═══════════════════════════════════════════════════════════ */
+
+function applyI18n(){
+
+  /* ═══════════════════════════════════════════════════════
+     PAGE TITLE
+     ═══════════════════════════════════════════════════════ */
+
+  document.title = t("docTitle");
+
+
+  /* ═══════════════════════════════════════════════════════
+     NORMAL TRANSLATIONS
+     ═══════════════════════════════════════════════════════ */
+
+  $$("[data-i18n]").forEach(el => {
+
+    const key = el.dataset.i18n;
+
+    if (!key) return;
+
+    const value = t(key);
+
+    if (
+      value !== undefined &&
+      value !== null &&
+      value !== "" &&
+      value !== key
+    ) {
+      el.textContent = value;
+    }
+
+  });
+
+
+  /* ═══════════════════════════════════════════════════════
+     PLACEHOLDER TRANSLATIONS
+     ═══════════════════════════════════════════════════════ */
+
+  $$("[data-i18n-ph]").forEach(el => {
+
+    const key = el.dataset.i18nPh;
+
+    if (!key) return;
+
+    const value = t(key);
+
+    if (
+      value !== undefined &&
+      value !== null &&
+      value !== "" &&
+      value !== key
+    ) {
+      el.placeholder = value;
+    }
+
+  });
+
+
+  /* ═══════════════════════════════════════════════════════
+     TOP MARQUEE
+     ═══════════════════════════════════════════════════════ */
+
+  const mq = $("#mqTrack");
+
+  if (mq) {
+
+    const marqueeKeys = [
       "mq_delivery",
       "mq_discounts",
       "mq_gift",
@@ -1574,25 +1640,48 @@ function updateLangBtn(){
       "mq_support"
     ];
 
-    mq.innerHTML="";
+    const frag = document.createDocumentFragment();
 
-    for(let i=0;i<2;i++){
-      marqueeKeys.forEach(key=>{
-        const span=document.createElement("span");
-        span.textContent=t(key);
-        mq.appendChild(span);
+    /*
+     * نسختان فقط للحركة المستمرة
+     */
+    for (let i = 0; i < 2; i++) {
+
+      marqueeKeys.forEach(key => {
+
+        const span = document.createElement("span");
+
+        span.textContent = t(key);
+
+        frag.appendChild(span);
+
       });
+
     }
+
+    mq.innerHTML = "";
+
+    mq.appendChild(frag);
+
   }
 
-  /* ═══ FAQ ═══ */
-  const faqWrap=$("#faqWrap");
 
-  if(faqWrap&&typeof renderFAQ==="function"){
+  /* ═══════════════════════════════════════════════════════
+     FAQ
+     ═══════════════════════════════════════════════════════ */
+
+  const faqWrap = $("#faqWrap");
+
+  if (
+    faqWrap &&
+    typeof renderFAQ === "function"
+  ) {
+
     renderFAQ();
-  }
-}
 
+  }
+
+}
 function initMarquee(){}
 
 function initEmbers(){
