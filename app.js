@@ -2527,16 +2527,26 @@ function initNav(){
     });
   });
   $$("[data-cat]").forEach(a=>{
-    if(a.closest(".mnav")||a.closest(".mainnav")||a.closest("footer")){
-      a.addEventListener("click",()=>{
-        setTimeout(()=>{
-          const chip=$(`#chips .chip[data-cat="${a.dataset.cat}"]`);
-          if(chip){chip.click();}
-        },100);
-      });
-    }
-  });
+// ✨ تم التعديل ليشمل جميع الروابط بما فيها قسم المجموعات المختارة
+a.addEventListener("click",(e)=>{
+// منع الرابط الافتراضي لو href="#products"
+if (a.getAttribute("href") === "#products") {
+e.preventDefault();
 }
+setTimeout(()=>{
+const chip = $(`#chips .chip[data-cat="${a.dataset.cat}"]`);
+if(chip){
+chip.click();
+// سكرول ناعم لقسم المنتجات
+const productsSection = document.getElementById("products");
+if (productsSection) {
+productsSection.scrollIntoView({ behavior: "smooth" });
+}
+}
+},100);
+});
+});
+  
 
 function openDrawer(id,ovlId){
   $("#"+id)?.classList.add("open");
