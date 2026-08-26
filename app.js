@@ -738,64 +738,172 @@ brand_point3_desc:
 /* ═══════════════════════════════════════════════════════════
    ✨ INIT — الحل الجذري النهائي: منع الوميض وتوحيد البيانات
    ═══════════════════════════════════════════════════════════ */
+
 let isFirstRenderComplete = false;
 let pendingDataRefresh = false;
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  /* ═══════════════════════════════════════════════════════════
+     1. INITIAL UI
+     ═══════════════════════════════════════════════════════════ */
+
   initLang();
   initMarquee();
   initEmbers();
   initReveal();
 
-  // 1. اعرض هيكل التحميل فوراً لمنع ظهور أي بيانات قديمة
+  /* ═══════════════════════════════════════════════════════════
+     2. LOADING SKELETON
+     منع ظهور المنتجات القديمة أو وميض المحتوى
+     ═══════════════════════════════════════════════════════════ */
+
   const grid = $("#pgrid");
+
   if (grid) {
     grid.innerHTML = `
-      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.4rem; padding:1rem;">
-        ${Array(4).fill(`<div class="skel" style="height:380px;border-radius:18px;"></div>`).join('')}
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+        gap:1.4rem;
+        padding:1rem;
+      ">
+        ${Array(4).fill(`
+          <div
+            class="skel"
+            style="
+              height:380px;
+              border-radius:18px;
+            "
+          ></div>
+        `).join("")}
       </div>
     `;
   }
 
-  // 2. اطلب البيانات الجديدة من Firebase مباشرة
-  loadAll().then(() => {
-    // 3. حفظ البيانات الجديدة في الكاش الآن (هذا يضمن تطابق الصفحة الرئيسية مع صفحة المنتج)
-    try {
-      localStorage.setItem("vl_products_v3", JSON.stringify(ALL_PRODUCTS.slice(0, 200)));
-      localStorage.setItem("vl_products_v3_time", String(Date.now()));
-    } catch(e) {}
+  /* ═══════════════════════════════════════════════════════════
+     3. LOAD DATA
+     ═══════════════════════════════════════════════════════════ */
 
-    // 4. السماح بالتحديثات اللاحقة
-    isFirstRenderComplete = true;
+  loadAll()
+    .then(() => {
 
-    // 5. الرسم الأولي
-    if (pendingDataRefresh) {
-      pendingDataRefresh = false;
-      renderProducts();
-    } else {
-      renderChips();
-      renderProducts();
-    }
-    
-    renderScents();
-    renderFAQ();
-    initProductRealtimeSync();
-    requestIdle(() => prefetchProductPages());
-    
-  }).catch(err => {
-    console.warn("⚠️ loadAll failed, falling back to cache:", err);
-    // في حالة فشل Firebase فقط، نستخدم الكاش كملاذ أخير
-    const hasCache = (typeof loadFromCache === "function") && loadFromCache();
-    if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
+      /* ═══════════════════════════════════════════════════════
+         4. UPDATE CACHE
+         توحيد بيانات الصفحة الرئيسية وصفحة المنتج
+         ═══════════════════════════════════════════════════════ */
+
+      try {
+        localStorage.setItem(
+          "vl_products_v3",
+          JSON.stringify(
+            typeof ALL_PRODUCTS !== "undefined"
+              ? ALL_PRODUCTS.slice(0, 200)
+              : []
+          )
+        );
+
+        localStorage.setItem(
+          "vl_products_v3_time",
+          String(Date.now())
+        );
+
+      } catch (e) {
+        console.warn("⚠️ Cache update failed:", e);
+      }
+
+      /* ═══════════════════════════════════════════════════════
+         5. FIRST RENDER COMPLETE
+         ═══════════════════════════════════════════════════════ */
+
       isFirstRenderComplete = true;
-      renderChips();
-      renderProducts();
+
+      /* ═══════════════════════════════════════════════════════
+         6. INITIAL PRODUCT RENDER
+         ═══════════════════════════════════════════════════════ */
+
+      if (pendingDataRefresh) {
+
+        pendingDataRefresh = false;
+
+        renderProducts();
+
+      } else {
+
+        renderChips();
+        renderProducts();
+
+      }
+
+      /* ═══════════════════════════════════════════════════════
+         7. OTHER SECTIONS
+         ═══════════════════════════════════════════════════════ */
+
       renderScents();
       renderFAQ();
-    } else {
-      if (grid) grid.innerHTML = `<div class="empty">⚠️ تعذر تحميل المنتجات، يرجى التحقق من اتصال الإنترنت</div>`;
-    }
-  });
+
+      /* ═══════════════════════════════════════════════════════
+         8. REALTIME PRODUCTS
+         ═══════════════════════════════════════════════════════ */
+
+      initProductRealtimeSync();
+
+      /* ═══════════════════════════════════════════════════════
+         9. IDLE PREFETCH
+         ═══════════════════════════════════════════════════════ */
+
+      requestIdle(() => {
+        prefetchProductPages();
+      });
+
+    })
+    .catch(err => {
+
+      console.warn(
+        "⚠️ loadAll failed, falling back to cache:",
+        err
+      );
+
+      /* ═══════════════════════════════════════════════════════
+         FALLBACK TO CACHE
+         ═══════════════════════════════════════════════════════ */
+
+      const hasCache =
+        typeof loadFromCache === "function" &&
+        loadFromCache();
+
+      if (
+        hasCache &&
+        typeof ALL_PRODUCTS !== "undefined" &&
+        ALL_PRODUCTS.length > 0
+      ) {
+
+        isFirstRenderComplete = true;
+
+        renderChips();
+        renderProducts();
+        renderScents();
+        renderFAQ();
+
+      } else {
+
+        if (grid) {
+
+          grid.innerHTML = `
+            <div class="empty">
+              ⚠️ تعذر تحميل المنتجات، يرجى التحقق من اتصال الإنترنت
+            </div>
+          `;
+
+        }
+
+      }
+
+    });
+
+  /* ═══════════════════════════════════════════════════════════
+     10. OTHER SYSTEMS
+     ═══════════════════════════════════════════════════════════ */
 
   initCart();
   initAccount();
@@ -803,163 +911,491 @@ document.addEventListener("DOMContentLoaded", () => {
   initChat();
   initNav();
   initQuickAdd();
+
+  /* ═══════════════════════════════════════════════════════════
+     11. HERO INTRO
+     ═══════════════════════════════════════════════════════════ */
+
   initHeroIntro();
+
 });
 
-// التعامل مع تحديثات Firebase اللاحقة (Realtime)
+
+/* ═══════════════════════════════════════════════════════════
+   REALTIME DATA REFRESH
+   ═══════════════════════════════════════════════════════════ */
+
 window.addEventListener("data-refresh", () => {
+
+  /*
+   * لو التحميل الأول لم ينتهِ،
+   * ننتظر حتى اكتماله حتى لا يحصل render مزدوج.
+   */
+
   if (!isFirstRenderComplete) {
-    pendingDataRefresh = true; // انتظر حتى ينتهي التحميل الأولي
+
+    pendingDataRefresh = true;
+
     return;
   }
+
   renderProducts();
+
 });
 
+
+/* ═══════════════════════════════════════════════════════════
+   PREFETCH PRODUCT PAGES
+   ═══════════════════════════════════════════════════════════ */
+
 function prefetchProductPages(){
-  if(!('requestIdleCallback' in window)) return;
-  const products = typeof ALL_PRODUCTS !== 'undefined' ? ALL_PRODUCTS.slice(0, 4) : [];
+
+  if (!("requestIdleCallback" in window)) return;
+
+  const products =
+    typeof ALL_PRODUCTS !== "undefined"
+      ? ALL_PRODUCTS.slice(0, 4)
+      : [];
+
   products.forEach((p, i) => {
+
     setTimeout(() => {
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
-      link.href = `product.html?p=${p.id}`;
-      link.as = 'document';
+
+      if (!p || !p.id) return;
+
+      /*
+       * منع إضافة نفس prefetch أكثر من مرة
+       */
+
+      const href = `product.html?p=${encodeURIComponent(p.id)}`;
+
+      if (
+        document.head.querySelector(
+          `link[rel="prefetch"][href="${href}"]`
+        )
+      ) {
+        return;
+      }
+
+      const link = document.createElement("link");
+
+      link.rel = "prefetch";
+      link.href = href;
+      link.as = "document";
+
       document.head.appendChild(link);
+
     }, i * 500);
+
   });
+
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   HERO INTRO
+   ═══════════════════════════════════════════════════════════ */
 
 function initHeroIntro(){
-  const hero = document.querySelector('.vl-hero-copy');
-  const art = document.querySelector('.vl-hero-art');
 
-  if(!hero) return;
+  const hero = document.querySelector(".vl-hero-copy");
+  const art = document.querySelector(".vl-hero-art");
+
+  if (!hero) return;
+
+  /*
+   * منع تشغيل الـintro أكثر من مرة
+   */
+
+  if (hero.dataset.introInitialized === "true") {
+    return;
+  }
+
+  hero.dataset.introInitialized = "true";
 
   requestAnimationFrame(() => {
-    setTimeout(() => {
-      hero.classList.add('hero-intro');
 
-      if(art){
-        art.classList.add('hero-art-intro');
+    setTimeout(() => {
+
+      hero.classList.add("hero-intro");
+
+      if (art) {
+        art.classList.add("hero-art-intro");
       }
+
     }, 40);
+
   });
+
 }
-  
-let productRealtimeStarted=false;
-let productRealtimeUnsubscribe=null;
+
+
+/* ═══════════════════════════════════════════════════════════
+   PRODUCTS REALTIME SYNC
+   ═══════════════════════════════════════════════════════════ */
+
+let productRealtimeStarted = false;
+let productRealtimeUnsubscribe = null;
 
 function initProductRealtimeSync(){
-  if(productRealtimeStarted)return;
-  if(typeof DB==="undefined"||typeof DB.watch!=="function")return;
-  productRealtimeStarted=true;
-  
+
+  if (productRealtimeStarted) return;
+
+  if (
+    typeof DB === "undefined" ||
+    typeof DB.watch !== "function"
+  ) {
+    return;
+  }
+
+  productRealtimeStarted = true;
+
   let lastHash = "";
-  
-  productRealtimeUnsubscribe=DB.watch("products",cloud=>{
-    const hash = JSON.stringify(cloud||[]).length + "-" + (cloud||[]).length;
-    if (hash === lastHash) return; 
-    lastHash = hash;
-    
-    const map=new Map(
-      (typeof PRODUCTS!=="undefined"?PRODUCTS:[]).map(p=>[p.id,{...p}])
-    );
-    (cloud||[]).forEach(d=>{
-      const slug=d.id_||d.slug||d.pid||d.id;
-      if(!slug)return;
-      if(d.active===false){map.delete(slug);return;}
-      map.set(slug,{...(map.get(slug)||{}),...d,id:slug,_fid:d.id||null});
-    });
-    ALL_PRODUCTS=[...map.values()];
-    window.dispatchEvent(new Event("data-refresh"));
-  },error=>{
-    console.warn("⚠️ Products realtime sync error:",error);
-  });
+
+  productRealtimeUnsubscribe = DB.watch(
+    "products",
+
+    cloud => {
+
+      const products = Array.isArray(cloud)
+        ? cloud
+        : [];
+
+      /*
+       * Lightweight change detection
+       */
+
+      const hash =
+        JSON.stringify(products).length +
+        "-" +
+        products.length;
+
+      if (hash === lastHash) {
+        return;
+      }
+
+      lastHash = hash;
+
+      /* ═══════════════════════════════════════════════════════
+         MERGE LOCAL + CLOUD PRODUCTS
+         ═══════════════════════════════════════════════════════ */
+
+      const map = new Map(
+
+        (
+          typeof PRODUCTS !== "undefined"
+            ? PRODUCTS
+            : []
+        ).map(p => [
+          p.id,
+          { ...p }
+        ])
+
+      );
+
+      products.forEach(d => {
+
+        if (!d) return;
+
+        const slug =
+          d.id_ ||
+          d.slug ||
+          d.pid ||
+          d.id;
+
+        if (!slug) return;
+
+        /*
+         * Inactive product
+         */
+
+        if (d.active === false) {
+
+          map.delete(slug);
+
+          return;
+        }
+
+        /*
+         * Merge cloud product
+         */
+
+        map.set(
+          slug,
+          {
+            ...(map.get(slug) || {}),
+            ...d,
+            id: slug,
+            _fid: d.id || null
+          }
+        );
+
+      });
+
+      ALL_PRODUCTS = [
+        ...map.values()
+      ];
+
+      /*
+       * Notify the application
+       */
+
+      window.dispatchEvent(
+        new Event("data-refresh")
+      );
+
+    },
+
+    error => {
+
+      console.warn(
+        "⚠️ Products realtime sync error:",
+        error
+      );
+
+    }
+
+  );
+
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   LANGUAGE INITIALIZATION
+   ═══════════════════════════════════════════════════════════ */
+
 function initLang(){
-  const btn=$("#langBtn");
-  if(!btn)return;
+
+  const btn = $("#langBtn");
+
+  if (!btn) return;
+
   updateLangBtn();
-  btn.addEventListener("click",()=>{
-    LANG=LANG==="ar"?"en":"ar";
-    try { localStorage.setItem("vl_lang",LANG); } catch(e){}
-    document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
-    document.documentElement.lang=LANG;
+
+  /*
+   * Prevent duplicate language listeners
+   */
+
+  if (btn.dataset.langInitialized === "true") {
     applyI18n();
     updateHeroCopy();
+    return;
+  }
+
+  btn.dataset.langInitialized = "true";
+
+  btn.addEventListener("click", () => {
+
+    LANG = LANG === "ar"
+      ? "en"
+      : "ar";
+
+    try {
+
+      localStorage.setItem(
+        "vl_lang",
+        LANG
+      );
+
+    } catch (e) {}
+
+    document.documentElement.dir =
+      LANG === "ar"
+        ? "rtl"
+        : "ltr";
+
+    document.documentElement.lang =
+      LANG;
+
+    /* ═══════════════════════════════════════════════════════
+       APPLY LANGUAGE
+       ═══════════════════════════════════════════════════════ */
+
+    applyI18n();
+
+    updateHeroCopy();
     updateLangBtn();
+
+    /*
+     * Refresh dynamic sections
+     */
+
     renderChips();
     renderProducts();
     renderScents();
     renderFAQ();
+
     fillCitySelect($("#accCity"));
     fillCitySelect($("#coCity"));
+
     fillCartForm();
+
     initChatWelcome();
-    toast(t(LANG==="ar"?"t_lang_ar":"t_lang_en"));
+
+    toast(
+      t(
+        LANG === "ar"
+          ? "t_lang_ar"
+          : "t_lang_en"
+      )
+    );
+
   });
+
+  /*
+   * Initial language render
+   */
+
   applyI18n();
   updateHeroCopy();
+
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   HERO COPY
+   ═══════════════════════════════════════════════════════════ */
 
 function updateHeroCopy(){
-  const eyebrow = document.querySelector('.vl-eyebrow');
-  const title = document.querySelector('.vl-hero-title');
-  const lead = document.querySelector('.vl-hero-lead');
-  const actions = document.querySelector('.vl-hero-actions');
 
-  if(!eyebrow || !title || !lead || !actions) return;
+  const eyebrow =
+    document.querySelector(".vl-eyebrow");
 
-  const t1 = title.querySelector('[data-i18n="hero_t1"]');
-  const t2 = title.querySelector('[data-i18n="hero_t2"]');
-  const btn1 = actions.querySelector('[data-i18n="hero_btn1"]');
-  const btn2 = actions.querySelector('[data-i18n="hero_btn2"]');
+  const title =
+    document.querySelector(".vl-hero-title");
 
-  if(eyebrow) eyebrow.textContent = t("hero_eyebrow");
-  if(t1) t1.textContent = t("hero_t1");
-  if(t2) t2.textContent = t("hero_t2");
-  if(lead) lead.textContent = t("hero_desc");
+  const lead =
+    document.querySelector(".vl-hero-lead");
 
-  if(btn1) btn1.textContent = t("hero_btn1");
-  if(btn2) btn2.textContent = t("hero_btn2");
+  const actions =
+    document.querySelector(".vl-hero-actions");
 
-  const proof1 = document.querySelector('[data-i18n="hero_s1_t"]');
-  const proof2 = document.querySelector('[data-i18n="hero_s2"]');
-  const proof3 = document.querySelector('[data-i18n="hero_s3"]');
+  /*
+   * Hero not present
+   */
 
-  if(proof1) proof1.textContent = t("hero_s1_t");
-  if(proof2) proof2.textContent = t("hero_s2");
-  if(proof3) proof3.textContent = t("hero_s3");
+  if (
+    !eyebrow ||
+    !title ||
+    !lead ||
+    !actions
+  ) {
+    return;
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     TITLE
+     ═══════════════════════════════════════════════════════ */
+
+  const t1 =
+    title.querySelector(
+      '[data-i18n="hero_t1"]'
+    );
+
+  const t2 =
+    title.querySelector(
+      '[data-i18n="hero_t2"]'
+    );
+
+  /* ═══════════════════════════════════════════════════════
+     BUTTONS
+     ═══════════════════════════════════════════════════════ */
+
+  const btn1 =
+    actions.querySelector(
+      '[data-i18n="hero_btn1"]'
+    );
+
+  const btn2 =
+    actions.querySelector(
+      '[data-i18n="hero_btn2"]'
+    );
+
+  /* ═══════════════════════════════════════════════════════
+     HERO TEXT
+     ═══════════════════════════════════════════════════════ */
+
+  eyebrow.textContent =
+    t("hero_eyebrow");
+
+  if (t1) {
+    t1.textContent =
+      t("hero_t1");
+  }
+
+  if (t2) {
+    t2.textContent =
+      t("hero_t2");
+  }
+
+  lead.textContent =
+    t("hero_desc");
+
+  if (btn1) {
+    btn1.textContent =
+      t("hero_btn1");
+  }
+
+  if (btn2) {
+    btn2.textContent =
+      t("hero_btn2");
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     HERO PROOF / FEATURES
+     ═══════════════════════════════════════════════════════ */
+
+  const proof1 =
+    document.querySelector(
+      '[data-i18n="hero_s1_t"]'
+    );
+
+  const proof2 =
+    document.querySelector(
+      '[data-i18n="hero_s2"]'
+    );
+
+  const proof3 =
+    document.querySelector(
+      '[data-i18n="hero_s3"]'
+    );
+
+  if (proof1) {
+    proof1.textContent =
+      t("hero_s1_t");
+  }
+
+  if (proof2) {
+    proof2.textContent =
+      t("hero_s2");
+  }
+
+  if (proof3) {
+    proof3.textContent =
+      t("hero_s3");
+  }
+
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   LANGUAGE BUTTON
+   ═══════════════════════════════════════════════════════════ */
+
 function updateLangBtn(){
-  const btn=$("#langBtn");
-  if(btn){btn.textContent=LANG==="ar"?"EN":"ع";}
+
+  const btn = $("#langBtn");
+
+  if (btn) {
+
+    btn.textContent =
+      LANG === "ar"
+        ? "EN"
+        : "ع";
+
+  }
+
 }
-
-function applyI18n(){
-  document.title=t("docTitle");
-
-  /* ═══ Normal translations ═══ */
-  $$("[data-i18n]").forEach(el=>{
-    const k=el.dataset.i18n;
-    const v=t(k);
-
-    if(v&&v!==k){
-      el.textContent=v;
-    }
-  });
-
-  /* ═══ Placeholder translations ═══ */
-  $$("[data-i18n-ph]").forEach(el=>{
-    const k=el.dataset.i18nPh;
-    const v=t(k);
-
-    if(v&&v!==k){
-      el.placeholder=v;
-    }
-  });
-
   /* ═══ Top Marquee ═══ */
   const mq=$("#mqTrack");
 
