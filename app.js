@@ -1750,28 +1750,787 @@ function activeCat(){
   return c?c.dataset.cat:"all";
 }
 
+/* ═══════════════════════════════════════════════════════════
+   PRODUCTS RENDER — PERFORMANCE OPTIMIZED
+   تقليل إعادة الرسم + منع الرسم المكرر + الحفاظ على الـ UI
+   ═══════════════════════════════════════════════════════════ */
+
+let lastRenderedProductSignature = "";
+let renderProductsQueued = false;
+let renderProductsPending = false;
+
 function renderProducts(){
-  const grid=$("#pgrid");
-  if(!grid)return;
 
-  const products = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) 
-    ? ALL_PRODUCTS 
-    : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
+  /*
+   * لو حصل أكثر من طلب render في نفس اللحظة،
+   * لا نعيد الرسم عدة مرات.
+   */
+  if (renderProductsQueued) {
+    renderProductsPending = true;
+    return;
+  }
 
-  const catF=activeCat();
-  const min=+($("#priceMin")?.value||0);
-  const max=+($("#priceMax")?.value||0);
-  const sort=$("#sortSel")?.value||"new";
+  renderProductsQueued = true;
 
-  let list=products.filter(p=>{
-    if(!p || !p.id) return false;
-    if(catF!=="all"&&p.cat!==catF)return false;
-    if(min&&p.price<min)return false;
-    if(max&&p.price>max)return false;
-    if(p.active===false) return false;
-    return true;
+  requestAnimationFrame(() => {
+
+    renderProductsQueued = false;
+
+    const grid = $("#pgrid");
+    if (!grid) return;
+
+    const products =
+      (
+        typeof ALL_PRODUCTS !== "undefined" &&
+        Array.isArray(ALL_PRODUCTS)
+      )
+        ? ALL_PRODUCTS
+        : (
+            typeof PRODUCTS !== "undefined"
+              ? PRODUCTS
+              : []
+          );
+
+    const catF = activeCat();
+
+    const min =
+      +($("#priceMin")?.value || 0);
+
+    const max =
+      +($("#priceMax")?.value || 0);
+
+    const sort =
+      $("#sortSel")?.value || "new";
+
+
+    /* ═══════════════════════════════════════════════════════
+       FILTER
+       ═══════════════════════════════════════════════════════ */
+
+    let list = products.filter(p => {
+
+      if (!p || !p.id) return false;
+
+      if (
+        catF !== "all" &&
+        p.cat !== catF
+      ) {
+        return false;
+      }
+
+      if (
+        min &&
+        Number(p.price || 0) < min
+      ) {
+        return false;
+      }
+
+      if (
+        max &&
+        Number(p.price || 0) > max
+      ) {
+        return false;
+      }
+
+      if (p.active === false) {
+        return false;
+      }
+
+      return true;
+
+    });
+
+
+    /* ═══════════════════════════════════════════════════════
+       SORT
+       المنتجات المثبتة أولاً دائماً
+       ═══════════════════════════════════════════════════════ */
+
+    list.sort((a, b) => {
+
+      if (a.pinned && !b.pinned) {
+        return -1;
+      }
+
+      if (!a.pinned && b.pinned) {
+        return 1;
+      }
+
+      if (a.pinned && b.pinned) {
+
+        return (
+          (b.pinnedAt || 0) -
+          (a.pinnedAt || 0)
+        );
+
+      }
+
+      switch (sort) {
+
+        case "asc":
+
+          return (
+            (a.price || 0) -
+            (b.price || 0)
+          );
+
+
+        case "desc":
+
+          return (
+            (b.price || 0) -
+            (a.price || 0)
+          );
+
+
+        case "rating":
+
+          return (
+            (
+              typeof ratingOf === "function"
+                ? ratingOf(b.id)?.avg
+                : 0
+            ) || 0
+          ) -
+          (
+            (
+              typeof ratingOf === "function"
+                ? ratingOf(a.id)?.avg
+                : 0
+            ) || 0
+          );
+
+
+        case "best":
+
+          return (
+            (b.sold || 0) -
+            (a.sold || 0)
+          );
+
+
+        case "disc":
+
+          return (
+            ((b.old - b.price) /
+              Math.max(b.old, 1))
+          ) -
+          (
+            ((a.old - a.price) /
+              Math.max(a.old, 1))
+          );
+
+
+        default:
+
+          return (
+            (b.createdAt || 0) -
+            (a.createdAt || 0)
+          );
+
+      }
+
+    });
+
+
+    /* ═══════════════════════════════════════════════════════
+       PRODUCT COUNT
+       ═══════════════════════════════════════════════════════ */
+
+    const cnt = $("#prodCount");
+
+    if (cnt) {
+
+      cnt.textContent =
+        list.length +
+        " " +
+        t("prod_word");
+
+    }
+
+
+    /* ═══════════════════════════════════════════════════════
+       EMPTY STATE
+       ═══════════════════════════════════════════════════════ */
+
+    if (!list.length) {
+
+      const emptyHTML =
+        `<div class="empty">${t("no_products")}</div>`;
+
+      /*
+       * لا نعيد رسم نفس رسالة عدم وجود المنتجات
+       */
+      if (
+        lastRenderedProductSignature !==
+        "EMPTY:" + emptyHTML
+      ) {
+
+        grid.innerHTML = emptyHTML;
+
+        lastRenderedProductSignature =
+          "EMPTY:" + emptyHTML;
+
+      }
+
+      return;
+
+    }
+
+
+    /* ═══════════════════════════════════════════════════════
+       CHANGE SIGNATURE
+       منع إعادة الرسم إذا لم تتغير المنتجات فعلياً
+       ═══════════════════════════════════════════════════════ */
+
+    const signature = list.map(p => {
+
+      return [
+        p.id,
+        p.price || 0,
+        p.old || 0,
+        p.stock ?? "",
+        p.active === false ? 0 : 1,
+        p.pinned ? 1 : 0,
+        p.pinnedAt || 0,
+        p.createdAt || 0,
+        p.sold || 0
+      ].join(":");
+
+    }).join("|");
+
+
+    const fullSignature =
+      [
+        LANG,
+        catF,
+        min,
+        max,
+        sort,
+        signature
+      ].join("||");
+
+
+    /*
+     * أهم جزء:
+     * لو نفس البيانات موجودة بالفعل على الشاشة،
+     * لا نعمل إعادة رسم نهائياً.
+     */
+
+    if (
+      fullSignature ===
+      lastRenderedProductSignature
+    ) {
+
+      /*
+       * لو فيه render إضافي اتطلب أثناء التنفيذ،
+       * نسمح له بالمرور مرة واحدة فقط.
+       */
+      if (renderProductsPending) {
+
+        renderProductsPending = false;
+
+        requestAnimationFrame(() => {
+          renderProducts();
+        });
+
+      }
+
+      return;
+
+    }
+
+
+    lastRenderedProductSignature =
+      fullSignature;
+
+
+    /* ═══════════════════════════════════════════════════════
+       RENDER SETTINGS
+       ═══════════════════════════════════════════════════════ */
+
+    const readMoreText =
+      LANG === "en"
+        ? "Read more →"
+        : "عرض المزيد ←";
+
+    const isMobile =
+      window.innerWidth <= 768;
+
+    const eagerCount =
+      isMobile ? 4 : 8;
+
+    const placeholderSvg =
+      `data:image/svg+xml;utf8,` +
+      `<svg xmlns='http://www.w3.org/2000/svg' ` +
+      `viewBox='0 0 400 400'>` +
+      `<rect fill='%23f5efe5' width='400' height='400'/>` +
+      `<text x='200' y='200' ` +
+      `text-anchor='middle' ` +
+      `dominant-baseline='middle' ` +
+      `font-family='serif' ` +
+      `font-size='24' ` +
+      `fill='%23d9ab5f'>✦</text>` +
+      `</svg>`;
+
+
+    /* ═══════════════════════════════════════════════════════
+       DOCUMENT FRAGMENT
+       نبني DOM مرة واحدة فقط
+       ═══════════════════════════════════════════════════════ */
+
+    const frag =
+      document.createDocumentFragment();
+
+
+    list.forEach((p, index) => {
+
+      try {
+
+        const r =
+          typeof ratingOf === "function"
+            ? ratingOf(p.id)
+            : null;
+
+
+        /* ═══════════════════════════════════════════════
+           BADGES
+           ═══════════════════════════════════════════════ */
+
+        const pinBadge =
+          p.pinned
+            ? `<span class="p-pin-badge">📌 مميز</span>`
+            : "";
+
+
+        const badge =
+          typeof pbadge === "function"
+            ? pbadge(p)
+            : "";
+
+
+        /* ═══════════════════════════════════════════════
+           DESCRIPTION
+           ═══════════════════════════════════════════════ */
+
+        const rawDesc =
+          LANG === "en"
+            ? (p.descEn || p.desc || "")
+            : (p.desc || p.descEn || "");
+
+
+        const productDesc =
+          String(rawDesc).trim();
+
+
+        /* ═══════════════════════════════════════════════
+           IMAGE PRIORITY
+           ═══════════════════════════════════════════════ */
+
+        const isFirstBatch =
+          index < eagerCount;
+
+
+        const loadingAttr =
+          isFirstBatch
+            ? "eager"
+            : "lazy";
+
+
+        const fetchPriority =
+          isFirstBatch
+            ? "high"
+            : "low";
+
+
+        /* ═══════════════════════════════════════════════
+           IMAGE
+           ═══════════════════════════════════════════════ */
+
+        let imgSrc = "";
+
+        try {
+
+          imgSrc =
+            typeof imgOf === "function"
+              ? imgOf(p)
+              : (p.img || "");
+
+        } catch (e) {
+
+          imgSrc =
+            placeholderSvg;
+
+        }
+
+
+        if (!imgSrc) {
+
+          imgSrc =
+            placeholderSvg;
+
+        }
+
+
+        /* ═══════════════════════════════════════════════
+           WISHLIST / STOCK
+           ═══════════════════════════════════════════════ */
+
+        const inWishlist =
+          isInWishlist(p.id);
+
+
+        const stockNum =
+          Number(p.stock);
+
+
+        const isOutOfStock =
+          !isNaN(stockNum) &&
+          stockNum === 0;
+
+
+        const stockBadg =
+          typeof stockBadge === "function"
+            ? stockBadge(p)
+            : "";
+
+
+        /* ═══════════════════════════════════════════════
+           ARTICLE
+           ═══════════════════════════════════════════════ */
+
+        const article =
+          document.createElement("article");
+
+
+        article.className =
+          "p-card";
+
+
+        article.dataset.id =
+          p.id;
+
+
+        /* ═══════════════════════════════════════════════
+           BRIDE BOX VIDEO
+           ═══════════════════════════════════════════════ */
+
+        const isBrideBox =
+          String(p.id) ===
+          "pmt2u7xq749e";
+
+
+        const brideVideoUrl =
+          "https://velalight.github.io/box.mp4?v=v5";
+
+
+        const mediaContent =
+          isBrideBox
+
+            ? `
+              <video
+                src="${brideVideoUrl}"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                poster="${imgSrc}"
+                style="
+                  width:100%;
+                  height:100%;
+                  object-fit:contain;
+                  background:#000;
+                  display:block;
+                  border-radius:inherit;
+                "
+                aria-label="${pname(p)}"
+              ></video>
+            `
+
+            : `
+              <img
+                src="${imgSrc}"
+                alt="${pname(p)}"
+                loading="${loadingAttr}"
+                decoding="async"
+                fetchpriority="${fetchPriority}"
+                width="400"
+                height="400"
+                onload="this.classList.add('loaded')"
+                onerror="window.handleImageError(this, '${p.id}')"
+              >
+            `;
+
+
+        /* ═══════════════════════════════════════════════
+           CARD HTML
+           ═══════════════════════════════════════════════ */
+
+        article.innerHTML = `
+
+          <a
+            class="p-media"
+            href="product.html?p=${encodeURIComponent(p.id)}"
+            aria-label="${pname(p)}"
+          >
+
+            ${mediaContent}
+
+            ${pinBadge}
+
+            ${
+              badge
+                ? `<span class="p-badge">${badge}</span>`
+                : ""
+            }
+
+            ${stockBadg}
+
+            <span class="p-quick">
+              ${t("view_details")}
+            </span>
+
+          </a>
+
+
+          <div class="p-body">
+
+            <span class="p-cat">
+              ${cat(p.cat)}
+            </span>
+
+
+            <h3>
+              <a
+                href="product.html?p=${encodeURIComponent(p.id)}"
+              >
+                ${pname(p)}
+              </a>
+            </h3>
+
+
+            ${
+              r
+                ? `
+                  <span
+                    class="stars"
+                    aria-label="${Math.round(r.avg)} stars"
+                  >
+                    ${"★".repeat(
+                      Math.round(r.avg)
+                    )}
+                  </span>
+                `
+                : ""
+            }
+
+
+            <p class="p-desc">
+              ${productDesc}
+            </p>
+
+
+            ${
+              productDesc.length > 30
+                ? `
+                  <a
+                    href="product.html?p=${encodeURIComponent(p.id)}"
+                    class="p-desc-link"
+                  >
+                    ${readMoreText}
+                  </a>
+                `
+                : ""
+            }
+
+
+            <div class="p-foot">
+
+              <div class="p-price">
+
+                ${money(p.price)}
+
+                ${
+                  p.old > p.price
+                    ? `<del>${money(p.old)}</del>`
+                    : ""
+                }
+
+              </div>
+
+
+              <button
+                class="p-add"
+                data-id="${p.id}"
+                ${isOutOfStock ? "disabled" : ""}
+                aria-label="${t("add_cart")} ${pname(p)}"
+              >
+                ${
+                  isOutOfStock
+                    ? (
+                        LANG === "en"
+                          ? "Out of stock"
+                          : "نفدت الكمية"
+                      )
+                    : t("add_cart")
+                }
+              </button>
+
+
+              <div
+                style="
+                  display:flex;
+                  gap:4px;
+                  flex-shrink:0;
+                  align-items:center;
+                "
+              >
+
+                <button
+                  class="p-wish"
+                  data-wish="${p.id}"
+                  type="button"
+                  aria-label="أضف للمفضلة"
+                  style="
+                    background:${inWishlist ? "#fee" : "none"};
+                    border:1px solid ${inWishlist ? "#e74c3c" : "var(--line)"};
+                    border-radius:10px;
+                    cursor:pointer;
+                    font-size:1.1rem;
+                    transition:.2s;
+                    color:${inWishlist ? "#e74c3c" : "inherit"};
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    width:38px;
+                    height:38px;
+                    padding:0;
+                  "
+                >
+                  ${inWishlist ? "❤️" : "🤍"}
+                </button>
+
+
+                <button
+                  class="p-share"
+                  data-id="${p.id}"
+                  data-name="${pname(p)}"
+                  type="button"
+                  aria-label="مشاركة المنتج"
+                  style="
+                    background:var(--bg);
+                    border:1px solid var(--line);
+                    border-radius:10px;
+                    cursor:pointer;
+                    transition:.2s;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    width:38px;
+                    height:38px;
+                    padding:0;
+                    color:var(--dark);
+                  "
+                  title="مشاركة"
+                >
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line
+                      x1="8.59"
+                      y1="13.51"
+                      x2="15.42"
+                      y2="17.49"
+                    ></line>
+                    <line
+                      x1="15.41"
+                      y1="6.51"
+                      x2="8.59"
+                      y2="10.49"
+                    ></line>
+                  </svg>
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        `;
+
+
+        frag.appendChild(article);
+
+
+      } catch (e) {
+
+        console.warn(
+          "⚠️ Failed to render product:",
+          p?.id,
+          e
+        );
+
+      }
+
+    });
+
+
+    /* ═══════════════════════════════════════════════════════
+       COMMIT DOM ONCE
+       ═══════════════════════════════════════════════════════ */
+
+    grid.replaceChildren(frag);
+
+
+    /* ═══════════════════════════════════════════════════════
+       EVENT DELEGATION
+       listener واحد فقط
+       ═══════════════════════════════════════════════════════ */
+
+    if (!productGridClickBound) {
+
+      grid.addEventListener(
+        "click",
+        handleProductGridClick
+      );
+
+      productGridClickBound = true;
+
+    }
+
+
+    /* ═══════════════════════════════════════════════════════
+       لو وصل طلب render أثناء الرسم
+       ═══════════════════════════════════════════════════════ */
+
+    if (renderProductsPending) {
+
+      renderProductsPending = false;
+
+      requestAnimationFrame(() => {
+        renderProducts();
+      });
+
+    }
+
   });
 
+}
   // ✨ منطق الترتيب الجديد: المنتجات المثبتة تأتي أولاً دائماً
   list.sort((a, b) => {
     if (a.pinned && !b.pinned) return -1;
