@@ -1031,8 +1031,8 @@ function initHeroIntro(){
 
 
 /* ═══════════════════════════════════════════════════════════
-   ⚡ PRODUCTS REALTIME SYNC — SMART & SAFE
-   تحديث المنتجات فورًا بدون تجاهل أي تعديل
+   ⚡ PRODUCTS REALTIME SYNC — SAFE
+   لا يستبدل المنتجات الموجودة إلا عند وصول بيانات صحيحة
    ═══════════════════════════════════════════════════════════ */
 
 let productRealtimeStarted = false;
@@ -1041,15 +1041,12 @@ let productRealtimeLastSignature = "";
 
 function initProductRealtimeSync(){
 
-  /* منع تشغيل المستمع أكثر من مرة */
   if (productRealtimeStarted) return;
 
-  /* لو Firebase غير متاح، لا نعمل أي شيء */
   if (
     typeof DB === "undefined" ||
     typeof DB.watch !== "function"
   ) {
-    console.warn("⚠️ Products realtime sync unavailable.");
     return;
   }
 
@@ -1060,17 +1057,35 @@ function initProductRealtimeSync(){
 
     cloud => {
 
-      const products = Array.isArray(cloud)
-        ? cloud
-        : [];
+      /*
+       * Firebase لازم يرجع Array حقيقية.
+       * لو رجع null / undefined / object فارغ
+       * لا نلمس ALL_PRODUCTS نهائياً.
+       */
+
+      if (!Array.isArray(cloud)) {
+        console.warn(
+          "⚠️ Invalid realtime products payload — keeping current products."
+        );
+        return;
+      }
 
       /*
-       * ═══════════════════════════════════════════════════════
-       * CHANGE DETECTION
-       *
-       * لا نعتمد على طول JSON فقط.
-       * أي تغيير فعلي في بيانات المنتجات سيؤدي إلى Signature جديد.
-       * ═══════════════════════════════════════════════════════
+       * لا نستبدل المنتجات ببيانات Firebase فارغة.
+       * ده أهم حماية من اختفاء المنتجات.
+       */
+
+      if (cloud.length === 0) {
+
+        console.warn(
+          "⚠️ Firebase returned 0 products — keeping current products."
+        );
+
+        return;
+      }
+
+      /*
+       * CHANGE SIGNATURE
        */
 
       let signature = "";
@@ -1078,16 +1093,12 @@ function initProductRealtimeSync(){
       try {
 
         signature = JSON.stringify(
-          products.map(p => {
+          cloud.map(p => {
 
             if (!p || typeof p !== "object") {
-              return p;
+              return null;
             }
 
-            /*
-             * ترتيب ثابت للحقول المهمة
-             * حتى يكون التحقق موثوقًا.
-             */
             return {
               id: p.id || "",
               id_: p.id_ || "",
@@ -1143,18 +1154,24 @@ function initProductRealtimeSync(){
                   ? p.scents
                   : [],
 
+              cat:
+                p.cat ?? "",
+
               category:
                 p.category ?? "",
 
               featured:
                 p.featured ?? false,
 
+              pinned:
+                p.pinned ?? false,
+
               badge:
                 p.badge ?? "",
 
               updatedAt:
                 p.updatedAt ?? "",
-              
+
               updated_at:
                 p.updated_at ?? ""
             };
@@ -1164,26 +1181,31 @@ function initProductRealtimeSync(){
 
       } catch (e) {
 
-        /*
-         * في حالة وجود بيانات غير قابلة للتحويل،
-         * نعتبرها تغييرًا حتى لا نخاطر بتجاهل التحديث.
-         */
-        signature = String(Date.now());
+        console.warn(
+          "⚠️ Products signature failed:",
+          e
+        );
 
-      }
-
-      /*
-       * لا تعيد الرسم إذا لم يحدث أي تغيير فعلي.
-       */
-      if (signature === productRealtimeLastSignature) {
         return;
       }
 
-      productRealtimeLastSignature = signature;
+      /*
+       * لا تعمل Render بدون تغيير فعلي.
+       */
+
+      if (
+        signature &&
+        signature === productRealtimeLastSignature
+      ) {
+        return;
+      }
+
+      productRealtimeLastSignature =
+        signature;
 
 
       /* ═══════════════════════════════════════════════════════
-         MERGE LOCAL PRODUCTS + FIREBASE PRODUCTS
+         BASE PRODUCTS
          ═══════════════════════════════════════════════════════ */
 
       const baseProducts =
@@ -1192,19 +1214,34 @@ function initProductRealtimeSync(){
           ? PRODUCTS
           : [];
 
+      /*
+       * استخدم المنتجات الحالية أولاً إن كانت موجودة.
+       * ده يمنع فقدان أي منتج موجود بسبب اختلاف مصدر البيانات.
+       */
+
+      const currentProducts =
+        typeof ALL_PRODUCTS !== "undefined" &&
+        Array.isArray(ALL_PRODUCTS) &&
+        ALL_PRODUCTS.length > 0
+          ? ALL_PRODUCTS
+          : baseProducts;
+
+
       const map = new Map();
 
-      /*
-       * المنتجات الأساسية الموجودة في app.js
-       */
-      baseProducts.forEach(product => {
+
+      /* ═══════════════════════════════════════════════════════
+         1. LOCAL / CURRENT PRODUCTS
+         ═══════════════════════════════════════════════════════ */
+
+      currentProducts.forEach(product => {
 
         if (!product || !product.id) {
           return;
         }
 
         map.set(
-          product.id,
+          String(product.id),
           {
             ...product
           }
@@ -1213,12 +1250,16 @@ function initProductRealtimeSync(){
       });
 
 
-      /*
-       * دمج منتجات Firebase
-       */
-      products.forEach(product => {
+      /* ═══════════════════════════════════════════════════════
+         2. FIREBASE PRODUCTS
+         ═══════════════════════════════════════════════════════ */
 
-        if (!product) {
+      cloud.forEach(product => {
+
+        if (
+          !product ||
+          typeof product !== "object"
+        ) {
           return;
         }
 
@@ -1232,26 +1273,30 @@ function initProductRealtimeSync(){
           return;
         }
 
+        const key = String(slug);
+
 
         /*
-         * المنتج غير نشط
-         * يتم حذفه من القائمة الظاهرة.
+         * لو المنتج غير نشط نحذفه فقط لو
+         * Firebase أكد فعلاً أنه غير نشط.
          */
+
         if (product.active === false) {
 
-          map.delete(slug);
+          map.delete(key);
 
           return;
         }
 
 
         /*
-         * تحديث / إضافة المنتج
+         * Merge
          */
+
         map.set(
-          slug,
+          key,
           {
-            ...(map.get(slug) || {}),
+            ...(map.get(key) || {}),
 
             ...product,
 
@@ -1266,18 +1311,37 @@ function initProductRealtimeSync(){
 
 
       /*
-       * تحديث القائمة الرئيسية
+       * لا تسمح أبداً بأن تصبح ALL_PRODUCTS فارغة
+       * نتيجة Sync غير صحيح.
        */
-      ALL_PRODUCTS = Array.from(
-        map.values()
-      );
+
+      const mergedProducts =
+        Array.from(map.values());
+
+      if (
+        mergedProducts.length === 0
+      ) {
+
+        console.warn(
+          "⚠️ Realtime merge produced 0 products — keeping current products."
+        );
+
+        return;
+      }
 
 
       /*
-       * حفظ آخر نسخة في الكاش
-       * حتى تكون الصفحة الرئيسية وصفحة المنتج
-       * متقاربتين في البيانات.
+       * تحديث القائمة الرئيسية
        */
+
+      ALL_PRODUCTS =
+        mergedProducts;
+
+
+      /* ═══════════════════════════════════════════════════════
+         CACHE
+         ═══════════════════════════════════════════════════════ */
+
       try {
 
         localStorage.setItem(
@@ -1303,8 +1367,9 @@ function initProductRealtimeSync(){
 
 
       /*
-       * إبلاغ باقي التطبيق أن البيانات تغيرت.
+       * أخبر التطبيق بإعادة الرسم.
        */
+
       window.dispatchEvent(
         new Event("data-refresh")
       );
@@ -1323,7 +1388,6 @@ function initProductRealtimeSync(){
   );
 
 }
-
 /* ═══════════════════════════════════════════════════════════
    LANGUAGE INITIALIZATION
    ═══════════════════════════════════════════════════════════ */
