@@ -2526,21 +2526,17 @@ function initNav(){
       $("#ovl")?.classList.remove("open");
     });
   });
- $$("[data-cat]").forEach(a=>{
-    if(a.closest(".mnav")||a.closest(".mainnav")||a.closest("footer")||a.closest(".vl-collections")){
+  $$("[data-cat]").forEach(a=>{
+    if(a.closest(".mnav")||a.closest(".mainnav")||a.closest("footer")){
       a.addEventListener("click",()=>{
         setTimeout(()=>{
           const chip=$(`#chips .chip[data-cat="${a.dataset.cat}"]`);
           if(chip){chip.click();}
-          const productsSection = document.getElementById("products");
-          if (productsSection) {
-            productsSection.scrollIntoView({ behavior: "smooth" });
-          }
         },100);
       });
     }
   });
-  
+}
 
 function openDrawer(id,ovlId){
   $("#"+id)?.classList.add("open");
