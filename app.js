@@ -165,34 +165,7 @@ const velaScentTr=name=>{
        🇪🇬 ARABIC
        ═══════════════════════════════════════ */
     ar: {
-      /* ═══ HERO ═══ */
-      hero_eyebrow:
-        "✦ شموع يدوية فاخرة",
 
-      hero_t1:
-        "ضوءٌ",
-
-      hero_t2:
-        "يُشبهكِ.",
-
-      hero_desc:
-        "شموع تُضيء… لتنير يومكِ بلحظاتٍ تستحقينها.",
-
-      hero_btn1:
-        "اكتشفي السحر ✨",
-
-      hero_btn2:
-        "رحلة العطور",
-
-      hero_s1_t:
-        "نوتة",
-
-      hero_s2:
-        "صناعة يدوية",
-
-      hero_s3:
-        "فنٌ يُقتنى",
-      
       /* Shipping & Payment */
       ship_note:
         "🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
@@ -738,172 +711,64 @@ brand_point3_desc:
 /* ═══════════════════════════════════════════════════════════
    ✨ INIT — الحل الجذري النهائي: منع الوميض وتوحيد البيانات
    ═══════════════════════════════════════════════════════════ */
-
 let isFirstRenderComplete = false;
 let pendingDataRefresh = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-
-  /* ═══════════════════════════════════════════════════════════
-     1. INITIAL UI
-     ═══════════════════════════════════════════════════════════ */
-
   initLang();
   initMarquee();
   initEmbers();
   initReveal();
 
-  /* ═══════════════════════════════════════════════════════════
-     2. LOADING SKELETON
-     منع ظهور المنتجات القديمة أو وميض المحتوى
-     ═══════════════════════════════════════════════════════════ */
-
+  // 1. اعرض هيكل التحميل فوراً لمنع ظهور أي بيانات قديمة
   const grid = $("#pgrid");
-
   if (grid) {
     grid.innerHTML = `
-      <div style="
-        display:grid;
-        grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-        gap:1.4rem;
-        padding:1rem;
-      ">
-        ${Array(4).fill(`
-          <div
-            class="skel"
-            style="
-              height:380px;
-              border-radius:18px;
-            "
-          ></div>
-        `).join("")}
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.4rem; padding:1rem;">
+        ${Array(4).fill(`<div class="skel" style="height:380px;border-radius:18px;"></div>`).join('')}
       </div>
     `;
   }
 
-  /* ═══════════════════════════════════════════════════════════
-     3. LOAD DATA
-     ═══════════════════════════════════════════════════════════ */
+  // 2. اطلب البيانات الجديدة من Firebase مباشرة
+  loadAll().then(() => {
+    // 3. حفظ البيانات الجديدة في الكاش الآن (هذا يضمن تطابق الصفحة الرئيسية مع صفحة المنتج)
+    try {
+      localStorage.setItem("vl_products_v3", JSON.stringify(ALL_PRODUCTS.slice(0, 200)));
+      localStorage.setItem("vl_products_v3_time", String(Date.now()));
+    } catch(e) {}
 
-  loadAll()
-    .then(() => {
+    // 4. السماح بالتحديثات اللاحقة
+    isFirstRenderComplete = true;
 
-      /* ═══════════════════════════════════════════════════════
-         4. UPDATE CACHE
-         توحيد بيانات الصفحة الرئيسية وصفحة المنتج
-         ═══════════════════════════════════════════════════════ */
-
-      try {
-        localStorage.setItem(
-          "vl_products_v3",
-          JSON.stringify(
-            typeof ALL_PRODUCTS !== "undefined"
-              ? ALL_PRODUCTS.slice(0, 200)
-              : []
-          )
-        );
-
-        localStorage.setItem(
-          "vl_products_v3_time",
-          String(Date.now())
-        );
-
-      } catch (e) {
-        console.warn("⚠️ Cache update failed:", e);
-      }
-
-      /* ═══════════════════════════════════════════════════════
-         5. FIRST RENDER COMPLETE
-         ═══════════════════════════════════════════════════════ */
-
+    // 5. الرسم الأولي
+    if (pendingDataRefresh) {
+      pendingDataRefresh = false;
+      renderProducts();
+    } else {
+      renderChips();
+      renderProducts();
+    }
+    
+    renderScents();
+    renderFAQ();
+    initProductRealtimeSync();
+    requestIdle(() => prefetchProductPages());
+    
+  }).catch(err => {
+    console.warn("⚠️ loadAll failed, falling back to cache:", err);
+    // في حالة فشل Firebase فقط، نستخدم الكاش كملاذ أخير
+    const hasCache = (typeof loadFromCache === "function") && loadFromCache();
+    if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
       isFirstRenderComplete = true;
-
-      /* ═══════════════════════════════════════════════════════
-         6. INITIAL PRODUCT RENDER
-         ═══════════════════════════════════════════════════════ */
-
-      if (pendingDataRefresh) {
-
-        pendingDataRefresh = false;
-
-        renderProducts();
-
-      } else {
-
-        renderChips();
-        renderProducts();
-
-      }
-
-      /* ═══════════════════════════════════════════════════════
-         7. OTHER SECTIONS
-         ═══════════════════════════════════════════════════════ */
-
+      renderChips();
+      renderProducts();
       renderScents();
       renderFAQ();
-
-      /* ═══════════════════════════════════════════════════════
-         8. REALTIME PRODUCTS
-         ═══════════════════════════════════════════════════════ */
-
-      initProductRealtimeSync();
-
-      /* ═══════════════════════════════════════════════════════
-         9. IDLE PREFETCH
-         ═══════════════════════════════════════════════════════ */
-
-      requestIdle(() => {
-        prefetchProductPages();
-      });
-
-    })
-    .catch(err => {
-
-      console.warn(
-        "⚠️ loadAll failed, falling back to cache:",
-        err
-      );
-
-      /* ═══════════════════════════════════════════════════════
-         FALLBACK TO CACHE
-         ═══════════════════════════════════════════════════════ */
-
-      const hasCache =
-        typeof loadFromCache === "function" &&
-        loadFromCache();
-
-      if (
-        hasCache &&
-        typeof ALL_PRODUCTS !== "undefined" &&
-        ALL_PRODUCTS.length > 0
-      ) {
-
-        isFirstRenderComplete = true;
-
-        renderChips();
-        renderProducts();
-        renderScents();
-        renderFAQ();
-
-      } else {
-
-        if (grid) {
-
-          grid.innerHTML = `
-            <div class="empty">
-              ⚠️ تعذر تحميل المنتجات، يرجى التحقق من اتصال الإنترنت
-            </div>
-          `;
-
-        }
-
-      }
-
-    });
-
-  /* ═══════════════════════════════════════════════════════════
-     10. OTHER SYSTEMS
-     ═══════════════════════════════════════════════════════════ */
+    } else {
+      if (grid) grid.innerHTML = `<div class="empty">⚠️ تعذر تحميل المنتجات، يرجى التحقق من اتصال الإنترنت</div>`;
+    }
+  });
 
   initCart();
   initAccount();
@@ -911,790 +776,149 @@ document.addEventListener("DOMContentLoaded", () => {
   initChat();
   initNav();
   initQuickAdd();
-
-  /* ═══════════════════════════════════════════════════════════
-     11. HERO INTRO
-     ═══════════════════════════════════════════════════════════ */
-
   initHeroIntro();
-
 });
 
-
-/* ═══════════════════════════════════════════════════════════
-   REALTIME DATA REFRESH
-   ═══════════════════════════════════════════════════════════ */
-
+// التعامل مع تحديثات Firebase اللاحقة (Realtime)
 window.addEventListener("data-refresh", () => {
-
-  /*
-   * لو التحميل الأول لم ينتهِ،
-   * ننتظر حتى اكتماله حتى لا يحصل render مزدوج.
-   */
-
   if (!isFirstRenderComplete) {
-
-    pendingDataRefresh = true;
-
+    pendingDataRefresh = true; // انتظر حتى ينتهي التحميل الأولي
     return;
   }
-
   renderProducts();
-
 });
-
-
-/* ═══════════════════════════════════════════════════════════
-   PREFETCH PRODUCT PAGES
-   ═══════════════════════════════════════════════════════════ */
 
 function prefetchProductPages(){
-
-  if (!("requestIdleCallback" in window)) return;
-
-  const products =
-    typeof ALL_PRODUCTS !== "undefined"
-      ? ALL_PRODUCTS.slice(0, 4)
-      : [];
-
+  if(!('requestIdleCallback' in window)) return;
+  const products = typeof ALL_PRODUCTS !== 'undefined' ? ALL_PRODUCTS.slice(0, 4) : [];
   products.forEach((p, i) => {
-
     setTimeout(() => {
-
-      if (!p || !p.id) return;
-
-      /*
-       * منع إضافة نفس prefetch أكثر من مرة
-       */
-
-      const href = `product.html?p=${encodeURIComponent(p.id)}`;
-
-      if (
-        document.head.querySelector(
-          `link[rel="prefetch"][href="${href}"]`
-        )
-      ) {
-        return;
-      }
-
-      const link = document.createElement("link");
-
-      link.rel = "prefetch";
-      link.href = href;
-      link.as = "document";
-
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = `product.html?p=${p.id}`;
+      link.as = 'document';
       document.head.appendChild(link);
-
     }, i * 500);
-
   });
-
 }
-
-
-/* ═══════════════════════════════════════════════════════════
-   HERO INTRO
-   ═══════════════════════════════════════════════════════════ */
 
 function initHeroIntro(){
-
-  const hero = document.querySelector(".vl-hero-copy");
-  const art = document.querySelector(".vl-hero-art");
-
-  if (!hero) return;
-
-  /*
-   * منع تشغيل الـintro أكثر من مرة
-   */
-
-  if (hero.dataset.introInitialized === "true") {
-    return;
-  }
-
-  hero.dataset.introInitialized = "true";
-
-  requestAnimationFrame(() => {
-
-    setTimeout(() => {
-
-      hero.classList.add("hero-intro");
-
-      if (art) {
-        art.classList.add("hero-art-intro");
-      }
-
-    }, 40);
-
+  const hero=document.querySelector('.hero-content');
+  if(!hero)return;
+  requestAnimationFrame(()=>{
+    setTimeout(()=>hero.classList.add('hero-intro'),40);
   });
-
 }
 
-
-/* ═══════════════════════════════════════════════════════════
-   ⚡ PRODUCTS REALTIME SYNC — SAFE
-   لا يستبدل المنتجات الموجودة إلا عند وصول بيانات صحيحة
-   ═══════════════════════════════════════════════════════════ */
-
-let productRealtimeStarted = false;
-let productRealtimeUnsubscribe = null;
-let productRealtimeLastSignature = "";
+let productRealtimeStarted=false;
+let productRealtimeUnsubscribe=null;
 
 function initProductRealtimeSync(){
-
-  if (productRealtimeStarted) return;
-
-  if (
-    typeof DB === "undefined" ||
-    typeof DB.watch !== "function"
-  ) {
-    return;
-  }
-
-  productRealtimeStarted = true;
-
-  productRealtimeUnsubscribe = DB.watch(
-    "products",
-
-    cloud => {
-
-      /*
-       * Firebase لازم يرجع Array حقيقية.
-       * لو رجع null / undefined / object فارغ
-       * لا نلمس ALL_PRODUCTS نهائياً.
-       */
-
-      if (!Array.isArray(cloud)) {
-        console.warn(
-          "⚠️ Invalid realtime products payload — keeping current products."
-        );
-        return;
-      }
-
-      /*
-       * لا نستبدل المنتجات ببيانات Firebase فارغة.
-       * ده أهم حماية من اختفاء المنتجات.
-       */
-
-      if (cloud.length === 0) {
-
-        console.warn(
-          "⚠️ Firebase returned 0 products — keeping current products."
-        );
-
-        return;
-      }
-
-      /*
-       * CHANGE SIGNATURE
-       */
-
-      let signature = "";
-
-      try {
-
-        signature = JSON.stringify(
-          cloud.map(p => {
-
-            if (!p || typeof p !== "object") {
-              return null;
-            }
-
-            return {
-              id: p.id || "",
-              id_: p.id_ || "",
-              slug: p.slug || "",
-              pid: p.pid || "",
-
-              active:
-                p.active !== false,
-
-              price:
-                p.price ?? "",
-
-              oldPrice:
-                p.oldPrice ?? "",
-
-              stock:
-                p.stock ?? "",
-
-              quantity:
-                p.quantity ?? "",
-
-              name:
-                p.name ?? "",
-
-              nameAr:
-                p.nameAr ?? "",
-
-              nameEn:
-                p.nameEn ?? "",
-
-              title:
-                p.title ?? "",
-
-              titleAr:
-                p.titleAr ?? "",
-
-              titleEn:
-                p.titleEn ?? "",
-
-              image:
-                p.image ?? "",
-
-              images:
-                Array.isArray(p.images)
-                  ? p.images
-                  : [],
-
-              scent:
-                p.scent ?? "",
-
-              scents:
-                Array.isArray(p.scents)
-                  ? p.scents
-                  : [],
-
-              cat:
-                p.cat ?? "",
-
-              category:
-                p.category ?? "",
-
-              featured:
-                p.featured ?? false,
-
-              pinned:
-                p.pinned ?? false,
-
-              badge:
-                p.badge ?? "",
-
-              updatedAt:
-                p.updatedAt ?? "",
-
-              updated_at:
-                p.updated_at ?? ""
-            };
-
-          })
-        );
-
-      } catch (e) {
-
-        console.warn(
-          "⚠️ Products signature failed:",
-          e
-        );
-
-        return;
-      }
-
-      /*
-       * لا تعمل Render بدون تغيير فعلي.
-       */
-
-      if (
-        signature &&
-        signature === productRealtimeLastSignature
-      ) {
-        return;
-      }
-
-      productRealtimeLastSignature =
-        signature;
-
-
-      /* ═══════════════════════════════════════════════════════
-         BASE PRODUCTS
-         ═══════════════════════════════════════════════════════ */
-
-      const baseProducts =
-        typeof PRODUCTS !== "undefined" &&
-        Array.isArray(PRODUCTS)
-          ? PRODUCTS
-          : [];
-
-      /*
-       * استخدم المنتجات الحالية أولاً إن كانت موجودة.
-       * ده يمنع فقدان أي منتج موجود بسبب اختلاف مصدر البيانات.
-       */
-
-      const currentProducts =
-        typeof ALL_PRODUCTS !== "undefined" &&
-        Array.isArray(ALL_PRODUCTS) &&
-        ALL_PRODUCTS.length > 0
-          ? ALL_PRODUCTS
-          : baseProducts;
-
-
-      const map = new Map();
-
-
-      /* ═══════════════════════════════════════════════════════
-         1. LOCAL / CURRENT PRODUCTS
-         ═══════════════════════════════════════════════════════ */
-
-      currentProducts.forEach(product => {
-
-        if (!product || !product.id) {
-          return;
-        }
-
-        map.set(
-          String(product.id),
-          {
-            ...product
-          }
-        );
-
-      });
-
-
-      /* ═══════════════════════════════════════════════════════
-         2. FIREBASE PRODUCTS
-         ═══════════════════════════════════════════════════════ */
-
-      cloud.forEach(product => {
-
-        if (
-          !product ||
-          typeof product !== "object"
-        ) {
-          return;
-        }
-
-        const slug =
-          product.id_ ||
-          product.slug ||
-          product.pid ||
-          product.id;
-
-        if (!slug) {
-          return;
-        }
-
-        const key = String(slug);
-
-
-        /*
-         * لو المنتج غير نشط نحذفه فقط لو
-         * Firebase أكد فعلاً أنه غير نشط.
-         */
-
-        if (product.active === false) {
-
-          map.delete(key);
-
-          return;
-        }
-
-
-        /*
-         * Merge
-         */
-
-        map.set(
-          key,
-          {
-            ...(map.get(key) || {}),
-
-            ...product,
-
-            id: slug,
-
-            _fid:
-              product.id || null
-          }
-        );
-
-      });
-
-
-      /*
-       * لا تسمح أبداً بأن تصبح ALL_PRODUCTS فارغة
-       * نتيجة Sync غير صحيح.
-       */
-
-      const mergedProducts =
-        Array.from(map.values());
-
-      if (
-        mergedProducts.length === 0
-      ) {
-
-        console.warn(
-          "⚠️ Realtime merge produced 0 products — keeping current products."
-        );
-
-        return;
-      }
-
-
-      /*
-       * تحديث القائمة الرئيسية
-       */
-
-      ALL_PRODUCTS =
-        mergedProducts;
-
-
-      /* ═══════════════════════════════════════════════════════
-         CACHE
-         ═══════════════════════════════════════════════════════ */
-
-      try {
-
-        localStorage.setItem(
-          "vl_products_v3",
-          JSON.stringify(
-            ALL_PRODUCTS.slice(0, 200)
-          )
-        );
-
-        localStorage.setItem(
-          "vl_products_v3_time",
-          String(Date.now())
-        );
-
-      } catch (e) {
-
-        console.warn(
-          "⚠️ Products cache update failed:",
-          e
-        );
-
-      }
-
-
-      /*
-       * أخبر التطبيق بإعادة الرسم.
-       */
-
-      window.dispatchEvent(
-        new Event("data-refresh")
-      );
-
-    },
-
-    error => {
-
-      console.warn(
-        "⚠️ Products realtime sync error:",
-        error
-      );
-
-    }
-
-  );
-
+  if(productRealtimeStarted)return;
+  if(typeof DB==="undefined"||typeof DB.watch!=="function")return;
+  productRealtimeStarted=true;
+  
+  let lastHash = "";
+  
+  productRealtimeUnsubscribe=DB.watch("products",cloud=>{
+    const hash = JSON.stringify(cloud||[]).length + "-" + (cloud||[]).length;
+    if (hash === lastHash) return; 
+    lastHash = hash;
+    
+    const map=new Map(
+      (typeof PRODUCTS!=="undefined"?PRODUCTS:[]).map(p=>[p.id,{...p}])
+    );
+    (cloud||[]).forEach(d=>{
+      const slug=d.id_||d.slug||d.pid||d.id;
+      if(!slug)return;
+      if(d.active===false){map.delete(slug);return;}
+      map.set(slug,{...(map.get(slug)||{}),...d,id:slug,_fid:d.id||null});
+    });
+    ALL_PRODUCTS=[...map.values()];
+    window.dispatchEvent(new Event("data-refresh"));
+  },error=>{
+    console.warn("⚠️ Products realtime sync error:",error);
+  });
 }
-/* ═══════════════════════════════════════════════════════════
-   LANGUAGE INITIALIZATION
-   ═══════════════════════════════════════════════════════════ */
 
 function initLang(){
-
-  const btn = $("#langBtn");
-
-  if (!btn) return;
-
+  const btn=$("#langBtn");
+  if(!btn)return;
   updateLangBtn();
-
-  /*
-   * Prevent duplicate language listeners
-   */
-
-  if (btn.dataset.langInitialized === "true") {
+  btn.addEventListener("click",()=>{
+    LANG=LANG==="ar"?"en":"ar";
+    try { localStorage.setItem("vl_lang",LANG); } catch(e){}
+    document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+    document.documentElement.lang=LANG;
     applyI18n();
-    updateHeroCopy();
-    return;
-  }
-
-  btn.dataset.langInitialized = "true";
-
-  btn.addEventListener("click", () => {
-
-    LANG = LANG === "ar"
-      ? "en"
-      : "ar";
-
-    try {
-
-      localStorage.setItem(
-        "vl_lang",
-        LANG
-      );
-
-    } catch (e) {}
-
-    document.documentElement.dir =
-      LANG === "ar"
-        ? "rtl"
-        : "ltr";
-
-    document.documentElement.lang =
-      LANG;
-
-    /* ═══════════════════════════════════════════════════════
-       APPLY LANGUAGE
-       ═══════════════════════════════════════════════════════ */
-
-    applyI18n();
-
     updateHeroCopy();
     updateLangBtn();
-
-    /*
-     * Refresh dynamic sections
-     */
-
     renderChips();
     renderProducts();
     renderScents();
     renderFAQ();
-
     fillCitySelect($("#accCity"));
     fillCitySelect($("#coCity"));
-
     fillCartForm();
-
     initChatWelcome();
-
-    toast(
-      t(
-        LANG === "ar"
-          ? "t_lang_ar"
-          : "t_lang_en"
-      )
-    );
-
+    toast(t(LANG==="ar"?"t_lang_ar":"t_lang_en"));
   });
-
-  /*
-   * Initial language render
-   */
-
   applyI18n();
   updateHeroCopy();
-
 }
-
-
-/* ═══════════════════════════════════════════════════════════
-   HERO COPY
-   ═══════════════════════════════════════════════════════════ */
 
 function updateHeroCopy(){
-
-  const eyebrow =
-    document.querySelector(".vl-eyebrow");
-
-  const title =
-    document.querySelector(".vl-hero-title");
-
-  const lead =
-    document.querySelector(".vl-hero-lead");
-
-  const actions =
-    document.querySelector(".vl-hero-actions");
-
-  /*
-   * Hero not present
-   */
-
-  if (
-    !eyebrow ||
-    !title ||
-    !lead ||
-    !actions
-  ) {
-    return;
+  const kick=document.querySelector('.hero-kick');
+  const title=document.querySelector('.hero-title-main');
+  const lead=document.querySelector('.hero-lead');
+  const cta=document.querySelector('.hero-cta');
+  if(!kick||!title||!lead||!cta)return;
+  if(LANG==='en'){
+    kick.textContent='✦ Hand-poured luxury candles';
+    title.textContent='Light that feels like you.';
+    lead.textContent='Candles that glow… illuminating your day with moments you deserve.';
+    cta.innerHTML='Discover your collection <span aria-hidden="true">✦</span>';
+  }else{
+    kick.textContent='✦ شموع يدوية فاخرة';
+    title.textContent='ضوءٌ يُشبهك.';
+    lead.textContent='شموع تُضيء… لتنير يومك بلحظاتٍ تستحقها.';
+    cta.innerHTML='اكتشف مجموعتك <span aria-hidden="true">✦</span>';
   }
-
-  /* ═══════════════════════════════════════════════════════
-     TITLE
-     ═══════════════════════════════════════════════════════ */
-
-  const t1 =
-    title.querySelector(
-      '[data-i18n="hero_t1"]'
-    );
-
-  const t2 =
-    title.querySelector(
-      '[data-i18n="hero_t2"]'
-    );
-
-  /* ═══════════════════════════════════════════════════════
-     BUTTONS
-     ═══════════════════════════════════════════════════════ */
-
-  const btn1 =
-    actions.querySelector(
-      '[data-i18n="hero_btn1"]'
-    );
-
-  const btn2 =
-    actions.querySelector(
-      '[data-i18n="hero_btn2"]'
-    );
-
-  /* ═══════════════════════════════════════════════════════
-     HERO TEXT
-     ═══════════════════════════════════════════════════════ */
-
-  eyebrow.textContent =
-    t("hero_eyebrow");
-
-  if (t1) {
-    t1.textContent =
-      t("hero_t1");
-  }
-
-  if (t2) {
-    t2.textContent =
-      t("hero_t2");
-  }
-
-  lead.textContent =
-    t("hero_desc");
-
-  if (btn1) {
-    btn1.textContent =
-      t("hero_btn1");
-  }
-
-  if (btn2) {
-    btn2.textContent =
-      t("hero_btn2");
-  }
-
-  /* ═══════════════════════════════════════════════════════
-     HERO PROOF / FEATURES
-     ═══════════════════════════════════════════════════════ */
-
-  const proof1 =
-    document.querySelector(
-      '[data-i18n="hero_s1_t"]'
-    );
-
-  const proof2 =
-    document.querySelector(
-      '[data-i18n="hero_s2"]'
-    );
-
-  const proof3 =
-    document.querySelector(
-      '[data-i18n="hero_s3"]'
-    );
-
-  if (proof1) {
-    proof1.textContent =
-      t("hero_s1_t");
-  }
-
-  if (proof2) {
-    proof2.textContent =
-      t("hero_s2");
-  }
-
-  if (proof3) {
-    proof3.textContent =
-      t("hero_s3");
-  }
-
 }
-
-
-/* ═══════════════════════════════════════════════════════════
-   LANGUAGE BUTTON
-   ═══════════════════════════════════════════════════════════ */
 
 function updateLangBtn(){
-
-  const btn = $("#langBtn");
-
-  if (!btn) return;
-
-  btn.textContent =
-    LANG === "ar"
-      ? "EN"
-      : "ع";
-
+  const btn=$("#langBtn");
+  if(btn){btn.textContent=LANG==="ar"?"EN":"ع";}
 }
 
-
-/* ═══════════════════════════════════════════════════════════
-   INTERNATIONALIZATION
-   تحديث النصوص الديناميكية + Marquee + FAQ
-   ═══════════════════════════════════════════════════════════ */
-
 function applyI18n(){
+  document.title=t("docTitle");
 
-  /* ═══════════════════════════════════════════════════════
-     PAGE TITLE
-     ═══════════════════════════════════════════════════════ */
+  /* ═══ Normal translations ═══ */
+  $$("[data-i18n]").forEach(el=>{
+    const k=el.dataset.i18n;
+    const v=t(k);
 
-  document.title = t("docTitle");
-
-
-  /* ═══════════════════════════════════════════════════════
-     NORMAL TRANSLATIONS
-     ═══════════════════════════════════════════════════════ */
-
-  $$("[data-i18n]").forEach(el => {
-
-    const key = el.dataset.i18n;
-
-    if (!key) return;
-
-    const value = t(key);
-
-    if (
-      value !== undefined &&
-      value !== null &&
-      value !== "" &&
-      value !== key
-    ) {
-      el.textContent = value;
+    if(v&&v!==k){
+      el.textContent=v;
     }
-
   });
 
+  /* ═══ Placeholder translations ═══ */
+  $$("[data-i18n-ph]").forEach(el=>{
+    const k=el.dataset.i18nPh;
+    const v=t(k);
 
-  /* ═══════════════════════════════════════════════════════
-     PLACEHOLDER TRANSLATIONS
-     ═══════════════════════════════════════════════════════ */
-
-  $$("[data-i18n-ph]").forEach(el => {
-
-    const key = el.dataset.i18nPh;
-
-    if (!key) return;
-
-    const value = t(key);
-
-    if (
-      value !== undefined &&
-      value !== null &&
-      value !== "" &&
-      value !== key
-    ) {
-      el.placeholder = value;
+    if(v&&v!==k){
+      el.placeholder=v;
     }
-
   });
 
+  /* ═══ Top Marquee ═══ */
+  const mq=$("#mqTrack");
 
-  /* ═══════════════════════════════════════════════════════
-     TOP MARQUEE
-     ═══════════════════════════════════════════════════════ */
-
-  const mq = $("#mqTrack");
-
-  if (mq) {
-
-    const marqueeKeys = [
+  if(mq){
+    const marqueeKeys=[
       "mq_delivery",
       "mq_discounts",
       "mq_gift",
@@ -1704,48 +928,25 @@ function applyI18n(){
       "mq_support"
     ];
 
-    const frag = document.createDocumentFragment();
+    mq.innerHTML="";
 
-    /*
-     * نسختان فقط للحركة المستمرة
-     */
-    for (let i = 0; i < 2; i++) {
-
-      marqueeKeys.forEach(key => {
-
-        const span = document.createElement("span");
-
-        span.textContent = t(key);
-
-        frag.appendChild(span);
-
+    for(let i=0;i<2;i++){
+      marqueeKeys.forEach(key=>{
+        const span=document.createElement("span");
+        span.textContent=t(key);
+        mq.appendChild(span);
       });
-
     }
-
-    mq.innerHTML = "";
-
-    mq.appendChild(frag);
-
   }
 
+  /* ═══ FAQ ═══ */
+  const faqWrap=$("#faqWrap");
 
-  /* ═══════════════════════════════════════════════════════
-     FAQ
-     ═══════════════════════════════════════════════════════ */
-
-  const faqWrap = $("#faqWrap");
-
-  if (
-    faqWrap &&
-    typeof renderFAQ === "function"
-  ) {
-
+  if(faqWrap&&typeof renderFAQ==="function"){
     renderFAQ();
-
   }
-
 }
+
 function initMarquee(){}
 
 function initEmbers(){
@@ -1786,892 +987,56 @@ function initReveal(){
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
-   CATEGORY CHIPS — PERFORMANCE OPTIMIZED
-   ═══════════════════════════════════════════════════════════ */
-
-let chipsInitialized = false;
-
 function renderChips(){
-
-  const w = $("#chips");
-
-  if (!w) return;
-
-  w.style.display = "none";
-  w.setAttribute("aria-hidden", "true");
-
-  const keys = [
-    "all",
-    "wood",
-    "glass",
-    "crystal",
-    "metal",
-    "massage",
-    "gift",
-    "bride"
-  ];
-
-  /*
-   * نبني الـ chips مرة واحدة فقط.
-   * تغيير اللغة لن يعيد إنشاء DOM بالكامل.
-   */
-
-  if (!chipsInitialized) {
-
-    const frag =
-      document.createDocumentFragment();
-
-    keys.forEach(k => {
-
-      const btn =
-        document.createElement("button");
-
-      btn.className =
-        "chip" +
-        (k === "all" ? " on" : "");
-
-      btn.dataset.cat = k;
-
-      btn.textContent = cat(k);
-
-      frag.appendChild(btn);
-
-    });
-
-    w.replaceChildren(frag);
-
-    /*
-     * Event delegation:
-     * Listener واحد فقط بدلاً من Listener لكل زر.
-     */
-
-    w.addEventListener("click", e => {
-
-      const btn =
-        e.target.closest(".chip");
-
-      if (!btn) return;
-
-      w.querySelectorAll(".chip")
-        .forEach(x => {
-          x.classList.remove("on");
-        });
-
+  const w=$("#chips");
+  if(!w)return;
+  w.style.display="none";
+  w.setAttribute("aria-hidden","true");
+  const keys=["all","wood","glass","crystal","metal","massage","gift","bride"];
+  const frag = document.createDocumentFragment();
+  keys.forEach(k => {
+    const btn = document.createElement('button');
+    btn.className = 'chip' + (k==="all" ? " on" : "");
+    btn.dataset.cat = k;
+    btn.textContent = cat(k);
+    btn.addEventListener("click",()=>{
+      w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
       btn.classList.add("on");
-
       renderProducts();
-
     });
-
-    chipsInitialized = true;
-
-  } else {
-
-    /*
-     * تحديث النص فقط عند تغيير اللغة.
-     */
-
-    w.querySelectorAll(".chip")
-      .forEach(btn => {
-
-        const key =
-          btn.dataset.cat;
-
-        btn.textContent =
-          cat(key);
-
-      });
-
-  }
-
+    frag.appendChild(btn);
+  });
+  w.innerHTML = '';
+  w.appendChild(frag);
 }
+
 function activeCat(){
   const c=$("#chips .chip.on");
   return c?c.dataset.cat:"all";
 }
 
-/* ═══════════════════════════════════════════════════════════
-   PRODUCTS RENDER — PERFORMANCE OPTIMIZED
-   تقليل إعادة الرسم + منع الرسم المكرر + الحفاظ على الـ UI
-   ═══════════════════════════════════════════════════════════ */
-
-let lastRenderedProductSignature = "";
-let renderProductsQueued = false;
-let renderProductsPending = false;
-
 function renderProducts(){
-
-  /*
-   * لو حصل أكثر من طلب render في نفس اللحظة،
-   * لا نعيد الرسم عدة مرات.
-   */
-  if (renderProductsQueued) {
-    renderProductsPending = true;
-    return;
-  }
-
-  renderProductsQueued = true;
-
-  requestAnimationFrame(() => {
-
-    renderProductsQueued = false;
-
-    const grid = $("#pgrid");
-    if (!grid) return;
-
-    const products =
-      (
-        typeof ALL_PRODUCTS !== "undefined" &&
-        Array.isArray(ALL_PRODUCTS)
-      )
-        ? ALL_PRODUCTS
-        : (
-            typeof PRODUCTS !== "undefined"
-              ? PRODUCTS
-              : []
-          );
-
-    const catF = activeCat();
-
-    const min =
-      +($("#priceMin")?.value || 0);
-
-    const max =
-      +($("#priceMax")?.value || 0);
-
-    const sort =
-      $("#sortSel")?.value || "new";
-
-
-    /* ═══════════════════════════════════════════════════════
-       FILTER
-       ═══════════════════════════════════════════════════════ */
-
-    let list = products.filter(p => {
-
-      if (!p || !p.id) return false;
-
-      if (
-        catF !== "all" &&
-        p.cat !== catF
-      ) {
-        return false;
-      }
-
-      if (
-        min &&
-        Number(p.price || 0) < min
-      ) {
-        return false;
-      }
-
-      if (
-        max &&
-        Number(p.price || 0) > max
-      ) {
-        return false;
-      }
-
-      if (p.active === false) {
-        return false;
-      }
-
-      return true;
-
-    });
-
-
-    /* ═══════════════════════════════════════════════════════
-       SORT
-       المنتجات المثبتة أولاً دائماً
-       ═══════════════════════════════════════════════════════ */
-
-    list.sort((a, b) => {
-
-      if (a.pinned && !b.pinned) {
-        return -1;
-      }
-
-      if (!a.pinned && b.pinned) {
-        return 1;
-      }
-
-      if (a.pinned && b.pinned) {
-
-        return (
-          (b.pinnedAt || 0) -
-          (a.pinnedAt || 0)
-        );
-
-      }
-
-      switch (sort) {
-
-        case "asc":
-
-          return (
-            (a.price || 0) -
-            (b.price || 0)
-          );
-
-
-        case "desc":
-
-          return (
-            (b.price || 0) -
-            (a.price || 0)
-          );
-
-
-        case "rating":
-
-          return (
-            (
-              typeof ratingOf === "function"
-                ? ratingOf(b.id)?.avg
-                : 0
-            ) || 0
-          ) -
-          (
-            (
-              typeof ratingOf === "function"
-                ? ratingOf(a.id)?.avg
-                : 0
-            ) || 0
-          );
-
-
-        case "best":
-
-          return (
-            (b.sold || 0) -
-            (a.sold || 0)
-          );
-
-
-        case "disc":
-
-          return (
-            ((b.old - b.price) /
-              Math.max(b.old, 1))
-          ) -
-          (
-            ((a.old - a.price) /
-              Math.max(a.old, 1))
-          );
-
-
-        default:
-
-          return (
-            (b.createdAt || 0) -
-            (a.createdAt || 0)
-          );
-
-      }
-
-    });
-
-
-    /* ═══════════════════════════════════════════════════════
-       PRODUCT COUNT
-       ═══════════════════════════════════════════════════════ */
-
-    const cnt = $("#prodCount");
-
-    if (cnt) {
-
-      cnt.textContent =
-        list.length +
-        " " +
-        t("prod_word");
-
-    }
-
-
-    /* ═══════════════════════════════════════════════════════
-       EMPTY STATE
-       ═══════════════════════════════════════════════════════ */
-
-    if (!list.length) {
-
-      const emptyHTML =
-        `<div class="empty">${t("no_products")}</div>`;
-
-      /*
-       * لا نعيد رسم نفس رسالة عدم وجود المنتجات
-       */
-      if (
-        lastRenderedProductSignature !==
-        "EMPTY:" + emptyHTML
-      ) {
-
-        grid.innerHTML = emptyHTML;
-
-        lastRenderedProductSignature =
-          "EMPTY:" + emptyHTML;
-
-      }
-
-      return;
-
-    }
-
-
-    /* ═══════════════════════════════════════════════════════
-       CHANGE SIGNATURE
-       منع إعادة الرسم إذا لم تتغير المنتجات فعلياً
-       ═══════════════════════════════════════════════════════ */
-
-    const signature = list.map(p => {
-
-      return [
-        p.id,
-        p.price || 0,
-        p.old || 0,
-        p.stock ?? "",
-        p.active === false ? 0 : 1,
-        p.pinned ? 1 : 0,
-        p.pinnedAt || 0,
-        p.createdAt || 0,
-        p.sold || 0
-      ].join(":");
-
-    }).join("|");
-
-
-    const fullSignature =
-      [
-        LANG,
-        catF,
-        min,
-        max,
-        sort,
-        signature
-      ].join("||");
-
-
-    /*
-     * أهم جزء:
-     * لو نفس البيانات موجودة بالفعل على الشاشة،
-     * لا نعمل إعادة رسم نهائياً.
-     */
-
-    if (
-      fullSignature ===
-      lastRenderedProductSignature
-    ) {
-
-      /*
-       * لو فيه render إضافي اتطلب أثناء التنفيذ،
-       * نسمح له بالمرور مرة واحدة فقط.
-       */
-      if (renderProductsPending) {
-
-        renderProductsPending = false;
-
-        requestAnimationFrame(() => {
-          renderProducts();
-        });
-
-      }
-
-      return;
-
-    }
-
-
-    lastRenderedProductSignature =
-      fullSignature;
-
-
-    /* ═══════════════════════════════════════════════════════
-       RENDER SETTINGS
-       ═══════════════════════════════════════════════════════ */
-
-    const readMoreText =
-      LANG === "en"
-        ? "Read more →"
-        : "عرض المزيد ←";
-
-    const isMobile =
-      window.innerWidth <= 768;
-
-    const eagerCount =
-      isMobile ? 4 : 8;
-
-    const placeholderSvg =
-      `data:image/svg+xml;utf8,` +
-      `<svg xmlns='http://www.w3.org/2000/svg' ` +
-      `viewBox='0 0 400 400'>` +
-      `<rect fill='%23f5efe5' width='400' height='400'/>` +
-      `<text x='200' y='200' ` +
-      `text-anchor='middle' ` +
-      `dominant-baseline='middle' ` +
-      `font-family='serif' ` +
-      `font-size='24' ` +
-      `fill='%23d9ab5f'>✦</text>` +
-      `</svg>`;
-
-
-    /* ═══════════════════════════════════════════════════════
-       DOCUMENT FRAGMENT
-       نبني DOM مرة واحدة فقط
-       ═══════════════════════════════════════════════════════ */
-
-    const frag =
-      document.createDocumentFragment();
-
-
-    list.forEach((p, index) => {
-
-      try {
-
-        const r =
-          typeof ratingOf === "function"
-            ? ratingOf(p.id)
-            : null;
-
-
-        /* ═══════════════════════════════════════════════
-           BADGES
-           ═══════════════════════════════════════════════ */
-
-        const pinBadge =
-          p.pinned
-            ? `<span class="p-pin-badge">📌 مميز</span>`
-            : "";
-
-
-        const badge =
-          typeof pbadge === "function"
-            ? pbadge(p)
-            : "";
-
-
-        /* ═══════════════════════════════════════════════
-           DESCRIPTION
-           ═══════════════════════════════════════════════ */
-
-        const rawDesc =
-          LANG === "en"
-            ? (p.descEn || p.desc || "")
-            : (p.desc || p.descEn || "");
-
-
-        const productDesc =
-          String(rawDesc).trim();
-
-
-        /* ═══════════════════════════════════════════════
-           IMAGE PRIORITY
-           ═══════════════════════════════════════════════ */
-
-        const isFirstBatch =
-          index < eagerCount;
-
-
-        const loadingAttr =
-          isFirstBatch
-            ? "eager"
-            : "lazy";
-
-
-        const fetchPriority =
-          isFirstBatch
-            ? "high"
-            : "low";
-
-
-        /* ═══════════════════════════════════════════════
-           IMAGE
-           ═══════════════════════════════════════════════ */
-
-        let imgSrc = "";
-
-        try {
-
-          imgSrc =
-            typeof imgOf === "function"
-              ? imgOf(p)
-              : (p.img || "");
-
-        } catch (e) {
-
-          imgSrc =
-            placeholderSvg;
-
-        }
-
-
-        if (!imgSrc) {
-
-          imgSrc =
-            placeholderSvg;
-
-        }
-
-
-        /* ═══════════════════════════════════════════════
-           WISHLIST / STOCK
-           ═══════════════════════════════════════════════ */
-
-        const inWishlist =
-          isInWishlist(p.id);
-
-
-        const stockNum =
-          Number(p.stock);
-
-
-        const isOutOfStock =
-          !isNaN(stockNum) &&
-          stockNum === 0;
-
-
-        const stockBadg =
-          typeof stockBadge === "function"
-            ? stockBadge(p)
-            : "";
-
-
-        /* ═══════════════════════════════════════════════
-           ARTICLE
-           ═══════════════════════════════════════════════ */
-
-        const article =
-          document.createElement("article");
-
-
-        article.className =
-          "p-card";
-
-
-        article.dataset.id =
-          p.id;
-
-
-        /* ═══════════════════════════════════════════════
-           BRIDE BOX VIDEO
-           ═══════════════════════════════════════════════ */
-
-        const isBrideBox =
-          String(p.id) ===
-          "pmt2u7xq749e";
-
-
-        const brideVideoUrl =
-          "https://velalight.github.io/box.mp4?v=v5";
-
-
-        const mediaContent =
-          isBrideBox
-
-            ? `
-              <video
-                src="${brideVideoUrl}"
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="metadata"
-                poster="${imgSrc}"
-                style="
-                  width:100%;
-                  height:100%;
-                  object-fit:contain;
-                  background:#000;
-                  display:block;
-                  border-radius:inherit;
-                "
-                aria-label="${pname(p)}"
-              ></video>
-            `
-
-            : `
-              <img
-                src="${imgSrc}"
-                alt="${pname(p)}"
-                loading="${loadingAttr}"
-                decoding="async"
-                fetchpriority="${fetchPriority}"
-                width="400"
-                height="400"
-                onload="this.classList.add('loaded')"
-                onerror="window.handleImageError(this, '${p.id}')"
-              >
-            `;
-
-
-        /* ═══════════════════════════════════════════════
-           CARD HTML
-           ═══════════════════════════════════════════════ */
-
-        article.innerHTML = `
-
-          <a
-            class="p-media"
-            href="product.html?p=${encodeURIComponent(p.id)}"
-            aria-label="${pname(p)}"
-          >
-
-            ${mediaContent}
-
-            ${pinBadge}
-
-            ${
-              badge
-                ? `<span class="p-badge">${badge}</span>`
-                : ""
-            }
-
-            ${stockBadg}
-
-            <span class="p-quick">
-              ${t("view_details")}
-            </span>
-
-          </a>
-
-
-          <div class="p-body">
-
-            <span class="p-cat">
-              ${cat(p.cat)}
-            </span>
-
-
-            <h3>
-              <a
-                href="product.html?p=${encodeURIComponent(p.id)}"
-              >
-                ${pname(p)}
-              </a>
-            </h3>
-
-
-            ${
-              r
-                ? `
-                  <span
-                    class="stars"
-                    aria-label="${Math.round(r.avg)} stars"
-                  >
-                    ${"★".repeat(
-                      Math.round(r.avg)
-                    )}
-                  </span>
-                `
-                : ""
-            }
-
-
-            <p class="p-desc">
-              ${productDesc}
-            </p>
-
-
-            ${
-              productDesc.length > 30
-                ? `
-                  <a
-                    href="product.html?p=${encodeURIComponent(p.id)}"
-                    class="p-desc-link"
-                  >
-                    ${readMoreText}
-                  </a>
-                `
-                : ""
-            }
-
-
-            <div class="p-foot">
-
-              <div class="p-price">
-
-                ${money(p.price)}
-
-                ${
-                  p.old > p.price
-                    ? `<del>${money(p.old)}</del>`
-                    : ""
-                }
-
-              </div>
-
-
-              <button
-                class="p-add"
-                data-id="${p.id}"
-                ${isOutOfStock ? "disabled" : ""}
-                aria-label="${t("add_cart")} ${pname(p)}"
-              >
-                ${
-                  isOutOfStock
-                    ? (
-                        LANG === "en"
-                          ? "Out of stock"
-                          : "نفدت الكمية"
-                      )
-                    : t("add_cart")
-                }
-              </button>
-
-
-              <div
-                style="
-                  display:flex;
-                  gap:4px;
-                  flex-shrink:0;
-                  align-items:center;
-                "
-              >
-
-                <button
-                  class="p-wish"
-                  data-wish="${p.id}"
-                  type="button"
-                  aria-label="أضف للمفضلة"
-                  style="
-                    background:${inWishlist ? "#fee" : "none"};
-                    border:1px solid ${inWishlist ? "#e74c3c" : "var(--line)"};
-                    border-radius:10px;
-                    cursor:pointer;
-                    font-size:1.1rem;
-                    transition:.2s;
-                    color:${inWishlist ? "#e74c3c" : "inherit"};
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    width:38px;
-                    height:38px;
-                    padding:0;
-                  "
-                >
-                  ${inWishlist ? "❤️" : "🤍"}
-                </button>
-
-
-                <button
-                  class="p-share"
-                  data-id="${p.id}"
-                  data-name="${pname(p)}"
-                  type="button"
-                  aria-label="مشاركة المنتج"
-                  style="
-                    background:var(--bg);
-                    border:1px solid var(--line);
-                    border-radius:10px;
-                    cursor:pointer;
-                    transition:.2s;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    width:38px;
-                    height:38px;
-                    padding:0;
-                    color:var(--dark);
-                  "
-                  title="مشاركة"
-                >
-
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="18" cy="5" r="3"></circle>
-                    <circle cx="6" cy="12" r="3"></circle>
-                    <circle cx="18" cy="19" r="3"></circle>
-                    <line
-                      x1="8.59"
-                      y1="13.51"
-                      x2="15.42"
-                      y2="17.49"
-                    ></line>
-                    <line
-                      x1="15.41"
-                      y1="6.51"
-                      x2="8.59"
-                      y2="10.49"
-                    ></line>
-                  </svg>
-
-                </button>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        `;
-
-
-        frag.appendChild(article);
-
-
-      } catch (e) {
-
-        console.warn(
-          "⚠️ Failed to render product:",
-          p?.id,
-          e
-        );
-
-      }
-
-    });
-
-
-    /* ═══════════════════════════════════════════════════════
-       COMMIT DOM ONCE
-       ═══════════════════════════════════════════════════════ */
-
-    grid.replaceChildren(frag);
-
-
-    /* ═══════════════════════════════════════════════════════
-       EVENT DELEGATION
-       listener واحد فقط
-       ═══════════════════════════════════════════════════════ */
-
-    if (!productGridClickBound) {
-
-      grid.addEventListener(
-        "click",
-        handleProductGridClick
-      );
-
-      productGridClickBound = true;
-
-    }
-
-
-    /* ═══════════════════════════════════════════════════════
-       لو وصل طلب render أثناء الرسم
-       ═══════════════════════════════════════════════════════ */
-
-    if (renderProductsPending) {
-
-      renderProductsPending = false;
-
-      requestAnimationFrame(() => {
-        renderProducts();
-      });
-
-    }
-
+  const grid=$("#pgrid");
+  if(!grid)return;
+
+  const products = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) 
+    ? ALL_PRODUCTS 
+    : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
+
+  const catF=activeCat();
+  const min=+($("#priceMin")?.value||0);
+  const max=+($("#priceMax")?.value||0);
+  const sort=$("#sortSel")?.value||"new";
+
+  let list=products.filter(p=>{
+    if(!p || !p.id) return false;
+    if(catF!=="all"&&p.cat!==catF)return false;
+    if(min&&p.price<min)return false;
+    if(max&&p.price>max)return false;
+    if(p.active===false) return false;
+    return true;
   });
 
-}
   // ✨ منطق الترتيب الجديد: المنتجات المثبتة تأتي أولاً دائماً
   list.sort((a, b) => {
     if (a.pinned && !b.pinned) return -1;
