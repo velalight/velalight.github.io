@@ -1143,40 +1143,36 @@ const mediaContent = isBrideBox
     >
   `;
 
-article.innerHTML = `
-        <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
-          ${mediaContent}
-          ${pinBadge}
-          ${badge ? `<span class="p-badge">${badge}</span>` : ""}
-          ${stockBadg}
-          <span class="p-quick">${t("view_details")}</span>
-        </a>
-        
-        <div class="p-body">
-          <span class="p-cat">${cat(p.cat)}</span>
-          <h3><a href="product.html?p=${p.id}">${pname(p)}</a></h3>
-          ${r?`<span class="stars" aria-label="${Math.round(r.avg)} stars">${"★".repeat(Math.round(r.avg))}</span>`:""}
-          <p class="p-desc">${productDesc}</p>
-          ${productDesc.length>30?`<a href="product.html?p=${p.id}" class="p-desc-link">${readMoreText}</a>`:""}
-          <div class="p-foot">
-            <div class="p-price">
-              ${money(p.price)}
-              ${p.old>p.price?`<del>${money(p.old)}</del>`:""}
-            </div>
-            <button class="p-add" data-id="${p.id}" ${isOutOfStock?"disabled":""} aria-label="${t("add_cart")} ${pname(p)}">${isOutOfStock?(LANG==="en"?"Out of stock":"نفدت الكمية"):t("add_cart")}</button>
-            
-            <div style="display:flex; gap:4px; flex-shrink:0; align-items:center;">
-              <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist?'#fee':'none'};border:1px solid ${inWishlist?'#e74c3c':'var(--line)'};border-radius:10px;cursor:pointer;font-size:1.1rem;transition:.2s;color:${inWishlist?'#e74c3c':'inherit'}; display:flex; align-items:center; justify-content:center; width:38px; height:38px; padding:0;">${inWishlist?"❤️":"🤍"}</button>
-              
-              <button class="p-share" data-id="${p.id}" data-name="${pname(p)}" type="button" aria-label="مشاركة المنتج" style="background:var(--bg);border:1px solid var(--line);border-radius:10px;cursor:pointer;transition:.2s; display:flex; align-items:center; justify-content:center; width:38px; height:38px; padding:0; color:var(--dark);" title="مشاركة">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-              </button>
-            </div>
-            
-          </div>
-        </div>
-      `;
-      
+   article.innerHTML = `
+     <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
+       ${mediaContent}
+       ${p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : ""}
+       ${badge ? `<span class="p-badge">${badge}</span>` : ""}
+       ${stockBadg}
+       <span class="p-quick">${t("view_details")}</span>
+     </a>
+     <div class="p-body">
+       <span class="p-cat">${cat(p.cat)}</span>
+       <h3><a href="product.html?p=${p.id}">${pname(p)}</a></h3>
+       ${r ? `<span class="stars" aria-label="${Math.round(r.avg)} stars">${"★".repeat(Math.round(r.avg))}</span>` : ""}
+       <p class="p-desc">${productDesc}</p>
+       ${productDesc.length > 30 ? `<a href="product.html?p=${p.id}" class="p-desc-link">${readMoreText}</a>` : ""}
+       <div class="p-foot">
+         <div class="p-price">
+           <span class="current-price">${money(p.price)}</span>
+           ${p.old > p.price ? `<del>${money(p.old)}</del>` : ""}
+         </div>
+         <div style="display:flex; gap:6px; width:100%; margin-top:4px;">
+           <button class="p-add" data-id="${p.id}" ${isOutOfStock ? "disabled" : ""} style="flex:1;">
+             ${isOutOfStock ? (LANG === "en" ? "Out of stock" : "نفدت الكمية") : t("add_cart")}
+           </button>
+           <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist ? '#fee' : 'var(--bg)'}; border:1px solid ${inWishlist ? '#e74c3c' : 'var(--line)'}; border-radius:10px; cursor:pointer; font-size:1.1rem; transition:.2s; color:${inWishlist ? '#e74c3c' : 'inherit'}; display:flex; align-items:center; justify-content:center; width:42px; height:42px; padding:0; flex-shrink:0;">
+             ${inWishlist ? "❤️" : "🤍"}
+           </button>
+         </div>
+       </div>
+     </div>
+   `;      
       frag.appendChild(article);
     } catch(e) {
       console.warn("⚠️ Failed to render product:", p.id, e);
