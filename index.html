@@ -1235,48 +1235,6 @@ content="VelaLight — شموع يدوية فاخرة بعطور مميزة، ه
 }
 </style>
 
-<!-- ═══════════════════════════════════════════════
-     PRODUCTS — Clean Collection
-     ═══════════════════════════════════════════════ -->
-<section id="products" class="sec products-clean">
-
-  <div class="wrap">
-
-    <div class="sec-head rv">
-      <div class="kick">Our Collection</div>
-      <h2 data-i18n="prod_h2">اختاري قطعتك المفضلة</h2>
-    </div>
-
-    <div class="chips" id="chips" aria-hidden="true" style="display:none"></div>
-
-    <div class="pgrid rv" id="pgrid"></div>
-
-  </div>
-
-</section>
-
-  <section id="collections" class="sec" style="padding:3rem 0; background:var(--bg2);">
-  <div class="wrap">
-    <div class="sec-head" style="text-align:center;">
-      <div class="kick">Curated For You</div>
-      <h2>مجموعات مختارة بعناية</h2>
-    </div>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:1rem; margin-top:2rem;">
-      <a href="#products" data-cat="bride" style="background:var(--panel); padding:2rem; border-radius:16px; text-align:center; border:1px solid var(--line); transition:.3s;">
-        <h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:0.5rem;">بوكس العروسة</h3>
-        <p style="color:var(--mut); font-size:0.9rem;">أفخم بوكس عروسة</p>
-      </a>
-      <a href="#products" data-cat="glass" style="background:var(--panel); padding:2rem; border-radius:16px; text-align:center; border:1px solid var(--line); transition:.3s;">
-        <h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:0.5rem;">شموع زجاجية</h3>
-        <p style="color:var(--mut); font-size:0.9rem;">أناقة شفافة</p>
-      </a>
-      <a href="#products" data-cat="gift" style="background:var(--panel); padding:2rem; border-radius:16px; text-align:center; border:1px solid var(--line); transition:.3s;">
-        <h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:0.5rem;">الهدايا</h3>
-        <p style="color:var(--mut); font-size:0.9rem;">تنسيق فاخر</p>
-      </a>
-    </div>
-  </div>
-</section>
   
 <!-- ═══════════════════════════════════════════════
      ABOUT
@@ -2195,7 +2153,38 @@ html[lang="en"] .review-en{display:inline}
   }
 }
 </style>
+<!-- ═══════════════════════════════════════════════
+     ✨ SIMPLE CATEGORIES — 3 مربعات بسيطة تحت البانر
+     ═══════════════════════════════════════════════ -->
+<section class="vl-simple-cats">
+  <div class="wrap">
+    <div class="simple-cats-grid">
+      
+      <!-- مربع 1: بوكس العروسة -->
+      <a href="#products" data-cat="bride" class="simple-cat-card">
+        <span style="font-size: 2rem;">👰</span>
+        <h3>بوكس العروسة</h3>
+        <p>أفخم بوكس عروسة</p>
+      </a>
 
+      <!-- مربع 2: شموع زجاجية -->
+      <a href="#products" data-cat="glass" class="simple-cat-card">
+        <span style="font-size: 2rem;">🕯️</span>
+        <h3>شموع زجاجية</h3>
+        <p>أناقة شفافة</p>
+      </a>
+
+      <!-- مربع 3: الهدايا -->
+      <a href="#products" data-cat="gift" class="simple-cat-card">
+        <span style="font-size: 2rem;">🎁</span>
+        <h3>الهدايا</h3>
+        <p>تنسيق فاخر</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+  
 <!-- ═══════════════════════════════════════════════
      VELALIGHT — FAQ
      ═══════════════════════════════════════════════ -->
