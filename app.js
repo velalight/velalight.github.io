@@ -165,7 +165,34 @@ const velaScentTr=name=>{
        🇪🇬 ARABIC
        ═══════════════════════════════════════ */
     ar: {
+      /* ═══ HERO ═══ */
+      hero_eyebrow:
+        "✦ شموع يدوية فاخرة",
 
+      hero_t1:
+        "ضوءٌ",
+
+      hero_t2:
+        "يُشبهكِ.",
+
+      hero_desc:
+        "شموع تُضيء… لتنير يومكِ بلحظاتٍ تستحقينها.",
+
+      hero_btn1:
+        "اكتشفي السحر ✨",
+
+      hero_btn2:
+        "رحلة العطور",
+
+      hero_s1_t:
+        "نوتة",
+
+      hero_s2:
+        "صناعة يدوية",
+
+      hero_s3:
+        "فنٌ يُقتنى",
+      
       /* Shipping & Payment */
       ship_note:
         "🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
@@ -803,13 +830,22 @@ function prefetchProductPages(){
 }
 
 function initHeroIntro(){
-  const hero=document.querySelector('.hero-content');
-  if(!hero)return;
-  requestAnimationFrame(()=>{
-    setTimeout(()=>hero.classList.add('hero-intro'),40);
+  const hero = document.querySelector('.vl-hero-copy');
+  const art = document.querySelector('.vl-hero-art');
+
+  if(!hero) return;
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      hero.classList.add('hero-intro');
+
+      if(art){
+        art.classList.add('hero-art-intro');
+      }
+    }, 40);
   });
 }
-
+  
 let productRealtimeStarted=false;
 let productRealtimeUnsubscribe=null;
 
@@ -868,24 +904,34 @@ function initLang(){
 }
 
 function updateHeroCopy(){
-  const kick=document.querySelector('.hero-kick');
-  const title=document.querySelector('.hero-title-main');
-  const lead=document.querySelector('.hero-lead');
-  const cta=document.querySelector('.hero-cta');
-  if(!kick||!title||!lead||!cta)return;
-  if(LANG==='en'){
-    kick.textContent='✦ Hand-poured luxury candles';
-    title.textContent='Light that feels like you.';
-    lead.textContent='Candles that glow… illuminating your day with moments you deserve.';
-    cta.innerHTML='Discover your collection <span aria-hidden="true">✦</span>';
-  }else{
-    kick.textContent='✦ شموع يدوية فاخرة';
-    title.textContent='ضوءٌ يُشبهك.';
-    lead.textContent='شموع تُضيء… لتنير يومك بلحظاتٍ تستحقها.';
-    cta.innerHTML='اكتشف مجموعتك <span aria-hidden="true">✦</span>';
-  }
-}
+  const eyebrow = document.querySelector('.vl-eyebrow');
+  const title = document.querySelector('.vl-hero-title');
+  const lead = document.querySelector('.vl-hero-lead');
+  const actions = document.querySelector('.vl-hero-actions');
 
+  if(!eyebrow || !title || !lead || !actions) return;
+
+  const t1 = title.querySelector('[data-i18n="hero_t1"]');
+  const t2 = title.querySelector('[data-i18n="hero_t2"]');
+  const btn1 = actions.querySelector('[data-i18n="hero_btn1"]');
+  const btn2 = actions.querySelector('[data-i18n="hero_btn2"]');
+
+  if(eyebrow) eyebrow.textContent = t("hero_eyebrow");
+  if(t1) t1.textContent = t("hero_t1");
+  if(t2) t2.textContent = t("hero_t2");
+  if(lead) lead.textContent = t("hero_desc");
+
+  if(btn1) btn1.textContent = t("hero_btn1");
+  if(btn2) btn2.textContent = t("hero_btn2");
+
+  const proof1 = document.querySelector('[data-i18n="hero_s1_t"]');
+  const proof2 = document.querySelector('[data-i18n="hero_s2"]');
+  const proof3 = document.querySelector('[data-i18n="hero_s3"]');
+
+  if(proof1) proof1.textContent = t("hero_s1_t");
+  if(proof2) proof2.textContent = t("hero_s2");
+  if(proof3) proof3.textContent = t("hero_s3");
+}
 function updateLangBtn(){
   const btn=$("#langBtn");
   if(btn){btn.textContent=LANG==="ar"?"EN":"ع";}
