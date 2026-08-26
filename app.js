@@ -1722,29 +1722,106 @@ function initReveal(){
   });
 }
 
-function renderChips(){
-  const w=$("#chips");
-  if(!w)return;
-  w.style.display="none";
-  w.setAttribute("aria-hidden","true");
-  const keys=["all","wood","glass","crystal","metal","massage","gift","bride"];
-  const frag = document.createDocumentFragment();
-  keys.forEach(k => {
-    const btn = document.createElement('button');
-    btn.className = 'chip' + (k==="all" ? " on" : "");
-    btn.dataset.cat = k;
-    btn.textContent = cat(k);
-    btn.addEventListener("click",()=>{
-      w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
-      btn.classList.add("on");
-      renderProducts();
-    });
-    frag.appendChild(btn);
-  });
-  w.innerHTML = '';
-  w.appendChild(frag);
-}
+/* ═══════════════════════════════════════════════════════════
+   CATEGORY CHIPS — PERFORMANCE OPTIMIZED
+   ═══════════════════════════════════════════════════════════ */
 
+let chipsInitialized = false;
+
+function renderChips(){
+
+  const w = $("#chips");
+
+  if (!w) return;
+
+  w.style.display = "none";
+  w.setAttribute("aria-hidden", "true");
+
+  const keys = [
+    "all",
+    "wood",
+    "glass",
+    "crystal",
+    "metal",
+    "massage",
+    "gift",
+    "bride"
+  ];
+
+  /*
+   * نبني الـ chips مرة واحدة فقط.
+   * تغيير اللغة لن يعيد إنشاء DOM بالكامل.
+   */
+
+  if (!chipsInitialized) {
+
+    const frag =
+      document.createDocumentFragment();
+
+    keys.forEach(k => {
+
+      const btn =
+        document.createElement("button");
+
+      btn.className =
+        "chip" +
+        (k === "all" ? " on" : "");
+
+      btn.dataset.cat = k;
+
+      btn.textContent = cat(k);
+
+      frag.appendChild(btn);
+
+    });
+
+    w.replaceChildren(frag);
+
+    /*
+     * Event delegation:
+     * Listener واحد فقط بدلاً من Listener لكل زر.
+     */
+
+    w.addEventListener("click", e => {
+
+      const btn =
+        e.target.closest(".chip");
+
+      if (!btn) return;
+
+      w.querySelectorAll(".chip")
+        .forEach(x => {
+          x.classList.remove("on");
+        });
+
+      btn.classList.add("on");
+
+      renderProducts();
+
+    });
+
+    chipsInitialized = true;
+
+  } else {
+
+    /*
+     * تحديث النص فقط عند تغيير اللغة.
+     */
+
+    w.querySelectorAll(".chip")
+      .forEach(btn => {
+
+        const key =
+          btn.dataset.cat;
+
+        btn.textContent =
+          cat(key);
+
+      });
+
+  }
+
+}
 function activeCat(){
   const c=$("#chips .chip.on");
   return c?c.dataset.cat:"all";
