@@ -26,9 +26,6 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="mobile-luxury-fix.css">
 
-<!-- ═══════════════════════════════════════════════════════════
-     ✨ PAGE-SPECIFIC STYLES — Product Page Enhancement
-     ═══════════════════════════════════════════════════════════ -->
 <style>
 /* ═══ Layout ═══ */
 .pd-hero{padding:1.5rem 0 3rem}
@@ -109,9 +106,7 @@
   letter-spacing:.5px;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ THUMBS — FORCE OVERRIDE (ID selector أقوى من أي class)
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ THUMBS ═══ */
 #pdThumbs{
   display:flex !important;
   flex-direction:row !important;
@@ -168,27 +163,12 @@
   box-shadow:0 4px 16px -4px rgba(217,171,95,.5) !important;
 }
 
-/* ═══ Responsive for thumbs ═══ */
 @media(max-width:768px){
-  #pdThumbs img{
-    width:62px !important;
-    height:62px !important;
-    min-width:62px !important;
-    min-height:62px !important;
-    max-width:62px !important;
-    max-height:62px !important;
-  }
+  #pdThumbs img{width:62px !important;height:62px !important;min-width:62px !important;min-height:62px !important;max-width:62px !important;max-height:62px !important;}
   #pdThumbs{min-height:62px !important}
 }
 @media(max-width:480px){
-  #pdThumbs img{
-    width:56px !important;
-    height:56px !important;
-    min-width:56px !important;
-    min-height:56px !important;
-    max-width:56px !important;
-    max-height:56px !important;
-  }
+  #pdThumbs img{width:56px !important;height:56px !important;min-width:56px !important;min-height:56px !important;max-width:56px !important;max-height:56px !important;}
   #pdThumbs{min-height:56px !important}
 }
      
@@ -666,7 +646,7 @@
   letter-spacing:.5px;
 }
 
-/* ═══ Product Video (Replaces Main Image) ═══ */
+/* ═══ Product Video ═══ */
 .pd-img video {
   width: 100%;
   height: 100%;
@@ -696,19 +676,40 @@
   border-radius: 0 0 22px 22px;
 }
 
+/* ═══ Trust Badges (تكتيك تسويقي) ═══ */
+.trust-badges{
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  gap:.5rem;
+  margin:.8rem 0 1.2rem;
+  padding:.6rem .4rem;
+  background:var(--panel);
+  border-radius:14px;
+  border:1px solid var(--line);
+  flex-wrap:wrap;
+}
+.trust-badges span{
+  display:flex;
+  align-items:center;
+  gap:.3rem;
+  font-size:.72rem;
+  color:var(--mut);
+  font-weight:600;
+}
+.trust-badges .icon{font-size:1.1rem}
+
 /* ═══ Responsive ═══ */
 @media(max-width:960px){
   .pd-grid{grid-template-columns:1fr;gap:2rem}
   .pd-gallery{position:static}
   .info-boxes{grid-template-columns:repeat(3,1fr)}
 }
-
 @media(max-width:768px){
   .pd-actions{grid-template-columns:1fr;gap:.6rem}
   .pd-actions .btn,.wish-btn{width:100%}
   .rel-grid{grid-template-columns:repeat(2,1fr)}
   .info-boxes{grid-template-columns:1fr}
-  
   .zoom-modal{padding:1rem}
   .zoom-modal img{max-width:95vw;max-height:85vh}
   .zoom-close{top:12px;right:12px;width:44px;height:44px;font-size:1.4rem}
@@ -716,13 +717,13 @@
   .zoom-nav.prev{left:10px}
   .zoom-nav.next{right:10px}
   .zoom-counter{bottom:16px;font-size:.8rem;padding:.35rem .8rem}
+  .trust-badges{gap:.3rem}
+  .trust-badges span{font-size:.62rem}
 }
-
 @media(max-width:480px){
   .pd-info h1{font-size:1.5rem}
   .pd-price .price-main{font-size:1.7rem}
   .rv-form .row{grid-template-columns:1fr}
-  
   .zoom-modal{padding:.5rem}
   .zoom-close{top:8px;right:8px;width:40px;height:40px;font-size:1.2rem}
   .zoom-nav{width:40px;height:40px;font-size:1.2rem}
@@ -755,33 +756,18 @@
 <!-- ═══ TOP BAR ═══ -->
 <div class="topbar">
   <div class="mq-track" id="mqTrack">
-    <span data-i18n="mq">
-      🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp;
-      🏷️ خصومات حصرية &nbsp;•&nbsp;
-      🎁 تغليف مجاني &nbsp;•&nbsp;
-      📦 شحن آمن &nbsp;•&nbsp;
-    </span>
-    <span data-i18n="mq">
-      🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp;
-      🏷️ خصومات حصرية &nbsp;•&nbsp;
-      🎁 تغليف مجاني &nbsp;•&nbsp;
-      📦 شحن آمن &nbsp;•&nbsp;
-    </span>
+    <span data-i18n="mq">🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp; 🏷️ خصومات حصرية &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; 📦 شحن آمن &nbsp;•&nbsp;</span>
+    <span data-i18n="mq">🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp; 🏷️ خصومات حصرية &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; 📦 شحن آمن &nbsp;•&nbsp;</span>
   </div>
 </div>
      
 <!-- ═══ HEADER ═══ -->
 <header>
   <div class="wrap hrow">
-
     <a class="logo" href="index.html" aria-label="VelaLight">
       <span class="flame"></span>
-      <div>
-        <b>VelaLight</b>
-        <small>Luxury Candle Studio</small>
-      </div>
+      <div><b>VelaLight</b><small>Luxury Candle Studio</small></div>
     </a>
-
     <nav class="mainnav" aria-label="Main navigation">
       <div><a href="index.html" data-i18n="nav_home">الرئيسية</a></div>
       <div>
@@ -802,15 +788,10 @@
       <div><a href="index.html#faq-section" data-i18n="nav_faq">الأسئلة الشائعة</a></div>
       <div><a href="contact.html" data-i18n="nav_contact">تواصل معنا</a></div>
     </nav>
-
     <div class="hact">
       <button class="langbtn" id="langBtn" type="button" aria-label="تغيير اللغة">EN</button>
-      <button class="icobtn" id="cartBtn" type="button" aria-label="سلة الشراء">
-        🛍️
-        <span class="badge" id="cartCount">0</span>
-      </button>
+      <button class="icobtn" id="cartBtn" type="button" aria-label="سلة الشراء">🛍️ <span class="badge" id="cartCount">0</span></button>
     </div>
-
   </div>
 </header>
 
@@ -830,7 +811,6 @@
   <a href="index.html#scents" data-i18n="mn_scents">العطور الفاخرة</a>
   <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
 </nav>
-
 <div class="ovl" id="ovl"></div>
      
 <!-- ═══════════════════════════════════════════════════════════
@@ -848,9 +828,7 @@
       <span class="current" id="crumbName" data-i18n="pd_product">المنتج</span>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         LOADING SKELETON
-         ═══════════════════════════════════════════════════════ -->
+    <!-- ═══ LOADING SKELETON ═══ -->
     <div id="pdLoading">
       <div class="pd-grid">
         <div class="skel" style="aspect-ratio:1;border-radius:22px" aria-hidden="true"></div>
@@ -864,9 +842,7 @@
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         PRODUCT NOT FOUND
-         ═══════════════════════════════════════════════════════ -->
+    <!-- ═══ PRODUCT NOT FOUND ═══ -->
     <div id="pdNotFound" class="empty hidden" role="alert" aria-live="polite">
       <div style="font-size:4rem;margin-bottom:1rem" aria-hidden="true">🕯️</div>
       <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem" data-i18n="pd_not_found_title">😕 المنتج غير متاح</h2>
@@ -874,13 +850,11 @@
       <a href="products.html" class="btn" data-i18n="pd_browse_products">تصفح المنتجات</a>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         PRODUCT CONTENT
-         ═══════════════════════════════════════════════════════ -->
+    <!-- ═══ PRODUCT CONTENT ═══ -->
     <div id="pdWrap" class="hidden">
       <div class="pd-grid">
 
-        <!-- ═══ Gallery — Enhanced ═══ -->
+        <!-- ═══ Gallery ═══ -->
         <div class="pd-gallery">
           <div class="pd-img" id="pdImgWrap">
             <img id="pdImg" src="" alt="" loading="eager" decoding="async" fetchpriority="high">
@@ -908,6 +882,14 @@
             <span class="save-badge" id="pdSave" style="display:none"></span>
           </div>
 
+          <!-- ═══ Trust Badges (تحفيز الشراء) ═══ -->
+          <div class="trust-badges">
+            <span><span class="icon">🕯️</span> صناعة يدوية</span>
+            <span><span class="icon">🚚</span> توصيل سريع</span>
+            <span><span class="icon">🎁</span> تغليف فاخر</span>
+            <span><span class="icon">💳</span> دفع آمن</span>
+          </div>
+
           <!-- ═══ Description ═══ -->
           <p class="pd-desc" id="pdDesc"></p>
 
@@ -928,14 +910,10 @@
             </div>
           </div>
 
-          <!-- ═══ Actions — مع تحسين الأزرار ═══ -->
+          <!-- ═══ Actions ═══ -->
           <div class="pd-actions">
-            <button class="btn" id="pdAddBtn" type="button" data-i18n="pd_add" style="background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(217,171,95,.4);">
-              🛍️ أضيفي للسلة
-            </button>
-            <button class="btn wa" id="pdBuyBtn" type="button" data-i18n="pd_buy" style="font-weight:700;">
-              💬 اطلبي عبر واتساب
-            </button>
+            <button class="btn" id="pdAddBtn" type="button" data-i18n="pd_add" style="background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(217,171,95,.4);">🛍️ أضيفي للسلة</button>
+            <button class="btn wa" id="pdBuyBtn" type="button" data-i18n="pd_buy" style="font-weight:700;">💬 اطلبي عبر واتساب</button>
             <button class="wish-btn" id="pdWishBtn" type="button" aria-label="إضافة إلى المفضلة" data-i18n-title="pd_wishlist" title="إضافة إلى المفضلة">🤍</button>
           </div>
 
@@ -971,9 +949,7 @@
       </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════
-         TABS — Description / Specs / Reviews
-         ═══════════════════════════════════════════════════════════ -->
+    <!-- ═══ TABS ═══ -->
     <div class="pd-tabs">
       <div class="tabs-nav" id="tabsNav">
         <button class="on" data-tab="desc"><span data-i18n="pd_desc_tab">📝 الوصف</span></button>
@@ -981,12 +957,7 @@
         <button data-tab="reviews"><span data-i18n="pd_reviews_tab">⭐ المراجعات</span> (<span id="revCount">0</span>)</button>
       </div>
 
-      <!-- Tab: Description -->
-      <div class="tab-pane on" id="tab-desc">
-        <div id="pdDescFull" style="color:var(--mut);line-height:1.9;font-size:.95rem"></div>
-      </div>
-
-      <!-- Tab: Specs -->
+      <div class="tab-pane on" id="tab-desc"><div id="pdDescFull" style="color:var(--mut);line-height:1.9;font-size:.95rem"></div></div>
       <div class="tab-pane" id="tab-specs">
         <table class="specs-table">
           <tr><td>⏱️ مدة الاحتراق</td><td id="specHours">—</td></tr>
@@ -997,8 +968,6 @@
           <tr><td>🧵 الفتيل</td><td>قطن / خشب طبيعي</td></tr>
         </table>
       </div>
-
-      <!-- Tab: Reviews -->
       <div class="tab-pane" id="tab-reviews">
         <div id="pdReviews"></div>
         <div class="rv-form">
@@ -1015,9 +984,7 @@
           </div>
           <textarea id="rvText" rows="3" placeholder="اكتبي رأيك بالتفصيل..."></textarea>
           <button class="btn" id="rvSubmit" style="margin-top:.9rem">إرسال المراجعة</button>
-          <small style="display:block;margin-top:.6rem;color:var(--dim)">
-            ✓ المراجعة بتظهر بعد الموافقة من الإدارة
-          </small>
+          <small style="display:block;margin-top:.6rem;color:var(--dim)">✓ المراجعة بتظهر بعد الموافقة من الإدارة</small>
         </div>
       </div>
     </div>
@@ -1043,42 +1010,27 @@
 <!-- ═══ CART DRAWER ═══ -->
 <div class="ovl" id="cartOv"></div>
 <aside class="drawer" id="cartDrawer">
-  <div class="dhead">
-    <h3 data-i18n="cart_title">🛍️ سلة الشراء</h3>
-    <button class="icobtn" id="closeCart" aria-label="إغلاق السلة">✕</button>
-  </div>
+  <div class="dhead"><h3 data-i18n="cart_title">🛍️ سلة الشراء</h3><button class="icobtn" id="closeCart" aria-label="إغلاق السلة">✕</button></div>
   <div class="dbody" id="cartItems"></div>
   <div class="dfoot">
     <h4 style="color:var(--gold2);font-size:.9rem;margin-bottom:.3rem" data-i18n="delivery_h">بيانات التوصيل</h4>
     <div class="co-form">
       <input id="coName" data-i18n-ph="ph_name" placeholder="الاسم بالكامل *">
       <input id="coPhone" type="tel" data-i18n-ph="ph_phone" placeholder="رقم الموبايل *">
-      <input id="coEmail" type="email" placeholder="الإيميل (لإرسال تأكيد الطلب - اختياري)" style="margin-top:.4rem">
+      <input id="coEmail" type="email" placeholder="الإيميل (اختياري)" style="margin-top:.4rem">
       <select id="coCity"></select>
       <input id="coAddr" data-i18n-ph="ph_addr" placeholder="العنوان بالتفصيل *">
-      <textarea id="coNotes" rows="2" data-i18n-ph="ph_notes" placeholder="ملاحظات / طلبات إضافية"></textarea>
+      <textarea id="coNotes" rows="2" data-i18n-ph="ph_notes" placeholder="ملاحظات"></textarea>
     </div>
     <div style="display:flex;gap:.5rem;margin-top:.8rem">
       <input id="couponInput" placeholder="🎟️ كود الكوبون" style="flex:1">
       <button class="btn ghost sm" id="applyCouponBtn" type="button">تطبيق</button>
     </div>
-    <div class="trow" id="discountRow" style="display:none;margin-top:.5rem;color:var(--ok)">
-      <span>🎟️ الخصم (<b id="couponCodeLbl"></b>)</span>
-      <b id="cartDiscount">-0</b>
-    </div>
-    <div class="trow" style="margin-top:.8rem">
-      <span data-i18n="subtotal">قيمة المنتجات</span>
-      <b id="cartSub">0</b>
-    </div>
-    <div class="trow total">
-      <span data-i18n="total">الإجمالي</span>
-      <b id="cartTotal">0</b>
-    </div>
+    <div class="trow" id="discountRow" style="display:none;margin-top:.5rem;color:var(--ok)"><span>🎟️ الخصم (<b id="couponCodeLbl"></b>)</span><b id="cartDiscount">-0</b></div>
+    <div class="trow" style="margin-top:.8rem"><span data-i18n="subtotal">قيمة المنتجات</span><b id="cartSub">0</b></div>
+    <div class="trow total"><span data-i18n="total">الإجمالي</span><b id="cartTotal">0</b></div>
     <p class="cart-shipping-note" data-i18n="ship_note">🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.</p>
-    <div class="paybox">
-      <b data-i18n="paymethod_h">طريقة الدفع: InstaPay</b>
-      <p style="margin-top:.4rem" data-i18n="pay_products_note">💳 قيمة المنتجات تُدفع مقدمًا عبر InstaPay.</p>
-    </div>
+    <div class="paybox"><b data-i18n="paymethod_h">طريقة الدفع: InstaPay</b><p style="margin-top:.4rem" data-i18n="pay_products_note">💳 قيمة المنتجات تُدفع مقدمًا عبر InstaPay.</p></div>
     <button class="btn wa" id="checkoutBtn" style="width:100%;margin-top:.8rem" data-i18n="checkout_wa">✅ إتمام الطلب عبر واتساب</button>
     <button class="btn ghost sm" id="emptyCartBtn" style="width:100%;margin-top:.5rem" data-i18n="empty_cart">🗑️ إفراغ السلة</button>
   </div>
@@ -1089,10 +1041,7 @@
   <div class="wrap">
     <div class="fgrid">
       <div>
-        <a class="logo" href="index.html">
-          <span class="flame"></span>
-          <div><b>VelaLight</b><small>Luxury Candle Studio</small></div>
-        </a>
+        <a class="logo" href="index.html"><span class="flame"></span><div><b>VelaLight</b><small>Luxury Candle Studio</small></div></a>
         <p style="margin-top:1rem;color:var(--mut);font-size:.88rem" data-i18n="foot_tag1">شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب</p>
         <p style="color:var(--dim);font-size:.8rem" data-i18n="foot_tag2">Luxury handmade candles - Signature scents - Custom gifts</p>
       </div>
@@ -1127,10 +1076,7 @@
     </div>
     <div class="fbot">
       <span data-i18n="foot_rights">© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</span>
-      <div>
-        <a href="privacy.html" data-i18n="foot_privacy">سياسة الخصوصية</a>
-        <a href="terms.html" data-i18n="foot_terms">شروط الاستخدام</a>
-      </div>
+      <div><a href="privacy.html" data-i18n="foot_privacy">سياسة الخصوصية</a> <a href="terms.html" data-i18n="foot_terms">شروط الاستخدام</a></div>
     </div>
   </div>
 </footer>
@@ -1142,9 +1088,7 @@
 <script type="module" src="firebase.js"></script>
 <script src="app.js"></script>
 
-<!-- ═══════════════════════════════════════════════════════════
-     PRODUCT PAGE LOGIC
-     ═══════════════════════════════════════════════════════════ -->
+<!-- ═══ PRODUCT PAGE LOGIC ═══ -->
 <script>
 (function(){
 "use strict";
@@ -1205,10 +1149,7 @@ const toggleWishlist=id=>{
 /* ═══════ CATEGORY TRANSLATION ═══════ */
 function catName(c){
   if(typeof cat==="function") return cat(c);
-  const map={
-    ar:{wood:"شموع خشبية",glass:"شموع زجاجية",crystal:"شموع كريستالية",metal:"شموع معدنية",massage:"شموع المساج",gift:"الهدايا",bride:"بوكس العروسة"},
-    en:{wood:"Wooden Candles",glass:"Glass Candles",crystal:"Crystal Candles",metal:"Metal Candles",massage:"Massage Candles",gift:"Gifts",bride:"Bride Box"}
-  };
+  const map={ar:{wood:"شموع خشبية",glass:"شموع زجاجية",crystal:"شموع كريستالية",metal:"شموع معدنية",massage:"شموع المساج",gift:"الهدايا",bride:"بوكس العروسة"},en:{wood:"Wooden Candles",glass:"Glass Candles",crystal:"Crystal Candles",metal:"Metal Candles",massage:"Massage Candles",gift:"Gifts",bride:"Bride Box"}};
   return (map[LANG]||map.ar)[c]||c||"";
 }
 
@@ -1229,9 +1170,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     try {
       if(typeof loadCloudCatalog === "function") await loadCloudCatalog(productPid);
       if(typeof loadAllReviews === "function") await loadAllReviews();
-    } catch (e) {
-      console.warn("Sync failed", e);
-    }
+    } catch (e) { console.warn("Sync failed", e); }
   };
 
   if (window.FB && typeof window.FB.list === "function") {
@@ -1248,69 +1187,35 @@ document.addEventListener("DOMContentLoaded",()=>{
       try {
         const cache2 = JSON.parse(localStorage.getItem("vl_products_cache_v2") || "[]");
         if (Array.isArray(cache2)) {
-          const cachedV2 = cache2.find(x =>
-            String(x.id) === String(productPid) || String(x.id_) === String(productPid)
-          ) || null;
-          
+          const cachedV2 = cache2.find(x => String(x.id) === String(productPid) || String(x.id_) === String(productPid)) || null;
           if (cachedV2) {
             P = { ...cachedV2 };
             render();
             if (typeof toast === "function") toast("⚠️ عرض البيانات المحفوظة مؤقتاً");
-          } else {
-            showNotFound();
-          }
-        } else {
-          showNotFound();
-        }
-      } catch (e) {
-        showNotFound();
-      }
+          } else { showNotFound(); }
+        } else { showNotFound(); }
+      } catch (e) { showNotFound(); }
     }
   }, 2500);
 });
 
 /* ═══════ NAV ═══════ */
 function initNav(){
-  $("#navToggle")?.addEventListener("click",()=>{
-    $("#mnav")?.classList.toggle("open");
-    $("#ovl")?.classList.toggle("open");
-  });
-  $("#ovl")?.addEventListener("click",()=>{
-    $("#mnav")?.classList.remove("open");
-    $("#ovl")?.classList.remove("open");
-  });
-  $$(".mnav a").forEach(a=>{
-    a.addEventListener("click",()=>{
-      $("#mnav")?.classList.remove("open");
-      $("#ovl")?.classList.remove("open");
-    });
-  });
+  $("#navToggle")?.addEventListener("click",()=>{ $("#mnav")?.classList.toggle("open"); $("#ovl")?.classList.toggle("open"); });
+  $("#ovl")?.addEventListener("click",()=>{ $("#mnav")?.classList.remove("open"); $("#ovl")?.classList.remove("open"); });
+  $$(".mnav a").forEach(a=>{ a.addEventListener("click",()=>{ $("#mnav")?.classList.remove("open"); $("#ovl")?.classList.remove("open"); }); });
 }
 
 /* ═══════ LANG WATCHER ═══════ */
 function initLangWatcher(){
   let lastLang=(typeof LANG !== "undefined") ? LANG : "ar";
-
   setInterval(()=>{
-    if(
-      (typeof LANG !== "undefined") &&
-      LANG!==lastLang
-    ){
+    if((typeof LANG !== "undefined") && LANG!==lastLang){
       lastLang=LANG;
-
       if(P) render();
-
-      if(typeof window.applyProductTranslations==="function"){
-        window.applyProductTranslations();
-      }
-
-      if(typeof renderReviews==="function"){
-        renderReviews();
-      }
-
-      if(P && typeof updateProductRating==="function"){
-        updateProductRating();
-      }
+      if(typeof window.applyProductTranslations==="function") window.applyProductTranslations();
+      if(typeof renderReviews==="function") renderReviews();
+      if(P && typeof updateProductRating==="function") updateProductRating();
     }
   },150);
 }
@@ -1318,49 +1223,29 @@ function initLangWatcher(){
 /* ═══════ LOAD ALL REVIEWS FROM FIREBASE ═══════ */
 async function loadAllReviews(){
   try{
-    if(
-      typeof DB !== "undefined" &&
-      typeof DB.list === "function"
-    ){
+    if(typeof DB !== "undefined" && typeof DB.list === "function"){
       const revs=await DB.list("reviews");
-      if(Array.isArray(revs)){
-        window.ALL_REVIEWS=[
-          ...(typeof SEED_REVIEWS!=="undefined" ? SEED_REVIEWS : []),
-          ...revs
-        ];
-      }
+      if(Array.isArray(revs)){ window.ALL_REVIEWS=[...(typeof SEED_REVIEWS!=="undefined"?SEED_REVIEWS:[]),...revs]; }
     }
-
     if(P){
       if(typeof renderReviews==="function") renderReviews();
-
       const reviewSummary=(typeof prodReviews==="function") ? prodReviews(P.id) : [];
-
       const revCount=$("#revCount");
       if(revCount) revCount.textContent=reviewSummary.length;
-
       const ratingBox=$("#pdRatingSummary");
       if(ratingBox){
         if(reviewSummary.length){
           const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
           const reviewWord=typeof t==="function" ? t("pd_review_word") : (typeof LANG!=="undefined" && LANG==="en" ? "reviews" : "مراجعة");
           const readAll=typeof t==="function" ? t("pd_read_all") : (typeof LANG!=="undefined" && LANG==="en" ? "Read all" : "اقرئي الكل");
-          ratingBox.innerHTML=
-            `<span class="stars">${"★".repeat(Math.round(avg))}</span>`+
-            `<b>${avg.toFixed(1)}</b>`+
-            `<span>(${reviewSummary.length} ${reviewWord})</span>`+
-            `<a href="#tab-reviews">${readAll}</a>`;
+          ratingBox.innerHTML=`<span class="stars">${"★".repeat(Math.round(avg))}</span><b>${avg.toFixed(1)}</b><span>(${reviewSummary.length} ${reviewWord})</span><a href="#tab-reviews">${readAll}</a>`;
         }else{
           const firstReview=typeof t==="function" ? t("pd_first_review") : (typeof LANG!=="undefined" && LANG==="en" ? "Be the first to review" : "كوني أول من يشارك رأيه");
-          ratingBox.innerHTML=
-            `<span class="stars" style="opacity:.4">★★★★★</span>`+
-            `<span>${firstReview}</span>`;
+          ratingBox.innerHTML=`<span class="stars" style="opacity:.4">★★★★★</span><span>${firstReview}</span>`;
         }
       }
     }
-  }catch(e){
-    console.warn("Reviews load failed", e);
-  }
+  }catch(e){ console.warn("Reviews load failed", e); }
 }
      
 /* ═══════ CLOUD CATALOG WITH CACHE UPDATE ═══════ */
@@ -1369,45 +1254,27 @@ async function loadCloudCatalog(pid){
     if(typeof DB !== "undefined" && typeof DB.list === "function") {
       const cloud=await DB.list("products");
       cloudCatalog=cloud||[];
-      const found=cloud.find(x=>
-        String(x.id)===String(pid)||
-        String(x.id_)===String(pid)||
-        String(x.slug)===String(pid)
-      );
-      
+      const found=cloud.find(x=> String(x.id)===String(pid)||String(x.id_)===String(pid)||String(x.slug)===String(pid));
       if(found&&found.active!==false){
         try{
           const cacheKey="vl_products_cache_v2";
           let cache=[];
           try{cache=JSON.parse(localStorage.getItem(cacheKey)||"[]")}catch(e){}
           if(!Array.isArray(cache)) cache=[];
-          
-          const idx=cache.findIndex(x=>
-            String(x.id)===String(pid)||String(x.id_)===String(pid)
-          );
+          const idx=cache.findIndex(x=> String(x.id)===String(pid)||String(x.id_)===String(pid));
           if(idx>=0) cache[idx]={...found,id:pid};
           else cache.push({...found,id:pid});
-          
           localStorage.setItem(cacheKey,JSON.stringify(cache.slice(-100)));
         }catch(e){console.warn("Cache update failed",e)}
-        
         P={...found};
         render();
-      }else if(found&&found.active===false){
-        showNotFound();
-      }else{
+      }else if(found&&found.active===false){ showNotFound(); }
+      else{
         const local=(typeof PRODUCTS!=="undefined")?PRODUCTS.find(x=>String(x.id)===String(pid)):null;
-        if(local){
-          P={...local};
-          render();
-        }else{
-          showNotFound();
-        }
+        if(local){ P={...local}; render(); } else { showNotFound(); }
       }
     }
-  }catch(e){
-    console.warn("Cloud load failed",e);
-  }
+  }catch(e){ console.warn("Cloud load failed",e); }
 }
 
 /* ═══════ RENDER ═══════ */
@@ -1418,12 +1285,10 @@ function render(){
 
   const name=(typeof pname === "function") ? pname(P) : (P.name || "منتج");
   document.title=name+" | VelaLight";
-
   let ogTitle=document.querySelector('meta[property="og:title"]');
   if(ogTitle) ogTitle.content=name;
   let ogDesc=document.querySelector('meta[property="og:description"]');
   if(ogDesc) ogDesc.content=(typeof pdesc === "function" ? pdesc(P) : (P.desc || "")).slice(0,160);
-
   if(typeof updateJsonLd === "function") updateJsonLd();
 
   $("#crumbName").textContent=name;
@@ -1431,17 +1296,12 @@ function render(){
 
   const desc=(typeof pdesc === "function") ? pdesc(P) : (P.desc || "");
   $("#pdDesc").textContent=desc;
-  $("#pdDescFull").innerHTML=desc.split("\n").filter(Boolean)
-    .map(p=>`<p style="margin-bottom:.9rem">${p}</p>`).join("")
-    ||`<p>${desc}</p>`;
+  $("#pdDescFull").innerHTML=desc.split("\n").filter(Boolean).map(p=>`<p style="margin-bottom:.9rem">${p}</p>`).join("") || `<p>${desc}</p>`;
 
   zoomImages=(typeof imgsOf === "function") ? imgsOf(P) : (P.img ? [P.img] : []);
   const mainImg=$("#pdImg");
   mainImg.classList.remove("loaded");
-  mainImg.onerror=()=>{
-    mainImg.src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>";
-    mainImg.classList.add("loaded");
-  };
+  mainImg.onerror=()=>{ mainImg.src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>"; mainImg.classList.add("loaded"); };
   mainImg.onload=()=>mainImg.classList.add("loaded");
   mainImg.src=(typeof CDN === "function" ? CDN(zoomImages[0]) : zoomImages[0]) || (P.img || "");
   mainImg.alt=name;
@@ -1452,24 +1312,16 @@ function render(){
   if(ratingBox){
     if(reviewSummary.length){
       const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
-      ratingBox.innerHTML=
-        `<span class="stars">${"★".repeat(Math.round(avg))}</span>`+
-        `<b>${avg.toFixed(1)}</b>`+
-        `<span>(${reviewSummary.length} ${(typeof LANG !== "undefined" && LANG==="en")?"reviews":"مراجعة"})</span>`+
-        `<a href="#tab-reviews">${(typeof LANG !== "undefined" && LANG==="en")?"Read all":"اقرئي الكل"}</a>`;
+      ratingBox.innerHTML=`<span class="stars">${"★".repeat(Math.round(avg))}</span><b>${avg.toFixed(1)}</b><span>(${reviewSummary.length} ${(typeof LANG !== "undefined" && LANG==="en")?"reviews":"مراجعة"})</span><a href="#tab-reviews">${(typeof LANG !== "undefined" && LANG==="en")?"Read all":"اقرئي الكل"}</a>`;
     }else{
-      ratingBox.innerHTML=
-        `<span class="stars" style="opacity:.4">★★★★★</span>`+
-        `<span>${(typeof LANG !== "undefined" && LANG==="en")?"Be the first to review":"كوني أول من يشارك رأيه"}</span>`;
+      ratingBox.innerHTML=`<span class="stars" style="opacity:.4">★★★★★</span><span>${(typeof LANG !== "undefined" && LANG==="en")?"Be the first to review":"كوني أول من يشارك رأيه"}</span>`;
     }
   }
 
   if(typeof renderStock === "function") renderStock();
 
   const badge=(typeof pbadge === "function") ? pbadge(P) : "";
-  $("#pdBadge").innerHTML=badge
-    ?`<span class="p-badge" style="position:static;display:inline-block;margin-bottom:.6rem">${badge}</span>`
-    :"";
+  $("#pdBadge").innerHTML=badge ? `<span class="p-badge" style="position:static;display:inline-block;margin-bottom:.6rem">${badge}</span>` : "";
 
   $("#pdPrice").textContent=(typeof money === "function") ? money(P.price) : (P.price + " ج.م");
   if(P.old&&P.old>P.price){
@@ -1501,9 +1353,7 @@ function render(){
 function renderStock(){
   const box=$("#pdStockInfo");
   if(!box) return;
-
   const s=Number(P.stock);
-
   if(P.stock===undefined||P.stock===null||P.stock===""||isNaN(s)){
     box.innerHTML=`<span class="stock-badge ok" data-i18n="stock_available">✓ متوفر</span>`;
   }else if(s===0){
@@ -1518,45 +1368,28 @@ function renderStock(){
   }
 }
      
-/* ═══════ ENHANCED THUMBS + GALLERY COUNTER ═══════ */
+/* ═══════ THUMBS ═══════ */
 function renderThumbs(){
   const thumbs=$("#pdThumbs");
   const counter=$("#galleryCounter");
   if(!thumbs) return;
-  
-  if(counter){
-    if(zoomImages.length>1){
-      counter.textContent=`📸 ${zoomImages.length} صور`;
-      counter.style.display="block";
-    }else{
-      counter.style.display="none";
-    }
-  }
-  
-  if(zoomImages.length<=1){thumbs.innerHTML="";return;}
-  
+  if(counter){ if(zoomImages.length>1){ counter.textContent=`📸 ${zoomImages.length} صور`; counter.style.display="block"; }else{ counter.style.display="none"; } }
+  if(zoomImages.length<=1){ thumbs.innerHTML=""; return; }
   thumbs.innerHTML=zoomImages.map((u,i)=>{
     const src=(typeof CDN === "function") ? CDN(u) : u;
     return `<img src="${src}" class="${i===0?"on":""}" data-src="${src}" data-idx="${i}" alt="${(typeof pname === "function" ? pname(P) : P.name)} ${i+1}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">`;
   }).join("");
-  
   thumbs.querySelectorAll("img").forEach(img=>{
     img.addEventListener("click",()=>{
       thumbs.querySelectorAll("img").forEach(x=>x.classList.remove("on"));
       img.classList.add("on");
-      
       const main=$("#pdImg");
       if(main){
         main.style.opacity="0";
-        main.onload=()=>{
-          main.style.opacity="1";
-          main.classList.add("loaded");
-        };
+        main.onload=()=>{ main.style.opacity="1"; main.classList.add("loaded"); };
         main.src=img.dataset.src;
       }
-      
       img.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
-      
       const idx=parseInt(img.dataset.idx)||0;
       if(typeof openZoomAt === "function") openZoomAt(idx);
     });
@@ -1567,58 +1400,23 @@ function renderThumbs(){
 function renderVideo(){
   const BRIDE_BOX_ID = "pmt2u7xq749e";
   const BRIDE_BOX_VIDEO = "box.mp4";
-
-  const currentId = String(
-    P?.id ||
-    P?.id_ ||
-    P?.pid ||
-    P?.slug ||
-    ""
-  ).trim();
-
+  const currentId = String(P?.id || P?.id_ || P?.pid || P?.slug || "").trim();
   const urlParams = new URLSearchParams(window.location.search);
-  const urlProductId = String(
-    urlParams.get("p") ||
-    urlParams.get("id") ||
-    ""
-  ).trim();
-
-  const isBrideBox =
-    currentId === BRIDE_BOX_ID ||
-    urlProductId === BRIDE_BOX_ID;
-
+  const urlProductId = String(urlParams.get("p") || urlParams.get("id") || "").trim();
+  const isBrideBox = currentId === BRIDE_BOX_ID || urlProductId === BRIDE_BOX_ID;
   if(!isBrideBox) return;
-     
   const imgWrap = $("#pdImgWrap");
   if(!imgWrap) return;
-
   const videoUrl = `https://velalight.github.io/${BRIDE_BOX_VIDEO}?v=v5`;
   const posterUrl = (typeof CDN === "function" && zoomImages[0]) ? CDN(zoomImages[0]) : (zoomImages[0] || P.img || "");
-
   imgWrap.innerHTML = `
-    <video
-      id="pdMainVideo"
-      src="${videoUrl}"
-      autoplay
-      muted
-      loop
-      playsinline
-      controls
-      preload="auto"
-      poster="${posterUrl}"
-      style="width:100%;height:100%;object-fit:contain;background:#000;border-radius:22px;display:block;"
-    >
-      متصفحك لا يدعم تشغيل الفيديو.
-    </video>
+    <video id="pdMainVideo" src="${videoUrl}" autoplay muted loop playsinline controls preload="auto" poster="${posterUrl}" style="width:100%;height:100%;object-fit:contain;background:#000;border-radius:22px;display:block;">متصفحك لا يدعم تشغيل الفيديو.</video>
     <div class="video-caption">▶️ شاهد المنتج</div>
   `;
-
   const zoomHint = $("#zoomHint");
   if(zoomHint) zoomHint.style.display = "none";
-
   const counter = $("#galleryCounter");
   if(counter) counter.style.display = "none";
-
   const vid = document.getElementById("pdMainVideo");
   if(vid){
     const tryPlay = () => { vid.play().catch(() => {}); };
@@ -1639,367 +1437,90 @@ function renderScents(){
   const pick=$("#pdScents");
   if(!pick) return;
   const scents=getProductScents();
-  
-  pick.innerHTML = `
-    <select id="pdScentSelect" style="width:100%; padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:1rem; cursor:pointer; outline:none;">
-      <option value="">${(typeof LANG !== "undefined" && LANG==="en")?"Choose a scent...":"اختار العطر..."}</option>
-      ${scents.map(s => `<option value="${s}">${velaScentTr(s)}</option>`).join('')}
-    </select>
-  `;
-
-  $("#pdScentSelect").addEventListener("change", (e) => {
-    selScent = e.target.value;
-  });
-  
+  pick.innerHTML = `<select id="pdScentSelect" style="width:100%; padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:1rem; cursor:pointer; outline:none;"><option value="">${(typeof LANG !== "undefined" && LANG==="en")?"Choose a scent...":"اختار العطر..."}</option>${scents.map(s => `<option value="${s}">${velaScentTr(s)}</option>`).join('')}</select>`;
+  $("#pdScentSelect").addEventListener("change", (e) => { selScent = e.target.value; });
   selScent="";
 }
 
 /* ═══════ EVENTS ═══════ */
 function bindEvents(){
-  $("#pdQMinus")?.addEventListener("click",()=>{
-    if(qty>1){qty--;$("#pdQVal").textContent=qty;}
-  });
-  $("#pdQPlus")?.addEventListener("click",()=>{
-    const maxStock=Number(P.stock)||999;
-    if(qty<maxStock){
-      qty++;
-      $("#pdQVal").textContent=qty;
-    }else{
-      if(typeof toast==="function") toast("⚠️ وصلتِ للحد الأقصى المتاح");
-    }
-  });
-  $("#pdAddBtn")?.addEventListener("click",()=>{
-    if(!selScent){
-      if(typeof toast==="function") toast("⚠️ من فضلك اختاري العطر الأول");
-      return;
-    }
-    if(typeof addToCart==="function"){
-      addToCart(P,{scent:selScent,qty});
-      if(typeof track==="function"){
-        track("add_to_cart",{items:[{item_id:P.id,item_name:P.name,price:P.price,quantity:qty}]});
-      }
-    }
-  });
-  $("#pdBuyBtn")?.addEventListener("click",()=>{
-    if(!selScent){
-      if(typeof toast==="function") toast("⚠️ من فضلك اختاري العطر الأول");
-      return;
-    }
-    const msg=
-      `✨ أهلاً VelaLight!\n\n`+
-      `عايزة أطلب:\n`+
-      `🕯️ ${(typeof pname === "function" ? pname(P) : P.name)}\n`+
-      `🌸 العطر: ${velaScentTr(selScent)}\n`+
-      `📦 الكمية: ${qty}\n`+
-      `💰 الإجمالي: ${(typeof money === "function" ? money(P.price*qty) : (P.price*qty + " ج.م"))}`;
-    const wa=(typeof CFG!=="undefined"&&CFG.WHATSAPP) ? CFG.WHATSAPP : "";
-    if(wa) window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,"_blank");
-  });
+  $("#pdQMinus")?.addEventListener("click",()=>{ if(qty>1){qty--;$("#pdQVal").textContent=qty;} });
+  $("#pdQPlus")?.addEventListener("click",()=>{ const maxStock=Number(P.stock)||999; if(qty<maxStock){ qty++; $("#pdQVal").textContent=qty; }else{ if(typeof toast==="function") toast("⚠️ وصلتِ للحد الأقصى المتاح"); } });
+  $("#pdAddBtn")?.addEventListener("click",()=>{ if(!selScent){ if(typeof toast==="function") toast("⚠️ من فضلك اختاري العطر الأول"); return; } if(typeof addToCart==="function"){ addToCart(P,{scent:selScent,qty}); if(typeof track==="function"){ track("add_to_cart",{items:[{item_id:P.id,item_name:P.name,price:P.price,quantity:qty}]}); } } });
+  $("#pdBuyBtn")?.addEventListener("click",()=>{ if(!selScent){ if(typeof toast==="function") toast("⚠️ من فضلك اختاري العطر الأول"); return; } const msg=`✨ أهلاً VelaLight!\n\nعايزة أطلب:\n🕯️ ${(typeof pname === "function" ? pname(P) : P.name)}\n🌸 العطر: ${velaScentTr(selScent)}\n📦 الكمية: ${qty}\n💰 الإجمالي: ${(typeof money === "function" ? money(P.price*qty) : (P.price*qty + " ج.م"))}`; const wa=(typeof CFG!=="undefined"&&CFG.WHATSAPP) ? CFG.WHATSAPP : ""; if(wa) window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,"_blank"); });
 }
 
 /* ═══════ WISHLIST ═══════ */
-function initWishButton(){
-  $("#pdWishBtn")?.addEventListener("click",()=>{
-    if(!P) return;
-    toggleWishlist(P.id);
-    updateWishButton();
-  });
-}
-
-function updateWishButton(){
-  const btn=$("#pdWishBtn");
-  if(!btn||!P) return;
-  if(isInWishlist(P.id)){
-    btn.textContent="❤️";
-    btn.classList.add("on");
-    btn.setAttribute("aria-label","إزالة من المفضلة");
-  }else{
-    btn.textContent="🤍";
-    btn.classList.remove("on");
-    btn.setAttribute("aria-label","أضف للمفضلة");
-  }
-}
+function initWishButton(){ $("#pdWishBtn")?.addEventListener("click",()=>{ if(!P) return; toggleWishlist(P.id); updateWishButton(); }); }
+function updateWishButton(){ const btn=$("#pdWishBtn"); if(!btn||!P) return; if(isInWishlist(P.id)){ btn.textContent="❤️"; btn.classList.add("on"); btn.setAttribute("aria-label","إزالة من المفضلة"); }else{ btn.textContent="🤍"; btn.classList.remove("on"); btn.setAttribute("aria-label","أضف للمفضلة"); } }
 
 /* ═══════ STARS ═══════ */
-function buildStars(){
-  const pick=$("#starPick");
-  if(!pick) return;
-  pick.querySelectorAll("button").forEach(b=>{
-    b.addEventListener("click",()=>{
-      selRating=+b.dataset.v;
-      pick.querySelectorAll("button").forEach((x,i)=>{
-        x.classList.toggle("lit",i<selRating);
-      });
-    });
-  });
-}
+function buildStars(){ const pick=$("#starPick"); if(!pick) return; pick.querySelectorAll("button").forEach(b=>{ b.addEventListener("click",()=>{ selRating=+b.dataset.v; pick.querySelectorAll("button").forEach((x,i)=>{ x.classList.toggle("lit",i<selRating); }); }); }); }
 
 /* ═══════ TABS ═══════ */
-function initTabs(){
-  $$("#tabsNav button").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      $$("#tabsNav button").forEach(b=>b.classList.remove("on"));
-      btn.classList.add("on");
-      $$(".tab-pane").forEach(p=>p.classList.remove("on"));
-      $("#tab-"+btn.dataset.tab)?.classList.add("on");
-    });
-  });
-}
+function initTabs(){ $$("#tabsNav button").forEach(btn=>{ btn.addEventListener("click",()=>{ $$("#tabsNav button").forEach(b=>b.classList.remove("on")); btn.classList.add("on"); $$(".tab-pane").forEach(p=>p.classList.remove("on")); $("#tab-"+btn.dataset.tab)?.classList.add("on"); }); }); }
 
 /* ═══════ ZOOM MODAL ═══════ */
-let zoomTouchStartX=0;
-let zoomTouchStartY=0;
-let zoomTouchStartTime=0;
-let zoomIsZoomed=false;
-let zoomScale=1;
-
+let zoomTouchStartX=0, zoomTouchStartY=0, zoomTouchStartTime=0, zoomIsZoomed=false, zoomScale=1;
 function initZoom(){
-  const modal=$("#zoomModal");
-  const img=$("#zoomImg");
+  const modal=$("#zoomModal"), img=$("#zoomImg");
   if(!modal||!img) return;
-
-  $("#zoomHint")?.addEventListener("click",e=>{
-    e.stopPropagation();
-    if(typeof openZoomAt === "function") openZoomAt(zoomIndex);
-  });
+  $("#zoomHint")?.addEventListener("click",e=>{ e.stopPropagation(); if(typeof openZoomAt === "function") openZoomAt(zoomIndex); });
   $("#pdImg")?.addEventListener("click",()=>{ if(typeof openZoomAt === "function") openZoomAt(zoomIndex); });
   $("#zoomClose")?.addEventListener("click",closeZoom);
-  modal.addEventListener("click",e=>{
-    if(e.target===modal) closeZoom();
-  });
+  modal.addEventListener("click",e=>{ if(e.target===modal) closeZoom(); });
   $("#zoomPrev")?.addEventListener("click",()=>{ if(typeof navigateZoom === "function") navigateZoom(-1); });
   $("#zoomNext")?.addEventListener("click",()=>{ if(typeof navigateZoom === "function") navigateZoom(1); });
-
-  document.addEventListener("keydown",e=>{
-    if(!modal.classList.contains("open")) return;
-    if(e.key==="Escape") closeZoom();
-    if(e.key==="ArrowLeft") { if(typeof navigateZoom === "function") navigateZoom(-1); }
-    if(e.key==="ArrowRight") { if(typeof navigateZoom === "function") navigateZoom(1); }
-  });
-
-  modal.addEventListener("touchstart",e=>{
-    if(zoomIsZoomed) return;
-    zoomTouchStartX=e.touches[0].clientX;
-    zoomTouchStartY=e.touches[0].clientY;
-    zoomTouchStartTime=Date.now();
-  },{passive:true});
-
-  modal.addEventListener("touchend",e=>{
-    if(zoomIsZoomed) return;
-    const deltaX=e.changedTouches[0].clientX-zoomTouchStartX;
-    const deltaY=e.changedTouches[0].clientY-zoomTouchStartY;
-    const deltaTime=Date.now()-zoomTouchStartTime;
-    
-    if(Math.abs(deltaX)>50&&Math.abs(deltaX)>Math.abs(deltaY)&&deltaTime<300){
-      if(deltaX<0) { if(typeof navigateZoom === "function") navigateZoom(1); }
-      else { if(typeof navigateZoom === "function") navigateZoom(-1); }
-    }
-  },{passive:true});
-
+  document.addEventListener("keydown",e=>{ if(!modal.classList.contains("open")) return; if(e.key==="Escape") closeZoom(); if(e.key==="ArrowLeft") { if(typeof navigateZoom === "function") navigateZoom(-1); } if(e.key==="ArrowRight") { if(typeof navigateZoom === "function") navigateZoom(1); } });
+  modal.addEventListener("touchstart",e=>{ if(zoomIsZoomed) return; zoomTouchStartX=e.touches[0].clientX; zoomTouchStartY=e.touches[0].clientY; zoomTouchStartTime=Date.now(); },{passive:true});
+  modal.addEventListener("touchend",e=>{ if(zoomIsZoomed) return; const deltaX=e.changedTouches[0].clientX-zoomTouchStartX; const deltaY=e.changedTouches[0].clientY-zoomTouchStartY; const deltaTime=Date.now()-zoomTouchStartTime; if(Math.abs(deltaX)>50&&Math.abs(deltaX)>Math.abs(deltaY)&&deltaTime<300){ if(deltaX<0) { if(typeof navigateZoom === "function") navigateZoom(1); } else { if(typeof navigateZoom === "function") navigateZoom(-1); } } },{passive:true});
   let lastTapTime=0;
-  img.addEventListener("click",e=>{
-    const now=Date.now();
-    if(lastTapTime===0){
-      lastTapTime=now;
-      return;
-    }
-    if(now-lastTapTime<300){
-      e.preventDefault();
-      if(typeof toggleImageZoom === "function") toggleImageZoom(e);
-      lastTapTime=0;
-    }else{
-      lastTapTime=now;
-    }
-  });
+  img.addEventListener("click",e=>{ const now=Date.now(); if(lastTapTime===0){ lastTapTime=now; return; } if(now-lastTapTime<300){ e.preventDefault(); if(typeof toggleImageZoom === "function") toggleImageZoom(e); lastTapTime=0; }else{ lastTapTime=now; } });
 }
-
-function navigateZoom(direction){
-  if(!zoomImages.length) return;
-  zoomIndex=(zoomIndex+direction+zoomImages.length)%zoomImages.length;
-  if(typeof updateZoom === "function") updateZoom();
-  if(typeof preloadAdjacentImages === "function") preloadAdjacentImages();
-}
-
-function openZoomAt(i){
-  if(!zoomImages.length) return;
-  zoomIndex=i;
-  $("#zoomModal").classList.add("open");
-  document.body.style.overflow="hidden";
-  if(typeof resetImageTransform === "function") resetImageTransform();
-  if(typeof updateZoom === "function") updateZoom();
-  if(typeof preloadAdjacentImages === "function") preloadAdjacentImages();
-}
-
-function closeZoom(){
-  $("#zoomModal").classList.remove("open");
-  document.body.style.overflow="";
-  if(typeof resetImageTransform === "function") resetImageTransform();
-}
-
-function updateZoom(){
-  if(!zoomImages[zoomIndex]) return;
-  const img=$("#zoomImg");
-  
-  img.style.opacity="0";
-  img.style.transform="scale(0.95)";
-  
-  img.src=(typeof CDN === "function") ? CDN(zoomImages[zoomIndex]) : zoomImages[zoomIndex];
-  
-  img.onload=()=>{
-    img.style.transition="opacity .3s ease, transform .3s ease";
-    img.style.opacity="1";
-    img.style.transform="scale(1)";
-  };
-  
-  $("#zoomCounter").textContent=`${zoomIndex+1} / ${zoomImages.length}`;
-  if(typeof updateZoomDots === "function") updateZoomDots();
-}
-
-function preloadAdjacentImages(){
-  if(!zoomImages.length) return;
-  const prevIdx=(zoomIndex-1+zoomImages.length)%zoomImages.length;
-  const nextIdx=(zoomIndex+1)%zoomImages.length;
-  
-  [prevIdx,nextIdx].forEach(idx=>{
-    const img=new Image();
-    img.src=(typeof CDN === "function") ? CDN(zoomImages[idx]) : zoomImages[idx];
-  });
-}
-
-function toggleImageZoom(e){
-  const img=$("#zoomImg");
-  if(!zoomIsZoomed){
-    const rect=img.getBoundingClientRect();
-    const x=((e.clientX-rect.left)/rect.width)*100;
-    const y=((e.clientY-rect.top)/rect.height)*100;
-    
-    zoomIsZoomed=true;
-    zoomScale=2.5;
-    img.style.transformOrigin=`${x}% ${y}%`;
-    img.style.transform=`scale(${zoomScale})`;
-    img.style.cursor="zoom-out";
-  }else{
-    if(typeof resetImageTransform === "function") resetImageTransform();
-  }
-}
-
-function resetImageTransform(){
-  const img=$("#zoomImg");
-  zoomIsZoomed=false;
-  zoomScale=1;
-  img.style.transformOrigin="center center";
-  img.style.transform="scale(1)";
-  img.style.cursor="zoom-in";
-}
-
-function updateZoomDots(){
-  let dots=$("#zoomDots");
-  if(!dots){
-    dots=document.createElement("div");
-    dots.id="zoomDots";
-    dots.style.cssText="position:absolute;bottom:60px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10";
-    $("#zoomModal").appendChild(dots);
-  }
-  
-  dots.innerHTML=zoomImages.map((_,i)=>
-    `<span style="width:8px;height:8px;border-radius:50%;background:${i===zoomIndex?"var(--gold)":"rgba(255,255,255,.4)"};transition:.3s"></span>`
-  ).join("");
-}
+function navigateZoom(direction){ if(!zoomImages.length) return; zoomIndex=(zoomIndex+direction+zoomImages.length)%zoomImages.length; if(typeof updateZoom === "function") updateZoom(); if(typeof preloadAdjacentImages === "function") preloadAdjacentImages(); }
+function openZoomAt(i){ if(!zoomImages.length) return; zoomIndex=i; $("#zoomModal").classList.add("open"); document.body.style.overflow="hidden"; if(typeof resetImageTransform === "function") resetImageTransform(); if(typeof updateZoom === "function") updateZoom(); if(typeof preloadAdjacentImages === "function") preloadAdjacentImages(); }
+function closeZoom(){ $("#zoomModal").classList.remove("open"); document.body.style.overflow=""; if(typeof resetImageTransform === "function") resetImageTransform(); }
+function updateZoom(){ if(!zoomImages[zoomIndex]) return; const img=$("#zoomImg"); img.style.opacity="0"; img.style.transform="scale(0.95)"; img.src=(typeof CDN === "function") ? CDN(zoomImages[zoomIndex]) : zoomImages[zoomIndex]; img.onload=()=>{ img.style.transition="opacity .3s ease, transform .3s ease"; img.style.opacity="1"; img.style.transform="scale(1)"; }; $("#zoomCounter").textContent=`${zoomIndex+1} / ${zoomImages.length}`; if(typeof updateZoomDots === "function") updateZoomDots(); }
+function preloadAdjacentImages(){ if(!zoomImages.length) return; const prevIdx=(zoomIndex-1+zoomImages.length)%zoomImages.length; const nextIdx=(zoomIndex+1)%zoomImages.length; [prevIdx,nextIdx].forEach(idx=>{ const img=new Image(); img.src=(typeof CDN === "function") ? CDN(zoomImages[idx]) : zoomImages[idx]; }); }
+function toggleImageZoom(e){ const img=$("#zoomImg"); if(!zoomIsZoomed){ const rect=img.getBoundingClientRect(); const x=((e.clientX-rect.left)/rect.width)*100; const y=((e.clientY-rect.top)/rect.height)*100; zoomIsZoomed=true; zoomScale=2.5; img.style.transformOrigin=`${x}% ${y}%`; img.style.transform=`scale(${zoomScale})`; img.style.cursor="zoom-out"; }else{ if(typeof resetImageTransform === "function") resetImageTransform(); } }
+function resetImageTransform(){ const img=$("#zoomImg"); zoomIsZoomed=false; zoomScale=1; img.style.transformOrigin="center center"; img.style.transform="scale(1)"; img.style.cursor="zoom-in"; }
+function updateZoomDots(){ let dots=$("#zoomDots"); if(!dots){ dots=document.createElement("div"); dots.id="zoomDots"; dots.style.cssText="position:absolute;bottom:60px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10"; $("#zoomModal").appendChild(dots); } dots.innerHTML=zoomImages.map((_,i)=>`<span style="width:8px;height:8px;border-radius:50%;background:${i===zoomIndex?"var(--gold)":"rgba(255,255,255,.4)"};transition:.3s"></span>`).join(""); }
 
 /* ═══════ REVIEWS ═══════ */
 function renderReviews(){
   const box=$("#pdReviews");
   if(!box) return;
   const revs=(typeof prodReviews==="function")?prodReviews(P.id):[];
-  if(!revs.length){
-    box.innerHTML=`<p style="color:var(--dim);text-align:center;padding:1.5rem">
-      ${(typeof LANG !== "undefined" && LANG==="en")?"No reviews yet. Be the first!":"لسة مفيش مراجعات. كوني أول من يشارك رأيه! ✨"}
-    </p>`;
-    return;
-  }
-  box.innerHTML=revs.map(r=>{
-    const date=r.createdAt?new Date(r.createdAt).toLocaleDateString((typeof LANG !== "undefined" && LANG==="en")?"en-US":"ar-EG"):"";
-    return `
-    <div class="rv-item">
-      <div class="rv-head">
-        <b>${r.name||"عميلة"}</b>
-        <div style="display:flex;align-items:center;gap:.6rem">
-          <span class="stars">${"★".repeat(r.rating||5)}</span>
-          <span class="rv-date">${date}</span>
-        </div>
-      </div>
-      <p>${r.text||""}</p>
-    </div>`;
-  }).join("");
+  if(!revs.length){ box.innerHTML=`<p style="color:var(--dim);text-align:center;padding:1.5rem">${(typeof LANG !== "undefined" && LANG==="en")?"No reviews yet. Be the first!":"لسة مفيش مراجعات. كوني أول من يشارك رأيه! ✨"}</p>`; return; }
+  box.innerHTML=revs.map(r=>{ const date=r.createdAt?new Date(r.createdAt).toLocaleDateString((typeof LANG !== "undefined" && LANG==="en")?"en-US":"ar-EG"):""; return `<div class="rv-item"><div class="rv-head"><b>${r.name||"عميلة"}</b><div style="display:flex;align-items:center;gap:.6rem"><span class="stars">${"★".repeat(r.rating||5)}</span><span class="rv-date">${date}</span></div></div><p>${r.text||""}</p></div>`; }).join("");
 }
 
 $("#rvSubmit")?.addEventListener("click",async()=>{
   const name=$("#rvName")?.value.trim();
   const text=$("#rvText")?.value.trim();
-  if(!name||!text){
-    if(typeof toast==="function") toast("⚠️ اكتبي اسمك ومراجعتك");
-    return;
-  }
+  if(!name||!text){ if(typeof toast==="function") toast("⚠️ اكتبي اسمك ومراجعتك"); return; }
   try{
     if(typeof DB !== "undefined" && typeof DB.add === "function") {
-      await DB.add("reviews",{
-        productSlug:P.id,
-        name,
-        text,
-        rating:selRating,
-        createdAt:Date.now(),
-        approved:false
-      });
+      await DB.add("reviews",{ productSlug:P.id, name, text, rating:selRating, createdAt:Date.now(), approved:false });
     }
     if(typeof toast==="function") toast("✅ تم إرسال المراجعة — هتظهر بعد الموافقة");
-    $("#rvName").value="";
-    $("#rvText").value="";
-    selRating=5;
-    $$("#starPick button").forEach((b,i)=>b.classList.toggle("lit",i<5));
-  }catch(e){
-    if(typeof toast==="function") toast("⚠️ حدث خطأ أثناء الإرسال");
-  }
+    $("#rvName").value=""; $("#rvText").value=""; selRating=5; $$("#starPick button").forEach((b,i)=>b.classList.toggle("lit",i<5));
+  }catch(e){ if(typeof toast==="function") toast("⚠️ حدث خطأ أثناء الإرسال"); }
 });
 
 /* ═══════ RELATED ═══════ */
 function renderRelated(){
   const box=$("#pdRelated");
   if(!box||!P) return;
-  
   let all = [];
-  if (cloudCatalog && cloudCatalog.length > 0) {
-    all = cloudCatalog;
-  } else if (typeof ALL_PRODUCTS !== "undefined") {
-    all = ALL_PRODUCTS;
-  } else if (typeof PRODUCTS !== "undefined") {
-    all = PRODUCTS;
-  }
-  
+  if (cloudCatalog && cloudCatalog.length > 0) { all = cloudCatalog; } else if (typeof ALL_PRODUCTS !== "undefined") { all = ALL_PRODUCTS; } else if (typeof PRODUCTS !== "undefined") { all = PRODUCTS; }
   let list = all.filter(x => x.cat === P.cat && x.id !== P.id).slice(0, 4);
-  
-  if(list.length < 4){
-    list = [...list, ...all.filter(x => x.cat !== P.cat && x.id !== P.id && !list.find(y => y.id === x.id))].slice(0, 4);
-  }
-  
-  if(!list.length){
-    box.innerHTML = `<p style="color:var(--dim);text-align:center;padding:1.5rem">${(typeof LANG !== "undefined" && LANG==="en")?"No similar products":"لا توجد منتجات مشابهة"}</p>`;
-    return;
-  }
-  
+  if(list.length < 4){ list = [...list, ...all.filter(x => x.cat !== P.cat && x.id !== P.id && !list.find(y => y.id === x.id))].slice(0, 4); }
+  if(!list.length){ box.innerHTML = `<p style="color:var(--dim);text-align:center;padding:1.5rem">${(typeof LANG !== "undefined" && LANG==="en")?"No similar products":"لا توجد منتجات مشابهة"}</p>`; return; }
   box.innerHTML = list.map(p => {
     const pImgs = p.images || p.imgs || (p.img ? [p.img] : []);
     const imgSrc = pImgs.length ? ((typeof CDN === "function") ? CDN(pImgs[0]) : pImgs[0]) : ((typeof CDN === "function") ? CDN(P.img || "RR.jpg") : (P.img || "RR.jpg"));
-    
-    return `
-    <a href="product.html?p=${p.id}" class="p-card" style="text-decoration:none">
-      <div class="p-media">
-        <img src="${imgSrc}" alt="${(typeof pname === "function" ? pname(p) : p.name)}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">
-      </div>
-      <div class="p-body">
-        <h3>${(typeof pname === "function" ? pname(p) : p.name)}</h3>
-        <div class="p-price">${(typeof money === "function" ? money(p.price) : (p.price + " ج.م"))}</div>
-      </div>
-    </a>`;
+    return `<a href="product.html?p=${p.id}" class="p-card" style="text-decoration:none"><div class="p-media"><img src="${imgSrc}" alt="${(typeof pname === "function" ? pname(p) : p.name)}" loading="lazy" decoding="async" onload="this.classList.add('loaded')"></div><div class="p-body"><h3>${(typeof pname === "function" ? pname(p) : p.name)}</h3><div class="p-price">${(typeof money === "function" ? money(p.price) : (p.price + " ج.م"))}</div></div></a>`;
   }).join("");
 }
 
@@ -2009,20 +1530,8 @@ function renderShare(){
   if(!box) return;
   const url=location.href;
   const text=((typeof LANG !== "undefined" && LANG==="en")?"Check out ":"شوفي ")+ (typeof pname === "function" ? pname(P) : P.name) + ((typeof LANG !== "undefined" && LANG==="en")?" from VelaLight ✨":" من VelaLight ✨");
-  box.innerHTML=`
-    <b>🔗 مشاركة:</b>
-    <a href="https://wa.me/?text=${encodeURIComponent(text+" "+url)}" target="_blank" rel="noopener">WhatsApp</a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener">Facebook</a>
-    <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}" target="_blank" rel="noopener">Twitter</a>
-    <button type="button" id="copyLink">📋 نسخ الرابط</button>`;
-  $("#copyLink")?.addEventListener("click",async()=>{
-    try{
-      await navigator.clipboard.writeText(url);
-      if(typeof toast==="function") toast("✅ تم نسخ الرابط");
-    }catch(e){
-      if(typeof toast==="function") toast("⚠️ فشل النسخ");
-    }
-  });
+  box.innerHTML=`<b>🔗 مشاركة:</b><a href="https://wa.me/?text=${encodeURIComponent(text+" "+url)}" target="_blank" rel="noopener">WhatsApp</a><a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener">Facebook</a><a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}" target="_blank" rel="noopener">Twitter</a><button type="button" id="copyLink">📋 نسخ الرابط</button>`;
+  $("#copyLink")?.addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText(url); if(typeof toast==="function") toast("✅ تم نسخ الرابط"); }catch(e){ if(typeof toast==="function") toast("⚠️ فشل النسخ"); } });
 }
 
 /* ═══════ JSON-LD ═══════ */
@@ -2030,90 +1539,48 @@ function updateJsonLd(){
   const ld=$("#pdJsonLd");
   if(!ld||!P) return;
   const imgs=zoomImages.map(u=> (typeof CDN === "function") ? CDN(u) : u);
-  const data={
-    "@context":"https://schema.org",
-    "@type":"Product",
-    "name":(typeof pname === "function" ? pname(P) : P.name),
-    "image":imgs.length?imgs:[(P.img || "")],
-    "description":(typeof pdesc === "function" ? pdesc(P) : (P.desc || "")).slice(0,500),
-    "brand":{"@type":"Brand","name":"VelaLight"},
-    "offers":{
-      "@type":"Offer",
-      "priceCurrency":"EGP",
-      "price":P.price||0,
-      "availability":Number(P.stock)===0
-        ?"https://schema.org/OutOfStock"
-        :"https://schema.org/InStock"
-    }
-  };
+  const data={ "@context":"https://schema.org", "@type":"Product", "name":(typeof pname === "function" ? pname(P) : P.name), "image":imgs.length?imgs:[(P.img || "")], "description":(typeof pdesc === "function" ? pdesc(P) : (P.desc || "")).slice(0,500), "brand":{"@type":"Brand","name":"VelaLight"}, "offers":{ "@type":"Offer", "priceCurrency":"EGP", "price":P.price||0, "availability":Number(P.stock)===0 ?"https://schema.org/OutOfStock" :"https://schema.org/InStock" } };
   const revs=(typeof prodReviews==="function")?prodReviews(P.id):[];
-  if(revs.length){
-    const avg=revs.reduce((a,r)=>a+Number(r.rating||5),0)/revs.length;
-    data.aggregateRating={
-      "@type":"AggregateRating",
-      "ratingValue":avg.toFixed(1),
-      "reviewCount":revs.length
-    };
-  }
+  if(revs.length){ const avg=revs.reduce((a,r)=>a+Number(r.rating||5),0)/revs.length; data.aggregateRating={ "@type":"AggregateRating", "ratingValue":avg.toFixed(1), "reviewCount":revs.length }; }
   ld.textContent=JSON.stringify(data,null,2);
 }
 
 /* ═══════ NOT FOUND ═══════ */
-function showNotFound(){
-  $("#pdLoading").classList.add("hidden");
-  $("#pdNotFound").classList.remove("hidden");
-}
+function showNotFound(){ $("#pdLoading").classList.add("hidden"); $("#pdNotFound").classList.remove("hidden"); }
 
 })();
 </script>
 <script>
 (function () {
   "use strict";
-
   function applyProductTranslations() {
     if (typeof t !== "function") return;
-
     var lang = localStorage.getItem("vl_lang") || "ar";
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
-
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
       var key = el.getAttribute("data-i18n");
       if (!key) return;
       var value = t(key);
-      if (value && value !== key && el.textContent !== value) {
-        el.textContent = value;
-      }
+      if (value && value !== key && el.textContent !== value) { el.textContent = value; }
     });
-
     document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
       var key = el.getAttribute("data-i18n-placeholder");
       if (!key) return;
       var value = t(key);
-      if (value && value !== key && el.getAttribute("placeholder") !== value) {
-        el.setAttribute("placeholder", value);
-      }
+      if (value && value !== key && el.getAttribute("placeholder") !== value) { el.setAttribute("placeholder", value); }
     });
-
     document.querySelectorAll("[data-i18n-title]").forEach(function (el) {
       var key = el.getAttribute("data-i18n-title");
       if (!key) return;
       var value = t(key);
-      if (value && value !== key && el.getAttribute("title") !== value) {
-        el.setAttribute("title", value);
-      }
+      if (value && value !== key && el.getAttribute("title") !== value) { el.setAttribute("title", value); }
     });
   }
-
   window.applyProductTranslations = applyProductTranslations;
-
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", function () {
-      setTimeout(applyProductTranslations, 100);
-    });
-  } else {
-    setTimeout(applyProductTranslations, 100);
-  }
+    document.addEventListener("DOMContentLoaded", function () { setTimeout(applyProductTranslations, 100); });
+  } else { setTimeout(applyProductTranslations, 100); }
 })();
 </script>
 </body>

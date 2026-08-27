@@ -1331,21 +1331,30 @@ function renderProductsPage() {
     return true;
   });
 
-  // ترتيب المنتجات
+  // ⚠️ ترتيب المنتجات (تم إصلاح المنطق ليعمل مع جميع خيارات الترتيب)
   list.sort((a, b) => {
+    // 1. المنتجات المثبتة (Pinned) تأتي أولاً
     if (a.pinned && !b.pinned) return -1;
     if (!a.pinned && b.pinned) return 1;
     if (a.pinned && b.pinned) {
       return (b.pinnedAt || 0) - (a.pinnedAt || 0);
     }
     
+    // 2. الترتيب حسب الاختيار
     switch(sort) {
-      case "asc": return (a.price || 0) - (b.price || 0);
-      case "desc": return (b.price || 0) - (a.price || 0);
-      case "rating": return ((typeof ratingOf === "function" ? ratingOf(b.id)?.avg : 0) || 0) - ((typeof ratingOf === "function" ? ratingOf(a.id)?.avg : 0) || 0);
-      case "best": return (b.sold || 0) - (a.sold || 0);
-      case "disc": return ((b.old - b.price) / Math.max(b.old, 1)) - ((a.old - a.price) / Math.max(a.old, 1));
-      default: return (b.createdAt || 0) - (a.createdAt || 0);
+      case "asc": // السعر: من الأقل إلى الأعلى
+        return (a.price || 0) - (b.price || 0);
+      case "desc": // السعر: من الأعلى إلى الأقل
+        return (b.price || 0) - (a.price || 0);
+      case "rating": // التقييم (النجوم)
+        return ((typeof ratingOf === "function" ? ratingOf(b.id)?.avg : 0) || 0) - ((typeof ratingOf === "function" ? ratingOf(a.id)?.avg : 0) || 0);
+      case "best": // الأكثر مبيعاً
+        return (b.sold || 0) - (a.sold || 0);
+      case "disc": // أكبر خصم
+        return ((b.old - b.price) / Math.max(b.old, 1)) - ((a.old - a.price) / Math.max(a.old, 1));
+      case "new": // الأحدث (افتراضي)
+      default:
+        return (b.createdAt || 0) - (a.createdAt || 0);
     }
   });
 

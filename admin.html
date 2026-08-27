@@ -139,6 +139,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       <button class="btn sm ghost" data-tab="products" type="button">🕯️ المنتجات</button>
       <button class="btn sm ghost" data-tab="coupons" type="button">🎟️ الكوبونات</button>
       <button class="btn sm ghost" data-tab="reviews" type="button">⭐ المراجعات</button>
+      <button class="btn sm ghost" data-tab="craftsmanship" type="button" style="background:var(--gold);color:#fff;">🎬 Behind the Scenes</button>
     </div>
 
     <!-- ================= ORDERS ================= -->
@@ -262,7 +263,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
             <label>الصورة الرئيسية (اسم الملف أو رابط)</label>
             <input id="pf_img" placeholder="مثال: RR.jpg">
           </div>
-          <!-- ✨ حقل الفيديو الجديد ✨ -->
           <div>
             <label>🎥 فيديو المنتج (اسم الملف.mp4)</label>
             <input id="pf_video" placeholder="مثال: box.mp4">
@@ -290,7 +290,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
           </div>
         </div>
 
-        <!-- ✨ حقل التثبيت (Pin) الجديد ✨ -->
         <div class="g" style="align-items:center; margin-top: 0.5rem;">
           <div style="display:flex; align-items:center; gap:0.5rem;">
             <input type="checkbox" id="pf_pinned" style="width:20px; height:20px; cursor:pointer;">
@@ -416,6 +415,82 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </table>
     </div>
 
+    <!-- ================= CRAFTSMANSHIP (Behind the Scenes) ================= -->
+    <div id="tab-craftsmanship" class="hidden">
+      <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
+        <button class="btn sm" id="addCraftBtn" type="button">➕ إضافة فيديو/صورة جديدة</button>
+      </div>
+      <p style="color:var(--dim);font-size:.78rem;margin:-.35rem 0 1rem">
+        إدارة محتوى قسم "Behind the Scenes" الذي يظهر في الصفحة الرئيسية. يمكنك إضافة فيديوهات أو صور تعرض عملية التصنيع.
+      </p>
+
+      <div class="pform hidden" id="craftForm">
+        <h3 style="color:var(--gold2);margin-bottom:1rem" id="craftFormTitle">عنصر جديد</h3>
+        <div class="g">
+          <div>
+            <label>العنوان (عربي) *</label>
+            <input id="cf_title" placeholder="مثال: نخلط الزيوت بعناية">
+          </div>
+          <div>
+            <label>العنوان (إنجليزي)</label>
+            <input id="cf_titleEn" placeholder="مثال: Mixing oils with care">
+          </div>
+        </div>
+        <div class="g">
+          <div>
+            <label>الوصف (عربي)</label>
+            <input id="cf_desc" placeholder="وصف مختصر">
+          </div>
+          <div>
+            <label>الوصف (إنجليزي)</label>
+            <input id="cf_descEn" placeholder="Short description">
+          </div>
+        </div>
+        <div class="g">
+          <div>
+            <label>نوع الوسائط *</label>
+            <select id="cf_type">
+              <option value="video">🎥 فيديو</option>
+              <option value="image">🖼️ صورة</option>
+            </select>
+          </div>
+          <div>
+            <label>رابط الوسائط *</label>
+            <input id="cf_media" placeholder="رابط الفيديو أو الصورة">
+            <div class="gallery-hint">✨ يمكنك رفع الفيديو في مجلد الموقع واستخدام اسم الملف (مثال: crafting.mp4).</div>
+          </div>
+        </div>
+        <div class="g">
+          <div>
+            <label>رابط الصورة المصغرة (اختياري)</label>
+            <input id="cf_thumb" placeholder="رابط صورة مصغرة">
+          </div>
+          <div>
+            <label>ترتيب العرض</label>
+            <input id="cf_order" type="number" value="1" min="1">
+          </div>
+        </div>
+        <div style="display:flex;gap:.6rem;margin-top:1rem">
+          <button class="btn sm" id="saveCraftBtn" type="button">💾 حفظ</button>
+          <button class="btn ghost sm" id="cancelCraftBtn" type="button">إلغاء</button>
+        </div>
+      </div>
+
+      <table class="adm">
+        <thead>
+          <tr>
+            <th>النوع</th>
+            <th>العنوان</th>
+            <th>الرابط</th>
+            <th>الترتيب</th>
+            <th>الحالة</th>
+            <th>إجراءات</th>
+          </tr>
+        </thead>
+        <tbody id="craftBody"></tbody>
+      </table>
+    </div>
+
   </div>
 </div>
 
@@ -438,6 +513,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initTabs();
   initProductForm();
   initCouponForm();
+  initCraftForm();
 });
 
 window.addEventListener("fb-ready", () => {
@@ -486,6 +562,7 @@ function showAdmin(){
   loadReviews();
   loadUsers();
   loadCoupons();
+  loadCraftItems();
 }
 
 document.addEventListener("click", async (event) => {
@@ -567,6 +644,7 @@ function initTabs(){
       $("#tab-products").classList.toggle("hidden", tab !== "products");
       $("#tab-coupons").classList.toggle("hidden", tab !== "coupons");
       $("#tab-reviews").classList.toggle("hidden", tab !== "reviews");
+      $("#tab-craftsmanship").classList.toggle("hidden", tab !== "craftsmanship");
     });
   });
 }
@@ -711,7 +789,7 @@ function renderAdminProducts(){
   
   body.innerHTML = list.map(product => {
     const imgsCount = (Array.isArray(product.imgs) && product.imgs.length) ? product.imgs.length : (Array.isArray(product.images) && product.images.length ? product.images.length : 1);
-    const pinIcon = product.pinned ? ' 📌' : ''; // ✨ أيقونة التثبيت
+    const pinIcon = product.pinned ? ' 📌' : '';
     return `
     <tr>
       <td><img class="adm-thumb" src="${imgOf(product)}" alt="" loading="lazy"></td>
@@ -841,7 +919,7 @@ function initProductForm(){
       img: mainImgVal || (imagesArr[0] || ""),
       imgs: imagesArr.length ? imagesArr : null,
       video: $("#pf_video").value.trim() || null,
-      pinned: document.getElementById("pf_pinned").checked, // ✨ حفظ حالة التثبيت
+      pinned: document.getElementById("pf_pinned").checked,
       badge: $("#pf_badge").value.trim(),
       badgeEn: $("#pf_badge").value.trim(),
       hours: $("#pf_hours").value.trim(),
@@ -881,7 +959,7 @@ function openProductForm(product){
     $("#pf_cat").value = product.cat || "wood";
     $("#pf_img").value = product.img || "";
     $("#pf_video").value = product.video || "";
-    $("#pf_pinned").checked = product.pinned === true; // ✨ تعبئة حالة التثبيت
+    $("#pf_pinned").checked = product.pinned === true;
     $("#pf_images").value = Array.isArray(product.imgs) ? product.imgs.filter(x => x !== product.img).join(", ") : (Array.isArray(product.images) ? product.images.filter(x => x !== product.img).join(", ") : "");
     $("#pf_badge").value = product.badge || "";
     $("#pf_hours").value = product.hours || "";
@@ -893,7 +971,7 @@ function openProductForm(product){
     form.dataset.editId = "";
     $("#formTitle").textContent = "منتج جديد";
     ["pf_name", "pf_nameEn", "pf_price", "pf_old", "pf_stock", "pf_img", "pf_video", "pf_images", "pf_badge", "pf_hours", "pf_desc", "pf_descEn", "pf_scents"].forEach(id => { $("#" + id).value = ""; });
-    document.getElementById("pf_pinned").checked = false; // ✨ تفريغ حالة التثبيت
+    document.getElementById("pf_pinned").checked = false;
     const preview = $("#galleryPreview");
     if(preview) preview.innerHTML = "";
     $("#pf_cat").value = "wood";
@@ -1077,6 +1155,142 @@ function loadReviews(){
       });
     });
   }).catch(error => { console.error("Reviews error:", error); toast("⚠️ تعذر تحميل المراجعات"); });
+}
+
+/* ================= CRAFTSMANSHIP (Behind the Scenes) ================= */
+let CRAFT_ITEMS = [];
+
+function loadCraftItems(){
+  if(!window.FB || typeof window.FB.list !== "function") return;
+  window.FB.list("craftsmanship").then(items => {
+    CRAFT_ITEMS = items || [];
+    renderCraftItems();
+  }).catch(err => { console.error("Craft error:", err); toast("⚠️ تعذر تحميل محتوى Behind the Scenes"); });
+}
+
+function renderCraftItems(){
+  const body = document.getElementById("craftBody");
+  if(!body) return;
+  let list = CRAFT_ITEMS || [];
+  list.sort((a,b) => (a.order || 0) - (b.order || 0));
+  if(!list.length){
+    body.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد عناصر. أضف فيديو أو صورة الآن!</td></tr>`;
+    return;
+  }
+  body.innerHTML = list.map(item => {
+    const isActive = item.active !== false;
+    const typeIcon = item.mediaType === 'video' ? '🎥' : '🖼️';
+    return `
+      <tr>
+        <td>${typeIcon} ${item.mediaType === 'video' ? 'فيديو' : 'صورة'}</td>
+        <td><b>${item.title || "-"}</b></td>
+        <td style="font-size:.75rem;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr">${item.mediaUrl || "-"}</td>
+        <td>${item.order || 0}</td>
+        <td><span class="${isActive ? 'coupon-active' : 'coupon-inactive'}">${isActive ? '✅ ظاهر' : '❌ مخفي'}</span></td>
+        <td style="display:flex;gap:.3rem;flex-wrap:wrap">
+          <button class="btn sm ghost" data-editcraft="${item.id}" type="button">✏️</button>
+          <button class="btn sm ghost" data-togglecraft="${item.id}" type="button">${isActive ? '🙈' : '👁️'}</button>
+          <button class="btn sm danger" data-delcraft="${item.id}" type="button">🗑️</button>
+        </td>
+      </tr>`;
+  }).join("");
+  bindCraftActions();
+}
+
+function bindCraftActions(){
+  $$("#craftBody [data-editcraft]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const item = CRAFT_ITEMS.find(x => x.id === btn.dataset.editcraft);
+      if(item) openCraftForm(item);
+    });
+  });
+  $$("#craftBody [data-togglecraft]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.togglecraft;
+      const item = CRAFT_ITEMS.find(x => x.id === id);
+      if(!item) return;
+      const newActive = item.active === false;
+      window.FB.update("craftsmanship", id, { active: newActive }).then(() => {
+        toast(newActive ? "✅ تم الإظهار" : "🙈 تم الإخفاء");
+        loadCraftItems();
+      }).catch(err => { console.error(err); toast("⚠️ فشل التحديث"); });
+    });
+  });
+  $$("#craftBody [data-delcraft]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if(!confirm("متأكد إنك عايز تحذف هذا العنصر؟")) return;
+      const id = btn.dataset.delcraft;
+      window.FB.remove("craftsmanship", id).then(() => {
+        toast("🗑️ تم الحذف");
+        loadCraftItems();
+      }).catch(err => { console.error(err); toast("⚠️ فشل الحذف"); });
+    });
+  });
+}
+
+function initCraftForm(){
+  $("#addCraftBtn")?.addEventListener("click", () => openCraftForm(null));
+  $("#cancelCraftBtn")?.addEventListener("click", () => $("#craftForm").classList.add("hidden"));
+  $("#saveCraftBtn")?.addEventListener("click", saveCraftItem);
+}
+
+function openCraftForm(item){
+  const form = $("#craftForm");
+  form.classList.remove("hidden");
+  if(item){
+    form.dataset.editId = item.id;
+    $("#craftFormTitle").textContent = "تعديل: " + (item.title || "");
+    $("#cf_title").value = item.title || "";
+    $("#cf_titleEn").value = item.titleEn || "";
+    $("#cf_desc").value = item.description || "";
+    $("#cf_descEn").value = item.descriptionEn || "";
+    $("#cf_type").value = item.mediaType || "video";
+    $("#cf_media").value = item.mediaUrl || "";
+    $("#cf_thumb").value = item.thumbnail || "";
+    $("#cf_order").value = item.order || 1;
+  } else {
+    form.dataset.editId = "";
+    $("#craftFormTitle").textContent = "عنصر جديد";
+    $("#cf_title").value = "";
+    $("#cf_titleEn").value = "";
+    $("#cf_desc").value = "";
+    $("#cf_descEn").value = "";
+    $("#cf_type").value = "video";
+    $("#cf_media").value = "";
+    $("#cf_thumb").value = "";
+    $("#cf_order").value = "1";
+  }
+  form.scrollIntoView({ behavior: "smooth" });
+}
+
+function saveCraftItem(){
+  const title = $("#cf_title").value.trim();
+  const mediaUrl = $("#cf_media").value.trim();
+  const editId = $("#craftForm").dataset.editId || "";
+  
+  if(!title){ toast("⚠️ اكتب العنوان"); return; }
+  if(!mediaUrl){ toast("⚠️ اكتب رابط الفيديو أو الصورة"); return; }
+  
+  const data = {
+    title,
+    titleEn: $("#cf_titleEn").value.trim(),
+    description: $("#cf_desc").value.trim(),
+    descriptionEn: $("#cf_descEn").value.trim(),
+    mediaType: $("#cf_type").value,
+    mediaUrl,
+    thumbnail: $("#cf_thumb").value.trim(),
+    order: Number($("#cf_order").value || 1),
+    active: true
+  };
+  
+  const saveFn = editId ? window.FB.update("craftsmanship", editId, data) : 
+    window.FB.set("craftsmanship", "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, createdAt: Date.now() });
+    
+  saveFn.then(() => {
+    toast("💾 تم حفظ العنصر");
+    $("#craftForm").classList.add("hidden");
+    loadCraftItems();
+  }).catch(err => { console.error(err); toast("⚠️ فشل الحفظ — راجع Firestore Rules"); });
 }
 
 })();

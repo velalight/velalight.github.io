@@ -8,7 +8,7 @@
 
   <meta
     name="description"
-    content="شاهدي تجارب وآراء عملاء VelaLight حول شموعنا اليدوية الفاخرة"
+    content="شاهدي تجارب وآراء عملاء VelaLight حول شموعنا اليدوية الفاخرة، وصور حقيقية من محادثاتهم معنا."
   >
 
   <link rel="stylesheet" href="style.css">
@@ -23,35 +23,31 @@
 
   <style>
     /* ═══════════════════════════════════════════════════════
-       VelaLight — REVIEWS PAGE
-       Uses the main site theme from style.css
+       VelaLight — REVIEWS PAGE (تحسينات تسويقية جذابة)
        ═══════════════════════════════════════════════════════ */
 
-    .reviews-page {
-      min-height: 100vh;
-    }
+    .reviews-page { min-height: 100vh; }
 
-    /* ═══ Header ═══ */
-
+    /* ═══ HEADER ═══ */
     .reviews-header {
-      background:
-        radial-gradient(
-          700px 300px at 50% -20%,
-          rgba(217,171,95,.12),
-          transparent 65%
-        ),
-        linear-gradient(
-          135deg,
-          var(--bg2) 0%,
-          var(--bg) 100%
-        );
-
+      background: radial-gradient(700px 300px at 50% -20%, rgba(217,171,95,.12), transparent 65%),
+                  linear-gradient(135deg, var(--bg2) 0%, var(--bg) 100%);
       padding: 3rem 1rem 2.5rem;
       text-align: center;
-
       border-bottom: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
     }
-
+    .reviews-header::after {
+      content: "🕯️";
+      position: absolute;
+      font-size: 8rem;
+      opacity: .04;
+      bottom: -30px;
+      left: 10%;
+      transform: rotate(-10deg);
+      pointer-events: none;
+    }
     .reviews-header h1 {
       font-family: var(--fd);
       font-size: clamp(1.7rem, 5vw, 2.5rem);
@@ -59,548 +55,325 @@
       line-height: 1.3;
       margin-bottom: .45rem;
     }
-
     .reviews-header p {
       color: var(--mut);
       font-size: .95rem;
       margin: 0;
+      max-width: 600px;
+      margin-inline: auto;
     }
-
     .back-link {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: .4rem;
-
       margin-top: 1rem;
-
       color: var(--gold2);
       font-weight: 700;
       font-size: .85rem;
-
       transition: .25s;
-
       -webkit-tap-highlight-color: transparent;
     }
+    .back-link:hover { color: var(--gold); transform: translateX(3px); }
 
-    .back-link:hover {
-      color: var(--gold);
-      transform: translateX(3px);
-    }
-
-    /* ═══ Stats ═══ */
-
+    /* ═══ STATS BAR ═══ */
     .stats-bar {
       background: var(--panel);
-
       padding: 1.25rem 1rem;
-
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
-
     .stats-grid {
       width: min(800px, 94%);
       margin: 0 auto;
-
       display: flex;
       justify-content: center;
       align-items: stretch;
-
       gap: 0;
     }
-
     .stat-item {
       flex: 1;
       min-width: 0;
-
       text-align: center;
-
       padding: .25rem 1.5rem;
-
       border-inline-start: 1px solid var(--line);
     }
-
-    .stat-item:first-child {
-      border-inline-start: 0;
-    }
-
+    .stat-item:first-child { border-inline-start: 0; }
     .stat-number {
       display: block;
-
       font-family: var(--fd);
       font-size: 1.55rem;
       font-weight: 800;
-
       color: var(--gold2);
-
       line-height: 1.25;
     }
-
     .stat-label {
       display: block;
-
       margin-top: .2rem;
-
       color: var(--mut);
       font-size: .72rem;
     }
+    .stat-rating-stars { color: var(--gold); font-size: 1.2rem; letter-spacing: 2px; }
 
-    /* ═══ Gallery ═══ */
+    /* ═══ QUOTE SECTION (تأثير عاطفي) ═══ */
+    .quote-section {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      background: linear-gradient(135deg, rgba(217,171,95,.06), rgba(217,171,95,.02));
+      border-bottom: 1px solid var(--line);
+    }
+    .quote-section blockquote {
+      font-family: var(--fd);
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: var(--ink);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.8;
+      font-style: italic;
+    }
+    .quote-section blockquote::before {
+      content: "“";
+      font-size: 2.5rem;
+      color: var(--gold2);
+      opacity: .5;
+      margin-inline-end: .3rem;
+    }
+    .quote-section blockquote::after {
+      content: "”";
+      font-size: 2.5rem;
+      color: var(--gold2);
+      opacity: .5;
+      margin-inline-start: .3rem;
+    }
+    .quote-author {
+      display: block;
+      margin-top: .5rem;
+      font-family: var(--fd);
+      color: var(--gold2);
+      font-size: .85rem;
+      font-style: normal;
+      font-weight: 600;
+    }
 
+    /* ═══ GALLERY ═══ */
     .gallery-container {
       width: min(1180px, 92%);
       margin-inline: auto;
-
       padding: 3rem 0;
     }
-
     .gallery-grid {
       display: grid;
-
-      grid-template-columns:
-        repeat(auto-fill, minmax(250px, 1fr));
-
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 1.25rem;
     }
-
     .gallery-item {
       position: relative;
-
       background: var(--panel);
-
       border: 1px solid var(--line);
       border-radius: 16px;
-
       overflow: hidden;
-
-      box-shadow:
-        0 5px 16px -7px rgba(100,70,30,.12);
-
-      transition:
-        transform .3s ease,
-        border-color .3s ease,
-        box-shadow .3s ease;
-
+      box-shadow: 0 5px 16px -7px rgba(100,70,30,.12);
+      transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
       cursor: zoom-in;
-
       -webkit-tap-highlight-color: transparent;
     }
-
     .gallery-item:hover {
       transform: translateY(-4px);
-
       border-color: rgba(217,171,95,.35);
-
-      box-shadow:
-        0 12px 28px -8px rgba(100,70,30,.18);
+      box-shadow: 0 12px 28px -8px rgba(100,70,30,.18);
     }
-
     .gallery-image-wrap {
       position: relative;
-
       background: var(--bg2);
-
       overflow: hidden;
     }
-
     .gallery-item img {
       width: 100%;
       height: 330px;
-
       object-fit: cover;
-
       display: block;
-
       background: var(--bg2);
-
       transition: transform .4s ease;
     }
+    .gallery-item:hover img { transform: scale(1.025); }
 
-    .gallery-item:hover img {
-      transform: scale(1.025);
+    /* ═══ OVERLAY ON IMAGE (تأثير "شاهد التجربة") ═══ */
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity .35s ease;
+      backdrop-filter: blur(2px);
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-overlay span {
+      background: rgba(255,255,255,.92);
+      color: var(--dark);
+      padding: .4rem 1.2rem;
+      border-radius: 99px;
+      font-size: .8rem;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(0,0,0,.15);
     }
 
     .gallery-item-info {
       min-height: 50px;
-
       padding: .65rem .8rem;
-
       display: flex;
       align-items: center;
       justify-content: space-between;
-
       gap: .5rem;
-
       background: var(--panel);
-
       border-top: 1px solid var(--line);
     }
-
     .gallery-item-badge {
       display: inline-flex;
       align-items: center;
-
       gap: .3rem;
-
       color: var(--ok);
-
       font-size: .72rem;
       font-weight: 700;
-
       white-space: nowrap;
     }
-
     .gallery-item-stars {
       color: var(--gold);
       font-size: .75rem;
-
       letter-spacing: 1px;
-
       white-space: nowrap;
     }
 
-    /* ═══ Empty State ═══ */
-
+    /* ═══ EMPTY STATE ═══ */
     .reviews-empty {
       grid-column: 1 / -1;
-
       text-align: center;
-
       padding: 4rem 1rem;
-
       color: var(--dim);
     }
+    .reviews-empty-icon { font-size: 2.5rem; margin-bottom: .7rem; opacity: .7; }
+    .reviews-empty p { margin: 0; font-size: .9rem; }
 
-    .reviews-empty-icon {
-      font-size: 2.5rem;
-      margin-bottom: .7rem;
-      opacity: .7;
-    }
-
-    .reviews-empty p {
-      margin: 0;
-      font-size: .9rem;
-    }
-
-    /* ═══ CTA ═══ */
-
+    /* ═══ CTA SECTION ═══ */
     .cta-section {
       text-align: center;
-
       padding: 3.5rem 1rem;
-
-      background:
-        radial-gradient(
-          600px 250px at 50% 100%,
-          rgba(217,171,95,.10),
-          transparent 65%
-        ),
-        var(--bg2);
-
+      background: radial-gradient(600px 250px at 50% 100%, rgba(217,171,95,.10), transparent 65%),
+                  var(--bg2);
       border-top: 1px solid var(--line);
     }
-
     .cta-section h2 {
       font-family: var(--fd);
-
       font-size: clamp(1.35rem, 4vw, 1.9rem);
-
       color: var(--ink);
-
       margin-bottom: .55rem;
     }
-
     .cta-section p {
       color: var(--mut);
-
       font-size: .85rem;
-
       margin-bottom: 1.25rem;
     }
+    .cta-section .btn { font-size: 1rem; padding: .9rem 2.2rem; }
 
-    /* ═══ Lightbox ═══ */
-
+    /* ═══ LIGHTBOX ═══ */
     .lightbox {
       position: fixed;
       inset: 0;
-
       display: none;
-
       align-items: center;
       justify-content: center;
-
       padding: 1.25rem;
-
       background: rgba(0,0,0,.94);
-
       z-index: 10000;
-
       cursor: zoom-out;
-
       backdrop-filter: blur(7px);
       -webkit-backdrop-filter: blur(7px);
     }
-
-    .lightbox.open {
-      display: flex;
-
-      animation: reviewsLightboxIn .25s ease;
-    }
-
-    @keyframes reviewsLightboxIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
+    .lightbox.open { display: flex; animation: reviewsLightboxIn .25s ease; }
+    @keyframes reviewsLightboxIn { from { opacity: 0; } to { opacity: 1; } }
     .lightbox img {
       max-width: min(1100px, 95vw);
       max-height: 88vh;
-
       width: auto;
       height: auto;
-
       object-fit: contain;
-
       border-radius: 12px;
-
-      box-shadow:
-        0 20px 70px rgba(0,0,0,.55);
-
+      box-shadow: 0 20px 70px rgba(0,0,0,.55);
       cursor: default;
-
       user-select: none;
       -webkit-user-drag: none;
-
       animation: reviewsImageIn .25s ease;
     }
-
-    @keyframes reviewsImageIn {
-      from {
-        opacity: 0;
-        transform: scale(.97);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
+    @keyframes reviewsImageIn { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
     .lightbox-close {
       position: absolute;
-
       top: 18px;
       inset-inline-end: 18px;
-
       width: 46px;
       height: 46px;
-
       display: grid;
       place-items: center;
-
       border: 1px solid rgba(255,255,255,.25);
-
       border-radius: 50%;
-
       background: rgba(255,255,255,.12);
-
       color: #fff;
-
       font-size: 1.5rem;
       line-height: 1;
-
       cursor: pointer;
-
       transition: .25s;
-
       z-index: 2;
     }
+    .lightbox-close:hover { background: rgba(255,255,255,.25); transform: rotate(90deg); }
+    .lightbox-close:active { transform: scale(.94); }
 
-    .lightbox-close:hover {
-      background: rgba(255,255,255,.25);
-      transform: rotate(90deg);
-    }
-
-    .lightbox-close:active {
-      transform: scale(.94);
-    }
-
-    /* ═══ Mobile ═══ */
-
+    /* ═══ MOBILE ═══ */
     @media(max-width:768px) {
-
-      .reviews-header {
-        padding: 2.2rem 1rem 2rem;
-      }
-
-      .reviews-header h1 {
-        font-size: 1.65rem;
-      }
-
-      .reviews-header p {
-        font-size: .8rem;
-      }
-
-      .back-link {
-        font-size: .78rem;
-      }
-
-      .stats-bar {
-        padding: 1rem .5rem;
-      }
-
-      .stats-grid {
-        width: 100%;
-      }
-
-      .stat-item {
-        padding: .2rem .45rem;
-      }
-
-      .stat-number {
-        font-size: 1.15rem;
-      }
-
-      .stat-label {
-        font-size: .6rem;
-      }
-
-      .gallery-container {
-        width: 94%;
-        padding: 2rem 0;
-      }
-
-      .gallery-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: .75rem;
-      }
-
-      .gallery-item {
-        border-radius: 12px;
-      }
-
-      .gallery-item img {
-        height: 220px;
-      }
-
-      .gallery-item-info {
-        min-height: 42px;
-        padding: .5rem .55rem;
-      }
-
-      .gallery-item-badge {
-        font-size: .6rem;
-      }
-
-      .gallery-item-stars {
-        font-size: .62rem;
-        letter-spacing: .5px;
-      }
-
-      .cta-section {
-        padding: 2.5rem 1rem;
-      }
-
-      .cta-section h2 {
-        font-size: 1.3rem;
-      }
-
-      .cta-section p {
-        font-size: .75rem;
-      }
-
-      .lightbox {
-        padding: .6rem;
-      }
-
-      .lightbox img {
-        max-width: 96vw;
-        max-height: 84vh;
-        border-radius: 9px;
-      }
-
-      .lightbox-close {
-        top: 10px;
-        inset-inline-end: 10px;
-
-        width: 40px;
-        height: 40px;
-
-        font-size: 1.25rem;
-      }
+      .reviews-header { padding: 2.2rem 1rem 2rem; }
+      .reviews-header h1 { font-size: 1.65rem; }
+      .reviews-header p { font-size: .8rem; }
+      .back-link { font-size: .78rem; }
+      .stats-bar { padding: 1rem .5rem; }
+      .stats-grid { width: 100%; }
+      .stat-item { padding: .2rem .45rem; }
+      .stat-number { font-size: 1.15rem; }
+      .stat-label { font-size: .6rem; }
+      .stat-rating-stars { font-size: 1rem; }
+      .quote-section { padding: 1.8rem 1rem; }
+      .quote-section blockquote { font-size: 1rem; }
+      .gallery-container { width: 94%; padding: 2rem 0; }
+      .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+      .gallery-item { border-radius: 12px; }
+      .gallery-item img { height: 220px; }
+      .gallery-overlay { display: none; } /* نخفيه على الموبايل عشان لا يزاحم */
+      .gallery-item-info { min-height: 42px; padding: .5rem .55rem; }
+      .gallery-item-badge { font-size: .6rem; }
+      .gallery-item-stars { font-size: .62rem; letter-spacing: .5px; }
+      .cta-section { padding: 2.5rem 1rem; }
+      .cta-section h2 { font-size: 1.3rem; }
+      .cta-section p { font-size: .75rem; }
+      .lightbox { padding: .6rem; }
+      .lightbox img { max-width: 96vw; max-height: 84vh; border-radius: 9px; }
+      .lightbox-close { top: 10px; inset-inline-end: 10px; width: 40px; height: 40px; font-size: 1.25rem; }
     }
-
     @media(max-width:400px) {
-
-      .gallery-grid {
-        gap: .6rem;
-      }
-
-      .gallery-item img {
-        height: 190px;
-      }
-
-      .gallery-item-info {
-        padding: .45rem;
-      }
-
-      .gallery-item-badge {
-        font-size: .55rem;
-      }
-
-      .gallery-item-stars {
-        font-size: .55rem;
-      }
-
-      .stat-number {
-        font-size: 1rem;
-      }
-
-      .stat-label {
-        font-size: .55rem;
-      }
+      .gallery-grid { gap: .6rem; }
+      .gallery-item img { height: 190px; }
+      .gallery-item-info { padding: .45rem; }
+      .gallery-item-badge { font-size: .55rem; }
+      .gallery-item-stars { font-size: .55rem; }
+      .stat-number { font-size: 1rem; }
+      .stat-label { font-size: .55rem; }
     }
-
-    /* ═══ Touch ═══ */
-
     @media(hover:none) and (pointer:coarse) {
-
-      .gallery-item:hover {
-        transform: none;
-        box-shadow:
-          0 5px 16px -7px rgba(100,70,30,.12);
-      }
-
-      .gallery-item:hover img {
-        transform: none;
-      }
-
-      .gallery-item:active {
-        transform: scale(.985);
-      }
+      .gallery-item:hover { transform: none; box-shadow: 0 5px 16px -7px rgba(100,70,30,.12); }
+      .gallery-item:hover img { transform: none; }
+      .gallery-item:active { transform: scale(.985); }
     }
-
-    /* ═══ Reduced Motion ═══ */
-
     @media(prefers-reduced-motion:reduce) {
-
-      .gallery-item,
-      .gallery-item img,
-      .back-link,
-      .lightbox-close {
-        transition: none !important;
-      }
-
-      .lightbox.open,
-      .lightbox img {
-        animation: none !important;
-      }
+      .gallery-item, .gallery-item img, .back-link, .lightbox-close { transition: none !important; }
+      .lightbox.open, .lightbox img { animation: none !important; }
     }
   </style>
 </head>
@@ -609,415 +382,187 @@
 
   <main class="reviews-page">
 
-    <!-- ═══ Header ═══ -->
-
+    <!-- ═══ HEADER ═══ -->
     <section class="reviews-header">
-
       <h1>💛 آراء عملائنا</h1>
-
-      <p>
-        تجارب عملاء VelaLight مع شموعنا اليدوية الفاخرة
-      </p>
-
-      <a href="index.html" class="back-link">
-        ← الرجوع للرئيسية
-      </a>
-
+      <p>شوفي تجارب عملاء VelaLight الحقيقية مع شموعنا اليدوية الفاخرة</p>
+      <a href="index.html" class="back-link">← الرجوع للرئيسية</a>
     </section>
 
-
-    <!-- ═══ Stats ═══ -->
-
+    <!-- ═══ STATS ═══ -->
     <section class="stats-bar" aria-label="إحصائيات آراء العملاء">
-
       <div class="stats-grid">
-
         <div class="stat-item">
-
-          <span
-            class="stat-number"
-            id="totalReviews"
-          >
-            0
-          </span>
-
-          <span class="stat-label">
-            تجربة عميل
-          </span>
-
+          <span class="stat-number" id="totalReviews">0</span>
+          <span class="stat-label">تجربة عميل</span>
         </div>
-
-
         <div class="stat-item">
-
-          <span class="stat-number">
-            ⭐⭐⭐⭐⭐
-          </span>
-
-          <span class="stat-label">
-            تقييم العملاء
-          </span>
-
+          <span class="stat-rating-stars">★★★★★</span>
+          <span class="stat-label">تقييم العملاء</span>
         </div>
-
-
         <div class="stat-item">
-
-          <span class="stat-number">
-            VelaLight
-          </span>
-
-          <span class="stat-label">
-            تجارب حقيقية من عملائنا
-          </span>
-
+          <span class="stat-number">🕯️</span>
+          <span class="stat-label">ثقة تتجدد</span>
         </div>
-
       </div>
-
     </section>
 
-
-    <!-- ═══ Gallery ═══ -->
-
-    <section
-      class="gallery-container"
-      aria-label="معرض آراء العملاء"
-    >
-
-      <div
-        class="gallery-grid"
-        id="galleryGrid"
-      ></div>
-
+    <!-- ═══ QUOTE SECTION ═══ -->
+    <section class="quote-section">
+      <blockquote>
+        مش مجرد شمعة… دي لحظة بتتعاش!
+        <span class="quote-author">— واحدة من عملائنا</span>
+      </blockquote>
     </section>
 
+    <!-- ═══ GALLERY ═══ -->
+    <section class="gallery-container" aria-label="معرض آراء العملاء">
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </section>
 
-    <!-- ═══ CTA ═══ -->
-
+    <!-- ═══ CTA SECTION ═══ -->
     <section class="cta-section">
-
-      <h2>
-        جاهزة تنضمي لعائلة VelaLight؟ 🕯️
-      </h2>
-
-      <p>
-        اختاري شمعتك الفاخرة واصنعي لحظتك الخاصة
-      </p>
-
-      <a
-        href="index.html#products"
-        class="btn"
-      >
-        تسوقي الآن 🛍️
-      </a>
-
+      <h2>جاهزة تنضمي لعائلة VelaLight؟ 🕯️</h2>
+      <p>اختاري شمعتك الفاخرة واصنعي لحظتك الخاصة</p>
+      <a href="index.html#products" class="btn">تسوقي الآن 🛍️</a>
     </section>
 
   </main>
 
-
-  <!-- ═══ Lightbox ═══ -->
-
-  <div
-    class="lightbox"
-    id="lightbox"
-    role="dialog"
-    aria-modal="true"
-    aria-label="عرض صورة رأي العميل"
-  >
-
-    <button
-      type="button"
-      class="lightbox-close"
-      id="lightboxClose"
-      aria-label="إغلاق الصورة"
-    >
-      ×
-    </button>
-
-    <img
-      id="lightboxImg"
-      src=""
-      alt="رأي عميل VelaLight"
-    >
-
+  <!-- ═══ LIGHTBOX ═══ -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="عرض صورة رأي العميل">
+    <button type="button" class="lightbox-close" id="lightboxClose" aria-label="إغلاق الصورة">×</button>
+    <img id="lightboxImg" src="" alt="رأي عميل VelaLight">
   </div>
-
 
   <script src="data.js"></script>
 
   <script>
     (function () {
-
       "use strict";
 
       const grid = document.getElementById("galleryGrid");
       const totalEl = document.getElementById("totalReviews");
-
       const lightbox = document.getElementById("lightbox");
       const lightboxImg = document.getElementById("lightboxImg");
       const lightboxClose = document.getElementById("lightboxClose");
 
-
-      /* ═════════════════════════════════════════════════════
-         Close Lightbox
-         ═════════════════════════════════════════════════════ */
-
+      /* ═══ CLOSE LIGHTBOX ═══ */
       function closeLightbox() {
-
         lightbox.classList.remove("open");
-
         lightboxImg.src = "";
-
         document.body.style.overflow = "";
-
       }
 
-
-      /* ═════════════════════════════════════════════════════
-         Open Lightbox
-         ═════════════════════════════════════════════════════ */
-
+      /* ═══ OPEN LIGHTBOX ═══ */
       function openLightbox(url, altText) {
-
         lightboxImg.src = url;
         lightboxImg.alt = altText || "رأي عميل VelaLight";
-
         lightbox.classList.add("open");
-
         document.body.style.overflow = "hidden";
-
       }
 
-
-      /* ═════════════════════════════════════════════════════
-         Create Gallery Item
-         ═════════════════════════════════════════════════════ */
-
+      /* ═══ CREATE GALLERY ITEM ═══ */
       function createGalleryItem(imgName, index) {
-
-        const imgUrl =
-          typeof CDN === "function"
-            ? CDN("testimonials/" + imgName)
-            : "https://velalight.github.io/testimonials/" + encodeURIComponent(imgName);
-
+        const imgUrl = typeof CDN === "function"
+          ? CDN("testimonials/" + imgName)
+          : "https://velalight.github.io/testimonials/" + encodeURIComponent(imgName);
 
         const item = document.createElement("article");
-
         item.className = "gallery-item";
-
-        item.setAttribute(
-          "aria-label",
-          "عرض تجربة العميل رقم " + (index + 1)
-        );
-
-
-        /* Image wrapper */
+        item.setAttribute("aria-label", "عرض تجربة العميل رقم " + (index + 1));
 
         const imageWrap = document.createElement("div");
-
         imageWrap.className = "gallery-image-wrap";
 
-
-        /* Image */
-
         const img = document.createElement("img");
-
         img.src = imgUrl;
-
         img.alt = "تجربة عميل VelaLight رقم " + (index + 1);
-
         img.loading = "lazy";
-
         img.decoding = "async";
 
-
-        /* Info */
+        // Overlay (يظهر على الديسكتوب)
+        const overlay = document.createElement("div");
+        overlay.className = "gallery-overlay";
+        overlay.innerHTML = `<span>👁️ شاهد التجربة</span>`;
 
         const info = document.createElement("div");
-
         info.className = "gallery-item-info";
 
-
         const badge = document.createElement("span");
-
         badge.className = "gallery-item-badge";
-
         badge.textContent = "✓ تجربة عميل";
 
-
         const stars = document.createElement("span");
-
         stars.className = "gallery-item-stars";
-
         stars.textContent = "★★★★★";
 
-
         imageWrap.appendChild(img);
-
+        imageWrap.appendChild(overlay);
         info.appendChild(badge);
-
         info.appendChild(stars);
-
         item.appendChild(imageWrap);
-
         item.appendChild(info);
 
-
-        /* Open image */
-
+        /* ═══ OPEN ON CLICK ═══ */
         item.addEventListener("click", function () {
-
-          openLightbox(
-            imgUrl,
-            "تجربة عميل VelaLight رقم " + (index + 1)
-          );
-
+          openLightbox(imgUrl, "تجربة عميل VelaLight رقم " + (index + 1));
         });
 
-
-        /* Keyboard accessibility */
-
+        /* ═══ KEYBOARD ═══ */
         item.setAttribute("tabindex", "0");
-
         item.addEventListener("keydown", function (event) {
-
-          if (
-            event.key === "Enter" ||
-            event.key === " "
-          ) {
-
+          if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-
-            openLightbox(
-              imgUrl,
-              "تجربة عميل VelaLight رقم " + (index + 1)
-            );
-
+            openLightbox(imgUrl, "تجربة عميل VelaLight رقم " + (index + 1));
           }
-
         });
-
 
         return item;
-
       }
 
-
-      /* ═════════════════════════════════════════════════════
-         Initialize Gallery
-         ═════════════════════════════════════════════════════ */
-
+      /* ═══ INIT GALLERY ═══ */
       function initGallery() {
-
-        if (
-          typeof REVIEWS_IMAGES === "undefined" ||
-          !Array.isArray(REVIEWS_IMAGES) ||
-          REVIEWS_IMAGES.length === 0
-        ) {
-
+        if (typeof REVIEWS_IMAGES === "undefined" || !Array.isArray(REVIEWS_IMAGES) || REVIEWS_IMAGES.length === 0) {
           grid.innerHTML = `
             <div class="reviews-empty">
               <div class="reviews-empty-icon">🕯️</div>
               <p>لا توجد تجارب للعرض حالياً</p>
             </div>
           `;
-
           totalEl.textContent = "0";
-
           return;
         }
 
-
         totalEl.textContent = REVIEWS_IMAGES.length;
 
-
         const fragment = document.createDocumentFragment();
-
-
         REVIEWS_IMAGES.forEach(function (imgName, index) {
-
           if (!imgName) return;
-
-          fragment.appendChild(
-            createGalleryItem(imgName, index)
-          );
-
+          fragment.appendChild(createGalleryItem(imgName, index));
         });
-
-
         grid.appendChild(fragment);
-
       }
 
-
-      /* ═════════════════════════════════════════════════════
-         Events
-         ═════════════════════════════════════════════════════ */
-
-      lightboxClose.addEventListener(
-        "click",
-        closeLightbox
-      );
-
-
-      lightbox.addEventListener(
-        "click",
-        function (event) {
-
-          if (event.target === lightbox) {
-
-            closeLightbox();
-
-          }
-
+      /* ═══ EVENTS ═══ */
+      lightboxClose.addEventListener("click", closeLightbox);
+      lightbox.addEventListener("click", function (event) {
+        if (event.target === lightbox) closeLightbox();
+      });
+      lightboxImg.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && lightbox.classList.contains("open")) {
+          closeLightbox();
         }
-      );
+      });
 
-
-      lightboxImg.addEventListener(
-        "click",
-        function (event) {
-
-          event.stopPropagation();
-
-        }
-      );
-
-
-      document.addEventListener(
-        "keydown",
-        function (event) {
-
-          if (
-            event.key === "Escape" &&
-            lightbox.classList.contains("open")
-          ) {
-
-            closeLightbox();
-
-          }
-
-        }
-      );
-
-
-      /* ═════════════════════════════════════════════════════
-         Init
-         ═════════════════════════════════════════════════════ */
-
+      /* ═══ INIT ═══ */
       if (document.readyState === "loading") {
-
-        document.addEventListener(
-          "DOMContentLoaded",
-          initGallery
-        );
-
+        document.addEventListener("DOMContentLoaded", initGallery);
       } else {
-
         initGallery();
-
       }
 
     })();
