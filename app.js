@@ -165,7 +165,17 @@ const velaScentTr=name=>{
        🇪🇬 ARABIC
        ═══════════════════════════════════════ */
     ar: {
-
+/* ═══ Reviews Page (reviews.html) ═══ */
+reviews_back: "← الرجوع للرئيسية",
+reviews_stats_trust: "ثقة تتجدد",
+reviews_quote: "مش مجرد شمعة… دي لحظة بتتعاش!",
+reviews_quote_author: "— واحدة من عملائنا",
+reviews_cta_title: "جاهزة تنضمي لعائلة VelaLight؟ 🕯️",
+reviews_cta_sub: "اختاري شمعتك الفاخرة واصنعي لحظتك الخاصة",
+reviews_cta_btn: "تسوقي الآن 🛍️",
+foot_wishlist: "❤️ المفضلة",
+foot_orders: "📦 طلباتي",
+      
       /* Shipping & Payment */
       ship_note:
         "🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
@@ -495,7 +505,17 @@ brand_point3_desc:
        🇬🇧 ENGLISH
        ═══════════════════════════════════════ */
     en: {
-
+/* ═══ Reviews Page (reviews.html) ═══ */
+reviews_back: "← Back to Home",
+reviews_stats_trust: "Trust Renewed",
+reviews_quote: "Not just a candle… it's a moment to live!",
+reviews_quote_author: "— One of our customers",
+reviews_cta_title: "Ready to join the VelaLight family? 🕯️",
+reviews_cta_sub: "Choose your luxury candle and create your own moment",
+reviews_cta_btn: "Shop Now 🛍️",
+foot_wishlist: "❤️ Wishlist",
+foot_orders: "📦 My Orders",
+      
       /* Shipping & Payment */
       ship_note:
         "🚚 Shipping: paid cash to the courier on delivery.",
