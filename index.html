@@ -1308,18 +1308,52 @@ async function loadCraftsmanship() {
       return;
     }
     
-    // عرض المحتوى من Firebase
+    // 🎯 عرض المحتوى من Firebase مع المسار الصحيح للفيديو والصور
     grid.innerHTML = items.map(item => {
-      const isVideo = item.mediaType === 'video';
-      const mediaHtml = isVideo 
-        ? `<video src="${item.mediaUrl}" autoplay muted loop playsinline style="width:100%; height:250px; object-fit:cover; display:block;"></video>`
-        : `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">`;
+      // بناء الرابط الكامل: نفترض أن الملفات موجودة في جذر الريبو
+      const baseUrl = 'https://velalight.github.io/';
+      const mediaSrc = item.mediaUrl ? baseUrl + item.mediaUrl : '';
+      
+      // تحديد نوع الوسائط
+      const isVideo = item.mediaType === 'video' || (item.mediaUrl && /\.(mp4|webm|ogg)$/i.test(item.mediaUrl));
+      
+      let mediaHtml = '';
+      if (isVideo && mediaSrc) {
+        mediaHtml = `
+          <video 
+            src="${mediaSrc}" 
+            autoplay 
+            muted 
+            loop 
+            playsinline 
+            controls 
+            style="width:100%; height:250px; object-fit:cover; display:block; background:#000;"
+            preload="metadata"
+          ></video>
+        `;
+      } else if (mediaSrc) {
+        mediaHtml = `
+          <img 
+            src="${mediaSrc}" 
+            alt="${item.title || ''}" 
+            loading="lazy" 
+            style="width:100%; height:250px; object-fit:cover; display:block;"
+          >
+        `;
+      } else {
+        // Fallback إذا لم يوجد رابط
+        mediaHtml = `
+          <div style="width:100%; height:250px; background:var(--bg2); display:flex; align-items:center; justify-content:center; color:var(--dim);">
+            🕯️ لا توجد وسائط
+          </div>
+        `;
+      }
       
       return `
         <div class="vl-craft-item" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">
           ${mediaHtml}
           <div style="padding:1.2rem; text-align:center;">
-            <h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:.3rem;">${item.title}</h3>
+            <h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:.3rem;">${item.title || ''}</h3>
             <p style="color:var(--mut); font-size:.9rem;">${item.description || ''}</p>
           </div>
         </div>
