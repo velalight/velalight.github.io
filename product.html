@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>منتج | VelaLight</title>
-<meta name="description" content="اكتشفي تفاصيل المنتج من VelaLight — شموع يدوية فاخرة بعطور مميزة.">
+<meta name="description" content="اكتشفي تفاصيل المنتج من VelaLight — شموع يدوية فاخرة بعطور مميزة. صناعة يدوية 100% بخامات طبيعية.">
 <meta name="theme-color" content="#faf6f0">
 
 <!-- ═══ SEO ═══ -->
@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="VelaLight">
 <meta property="og:locale" content="ar_EG">
 <meta property="og:title" content="منتج | VelaLight">
-<meta property="og:description" content="شموع يدوية فاخرة بعطور مميزة">
+<meta property="og:description" content="شموع يدوية فاخرة بعطور مميزة - صناعة يدوية 100%">
 <meta property="og:image" content="https://velalight.github.io/RR.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://velalight.github.io/product.html">
@@ -328,14 +328,30 @@
   color:var(--dark);
 }
 
-/* ═══ Actions ═══ */
+/* ═══ Actions — تحسين الأزرار ═══ */
 .pd-actions{
   display:grid;
   grid-template-columns:1fr auto auto;
   gap:.6rem;
   margin-top:1.2rem;
 }
-.pd-actions .btn{padding:1rem 1.3rem;font-size:.95rem}
+.pd-actions .btn{
+  padding:1rem 1.3rem;
+  font-size:.95rem;
+  border-radius:12px;
+  font-weight:700;
+  transition:all .3s ease;
+}
+.pd-actions .btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 25px rgba(217,171,95,.4);
+}
+.pd-actions .btn.wa{
+  background:linear-gradient(135deg,#5fbe6f,#2e8b45);
+}
+.pd-actions .btn.wa:hover{
+  box-shadow:0 8px 25px rgba(46,139,69,.4);
+}
 .wish-btn{
   background:var(--panel);
   border:1.5px solid var(--line);
@@ -649,8 +665,8 @@
   font-weight:600;
   letter-spacing:.5px;
 }
-/* ═══ Product Video (Replaces Main Image) ═══ */
 
+/* ═══ Product Video (Replaces Main Image) ═══ */
 .pd-img video {
   width: 100%;
   height: 100%;
@@ -658,42 +674,16 @@
   display: block;
   background: #000;
   border-radius: 22px;
-
-  /* مهم: الفيديو فوق طبقة الـ shimmer */
   position: relative;
   z-index: 2;
 }
-
-/* إخفاء طبقة الـ shimmer عندما يكون الفيديو موجودًا */
 .pd-img:has(video)::before {
   opacity: 0 !important;
   animation: none !important;
 }
-
-/* الفيديو لا يحتاج زر تكبير الصور */
-.pd-img:has(video) {
-  cursor: default;
-}
-
-.pd-img:has(video) .zoom-hint {
-  display: none !important;
-}
-
+.pd-img:has(video) { cursor: default; }
+.pd-img:has(video) .zoom-hint { display: none !important; }
 .pd-img .video-caption {
-  position: absolute;
-  bottom: 0;
-  inset-inline: 0;
-  background: rgba(0,0,0,.7);
-  color: #fff;
-  padding: .5rem;
-  text-align: center;
-  font-size: .8rem;
-  z-index: 5;
-  border-radius: 0 0 22px 22px;
-}
-     
-
- .pd-img .video-caption {
   position: absolute;
   bottom: 0;
   inset-inline: 0;
@@ -771,7 +761,6 @@
       🎁 تغليف مجاني &nbsp;•&nbsp;
       📦 شحن آمن &nbsp;•&nbsp;
     </span>
-
     <span data-i18n="mq">
       🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp;
       🏷️ خصومات حصرية &nbsp;•&nbsp;
@@ -785,11 +774,7 @@
 <header>
   <div class="wrap hrow">
 
-    <a
-      class="logo"
-      href="index.html"
-      aria-label="VelaLight"
-    >
+    <a class="logo" href="index.html" aria-label="VelaLight">
       <span class="flame"></span>
       <div>
         <b>VelaLight</b>
@@ -797,177 +782,56 @@
       </div>
     </a>
 
-    <nav
-      class="mainnav"
-      aria-label="Main navigation"
-    >
-
+    <nav class="mainnav" aria-label="Main navigation">
+      <div><a href="index.html" data-i18n="nav_home">الرئيسية</a></div>
       <div>
-        <a
-          href="index.html"
-          data-i18n="nav_home"
-        >الرئيسية</a>
-      </div>
-
-      <div>
-
-        <a
-          href="index.html#products"
-          data-i18n="nav_shop"
-        >تسوق</a>
-
-        <a
-          href="index.html#products"
-          aria-label="Open shop categories"
-        >▾</a>
-
+        <a href="products.html" data-i18n="nav_shop">تسوق</a>
+        <a href="products.html" aria-label="Open shop categories">▾</a>
         <div class="dd">
-
-          <a href="index.html#products" data-cat="all" data-i18n="cat_all">كل الشموع</a>
-          <a href="index.html#products" data-cat="wood" data-i18n="cat_wood">شموع خشبية</a>
-          <a href="index.html#products" data-cat="glass" data-i18n="cat_glass">شموع زجاجية</a>
-          <a href="index.html#products" data-cat="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
-          <a href="index.html#products" data-cat="metal" data-i18n="cat_metal">شموع معدنية</a>
-          <a href="index.html#products" data-cat="massage" data-i18n="cat_massage">شموع المساج</a>
-          <a href="index.html#products" data-cat="gift" data-i18n="cat_gift">الهدايا</a>
-          <a href="index.html#products" data-cat="bride" data-i18n="cat_bride">بوكس العروسة</a>
-
+          <a href="products.html" data-cat="all" data-i18n="cat_all">كل الشموع</a>
+          <a href="products.html" data-cat="wood" data-i18n="cat_wood">شموع خشبية</a>
+          <a href="products.html" data-cat="glass" data-i18n="cat_glass">شموع زجاجية</a>
+          <a href="products.html" data-cat="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
+          <a href="products.html" data-cat="metal" data-i18n="cat_metal">شموع معدنية</a>
+          <a href="products.html" data-cat="massage" data-i18n="cat_massage">شموع المساج</a>
+          <a href="products.html" data-cat="gift" data-i18n="cat_gift">الهدايا</a>
+          <a href="products.html" data-cat="bride" data-i18n="cat_bride">بوكس العروسة</a>
         </div>
       </div>
-
-      <div>
-        <a
-          href="index.html#about-us"
-          data-i18n="nav_about"
-        >من نحن</a>
-      </div>
-
-      <div>
-        <a
-          href="index.html#faq-section"
-          data-i18n="nav_faq"
-        >الأسئلة الشائعة</a>
-      </div>
-
-      <div>
-        <a
-          href="contact.html"
-          data-i18n="nav_contact"
-        >تواصل معنا</a>
-      </div>
-
+      <div><a href="index.html#about-us" data-i18n="nav_about">من نحن</a></div>
+      <div><a href="index.html#faq-section" data-i18n="nav_faq">الأسئلة الشائعة</a></div>
+      <div><a href="contact.html" data-i18n="nav_contact">تواصل معنا</a></div>
     </nav>
 
-
     <div class="hact">
-
-      <button
-        class="langbtn"
-        id="langBtn"
-        type="button"
-        aria-label="تغيير اللغة"
-      >EN</button>
-
-      <button
-        class="icobtn"
-        id="cartBtn"
-        type="button"
-        aria-label="سلة الشراء"
-      >
+      <button class="langbtn" id="langBtn" type="button" aria-label="تغيير اللغة">EN</button>
+      <button class="icobtn" id="cartBtn" type="button" aria-label="سلة الشراء">
         🛍️
-        <span
-          class="badge"
-          id="cartCount"
-        >0</span>
+        <span class="badge" id="cartCount">0</span>
       </button>
-
     </div>
 
   </div>
 </header>
 
-
 <!-- ═══ MOBILE NAVIGATION ═══ -->
-<nav
-  class="mnav"
-  id="mnav"
-  aria-label="Mobile navigation"
->
-
+<nav class="mnav" id="mnav" aria-label="Mobile navigation">
   <h5 data-i18n="mn_cats">تصنيفات الشموع</h5>
-
-  <a
-    href="index.html#products"
-    data-cat="all"
-    data-i18n="cat_all"
-  >كل الشموع</a>
-
-  <a
-    href="index.html#products"
-    data-cat="wood"
-    data-i18n="cat_wood"
-  >شموع خشبية</a>
-
-  <a
-    href="index.html#products"
-    data-cat="glass"
-    data-i18n="cat_glass"
-  >شموع زجاجية</a>
-
-  <a
-    href="index.html#products"
-    data-cat="crystal"
-    data-i18n="cat_crystal"
-  >شموع كريستالية</a>
-
-  <a
-    href="index.html#products"
-    data-cat="metal"
-    data-i18n="cat_metal"
-  >شموع معدنية</a>
-
-  <a
-    href="index.html#products"
-    data-cat="massage"
-    data-i18n="cat_massage"
-  >شموع المساج</a>
-
-  <a
-    href="index.html#products"
-    data-cat="gift"
-    data-i18n="cat_gift"
-  >الهدايا</a>
-
-  <a
-    href="index.html#products"
-    data-cat="bride"
-    data-i18n="cat_bride"
-  >بوكس العروسة</a>
-
-
+  <a href="products.html" data-cat="all" data-i18n="cat_all">كل الشموع</a>
+  <a href="products.html" data-cat="wood" data-i18n="cat_wood">شموع خشبية</a>
+  <a href="products.html" data-cat="glass" data-i18n="cat_glass">شموع زجاجية</a>
+  <a href="products.html" data-cat="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
+  <a href="products.html" data-cat="metal" data-i18n="cat_metal">شموع معدنية</a>
+  <a href="products.html" data-cat="massage" data-i18n="cat_massage">شموع المساج</a>
+  <a href="products.html" data-cat="gift" data-i18n="cat_gift">الهدايا</a>
+  <a href="products.html" data-cat="bride" data-i18n="cat_bride">بوكس العروسة</a>
   <h5 data-i18n="mn_explore">اكتشف</h5>
-
-  <a
-    href="index.html#about-us"
-    data-i18n="nav_about"
-  >من نحن</a>
-
-  <a
-    href="index.html#scents"
-    data-i18n="mn_scents"
-  >العطور الفاخرة</a>
-
-  <a
-    href="contact.html"
-    data-i18n="nav_contact"
-  >تواصل معنا</a>
-
+  <a href="index.html#about-us" data-i18n="nav_about">من نحن</a>
+  <a href="index.html#scents" data-i18n="mn_scents">العطور الفاخرة</a>
+  <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
 </nav>
 
-<div
-  class="ovl"
-  id="ovl"
-></div>
+<div class="ovl" id="ovl"></div>
      
 <!-- ═══════════════════════════════════════════════════════════
      MAIN CONTENT — Product Page
@@ -978,432 +842,192 @@
     <!-- ═══ Breadcrumb ═══ -->
     <div class="crumb">
       <a href="index.html" data-i18n="nav_home">الرئيسية</a>
-
       <span class="sep">›</span>
-
-      <a href="index.html#products" data-i18n="nav_shop">تسوق</a>
-
+      <a href="products.html" data-i18n="nav_shop">تسوق</a>
       <span class="sep">›</span>
-
-      <span
-        class="current"
-        id="crumbName"
-        data-i18n="pd_product"
-      >المنتج</span>
+      <span class="current" id="crumbName" data-i18n="pd_product">المنتج</span>
     </div>
-
 
     <!-- ═══════════════════════════════════════════════════════
          LOADING SKELETON
          ═══════════════════════════════════════════════════════ -->
     <div id="pdLoading">
-
       <div class="pd-grid">
-
-        <!-- Image Skeleton -->
-        <div
-          class="skel"
-          style="aspect-ratio:1;border-radius:22px"
-          aria-hidden="true"
-        ></div>
-
-        <!-- Info Skeleton -->
+        <div class="skel" style="aspect-ratio:1;border-radius:22px" aria-hidden="true"></div>
         <div>
-
-          <div
-            class="skel"
-            style="height:22px;width:45%;margin-bottom:1rem"
-            aria-hidden="true"
-          ></div>
-
-          <div
-            class="skel"
-            style="height:40px;width:80%;margin-bottom:1rem"
-            aria-hidden="true"
-          ></div>
-
-          <div
-            class="skel"
-            style="height:30px;width:35%;margin-bottom:1.5rem"
-            aria-hidden="true"
-          ></div>
-
-          <div
-            class="skel"
-            style="height:90px;margin-bottom:1.2rem"
-            aria-hidden="true"
-          ></div>
-
-          <div
-            class="skel"
-            style="height:50px;width:60%"
-            aria-hidden="true"
-          ></div>
-
+          <div class="skel" style="height:22px;width:45%;margin-bottom:1rem" aria-hidden="true"></div>
+          <div class="skel" style="height:40px;width:80%;margin-bottom:1rem" aria-hidden="true"></div>
+          <div class="skel" style="height:30px;width:35%;margin-bottom:1.5rem" aria-hidden="true"></div>
+          <div class="skel" style="height:90px;margin-bottom:1.2rem" aria-hidden="true"></div>
+          <div class="skel" style="height:50px;width:60%" aria-hidden="true"></div>
         </div>
-
       </div>
-
     </div>
-
 
     <!-- ═══════════════════════════════════════════════════════
          PRODUCT NOT FOUND
          ═══════════════════════════════════════════════════════ -->
-    <div
-      id="pdNotFound"
-      class="empty hidden"
-      role="alert"
-      aria-live="polite"
-    >
-
-      <div
-        style="font-size:4rem;margin-bottom:1rem"
-        aria-hidden="true"
-      >🕯️</div>
-
-      <h2
-        class="fd"
-        style="color:var(--gold2);margin-bottom:.5rem"
-        data-i18n="pd_not_found_title"
-      >😕 المنتج غير متاح</h2>
-
-      <p
-        style="color:var(--mut);margin-bottom:1.5rem"
-        data-i18n="pd_not_found_desc"
-      >عذراً، لم نتمكن من العثور على هذا المنتج</p>
-
-      <a
-        href="index.html#products"
-        class="btn"
-        data-i18n="pd_browse_products"
-      >تصفح المنتجات</a>
-
+    <div id="pdNotFound" class="empty hidden" role="alert" aria-live="polite">
+      <div style="font-size:4rem;margin-bottom:1rem" aria-hidden="true">🕯️</div>
+      <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem" data-i18n="pd_not_found_title">😕 المنتج غير متاح</h2>
+      <p style="color:var(--mut);margin-bottom:1.5rem" data-i18n="pd_not_found_desc">عذراً، لم نتمكن من العثور على هذا المنتج</p>
+      <a href="products.html" class="btn" data-i18n="pd_browse_products">تصفح المنتجات</a>
     </div>
-
 
     <!-- ═══════════════════════════════════════════════════════
          PRODUCT CONTENT
          ═══════════════════════════════════════════════════════ -->
+    <div id="pdWrap" class="hidden">
+      <div class="pd-grid">
 
-   <!-- ═══════════════════════════════════════════════════════════
-     PRODUCT CONTENT
-     ═══════════════════════════════════════════════════════════ -->
-<div id="pdWrap" class="hidden">
-  <div class="pd-grid">
-
-    <!-- ═══ Gallery — Enhanced ═══ -->
-    <div class="pd-gallery">
-      <div class="pd-img" id="pdImgWrap">
-
-        <img
-          id="pdImg"
-          src=""
-          alt=""
-          loading="eager"
-          decoding="async"
-          fetchpriority="high"
-        >
-
-        <div
-          class="zoom-hint"
-          id="zoomHint"
-          data-i18n="pd_zoom"
-        >🔍 تكبير</div>
-
-        <!-- JavaScript يضع عدد الصور هنا -->
-        <div
-          class="gallery-counter"
-          id="galleryCounter"
-        ></div>
-
-      </div>
-
-      <div
-        class="pd-thumbs"
-        id="pdThumbs"
-      ></div>
-    </div>
-
-
-    <!-- ═══ Info Panel ═══ -->
-    <div class="pd-info">
-
-      <div id="pdBadge"></div>
-
-      <h1
-        id="pdName"
-        class="fd"
-      ></h1>
-
-      <div
-        class="pd-rating"
-        id="pdRatingSummary"
-      ></div>
-
-      <div id="pdStockInfo"></div>
-
-
-      <!-- ═══ Price ═══ -->
-      <div class="pd-price">
-
-        <span
-          class="price-main"
-          id="pdPrice"
-        ></span>
-
-        <del
-          id="pdOld"
-          style="display:none"
-        ></del>
-
-        <span
-          class="save-badge"
-          id="pdSave"
-          style="display:none"
-        ></span>
-
-      </div>
-
-
-      <!-- ═══ Description ═══ -->
-      <p
-        class="pd-desc"
-        id="pdDesc"
-      ></p>
-
-
-      <!-- ═══ Scent Picker ═══ -->
-      <div class="opt-title">
-
-        <span
-          data-i18n="pd_scent_t"
-        >🌸 اختاري العطر:</span>
-
-        <span
-          class="req-tag"
-          data-i18n="pd_required"
-        >مطلوب</span>
-
-      </div>
-
-      <div
-        class="scents-pick"
-        id="pdScents"
-      ></div>
-
-
-      <!-- ═══ Quantity ═══ -->
-      <div
-        class="opt-title"
-        data-i18n="pd_qty_t"
-      >الكمية:</div>
-
-      <div class="qty-wrap">
-
-        <div class="qty">
-
-          <button
-            id="pdQMinus"
-            type="button"
-            aria-label="تقليل الكمية"
-            data-i18n-title="pd_decrease"
-            title="تقليل الكمية"
-          >−</button>
-
-          <b id="pdQVal">1</b>
-
-          <button
-            id="pdQPlus"
-            type="button"
-            aria-label="زيادة الكمية"
-            data-i18n-title="pd_increase"
-            title="زيادة الكمية"
-          >+</button>
-
+        <!-- ═══ Gallery — Enhanced ═══ -->
+        <div class="pd-gallery">
+          <div class="pd-img" id="pdImgWrap">
+            <img id="pdImg" src="" alt="" loading="eager" decoding="async" fetchpriority="high">
+            <div class="zoom-hint" id="zoomHint" data-i18n="pd_zoom">🔍 تكبير</div>
+            <div class="gallery-counter" id="galleryCounter"></div>
+          </div>
+          <div class="pd-thumbs" id="pdThumbs"></div>
         </div>
 
-      </div>
+        <!-- ═══ Info Panel ═══ -->
+        <div class="pd-info">
 
+          <div id="pdBadge"></div>
 
-      <!-- ═══ Actions ═══ -->
-      <div class="pd-actions">
+          <h1 id="pdName" class="fd"></h1>
 
-        <button
-          class="btn"
-          id="pdAddBtn"
-          type="button"
-          data-i18n="pd_add"
-        >🛍️ أضيفي للسلة</button>
+          <div class="pd-rating" id="pdRatingSummary"></div>
 
-        <button
-          class="btn wa"
-          id="pdBuyBtn"
-          type="button"
-          data-i18n="pd_buy"
-        >💬 اطلبي عبر واتساب</button>
+          <div id="pdStockInfo"></div>
 
-        <button
-          class="wish-btn"
-          id="pdWishBtn"
-          type="button"
-          aria-label="إضافة إلى المفضلة"
-          data-i18n-title="pd_wishlist"
-          title="إضافة إلى المفضلة"
-        >🤍</button>
-
-      </div>
-
-
-      <!-- ═══ Payment Info ═══ -->
-      <div class="pay-info">
-
-        <!-- Payment -->
-        <div class="pay-row">
-
-          <span class="pay-icon">💳</span>
-
-          <div>
-
-            <div
-              class="pay-title"
-              data-i18n="pay_title"
-            >InstaPay</div>
-
-            <div
-              class="pay-desc"
-              data-i18n="paymethod_d"
-            >InstaPay مقدمًا، والشحن كاش عند الاستلام.</div>
-
+          <!-- ═══ Price ═══ -->
+          <div class="pd-price">
+            <span class="price-main" id="pdPrice"></span>
+            <del id="pdOld" style="display:none"></del>
+            <span class="save-badge" id="pdSave" style="display:none"></span>
           </div>
 
-        </div>
+          <!-- ═══ Description ═══ -->
+          <p class="pd-desc" id="pdDesc"></p>
 
+          <!-- ═══ Scent Picker ═══ -->
+          <div class="opt-title">
+            <span data-i18n="pd_scent_t">🌸 اختاري العطر:</span>
+            <span class="req-tag" data-i18n="pd_required">مطلوب</span>
+          </div>
+          <div class="scents-pick" id="pdScents"></div>
 
-        <!-- Shipping -->
-        <div class="pay-row">
-
-          <span class="pay-icon">🚚</span>
-
-          <div>
-
-            <div
-              class="pay-title"
-              data-i18n="pd_ship"
-            >التوصيل:</div>
-
-            <div
-              class="pay-desc"
-              data-i18n="pd_ship_v"
-            >3–7 أيام</div>
-
+          <!-- ═══ Quantity ═══ -->
+          <div class="opt-title" data-i18n="pd_qty_t">الكمية:</div>
+          <div class="qty-wrap">
+            <div class="qty">
+              <button id="pdQMinus" type="button" aria-label="تقليل الكمية" data-i18n-title="pd_decrease" title="تقليل الكمية">−</button>
+              <b id="pdQVal">1</b>
+              <button id="pdQPlus" type="button" aria-label="زيادة الكمية" data-i18n-title="pd_increase" title="زيادة الكمية">+</button>
+            </div>
           </div>
 
-        </div>
+          <!-- ═══ Actions — مع تحسين الأزرار ═══ -->
+          <div class="pd-actions">
+            <button class="btn" id="pdAddBtn" type="button" data-i18n="pd_add" style="background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(217,171,95,.4);">
+              🛍️ أضيفي للسلة
+            </button>
+            <button class="btn wa" id="pdBuyBtn" type="button" data-i18n="pd_buy" style="font-weight:700;">
+              💬 اطلبي عبر واتساب
+            </button>
+            <button class="wish-btn" id="pdWishBtn" type="button" aria-label="إضافة إلى المفضلة" data-i18n-title="pd_wishlist" title="إضافة إلى المفضلة">🤍</button>
+          </div>
 
-      </div>
-
-
-      <!-- ═══ Handmade Note ═══ -->
-      <div class="handmade-note">
-
-        <span class="hm-icon">✦</span>
-
-        <span data-i18n="handmade_note">
-          قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة
-        </span>
-
-      </div>
-
-
-      <!-- ═══ Share ═══ -->
-      <div
-        class="share-row"
-        id="pdShare"
-      ></div>
-
-    </div>
-
-  </div>
-</div>
-       
-       
-      <!-- ═══════════════════════════════════════════════════════════
-           TABS — Description / Specs / Reviews
-           ═══════════════════════════════════════════════════════════ -->
-      <div class="pd-tabs">
-        <div class="tabs-nav" id="tabsNav">
-          <button class="on" data-tab="desc"><span data-i18n="pd_desc_tab">📝 الوصف</span></button>
-          <button data-tab="specs"><span data-i18n="pd_specs_tab">📋 المواصفات</span></button>
-          <button data-tab="reviews"><span data-i18n="pd_reviews_tab">⭐ المراجعات</span> (<span id="revCount">0</span>)</button>
-        </div>
-
-        <!-- Tab: Description -->
-        <div class="tab-pane on" id="tab-desc">
-          <div id="pdDescFull" style="color:var(--mut);line-height:1.9;font-size:.95rem"></div>
-        </div>
-
-        <!-- Tab: Specs -->
-        <div class="tab-pane" id="tab-specs">
-          <table class="specs-table">
-            <tr>
-              <td>⏱️ مدة الاحتراق</td>
-              <td id="specHours">—</td>
-            </tr>
-            <tr>
-              <td>🌸 العطور المتاحة</td>
-              <td id="specScents">—</td>
-            </tr>
-            <tr>
-              <td>📦 التصنيف</td>
-              <td id="specCat">—</td>
-            </tr>
-            <tr>
-              <td>🤲 الصناعة</td>
-              <td>يدوية 100% بخامات طبيعية</td>
-            </tr>
-            <tr>
-              <td>🕯️ نوع الشمع</td>
-              <td>صويا طبيعي نقي</td>
-            </tr>
-            <tr>
-              <td>🧵 الفتيل</td>
-              <td>قطن / خشب طبيعي</td>
-            </tr>
-          </table>
-        </div>
-
-        <!-- Tab: Reviews -->
-        <div class="tab-pane" id="tab-reviews">
-          <div id="pdReviews"></div>
-          <div class="rv-form">
-            <h3 class="fd">ضيفي مراجعتك ⭐</h3>
-            <div class="row">
-              <input id="rvName" placeholder="اسمك">
-              <div class="starpick" id="starPick">
-                <button data-v="1">★</button>
-                <button data-v="2">★</button>
-                <button data-v="3">★</button>
-                <button data-v="4">★</button>
-                <button data-v="5" class="lit">★</button>
+          <!-- ═══ Payment Info ═══ -->
+          <div class="pay-info">
+            <div class="pay-row">
+              <span class="pay-icon">💳</span>
+              <div>
+                <div class="pay-title" data-i18n="pay_title">InstaPay</div>
+                <div class="pay-desc" data-i18n="paymethod_d">InstaPay مقدمًا، والشحن كاش عند الاستلام.</div>
               </div>
             </div>
-            <textarea id="rvText" rows="3" placeholder="اكتبي رأيك بالتفصيل..."></textarea>
-            <button class="btn" id="rvSubmit" style="margin-top:.9rem">إرسال المراجعة</button>
-            <small style="display:block;margin-top:.6rem;color:var(--dim)">
-              ✓ المراجعة بتظهر بعد الموافقة من الإدارة
-            </small>
+            <div class="pay-row">
+              <span class="pay-icon">🚚</span>
+              <div>
+                <div class="pay-title" data-i18n="pd_ship">التوصيل:</div>
+                <div class="pay-desc" data-i18n="pd_ship_v">3–7 أيام</div>
+              </div>
+            </div>
           </div>
+
+          <!-- ═══ Handmade Note ═══ -->
+          <div class="handmade-note">
+            <span class="hm-icon">✦</span>
+            <span data-i18n="handmade_note">قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة</span>
+          </div>
+
+          <!-- ═══ Share ═══ -->
+          <div class="share-row" id="pdShare"></div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TABS — Description / Specs / Reviews
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="pd-tabs">
+      <div class="tabs-nav" id="tabsNav">
+        <button class="on" data-tab="desc"><span data-i18n="pd_desc_tab">📝 الوصف</span></button>
+        <button data-tab="specs"><span data-i18n="pd_specs_tab">📋 المواصفات</span></button>
+        <button data-tab="reviews"><span data-i18n="pd_reviews_tab">⭐ المراجعات</span> (<span id="revCount">0</span>)</button>
+      </div>
+
+      <!-- Tab: Description -->
+      <div class="tab-pane on" id="tab-desc">
+        <div id="pdDescFull" style="color:var(--mut);line-height:1.9;font-size:.95rem"></div>
+      </div>
+
+      <!-- Tab: Specs -->
+      <div class="tab-pane" id="tab-specs">
+        <table class="specs-table">
+          <tr><td>⏱️ مدة الاحتراق</td><td id="specHours">—</td></tr>
+          <tr><td>🌸 العطور المتاحة</td><td id="specScents">—</td></tr>
+          <tr><td>📦 التصنيف</td><td id="specCat">—</td></tr>
+          <tr><td>🤲 الصناعة</td><td>يدوية 100% بخامات طبيعية</td></tr>
+          <tr><td>🕯️ نوع الشمع</td><td>صويا طبيعي نقي</td></tr>
+          <tr><td>🧵 الفتيل</td><td>قطن / خشب طبيعي</td></tr>
+        </table>
+      </div>
+
+      <!-- Tab: Reviews -->
+      <div class="tab-pane" id="tab-reviews">
+        <div id="pdReviews"></div>
+        <div class="rv-form">
+          <h3 class="fd">ضيفي مراجعتك ⭐</h3>
+          <div class="row">
+            <input id="rvName" placeholder="اسمك">
+            <div class="starpick" id="starPick">
+              <button data-v="1">★</button>
+              <button data-v="2">★</button>
+              <button data-v="3">★</button>
+              <button data-v="4">★</button>
+              <button data-v="5" class="lit">★</button>
+            </div>
+          </div>
+          <textarea id="rvText" rows="3" placeholder="اكتبي رأيك بالتفصيل..."></textarea>
+          <button class="btn" id="rvSubmit" style="margin-top:.9rem">إرسال المراجعة</button>
+          <small style="display:block;margin-top:.6rem;color:var(--dim)">
+            ✓ المراجعة بتظهر بعد الموافقة من الإدارة
+          </small>
         </div>
       </div>
-
-      <!-- ═══ Related Products ═══ -->
-      <div class="rel-section">
-        <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem" data-i18n="pd_rel_h2">✨ منتجات هتعجبك</h2>
-        <div class="rel-grid" id="pdRelated"></div>
-      </div>
-
     </div>
+
+    <!-- ═══ Related Products ═══ -->
+    <div class="rel-section">
+      <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem" data-i18n="pd_rel_h2">✨ منتجات هتعجبك</h2>
+      <div class="rel-grid" id="pdRelated"></div>
+    </div>
+
   </div>
 </main>
 
@@ -1416,7 +1040,7 @@
   <div class="zoom-counter" id="zoomCounter"></div>
 </div>
 
-<!-- ═══ CART DRAWER (مطلوب لفتح السلة من صفحة المنتج) ═══ -->
+<!-- ═══ CART DRAWER ═══ -->
 <div class="ovl" id="cartOv"></div>
 <aside class="drawer" id="cartDrawer">
   <div class="dhead">
@@ -1475,22 +1099,23 @@
       <div>
         <h4 data-i18n="foot_quick">روابط سريعة</h4>
         <a href="index.html" data-i18n="nav_home">الرئيسية</a>
-        <a href="index.html#products" data-i18n="foot_shop">تسوق</a>
+        <a href="products.html" data-i18n="foot_shop">تسوق</a>
         <a href="wishlist.html" style="color:var(--gold2)">❤️ المفضلة</a>
         <a href="my-orders.html">📦 طلباتي</a>
         <a href="index.html#about-us" data-i18n="nav_about">من نحن</a>
         <a href="index.html#faq-section" data-i18n="nav_faq">الأسئلة الشائعة</a>
         <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
+        <a href="reviews.html" data-i18n="mn_rev">آراء العملاء</a>
       </div>
       <div>
         <h4 data-i18n="mn_cats">تصنيفات الشموع</h4>
-        <a href="index.html#products" data-cat="wood" data-i18n="cat_wood">شموع خشبية</a>
-        <a href="index.html#products" data-cat="glass" data-i18n="cat_glass">شموع زجاجية</a>
-        <a href="index.html#products" data-cat="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
-        <a href="index.html#products" data-cat="metal" data-i18n="cat_metal">شموع معدنية</a>
-        <a href="index.html#products" data-cat="massage" data-i18n="cat_massage">شموع المساج</a>
-        <a href="index.html#products" data-cat="bride" data-i18n="cat_bride">بوكس العروسة</a>
-        <a href="index.html#products" data-cat="gift" data-i18n="cat_gift">الهدايا</a>
+        <a href="products.html" data-cat="wood" data-i18n="cat_wood">شموع خشبية</a>
+        <a href="products.html" data-cat="glass" data-i18n="cat_glass">شموع زجاجية</a>
+        <a href="products.html" data-cat="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
+        <a href="products.html" data-cat="metal" data-i18n="cat_metal">شموع معدنية</a>
+        <a href="products.html" data-cat="massage" data-i18n="cat_massage">شموع المساج</a>
+        <a href="products.html" data-cat="bride" data-i18n="cat_bride">بوكس العروسة</a>
+        <a href="products.html" data-cat="gift" data-i18n="cat_gift">الهدايا</a>
       </div>
       <div>
         <h4 data-i18n="foot_pay_h">الدفع والشحن</h4>
@@ -1675,17 +1300,14 @@ function initLangWatcher(){
 
       if(P) render();
 
-      /* تحديث ترجمة عناصر صفحة المنتج بعد تغيير اللغة */
       if(typeof window.applyProductTranslations==="function"){
         window.applyProductTranslations();
       }
 
-      /* إعادة رسم المراجعات باللغة الجديدة */
       if(typeof renderReviews==="function"){
         renderReviews();
       }
 
-      /* إعادة رسم تقييم المنتج */
       if(P && typeof updateProductRating==="function"){
         updateProductRating();
       }
@@ -1693,142 +1315,52 @@ function initLangWatcher(){
   },150);
 }
 
-
 /* ═══════ LOAD ALL REVIEWS FROM FIREBASE ═══════ */
 async function loadAllReviews(){
-
   try{
-
-    /* تحميل المراجعات */
     if(
       typeof DB !== "undefined" &&
       typeof DB.list === "function"
     ){
-
       const revs=await DB.list("reviews");
-
       if(Array.isArray(revs)){
-
         window.ALL_REVIEWS=[
-          ...(typeof SEED_REVIEWS!=="undefined"
-            ? SEED_REVIEWS
-            : []
-          ),
+          ...(typeof SEED_REVIEWS!=="undefined" ? SEED_REVIEWS : []),
           ...revs
         ];
-
       }
-
     }
 
-
-    /* ═══ تحديث صفحة المنتج ═══ */
     if(P){
+      if(typeof renderReviews==="function") renderReviews();
 
-      /* إعادة رسم قسم المراجعات */
-      if(typeof renderReviews==="function"){
-        renderReviews();
-      }
+      const reviewSummary=(typeof prodReviews==="function") ? prodReviews(P.id) : [];
 
-
-      /* حساب المراجعات الخاصة بالمنتج */
-      const reviewSummary=
-        (typeof prodReviews==="function")
-          ? prodReviews(P.id)
-          : [];
-
-
-      /* عدد المراجعات */
       const revCount=$("#revCount");
+      if(revCount) revCount.textContent=reviewSummary.length;
 
-      if(revCount){
-        revCount.textContent=reviewSummary.length;
-      }
-
-
-      /* ═══ تقييم المنتج ═══ */
       const ratingBox=$("#pdRatingSummary");
-
       if(ratingBox){
-
         if(reviewSummary.length){
-
-          const avg=
-            reviewSummary.reduce(
-              (a,r)=>a+Number(r.rating||5),
-              0
-            ) /
-            reviewSummary.length;
-
-
-          const reviewWord=
-            typeof t==="function"
-              ? t("pd_review_word")
-              : (
-                  typeof LANG!=="undefined" &&
-                  LANG==="en"
-                    ? "reviews"
-                    : "مراجعة"
-                );
-
-
-          const readAll=
-            typeof t==="function"
-              ? t("pd_read_all")
-              : (
-                  typeof LANG!=="undefined" &&
-                  LANG==="en"
-                    ? "Read all"
-                    : "اقرئي الكل"
-                );
-
-
+          const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
+          const reviewWord=typeof t==="function" ? t("pd_review_word") : (typeof LANG!=="undefined" && LANG==="en" ? "reviews" : "مراجعة");
+          const readAll=typeof t==="function" ? t("pd_read_all") : (typeof LANG!=="undefined" && LANG==="en" ? "Read all" : "اقرئي الكل");
           ratingBox.innerHTML=
-            `<span class="stars">${
-              "★".repeat(Math.round(avg))
-            }</span>`+
-
+            `<span class="stars">${"★".repeat(Math.round(avg))}</span>`+
             `<b>${avg.toFixed(1)}</b>`+
-
             `<span>(${reviewSummary.length} ${reviewWord})</span>`+
-
             `<a href="#tab-reviews">${readAll}</a>`;
-
         }else{
-
-          const firstReview=
-            typeof t==="function"
-              ? t("pd_first_review")
-              : (
-                  typeof LANG!=="undefined" &&
-                  LANG==="en"
-                    ? "Be the first to review"
-                    : "كوني أول من يشارك رأيه"
-                );
-
-
+          const firstReview=typeof t==="function" ? t("pd_first_review") : (typeof LANG!=="undefined" && LANG==="en" ? "Be the first to review" : "كوني أول من يشارك رأيه");
           ratingBox.innerHTML=
-            `<span class="stars" style="opacity:.4">
-              ★★★★★
-            </span>`+
-
+            `<span class="stars" style="opacity:.4">★★★★★</span>`+
             `<span>${firstReview}</span>`;
-
         }
-
       }
-
     }
-
   }catch(e){
-
-    console.warn(
-      "Reviews load failed",
-      e
-    );
-
+    console.warn("Reviews load failed", e);
   }
-
 }
      
 /* ═══════ CLOUD CATALOG WITH CACHE UPDATE ═══════ */
@@ -1974,16 +1506,13 @@ function renderStock(){
 
   if(P.stock===undefined||P.stock===null||P.stock===""||isNaN(s)){
     box.innerHTML=`<span class="stock-badge ok" data-i18n="stock_available">✓ متوفر</span>`;
-
   }else if(s===0){
     box.innerHTML=`<span class="stock-badge out" data-i18n="stock_out">✕ نفدت الكمية</span>`;
     $("#pdAddBtn").disabled=true;
     $("#pdAddBtn").textContent=t("stock_out");
     $("#pdBuyBtn").disabled=true;
-
   }else if(s<=5){
     box.innerHTML=`<span class="stock-badge low">⚡ ${t("stock_remaining").replace("{n}",s)}</span>`;
-
   }else{
     box.innerHTML=`<span class="stock-badge ok">✓ ${t("stock_available_count").replace("{n}",s)}</span>`;
   }
@@ -2036,48 +1565,35 @@ function renderThumbs(){
 
 /* ═══════ VIDEO — Bride Box فقط ═══════ */
 function renderVideo(){
-
   const BRIDE_BOX_ID = "pmt2u7xq749e";
   const BRIDE_BOX_VIDEO = "box.mp4";
 
   const currentId = String(
-  P?.id ||
-  P?.id_ ||
-  P?.pid ||
-  P?.slug ||
-  ""
-).trim();
+    P?.id ||
+    P?.id_ ||
+    P?.pid ||
+    P?.slug ||
+    ""
+  ).trim();
 
-const urlParams = new URLSearchParams(window.location.search);
-const urlProductId = String(
-  urlParams.get("p") ||
-  urlParams.get("id") ||
-  ""
-).trim();
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlProductId = String(
+    urlParams.get("p") ||
+    urlParams.get("id") ||
+    ""
+  ).trim();
 
-const isBrideBox =
-  currentId === BRIDE_BOX_ID ||
-  urlProductId === BRIDE_BOX_ID;
+  const isBrideBox =
+    currentId === BRIDE_BOX_ID ||
+    urlProductId === BRIDE_BOX_ID;
 
-if(!isBrideBox){
-  return;
-}
+  if(!isBrideBox) return;
      
   const imgWrap = $("#pdImgWrap");
-  if(!imgWrap){
-    console.warn("⚠️ لم يتم العثور على #pdImgWrap");
-    return;
-  }
+  if(!imgWrap) return;
 
-  const videoUrl =
-    `https://velalight.github.io/${BRIDE_BOX_VIDEO}?v=v5`;
-
-  const posterUrl =
-    (typeof CDN === "function" && zoomImages[0])
-      ? CDN(zoomImages[0])
-      : (zoomImages[0] || P.img || "");
-
-  console.log("🎥 Bride Box Video:", videoUrl);
+  const videoUrl = `https://velalight.github.io/${BRIDE_BOX_VIDEO}?v=v5`;
+  const posterUrl = (typeof CDN === "function" && zoomImages[0]) ? CDN(zoomImages[0]) : (zoomImages[0] || P.img || "");
 
   imgWrap.innerHTML = `
     <video
@@ -2090,77 +1606,28 @@ if(!isBrideBox){
       controls
       preload="auto"
       poster="${posterUrl}"
-      style="
-        width:100%;
-        height:100%;
-        object-fit:contain;
-        background:#000;
-        border-radius:22px;
-        display:block;
-      "
+      style="width:100%;height:100%;object-fit:contain;background:#000;border-radius:22px;display:block;"
     >
       متصفحك لا يدعم تشغيل الفيديو.
     </video>
-
-    <div
-      class="video-caption"
-      style="
-        position:absolute;
-        bottom:0;
-        inset-inline:0;
-        background:rgba(0,0,0,.7);
-        color:#fff;
-        padding:.5rem;
-        text-align:center;
-        font-size:.8rem;
-        z-index:5;
-        border-radius:0 0 22px 22px;
-      "
-    >
-      ▶️ شاهد المنتج
-    </div>
+    <div class="video-caption">▶️ شاهد المنتج</div>
   `;
 
   const zoomHint = $("#zoomHint");
-  if(zoomHint){
-    zoomHint.style.display = "none";
-  }
+  if(zoomHint) zoomHint.style.display = "none";
 
   const counter = $("#galleryCounter");
-  if(counter){
-    counter.style.display = "none";
-  }
+  if(counter) counter.style.display = "none";
 
   const vid = document.getElementById("pdMainVideo");
-
   if(vid){
-
-    const tryPlay = () => {
-
-      vid.play().catch(error => {
-
-        console.warn(
-          "⚠️ المتصفح منع التشغيل التلقائي:",
-          error
-        );
-
-      });
-
-    };
-
+    const tryPlay = () => { vid.play().catch(() => {}); };
     tryPlay();
-
-    vid.addEventListener(
-      "loadeddata",
-      tryPlay,
-      {once:true}
-    );
-
+    vid.addEventListener("loadeddata", tryPlay, {once:true});
   }
-
 }
      
-/* ═══════ SCENTS — ✨ تم التعديل هنا لتحويلها إلى قائمة منسدلة (Dropdown) ✨ ═══════ */
+/* ═══════ SCENTS — Dropdown ═══════ */
 function getProductScents(){
   const cloudP=(cloudCatalog||[]).find(x=>String(x.id)===String(P.id)||String(x.id_)===String(P.id));
   if(cloudP&&Array.isArray(cloudP.scents)&&cloudP.scents.length) return cloudP.scents;
@@ -2173,7 +1640,6 @@ function renderScents(){
   if(!pick) return;
   const scents=getProductScents();
   
-  // ✨ تحويل العطور من أزرار متناثرة إلى قائمة منسدلة أنيقة وسهلة
   pick.innerHTML = `
     <select id="pdScentSelect" style="width:100%; padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:1rem; cursor:pointer; outline:none;">
       <option value="">${(typeof LANG !== "undefined" && LANG==="en")?"Choose a scent...":"اختار العطر..."}</option>
@@ -2181,7 +1647,6 @@ function renderScents(){
     </select>
   `;
 
-  // تحديث المتغير عند تغيير الاختيار
   $("#pdScentSelect").addEventListener("change", (e) => {
     selScent = e.target.value;
   });
@@ -2606,73 +2071,49 @@ function showNotFound(){
   "use strict";
 
   function applyProductTranslations() {
-
     if (typeof t !== "function") return;
 
     var lang = localStorage.getItem("vl_lang") || "ar";
-
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
 
-    /* النصوص */
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
-
       var key = el.getAttribute("data-i18n");
       if (!key) return;
-
       var value = t(key);
-
       if (value && value !== key && el.textContent !== value) {
         el.textContent = value;
       }
-
     });
 
-    /* Placeholder */
     document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
-
       var key = el.getAttribute("data-i18n-placeholder");
       if (!key) return;
-
       var value = t(key);
-
       if (value && value !== key && el.getAttribute("placeholder") !== value) {
         el.setAttribute("placeholder", value);
       }
-
     });
 
-    /* Title */
     document.querySelectorAll("[data-i18n-title]").forEach(function (el) {
-
       var key = el.getAttribute("data-i18n-title");
       if (!key) return;
-
       var value = t(key);
-
       if (value && value !== key && el.getAttribute("title") !== value) {
         el.setAttribute("title", value);
       }
-
     });
-
   }
 
   window.applyProductTranslations = applyProductTranslations;
 
-  /* أول تحميل */
   if (document.readyState === "loading") {
-
     document.addEventListener("DOMContentLoaded", function () {
       setTimeout(applyProductTranslations, 100);
     });
-
   } else {
-
     setTimeout(applyProductTranslations, 100);
-
   }
-
 })();
 </script>
 </body>

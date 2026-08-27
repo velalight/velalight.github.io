@@ -416,7 +416,44 @@ brand_point3_desc:
         "📦 شحن آمن من الورشة لحد باب بيتك",
 
       mq_support:
-        "💬 دعم فني يومي لخدمتك"
+        "💬 دعم فني يومي لخدمتك",
+
+      /* ═══ Products Page ═══ */
+      products_title: "كل المنتجات",
+      products_sub: "اكتشفي تشكيلتنا الكاملة من الشموع الفاخرة",
+      filter_all: "الكل",
+      filter_wood: "خشبية",
+      filter_glass: "زجاجية",
+      filter_crystal: "كريستالية",
+      filter_metal: "معدنية",
+      filter_massage: "مساج",
+      filter_gift: "هدايا",
+      filter_bride: "بوكس العروسة",
+      sort_new: "الأحدث",
+      sort_asc: "السعر: من الأقل",
+      sort_desc: "السعر: من الأعلى",
+      sort_rating: "التقييم",
+      sort_best: "الأكثر مبيعاً",
+      sort_disc: "أكبر خصم",
+      no_products_filter: "لا توجد منتجات تطابق الفلتر المختار",
+      view_details: "عرض التفاصيل",
+      add_cart: "أضف للسلة",
+      price_lbl: "السعر:",
+      scent_lbl: "العطر:",
+      cart_empty: "السلة فارغة",
+      cart_empty_sub: "أضيفي منتجاتك المفضلة",
+
+      /* ═══ Reviews Page ═══ */
+      reviews_page_title: "كل آراء عملائنا",
+      reviews_page_sub: "شوفي تجارب العملاء الحقيقية مع منتجات VelaLight",
+      reviews_verified: "عميلة موثّقة",
+      reviews_customer: "عميلة سعيدة",
+      reviews_share_your: "شاركينا رأيك ✨",
+      reviews_share_sub: "جربتي منتج من VelaLight؟ اكتبيلنا تجربتك",
+
+      /* ═══ Products Page ═══ */
+      prod_word: "منتج",
+      no_products: "لا توجد منتجات",
 
     },
 
@@ -678,7 +715,44 @@ brand_point3_desc:
         "📦 Safe shipping from our workshop to your door",
 
       mq_support:
-        "💬 Daily customer support"
+        "💬 Daily customer support",
+
+      /* ═══ Products Page ═══ */
+      products_title: "All Products",
+      products_sub: "Discover our full collection of luxury candles",
+      filter_all: "All",
+      filter_wood: "Wooden",
+      filter_glass: "Glass",
+      filter_crystal: "Crystal",
+      filter_metal: "Metal",
+      filter_massage: "Massage",
+      filter_gift: "Gifts",
+      filter_bride: "Bride Box",
+      sort_new: "Newest",
+      sort_asc: "Price: Low to High",
+      sort_desc: "Price: High to Low",
+      sort_rating: "Rating",
+      sort_best: "Best Sellers",
+      sort_disc: "Biggest Discount",
+      no_products_filter: "No products match your filter",
+      view_details: "View Details",
+      add_cart: "Add to Cart",
+      price_lbl: "Price:",
+      scent_lbl: "Scent:",
+      cart_empty: "Cart is empty",
+      cart_empty_sub: "Add your favorite products",
+
+      /* ═══ Reviews Page ═══ */
+      reviews_page_title: "All Customer Reviews",
+      reviews_page_sub: "See real experiences from VelaLight customers",
+      reviews_verified: "Verified Customer",
+      reviews_customer: "Happy Customer",
+      reviews_share_your: "Share Your Review ✨",
+      reviews_share_sub: "Tried a VelaLight product? Tell us about your experience",
+
+      /* ═══ Products Page ═══ */
+      prod_word: "products",
+      no_products: "No products found",
 
     }
 
@@ -720,9 +794,14 @@ document.addEventListener("DOMContentLoaded", () => {
   initEmbers();
   initReveal();
 
+  // تحقق إذا كنا في صفحة المنتجات أو الآراء
+  const isProductsPage = window.location.pathname.includes('products.html');
+  const isReviewsPage = window.location.pathname.includes('reviews.html');
+  const isProductPage = window.location.pathname.includes('product.html');
+
   // 1. اعرض هيكل التحميل فوراً لمنع ظهور أي بيانات قديمة
-  const grid = $("#pgrid");
-  if (grid) {
+  const grid = document.getElementById("pgrid");
+  if (grid && !isProductPage) {
     grid.innerHTML = `
       <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.4rem; padding:1rem;">
         ${Array(4).fill(`<div class="skel" style="height:380px;border-radius:18px;"></div>`).join('')}
@@ -732,7 +811,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 2. اطلب البيانات الجديدة من Firebase مباشرة
   loadAll().then(() => {
-    // 3. حفظ البيانات الجديدة في الكاش الآن (هذا يضمن تطابق الصفحة الرئيسية مع صفحة المنتج)
+    // 3. حفظ البيانات الجديدة في الكاش الآن
     try {
       localStorage.setItem("vl_products_v3", JSON.stringify(ALL_PRODUCTS.slice(0, 200)));
       localStorage.setItem("vl_products_v3_time", String(Date.now()));
@@ -741,11 +820,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // 4. السماح بالتحديثات اللاحقة
     isFirstRenderComplete = true;
 
-    // 5. الرسم الأولي
-    if (pendingDataRefresh) {
-      pendingDataRefresh = false;
-      renderProducts();
-    } else {
+    // 5. الرسم حسب الصفحة
+    if (isProductsPage) {
+      if (typeof renderProductsPage === "function") {
+        renderProductsPage();
+      } else {
+        renderChips();
+        renderProducts();
+      }
+    } else if (isReviewsPage) {
+      if (typeof renderReviewsPage === "function") {
+        renderReviewsPage();
+      }
+    } else if (!isProductPage) {
+      // الصفحة الرئيسية
       renderChips();
       renderProducts();
     }
@@ -761,12 +849,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const hasCache = (typeof loadFromCache === "function") && loadFromCache();
     if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
       isFirstRenderComplete = true;
-      renderChips();
-      renderProducts();
+      if (isProductsPage && typeof renderProductsPage === "function") {
+        renderProductsPage();
+      } else if (!isProductPage) {
+        renderChips();
+        renderProducts();
+      }
       renderScents();
       renderFAQ();
     } else {
-      if (grid) grid.innerHTML = `<div class="empty">⚠️ تعذر تحميل المنتجات، يرجى التحقق من اتصال الإنترنت</div>`;
+      if (grid && !isProductPage) grid.innerHTML = `<div class="empty">⚠️ تعذر تحميل المنتجات، يرجى التحقق من اتصال الإنترنت</div>`;
     }
   });
 
@@ -785,7 +877,14 @@ window.addEventListener("data-refresh", () => {
     pendingDataRefresh = true; // انتظر حتى ينتهي التحميل الأولي
     return;
   }
-  renderProducts();
+  const isProductsPage = window.location.pathname.includes('products.html');
+  const isProductPage = window.location.pathname.includes('product.html');
+  
+  if (isProductsPage && typeof renderProductsPage === "function") {
+    renderProductsPage();
+  } else if (!isProductPage) {
+    renderProducts();
+  }
 });
 
 function prefetchProductPages(){
@@ -842,7 +941,7 @@ function initProductRealtimeSync(){
 }
 
 function initLang(){
-  const btn=$("#langBtn");
+  const btn=document.getElementById("langBtn");
   if(!btn)return;
   updateLangBtn();
   btn.addEventListener("click",()=>{
@@ -853,12 +952,22 @@ function initLang(){
     applyI18n();
     updateHeroCopy();
     updateLangBtn();
-    renderChips();
-    renderProducts();
+    
+    const isProductsPage = window.location.pathname.includes('products.html');
+    const isReviewsPage = window.location.pathname.includes('reviews.html');
+    
+    if (isProductsPage && typeof renderProductsPage === "function") {
+      renderProductsPage();
+    } else if (isReviewsPage && typeof renderReviewsPage === "function") {
+      renderReviewsPage();
+    } else {
+      renderChips();
+      renderProducts();
+    }
     renderScents();
     renderFAQ();
-    fillCitySelect($("#accCity"));
-    fillCitySelect($("#coCity"));
+    fillCitySelect(document.getElementById("accCity"));
+    fillCitySelect(document.getElementById("coCity"));
     fillCartForm();
     initChatWelcome();
     toast(t(LANG==="ar"?"t_lang_ar":"t_lang_en"));
@@ -887,7 +996,7 @@ function updateHeroCopy(){
 }
 
 function updateLangBtn(){
-  const btn=$("#langBtn");
+  const btn=document.getElementById("langBtn");
   if(btn){btn.textContent=LANG==="ar"?"EN":"ع";}
 }
 
@@ -895,7 +1004,7 @@ function applyI18n(){
   document.title=t("docTitle");
 
   /* ═══ Normal translations ═══ */
-  $$("[data-i18n]").forEach(el=>{
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
     const k=el.dataset.i18n;
     const v=t(k);
 
@@ -905,7 +1014,7 @@ function applyI18n(){
   });
 
   /* ═══ Placeholder translations ═══ */
-  $$("[data-i18n-ph]").forEach(el=>{
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
     const k=el.dataset.i18nPh;
     const v=t(k);
 
@@ -914,8 +1023,18 @@ function applyI18n(){
     }
   });
 
+  /* ═══ Title attributes ═══ */
+  document.querySelectorAll("[data-i18n-title]").forEach(el=>{
+    const k=el.dataset.i18nTitle;
+    const v=t(k);
+
+    if(v&&v!==k){
+      el.title=v;
+    }
+  });
+
   /* ═══ Top Marquee ═══ */
-  const mq=$("#mqTrack");
+  const mq=document.getElementById("mqTrack");
 
   if(mq){
     const marqueeKeys=[
@@ -940,7 +1059,7 @@ function applyI18n(){
   }
 
   /* ═══ FAQ ═══ */
-  const faqWrap=$("#faqWrap");
+  const faqWrap=document.getElementById("faqWrap");
 
   if(faqWrap&&typeof renderFAQ==="function"){
     renderFAQ();
@@ -950,7 +1069,7 @@ function applyI18n(){
 function initMarquee(){}
 
 function initEmbers(){
-  const w=$("#embers");
+  const w=document.getElementById("embers");
   if(!w)return;
   w.innerHTML="";
   const frag = document.createDocumentFragment();
@@ -966,7 +1085,7 @@ function initEmbers(){
 
 function initReveal(){
   if(!('IntersectionObserver' in window)) {
-    $$(".rv").forEach(el => el.classList.add("on"));
+    document.querySelectorAll(".rv").forEach(el => el.classList.add("on"));
     return;
   }
   const io=new IntersectionObserver(es=>{
@@ -978,7 +1097,7 @@ function initReveal(){
     });
   },{threshold:.05, rootMargin:"0px 0px 100px 0px"});
   
-  $$(".rv").forEach(el=>{
+  document.querySelectorAll(".rv").forEach(el=>{
     if (el.getBoundingClientRect().top < window.innerHeight + 100) {
       el.classList.add("on");
     } else {
@@ -988,7 +1107,7 @@ function initReveal(){
 }
 
 function renderChips(){
-  const w=$("#chips");
+  const w=document.getElementById("chips");
   if(!w)return;
   w.style.display="none";
   w.setAttribute("aria-hidden","true");
@@ -1002,7 +1121,12 @@ function renderChips(){
     btn.addEventListener("click",()=>{
       w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
       btn.classList.add("on");
-      renderProducts();
+      const isProductsPage = window.location.pathname.includes('products.html');
+      if (isProductsPage && typeof renderProductsPage === "function") {
+        renderProductsPage();
+      } else {
+        renderProducts();
+      }
     });
     frag.appendChild(btn);
   });
@@ -1011,12 +1135,12 @@ function renderChips(){
 }
 
 function activeCat(){
-  const c=$("#chips .chip.on");
+  const c=document.querySelector("#chips .chip.on");
   return c?c.dataset.cat:"all";
 }
 
 function renderProducts(){
-  const grid=$("#pgrid");
+  const grid=document.getElementById("pgrid");
   if(!grid)return;
 
   const products = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) 
@@ -1024,9 +1148,9 @@ function renderProducts(){
     : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
 
   const catF=activeCat();
-  const min=+($("#priceMin")?.value||0);
-  const max=+($("#priceMax")?.value||0);
-  const sort=$("#sortSel")?.value||"new";
+  const min=+(document.getElementById("priceMin")?.value||0);
+  const max=+(document.getElementById("priceMax")?.value||0);
+  const sort=document.getElementById("sortSel")?.value||"new";
 
   let list=products.filter(p=>{
     if(!p || !p.id) return false;
@@ -1055,7 +1179,7 @@ function renderProducts(){
     }
   });
 
-  const cnt=$("#prodCount");
+  const cnt=document.getElementById("prodCount");
   if(cnt){cnt.textContent=list.length+" "+t("prod_word");}
 
   if(!list.length){
@@ -1075,7 +1199,6 @@ function renderProducts(){
     try {
       const r=(typeof ratingOf==="function")?ratingOf(p.id):null;
       
-      // ✨ إضافة شارة التثبيت
       const pinBadge = p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : "";
       const badge = (typeof pbadge === "function") ? pbadge(p) : "";
       
@@ -1183,13 +1306,235 @@ const mediaContent = isBrideBox
   grid.appendChild(frag);
 
   // ✨ Event delegation: اربط مستمع النقر مرة واحدة فقط
-  // منع تراكم listeners مع كل إعادة رسم للمنتجات.
   if (!productGridClickBound) {
     grid.addEventListener('click', handleProductGridClick);
     productGridClickBound = true;
   }
 }
 
+/* ═══ PRODUCTS PAGE — عرض كل المنتجات مع فلترة وترتيب ═══ */
+function renderProductsPage() {
+  const grid = document.getElementById("productsGrid");
+  if (!grid) return;
+
+  const products = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) 
+    ? ALL_PRODUCTS 
+    : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
+
+  const catF = activeCat();
+  const sort = document.getElementById("sortSelect")?.value || "new";
+
+  let list = products.filter(p => {
+    if (!p || !p.id) return false;
+    if (catF !== "all" && p.cat !== catF) return false;
+    if (p.active === false) return false;
+    return true;
+  });
+
+  // ترتيب المنتجات
+  list.sort((a, b) => {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    if (a.pinned && b.pinned) {
+      return (b.pinnedAt || 0) - (a.pinnedAt || 0);
+    }
+    
+    switch(sort) {
+      case "asc": return (a.price || 0) - (b.price || 0);
+      case "desc": return (b.price || 0) - (a.price || 0);
+      case "rating": return ((typeof ratingOf === "function" ? ratingOf(b.id)?.avg : 0) || 0) - ((typeof ratingOf === "function" ? ratingOf(a.id)?.avg : 0) || 0);
+      case "best": return (b.sold || 0) - (a.sold || 0);
+      case "disc": return ((b.old - b.price) / Math.max(b.old, 1)) - ((a.old - a.price) / Math.max(a.old, 1));
+      default: return (b.createdAt || 0) - (a.createdAt || 0);
+    }
+  });
+
+  const countEl = document.getElementById("productsCount");
+  if (countEl) countEl.textContent = list.length + " " + t("prod_word");
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty" style="padding:3rem 0;">${t("no_products_filter")}</div>`;
+    return;
+  }
+
+  const isMobile = window.innerWidth <= 768;
+  const eagerCount = isMobile ? 4 : 8;
+  const placeholderSvg = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>`;
+
+  const frag = document.createDocumentFragment();
+
+  list.forEach((p, index) => {
+    try {
+      const r = (typeof ratingOf === "function") ? ratingOf(p.id) : null;
+      const badge = (typeof pbadge === "function") ? pbadge(p) : "";
+      const rawDesc = LANG === "en" ? (p.descEn || p.desc || "") : (p.desc || p.descEn || "");
+      const productDesc = String(rawDesc).trim();
+      
+      const isFirstBatch = index < eagerCount;
+      const loadingAttr = isFirstBatch ? 'eager' : 'lazy';
+      const fetchPriority = isFirstBatch ? 'high' : 'low';
+      
+      let imgSrc = "";
+      try {
+        imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || "");
+      } catch(e) {
+        imgSrc = placeholderSvg;
+      }
+      if (!imgSrc) imgSrc = placeholderSvg;
+
+      const inWishlist = isInWishlist(p.id);
+      const stockNum = Number(p.stock);
+      const isOutOfStock = !isNaN(stockNum) && stockNum === 0;
+      const stockBadg = (typeof stockBadge === "function") ? stockBadge(p) : "";
+
+      const article = document.createElement('article');
+      article.className = 'p-card';
+      article.dataset.id = p.id;
+
+      article.innerHTML = `
+        <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
+          <img
+            src="${imgSrc}"
+            alt="${pname(p)}"
+            loading="${loadingAttr}"
+            decoding="async"
+            fetchpriority="${fetchPriority}"
+            width="400"
+            height="400"
+            onload="this.classList.add('loaded')"
+            onerror="window.handleImageError(this, '${p.id}')"
+          >
+          ${p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : ""}
+          ${badge ? `<span class="p-badge">${badge}</span>` : ""}
+          ${stockBadg}
+          <span class="p-quick">${t("view_details")}</span>
+        </a>
+        <div class="p-body">
+          <span class="p-cat">${cat(p.cat)}</span>
+          <h3><a href="product.html?p=${p.id}">${pname(p)}</a></h3>
+          ${r ? `<span class="stars" aria-label="${Math.round(r.avg)} stars">${"★".repeat(Math.round(r.avg))}</span>` : ""}
+          <p class="p-desc">${productDesc}</p>
+          <div class="p-foot">
+            <div class="p-price">
+              <span class="current-price">${money(p.price)}</span>
+              ${p.old > p.price ? `<del>${money(p.old)}</del>` : ""}
+            </div>
+            <div style="display:flex; gap:6px; width:100%; margin-top:4px;">
+              <button class="p-add" data-id="${p.id}" ${isOutOfStock ? "disabled" : ""} style="flex:1;">
+                ${isOutOfStock ? (LANG === "en" ? "Out of stock" : "نفدت الكمية") : t("add_cart")}
+              </button>
+              <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist ? '#fee' : 'var(--bg)'}; border:1px solid ${inWishlist ? '#e74c3c' : 'var(--line)'}; border-radius:10px; cursor:pointer; font-size:1.1rem; transition:.2s; color:${inWishlist ? '#e74c3c' : 'inherit'}; display:flex; align-items:center; justify-content:center; width:42px; height:42px; padding:0; flex-shrink:0;">
+                ${inWishlist ? "❤️" : "🤍"}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+      frag.appendChild(article);
+    } catch(e) {
+      console.warn("⚠️ Failed to render product:", p.id, e);
+    }
+  });
+
+  grid.innerHTML = '';
+  grid.appendChild(frag);
+
+  // Event delegation
+  if (!productGridClickBound) {
+    grid.addEventListener('click', handleProductGridClick);
+    productGridClickBound = true;
+  }
+}
+
+/* ═══ REVIEWS PAGE — عرض كل الآراء ═══ */
+function renderReviewsPage() {
+  const grid = document.getElementById("reviewsGrid");
+  if (!grid) return;
+
+  // استخدام REVIEWS_IMAGES أو بيانات من Firebase
+  let reviews = [];
+  
+  if (typeof REVIEWS_IMAGES !== "undefined" && Array.isArray(REVIEWS_IMAGES)) {
+    reviews = REVIEWS_IMAGES.map((name, index) => ({
+      id: index,
+      image: name,
+      name: LANG === "en" ? `Customer #${index + 1}` : `عميلة سعيدة #${index + 1}`,
+      verified: true,
+      rating: 5,
+      text: LANG === "en" ? "Amazing candles! Highly recommend." : "شموع رائعة! أنصح بها بشدة."
+    }));
+  }
+
+  // إذا كانت هناك مراجعات من Firebase، ندمجها
+  if (typeof ALL_REVIEWS !== "undefined" && Array.isArray(ALL_REVIEWS) && ALL_REVIEWS.length > 0) {
+    const fbReviews = ALL_REVIEWS.map(r => ({
+      id: r.id || Date.now() + Math.random(),
+      image: r.image || null,
+      name: r.name || (LANG === "en" ? "Customer" : "عميلة"),
+      verified: r.verified !== false,
+      rating: r.rating || 5,
+      text: r.text || (LANG === "en" ? "Great product!" : "منتج رائع!")
+    }));
+    reviews = [...fbReviews, ...reviews];
+  }
+
+  if (!reviews.length) {
+    grid.innerHTML = `
+      <div class="empty" style="padding:3rem 0;">
+        <div style="font-size:3rem;margin-bottom:1rem;">💛</div>
+        <p style="color:var(--mut);">${LANG === "en" ? "No reviews yet. Be the first!" : "لسة مفيش مراجعات. كوني أول من يشارك رأيه!"}</p>
+      </div>
+    `;
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+
+  reviews.forEach((r) => {
+    const card = document.createElement('article');
+    card.className = 'vl-review-card-full';
+    card.style.cssText = `
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      padding:1.5rem;
+      display:flex;
+      gap:1.5rem;
+      align-items:center;
+      transition:.3s;
+      margin-bottom:1.2rem;
+    `;
+
+    const imgSrc = r.image ? (typeof CDN === "function" ? CDN("testimonials/" + r.image) : "https://velalight.github.io/testimonials/" + r.image) : null;
+
+    card.innerHTML = `
+      ${imgSrc ? `
+        <div style="flex:0 0 120px; border-radius:12px; overflow:hidden; border:1px solid var(--line);">
+          <img src="${imgSrc}" alt="${r.name}" loading="lazy" style="width:120px;height:120px;object-fit:cover;display:block;">
+        </div>
+      ` : `
+        <div style="flex:0 0 80px; height:80px; border-radius:50%; background:var(--gold); display:grid; place-items:center; font-size:2.5rem; color:#fff;">
+          ${r.name.charAt(0)}
+        </div>
+      `}
+      <div style="flex:1; min-width:0;">
+        <div style="display:flex; align-items:center; gap:.8rem; flex-wrap:wrap; margin-bottom:.4rem;">
+          <strong style="font-family:var(--fd); font-size:1.05rem;">${r.name}</strong>
+          ${r.verified ? `<span style="background:#d4edda; color:#155724; padding:2px 10px; border-radius:99px; font-size:.7rem; font-weight:700;">✓ ${LANG === "en" ? "Verified" : "موثّقة"}</span>` : ""}
+          <span class="stars" style="color:var(--gold); letter-spacing:2px;">${"★".repeat(r.rating || 5)}</span>
+        </div>
+        <p style="color:var(--mut); line-height:1.8; font-size:.95rem; margin:0;">${r.text}</p>
+      </div>
+    `;
+    frag.appendChild(card);
+  });
+
+  grid.innerHTML = '';
+  grid.appendChild(frag);
+}
+
+/* ═══ EVENT HANDLER FOR PRODUCT GRID ═══ */
 function handleProductGridClick(e){
   const shareBtn = e.target.closest('.p-share');
   if (shareBtn) {
@@ -1239,11 +1584,11 @@ function handleProductGridClick(e){
 }
 
 function initQuickAdd(){
-  const closeBtn = $("#closeScent");
-  const overlay = $("#scentOv");
-  const minusBtn = $("#smQMinus");
-  const plusBtn = $("#smQPlus");
-  const addBtn = $("#scentModalAdd");
+  const closeBtn = document.getElementById("closeScent");
+  const overlay = document.getElementById("scentOv");
+  const minusBtn = document.getElementById("smQMinus");
+  const plusBtn = document.getElementById("smQPlus");
+  const addBtn = document.getElementById("scentModalAdd");
 
   closeBtn?.addEventListener("click",()=>closeModal("scentOv"));
 
@@ -1272,7 +1617,7 @@ function initQuickAdd(){
   addBtn?.addEventListener("click",()=>{
     if(!quickAddProduct) return;
 
-    const modalSelect = $("#modalScentSelect");
+    const modalSelect = document.getElementById("modalScentSelect");
     if(modalSelect && !quickAddScent) quickAddScent = modalSelect.value;
 
     if(!quickAddScent){
@@ -1293,7 +1638,6 @@ function initQuickAdd(){
       addBtn.disabled = true;
       addBtn.textContent = t("quick_add_added");
 
-      // تأكيد بصري سريع ثم إغلاق النافذة.
       setTimeout(()=>{
         addBtn.disabled = false;
         addBtn.textContent = originalText || t("quick_add_add");
@@ -1304,11 +1648,11 @@ function initQuickAdd(){
 }
 
 function updateQuickAddQtyUI(){
-  const qv = $("#smQVal");
+  const qv = document.getElementById("smQVal");
   if(qv) qv.textContent = quickAddQty;
 
-  const minus = $("#smQMinus");
-  const plus = $("#smQPlus");
+  const minus = document.getElementById("smQMinus");
+  const plus = document.getElementById("smQPlus");
 
   if(minus){
     minus.disabled = quickAddQty <= 1;
@@ -1333,27 +1677,27 @@ function openQuickAdd(p){
     ? Math.floor(stockNum)
     : 99;
 
-  const title=$("#scentModalTitle");
+  const title=document.getElementById("scentModalTitle");
   if(title){
     title.textContent=pname(p);
     title.setAttribute("aria-label", pname(p));
   }
 
-  const qv=$("#smQVal");
+  const qv=document.getElementById("smQVal");
   if(qv) qv.textContent="1";
 
-  const minus=$("#smQMinus");
-  const plus=$("#smQPlus");
+  const minus=document.getElementById("smQMinus");
+  const plus=document.getElementById("smQPlus");
   if(minus) minus.disabled=true;
   if(plus) plus.disabled=quickAddMaxStock <= 1;
 
-  const addBtn=$("#scentModalAdd");
+  const addBtn=document.getElementById("scentModalAdd");
   if(addBtn){
     addBtn.disabled=true;
     addBtn.textContent=t("quick_add_add");
   }
 
-  const w=$("#scentModalScents");
+  const w=document.getElementById("scentModalScents");
   if(!w) return;
 
   let imgSrc="";
@@ -1397,9 +1741,9 @@ function openQuickAdd(p){
   `;
 
   // إعادة ربط أزرار الكمية بعد إعادة بناء محتوى الـ Quick Add.
-  const newMinus=$("#smQMinus");
-  const newPlus=$("#smQPlus");
-  const newSelect=$("#modalScentSelect");
+  const newMinus=document.getElementById("smQMinus");
+  const newPlus=document.getElementById("smQPlus");
+  const newSelect=document.getElementById("modalScentSelect");
 
   newMinus?.addEventListener("click",()=>{
     if(quickAddQty>1){
@@ -1421,14 +1765,13 @@ function openQuickAdd(p){
 
   newSelect?.addEventListener("change",e=>{
     quickAddScent=e.target.value;
-    const modalAdd=$("#scentModalAdd");
+    const modalAdd=document.getElementById("scentModalAdd");
     if(modalAdd) modalAdd.disabled=!quickAddScent;
   });
 
   updateQuickAddQtyUI();
   openDrawer("scentOv");
 
-  // تركيز الاختيار مباشرة لتقليل خطوة ذهنية على العميل.
   setTimeout(()=>newSelect?.focus(),60);
 }
 
@@ -1436,7 +1779,12 @@ const debouncedRenderProducts = debounce(renderProducts, 250);
 
 document.addEventListener("change",e=>{
   if(e.target.id==="priceMin"||e.target.id==="priceMax"||e.target.id==="sortSel"){
-    renderProducts();
+    const isProductsPage = window.location.pathname.includes('products.html');
+    if (isProductsPage && typeof renderProductsPage === "function") {
+      renderProductsPage();
+    } else {
+      renderProducts();
+    }
   }
 });
 document.addEventListener("input",e=>{
@@ -1446,7 +1794,7 @@ document.addEventListener("input",e=>{
 });
 
 function renderScents(){
-  const w=$("#scentGrid");
+  const w=document.getElementById("scentGrid");
   if(!w)return;
   const frag = document.createDocumentFragment();
   VELA_SCENTS.forEach((s, i) => {
@@ -1466,7 +1814,7 @@ function renderScents(){
 }
 
 function renderFAQ(){
-  const w = $("#faqWrap");
+  const w = document.getElementById("faqWrap");
   if(!w) return;
 
   const items = [
@@ -1552,16 +1900,16 @@ function renderFAQ(){
 
 function initCart(){
   cartBadge();
-  fillCitySelect($("#coCity"));
+  fillCitySelect(document.getElementById("coCity"));
   fillCartForm();
   
-  $("#cartBtn")?.addEventListener("click",()=>{
+  document.getElementById("cartBtn")?.addEventListener("click",()=>{
     fillCartForm();
     renderCart();
     openDrawer("cartDrawer","cartOv");
   });
-  $("#closeCart")?.addEventListener("click",closeDrawers);
-  $("#cartOv")?.addEventListener("click",closeDrawers);
+  document.getElementById("closeCart")?.addEventListener("click",closeDrawers);
+  document.getElementById("cartOv")?.addEventListener("click",closeDrawers);
   renderCart();
 
   if(new URLSearchParams(location.search).get("cart")==="1"){
@@ -1570,14 +1918,14 @@ function initCart(){
     openDrawer("cartDrawer","cartOv");
   }
 
-  $("#emptyCartBtn")?.addEventListener("click",()=>{
+  document.getElementById("emptyCartBtn")?.addEventListener("click",()=>{
     if(!confirm(t("t_confirm_empty")))return;
     saveCart([]);
     renderCart();
   });
 
-  $("#checkoutBtn")?.addEventListener("click",checkout);
-  $("#applyCouponBtn")?.addEventListener("click",applyCoupon);
+  document.getElementById("checkoutBtn")?.addEventListener("click",checkout);
+  document.getElementById("applyCouponBtn")?.addEventListener("click",applyCoupon);
 
   const saveCustomer = debounce(() => saveCartCustomer(), 500);
   
@@ -1606,7 +1954,7 @@ function initCart(){
 
 function renderCart(){
   const c=getCart();
-  const w=$("#cartItems");
+  const w=document.getElementById("cartItems");
   if(!w)return;
 
   if(!c.length){
@@ -1794,29 +2142,29 @@ function updateTotals(c){
   const totalDisc = qtyDiscount + couponDisc;
   const total = Math.max(0, sub - totalDisc);
 
-  if($("#cartSub")){$("#cartSub").textContent=money(sub);}
+  if(document.getElementById("cartSub")){document.getElementById("cartSub").textContent=money(sub);}
   
-  const qtyDiscRow = $("#qtyDiscountRow");
+  const qtyDiscRow = document.getElementById("qtyDiscountRow");
   if (qtyDiscRow) {
     if (qtyDiscount > 0) {
       qtyDiscRow.style.display = "flex";
-      if($("#qtyDiscountVal")) $("#qtyDiscountVal").textContent = "-" + money(qtyDiscount);
+      if(document.getElementById("qtyDiscountVal")) document.getElementById("qtyDiscountVal").textContent = "-" + money(qtyDiscount);
     } else {
       qtyDiscRow.style.display = "none";
     }
   }
 
-  const dRow=$("#discountRow");
+  const dRow=document.getElementById("discountRow");
   if(dRow){dRow.style.display=couponDisc>0?"flex":"none";}
-  if($("#cartDiscount")){$("#cartDiscount").textContent="-"+money(couponDisc);}
-  if($("#couponCodeLbl")&&appliedCoupon){$("#couponCodeLbl").textContent=appliedCoupon.code;}
+  if(document.getElementById("cartDiscount")){document.getElementById("cartDiscount").textContent="-"+money(couponDisc);}
+  if(document.getElementById("couponCodeLbl")&&appliedCoupon){document.getElementById("couponCodeLbl").textContent=appliedCoupon.code;}
   
     // ✨ تكتيك زيادة المبيعات: شريط الشحن المجاني التفاعلي
   const freeShippingThreshold = 3000; // حد الشحن المجاني
   const remaining = Math.max(0, freeShippingThreshold - sub);
   const progressPercent = Math.min(100, (sub / freeShippingThreshold) * 100);
 
-  const freeShipRow = $("#freeShippingRow");
+  const freeShipRow = document.getElementById("freeShippingRow");
   const shipNote = document.querySelector('.cart-shipping-note');
   
   if (freeShipRow && shipNote) {
@@ -1845,7 +2193,7 @@ function updateTotals(c){
     }
   }
   
-  if($("#cartTotal")){$("#cartTotal").textContent=money(total);}
+  if(document.getElementById("cartTotal")){document.getElementById("cartTotal").textContent=money(total);}
 }
 
 function getSavedUser(){
@@ -1855,12 +2203,12 @@ function getSavedUser(){
 
 function fillCartForm(){
   const u=getSavedUser();
-  if($("#coName")){$("#coName").value=u.name||"";}
-  if($("#coPhone")){$("#coPhone").value=u.phone||"";}
-  if($("#coEmail")){$("#coEmail").value=u.email||"";}
-  if($("#coCity")){$("#coCity").value=u.city||"";}
-  if($("#coAddr")){$("#coAddr").value=u.addr||"";}
-  if($("#coNotes")){$("#coNotes").value=u.notes||"";}
+  if(document.getElementById("coName")){document.getElementById("coName").value=u.name||"";}
+  if(document.getElementById("coPhone")){document.getElementById("coPhone").value=u.phone||"";}
+  if(document.getElementById("coEmail")){document.getElementById("coEmail").value=u.email||"";}
+  if(document.getElementById("coCity")){document.getElementById("coCity").value=u.city||"";}
+  if(document.getElementById("coAddr")){document.getElementById("coAddr").value=u.addr||"";}
+  if(document.getElementById("coNotes")){document.getElementById("coNotes").value=u.notes||"";}
 }
 
 function saveUserFromCart(name,phone,email,city,addr,notes=""){
@@ -1871,19 +2219,19 @@ function saveUserFromCart(name,phone,email,city,addr,notes=""){
   } catch(e) {
     console.warn("⚠️ Failed to save user:", e);
   }
-  if($("#accName"))$("#accName").value=name;
-  if($("#accPhone"))$("#accPhone").value=phone;
-  if($("#accCity"))$("#accCity").value=city;
-  if($("#accAddr"))$("#accAddr").value=addr;
+  if(document.getElementById("accName"))document.getElementById("accName").value=name;
+  if(document.getElementById("accPhone"))document.getElementById("accPhone").value=phone;
+  if(document.getElementById("accCity"))document.getElementById("accCity").value=city;
+  if(document.getElementById("accAddr"))document.getElementById("accAddr").value=addr;
 }
 
 function saveCartCustomer(){
-  const name=$("#coName")?.value.trim()||"";
-  const phone=$("#coPhone")?.value.trim()||"";
-  const email=$("#coEmail")?.value.trim()||"";
-  const city=$("#coCity")?.value||"";
-  const addr=$("#coAddr")?.value.trim()||"";
-  const notes=$("#coNotes")?.value.trim()||"";
+  const name=document.getElementById("coName")?.value.trim()||"";
+  const phone=document.getElementById("coPhone")?.value.trim()||"";
+  const email=document.getElementById("coEmail")?.value.trim()||"";
+  const city=document.getElementById("coCity")?.value||"";
+  const addr=document.getElementById("coAddr")?.value.trim()||"";
+  const notes=document.getElementById("coNotes")?.value.trim()||"";
   const old=getSavedUser();
   try {
     localStorage.setItem("vl_user",JSON.stringify({...old,name,phone,email,city,addr,notes,orders:old.orders||0}));
@@ -1907,28 +2255,26 @@ async function checkout(){
   const missingScent=c.some(it=>!it.scent||!String(it.scent).trim());
   if(missingScent){toast(t("t_scentwarn"));return;}
 
-  const name=$("#coName")?.value.trim()||"";
-  const phone=$("#coPhone")?.value.trim()||"";
-  const email=$("#coEmail")?.value.trim()||"";
-  const city=$("#coCity")?.value||"";
-  const addr=$("#coAddr")?.value.trim()||"";
-  const notes=$("#coNotes")?.value.trim()||"";
+  const name=document.getElementById("coName")?.value.trim()||"";
+  const phone=document.getElementById("coPhone")?.value.trim()||"";
+  const email=document.getElementById("coEmail")?.value.trim()||"";
+  const city=document.getElementById("coCity")?.value||"";
+  const addr=document.getElementById("coAddr")?.value.trim()||"";
+  const notes=document.getElementById("coNotes")?.value.trim()||"";
 
   if(!name){
     toast(LANG==="en"?"⚠️ Please enter your full name.":"⚠️ من فضلك اكتب الاسم بالكامل.");
-    $("#coName")?.focus();return;
+    document.getElementById("coName")?.focus();return;
   }
   if(!phone){
     toast(LANG==="en"?"⚠️ Please enter your mobile number.":"⚠️ من فضلك اكتب رقم الموبايل.");
-    $("#coPhone")?.focus();return;
+    document.getElementById("coPhone")?.focus();return;
   }
   if(!addr){
     toast(LANG==="en"?"⚠️ Please enter the detailed address.":"⚠️ من فضلك اكتب العنوان بالتفصيل.");
-    $("#coAddr")?.focus();return;
+    document.getElementById("coAddr")?.focus();return;
   }
 
-  // نفتح تاب فاضي دلوقتي فورًا (لسه جوه نفس الـ click event) عشان نحجز إذن المتصفح
-  // لو فتحناه بعد كل الـ await (Firebase / الإيميل) المتصفح هيعتبره popup غير مرغوب فيه ويمنعه بصمت
   const waWindow = window.open("", "_blank");
 
   saveUserFromCart(name,phone,email,city,addr,notes);
@@ -2073,7 +2419,7 @@ async function checkout(){
   } catch(e) {
     console.warn("⚠️ Failed to save user:", e);
   }
-  const oc=$("#ordCount");
+  const oc=document.getElementById("ordCount");
   if(oc){oc.textContent=u.orders;}
 
   if(userId && window.FB && window.FB.db){
@@ -2262,11 +2608,9 @@ ${itemsSummary}
   
   const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
-  // نستخدم التاب اللي فتحناه بالفعل جوه الـ click event (waWindow) عشان المتصفح ما يمنعوش
   if (waWindow && !waWindow.closed) {
     waWindow.location.href = waUrl;
   } else {
-    // fallback لو المتصفح قفل النافذة برضو (نادر) — نحاول نفتحها تاني
     window.open(waUrl, "_blank");
   }
 }
@@ -2275,7 +2619,7 @@ ${itemsSummary}
    ✨ اصلاح جذري وبسيط لحساب المستخدم (بدون تعديل HTML)
    ═══════════════════════════════════════════════════════════ */
 function initAccount() {
-  $("#accBtn")?.addEventListener("click", async () => {
+  document.getElementById("accBtn")?.addEventListener("click", async () => {
     const isFirebaseLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
 
     const fieldsToToggle = ["accName", "accPhone", "accCity", "accAddr", "saveAccBtn"];
@@ -2339,8 +2683,8 @@ function initAccount() {
         </div>
       `;
 
-      if ($("#ordCount")) {
-        $("#ordCount").textContent = userData.ordersCount || 0;
+      if (document.getElementById("ordCount")) {
+        document.getElementById("ordCount").textContent = userData.ordersCount || 0;
       }
       
       localStorage.setItem("vl_user", JSON.stringify({
@@ -2367,14 +2711,14 @@ function initAccount() {
     openDrawer("accOv");
   });
 
-  $("#closeAcc")?.addEventListener("click", () => closeModal("accOv"));
-  $("#accOv")?.addEventListener("click", e => {
+  document.getElementById("closeAcc")?.addEventListener("click", () => closeModal("accOv"));
+  document.getElementById("accOv")?.addEventListener("click", e => {
     if (e.target.id === "accOv") { closeModal("accOv"); }
   });
 
-  $("#saveAccBtn")?.addEventListener("click", async () => {
-    const name = $("#accName")?.value.trim();
-    const phone = $("#accPhone")?.value.trim();
+  document.getElementById("saveAccBtn")?.addEventListener("click", async () => {
+    const name = document.getElementById("accName")?.value.trim();
+    const phone = document.getElementById("accPhone")?.value.trim();
     if (!name || !phone) { toast("⚠️ اكتب الاسم ورقم الموبايل."); return; }
     
     const old = getSavedUser();
@@ -2387,7 +2731,7 @@ function initAccount() {
     closeModal("accOv");
   });
 
-  $("#guestLoginBtn")?.addEventListener("click", () => {
+  document.getElementById("guestLoginBtn")?.addEventListener("click", () => {
     if (typeof openAuthModal === "function") {
       closeModal("accOv");
       openAuthModal();
@@ -2396,7 +2740,7 @@ function initAccount() {
     }
   });
 
-  $("#logoutBtn")?.addEventListener("click", async () => {
+  document.getElementById("logoutBtn")?.addEventListener("click", async () => {
     if (window.FB && window.FB.auth && typeof VL_Logout === "function") {
       await VL_Logout();
     }
@@ -2415,13 +2759,13 @@ async function loadUserData(isLoggedIn) {
   if (isLoggedIn && typeof VL_GetCurrentUser === "function") {
     const userData = await VL_GetCurrentUser();
     if (userData) {
-      const displayNameEl = $("#displayName");
+      const displayNameEl = document.getElementById("displayName");
       if(displayNameEl) displayNameEl.textContent = userData.name || "عميلنا العزيز";
-      const displayEmailEl = $("#displayEmail");
+      const displayEmailEl = document.getElementById("displayEmail");
       if(displayEmailEl) displayEmailEl.textContent = userData.email || "غير متوفر";
-      const displayPhoneEl = $("#displayPhone");
+      const displayPhoneEl = document.getElementById("displayPhone");
       if(displayPhoneEl) displayPhoneEl.textContent = userData.phone || "غير متوفر";
-      const ordCountLoggedInEl = $("#ordCountLoggedIn");
+      const ordCountLoggedInEl = document.getElementById("ordCountLoggedIn");
       if(ordCountLoggedInEl) ordCountLoggedInEl.textContent = userData.ordersCount || 0;
     }
   }
@@ -2435,25 +2779,25 @@ function fillCitySelect(sel){
 }
 
 function initSearch(){
-  $("#searchBtn")?.addEventListener("click",()=>{
+  document.getElementById("searchBtn")?.addEventListener("click",()=>{
     openDrawer("searchOv");
-    setTimeout(()=>{$("#searchInput")?.focus();},200);
+    setTimeout(()=>{document.getElementById("searchInput")?.focus();},200);
   });
-  $("#closeSearch")?.addEventListener("click",()=>closeModal("searchOv"));
-  $("#searchOv")?.addEventListener("click",e=>{
+  document.getElementById("closeSearch")?.addEventListener("click",()=>closeModal("searchOv"));
+  document.getElementById("searchOv")?.addEventListener("click",e=>{
     if(e.target.id==="searchOv"){closeModal("searchOv");}
   });
   
   const debouncedSearch = debounce((q) => performSearch(q), 200);
   
-  $("#searchInput")?.addEventListener("input",e=>{
+  document.getElementById("searchInput")?.addEventListener("input",e=>{
     const q=e.target.value.trim().toLowerCase();
     debouncedSearch(q);
   });
 }
 
 function performSearch(q){
-  const w=$("#searchResults");
+  const w=document.getElementById("searchResults");
   if(!w)return;
   if(!q){w.innerHTML="";return;}
   
@@ -2477,8 +2821,8 @@ function performSearch(q){
 }
 
 function initChat(){
-  $("#chatFab")?.addEventListener("click",()=>{$("#chatOv")?.classList.toggle("open");});
-  $("#closeChat")?.addEventListener("click",()=>{$("#chatOv")?.classList.remove("open");});
+  document.getElementById("chatFab")?.addEventListener("click",()=>{document.getElementById("chatOv")?.classList.toggle("open");});
+  document.getElementById("closeChat")?.addEventListener("click",()=>{document.getElementById("chatOv")?.classList.remove("open");});
   initChatWelcome();
   const quick=[
     [t("q_gift"),"a_gift"],
@@ -2487,7 +2831,7 @@ function initChat(){
     [t("q_ship"),"a_ship"],
     [t("q_bride"),"a_bride"]
   ];
-  const qw=$("#chatQuick");
+  const qw=document.getElementById("chatQuick");
   if(qw){
     qw.innerHTML=quick.map(q=>`<button type="button" data-a="${q[1]}">${q[0]}</button>`).join("");
     qw.querySelectorAll("button").forEach(b=>{
@@ -2500,12 +2844,12 @@ function initChat(){
 }
 
 function initChatWelcome(){
-  const w=$("#chatMsgs");
+  const w=document.getElementById("chatMsgs");
   if(w&&!w.children.length){addMsg(t("chat_welcome"),"bot");}
 }
 
 function addMsg(txt,who){
-  const w=$("#chatMsgs");
+  const w=document.getElementById("chatMsgs");
   if(!w)return;
   const d=document.createElement("div");
   d.className="msg "+who;
@@ -2515,22 +2859,22 @@ function addMsg(txt,who){
 }
 
 function initNav(){
-  $("#navToggle")?.addEventListener("click",()=>{
-    $("#mnav")?.classList.toggle("open");
-    $("#ovl")?.classList.toggle("open");
+  document.getElementById("navToggle")?.addEventListener("click",()=>{
+    document.getElementById("mnav")?.classList.toggle("open");
+    document.getElementById("ovl")?.classList.toggle("open");
   });
-  $("#ovl")?.addEventListener("click",closeDrawers);
-  $$(".mnav a").forEach(a=>{
+  document.getElementById("ovl")?.addEventListener("click",closeDrawers);
+  document.querySelectorAll(".mnav a").forEach(a=>{
     a.addEventListener("click",()=>{
-      $("#mnav")?.classList.remove("open");
-      $("#ovl")?.classList.remove("open");
+      document.getElementById("mnav")?.classList.remove("open");
+      document.getElementById("ovl")?.classList.remove("open");
     });
   });
-  $$("[data-cat]").forEach(a=>{
+  document.querySelectorAll("[data-cat]").forEach(a=>{
     if(a.closest(".mnav")||a.closest(".mainnav")||a.closest("footer")){
       a.addEventListener("click",()=>{
         setTimeout(()=>{
-          const chip=$(`#chips .chip[data-cat="${a.dataset.cat}"]`);
+          const chip=document.querySelector(`#chips .chip[data-cat="${a.dataset.cat}"]`);
           if(chip){chip.click();}
         },100);
       });
@@ -2539,16 +2883,16 @@ function initNav(){
 }
 
 function openDrawer(id,ovlId){
-  $("#"+id)?.classList.add("open");
-  if(ovlId){$("#"+ovlId)?.classList.add("open");}
+  document.getElementById(id)?.classList.add("open");
+  if(ovlId){document.getElementById(ovlId)?.classList.add("open");}
   document.body.style.overflow = 'hidden';
 }
 function closeDrawers(){
-  $$(".drawer,.ovl").forEach(el=>el.classList.remove("open"));
+  document.querySelectorAll(".drawer,.ovl").forEach(el=>el.classList.remove("open"));
   document.body.style.overflow = '';
 }
 function closeModal(id){
-  $("#"+id)?.classList.remove("open");
+  document.getElementById(id)?.classList.remove("open");
   const stillOpen = document.querySelector('.drawer.open, .ovl.open');
   if(!stillOpen){
     document.body.style.overflow = '';
@@ -2617,7 +2961,7 @@ function calcCouponDiscount(sub){
 }
 
 async function applyCoupon(){
-  const code=($("#couponInput")?.value||"").trim().toUpperCase();
+  const code=(document.getElementById("couponInput")?.value||"").trim().toUpperCase();
   if(!code){toast("⚠️ اكتب كود الكوبون");return;}
   
   let list=[];
@@ -2646,7 +2990,7 @@ async function consumeCoupon(){
     }catch(e){console.warn("⚠️ coupon update failed",e);}
   }
   appliedCoupon=null;
-  if($("#couponInput"))$("#couponInput").value="";
+  if(document.getElementById("couponInput"))document.getElementById("couponInput").value="";
 }
 
 if (typeof window.addToCart === "function") {
@@ -2666,20 +3010,12 @@ if (typeof window.addToCart === "function") {
   };
 }
 
-/* ═══ تصدير الدوال عالمياً ═══ */
+/* ═══ EXPOSE GLOBALLY ═══ */
+window.renderProductsPage = renderProductsPage;
+window.renderReviewsPage = renderReviewsPage;
 window.getWishlist = getWishlist;
 window.toggleWishlist = toggleWishlist;
 window.isInWishlist = isInWishlist;
 window.WISHLIST_KEY = WISHLIST_KEY;
-window.ALL_PRODUCTS_REF = () => (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
-window.imgOfRef = (p) => (typeof imgOf === "function") ? imgOf(p) : (p.img || "");
-window.pnameRef = (p) => (typeof pname === "function") ? pname(p) : (p.name || "");
-window.moneyRef = (n) => (typeof money === "function") ? money(n) : (n + " ج.م");
-window.catRef = (c) => (typeof cat === "function") ? cat(c) : (c || "");
-window.toastRef = (m) => (typeof toast === "function") ? toast(m) : console.log(m);
-window.addToCartRef = (p, o) => (typeof addToCart === "function") ? addToCart(p, o) : false;
-window.openQuickAddRef = (p) => (typeof openQuickAdd === "function") ? openQuickAdd(p) : null;
-window.tRef = (k) => (typeof t === "function") ? t(k) : k;
-window.LANGRef = () => (typeof LANG !== "undefined") ? LANG : "ar";
 
 })();
