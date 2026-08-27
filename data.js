@@ -10,7 +10,7 @@ const CFG = {
     messagingSenderId: "1095485535268",
     appId: "1:1095485535268:web:4d17ee9de6f5acdacbd4b1"
   },
-  GA4_ID: "G-XXXXXXXXXX",
+  GA4_ID: "G-BWBD8ZZD23",
   META_PIXEL_ID: "YOUR_META_PIXEL_ID",
   TIKTOK_PIXEL_ID: "YOUR_TIKTOK_PIXEL_ID"
 };
