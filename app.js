@@ -455,6 +455,39 @@ brand_point3_desc:
       prod_word: "منتج",
       no_products: "لا توجد منتجات",
 
+      /* ═══ Craftsmanship (Behind the Scenes) ═══ */
+      craft_kick: "Behind the Scenes",
+      craft_title: "إيد مصرية.. تفاصيل ملهاش حدود",
+      craft_desc: "شوفي ازاي بنصنع كل قطعة بحب ودقة عشان توصلك بالشكل اللي يليق بيكي",
+      craft_loading: "⏳ جاري التحميل...",
+      craft_fallback1_title: "نخلط الزيوت بعناية",
+      craft_fallback1_desc: "نستخدم أفضل الزيوت الطبيعية لضمان رائحة تدوم طويلاً",
+      craft_fallback2_title: "تغليف فاخر جاهز للإهداء",
+      craft_fallback2_desc: "كل قطعة بتتغلف بإيدينا عشان تكون مميزة",
+      craft_fallback3_title: "فحص دقيق لكل قطعة",
+      craft_fallback3_desc: "نتأكد من الجودة قبل ما توصل لباب بيتك",
+
+      /* ═══ Reviews Enhanced ═══ */
+      rev_see_all: "📸 شوفي كل التجارب",
+      rev_stats_label: "عميلة وثقت فينا",
+      rev_stats_rating: "تقييم 5 نجوم",
+      rev_loading: "⏳ جاري تحميل التجارب...",
+
+      /* ═══ FAQ & Misc ═══ */
+      faq_kick: "FAQ",
+      faq_sub: "كل ما تحتاجين معرفته عن الطلب، الشحن، الشموع والعطور.",
+      foot_designer_label: "صُمم وتطوير بعناية بواسطة",
+      brand_kick: "The VelaLight Touch",
+      scents_kick: "Signature Scents",
+      prod_kick: "Our Collection",
+      prod_sub: "اكتشفي أحدث تشكيلتنا من الشموع الفاخرة",
+      prod_see_all: "🕯️ استعرضي كل المنتجات",
+      about_kick: "Our Story",
+      ed_kick: "A Moment of Luxury",
+      ed_h2: "لحظاتٌ تُحفر في الذاكرة",
+      ed_p: "كل شمعة من VelaLight ليست مجرد إضاءة… هي لحظة كاملة. لحظة هدوء، لحظة رومانسية، لحظة فرح. اصنعي ذكرياتك الخاصة مع عطورنا الفاخرة.",
+      ed_cta: "ابدئي رحلتك ✨",
+
     },
 
 
@@ -754,6 +787,39 @@ brand_point3_desc:
       prod_word: "products",
       no_products: "No products found",
 
+      /* ═══ Craftsmanship (Behind the Scenes) ═══ */
+      craft_kick: "Behind the Scenes",
+      craft_title: "Egyptian Hands.. Details Beyond Limits",
+      craft_desc: "See how we craft every piece with love and precision to deliver it to you in the way that suits you.",
+      craft_loading: "⏳ Loading...",
+      craft_fallback1_title: "Mixing oils with care",
+      craft_fallback1_desc: "We use the finest natural oils to ensure a long-lasting scent",
+      craft_fallback2_title: "Luxury gift wrapping ready",
+      craft_fallback2_desc: "Every piece is wrapped by our hands to make it special",
+      craft_fallback3_title: "Quality inspection for every piece",
+      craft_fallback3_desc: "We ensure quality before it reaches your doorstep",
+
+      /* ═══ Reviews Enhanced ═══ */
+      rev_see_all: "📸 See All Experiences",
+      rev_stats_label: "Customers Trusted Us",
+      rev_stats_rating: "5-Star Rating",
+      rev_loading: "⏳ Loading experiences...",
+
+      /* ═══ FAQ & Misc ═══ */
+      faq_kick: "FAQ",
+      faq_sub: "Everything you need to know about ordering, shipping, candles and scents.",
+      foot_designer_label: "Designed & Developed with care by",
+      brand_kick: "The VelaLight Touch",
+      scents_kick: "Signature Scents",
+      prod_kick: "Our Collection",
+      prod_sub: "Discover our latest collection of luxury candles",
+      prod_see_all: "🕯️ Browse All Products",
+      about_kick: "Our Story",
+      ed_kick: "A Moment of Luxury",
+      ed_h2: "Moments Etched in Memory",
+      ed_p: "Every VelaLight candle is more than just a light… it's a complete moment. A moment of calm, a moment of romance, a moment of joy. Create your own memories with our luxury scents.",
+      ed_cta: "Start Your Journey ✨",
+
     }
 
   };
@@ -781,8 +847,7 @@ brand_point3_desc:
   });
 
 })();
-  
-/* ═══════════════════════════════════════════════════════════
+  /* ═══════════════════════════════════════════════════════════
    ✨ INIT — الحل الجذري النهائي: منع الوميض وتوحيد البيانات
    ═══════════════════════════════════════════════════════════ */
 let isFirstRenderComplete = false;
@@ -869,6 +934,11 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
   initQuickAdd();
   initHeroIntro();
+  
+  // تحديث عدد التجارب في قسم الآراء
+  if (typeof window.updateReviewsCount === 'function') {
+    window.updateReviewsCount();
+  }
 });
 
 // التعامل مع تحديثات Firebase اللاحقة (Realtime)
@@ -1007,7 +1077,6 @@ function applyI18n(){
   document.querySelectorAll("[data-i18n]").forEach(el=>{
     const k=el.dataset.i18n;
     const v=t(k);
-
     if(v&&v!==k){
       el.textContent=v;
     }
@@ -1017,7 +1086,6 @@ function applyI18n(){
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
     const k=el.dataset.i18nPh;
     const v=t(k);
-
     if(v&&v!==k){
       el.placeholder=v;
     }
@@ -1027,7 +1095,6 @@ function applyI18n(){
   document.querySelectorAll("[data-i18n-title]").forEach(el=>{
     const k=el.dataset.i18nTitle;
     const v=t(k);
-
     if(v&&v!==k){
       el.title=v;
     }
@@ -1035,7 +1102,6 @@ function applyI18n(){
 
   /* ═══ Top Marquee ═══ */
   const mq=document.getElementById("mqTrack");
-
   if(mq){
     const marqueeKeys=[
       "mq_delivery",
@@ -1046,9 +1112,7 @@ function applyI18n(){
       "mq_shipping",
       "mq_support"
     ];
-
     mq.innerHTML="";
-
     for(let i=0;i<2;i++){
       marqueeKeys.forEach(key=>{
         const span=document.createElement("span");
@@ -1060,7 +1124,6 @@ function applyI18n(){
 
   /* ═══ FAQ ═══ */
   const faqWrap=document.getElementById("faqWrap");
-
   if(faqWrap&&typeof renderFAQ==="function"){
     renderFAQ();
   }
@@ -2098,8 +2161,7 @@ function renderCart(){
   
   updateTotals(c);
 }
-
-function handleCartClick(e){
+  function handleCartClick(e){
   const rmBtn = e.target.closest('.rm');
   const plusBtn = e.target.closest('.cq-plus');
   const minusBtn = e.target.closest('.cq-minus');
@@ -3002,6 +3064,22 @@ async function consumeCoupon(){
   if(document.getElementById("couponInput"))document.getElementById("couponInput").value="";
 }
 
+/* ═══ REVIEWS COUNT HELPER ═══ */
+window.getReviewsCount = function() {
+  if (typeof REVIEWS_IMAGES !== 'undefined' && Array.isArray(REVIEWS_IMAGES)) {
+    return REVIEWS_IMAGES.length;
+  }
+  return 0;
+};
+
+window.updateReviewsCount = function() {
+  const el = document.getElementById('totalReviewsCount');
+  if (el) {
+    const count = window.getReviewsCount();
+    el.textContent = count > 0 ? count + '+' : '0';
+  }
+};
+
 if (typeof window.addToCart === "function") {
   const _originalAddToCart = window.addToCart;
   window.addToCart = function(product, options) {
@@ -3026,5 +3104,7 @@ window.getWishlist = getWishlist;
 window.toggleWishlist = toggleWishlist;
 window.isInWishlist = isInWishlist;
 window.WISHLIST_KEY = WISHLIST_KEY;
+window.updateReviewsCount = updateReviewsCount;
+window.getReviewsCount = getReviewsCount;
 
 })();
