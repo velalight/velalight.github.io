@@ -766,7 +766,7 @@ faq8a:"Due to the nature of our handmade products, returns or exchanges are not 
     foot_designer_cta:"⚡ Want a professional website like this for your business?",
     foot_designer_link:"Contact us today",
 
-    foot_rights:"© 2026 - 2030 VelaLight — All Rights Reserved",
+    foot_rights:"© 2026 VelaLight — All Rights Reserved",
 
     foot_exchange:"Shipping Policy",
     foot_privacy:"Privacy Policy",
