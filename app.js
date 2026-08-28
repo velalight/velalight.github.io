@@ -2993,15 +2993,21 @@ function closeModal(id){
 
 function stockBadge(p){
   if(!p) return "";
-  // إذا كان المخزون غير محدد، متظهرش رسالة (يعني غير محدود)
+  // إذا كان المخزون غير محدد أو null أو فارغ، لا تظهر رسالة (يعني غير محدود)
   if(p.stock === undefined || p.stock === null || p.stock === "") return "";
+  
   const s = Number(p.stock);
   if(isNaN(s)) return "";
+  
+  // حالة المخزون الصفر
   if(s === 0) return `<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>`;
+  
+  // حالة المخزون المتبقي (أقل من أو يساوي 5)
   if(s <= 5) return `<span class="p-badge" style="background:#e67e22">باقي ${s} فقط</span>`;
-  return "";
+  
+  // حالة المخزون المتوفر (أكثر من 5)
+  return `<span class="p-badge" style="background:#27ae60">متوفر</span>`;
 }
-
 async function decrementStock(items){
   if(!window.FB || !window.FB.db) return;
   
