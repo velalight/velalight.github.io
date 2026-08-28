@@ -879,7 +879,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initEmbers();
   initReveal();
 
-  // تحقق إذا كنا في صفحة المنتجات أو الآراء
+  // تحقق إذا كنا في صفحة المنتجات أو الآراء أو المنتج
   const isProductsPage = window.location.pathname.includes('products.html');
   const isReviewsPage = window.location.pathname.includes('reviews.html');
   const isProductPage = window.location.pathname.includes('product.html');
@@ -917,7 +917,14 @@ document.addEventListener("DOMContentLoaded", () => {
       if (typeof renderReviewsPage === "function") {
         renderReviewsPage();
       }
-    } else if (!isProductPage) {
+    } else if (isProductPage) {
+      // ⭐ حل المشكلة: استدعاء دالة رسم صفحة المنتج
+      if (typeof renderProductPage === "function") {
+        renderProductPage();
+      } else {
+        console.warn("⚠️ renderProductPage not defined");
+      }
+    } else {
       // الصفحة الرئيسية
       renderChips();
       renderProducts();
@@ -936,6 +943,8 @@ document.addEventListener("DOMContentLoaded", () => {
       isFirstRenderComplete = true;
       if (isProductsPage && typeof renderProductsPage === "function") {
         renderProductsPage();
+      } else if (isProductPage && typeof renderProductPage === "function") {
+        renderProductPage();
       } else if (!isProductPage) {
         renderChips();
         renderProducts();
@@ -972,6 +981,8 @@ window.addEventListener("data-refresh", () => {
   
   if (isProductsPage && typeof renderProductsPage === "function") {
     renderProductsPage();
+  } else if (isProductPage && typeof renderProductPage === "function") {
+    renderProductPage();
   } else if (!isProductPage) {
     renderProducts();
   }
@@ -1045,11 +1056,14 @@ function initLang(){
     
     const isProductsPage = window.location.pathname.includes('products.html');
     const isReviewsPage = window.location.pathname.includes('reviews.html');
+    const isProductPage = window.location.pathname.includes('product.html');
     
     if (isProductsPage && typeof renderProductsPage === "function") {
       renderProductsPage();
     } else if (isReviewsPage && typeof renderReviewsPage === "function") {
       renderReviewsPage();
+    } else if (isProductPage && typeof renderProductPage === "function") {
+      renderProductPage();
     } else {
       renderChips();
       renderProducts();
@@ -3124,9 +3138,272 @@ if (typeof window.addToCart === "function") {
   };
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ دالة رسم صفحة المنتج (الحل الجذري)
+   ═══════════════════════════════════════════════════════════ */
+function renderProductPage() {
+  // 1. الحصول على معرف المنتج من الرابط
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get('p') || params.get('id');
+  
+  // 2. التأكد من وجود المعرف
+  if (!productId) {
+    showProductNotFound();
+    return;
+  }
+
+  // 3. البحث عن المنتج في ALL_PRODUCTS (المحدث من Firebase)
+  let product = null;
+  if (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) {
+    product = ALL_PRODUCTS.find(p => 
+      String(p.id) === String(productId) || 
+      String(p.id_) === String(productId) ||
+      String(p.slug) === String(productId)
+    );
+  }
+  
+  // 4. إذا لم يوجد، حاول من PRODUCTS القديم أو من الكاش
+  if (!product && typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)) {
+    product = PRODUCTS.find(p => String(p.id) === String(productId));
+  }
+  
+  if (!product) {
+    // 5. محاولة أخيرة: جلب من Firebase مباشرة
+    if (typeof loadCloudCatalog === "function") {
+      loadCloudCatalog(productId).then(() => {
+        // بعد تحميل الكتالوج، حاول مرة أخرى
+        if (typeof ALL_PRODUCTS !== "undefined") {
+          const found = ALL_PRODUCTS.find(p => 
+            String(p.id) === String(productId) || 
+            String(p.id_) === String(productId) ||
+            String(p.slug) === String(productId)
+          );
+          if (found) {
+            renderProductPageContent(found);
+            return;
+          }
+        }
+        showProductNotFound();
+      }).catch(() => showProductNotFound());
+      return;
+    }
+    showProductNotFound();
+    return;
+  }
+
+  // 6. المنتج موجود، اعرضه
+  renderProductPageContent(product);
+}
+
+/* ═══ دالة مساعدة لعرض محتوى المنتج ═══ */
+function renderProductPageContent(product) {
+  // التأكد من وجود العناصر في الصفحة
+  const wrap = document.getElementById("pdWrap");
+  const loading = document.getElementById("pdLoading");
+  const notFound = document.getElementById("pdNotFound");
+  
+  if (!wrap) return; // تأكد من وجود العناصر في الصفحة
+
+  // إخفاء الـ Skeleton وإظهار المحتوى
+  if (loading) loading.classList.add("hidden");
+  if (notFound) notFound.classList.add("hidden");
+  wrap.classList.remove("hidden");
+
+  // تحديث عنوان الصفحة
+  document.title = (product.name || "منتج") + " | VelaLight";
+  
+  // تحديث الوصف الميتا
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) {
+    const desc = product.desc || product.descEn || "";
+    metaDesc.content = desc.slice(0, 160) + " - شموع VelaLight الفاخرة";
+  }
+  
+  // تحديث Open Graph
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.content = product.name || "منتج";
+  
+  const ogDesc = document.querySelector('meta[property="og:description"]');
+  if (ogDesc) {
+    const desc = product.desc || product.descEn || "";
+    ogDesc.content = desc.slice(0, 160);
+  }
+
+  // 1. اسم المنتج
+  const nameEl = document.getElementById("pdName");
+  if (nameEl) nameEl.textContent = product.name || "اسم المنتج";
+  
+  // 2. السعر
+  const priceEl = document.getElementById("pdPrice");
+  if (priceEl) {
+    priceEl.textContent = (typeof money === "function") ? money(product.price) : (product.price + " ج.م");
+  }
+  
+  // 3. السعر القديم والخصم
+  const oldEl = document.getElementById("pdOld");
+  const saveEl = document.getElementById("pdSave");
+  if (oldEl && saveEl && product.old && product.old > product.price) {
+    oldEl.textContent = (typeof money === "function") ? money(product.old) : (product.old + " ج.م");
+    oldEl.style.display = "inline";
+    const savePercent = Math.round(((product.old - product.price) / product.old) * 100);
+    saveEl.textContent = "−" + savePercent + "%";
+    saveEl.style.display = "inline-block";
+  } else {
+    if (oldEl) oldEl.style.display = "none";
+    if (saveEl) saveEl.style.display = "none";
+  }
+
+  // 4. الوصف
+  const descEl = document.getElementById("pdDesc");
+  if (descEl) {
+    const desc = product.desc || product.descEn || "";
+    descEl.textContent = desc;
+  }
+  
+  // 5. الوصف الكامل (التاب)
+  const descFull = document.getElementById("pdDescFull");
+  if (descFull) {
+    const desc = product.desc || product.descEn || "";
+    descFull.innerHTML = desc.split("\n").filter(Boolean).map(p => `<p style="margin-bottom:.9rem">${p}</p>`).join("") || `<p>${desc}</p>`;
+  }
+
+  // 6. الصورة الرئيسية
+  const mainImg = document.getElementById("pdImg");
+  const zoomImages = [];
+  
+  if (mainImg) {
+    // تجميع الصور
+    if (product.images && product.images.length) {
+      zoomImages.push(...product.images);
+    } else if (product.img) {
+      zoomImages.push(product.img);
+    } else {
+      zoomImages.push("RR.jpg");
+    }
+    
+    const imgSrc = (typeof CDN === "function") ? CDN(zoomImages[0]) : zoomImages[0];
+    mainImg.src = imgSrc;
+    mainImg.alt = product.name || "منتج";
+    mainImg.onerror = function() {
+      this.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>";
+    };
+    mainImg.onload = function() { this.classList.add('loaded'); };
+    mainImg.classList.remove('loaded');
+  }
+
+  // 7. معرض الصور المصغرة
+  const thumbs = document.getElementById("pdThumbs");
+  if (thumbs && zoomImages.length > 1) {
+    thumbs.innerHTML = zoomImages.map((u, i) => {
+      const src = (typeof CDN === "function") ? CDN(u) : u;
+      return `<img src="${src}" class="${i === 0 ? "on" : ""}" data-src="${src}" data-idx="${i}" alt="${product.name || "منتج"} ${i+1}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">`;
+    }).join("");
+    
+    thumbs.querySelectorAll("img").forEach(img => {
+      img.addEventListener("click", function() {
+        thumbs.querySelectorAll("img").forEach(x => x.classList.remove("on"));
+        this.classList.add("on");
+        const main = document.getElementById("pdImg");
+        if (main) {
+          main.style.opacity = "0";
+          main.onload = function() { this.style.opacity = "1"; this.classList.add("loaded"); };
+          main.src = this.dataset.src;
+        }
+      });
+    });
+  } else if (thumbs) {
+    thumbs.innerHTML = "";
+  }
+
+  // 8. عداد الصور
+  const counter = document.getElementById("galleryCounter");
+  if (counter) {
+    if (zoomImages.length > 1) {
+      counter.textContent = `📸 ${zoomImages.length} صور`;
+      counter.style.display = "block";
+    } else {
+      counter.style.display = "none";
+    }
+  }
+
+  // 9. العطور
+  const scentSelect = document.getElementById("pdScentSelect");
+  if (scentSelect) {
+    let scents = product.scents || [];
+    if (!scents.length) scents = VELA_SCENTS.map(s => s[0]);
+    scentSelect.innerHTML = `<option value="">${(LANG === "en") ? "Choose a scent..." : "اختار العطر..."}</option>` + 
+      scents.map(s => `<option value="${s}">${velaScentTr(s)}</option>`).join("");
+    scentSelect.addEventListener("change", function(e) {
+      window.selScent = e.target.value;
+    });
+  }
+
+  // 10. المواصفات
+  const specCat = document.getElementById("specCat");
+  if (specCat) specCat.textContent = cat(product.cat) || "—";
+  
+  const specScents = document.getElementById("specScents");
+  if (specScents) {
+    const scents = product.scents || VELA_SCENTS.map(s => s[0]);
+    specScents.textContent = scents.map(velaScentTr).join(" • ");
+  }
+  
+  const specHours = document.getElementById("specHours");
+  if (specHours) {
+    specHours.textContent = product.burnTime || "—";
+  }
+
+  // 11. المخزون
+  const stockInfo = document.getElementById("pdStockInfo");
+  if (stockInfo) {
+    const s = Number(product.stock);
+    if (product.stock === undefined || product.stock === null || product.stock === "" || isNaN(s)) {
+      stockInfo.innerHTML = `<span class="stock-badge ok">✓ متوفر</span>`;
+    } else if (s === 0) {
+      stockInfo.innerHTML = `<span class="stock-badge out">✕ نفدت الكمية</span>`;
+    } else if (s <= 5) {
+      stockInfo.innerHTML = `<span class="stock-badge low">⚡ متاح ${s} فقط</span>`;
+    } else {
+      stockInfo.innerHTML = `<span class="stock-badge ok">✓ متاح ${s}</span>`;
+    }
+  }
+
+  // 12. تفعيل الأزرار والأحداث
+  if (typeof bindEvents === "function") bindEvents();
+  
+  // 13. عرض المنتجات المشابهة
+  if (typeof renderRelated === "function") renderRelated();
+  
+  // 14. المراجعات
+  if (typeof renderReviews === "function") renderReviews();
+  
+  // 15. زر المفضلة
+  if (typeof updateWishButton === "function") updateWishButton();
+  
+  // 16. JSON-LD
+  if (typeof updateJsonLd === "function") updateJsonLd();
+}
+
+/* ═══ دالة عرض "المنتج غير متاح" ═══ */
+function showProductNotFound() {
+  const loading = document.getElementById("pdLoading");
+  const notFound = document.getElementById("pdNotFound");
+  const wrap = document.getElementById("pdWrap");
+  
+  if (loading) loading.classList.add("hidden");
+  if (notFound) notFound.classList.remove("hidden");
+  if (wrap) wrap.classList.add("hidden");
+}
+
+/* ═══ تجهيز JSON-LD للمنتج ═══ */
+function updateJsonLd() {
+  // سيتم تنفيذها في product.html أو يمكن تنفيذها هنا
+}
+
 /* ═══ EXPOSE GLOBALLY ═══ */
 window.renderProductsPage = renderProductsPage;
 window.renderReviewsPage = renderReviewsPage;
+window.renderProductPage = renderProductPage;
 window.getWishlist = getWishlist;
 window.toggleWishlist = toggleWishlist;
 window.isInWishlist = isInWishlist;
