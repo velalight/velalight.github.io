@@ -1211,11 +1211,46 @@ document.addEventListener("DOMContentLoaded",()=>{
     }, 1000);
   }
 
-  setTimeout(() => {
-    if (!P) {
-      try {
+ setTimeout(() => {
+  if (!P) {
+    try {
+      // ✨ تجاهل الكاش القديم لو عمره أكثر من 30 ثانية
+      const cacheTime = Number(localStorage.getItem("vl_products_cache_v2_time") || "0");
+      const cacheIsOld = (Date.now() - cacheTime) > 30000; // 30 ثانية
+
+      if (!cacheIsOld) {
         const cache2 = JSON.parse(localStorage.getItem("vl_products_cache_v2") || "[]");
         if (Array.isArray(cache2)) {
+          const cachedV2 = cache2.find(x =>
+            String(x.id) === String(productPid) || String(x.id_) === String(productPid)
+          ) || null;
+          
+          if (cachedV2) {
+            P = { ...cachedV2 };
+            render();
+            if (typeof toast === "function") toast("⚠️ عرض البيانات المحفوظة مؤقتاً");
+          } else {
+            showNotFound();
+          }
+        } else {
+          showNotFound();
+        }
+      } else {
+        // الكاش قديم، بنروح لـ Firebase
+        console.warn("⚠️ Cache is old, waiting for Firebase...");
+        // نستنى شوية ونحاول تاني من Firebase
+        setTimeout(() => {
+          if (!P) {
+            loadCloudCatalog(productPid);
+          }
+        }, 1000);
+      }
+    } catch (e) {
+      showNotFound();
+    }
+  }
+}, 2500);
+  if (Array.isArray(cache2)) {
           const cachedV2 = cache2.find(x => String(x.id) === String(productPid) || String(x.id_) === String(productPid)) || null;
           if (cachedV2) {
             P = { ...cachedV2 };
