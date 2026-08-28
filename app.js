@@ -490,6 +490,7 @@ brand_point3_desc:
       brand_kick: "The VelaLight Touch",
       scents_kick: "Signature Scents",
       prod_kick: "Our Collection",
+     prod_h2: "Choose Your Favorite Piece",
       prod_sub: "اكتشفي أحدث تشكيلتنا من الشموع الفاخرة",
       prod_see_all: "🕯️ استعرضي كل المنتجات",
       about_kick: "Our Story",
