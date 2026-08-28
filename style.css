@@ -121,7 +121,7 @@ small{color:var(--dim)}
 .rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
 .rv.on{opacity:1;transform:none}
 
-/* ═══ Topbar ═══ */
+/* ═══ Topbar — يختفي مع السكرول ═══ */
 .topbar{
  background:linear-gradient(90deg,#2a1c0b,#3a2812,#2a1c0b);
  border-bottom:1px solid rgba(217,171,95,.2);
@@ -251,7 +251,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 .langbtn:active{transform:scale(.95)}
 #navToggle{display:none}
 
-/* ═══ Chips ══ */
+/* ═══ Chips (container hidden, chip styled for modals) ══ */
 .chips{display:none;gap:.55rem;flex-wrap:wrap}
 .chip{
  display:inline-flex;
@@ -313,11 +313,11 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  -webkit-tap-highlight-color:transparent;
 }
 
-/* ✅ التعديل الجذري هنا: جعل الصورة متناسقة دائماً */
 .p-media img {
   width: 100%;
-  aspect-ratio: 1 / 1; /* يجعل الصورة مربعة ومتناسقة في كل الشاشات */
-  object-fit: cover; /* يملأ المربع بالكامل دون تشويه أو فراغات */
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
   background: var(--bg2);
   display: block;
 }
@@ -367,6 +367,7 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  pointer-events:none;
 }
 
+/* ═══ Pinned Badge ═══ */
 .p-pin-badge{
  position:absolute;
  top:12px;
@@ -489,7 +490,9 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 .stat b{font-family:var(--fd);font-size:2rem;color:var(--gold2);display:block}
 .stat span{font-size:.8rem;color:var(--dim)}
 
-/* ═══ VELALIGHT — SIGNATURE SCENTS ═══ */
+/* ═══════════════════════════════════════════════════════════
+   VELALIGHT — SIGNATURE SCENTS
+   ═══════════════════════════════════════════════════════════ */
 .vl-scents{padding-top:2.4rem;padding-bottom:2.4rem}
 .scents-head{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;padding-bottom:1.15rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
 .scents-head h2{margin:0;font-size:clamp(1.35rem,2.5vw,1.8rem);line-height:1.2}
@@ -523,7 +526,9 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  .scent small{font-size:.46rem}
 }
 
-/* ═══ VELALIGHT — BRAND PROMISE ═══ */
+/* ═══════════════════════════════════════════════════════════
+   VELALIGHT — BRAND PROMISE
+   ═══════════════════════════════════════════════════════════ */
 .vl-brand-promise{padding-top:2.4rem;padding-bottom:2.4rem}
 .brand-promise-inner{display:flex;align-items:center;justify-content:space-between;gap:2.5rem;padding:1.35rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .brand-promise-title{flex:0 1 360px;min-width:0}
@@ -557,7 +562,9 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  .brand-point span{font-size:.52rem}
 }
 
-/* ═══ VELALIGHT — FAQ ═══ */
+/* ═══════════════════════════════════════════════════════════
+   VELALIGHT — FAQ
+   ═══════════════════════════════════════════════════════════ */
 .vl-faq{padding-top:2.4rem;padding-bottom:2.4rem}
 .faq-inner{max-width:820px;margin:0 auto}
 .faq-heading{text-align:center;margin-bottom:1.3rem}
@@ -783,7 +790,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .pgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.1rem}
 }
 
-/* ═══ MOBILE (max-width: 768px) — ✅ تم الإصلاح هنا ═══ */
+/* ═══ MOBILE (max-width: 768px) — التعديل الأهم ═══ */
 @media(max-width:768px){
  body{line-height:1.6}
  .sec{padding:3.5rem 0}
@@ -794,16 +801,13 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .logo small{font-size:.45rem}
  .pgrid{grid-template-columns:repeat(2,1fr);gap:.9rem}
  .p-card{border-radius:14px;display:flex;flex-direction:column;height:100%}
- 
- /* ✅ ضمان أن الصورة تملأ العرض بنسبة مربعة مثالية */
- .p-media, .p-media img {
-   width: 100% !important;
-   aspect-ratio: 1 / 1 !important;
-   object-fit: cover !important;
-   opacity: 1 !important;
-   transition: transform .3s ease;
+ .p-media img{
+   opacity:1 !important;
+   transition:transform .3s ease;
+   max-height:400px;
+   width:100%;
+   object-fit:cover;
  }
- 
  .p-quick{
    transform:translateY(0);
    padding:.45rem .3rem;
@@ -865,7 +869,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .pd-thumbs img{width:58px;height:58px;border-radius:10px}
 }
 
-/* ═══ SMALL MOBILE (max-width: 480px) — ✅ تم الإصلاح هنا ═══ */
+/* ═══ SMALL MOBILE (max-width: 480px) — تم إصلاح حجم الصور ═══ */
 @media(max-width:480px){
  .wrap{width:94%}
  .sec{padding:3rem 0}
@@ -882,15 +886,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .pgrid{grid-template-columns:repeat(2,1fr);gap:.7rem}
  .p-card{border-radius:12px}
  .p-media{border-radius:12px 12px 0 0}
- 
- /* ✅ إلغاء أي قيود ارتفاع قديمة وفرض النسبة المربعة */
- .p-media, .p-media img {
-   width: 100% !important;
-   aspect-ratio: 1 / 1 !important;
-   object-fit: cover !important;
-   max-height: none !important;
- }
- 
+ .p-media img{max-height:360px !important;object-fit:cover !important;width:100% !important}
  .p-quick{font-size:.65rem;padding:.4rem .25rem}
  .p-body{padding:.6rem .65rem .75rem}
  .p-cat{font-size:.58rem}
@@ -920,7 +916,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .feat .n{display:none}
 }
 
-/* ═══ EXTRA SMALL (max-width: 600px) ═══ */
+/* ═══ EXTRA SMALL (max-width: 600px) — خاص بالـ feat-grid ═══ */
 @media(max-width:600px){
  .feat-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.35rem;width:100%;max-width:100%;overflow:visible;box-sizing:border-box}
  .feat{width:100%;min-width:0;max-width:none;padding:.5rem .25rem;border-radius:8px;overflow:hidden}
@@ -1043,14 +1039,12 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
 .vl-craft-item{transition:all 0.3s ease}
 .vl-craft-item:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(100,70,30,0.12);border-color:var(--gold) !important}
 
-/* ✅ تحسين ظهور الصور لمنع الوميض مع الحفاظ على التناسق */
+/* تحسين ظهور الصور لمنع الوميض */
 .p-media img {
   opacity: 1 !important;
   transition: opacity 0.3s ease;
   background-color: #f5efe5;
-  width: 100% !important;
-  aspect-ratio: 1 / 1 !important;
-  object-fit: cover !important;
+  min-height: 200px;
 }
 .p-media img:not([src]),
 .p-media img[src=""] {
