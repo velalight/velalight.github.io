@@ -664,7 +664,7 @@ function loadOrders(){
       const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString("ar-EG") : "-";
       const optionsHtml = statusList.map((status, index) => 
         `<option value="${index}"${order.status === index ? " selected" : ""}>${status}</option>`
-      ).join("");
+      }).join("");
       
       return `
         <tr>
