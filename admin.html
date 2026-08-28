@@ -142,7 +142,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       <button class="btn sm ghost" data-tab="craftsmanship" type="button" style="background:var(--gold);color:#fff;">🎬 Behind the Scenes</button>
     </div>
 
-    <!-- ================= ORDERS ================= -->
+    <!-- ================= ORDERS ================= (مع تحديث الحالة) -->
     <div id="tab-orders">
       <table class="adm">
         <thead>
@@ -563,7 +563,7 @@ function showAdmin(){
   loadUsers();
   loadCoupons();
   loadCraftItems();
-}
+});
 
 document.addEventListener("click", async (event) => {
   if(event.target.id !== "loginBtn") return;
@@ -657,9 +657,15 @@ function loadOrders(){
     const revenue = orders.filter(order => order.status !== 4).reduce((total, order) => total + Number(order.total || 0), 0);
     $("#stRevenue").textContent = money(revenue);
     
+    // الحالات المعروفة
+    const statusList = ["قيد المراجعة", "جاري التجهيز", "تم الشحن", "تم التسليم", "ملغي"];
+    
     $("#ordersBody").innerHTML = orders.map(order => {
       const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString("ar-EG") : "-";
-      const statusOptions = STATUS.map((status,index) => `<option value="${index}"${order.status === index ? " selected" : ""}>${status}</option>`).join("");
+      const optionsHtml = statusList.map((status, index) => 
+        `<option value="${index}"${order.status === index ? " selected" : ""}>${status}</option>`
+      ).join("");
+      
       return `
         <tr>
           <td style="direction:ltr;font-size:.78rem">${order.id || "-"}</td>
@@ -667,15 +673,30 @@ function loadOrders(){
           <td>${order.name || "-"}</td>
           <td style="direction:ltr">${order.phone || "-"}</td>
           <td>${money(order.total || 0)}</td>
-          <td><select data-oid="${order._fid || order.id}">${statusOptions}</select></td>
+          <td>
+            <select class="order-status-select" data-oid="${order._fid || order.id}" style="padding:.3rem .5rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-family:inherit;width:auto;">
+              ${optionsHtml}
+            </select>
+          </td>
         </tr>`;
     }).join("");
     
-    $$("#ordersBody select").forEach(select => {
-      select.addEventListener("change", () => {
-        window.FB.update("orders", select.dataset.oid, { status: Number(select.value) })
-          .then(() => toast("✅ تم تحديث الحالة"))
-          .catch(error => { console.error(error); toast("⚠️ فشل تحديث الحالة"); });
+    // ربط حدث تغيير الحالة
+    document.querySelectorAll(".order-status-select").forEach(select => {
+      select.addEventListener("change", function() {
+        const newStatus = Number(this.value);
+        const oid = this.dataset.oid;
+        if (window.FB && typeof window.FB.update === "function") {
+          window.FB.update("orders", oid, { status: newStatus })
+            .then(() => {
+              toast("✅ تم تحديث الحالة إلى: " + ["قيد المراجعة","جاري التجهيز","تم الشحن","تم التسليم","ملغي"][newStatus]);
+              // تحديث الإيرادات
+              loadOrders();
+            })
+            .catch(() => toast("⚠️ فشل تحديث الحالة"));
+        } else {
+          toast("⚠️ Firebase غير متصل");
+        }
       });
     });
   }, error => console.error("Orders error:", error));
@@ -983,6 +1004,24 @@ function loadCoupons(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("coupons").then(coupons => {
     ALL_COUPONS = coupons || [];
+    // إذا كانت القائمة فارغة، أضف كوبون افتراضي WELCOME10
+    if (ALL_COUPONS.length === 0) {
+      const defaultCoupon = {
+        code: "WELCOME10",
+        type: "percent",
+        value: 10,
+        maxUses: 100,
+        usedCount: 0,
+        active: true,
+        createdAt: Date.now()
+      };
+      window.FB.set("coupons", "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), defaultCoupon)
+        .then(() => {
+          toast("🎉 تم إضافة كوبون ترحيبي WELCOME10 تلقائياً");
+          loadCoupons(); // إعادة التحميل
+        })
+        .catch(() => toast("⚠️ فشل إضافة الكوبون الافتراضي"));
+    }
     renderCoupons(ALL_COUPONS);
   }).catch(err => { console.error("Coupons error:", err); toast("⚠️ تعذر تحميل الكوبونات"); });
 }
