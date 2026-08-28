@@ -1073,17 +1073,35 @@ function updateHeroCopy(){
   const cta=document.querySelector('.hero-cta');
   if(!kick||!title||!lead||!cta)return;
   if(LANG==='en'){
-    kick.textContent='✦ Handmade luxury candles';
+    kick.textContent='✦ Hand-poured luxury candles';
     title.textContent='Light that feels like you.';
-    lead.textContent='Handmade candles in diverse designs and scents tailored to your taste - each candle crafted to add a unique feel to your space.';
-    cta.innerHTML='Choose your candle <span aria-hidden="true">✦</span>';
+    lead.textContent='Candles that glow… illuminating your day with moments you deserve.';
+    cta.innerHTML='Discover your collection <span aria-hidden="true">✦</span>';
   }else{
     kick.textContent='✦ شموع يدوية فاخرة';
-    title.textContent='ضوءٌ يُشبهكِ.';
-    lead.textContent='شموع هاند ميد بتصميمات مختلفه وروائح على ذوقك - كل شمعه معموله علشان تضيف لمكانك احساس مختلف.';
-    cta.innerHTML='اختار شمعتك <span aria-hidden="true">✨</span>';
+    title.textContent='ضوءٌ يُشبهك.';
+    lead.textContent='شموع تُضيء… لتنير يومك بلحظاتٍ تستحقها.';
+    cta.innerHTML='اكتشف مجموعتك <span aria-hidden="true">✦</span>';
   }
 }
+
+function updateLangBtn(){
+  const btn=document.getElementById("langBtn");
+  if(btn){btn.textContent=LANG==="ar"?"EN":"ع";}
+}
+
+function applyI18n(){
+  document.title=t("docTitle");
+
+  /* ═══ Normal translations ═══ */
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k=el.dataset.i18n;
+    const v=t(k);
+    if(v&&v!==k){
+      el.textContent=v;
+    }
+  });
+
   /* ═══ Placeholder translations ═══ */
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
     const k=el.dataset.i18nPh;
