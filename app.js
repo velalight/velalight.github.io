@@ -3154,6 +3154,5 @@ window.isInWishlist = isInWishlist;
 window.WISHLIST_KEY = WISHLIST_KEY;
 window.updateReviewsCount = updateReviewsCount;
 window.getReviewsCount = getReviewsCount;
-window.subscribeUser = subscribeUser; // تصدير الدالة للاستخدام العام
 
 })();
