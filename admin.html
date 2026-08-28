@@ -4,70 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>لوحة التحكم | VelaLight</title>
-<!-- ═══ تعديل: تم إضافة meta لمنع الفهرسة (موجود) ═══ -->
 <meta name="robots" content="noindex,nofollow">
-
 <link rel="stylesheet" href="style.css">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* === جميع التنسيقات الموجودة + تعديلات البحث والفلتر === */
-.login-wrap{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:2rem;
-}
-.login-box{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:2.5rem;
-  width:min(400px,92vw);
-  text-align:center;
-}
-.login-box h2{
-  font-family:var(--fd);
-  color:var(--gold2);
-  margin-bottom:1.5rem;
-}
-.login-box input{
-  margin-bottom:1rem;
-  text-align:center;
-}
-.login-box button{
-  transition:.2s ease;
-}
-.login-box button:disabled{
-  opacity:.65;
-  cursor:not-allowed;
-}
-.login-status{
-  min-height:20px;
-}
-.adm-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:1rem;
-  padding:1rem 0;
-  flex-wrap:wrap;
-}
-.adm-top h1{
-  font-family:var(--fd);
-  color:var(--gold2);
-  font-size:1.4rem;
-}
-.adm-nav{
-  display:flex;
-  gap:.5rem;
-  flex-wrap:wrap;
-}
-/* ═══ تنسيقات جدول الأدمن (مظهر فاتح) ═══ */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
+.login-box{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:2.5rem;width:min(400px,92vw);text-align:center;}
+.login-box h2{font-family:var(--fd);color:var(--gold2);margin-bottom:1.5rem;}
+.login-box input{margin-bottom:1rem;text-align:center;}
+.login-box button{transition:.2s ease;}
+.login-box button:disabled{opacity:.65;cursor:not-allowed;}
+.login-status{min-height:20px;}
+.adm-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 0;flex-wrap:wrap;}
+.adm-top h1{font-family:var(--fd);color:var(--gold2);font-size:1.4rem;}
+.adm-nav{display:flex;gap:.5rem;flex-wrap:wrap;}
 .adm-head{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.6rem}
 .adm-stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1rem 1.5rem;min-width:150px;box-shadow:var(--sh)}
 .adm-stat b{font-family:var(--fd);font-size:1.6rem;color:var(--gold2);display:block}
@@ -83,45 +36,22 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 .pform .g{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
 .pform label{font-size:.75rem;color:var(--dim);display:block;margin:.6rem 0 .25rem}
 .hidden{display:none!important}
-/* ═══ Export Button ═══ */
 .export-btn{background:linear-gradient(135deg,#4a8a5c,#2e6b3f);color:#fff;padding:.5rem 1rem;border-radius:10px;font-size:.8rem;cursor:pointer;border:none;transition:.2s;font-weight:700}
 .export-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px -8px rgba(74,138,92,.5)}
-/* ═══ تنسيقات الكوبونات ═══ */
 .coupon-active{background:#d4edda;color:#155724;padding:.2rem .6rem;border-radius:99px;font-size:.72rem;font-weight:700}
 .coupon-inactive{background:#f8d7da;color:#721c24;padding:.2rem .6rem;border-radius:99px;font-size:.72rem;font-weight:700}
 .coupon-code{font-family:monospace;font-weight:700;background:#fef5e7;padding:.2rem .5rem;border-radius:6px;color:#d4af37;font-size:.85rem}
-/* ═══ Gallery Preview ═══ */
 .gallery-preview{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
 .gallery-preview img{width:60px;height:60px;border-radius:10px;object-fit:cover;border:2px solid var(--line);background:var(--panel2)}
 .gallery-hint{font-size:.7rem;color:var(--dim);margin-top:.3rem;font-style:italic}
-/* ═══ تعديل: تنسيقات شريط البحث والفلتر للطلبات ═══ */
-.order-filters{
-  display:flex;
-  gap:.8rem;
-  flex-wrap:wrap;
-  margin-bottom:1rem;
-  align-items:center;
-}
-.order-filters input, .order-filters select{
-  padding:.5rem .8rem;
-  border-radius:10px;
-  border:1px solid var(--line);
-  background:var(--panel);
-  font-size:.85rem;
-  min-width:180px;
-}
-@media(max-width:600px){
-  table.adm{display:block;overflow-x:auto}
-  .pform .g{grid-template-columns:1fr}
-  .order-filters{flex-direction:column;align-items:stretch}
-  .order-filters input, .order-filters select{min-width:auto}
-}
+.order-filters{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center;}
+.order-filters input,.order-filters select{padding:.5rem .8rem;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-size:.85rem;min-width:180px;}
+@media(max-width:600px){table.adm{display:block;overflow-x:auto}.pform .g{grid-template-columns:1fr}.order-filters{flex-direction:column;align-items:stretch}.order-filters input,.order-filters select{min-width:auto}}
 </style>
 </head>
-
 <body>
 
-<!-- ================= LOGIN ================= -->
+<!-- LOGIN -->
 <div id="loginScreen" class="login-wrap">
   <div class="login-box">
     <h2>🔐 لوحة تحكم VelaLight</h2>
@@ -132,7 +62,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   </div>
 </div>
 
-<!-- ================= ADMIN ================= -->
+<!-- ADMIN -->
 <div id="adminScreen" class="hidden">
   <div class="wrap">
     <div class="adm-top">
@@ -143,7 +73,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </div>
     </div>
 
-    <!-- ================= STATS ================= -->
     <div class="adm-head" id="statsRow">
       <div class="adm-stat"><b id="stOrders">0</b><span>📦 الطلبات</span></div>
       <div class="adm-stat"><b id="stProducts">0</b><span>🕯️ المنتجات</span></div>
@@ -152,7 +81,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       <div class="adm-stat"><b id="stRevenue">0</b><span>💰 الإيرادات</span></div>
     </div>
 
-    <!-- ================= TABS ================= -->
     <div class="adm-tabs">
       <button class="btn sm" data-tab="orders" type="button">📦 الطلبات</button>
       <button class="btn sm ghost" data-tab="users" type="button">👥 العملاء</button>
@@ -162,40 +90,27 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       <button class="btn sm ghost" data-tab="craftsmanship" type="button" style="background:var(--gold);color:#fff;">🎬 Behind the Scenes</button>
     </div>
 
-    <!-- ================= ORDERS ================= -->
+    <!-- ORDERS -->
     <div id="tab-orders">
-      <!-- ═══ تعديل: إضافة شريط بحث وفلتر للطلبات ═══ -->
       <div class="order-filters">
         <input id="orderSearch" type="search" placeholder="🔎 ابحث برقم الطلب أو اسم العميل">
         <select id="orderStatusFilter">
           <option value="">كل الحالات</option>
-          <option value="0">قيد المراجعة</option>
-          <option value="1">قيد التجهيز</option>
-          <option value="2">تم التجهيز</option>
-          <option value="3">تم الشحن</option>
-          <option value="4">مكتمل</option>
-          <option value="5">ملغي</option>
+          <option value="0">قيد المراجعة</option><option value="1">قيد التجهيز</option>
+          <option value="2">تم التجهيز</option><option value="3">تم الشحن</option>
+          <option value="4">مكتمل</option><option value="5">ملغي</option>
         </select>
         <input id="orderDateFrom" type="date" placeholder="من تاريخ">
         <input id="orderDateTo" type="date" placeholder="إلى تاريخ">
         <button class="btn sm ghost" id="clearOrderFilters" type="button">✖️ مسح</button>
       </div>
       <table class="adm">
-        <thead>
-          <tr>
-            <th>رقم الطلب</th>
-            <th>التاريخ</th>
-            <th>العميل</th>
-            <th>الموبايل</th>
-            <th>الإجمالي</th>
-            <th>الحالة</th>
-          </tr>
-        </thead>
+        <thead><tr><th>رقم الطلب</th><th>التاريخ</th><th>العميل</th><th>الموبايل</th><th>الإجمالي</th><th>الحالة</th></tr></thead>
         <tbody id="ordersBody"></tbody>
       </table>
     </div>
 
-    <!-- ================= USERS ================= -->
+    <!-- USERS -->
     <div id="tab-users" class="hidden">
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <h3 style="color:var(--gold2);font-family:var(--fd);margin:0">👥 العملاء المسجلين</h3>
@@ -205,44 +120,27 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         </div>
       </div>
       <table class="adm">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>الاسم</th>
-            <th>الإيميل</th>
-            <th>الموبايل</th>
-            <th>المدينة</th>
-            <th>الطلبات</th>
-            <th>الإجمالي</th>
-            <th>تاريخ التسجيل</th>
-          </tr>
-        </thead>
+        <thead><tr><th>#</th><th>الاسم</th><th>الإيميل</th><th>الموبايل</th><th>المدينة</th><th>الطلبات</th><th>الإجمالي</th><th>تاريخ التسجيل</th></tr></thead>
         <tbody id="usersBody"></tbody>
       </table>
     </div>
 
-    <!-- ================= PRODUCTS ================= -->
+    <!-- PRODUCTS -->
     <div id="tab-products" class="hidden">
-      <!-- ... (نفس المحتوى السابق) ... -->
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addProductBtn" type="button">➕ إضافة منتج جديد</button>
         <div style="display:flex;gap:.5rem;flex:1;min-width:260px;max-width:760px;flex-wrap:wrap">
           <input id="productSearch" type="search" placeholder="🔎 ابحث باسم المنتج أو ID..." style="flex:1;min-width:220px;margin:0">
           <select id="productCatFilter" style="min-width:170px;margin:0">
             <option value="">كل التصنيفات</option>
-            <option value="wood">شموع خشبية</option>
-            <option value="glass">شموع زجاجية</option>
-            <option value="crystal">شموع كريستالية</option>
-            <option value="metal">شموع معدنية</option>
-            <option value="massage">شموع المساج</option>
-            <option value="gift">الهدايا</option>
+            <option value="wood">شموع خشبية</option><option value="glass">شموع زجاجية</option>
+            <option value="crystal">شموع كريستالية</option><option value="metal">شموع معدنية</option>
+            <option value="massage">شموع المساج</option><option value="gift">الهدايا</option>
             <option value="bride">بوكس العروسة</option>
           </select>
           <select id="productSort" style="min-width:150px;margin:0">
-            <option value="newest">الأحدث أولًا</option>
-            <option value="name">الاسم</option>
-            <option value="priceLow">السعر الأقل</option>
-            <option value="priceHigh">السعر الأعلى</option>
+            <option value="newest">الأحدث أولًا</option><option value="name">الاسم</option>
+            <option value="priceLow">السعر الأقل</option><option value="priceHigh">السعر الأعلى</option>
           </select>
         </div>
       </div>
@@ -252,7 +150,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </p>
 
       <div class="pform hidden" id="productForm">
-        <!-- ... (نفس المحتوى) ... -->
         <h3 style="color:var(--gold2);margin-bottom:1rem" id="formTitle">منتج جديد</h3>
         <div class="g">
           <div><label>اسم المنتج (عربي) *</label><input id="pf_name"></div>
@@ -288,7 +185,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         <label>العطور المتاحة (افصل بفاصلة)</label><input id="pf_scents" placeholder="عود, فانيليا, مسك أبيض">
         <div style="display:flex;gap:.6rem;margin-top:1rem">
           <button class="btn sm" id="saveProductBtn" type="button">💾 حفظ المنتج</button>
-          <button class="btn ghost sm" id="cancelProductBtn" type="button">إلغاء</button>
+          <button class="btn sm ghost" id="cancelProductBtn" type="button">إلغاء</button>
         </div>
       </div>
 
@@ -298,9 +195,8 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </table>
     </div>
 
-    <!-- ================= COUPONS ================= -->
+    <!-- COUPONS -->
     <div id="tab-coupons" class="hidden">
-      <!-- ... (نفس المحتوى) ... -->
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addCouponBtn" type="button">➕ إضافة كوبون جديد</button>
       </div>
@@ -321,7 +217,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         </div>
         <div style="display:flex;gap:.6rem;margin-top:1rem">
           <button class="btn sm" id="saveCouponBtn" type="button">💾 حفظ الكوبون</button>
-          <button class="btn ghost sm" id="cancelCouponBtn" type="button">إلغاء</button>
+          <button class="btn sm ghost" id="cancelCouponBtn" type="button">إلغاء</button>
         </div>
       </div>
       <table class="adm">
@@ -330,7 +226,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </table>
     </div>
 
-    <!-- ================= REVIEWS ================= -->
+    <!-- REVIEWS -->
     <div id="tab-reviews" class="hidden">
       <table class="adm">
         <thead><tr><th>الاسم</th><th>المنتج</th><th>التقييم</th><th>المراجعة</th><th>إجراءات</th></tr></thead>
@@ -338,7 +234,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </table>
     </div>
 
-    <!-- ================= CRAFTSMANSHIP ================= -->
+    <!-- CRAFTSMANSHIP -->
     <div id="tab-craftsmanship" class="hidden">
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addCraftBtn" type="button">➕ إضافة فيديو/صورة جديدة</button>
@@ -364,7 +260,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         </div>
         <div style="display:flex;gap:.6rem;margin-top:1rem">
           <button class="btn sm" id="saveCraftBtn" type="button">💾 حفظ</button>
-          <button class="btn ghost sm" id="cancelCraftBtn" type="button">إلغاء</button>
+          <button class="btn sm ghost" id="cancelCraftBtn" type="button">إلغاء</button>
         </div>
       </div>
       <table class="adm">
@@ -378,11 +274,9 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
 <div id="toasts"></div>
 
-<!-- ================= DATA ================= -->
 <script src="data.js"></script>
 <script type="module" src="firebase.js"></script>
 
-<!-- ================= ADMIN SCRIPT ================= -->
 <script>
 (function(){
 "use strict";
@@ -390,14 +284,14 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 let loggedIn = false;
 let ALL_USERS = [];
 let ALL_COUPONS = [];
-let ALL_ORDERS = []; // ═══ تعديل: لتخزين الطلبات للتصفية
+let ALL_ORDERS = [];
+let PRODUCTS_ADMIN_CACHE = [];
 
 document.addEventListener("DOMContentLoaded", () => {
   initTabs();
   initProductForm();
   initCouponForm();
   initCraftForm();
-  // ═══ تعديل: ربط أحداث البحث والفلتر
   document.getElementById("orderSearch")?.addEventListener("input", filterOrders);
   document.getElementById("orderStatusFilter")?.addEventListener("change", filterOrders);
   document.getElementById("orderDateFrom")?.addEventListener("change", filterOrders);
@@ -405,17 +299,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("clearOrderFilters")?.addEventListener("click", clearOrderFilters);
 });
 
-window.addEventListener("fb-ready", () => {
-  console.log("FB READY");
-  checkAuth();
-});
-
+window.addEventListener("fb-ready", () => { console.log("FB READY"); checkAuth(); });
 window.addEventListener("fb-error", (event) => {
   console.error("Firebase ERROR:", event.detail);
   const errorBox = document.getElementById("loginErr");
   if(errorBox) errorBox.textContent = "⚠️ تعذر تشغيل Firebase. راجع Console.";
 });
-
 window.addEventListener("fb-auth-state", (event) => {
   const user = event.detail;
   console.log("AUTH STATE:", user ? user.email : "NOT LOGGED IN");
@@ -431,21 +320,17 @@ function checkAuth(){
 
 function showLogin(){
   loggedIn = false;
-  const loginScreen = document.getElementById("loginScreen");
-  const adminScreen = document.getElementById("adminScreen");
-  if(loginScreen) loginScreen.classList.remove("hidden");
-  if(adminScreen) adminScreen.classList.add("hidden");
+  document.getElementById("loginScreen").classList.remove("hidden");
+  document.getElementById("adminScreen").classList.add("hidden");
 }
 
 function showAdmin(){
   if(loggedIn) return;
   if(!window.FB || typeof window.FB.authUser !== "function") return;
   if(!window.FB.authUser()) return;
-  
   loggedIn = true;
   document.getElementById("loginScreen").classList.add("hidden");
   document.getElementById("adminScreen").classList.remove("hidden");
-  
   loadOrders();
   loadProducts();
   loadReviews();
@@ -460,23 +345,16 @@ document.addEventListener("click", async (event) => {
   const passInput = document.getElementById("loginPass");
   const loginBtn = document.getElementById("loginBtn");
   const loginErr = document.getElementById("loginErr");
-  
   const email = emailInput.value.trim();
   const pass = passInput.value;
-  
-  if(!email || !pass){
-    loginErr.textContent = "⚠️ اكتب الإيميل وكلمة المرور";
-    return;
-  }
+  if(!email || !pass){ loginErr.textContent = "⚠️ اكتب الإيميل وكلمة المرور"; return; }
   if(!window.FB || typeof window.FB.admin !== "function"){
     loginErr.textContent = "⚠️ Firebase لم يتم تحميله بعد. أعد تحميل الصفحة.";
     return;
   }
-  
   loginErr.textContent = "";
   loginBtn.disabled = true;
   loginBtn.textContent = "⏳ جاري الدخول...";
-  
   try{
     const result = await window.FB.admin(email, pass);
     console.log("LOGIN SUCCESS:", result.user.email);
@@ -519,58 +397,52 @@ document.addEventListener("click", async (event) => {
 });
 
 function initTabs(){
-  $$(".adm-tabs button").forEach(button => {
+  document.querySelectorAll(".adm-tabs button").forEach(button => {
     button.addEventListener("click", () => {
-      $$(".adm-tabs button").forEach(other => {
+      document.querySelectorAll(".adm-tabs button").forEach(other => {
         other.classList.remove("on");
         other.classList.add("ghost");
       });
       button.classList.add("on");
       button.classList.remove("ghost");
       const tab = button.dataset.tab;
-      $("#tab-orders").classList.toggle("hidden", tab !== "orders");
-      $("#tab-users").classList.toggle("hidden", tab !== "users");
-      $("#tab-products").classList.toggle("hidden", tab !== "products");
-      $("#tab-coupons").classList.toggle("hidden", tab !== "coupons");
-      $("#tab-reviews").classList.toggle("hidden", tab !== "reviews");
-      $("#tab-craftsmanship").classList.toggle("hidden", tab !== "craftsmanship");
+      document.getElementById("tab-orders").classList.toggle("hidden", tab !== "orders");
+      document.getElementById("tab-users").classList.toggle("hidden", tab !== "users");
+      document.getElementById("tab-products").classList.toggle("hidden", tab !== "products");
+      document.getElementById("tab-coupons").classList.toggle("hidden", tab !== "coupons");
+      document.getElementById("tab-reviews").classList.toggle("hidden", tab !== "reviews");
+      document.getElementById("tab-craftsmanship").classList.toggle("hidden", tab !== "craftsmanship");
     });
   });
 }
 
-// ═══ تعديل: دالة تحميل الطلبات مع حفظها في ALL_ORDERS ═══
 function loadOrders(){
   if(!window.FB || typeof window.FB.watch !== "function") return;
   window.FB.watch("orders", orders => {
     orders.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
     ALL_ORDERS = orders;
-    $("#stOrders").textContent = orders.length;
+    document.getElementById("stOrders").textContent = orders.length;
     const revenue = orders.filter(order => order.status !== 4).reduce((total, order) => total + Number(order.total || 0), 0);
-    $("#stRevenue").textContent = money(revenue);
-    filterOrders(); // ═══ تطبيق الفلاتر بعد التحميل
+    document.getElementById("stRevenue").textContent = money(revenue);
+    filterOrders();
   }, error => console.error("Orders error:", error));
 }
 
-// ═══ تعديل: دالة تصفية الطلبات ═══
 function filterOrders(){
   const search = (document.getElementById("orderSearch")?.value || "").trim().toLowerCase();
   const statusFilter = document.getElementById("orderStatusFilter")?.value || "";
   const dateFrom = document.getElementById("orderDateFrom")?.value;
   const dateTo = document.getElementById("orderDateTo")?.value;
-
   let filtered = ALL_ORDERS;
-
   if(search){
     filtered = filtered.filter(order => {
       const haystack = (order.id || "") + " " + (order.name || "") + " " + (order.phone || "");
       return haystack.toLowerCase().includes(search);
     });
   }
-
   if(statusFilter !== ""){
     filtered = filtered.filter(order => String(order.status) === statusFilter);
   }
-
   if(dateFrom){
     const from = new Date(dateFrom);
     from.setHours(0,0,0,0);
@@ -581,7 +453,6 @@ function filterOrders(){
       return d >= from;
     });
   }
-
   if(dateTo){
     const to = new Date(dateTo);
     to.setHours(23,59,59,999);
@@ -591,7 +462,6 @@ function filterOrders(){
       return d <= to;
     });
   }
-
   renderOrders(filtered);
 }
 
@@ -616,8 +486,7 @@ function renderOrders(orders){
         <td><select data-oid="${order._fid || order.id}">${statusOptions}</select></td>
       </tr>`;
   }).join("");
-
-  $$("#ordersBody select").forEach(select => {
+  document.querySelectorAll("#ordersBody select").forEach(select => {
     select.addEventListener("change", () => {
       window.FB.update("orders", select.dataset.oid, { status: Number(select.value) })
         .then(() => toast("✅ تم تحديث الحالة"))
@@ -626,7 +495,6 @@ function renderOrders(orders){
   });
 }
 
-// ═══ تعديل: مسح الفلاتر ═══
 function clearOrderFilters(){
   document.getElementById("orderSearch").value = "";
   document.getElementById("orderStatusFilter").value = "";
@@ -639,7 +507,7 @@ function loadUsers(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("users").then(users => {
     ALL_USERS = users || [];
-    $("#stUsers").textContent = ALL_USERS.length;
+    document.getElementById("stUsers").textContent = ALL_USERS.length;
     renderUsers(ALL_USERS);
   }).catch(err => { console.error("Users error:", err); toast("⚠️ تعذر تحميل العملاء"); });
 }
@@ -710,7 +578,7 @@ document.addEventListener("click", (e) => {
   toast("✅ تم تصدير العملاء بنجاح (" + ALL_USERS.length + " عميل)");
 });
 
-let PRODUCTS_ADMIN_CACHE = [];
+// ═══════ PRODUCTS FUNCTIONS ═══════
 
 function renderAdminProducts(){
   const search = String(document.getElementById("productSearch")?.value || "").trim().toLowerCase();
@@ -742,15 +610,16 @@ function renderAdminProducts(){
   }
   
   body.innerHTML = list.map(product => {
-    const imgsCount = (Array.isArray(product.imgs) && product.imgs.length) ? product.imgs.length : (Array.isArray(product.images) && product.images.length ? product.images.length : 1);
+    const stockDisplay = (product.stock === null || product.stock === undefined || product.stock === "") ? "∞" : product.stock;
     const pinIcon = product.pinned ? ' 📌' : '';
+    const imgSrc = (typeof imgOf === "function") ? imgOf(product) : (product.img || "");
     return `
     <tr>
-      <td><img class="adm-thumb" src="${imgOf(product)}" alt="" loading="lazy"></td>
+      <td><img class="adm-thumb" src="${imgSrc}" alt="" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22><rect fill=%22%23f5efe5%22 width=%22400%22 height=%22400%22/><text x=%22200%22 y=%22200%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22serif%22 font-size=%2224%22 fill=%22%23d9ab5f%22>✦</text></svg>'"></td>
       <td><b>${product.name || ""}${pinIcon}</b><br><small style="color:var(--dim);font-size:.7rem">ID: ${product.id}</small></td>
       <td>${CATS.ar[product.cat] || product.cat || ""}</td>
       <td>${money(product.price || 0)}</td>
-      <td>${(product.stock===null||product.stock===undefined||product.stock==="")?"∞":product.stock}</td>
+      <td>${stockDisplay}</td>
       <td>${product.video ? '🎥 نعم' : '-'}</td>
       <td>${product.active === false ? "❌ مخفي" : "✅ ظاهر"}</td>
       <td style="display:flex;gap:.3rem;flex-wrap:wrap">
@@ -762,7 +631,6 @@ function renderAdminProducts(){
       </td>
     </tr>`;
   }).join("");
-  
   bindProductActions(PRODUCTS_ADMIN_CACHE);
 }
 
@@ -778,7 +646,16 @@ function loadProducts(){
       const slug = data.id_ || data.slug || data.pid || data.id;
       if(!slug) return;
       if(data.active === false){ map.delete(slug); return; }
-      map.set(slug, { ...(map.get(slug) || {}), ...data, id:slug, _fid:data.id || null, active:data.active !== false });
+      const local = map.get(slug) || {};
+      map.set(slug, {
+        ...local,
+        ...data,
+        id: slug,
+        _fid: data.id || null,
+        active: data.active !== false,
+        // ═══ الحفاظ على قيمة المخزون إذا لم ترد من Firebase ═══
+        stock: data.stock !== undefined ? data.stock : (local.stock ?? null)
+      });
     });
     PRODUCTS_ADMIN_CACHE = [...map.values()];
     renderAdminProducts();
@@ -786,14 +663,13 @@ function loadProducts(){
 }
 
 function bindProductActions(list){
-  $$("#productsBody [data-edit]").forEach(button => {
+  document.querySelectorAll("#productsBody [data-edit]").forEach(button => {
     button.addEventListener("click", () => {
       const product = list.find(item => item.id === button.dataset.edit);
       if(product) openProductForm(product);
     });
   });
-  
-  $$("#productsBody [data-toggle]").forEach(button => {
+  document.querySelectorAll("#productsBody [data-toggle]").forEach(button => {
     button.addEventListener("click", () => {
       const fid = button.dataset.fid;
       const id = button.dataset.toggle;
@@ -805,8 +681,7 @@ function bindProductActions(list){
       }).catch(error => { console.error(error); toast("⚠️ فشل تحديث المنتج"); });
     });
   });
-  
-  $$("#productsBody [data-del]").forEach(button => {
+  document.querySelectorAll("#productsBody [data-del]").forEach(button => {
     button.addEventListener("click", () => {
       if(!confirm("متأكد إنك عايز تحذف/تخفي المنتج ده؟")) return;
       const fid = button.dataset.fid;
@@ -828,15 +703,14 @@ function initProductForm(){
       el.addEventListener("change", renderAdminProducts);
     }
   });
-  
-  $("#addProductBtn")?.addEventListener("click", () => openProductForm(null));
-  $("#cancelProductBtn")?.addEventListener("click", () => $("#productForm").classList.add("hidden"));
+  document.getElementById("addProductBtn")?.addEventListener("click", () => openProductForm(null));
+  document.getElementById("cancelProductBtn")?.addEventListener("click", () => document.getElementById("productForm").classList.add("hidden"));
   
   const updatePreview = () => {
-    const mainImg = $("#pf_img").value.trim();
-    const extras = $("#pf_images").value.split(",").map(s=>s.trim()).filter(Boolean);
+    const mainImg = document.getElementById("pf_img").value.trim();
+    const extras = document.getElementById("pf_images").value.split(",").map(s=>s.trim()).filter(Boolean);
     const all = [mainImg, ...extras].filter(Boolean);
-    const preview = $("#galleryPreview");
+    const preview = document.getElementById("galleryPreview");
     if(!preview) return;
     if(!all.length){ preview.innerHTML = ""; return; }
     preview.innerHTML = all.map(u => {
@@ -844,42 +718,41 @@ function initProductForm(){
       return `<img src="${src}" alt="">`;
     }).join("");
   };
+  document.getElementById("pf_img")?.addEventListener("input", updatePreview);
+  document.getElementById("pf_images")?.addEventListener("input", updatePreview);
   
-  $("#pf_img")?.addEventListener("input", updatePreview);
-  $("#pf_images")?.addEventListener("input", updatePreview);
-  
-  $("#saveProductBtn")?.addEventListener("click", () => {
-    const name = $("#pf_name").value.trim();
-    const nameEn = $("#pf_nameEn").value.trim();
-    const price = Number($("#pf_price").value || 0);
+  document.getElementById("saveProductBtn")?.addEventListener("click", () => {
+    const name = document.getElementById("pf_name").value.trim();
+    const nameEn = document.getElementById("pf_nameEn").value.trim();
+    const price = Number(document.getElementById("pf_price").value || 0);
     
     if(!name || !nameEn || price <= 0){
       toast("⚠️ كمّل الحقول المطلوبة (*)");
       return;
     }
     
-    const existingId = $("#productForm").dataset.editId || "";
-    const scents = $("#pf_scents").value.split(",").map(scent => scent.trim()).filter(Boolean);
-    const stockVal = $("#pf_stock").value;
-    const mainImgVal = $("#pf_img").value.trim();
-    const extraImgs = $("#pf_images").value.split(",").map(s=>s.trim()).filter(Boolean);
+    const existingId = document.getElementById("productForm").dataset.editId || "";
+    const scents = document.getElementById("pf_scents").value.split(",").map(scent => scent.trim()).filter(Boolean);
+    const stockVal = document.getElementById("pf_stock").value;
+    const mainImgVal = document.getElementById("pf_img").value.trim();
+    const extraImgs = document.getElementById("pf_images").value.split(",").map(s=>s.trim()).filter(Boolean);
     const imagesArr = [mainImgVal, ...extraImgs].filter(Boolean);
     
     const data = {
       name, nameEn, price,
-      old: Number($("#pf_old").value || 0),
+      old: Number(document.getElementById("pf_old").value || 0),
       stock: stockVal === "" ? null : Number(stockVal || 0),
-      cat: $("#pf_cat").value,
+      cat: document.getElementById("pf_cat").value,
       img: mainImgVal || (imagesArr[0] || ""),
       imgs: imagesArr.length ? imagesArr : null,
-      video: $("#pf_video").value.trim() || null,
+      video: document.getElementById("pf_video").value.trim() || null,
       pinned: document.getElementById("pf_pinned").checked,
-      badge: $("#pf_badge").value.trim(),
-      badgeEn: $("#pf_badge").value.trim(),
-      hours: $("#pf_hours").value.trim(),
-      hoursEn: $("#pf_hours").value.trim(),
-      desc: $("#pf_desc").value.trim(),
-      descEn: $("#pf_descEn").value.trim(),
+      badge: document.getElementById("pf_badge").value.trim(),
+      badgeEn: document.getElementById("pf_badge").value.trim(),
+      hours: document.getElementById("pf_hours").value.trim(),
+      hoursEn: document.getElementById("pf_hours").value.trim(),
+      desc: document.getElementById("pf_desc").value.trim(),
+      descEn: document.getElementById("pf_descEn").value.trim(),
       scents,
       active: true
     };
@@ -889,7 +762,7 @@ function initProductForm(){
       
     saveFn.then(() => {
       toast("💾 تم حفظ المنتج");
-      $("#productForm").classList.add("hidden");
+      document.getElementById("productForm").classList.add("hidden");
       loadProducts();
     }).catch(error => {
       console.error("Product save error:", error);
@@ -899,40 +772,40 @@ function initProductForm(){
 }
 
 function openProductForm(product){
-  const form = $("#productForm");
+  const form = document.getElementById("productForm");
   form.classList.remove("hidden");
-  
   if(product){
     form.dataset.editId = product.id;
-    $("#formTitle").textContent = "تعديل: " + (product.name || "");
-    $("#pf_name").value = product.name || "";
-    $("#pf_nameEn").value = product.nameEn || "";
-    $("#pf_price").value = product.price || "";
-    $("#pf_old").value = product.old || "";
-    $("#pf_stock").value = (product.stock===null||product.stock===undefined)?"":product.stock;
-    $("#pf_cat").value = product.cat || "wood";
-    $("#pf_img").value = product.img || "";
-    $("#pf_video").value = product.video || "";
-    $("#pf_pinned").checked = product.pinned === true;
-    $("#pf_images").value = Array.isArray(product.imgs) ? product.imgs.filter(x => x !== product.img).join(", ") : (Array.isArray(product.images) ? product.images.filter(x => x !== product.img).join(", ") : "");
-    $("#pf_badge").value = product.badge || "";
-    $("#pf_hours").value = product.hours || "";
-    $("#pf_desc").value = product.desc || "";
-    $("#pf_descEn").value = product.descEn || "";
-    $("#pf_scents").value = (product.scents || []).join(", ");
-    $("#pf_img").dispatchEvent(new Event("input"));
+    document.getElementById("formTitle").textContent = "تعديل: " + (product.name || "");
+    document.getElementById("pf_name").value = product.name || "";
+    document.getElementById("pf_nameEn").value = product.nameEn || "";
+    document.getElementById("pf_price").value = product.price || "";
+    document.getElementById("pf_old").value = product.old || "";
+    document.getElementById("pf_stock").value = (product.stock===null||product.stock===undefined)?"":product.stock;
+    document.getElementById("pf_cat").value = product.cat || "wood";
+    document.getElementById("pf_img").value = product.img || "";
+    document.getElementById("pf_video").value = product.video || "";
+    document.getElementById("pf_pinned").checked = product.pinned === true;
+    document.getElementById("pf_images").value = Array.isArray(product.imgs) ? product.imgs.filter(x => x !== product.img).join(", ") : (Array.isArray(product.images) ? product.images.filter(x => x !== product.img).join(", ") : "");
+    document.getElementById("pf_badge").value = product.badge || "";
+    document.getElementById("pf_hours").value = product.hours || "";
+    document.getElementById("pf_desc").value = product.desc || "";
+    document.getElementById("pf_descEn").value = product.descEn || "";
+    document.getElementById("pf_scents").value = (product.scents || []).join(", ");
+    document.getElementById("pf_img").dispatchEvent(new Event("input"));
   }else{
     form.dataset.editId = "";
-    $("#formTitle").textContent = "منتج جديد";
-    ["pf_name", "pf_nameEn", "pf_price", "pf_old", "pf_stock", "pf_img", "pf_video", "pf_images", "pf_badge", "pf_hours", "pf_desc", "pf_descEn", "pf_scents"].forEach(id => { $("#" + id).value = ""; });
+    document.getElementById("formTitle").textContent = "منتج جديد";
+    ["pf_name", "pf_nameEn", "pf_price", "pf_old", "pf_stock", "pf_img", "pf_video", "pf_images", "pf_badge", "pf_hours", "pf_desc", "pf_descEn", "pf_scents"].forEach(id => { document.getElementById(id).value = ""; });
     document.getElementById("pf_pinned").checked = false;
-    const preview = $("#galleryPreview");
+    const preview = document.getElementById("galleryPreview");
     if(preview) preview.innerHTML = "";
-    $("#pf_cat").value = "wood";
+    document.getElementById("pf_cat").value = "wood";
   }
   form.scrollIntoView({ behavior:"smooth" });
 }
 
+// ================= COUPONS =================
 function loadCoupons(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("coupons").then(coupons => {
@@ -980,13 +853,13 @@ function renderCoupons(coupons){
 }
 
 function bindCouponActions(list){
-  $$("#couponsBody [data-editc]").forEach(btn => {
+  document.querySelectorAll("#couponsBody [data-editc]").forEach(btn => {
     btn.addEventListener("click", () => {
       const c = list.find(x => x.id === btn.dataset.editc);
       if(c) openCouponForm(c);
     });
   });
-  $$("#couponsBody [data-togglec]").forEach(btn => {
+  document.querySelectorAll("#couponsBody [data-togglec]").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.togglec;
       const c = list.find(x => x.id === id);
@@ -998,7 +871,7 @@ function bindCouponActions(list){
       }).catch(err => { console.error(err); toast("⚠️ فشل التحديث"); });
     });
   });
-  $$("#couponsBody [data-delc]").forEach(btn => {
+  document.querySelectorAll("#couponsBody [data-delc]").forEach(btn => {
     btn.addEventListener("click", () => {
       if(!confirm("متأكد إنك عايز تحذف الكوبون ده؟")) return;
       const id = btn.dataset.delc;
@@ -1011,49 +884,49 @@ function bindCouponActions(list){
 }
 
 function initCouponForm(){
-  $("#addCouponBtn")?.addEventListener("click", () => openCouponForm(null));
-  $("#cancelCouponBtn")?.addEventListener("click", () => $("#couponForm").classList.add("hidden"));
-  $("#saveCouponBtn")?.addEventListener("click", saveCoupon);
+  document.getElementById("addCouponBtn")?.addEventListener("click", () => openCouponForm(null));
+  document.getElementById("cancelCouponBtn")?.addEventListener("click", () => document.getElementById("couponForm").classList.add("hidden"));
+  document.getElementById("saveCouponBtn")?.addEventListener("click", saveCoupon);
 }
 
 function openCouponForm(coupon){
-  const form = $("#couponForm");
+  const form = document.getElementById("couponForm");
   form.classList.remove("hidden");
   if(coupon){
     form.dataset.editId = coupon.id;
-    $("#couponFormTitle").textContent = "تعديل كوبون: " + (coupon.code || "");
-    $("#cf_code").value = coupon.code || "";
-    $("#cf_type").value = coupon.type || "percent";
-    $("#cf_value").value = coupon.value || "";
-    $("#cf_maxUses").value = coupon.maxUses || "";
-    $("#cf_active").value = coupon.active !== false ? "true" : "false";
+    document.getElementById("couponFormTitle").textContent = "تعديل كوبون: " + (coupon.code || "");
+    document.getElementById("cf_code").value = coupon.code || "";
+    document.getElementById("cf_type").value = coupon.type || "percent";
+    document.getElementById("cf_value").value = coupon.value || "";
+    document.getElementById("cf_maxUses").value = coupon.maxUses || "";
+    document.getElementById("cf_active").value = coupon.active !== false ? "true" : "false";
     if(coupon.expiresAt){
       const date = new Date(Number(coupon.expiresAt));
-      $("#cf_expires").value = date.toISOString().slice(0,10);
+      document.getElementById("cf_expires").value = date.toISOString().slice(0,10);
     } else {
-      $("#cf_expires").value = "";
+      document.getElementById("cf_expires").value = "";
     }
   } else {
     form.dataset.editId = "";
-    $("#couponFormTitle").textContent = "كوبون جديد";
-    $("#cf_code").value = "";
-    $("#cf_type").value = "percent";
-    $("#cf_value").value = "";
-    $("#cf_maxUses").value = "";
-    $("#cf_expires").value = "";
-    $("#cf_active").value = "true";
+    document.getElementById("couponFormTitle").textContent = "كوبون جديد";
+    document.getElementById("cf_code").value = "";
+    document.getElementById("cf_type").value = "percent";
+    document.getElementById("cf_value").value = "";
+    document.getElementById("cf_maxUses").value = "";
+    document.getElementById("cf_expires").value = "";
+    document.getElementById("cf_active").value = "true";
   }
   form.scrollIntoView({ behavior: "smooth" });
 }
 
 function saveCoupon(){
-  const code = $("#cf_code").value.trim().toUpperCase();
-  const type = $("#cf_type").value;
-  const value = Number($("#cf_value").value || 0);
-  const maxUses = $("#cf_maxUses").value === "" ? null : Number($("#cf_maxUses").value || 0);
-  const expiresVal = $("#cf_expires").value;
-  const active = $("#cf_active").value === "true";
-  const editId = $("#couponForm").dataset.editId || "";
+  const code = document.getElementById("cf_code").value.trim().toUpperCase();
+  const type = document.getElementById("cf_type").value;
+  const value = Number(document.getElementById("cf_value").value || 0);
+  const maxUses = document.getElementById("cf_maxUses").value === "" ? null : Number(document.getElementById("cf_maxUses").value || 0);
+  const expiresVal = document.getElementById("cf_expires").value;
+  const active = document.getElementById("cf_active").value === "true";
+  const editId = document.getElementById("couponForm").dataset.editId || "";
   
   if(!code || !/^[A-Z0-9]{3,20}$/.test(code)){ toast("⚠️ كود الكوبون لازم 3-20 حرف/رقم إنجليزي"); return; }
   if(value <= 0){ toast("⚠️ قيمة الخصم لازم أكبر من صفر"); return; }
@@ -1072,16 +945,17 @@ function saveCoupon(){
     
   saveFn.then(() => {
     toast("💾 تم حفظ الكوبون");
-    $("#couponForm").classList.add("hidden");
+    document.getElementById("couponForm").classList.add("hidden");
     loadCoupons();
   }).catch(err => { console.error(err); toast("⚠️ فشل الحفظ — راجع Firestore Rules"); });
 }
 
+// ================= REVIEWS =================
 function loadReviews(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("reviews").then(reviews => {
-    $("#stReviews").textContent = reviews.length;
-    $("#reviewsBody").innerHTML = reviews.map(review => `
+    document.getElementById("stReviews").textContent = reviews.length;
+    document.getElementById("reviewsBody").innerHTML = reviews.map(review => `
       <tr>
         <td>${review.name || "-"}</td>
         <td>${review.productSlug || review.pid || "-"}</td>
@@ -1093,14 +967,14 @@ function loadReviews(){
         </td>
       </tr>`).join("");
       
-    $$("#reviewsBody [data-approve]").forEach(button => {
+    document.querySelectorAll("#reviewsBody [data-approve]").forEach(button => {
       button.addEventListener("click", () => {
         window.FB.update("reviews", button.dataset.approve, { approved:true }).then(() => {
           toast("✅ تمت الموافقة"); loadReviews();
         }).catch(error => { console.error(error); toast("⚠️ فشل تحديث المراجعة"); });
       });
     });
-    $$("#reviewsBody [data-delrev]").forEach(button => {
+    document.querySelectorAll("#reviewsBody [data-delrev]").forEach(button => {
       button.addEventListener("click", () => {
         if(!confirm("حذف المراجعة؟")) return;
         window.FB.remove("reviews", button.dataset.delrev).then(() => {
@@ -1111,7 +985,7 @@ function loadReviews(){
   }).catch(error => { console.error("Reviews error:", error); toast("⚠️ تعذر تحميل المراجعات"); });
 }
 
-/* ================= CRAFTSMANSHIP (Behind the Scenes) ================= */
+// ================= CRAFTSMANSHIP =================
 let CRAFT_ITEMS = [];
 
 function loadCraftItems(){
@@ -1152,13 +1026,13 @@ function renderCraftItems(){
 }
 
 function bindCraftActions(){
-  $$("#craftBody [data-editcraft]").forEach(btn => {
+  document.querySelectorAll("#craftBody [data-editcraft]").forEach(btn => {
     btn.addEventListener("click", () => {
       const item = CRAFT_ITEMS.find(x => x.id === btn.dataset.editcraft);
       if(item) openCraftForm(item);
     });
   });
-  $$("#craftBody [data-togglecraft]").forEach(btn => {
+  document.querySelectorAll("#craftBody [data-togglecraft]").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.togglecraft;
       const item = CRAFT_ITEMS.find(x => x.id === id);
@@ -1170,7 +1044,7 @@ function bindCraftActions(){
       }).catch(err => { console.error(err); toast("⚠️ فشل التحديث"); });
     });
   });
-  $$("#craftBody [data-delcraft]").forEach(btn => {
+  document.querySelectorAll("#craftBody [data-delcraft]").forEach(btn => {
     btn.addEventListener("click", () => {
       if(!confirm("متأكد إنك عايز تحذف هذا العنصر؟")) return;
       const id = btn.dataset.delcraft;
@@ -1183,66 +1057,62 @@ function bindCraftActions(){
 }
 
 function initCraftForm(){
-  $("#addCraftBtn")?.addEventListener("click", () => openCraftForm(null));
-  $("#cancelCraftBtn")?.addEventListener("click", () => $("#craftForm").classList.add("hidden"));
-  $("#saveCraftBtn")?.addEventListener("click", saveCraftItem);
+  document.getElementById("addCraftBtn")?.addEventListener("click", () => openCraftForm(null));
+  document.getElementById("cancelCraftBtn")?.addEventListener("click", () => document.getElementById("craftForm").classList.add("hidden"));
+  document.getElementById("saveCraftBtn")?.addEventListener("click", saveCraftItem);
 }
 
 function openCraftForm(item){
-  const form = $("#craftForm");
+  const form = document.getElementById("craftForm");
   form.classList.remove("hidden");
   if(item){
     form.dataset.editId = item.id;
-    $("#craftFormTitle").textContent = "تعديل: " + (item.title || "");
-    $("#cf_title").value = item.title || "";
-    $("#cf_titleEn").value = item.titleEn || "";
-    $("#cf_desc").value = item.description || "";
-    $("#cf_descEn").value = item.descriptionEn || "";
-    $("#cf_type").value = item.mediaType || "video";
-    $("#cf_media").value = item.mediaUrl || "";
-    $("#cf_thumb").value = item.thumbnail || "";
-    $("#cf_order").value = item.order || 1;
+    document.getElementById("craftFormTitle").textContent = "تعديل: " + (item.title || "");
+    document.getElementById("cf_title").value = item.title || "";
+    document.getElementById("cf_titleEn").value = item.titleEn || "";
+    document.getElementById("cf_desc").value = item.description || "";
+    document.getElementById("cf_descEn").value = item.descriptionEn || "";
+    document.getElementById("cf_type").value = item.mediaType || "video";
+    document.getElementById("cf_media").value = item.mediaUrl || "";
+    document.getElementById("cf_thumb").value = item.thumbnail || "";
+    document.getElementById("cf_order").value = item.order || 1;
   } else {
     form.dataset.editId = "";
-    $("#craftFormTitle").textContent = "عنصر جديد";
-    $("#cf_title").value = "";
-    $("#cf_titleEn").value = "";
-    $("#cf_desc").value = "";
-    $("#cf_descEn").value = "";
-    $("#cf_type").value = "video";
-    $("#cf_media").value = "";
-    $("#cf_thumb").value = "";
-    $("#cf_order").value = "1";
+    document.getElementById("craftFormTitle").textContent = "عنصر جديد";
+    document.getElementById("cf_title").value = "";
+    document.getElementById("cf_titleEn").value = "";
+    document.getElementById("cf_desc").value = "";
+    document.getElementById("cf_descEn").value = "";
+    document.getElementById("cf_type").value = "video";
+    document.getElementById("cf_media").value = "";
+    document.getElementById("cf_thumb").value = "";
+    document.getElementById("cf_order").value = "1";
   }
   form.scrollIntoView({ behavior: "smooth" });
 }
 
 function saveCraftItem(){
-  const title = $("#cf_title").value.trim();
-  const mediaUrl = $("#cf_media").value.trim();
-  const editId = $("#craftForm").dataset.editId || "";
-  
+  const title = document.getElementById("cf_title").value.trim();
+  const mediaUrl = document.getElementById("cf_media").value.trim();
+  const editId = document.getElementById("craftForm").dataset.editId || "";
   if(!title){ toast("⚠️ اكتب العنوان"); return; }
   if(!mediaUrl){ toast("⚠️ اكتب رابط الفيديو أو الصورة"); return; }
-  
   const data = {
     title,
-    titleEn: $("#cf_titleEn").value.trim(),
-    description: $("#cf_desc").value.trim(),
-    descriptionEn: $("#cf_descEn").value.trim(),
-    mediaType: $("#cf_type").value,
+    titleEn: document.getElementById("cf_titleEn").value.trim(),
+    description: document.getElementById("cf_desc").value.trim(),
+    descriptionEn: document.getElementById("cf_descEn").value.trim(),
+    mediaType: document.getElementById("cf_type").value,
     mediaUrl,
-    thumbnail: $("#cf_thumb").value.trim(),
-    order: Number($("#cf_order").value || 1),
+    thumbnail: document.getElementById("cf_thumb").value.trim(),
+    order: Number(document.getElementById("cf_order").value || 1),
     active: true
   };
-  
   const saveFn = editId ? window.FB.update("craftsmanship", editId, data) : 
     window.FB.set("craftsmanship", "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, createdAt: Date.now() });
-    
   saveFn.then(() => {
     toast("💾 تم حفظ العنصر");
-    $("#craftForm").classList.add("hidden");
+    document.getElementById("craftForm").classList.add("hidden");
     loadCraftItems();
   }).catch(err => { console.error(err); toast("⚠️ فشل الحفظ — راجع Firestore Rules"); });
 }
