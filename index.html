@@ -732,7 +732,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 </style>
 
 <!-- ═══════════════════════════════════════════════
-     FOOTER
+     FOOTER (مع نموذج الاشتراك)
      ═══════════════════════════════════════════════ -->
 <footer>
   <div class="wrap">
@@ -788,6 +788,23 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
         </div>
       </div>
     </div>
+
+    <!-- ═══ تعديل: نموذج الاشتراك (جمع البريد والتلفون) ═══ -->
+    <div style="margin-top:2.5rem; padding-top:2rem; border-top:1px solid rgba(217,171,95,.15);">
+      <div style="max-width:520px; margin:0 auto; text-align:center;">
+        <h4 style="color:var(--gold); font-family:var(--fd); margin-bottom:0.5rem;">💌 انضمي لعائلة VelaLight</h4>
+        <p style="color:var(--dim); font-size:0.85rem; margin-bottom:1rem;">احصلي على عروض حصرية وأولوية في معرفة المنتجات الجديدة</p>
+        <form id="subscribeForm" style="display:flex; flex-direction:column; gap:0.6rem; align-items:stretch;">
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+            <input id="subEmail" type="email" placeholder="📧 بريدك الإلكتروني" style="flex:1; min-width:160px; background:var(--panel); border:1px solid rgba(217,171,95,.2); border-radius:10px; padding:0.7rem 1rem; color:var(--ink);" required>
+            <input id="subPhone" type="tel" placeholder="📱 رقم الهاتف (اختياري)" style="flex:1; min-width:140px; background:var(--panel); border:1px solid rgba(217,171,95,.2); border-radius:10px; padding:0.7rem 1rem; color:var(--ink);">
+          </div>
+          <button type="submit" style="background:linear-gradient(135deg,var(--gold),#b8863f); color:#fff; border:none; border-radius:10px; padding:0.8rem 1.5rem; font-weight:700; font-size:0.95rem; cursor:pointer; transition:.3s; box-shadow:0 4px 15px rgba(217,171,95,.3);">اشتركي الآن 💛</button>
+          <div id="subMsg" style="display:none; color:var(--ok); font-size:0.85rem; margin-top:0.3rem;"></div>
+        </form>
+      </div>
+    </div>
+
     <div class="fbot">
       <span data-i18n="foot_rights">© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</span>
       <div><a href="privacy.html" data-i18n="foot_privacy">سياسة الخصوصية</a> <a href="terms.html" data-i18n="foot_terms">شروط الاستخدام</a></div>
