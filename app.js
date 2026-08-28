@@ -3326,18 +3326,25 @@ function renderProductPageContent(product) {
     }
   }
 
-  // 9. العطور
-  const scentSelect = document.getElementById("pdScentSelect");
-  if (scentSelect) {
+// 9. العطور
+const scentsContainer = document.getElementById("pdScents");
+if (scentsContainer) {
     let scents = product.scents || [];
     if (!scents.length) scents = VELA_SCENTS.map(s => s[0]);
-    scentSelect.innerHTML = `<option value="">${(LANG === "en") ? "Choose a scent..." : "اختار العطر..."}</option>` + 
-      scents.map(s => `<option value="${s}">${velaScentTr(s)}</option>`).join("");
-    scentSelect.addEventListener("change", function(e) {
-      window.selScent = e.target.value;
-    });
-  }
-
+    // إنشاء select داخل الحاوية
+    scentsContainer.innerHTML = `
+        <select id="pdScentSelect" style="width:100%; padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:1rem; cursor:pointer; outline:none;">
+            <option value="">${(LANG === "en") ? "Choose a scent..." : "اختار العطر..."}</option>
+            ${scents.map(s => `<option value="${s}">${velaScentTr(s)}</option>`).join('')}
+        </select>
+    `;
+    const scentSelect = document.getElementById("pdScentSelect");
+    if (scentSelect) {
+        scentSelect.addEventListener("change", function(e) {
+            window.selScent = e.target.value;
+        });
+    }
+}
   // 10. المواصفات
   const specCat = document.getElementById("specCat");
   if (specCat) specCat.textContent = cat(product.cat) || "—";
