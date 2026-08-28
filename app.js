@@ -3134,3 +3134,35 @@ window.updateReviewsCount = updateReviewsCount;
 window.getReviewsCount = getReviewsCount;
 
 })();
+
+// نموذج النشرة البريدية
+document.getElementById('newsletterForm')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const email = document.getElementById('newsletterEmail').value.trim();
+  if (!email) { toast('⚠️ اكتب بريدك الإلكتروني'); return; }
+  
+  // حفظ في Firebase أو إرسال إلى Web3Forms
+  const data = { email, subscribedAt: Date.now() };
+  
+  if (typeof DB !== 'undefined' && typeof DB.add === 'function') {
+    DB.add('subscribers', data).then(() => {
+      toast('✅ تم الاشتراك بنجاح! 🎉');
+      document.getElementById('newsletterEmail').value = '';
+    }).catch(() => toast('⚠️ حدث خطأ، حاولي مرة أخرى'));
+  } else {
+    // تجربة بديلة: إرسال إلى بريدك
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        access_key: 'a23e1d50-37ee-4aec-a465-aeeb819c02a1',
+        subject: '📧 اشتراك جديد في النشرة البريدية',
+        from_name: 'VelaLight Newsletter',
+        message: `بريد إلكتروني جديد: ${email}`
+      })
+    }).then(() => {
+      toast('✅ تم الاشتراك بنجاح! 🎉');
+      document.getElementById('newsletterEmail').value = '';
+    }).catch(() => toast('⚠️ حدث خطأ، حاولي مرة أخرى'));
+  }
+});
