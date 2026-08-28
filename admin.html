@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>لوحة التحكم | VelaLight</title>
+<!-- ═══ تعديل: تم إضافة meta لمنع الفهرسة (موجود) ═══ -->
 <meta name="robots" content="noindex,nofollow">
 
 <link rel="stylesheet" href="style.css">
@@ -13,6 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* === جميع التنسيقات الموجودة + تعديلات البحث والفلتر === */
 .login-wrap{
   min-height:100vh;
   display:flex;
@@ -92,9 +94,27 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 .gallery-preview{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
 .gallery-preview img{width:60px;height:60px;border-radius:10px;object-fit:cover;border:2px solid var(--line);background:var(--panel2)}
 .gallery-hint{font-size:.7rem;color:var(--dim);margin-top:.3rem;font-style:italic}
+/* ═══ تعديل: تنسيقات شريط البحث والفلتر للطلبات ═══ */
+.order-filters{
+  display:flex;
+  gap:.8rem;
+  flex-wrap:wrap;
+  margin-bottom:1rem;
+  align-items:center;
+}
+.order-filters input, .order-filters select{
+  padding:.5rem .8rem;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  font-size:.85rem;
+  min-width:180px;
+}
 @media(max-width:600px){
   table.adm{display:block;overflow-x:auto}
   .pform .g{grid-template-columns:1fr}
+  .order-filters{flex-direction:column;align-items:stretch}
+  .order-filters input, .order-filters select{min-width:auto}
 }
 </style>
 </head>
@@ -144,6 +164,22 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
     <!-- ================= ORDERS ================= -->
     <div id="tab-orders">
+      <!-- ═══ تعديل: إضافة شريط بحث وفلتر للطلبات ═══ -->
+      <div class="order-filters">
+        <input id="orderSearch" type="search" placeholder="🔎 ابحث برقم الطلب أو اسم العميل">
+        <select id="orderStatusFilter">
+          <option value="">كل الحالات</option>
+          <option value="0">قيد المراجعة</option>
+          <option value="1">قيد التجهيز</option>
+          <option value="2">تم التجهيز</option>
+          <option value="3">تم الشحن</option>
+          <option value="4">مكتمل</option>
+          <option value="5">ملغي</option>
+        </select>
+        <input id="orderDateFrom" type="date" placeholder="من تاريخ">
+        <input id="orderDateTo" type="date" placeholder="إلى تاريخ">
+        <button class="btn sm ghost" id="clearOrderFilters" type="button">✖️ مسح</button>
+      </div>
       <table class="adm">
         <thead>
           <tr>
@@ -187,6 +223,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
     <!-- ================= PRODUCTS ================= -->
     <div id="tab-products" class="hidden">
+      <!-- ... (نفس المحتوى السابق) ... -->
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addProductBtn" type="button">➕ إضافة منتج جديد</button>
         <div style="display:flex;gap:.5rem;flex:1;min-width:260px;max-width:760px;flex-wrap:wrap">
@@ -215,186 +252,80 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </p>
 
       <div class="pform hidden" id="productForm">
+        <!-- ... (نفس المحتوى) ... -->
         <h3 style="color:var(--gold2);margin-bottom:1rem" id="formTitle">منتج جديد</h3>
-
         <div class="g">
-          <div>
-            <label>اسم المنتج (عربي) *</label>
-            <input id="pf_name">
-          </div>
-          <div>
-            <label>الاسم الإنجليزي (للرابط/SEO) *</label>
-            <input id="pf_nameEn">
-          </div>
+          <div><label>اسم المنتج (عربي) *</label><input id="pf_name"></div>
+          <div><label>الاسم الإنجليزي (للرابط/SEO) *</label><input id="pf_nameEn"></div>
         </div>
-
         <div class="g">
-          <div>
-            <label>السعر (ج.م) *</label>
-            <input id="pf_price" type="number">
-          </div>
-          <div>
-            <label>السعر قبل الخصم</label>
-            <input id="pf_old" type="number">
-          </div>
+          <div><label>السعر (ج.م) *</label><input id="pf_price" type="number"></div>
+          <div><label>السعر قبل الخصم</label><input id="pf_old" type="number"></div>
         </div>
-
         <div class="g">
-          <div>
-            <label>المخزون (فارغ = غير محدود)</label>
-            <input id="pf_stock" type="number" min="0" placeholder="مثال: 10">
-          </div>
-          <div>
-            <label>التصنيف</label>
-            <select id="pf_cat">
-              <option value="wood">شموع خشبية</option>
-              <option value="glass">شموع زجاجية</option>
-              <option value="crystal">شموع كريستالية</option>
-              <option value="metal">شموع معدنية</option>
-              <option value="massage">شموع المساج</option>
-              <option value="gift">الهدايا</option>
-              <option value="bride">بوكس العروسة</option>
-            </select>
-          </div>
+          <div><label>المخزون (فارغ = غير محدود)</label><input id="pf_stock" type="number" min="0" placeholder="مثال: 10"></div>
+          <div><label>التصنيف</label><select id="pf_cat"><option value="wood">شموع خشبية</option><option value="glass">شموع زجاجية</option><option value="crystal">شموع كريستالية</option><option value="metal">شموع معدنية</option><option value="massage">شموع المساج</option><option value="gift">الهدايا</option><option value="bride">بوكس العروسة</option></select></div>
         </div>
-
         <div class="g">
-          <div>
-            <label>الصورة الرئيسية (اسم الملف أو رابط)</label>
-            <input id="pf_img" placeholder="مثال: RR.jpg">
-          </div>
-          <div>
-            <label>🎥 فيديو المنتج (اسم الملف.mp4)</label>
-            <input id="pf_video" placeholder="مثال: box.mp4">
-            <div class="gallery-hint">✨ إذا تم إدخال اسم فيديو، سيظهر ويشغل تلقائياً (Autoplay + Loop) بدلاً من الصورة الرئيسية.</div>
-          </div>
+          <div><label>الصورة الرئيسية (اسم الملف أو رابط)</label><input id="pf_img" placeholder="مثال: RR.jpg"></div>
+          <div><label>🎥 فيديو المنتج (اسم الملف.mp4)</label><input id="pf_video" placeholder="مثال: box.mp4"><div class="gallery-hint">✨ إذا تم إدخال اسم فيديو، سيظهر ويشغل تلقائياً (Autoplay + Loop) بدلاً من الصورة الرئيسية.</div></div>
         </div>
-
         <div class="g" style="grid-column:1/-1">
-          <div style="grid-column:1/-1">
-            <label>📸 صور إضافية للمعرض (افصل بفاصلة ,)</label>
-            <input id="pf_images" placeholder="مثال: img2.jpg, img3.jpg, img4.jpg">
-            <div class="gallery-hint">✨ ستظهر كصور قابلة للتبديل والتكبير في صفحة المنتج</div>
-            <div class="gallery-preview" id="galleryPreview"></div>
-          </div>
+          <div style="grid-column:1/-1"><label>📸 صور إضافية للمعرض (افصل بفاصلة ,)</label><input id="pf_images" placeholder="مثال: img2.jpg, img3.jpg, img4.jpg"><div class="gallery-hint">✨ ستظهر كصور قابلة للتبديل والتكبير في صفحة المنتج</div><div class="gallery-preview" id="galleryPreview"></div></div>
         </div>
-
         <div class="g">
-          <div>
-            <label>مدة الاشتعال</label>
-            <input id="pf_hours" placeholder="72 ساعة اشتعال">
-          </div>
-          <div>
-            <label>بادج عربي (اختياري)</label>
-            <input id="pf_badge" placeholder="خصم / الأكثر مبيعًا">
-          </div>
+          <div><label>مدة الاشتعال</label><input id="pf_hours" placeholder="72 ساعة اشتعال"></div>
+          <div><label>بادج عربي (اختياري)</label><input id="pf_badge" placeholder="خصم / الأكثر مبيعًا"></div>
         </div>
-
         <div class="g" style="align-items:center; margin-top: 0.5rem;">
           <div style="display:flex; align-items:center; gap:0.5rem;">
             <input type="checkbox" id="pf_pinned" style="width:20px; height:20px; cursor:pointer;">
             <label for="pf_pinned" style="margin:0; font-weight:700; color:var(--gold2); cursor:pointer;">📌 تثبيت هذا المنتج (سيظهر أولاً في الصفحة الرئيسية)</label>
           </div>
         </div>
-
-        <label>الوصف العربي</label>
-        <textarea id="pf_desc" rows="3"></textarea>
-
-        <label>الوصف الإنجليزي</label>
-        <textarea id="pf_descEn" rows="2"></textarea>
-
-        <label>العطور المتاحة (افصل بفاصلة)</label>
-        <input id="pf_scents" placeholder="عود, فانيليا, مسك أبيض">
-
+        <label>الوصف العربي</label><textarea id="pf_desc" rows="3"></textarea>
+        <label>الوصف الإنجليزي</label><textarea id="pf_descEn" rows="2"></textarea>
+        <label>العطور المتاحة (افصل بفاصلة)</label><input id="pf_scents" placeholder="عود, فانيليا, مسك أبيض">
         <div style="display:flex;gap:.6rem;margin-top:1rem">
           <button class="btn sm" id="saveProductBtn" type="button">💾 حفظ المنتج</button>
           <button class="btn ghost sm" id="cancelProductBtn" type="button">إلغاء</button>
         </div>
       </div>
 
-      <!-- جدول المنتجات -->
       <table class="adm">
-        <thead>
-          <tr>
-            <th></th>
-            <th>المنتج</th>
-            <th>التصنيف</th>
-            <th>السعر</th>
-            <th>المخزون</th>
-            <th>الفيديو</th>
-            <th>ظهور</th>
-            <th>إجراءات</th>
-          </tr>
-        </thead>
+        <thead><tr><th></th><th>المنتج</th><th>التصنيف</th><th>السعر</th><th>المخزون</th><th>الفيديو</th><th>ظهور</th><th>إجراءات</th></tr></thead>
         <tbody id="productsBody"></tbody>
       </table>
     </div>
 
     <!-- ================= COUPONS ================= -->
     <div id="tab-coupons" class="hidden">
+      <!-- ... (نفس المحتوى) ... -->
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addCouponBtn" type="button">➕ إضافة كوبون جديد</button>
       </div>
-      <p style="color:var(--dim);font-size:.78rem;margin:-.35rem 0 1rem">
-        أنشئ كوبونات خصم لعملائك — نسبتك المئوية أو مبلغ ثابت. الكوبون يظهر للعميل في السلة.
-      </p>
-
+      <p style="color:var(--dim);font-size:.78rem;margin:-.35rem 0 1rem">أنشئ كوبونات خصم لعملائك — نسبتك المئوية أو مبلغ ثابت. الكوبون يظهر للعميل في السلة.</p>
       <div class="pform hidden" id="couponForm">
         <h3 style="color:var(--gold2);margin-bottom:1rem" id="couponFormTitle">كوبون جديد</h3>
         <div class="g">
-          <div>
-            <label>كود الكوبون * (حروف إنجليزي)</label>
-            <input id="cf_code" placeholder="WELCOME10" style="text-transform:uppercase">
-          </div>
-          <div>
-            <label>نوع الخصم *</label>
-            <select id="cf_type">
-              <option value="percent">نسبة مئوية (%)</option>
-              <option value="fixed">مبلغ ثابت (ج.م)</option>
-            </select>
-          </div>
+          <div><label>كود الكوبون * (حروف إنجليزي)</label><input id="cf_code" placeholder="WELCOME10" style="text-transform:uppercase"></div>
+          <div><label>نوع الخصم *</label><select id="cf_type"><option value="percent">نسبة مئوية (%)</option><option value="fixed">مبلغ ثابت (ج.م)</option></select></div>
         </div>
         <div class="g">
-          <div>
-            <label>قيمة الخصم *</label>
-            <input id="cf_value" type="number" min="0" placeholder="مثال: 10 أو 50">
-          </div>
-          <div>
-            <label>أقصى عدد استخدامات (فارغ = غير محدود)</label>
-            <input id="cf_maxUses" type="number" min="0" placeholder="مثال: 100">
-          </div>
+          <div><label>قيمة الخصم *</label><input id="cf_value" type="number" min="0" placeholder="مثال: 10 أو 50"></div>
+          <div><label>أقصى عدد استخدامات (فارغ = غير محدود)</label><input id="cf_maxUses" type="number" min="0" placeholder="مثال: 100"></div>
         </div>
         <div class="g">
-          <div>
-            <label>تاريخ الانتهاء (اختياري)</label>
-            <input id="cf_expires" type="date">
-          </div>
-          <div>
-            <label>الحالة</label>
-            <select id="cf_active">
-              <option value="true">✅ مفعل</option>
-              <option value="false">❌ متوقف</option>
-            </select>
-          </div>
+          <div><label>تاريخ الانتهاء (اختياري)</label><input id="cf_expires" type="date"></div>
+          <div><label>الحالة</label><select id="cf_active"><option value="true">✅ مفعل</option><option value="false">❌ متوقف</option></select></div>
         </div>
         <div style="display:flex;gap:.6rem;margin-top:1rem">
           <button class="btn sm" id="saveCouponBtn" type="button">💾 حفظ الكوبون</button>
           <button class="btn ghost sm" id="cancelCouponBtn" type="button">إلغاء</button>
         </div>
       </div>
-
       <table class="adm">
-        <thead>
-          <tr>
-            <th>الكود</th>
-            <th>النوع</th>
-            <th>القيمة</th>
-            <th>الاستخدام</th>
-            <th>الانتهاء</th>
-            <th>الحالة</th>
-            <th>إجراءات</th>
-          </tr>
-        </thead>
+        <thead><tr><th>الكود</th><th>النوع</th><th>القيمة</th><th>الاستخدام</th><th>الانتهاء</th><th>الحالة</th><th>إجراءات</th></tr></thead>
         <tbody id="couponsBody"></tbody>
       </table>
     </div>
@@ -402,91 +333,42 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
     <!-- ================= REVIEWS ================= -->
     <div id="tab-reviews" class="hidden">
       <table class="adm">
-        <thead>
-          <tr>
-            <th>الاسم</th>
-            <th>المنتج</th>
-            <th>التقييم</th>
-            <th>المراجعة</th>
-            <th>إجراءات</th>
-          </tr>
-        </thead>
+        <thead><tr><th>الاسم</th><th>المنتج</th><th>التقييم</th><th>المراجعة</th><th>إجراءات</th></tr></thead>
         <tbody id="reviewsBody"></tbody>
       </table>
     </div>
 
-    <!-- ================= CRAFTSMANSHIP (Behind the Scenes) ================= -->
+    <!-- ================= CRAFTSMANSHIP ================= -->
     <div id="tab-craftsmanship" class="hidden">
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addCraftBtn" type="button">➕ إضافة فيديو/صورة جديدة</button>
       </div>
-      <p style="color:var(--dim);font-size:.78rem;margin:-.35rem 0 1rem">
-        إدارة محتوى قسم "Behind the Scenes" الذي يظهر في الصفحة الرئيسية. يمكنك إضافة فيديوهات أو صور تعرض عملية التصنيع.
-      </p>
-
+      <p style="color:var(--dim);font-size:.78rem;margin:-.35rem 0 1rem">إدارة محتوى قسم "Behind the Scenes" الذي يظهر في الصفحة الرئيسية. يمكنك إضافة فيديوهات أو صور تعرض عملية التصنيع.</p>
       <div class="pform hidden" id="craftForm">
         <h3 style="color:var(--gold2);margin-bottom:1rem" id="craftFormTitle">عنصر جديد</h3>
         <div class="g">
-          <div>
-            <label>العنوان (عربي) *</label>
-            <input id="cf_title" placeholder="مثال: نخلط الزيوت بعناية">
-          </div>
-          <div>
-            <label>العنوان (إنجليزي)</label>
-            <input id="cf_titleEn" placeholder="مثال: Mixing oils with care">
-          </div>
+          <div><label>العنوان (عربي) *</label><input id="cf_title" placeholder="مثال: نخلط الزيوت بعناية"></div>
+          <div><label>العنوان (إنجليزي)</label><input id="cf_titleEn" placeholder="مثال: Mixing oils with care"></div>
         </div>
         <div class="g">
-          <div>
-            <label>الوصف (عربي)</label>
-            <input id="cf_desc" placeholder="وصف مختصر">
-          </div>
-          <div>
-            <label>الوصف (إنجليزي)</label>
-            <input id="cf_descEn" placeholder="Short description">
-          </div>
+          <div><label>الوصف (عربي)</label><input id="cf_desc" placeholder="وصف مختصر"></div>
+          <div><label>الوصف (إنجليزي)</label><input id="cf_descEn" placeholder="Short description"></div>
         </div>
         <div class="g">
-          <div>
-            <label>نوع الوسائط *</label>
-            <select id="cf_type">
-              <option value="video">🎥 فيديو</option>
-              <option value="image">🖼️ صورة</option>
-            </select>
-          </div>
-          <div>
-            <label>رابط الوسائط *</label>
-            <input id="cf_media" placeholder="رابط الفيديو أو الصورة">
-            <div class="gallery-hint">✨ يمكنك رفع الفيديو في مجلد الموقع واستخدام اسم الملف (مثال: crafting.mp4).</div>
-          </div>
+          <div><label>نوع الوسائط *</label><select id="cf_type"><option value="video">🎥 فيديو</option><option value="image">🖼️ صورة</option></select></div>
+          <div><label>رابط الوسائط *</label><input id="cf_media" placeholder="رابط الفيديو أو الصورة"><div class="gallery-hint">✨ يمكنك رفع الفيديو في مجلد الموقع واستخدام اسم الملف (مثال: crafting.mp4).</div></div>
         </div>
         <div class="g">
-          <div>
-            <label>رابط الصورة المصغرة (اختياري)</label>
-            <input id="cf_thumb" placeholder="رابط صورة مصغرة">
-          </div>
-          <div>
-            <label>ترتيب العرض</label>
-            <input id="cf_order" type="number" value="1" min="1">
-          </div>
+          <div><label>رابط الصورة المصغرة (اختياري)</label><input id="cf_thumb" placeholder="رابط صورة مصغرة"></div>
+          <div><label>ترتيب العرض</label><input id="cf_order" type="number" value="1" min="1"></div>
         </div>
         <div style="display:flex;gap:.6rem;margin-top:1rem">
           <button class="btn sm" id="saveCraftBtn" type="button">💾 حفظ</button>
           <button class="btn ghost sm" id="cancelCraftBtn" type="button">إلغاء</button>
         </div>
       </div>
-
       <table class="adm">
-        <thead>
-          <tr>
-            <th>النوع</th>
-            <th>العنوان</th>
-            <th>الرابط</th>
-            <th>الترتيب</th>
-            <th>الحالة</th>
-            <th>إجراءات</th>
-          </tr>
-        </thead>
+        <thead><tr><th>النوع</th><th>العنوان</th><th>الرابط</th><th>الترتيب</th><th>الحالة</th><th>إجراءات</th></tr></thead>
         <tbody id="craftBody"></tbody>
       </table>
     </div>
@@ -508,12 +390,19 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 let loggedIn = false;
 let ALL_USERS = [];
 let ALL_COUPONS = [];
+let ALL_ORDERS = []; // ═══ تعديل: لتخزين الطلبات للتصفية
 
 document.addEventListener("DOMContentLoaded", () => {
   initTabs();
   initProductForm();
   initCouponForm();
   initCraftForm();
+  // ═══ تعديل: ربط أحداث البحث والفلتر
+  document.getElementById("orderSearch")?.addEventListener("input", filterOrders);
+  document.getElementById("orderStatusFilter")?.addEventListener("change", filterOrders);
+  document.getElementById("orderDateFrom")?.addEventListener("change", filterOrders);
+  document.getElementById("orderDateTo")?.addEventListener("change", filterOrders);
+  document.getElementById("clearOrderFilters")?.addEventListener("click", clearOrderFilters);
 });
 
 window.addEventListener("fb-ready", () => {
@@ -649,36 +538,101 @@ function initTabs(){
   });
 }
 
+// ═══ تعديل: دالة تحميل الطلبات مع حفظها في ALL_ORDERS ═══
 function loadOrders(){
   if(!window.FB || typeof window.FB.watch !== "function") return;
   window.FB.watch("orders", orders => {
     orders.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+    ALL_ORDERS = orders;
     $("#stOrders").textContent = orders.length;
     const revenue = orders.filter(order => order.status !== 4).reduce((total, order) => total + Number(order.total || 0), 0);
     $("#stRevenue").textContent = money(revenue);
-    
-    $("#ordersBody").innerHTML = orders.map(order => {
-      const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString("ar-EG") : "-";
-      const statusOptions = STATUS.map((status,index) => `<option value="${index}"${order.status === index ? " selected" : ""}>${status}</option>`).join("");
-      return `
-        <tr>
-          <td style="direction:ltr;font-size:.78rem">${order.id || "-"}</td>
-          <td>${date}</td>
-          <td>${order.name || "-"}</td>
-          <td style="direction:ltr">${order.phone || "-"}</td>
-          <td>${money(order.total || 0)}</td>
-          <td><select data-oid="${order._fid || order.id}">${statusOptions}</select></td>
-        </tr>`;
-    }).join("");
-    
-    $$("#ordersBody select").forEach(select => {
-      select.addEventListener("change", () => {
-        window.FB.update("orders", select.dataset.oid, { status: Number(select.value) })
-          .then(() => toast("✅ تم تحديث الحالة"))
-          .catch(error => { console.error(error); toast("⚠️ فشل تحديث الحالة"); });
-      });
-    });
+    filterOrders(); // ═══ تطبيق الفلاتر بعد التحميل
   }, error => console.error("Orders error:", error));
+}
+
+// ═══ تعديل: دالة تصفية الطلبات ═══
+function filterOrders(){
+  const search = (document.getElementById("orderSearch")?.value || "").trim().toLowerCase();
+  const statusFilter = document.getElementById("orderStatusFilter")?.value || "";
+  const dateFrom = document.getElementById("orderDateFrom")?.value;
+  const dateTo = document.getElementById("orderDateTo")?.value;
+
+  let filtered = ALL_ORDERS;
+
+  if(search){
+    filtered = filtered.filter(order => {
+      const haystack = (order.id || "") + " " + (order.name || "") + " " + (order.phone || "");
+      return haystack.toLowerCase().includes(search);
+    });
+  }
+
+  if(statusFilter !== ""){
+    filtered = filtered.filter(order => String(order.status) === statusFilter);
+  }
+
+  if(dateFrom){
+    const from = new Date(dateFrom);
+    from.setHours(0,0,0,0);
+    filtered = filtered.filter(order => {
+      if(!order.createdAt) return true;
+      const d = new Date(order.createdAt);
+      d.setHours(0,0,0,0);
+      return d >= from;
+    });
+  }
+
+  if(dateTo){
+    const to = new Date(dateTo);
+    to.setHours(23,59,59,999);
+    filtered = filtered.filter(order => {
+      if(!order.createdAt) return true;
+      const d = new Date(order.createdAt);
+      return d <= to;
+    });
+  }
+
+  renderOrders(filtered);
+}
+
+function renderOrders(orders){
+  const body = document.getElementById("ordersBody");
+  if(!body) return;
+  if(!orders.length){
+    body.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد طلبات تطابق الفلتر</td></tr>`;
+    return;
+  }
+  const STATUS = ["قيد المراجعة", "قيد التجهيز", "تم التجهيز", "تم الشحن", "مكتمل", "ملغي"];
+  body.innerHTML = orders.map(order => {
+    const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString("ar-EG") : "-";
+    const statusOptions = STATUS.map((status,index) => `<option value="${index}"${order.status === index ? " selected" : ""}>${status}</option>`).join("");
+    return `
+      <tr>
+        <td style="direction:ltr;font-size:.78rem">${order.id || "-"}</td>
+        <td>${date}</td>
+        <td>${order.name || "-"}</td>
+        <td style="direction:ltr">${order.phone || "-"}</td>
+        <td>${money(order.total || 0)}</td>
+        <td><select data-oid="${order._fid || order.id}">${statusOptions}</select></td>
+      </tr>`;
+  }).join("");
+
+  $$("#ordersBody select").forEach(select => {
+    select.addEventListener("change", () => {
+      window.FB.update("orders", select.dataset.oid, { status: Number(select.value) })
+        .then(() => toast("✅ تم تحديث الحالة"))
+        .catch(error => { console.error(error); toast("⚠️ فشل تحديث الحالة"); });
+    });
+  });
+}
+
+// ═══ تعديل: مسح الفلاتر ═══
+function clearOrderFilters(){
+  document.getElementById("orderSearch").value = "";
+  document.getElementById("orderStatusFilter").value = "";
+  document.getElementById("orderDateFrom").value = "";
+  document.getElementById("orderDateTo").value = "";
+  filterOrders();
 }
 
 function loadUsers(){
