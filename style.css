@@ -869,7 +869,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .pd-thumbs img{width:58px;height:58px;border-radius:10px}
 }
 
-/* ═══ SMALL MOBILE (max-width: 480px) ═══ */
+/* ═══ SMALL MOBILE (max-width: 480px) — تم إصلاح حجم الصور ═══ */
 @media(max-width:480px){
  .wrap{width:94%}
  .sec{padding:3rem 0}
@@ -886,7 +886,7 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
  .pgrid{grid-template-columns:repeat(2,1fr);gap:.7rem}
  .p-card{border-radius:12px}
  .p-media{border-radius:12px 12px 0 0}
- .p-media img{max-height:220px}
+ .p-media img{max-height:360px !important;object-fit:cover !important;width:100% !important}
  .p-quick{font-size:.65rem;padding:.4rem .25rem}
  .p-body{padding:.6rem .65rem .75rem}
  .p-cat{font-size:.58rem}
