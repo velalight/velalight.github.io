@@ -3003,9 +3003,10 @@ function stockBadge(p){
   if(isNaN(s))return"";
   if(s===0)return`<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>`;
   if(s<=5)return`<span class="p-badge" style="background:#e67e22">باقي ${s} فقط</span>`;
-  return"";
+  // عرض المخزون حتى لو أكبر من 5
+  return`<span class="p-badge" style="background:#2ecc71; color:#fff;">${s} متاحة</span>`;
 }
-
+  
 async function decrementStock(items){
   if(!window.FB || !window.FB.db) return;
   
