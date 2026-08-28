@@ -1,5 +1,14 @@
 (function(){
 "use strict";
+  function stockBadge(p) {
+    if (!p) return "";
+    if (p.stock === undefined || p.stock === null || p.stock === "") return "";
+    var s = Number(p.stock);
+    if (isNaN(s)) return "";
+    if (s === 0) return '<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>';
+    if (s <= 5) return '<span class="p-badge" style="background:#e67e22">باقي ' + s + ' فقط</span>';
+    return "";
+}
 
 // ☢️ تنظيف ذاتي آمن: إلغاء تسجيل أي Service Worker قديم عالق ومسح الكاش التالف
 if ('serviceWorker' in navigator) {
