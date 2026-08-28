@@ -5,8 +5,8 @@
     if (p.stock === undefined || p.stock === null || p.stock === "") return "";
     var s = Number(p.stock);
     if (isNaN(s)) return "";
-    if (s === 0) return '<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>';
-    if (s <= 5) return '<span class="p-badge" style="background:#e67e22">باقي ' + s + ' فقط</span>';
+    if (s === 0) return '<span class="stock-badge" style="position:absolute;top:12px;left:12px;background:#e74c3c;color:#fff;font-size:.7rem;font-weight:800;padding:.3rem .75rem;border-radius:99px;z-index:3;pointer-events:none;">نفدت الكمية</span>';
+    if (s <= 5) return '<span class="stock-badge" style="position:absolute;top:12px;left:12px;background:#e67e22;color:#fff;font-size:.7rem;font-weight:800;padding:.3rem .75rem;border-radius:99px;z-index:3;pointer-events:none;">باقي ' + s + ' فقط</span>';
     return "";
 }
 
