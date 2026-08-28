@@ -1263,6 +1263,20 @@ document.addEventListener("DOMContentLoaded",()=>{
   }, 2500);
 });
 
+  // دالة احتياطية لتجربة تحميل المنتج من ALL_PRODUCTS لو فشل Firebase
+function loadFromAllProducts(pid) {
+  if (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) {
+    const found = ALL_PRODUCTS.find(p => String(p.id) === String(pid) || String(p.id_) === String(pid));
+    if (found && found.active !== false) {
+      P = { ...found };
+      render();
+      if (typeof toast === "function") toast("✅ تم تحميل المنتج من الذاكرة");
+      return true;
+    }
+  }
+  return false;
+}
+  
 /* ═══════ NAV ═══════ */
 function initNav(){
   $("#navToggle")?.addEventListener("click",()=>{ $("#mnav")?.classList.toggle("open"); $("#ovl")?.classList.toggle("open"); });
