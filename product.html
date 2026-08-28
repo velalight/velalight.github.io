@@ -1314,6 +1314,19 @@ function render(){
 
   const name=(typeof pname === "function") ? pname(P) : (P.name || "منتج");
   document.title=name+" | VelaLight";
+  // تحديث وصف الصفحة حسب المنتج
+let metaDesc = document.querySelector('meta[name="description"]');
+if (metaDesc) {
+  const productDesc = (typeof pdesc === "function") ? pdesc(P) : (P.desc || "");
+  metaDesc.content = productDesc.slice(0, 160) + " - شموع VelaLight الفاخرة";
+}
+
+// تحديث Open Graph
+let ogDesc = document.querySelector('meta[property="og:description"]');
+if (ogDesc) {
+  const productDesc = (typeof pdesc === "function") ? pdesc(P) : (P.desc || "");
+  ogDesc.content = productDesc.slice(0, 160);
+}
   let ogTitle=document.querySelector('meta[property="og:title"]');
   if(ogTitle) ogTitle.content=name;
   let ogDesc=document.querySelector('meta[property="og:description"]');
