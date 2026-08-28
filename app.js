@@ -2478,6 +2478,12 @@ async function checkout(){
   while (retries > 0 && !savedToFirebase) {
     try {
       await DB.add("orders", orderData);
+      // تقليل المخزون
+try {
+  await decrementStock(c);
+} catch(e) {
+  console.warn("⚠️ Stock decrement failed:", e);
+}
       savedToFirebase = true;
     } catch(e) {
       console.warn(`⚠️ Order save attempt failed (${retries} left):`, e);
