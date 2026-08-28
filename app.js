@@ -1303,9 +1303,13 @@ function renderProducts(){
       if (!imgSrc) imgSrc = placeholderSvg;
       
       const inWishlist = isInWishlist(p.id);
-      const stockNum = Number(p.stock);
+        const stockNum = Number(p.stock);
       const isOutOfStock = !isNaN(stockNum) && stockNum === 0;
-      const stockBadg = (typeof stockBadge === "function") ? stockBadge(p) : "";
+      // إذا كان stock === undefined أو null أو ""، اعتبره غير محدود (لا تظهر رسالة نفدت)
+      const isUnlimited = (p.stock === undefined || p.stock === null || p.stock === "");
+      // إذا كان stock === undefined أو null أو ""، اعتبره غير محدود (لا تظهر رسالة نفدت)
+  const isUnlimited = (p.stock === undefined || p.stock === null || p.stock === "");
+            const stockBadg = (typeof stockBadge === "function") ? stockBadge(p) : "";
       
       const article = document.createElement('article');
       article.className = 'p-card';
@@ -1765,10 +1769,14 @@ function openQuickAdd(p){
   quickAddScent="";
   quickAddQty=1;
 
-  const stockNum = Number(p.stock);
-  quickAddMaxStock = Number.isFinite(stockNum) && stockNum > 0
-    ? Math.floor(stockNum)
-    : 99;
+    const stockNum = Number(p.stock);
+  // إذا كان المخزون غير محدود، نضع حداً كبيراً (99)
+  if (p.stock === undefined || p.stock === null || p.stock === "") {
+    quickAddMaxStock = 99;
+  } else {
+    quickAddMaxStock = Number.isFinite(stockNum) && stockNum > 0 ? Math.floor(stockNum) : 0;
+  }
+  
 
   const title=document.getElementById("scentModalTitle");
   if(title){
@@ -2993,14 +3001,15 @@ function closeModal(id){
 
 function stockBadge(p){
   if(!p) return "";
-  if(p.stock===undefined||p.stock===null||p.stock==="")return"";
-  const s=Number(p.stock);
-  if(isNaN(s))return"";
-  if(s===0)return`<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>`;
-  if(s<=5)return`<span class="p-badge" style="background:#e67e22">باقي ${s} فقط</span>`;
-  return"";
+  // إذا كان stock غير محدد أو null أو فارغ، لا تظهر أي رسالة (يعني غير محدود)
+  if(p.stock === undefined || p.stock === null || p.stock === "") return "";
+  const s = Number(p.stock);
+  if(isNaN(s)) return "";
+  if(s === 0) return `<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>`;
+  if(s <= 5) return `<span class="p-badge" style="background:#e67e22">باقي ${s} فقط</span>`;
+  return "";
 }
-
+  
 async function decrementStock(items){
   if(!window.FB || !window.FB.db) return;
   
