@@ -313,14 +313,11 @@
     localStorage.setItem("vl_products_filter", JSON.stringify({ cat, sort }));
     
     // استدعاء دالة الرسم من app.js
-    if (typeof renderProductsPage === "function") {
-  renderProductsPage();
-} else if (typeof renderProducts === "function") {
-  // استخدام الدالة البديلة renderProducts اللي موجودة فعلاً في app.js
+    // استدعاء الدالة الأساسية لرسم المنتجات مع ربط أزرار الإضافة
+if (typeof renderProducts === "function") {
   renderProducts();
 } else {
-  console.warn("No render function found, reloading...");
-  location.reload();
+  console.warn("renderProducts function not found!");
 }
   }
 
