@@ -1193,6 +1193,14 @@ document.addEventListener("DOMContentLoaded",()=>{
   initLangWatcher();
 
   productPid=new URLSearchParams(location.search).get("p")||"";
+  // جيب المنتج من ALL_PRODUCTS فوراً
+if (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) {
+  const found = ALL_PRODUCTS.find(x => String(x.id) === String(productPid) || String(x.id_) === String(productPid));
+  if (found) {
+    P = { ...found };
+    render();
+  }
+}
   if(!productPid){showNotFound();return}
 
   const sync = async () => {
