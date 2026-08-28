@@ -428,204 +428,127 @@ brand_point3_desc:
       mq_support:
         "💬 دعم فني يومي لخدمتك",
 
-/* ═══ Products Page ═══ */
-products_title: "كل المنتجات",
-products_sub: "اكتشفي تشكيلتنا الكاملة من الشموع الفاخرة",
-filter_all: "الكل",
-filter_wood: "خشبية",
-filter_glass: "زجاجية",
-filter_crystal: "كريستالية",
-filter_metal: "معدنية",
-filter_massage: "مساج",
-filter_gift: "هدايا",
-filter_bride: "بوكس العروسة",
-sort_new: "الأحدث",
-sort_asc: "السعر: من الأقل",
-sort_desc: "السعر: من الأعلى",
-sort_rating: "التقييم",
-sort_best: "الأكثر مبيعاً",
-sort_disc: "أكبر خصم",
-no_products_filter: "لا توجد منتجات تطابق الفلتر المختار",
-view_details: "عرض التفاصيل",
-add_cart: "أضف للسلة",
-price_lbl: "السعر:",
-scent_lbl: "العطر:",
-cart_empty: "السلة فارغة",
-cart_empty_sub: "أضيفي منتجاتك المفضلة",
+      /* ═══ Products Page ═══ */
+      products_title: "كل المنتجات",
+      products_sub: "اكتشفي تشكيلتنا الكاملة من الشموع الفاخرة",
+      filter_all: "الكل",
+      filter_wood: "خشبية",
+      filter_glass: "زجاجية",
+      filter_crystal: "كريستالية",
+      filter_metal: "معدنية",
+      filter_massage: "مساج",
+      filter_gift: "هدايا",
+      filter_bride: "بوكس العروسة",
+      sort_new: "الأحدث",
+      sort_asc: "السعر: من الأقل",
+      sort_desc: "السعر: من الأعلى",
+      sort_rating: "التقييم",
+      sort_best: "الأكثر مبيعاً",
+      sort_disc: "أكبر خصم",
+      no_products_filter: "لا توجد منتجات تطابق الفلتر المختار",
+      view_details: "عرض التفاصيل",
+      add_cart: "أضف للسلة",
+      price_lbl: "السعر:",
+      scent_lbl: "العطر:",
+      cart_empty: "السلة فارغة",
+      cart_empty_sub: "أضيفي منتجاتك المفضلة",
 
-/* ═══ Reviews Page ═══ */
-reviews_page_title: "كل آراء عملائنا",
-reviews_page_sub: "شوفي تجارب العملاء الحقيقية مع منتجات VelaLight",
-reviews_verified: "عميلة موثّقة",
-reviews_customer: "عميلة سعيدة",
-reviews_share_your: "شاركينا رأيك ✨",
-reviews_share_sub: "جربتي منتج من VelaLight؟ اكتبيلنا تجربتك",
+      /* ═══ Reviews Page ═══ */
+      reviews_page_title: "كل آراء عملائنا",
+      reviews_page_sub: "شوفي تجارب العملاء الحقيقية مع منتجات VelaLight",
+      reviews_verified: "عميلة موثّقة",
+      reviews_customer: "عميلة سعيدة",
+      reviews_share_your: "شاركينا رأيك ✨",
+      reviews_share_sub: "جربتي منتج من VelaLight؟ اكتبيلنا تجربتك",
 
-/* ═══ Products Page ═══ */
-prod_word: "منتج",
-no_products: "لا توجد منتجات",
+      /* ═══ Products Page ═══ */
+      prod_word: "منتج",
+      no_products: "لا توجد منتجات",
 
-/* ═══ Craftsmanship (Behind the Scenes) ═══ */
-craft_kick: "Behind the Scenes",
-craft_title: "إيد مصرية.. تفاصيل ملهاش حدود",
-craft_desc: "شوفي ازاي بنصنع كل قطعة بحب ودقة عشان توصلك بالشكل اللي يليق بيكي",
-craft_loading: "⏳ جاري التحميل...",
-craft_fallback1_title: "نخلط الزيوت بعناية",
-craft_fallback1_desc: "نستخدم أفضل الزيوت الطبيعية لضمان رائحة تدوم طويلاً",
-craft_fallback2_title: "تغليف فاخر جاهز للإهداء",
-craft_fallback2_desc: "كل قطعة بتتغلف بإيدينا عشان تكون مميزة",
-craft_fallback3_title: "فحص دقيق لكل قطعة",
-craft_fallback3_desc: "نتأكد من الجودة قبل ما توصل لباب بيتك",
+      /* ═══ Craftsmanship (Behind the Scenes) ═══ */
+      craft_kick: "Behind the Scenes",
+      craft_title: "إيد مصرية.. تفاصيل ملهاش حدود",
+      craft_desc: "شوفي ازاي بنصنع كل قطعة بحب ودقة عشان توصلك بالشكل اللي يليق بيكي",
+      craft_loading: "⏳ جاري التحميل...",
+      craft_fallback1_title: "نخلط الزيوت بعناية",
+      craft_fallback1_desc: "نستخدم أفضل الزيوت الطبيعية لضمان رائحة تدوم طويلاً",
+      craft_fallback2_title: "تغليف فاخر جاهز للإهداء",
+      craft_fallback2_desc: "كل قطعة بتتغلف بإيدينا عشان تكون مميزة",
+      craft_fallback3_title: "فحص دقيق لكل قطعة",
+      craft_fallback3_desc: "نتأكد من الجودة قبل ما توصل لباب بيتك",
 
-/* ═══ Reviews Enhanced ═══ */
-rev_see_all: "📸 شوفي كل التجارب",
-rev_stats_label: "عميلة وثقت فينا",
-rev_stats_rating: "تقييم 5 نجوم",
-rev_loading: "⏳ جاري تحميل التجارب...",
+      /* ═══ Reviews Enhanced ═══ */
+      rev_see_all: "📸 شوفي كل التجارب",
+      rev_stats_label: "عميلة وثقت فينا",
+      rev_stats_rating: "تقييم 5 نجوم",
+      rev_loading: "⏳ جاري تحميل التجارب...",
 
-/* ═══ FAQ & Misc ═══ */
-faq_kick: "FAQ",
-faq_sub: "كل ما تحتاجين معرفته عن الطلب، الشحن، الشموع والعطور.",
-foot_designer_label: "صُمم وتطوير بعناية بواسطة",
-brand_kick: "The VelaLight Touch",
-scents_kick: "Signature Scents",
+      /* ═══ FAQ & Misc ═══ */
+      faq_kick: "FAQ",
+      faq_sub: "كل ما تحتاجين معرفته عن الطلب، الشحن، الشموع والعطور.",
+      foot_designer_label: "صُمم وتطوير بعناية بواسطة",
+      brand_kick: "The VelaLight Touch",
+      scents_kick: "Signature Scents",
+      prod_kick: "Our Collection",
+      prod_sub: "اكتشفي أحدث تشكيلتنا من الشموع الفاخرة",
+      prod_see_all: "🕯️ استعرضي كل المنتجات",
+      about_kick: "Our Story",
+      ed_kick: "A Moment of Luxury",
+      ed_h2: "لحظاتٌ تُحفر في الذاكرة",
+      ed_p: "كل شمعة من VelaLight ليست مجرد إضاءة… هي لحظة كاملة. لحظة هدوء، لحظة رومانسية، لحظة فرح. اصنعي ذكرياتك الخاصة مع عطورنا الفاخرة.",
+      ed_cta: "ابدئي رحلتك ✨",
 
-/* ═══ Home Products Collection ═══ */
-prod_kick: "مجموعتنا",
-prod_h2: "اختاري قطعتك المفضلة",
-prod_sub: "اكتشفي أحدث تشكيلتنا من الشموع الفاخرة",
-prod_see_all: "🕯️ استعرضي كل المنتجات",
-
-about_kick: "Our Story",
-ed_kick: "A Moment of Luxury",
-ed_h2: "لحظاتٌ تُحفر في الذاكرة",
-ed_p: "كل شمعة من VelaLight ليست مجرد إضاءة… هي لحظة كاملة. لحظة هدوء، لحظة رومانسية، لحظة فرح. اصنعي ذكرياتك الخاصة مع عطورنا الفاخرة.",
-ed_cta: "ابدئي رحلتك ✨",
-
-},
+    },
 
 
-/* ═══════════════════════════════════════
-   🇬🇧 ENGLISH
-   ═══════════════════════════════════════ */
-en: {
-  /* ═══ Reviews Page (reviews.html) ═══ */
-  reviews_back: "← Back to Home",
-  reviews_stats_trust: "Trust Renewed",
-  reviews_quote: "Not just a candle… it's a moment to live!",
-  reviews_quote_author: "— One of our customers",
-  reviews_cta_title: "Ready to join the VelaLight family? 🕯️",
-  reviews_cta_sub: "Choose your luxury candle and create your own moment",
-  reviews_cta_btn: "Shop Now 🛍️",
-  foot_wishlist: "❤️ Wishlist",
-  foot_orders: "📦 My Orders",
+    /* ═══════════════════════════════════════
+       🇬🇧 ENGLISH
+       ═══════════════════════════════════════ */
+    en: {
+/* ═══ Reviews Page (reviews.html) ═══ */
+reviews_back: "← Back to Home",
+reviews_stats_trust: "Trust Renewed",
+reviews_quote: "Not just a candle… it's a moment to live!",
+reviews_quote_author: "— One of our customers",
+reviews_cta_title: "Ready to join the VelaLight family? 🕯️",
+reviews_cta_sub: "Choose your luxury candle and create your own moment",
+reviews_cta_btn: "Shop Now 🛍️",
+foot_wishlist: "❤️ Wishlist",
+foot_orders: "📦 My Orders",
+      
+      /* Shipping & Payment */
+      ship_note:
+        "🚚 Shipping: paid cash to the courier on delivery.",
 
-  /* ═══ Shipping & Payment ═══ */
-  ship_note:
-    "🚚 Shipping: paid cash to the courier on delivery.",
+      pay_products_note:
+        "💳 Payment details (InstaPay / Wallet / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
 
-  pay_products_note:
-    "💳 Payment details (InstaPay / Wallet / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
+      pay_title:
+        "Payment via InstaPay",
 
-  pay_title:
-    "Payment via InstaPay",
+      paymethod_d:
+        "Product payment is made upfront upon order confirmation.",
 
-  paymethod_d:
-    "Product payment is made upfront upon order confirmation.",
 
-  /* ═══ Scent ═══ */
-  t_scentwarn:
-    "⚠️ Please choose a scent first.",
+      /* Scent */
+      t_scentwarn:
+        "⚠️ Please choose a scent first.",
 
-  quick_add_scent:
-    "🌸 Choose a scent",
+      quick_add_scent:
+        "🌸 Choose a scent",
 
-  quick_add_qty:
-    "Quantity",
+      quick_add_qty:
+        "Quantity",
 
-  quick_add_add:
-    "🛍️ Add to Cart",
+      quick_add_add:
+        "🛍️ Add to Cart",
 
-  quick_add_added:
-    "✓ Added to Cart",
+      quick_add_added:
+        "✓ Added to Cart",
 
-  scent_req:
-    "Required",
+      scent_req:
+        "Required",
 
-  /* ═══ Products Page ═══ */
-  products_title: "All Products",
-  products_sub: "Discover our full collection of luxury candles",
-  filter_all: "All",
-  filter_wood: "Wooden",
-  filter_glass: "Glass",
-  filter_crystal: "Crystal",
-  filter_metal: "Metal",
-  filter_massage: "Massage",
-  filter_gift: "Gifts",
-  filter_bride: "Bride Box",
-  sort_new: "Newest",
-  sort_asc: "Price: Low to High",
-  sort_desc: "Price: High to Low",
-  sort_rating: "Rating",
-  sort_best: "Best Sellers",
-  sort_disc: "Biggest Discount",
-  no_products_filter: "No products match your filter",
-  view_details: "View Details",
-  add_cart: "Add to Cart",
-  price_lbl: "Price:",
-  scent_lbl: "Scent:",
-  cart_empty: "Cart is empty",
-  cart_empty_sub: "Add your favorite products",
-
-  /* ═══ Reviews Page ═══ */
-  reviews_page_title: "All Customer Reviews",
-  reviews_page_sub: "See real experiences from VelaLight customers",
-  reviews_verified: "Verified Customer",
-  reviews_customer: "Happy Customer",
-  reviews_share_your: "Share Your Review ✨",
-  reviews_share_sub: "Tried a VelaLight product? Tell us about your experience",
-
-  /* ═══ Products Page ═══ */
-  prod_word: "products",
-  no_products: "No products found",
-
-  /* ═══ Craftsmanship (Behind the Scenes) ═══ */
-  craft_kick: "Behind the Scenes",
-  craft_title: "Egyptian Hands.. Details Beyond Limits",
-  craft_desc: "See how we craft every piece with love and precision to deliver it to you in the way that suits you.",
-  craft_loading: "⏳ Loading...",
-  craft_fallback1_title: "Mixing oils with care",
-  craft_fallback1_desc: "We use the finest natural oils to ensure a long-lasting scent",
-  craft_fallback2_title: "Luxury gift wrapping ready",
-  craft_fallback2_desc: "Every piece is wrapped by our hands to make it special",
-  craft_fallback3_title: "Quality inspection for every piece",
-  craft_fallback3_desc: "We ensure quality before it reaches your doorstep",
-
-  /* ═══ Reviews Enhanced ═══ */
-  rev_see_all: "📸 See All Experiences",
-  rev_stats_label: "Customers Trusted Us",
-  rev_stats_rating: "5-Star Rating",
-  rev_loading: "⏳ Loading experiences...",
-
-  /* ═══ FAQ & Misc ═══ */
-  faq_kick: "FAQ",
-  faq_sub: "Everything you need to know about ordering, shipping, candles and scents.",
-  foot_designer_label: "Designed & Developed with care by",
-  brand_kick: "The VelaLight Touch",
-  scents_kick: "Signature Scents",
-
-  /* ═══ Home Products Collection ═══ */
-  prod_kick: "Our Collection",
-  prod_h2: "Choose Your Favorite Piece",
-  prod_sub: "Discover our latest collection of luxury candles",
-  prod_see_all: "🕯️ Browse All Products",
-
-  about_kick: "Our Story",
-  ed_kick: "A Moment of Luxury",
-  ed_h2: "Moments Etched in Memory",
-  ed_p: "Every VelaLight candle is more than just a light… it's a complete moment. A moment of calm, a moment of romance, a moment of joy. Create your own memories with our luxury scents.",
-  ed_cta: "Start Your Journey ✨",
- 
 
       /* Handmade */
       handmade_note:
