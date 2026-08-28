@@ -1687,3 +1687,26 @@ function showNotFound(){ $("#pdLoading").classList.add("hidden"); $("#pdNotFound
 
 /* ═══ Breadcrumb ═══ */
 .crumb{display:
+
+       <script>
+function renderStock() {
+    var box = document.getElementById("pdStockInfo");
+    if (!box) return;
+    var stockValue = Number(P.stock);
+    var isUnlimited = (P.stock === undefined || P.stock === null || P.stock === "");
+
+    if (isUnlimited || isNaN(stockValue)) {
+        box.innerHTML = '<span class="stock-badge ok">✓ متوفر</span>';
+    } else if (stockValue === 0) {
+        box.innerHTML = '<span class="stock-badge out">✕ نفدت الكمية</span>';
+        var addBtn = document.getElementById("pdAddBtn");
+        if (addBtn) { addBtn.disabled = true; addBtn.textContent = "نفدت الكمية"; }
+        var buyBtn = document.getElementById("pdBuyBtn");
+        if (buyBtn) { buyBtn.disabled = true; }
+    } else if (stockValue <= 5) {
+        box.innerHTML = '<span class="stock-badge low">⚡ باقي ' + stockValue + ' فقط</span>';
+    } else {
+        box.innerHTML = '<span class="stock-badge ok">✓ متوفر (' + stockValue + ')</span>';
+    }
+}
+</script>
