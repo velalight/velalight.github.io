@@ -9,6 +9,7 @@
 <link rel="canonical" href="https://velalight.github.io/products.html">
 
 <!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
+<!-- 1. Google Analytics 4 (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -17,6 +18,7 @@
   gtag('config', 'G-BWBD8ZZD23'); 
 </script>
 
+<!-- 2. Meta Pixel (Facebook Pixel) -->
 <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -33,6 +35,7 @@
   <img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=1377896053806991&ev=PageView&noscript=1"/>
 </noscript>
+<!-- ═══ End Tracking Codes ═══ -->
 
 <!-- ═══ Preconnect & Fonts ═══ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -187,7 +190,7 @@
   </div>
 </main>
 
-<!-- ═══ SCENT MODAL ═══ -->
+  <!-- ═══ SCENT MODAL ═══ -->
 <div class="modal" id="scentOv">
   <div class="mpanel">
     <button class="icobtn" id="closeScent" style="float:left" aria-label="إغلاق">✕</button>
@@ -203,7 +206,7 @@
     <button class="btn" id="scentModalAdd" style="width:100%;margin-top:1.2rem" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
   </div>
 </div>
-
+  
 <!-- ═══ CART DRAWER ═══ -->
 <div class="ovl" id="cartOv"></div>
 <aside class="drawer" id="cartDrawer">
@@ -333,23 +336,25 @@
   // تهيئة الفلاتر والترتيب
   const chips = document.querySelectorAll("#chips .chip");
   const sortSelect = document.getElementById("sortSelect");
+  const grid = document.getElementById("productsGrid");
 
   function updateFilters() {
     const activeChip = document.querySelector("#chips .chip.on");
     const cat = activeChip ? activeChip.dataset.cat : "all";
     const sort = sortSelect ? sortSelect.value : "new";
     
+    // حفظ الحالة في localStorage عشان تفضل ثابتة
     localStorage.setItem("vl_products_filter", JSON.stringify({ cat, sort }));
     
-    if (typeof renderProductsPage === "function") {
-      renderProductsPage();
-    } else if (typeof renderProducts === "function") {
+    // استدعاء دالة الرسم من app.js
+    if (typeof renderProducts === "function") {
       renderProducts();
     } else {
-      console.warn("No render function found!");
+      console.warn("renderProducts function not found!");
     }
   }
 
+  // ربط الأحداث
   chips.forEach(chip => {
     chip.addEventListener("click", function() {
       chips.forEach(c => c.classList.remove("on"));
@@ -362,6 +367,7 @@
     sortSelect.addEventListener("change", updateFilters);
   }
 
+  // استعادة الفلتر المخزن
   try {
     const saved = JSON.parse(localStorage.getItem("vl_products_filter") || "{}");
     if (saved.cat) {
@@ -374,6 +380,7 @@
     }
   } catch(e) {}
 
+  // دالة مساعدة لتحديث اللغة
   function applyProductsTranslations() {
     if (typeof t !== "function") return;
     document.querySelectorAll("[data-i18n]").forEach(el => {
@@ -383,20 +390,24 @@
     });
   }
 
+  // مراقبة تغيير اللغة
   const langObserver = new MutationObserver(() => {
     applyProductsTranslations();
-    updateFilters();
+    if (typeof renderProductsPage === "function") renderProductsPage();
   });
   langObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
 
+  // تهيئة أولية
   document.addEventListener("DOMContentLoaded", function() {
     applyProductsTranslations();
     updateFilters();
     
+    // تهيئة السلة
     if (typeof initCart === "function") initCart();
     if (typeof cartBadge === "function") cartBadge();
   });
 
+  // تصدير الدوال لاستخدامها من app.js
   window.updateFilters = updateFilters;
 
 })();
