@@ -1382,24 +1382,30 @@ function render(){
 function renderStock(){
   const box = document.getElementById("pdStockInfo");
   if(!box) return;
-  // تحويل القيمة لرقم مع التعامل مع null/undefined
-  const stockValue = Number(P.stock);
-  const isUnlimited = (P.stock === undefined || P.stock === null || P.stock === "");
   
-  if(isUnlimited || isNaN(stockValue)){
+  // إذا كان المخزون غير محدد أو null أو فارغ، اعتبره غير محدود
+  if(P.stock === undefined || P.stock === null || P.stock === ""){
     box.innerHTML = `<span class="stock-badge ok">✓ متوفر</span>`;
-  }else if(stockValue === 0){
+    return;
+  }
+  
+  const s = Number(P.stock);
+  if(isNaN(s)){
+    box.innerHTML = `<span class="stock-badge ok">✓ متوفر</span>`;
+    return;
+  }
+  
+  if(s === 0){
     box.innerHTML = `<span class="stock-badge out">✕ نفدت الكمية</span>`;
     document.getElementById("pdAddBtn").disabled = true;
     document.getElementById("pdAddBtn").textContent = "نفدت الكمية";
     document.getElementById("pdBuyBtn").disabled = true;
-  }else if(stockValue <= 5){
-    box.innerHTML = `<span class="stock-badge low">⚡ باقي ${stockValue} فقط</span>`;
+  }else if(s <= 5){
+    box.innerHTML = `<span class="stock-badge low">⚡ باقي ${s} فقط</span>`;
   }else{
-    box.innerHTML = `<span class="stock-badge ok">✓ متوفر (${stockValue})</span>`;
+    box.innerHTML = `<span class="stock-badge ok">✓ متوفر (${s})</span>`;
   }
-}
-     
+}     
 /* ═══════ THUMBS ═══════ */
 function renderThumbs(){
   const thumbs=$("#pdThumbs");
