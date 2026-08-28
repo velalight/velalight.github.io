@@ -1,15 +1,6 @@
 (function(){
 "use strict";
-  function stockBadge(p) {
-    if (!p) return "";
-    if (p.stock === undefined || p.stock === null || p.stock === "") return "";
-    var s = Number(p.stock);
-    if (isNaN(s)) return "";
-    if (s === 0) return '<span class="stock-badge" style="position:absolute;top:12px;left:12px;background:#e74c3c;color:#fff;font-size:.7rem;font-weight:800;padding:.3rem .75rem;border-radius:99px;z-index:3;pointer-events:none;">نفدت الكمية</span>';
-    if (s <= 5) return '<span class="stock-badge" style="position:absolute;top:12px;left:12px;background:#e67e22;color:#fff;font-size:.7rem;font-weight:800;padding:.3rem .75rem;border-radius:99px;z-index:3;pointer-events:none;">باقي ' + s + ' فقط</span>';
-    return "";
-}
-
+ 
 // ☢️ تنظيف ذاتي آمن: إلغاء تسجيل أي Service Worker قديم عالق ومسح الكاش التالف
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(function(registrations) {
@@ -3002,22 +2993,42 @@ function closeModal(id){
 
 function stockBadge(p){
   if(!p) return "";
-  // إذا كان المخزون غير محدد أو null أو فارغ، لا تظهر رسالة (يعني غير محدود)
+
+  // إذا كان المخزون غير محدد، لا يظهر ليبل المخزون
   if(p.stock === undefined || p.stock === null || p.stock === "") return "";
-  
+
   const s = Number(p.stock);
   if(isNaN(s)) return "";
-  
-  // حالة المخزون الصفر
-  if(s === 0) return `<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>`;
-  
-  // حالة المخزون المتبقي (أقل من أو يساوي 5)
-  if(s <= 5) return `<span class="p-badge" style="background:#e67e22">باقي ${s} فقط</span>`;
-  
-  // حالة المخزون المتوفر (أكثر من 5)
-  return `<span class="p-badge" style="background:#27ae60">متوفر</span>`;
+
+  const baseStyle = `
+    position:absolute;
+    top:12px;
+    inset-inline-end:12px;
+    inset-inline-start:auto;
+    color:#fff;
+    font-size:.7rem;
+    font-weight:800;
+    padding:.3rem .75rem;
+    border-radius:99px;
+    z-index:4;
+    pointer-events:none;
+    white-space:nowrap;
+  `;
+
+  // نفدت الكمية
+  if(s === 0){
+    return `<span class="stock-badge" style="${baseStyle}background:#e74c3c;">نفدت الكمية</span>`;
+  }
+
+  // باقي 5 أو أقل
+  if(s <= 5){
+    return `<span class="stock-badge" style="${baseStyle}background:#e67e22;">باقي ${s} فقط</span>`;
+  }
+
+  // متوفر
+  return `<span class="stock-badge" style="${baseStyle}background:#27ae60;">متوفر</span>`;
 }
-async function decrementStock(items){
+  async function decrementStock(items){
   if(!window.FB || !window.FB.db) return;
   
   const { runTransaction, doc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
