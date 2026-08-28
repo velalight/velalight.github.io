@@ -314,12 +314,14 @@
     
     // استدعاء دالة الرسم من app.js
     if (typeof renderProductsPage === "function") {
-      renderProductsPage();
-    } else {
-      // Fallback: لو الدالة مش موجودة، نعيد تحميل البيانات
-      console.warn("renderProductsPage not found, reloading...");
-      location.reload();
-    }
+  renderProductsPage();
+} else if (typeof renderProducts === "function") {
+  // استخدام الدالة البديلة renderProducts اللي موجودة فعلاً في app.js
+  renderProducts();
+} else {
+  console.warn("No render function found, reloading...");
+  location.reload();
+}
   }
 
   // ربط الأحداث
