@@ -1214,17 +1214,29 @@ document.addEventListener("DOMContentLoaded",()=>{
  setTimeout(() => {
   if (!P) {
     try {
-      // ✨ تجاهل الكاش القديم لو عمره أكثر من 30 ثانية
-      const cacheTime = Number(localStorage.getItem("vl_products_cache_v2_time") || "0");
-      const cacheIsOld = (Date.now() - cacheTime) > 30000; // 30 ثانية
-
-      if (!cacheIsOld) {
+      // 🔥 جيب المنتج من ALL_PRODUCTS (اللي بيتم تحديثها من Firebase)
+      if (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) {
+        const found = ALL_PRODUCTS.find(x => 
+          String(x.id) === String(productPid) || 
+          String(x.id_) === String(productPid) ||
+          String(x.slug) === String(productPid)
+        );
+        
+        if (found && found.active !== false) {
+          P = { ...found };
+          render();
+          console.log("✅ تم تحميل المنتج:", P.name);
+        } else {
+          // لو مش موجود في ALL_PRODUCTS، جرب تجيب من Firebase مباشرة
+          loadCloudCatalog(productPid);
+        }
+      } else {
+        // لو ALL_PRODUCTS مش موجود، جرب الكاش أو Firebase
         const cache2 = JSON.parse(localStorage.getItem("vl_products_cache_v2") || "[]");
         if (Array.isArray(cache2)) {
           const cachedV2 = cache2.find(x =>
             String(x.id) === String(productPid) || String(x.id_) === String(productPid)
           ) || null;
-          
           if (cachedV2) {
             P = { ...cachedV2 };
             render();
@@ -1235,21 +1247,14 @@ document.addEventListener("DOMContentLoaded",()=>{
         } else {
           showNotFound();
         }
-      } else {
-        // الكاش قديم، بنروح لـ Firebase
-        console.warn("⚠️ Cache is old, waiting for Firebase...");
-        // نستنى شوية ونحاول تاني من Firebase
-        setTimeout(() => {
-          if (!P) {
-            loadCloudCatalog(productPid);
-          }
-        }, 1000);
       }
     } catch (e) {
+      console.error("❌ Product load error:", e);
       showNotFound();
     }
   }
-}, 2500);
+}, 1000); // قللت الوقت عشان تظهر أسرع
+  
   if (Array.isArray(cache2)) {
           const cachedV2 = cache2.find(x => String(x.id) === String(productPid) || String(x.id_) === String(productPid)) || null;
           if (cachedV2) {
