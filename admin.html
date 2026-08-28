@@ -738,10 +738,10 @@ function initProductForm(){
     const extraImgs = document.getElementById("pf_images").value.split(",").map(s=>s.trim()).filter(Boolean);
     const imagesArr = [mainImgVal, ...extraImgs].filter(Boolean);
     
+    // بناء الكائن الأساسي بدون stock
     const data = {
       name, nameEn, price,
       old: Number(document.getElementById("pf_old").value || 0),
-      stock: stockVal === "" ? null : Number(stockVal || 0),
       cat: document.getElementById("pf_cat").value,
       img: mainImgVal || (imagesArr[0] || ""),
       imgs: imagesArr.length ? imagesArr : null,
@@ -756,6 +756,12 @@ function initProductForm(){
       scents,
       active: true
     };
+    
+    // ═══ إصلاح المخزون: نضيف الحقل فقط إذا كان غير فارغ ═══
+    if (stockVal !== "") {
+      data.stock = Number(stockVal);
+    }
+    // إذا كان فارغاً، لا نضيف الحقل، فيعتبر غير محدود
     
     const saveFn = existingId ? window.FB.set("products", existingId, { ...data, id_: existingId }) : 
       window.FB.set("products", "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, id_: "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), createdAt: Date.now(), sold: 0 });
