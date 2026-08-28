@@ -2993,12 +2993,13 @@ function closeModal(id){
 
 function stockBadge(p){
   if(!p) return "";
-  if(p.stock===undefined||p.stock===null||p.stock==="")return"";
-  const s=Number(p.stock);
-  if(isNaN(s))return"";
-  if(s===0)return`<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>`;
-  if(s<=5)return`<span class="p-badge" style="background:#e67e22">باقي ${s} فقط</span>`;
-  return"";
+  // إذا كان المخزون غير محدد أو null أو فارغ، لا تظهر أي رسالة (يعني غير محدود)
+  if(p.stock === undefined || p.stock === null || p.stock === "") return "";
+  const s = Number(p.stock);
+  if(isNaN(s)) return "";
+  if(s === 0) return `<span class="p-badge" style="background:#e74c3c">نفدت الكمية</span>`;
+  if(s <= 5) return `<span class="p-badge" style="background:#e67e22">باقي ${s} فقط</span>`;
+  return "";
 }
 
 async function decrementStock(items){
