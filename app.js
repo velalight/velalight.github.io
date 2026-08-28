@@ -3151,31 +3151,35 @@ async function subscribeUser(email, phone) {
     toast("⚠️ من فضلك اكتب الإيميل أو رقم الهاتف");
     return false;
   }
+
   try {
-    if (typeof DB !== "undefined" && typeof DB.add === "function") {
-      await DB.add("subscribers", {
+    // Firebase هو النظام الأساسي لتسجيل المشتركين
+    if (window.FB && typeof window.FB.add === "function") {
+
+      await window.FB.add("subscribers", {
         email: email || "",
         phone: phone || "",
         createdAt: Date.now(),
         source: window.location.pathname
       });
+
       toast("✅ تم الاشتراك بنجاح! شكراً لانضمامك لعائلة VelaLight 💛");
       return true;
-    } else {
-      // تخزين محلي إذا لم يكن Firebase جاهزاً
-      let subs = JSON.parse(localStorage.getItem("vl_subscribers") || "[]");
-      subs.push({ email, phone, createdAt: Date.now() });
-      localStorage.setItem("vl_subscribers", JSON.stringify(subs));
-      toast("✅ تم الاشتراك بنجاح (محلياً) 💛");
-      return true;
     }
-  } catch(e) {
-    console.error("Subscription error:", e);
+
+    // Firebase لم يجهز بعد
+    toast("⏳ جاري الاتصال بالخادم، حاول مرة أخرى بعد لحظات");
+    return false;
+
+  } catch (e) {
+
+    console.error("❌ Subscription error:", e);
+
     toast("⚠️ حدث خطأ أثناء الاشتراك، حاول مرة أخرى");
+
     return false;
   }
 }
-
 /* ═══ تعديل: تهيئة نموذج الاشتراك ═══ */
 function initSubscriptionForm() {
   const form = document.getElementById("subscribeForm");
