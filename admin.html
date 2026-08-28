@@ -142,23 +142,58 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       <button class="btn sm ghost" data-tab="craftsmanship" type="button" style="background:var(--gold);color:#fff;">🎬 Behind the Scenes</button>
     </div>
 
-    <!-- ================= ORDERS ================= (مع تحديث الحالة) -->
-    <div id="tab-orders">
-      <table class="adm">
-        <thead>
-          <tr>
-            <th>رقم الطلب</th>
-            <th>التاريخ</th>
-            <th>العميل</th>
-            <th>الموبايل</th>
-            <th>الإجمالي</th>
-            <th>الحالة</th>
-          </tr>
-        </thead>
-        <tbody id="ordersBody"></tbody>
-      </table>
-    </div>
-
+    function loadOrders(){
+  if(!window.FB || typeof window.FB.watch !== "function") return;
+  window.FB.watch("orders", orders => {
+    orders.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+    $("#stOrders").textContent = orders.length;
+    const revenue = orders.filter(order => order.status !== 4).reduce((total, order) => total + Number(order.total || 0), 0);
+    $("#stRevenue").textContent = money(revenue);
+    
+    const statusList = ["قيد المراجعة", "جاري التجهيز", "تم الشحن", "تم التسليم", "ملغي"];
+    
+    const rowsHtml = orders.map(order => {
+      const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString("ar-EG") : "-";
+      const optionsHtml = statusList.map((status, index) => 
+        `<option value="${index}"${order.status === index ? " selected" : ""}>${status}</option>`
+      ).join("");
+      
+      return `
+        <tr>
+          <td style="direction:ltr;font-size:.78rem">${order.id || "-"}</td>
+          <td>${date}</td>
+          <td>${order.name || "-"}</td>
+          <td style="direction:ltr">${order.phone || "-"}</td>
+          <td>${money(order.total || 0)}</td>
+          <td>
+            <select class="order-status-select" data-oid="${order._fid || order.id}" style="padding:.3rem .5rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-family:inherit;width:auto;">
+              ${optionsHtml}
+            </select>
+          </td>
+        </tr>`;
+    }).join("");
+    
+    $("#ordersBody").innerHTML = rowsHtml;
+    
+    // ربط حدث تغيير الحالة
+    document.querySelectorAll(".order-status-select").forEach(select => {
+      select.addEventListener("change", function() {
+        const newStatus = Number(this.value);
+        const oid = this.dataset.oid;
+        if (window.FB && typeof window.FB.update === "function") {
+          window.FB.update("orders", oid, { status: newStatus })
+            .then(() => {
+              toast("✅ تم تحديث الحالة");
+              loadOrders(); // تحديث البيانات
+            })
+            .catch(() => toast("⚠️ فشل تحديث الحالة"));
+        } else {
+          toast("⚠️ Firebase غير متصل");
+        }
+      });
+    });
+  }, error => console.error("Orders error:", error));
+}
     <!-- ================= USERS ================= -->
     <div id="tab-users" class="hidden">
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
