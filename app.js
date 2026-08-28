@@ -2993,7 +2993,7 @@ function closeModal(id){
 
 function stockBadge(p){
   if(!p) return "";
-  // إذا كان المخزون غير محدد أو null أو فارغ، لا تظهر أي رسالة (يعني غير محدود)
+  // إذا كان المخزون غير محدد، متظهرش رسالة (يعني غير محدود)
   if(p.stock === undefined || p.stock === null || p.stock === "") return "";
   const s = Number(p.stock);
   if(isNaN(s)) return "";
