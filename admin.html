@@ -65,7 +65,6 @@
   gap:.5rem;
   flex-wrap:wrap;
 }
-/* ═══ تنسيقات جدول الأدمن (مظهر فاتح) ═══ */
 .adm-head{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.6rem}
 .adm-stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1rem 1.5rem;min-width:150px;box-shadow:var(--sh)}
 .adm-stat b{font-family:var(--fd);font-size:1.6rem;color:var(--gold2);display:block}
@@ -81,14 +80,11 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 .pform .g{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
 .pform label{font-size:.75rem;color:var(--dim);display:block;margin:.6rem 0 .25rem}
 .hidden{display:none!important}
-/* ═══ Export Button ═══ */
 .export-btn{background:linear-gradient(135deg,#4a8a5c,#2e6b3f);color:#fff;padding:.5rem 1rem;border-radius:10px;font-size:.8rem;cursor:pointer;border:none;transition:.2s;font-weight:700}
 .export-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px -8px rgba(74,138,92,.5)}
-/* ═══ تنسيقات الكوبونات ═══ */
 .coupon-active{background:#d4edda;color:#155724;padding:.2rem .6rem;border-radius:99px;font-size:.72rem;font-weight:700}
 .coupon-inactive{background:#f8d7da;color:#721c24;padding:.2rem .6rem;border-radius:99px;font-size:.72rem;font-weight:700}
 .coupon-code{font-family:monospace;font-weight:700;background:#fef5e7;padding:.2rem .5rem;border-radius:6px;color:#d4af37;font-size:.85rem}
-/* ═══ Gallery Preview ═══ */
 .gallery-preview{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
 .gallery-preview img{width:60px;height:60px;border-radius:10px;object-fit:cover;border:2px solid var(--line);background:var(--panel2)}
 .gallery-hint{font-size:.7rem;color:var(--dim);margin-top:.3rem;font-style:italic}
@@ -123,7 +119,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </div>
     </div>
 
-    <!-- ================= STATS ================= -->
     <div class="adm-head" id="statsRow">
       <div class="adm-stat"><b id="stOrders">0</b><span>📦 الطلبات</span></div>
       <div class="adm-stat"><b id="stProducts">0</b><span>🕯️ المنتجات</span></div>
@@ -132,7 +127,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       <div class="adm-stat"><b id="stRevenue">0</b><span>💰 الإيرادات</span></div>
     </div>
 
-    <!-- ================= TABS ================= -->
     <div class="adm-tabs">
       <button class="btn sm" data-tab="orders" type="button">📦 الطلبات</button>
       <button class="btn sm ghost" data-tab="users" type="button">👥 العملاء</button>
@@ -142,59 +136,22 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       <button class="btn sm ghost" data-tab="craftsmanship" type="button" style="background:var(--gold);color:#fff;">🎬 Behind the Scenes</button>
     </div>
 
-    function loadOrders(){
-  if(!window.FB || typeof window.FB.watch !== "function") return;
-  window.FB.watch("orders", orders => {
-    orders.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
-    $("#stOrders").textContent = orders.length;
-    const revenue = orders.filter(order => order.status !== 4).reduce((total, order) => total + Number(order.total || 0), 0);
-    $("#stRevenue").textContent = money(revenue);
-    
-    const statusList = ["قيد المراجعة", "جاري التجهيز", "تم الشحن", "تم التسليم", "ملغي"];
-    
-    const rowsHtml = orders.map(order => {
-      const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString("ar-EG") : "-";
-      const optionsHtml = statusList.map((status, index) => 
-        `<option value="${index}"${order.status === index ? " selected" : ""}>${status}</option>`
-      ).join("");
-      
-      return `
-        <tr>
-          <td style="direction:ltr;font-size:.78rem">${order.id || "-"}</td>
-          <td>${date}</td>
-          <td>${order.name || "-"}</td>
-          <td style="direction:ltr">${order.phone || "-"}</td>
-          <td>${money(order.total || 0)}</td>
-          <td>
-            <select class="order-status-select" data-oid="${order._fid || order.id}" style="padding:.3rem .5rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-family:inherit;width:auto;">
-              ${optionsHtml}
-            </select>
-          </td>
-        </tr>`;
-    }).join("");
-    
-    $("#ordersBody").innerHTML = rowsHtml;
-    
-    // ربط حدث تغيير الحالة
-    document.querySelectorAll(".order-status-select").forEach(select => {
-      select.addEventListener("change", function() {
-        const newStatus = Number(this.value);
-        const oid = this.dataset.oid;
-        if (window.FB && typeof window.FB.update === "function") {
-          window.FB.update("orders", oid, { status: newStatus })
-            .then(() => {
-              toast("✅ تم تحديث الحالة");
-              loadOrders(); // تحديث البيانات
-            })
-            .catch(() => toast("⚠️ فشل تحديث الحالة"));
-        } else {
-          toast("⚠️ Firebase غير متصل");
-        }
-      });
-    });
-  }, error => console.error("Orders error:", error));
-}
-    <!-- ================= USERS ================= -->
+    <div id="tab-orders">
+      <table class="adm">
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>التاريخ</th>
+            <th>العميل</th>
+            <th>الموبايل</th>
+            <th>الإجمالي</th>
+            <th>الحالة</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </div>
+
     <div id="tab-users" class="hidden">
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <h3 style="color:var(--gold2);font-family:var(--fd);margin:0">👥 العملاء المسجلين</h3>
@@ -220,7 +177,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </table>
     </div>
 
-    <!-- ================= PRODUCTS ================= -->
     <div id="tab-products" class="hidden">
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addProductBtn" type="button">➕ إضافة منتج جديد</button>
@@ -347,7 +303,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         </div>
       </div>
 
-      <!-- جدول المنتجات -->
       <table class="adm">
         <thead>
           <tr>
@@ -365,7 +320,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </table>
     </div>
 
-    <!-- ================= COUPONS ================= -->
     <div id="tab-coupons" class="hidden">
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addCouponBtn" type="button">➕ إضافة كوبون جديد</button>
@@ -434,7 +388,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </table>
     </div>
 
-    <!-- ================= REVIEWS ================= -->
     <div id="tab-reviews" class="hidden">
       <table class="adm">
         <thead>
@@ -450,7 +403,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </table>
     </div>
 
-    <!-- ================= CRAFTSMANSHIP (Behind the Scenes) ================= -->
     <div id="tab-craftsmanship" class="hidden">
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addCraftBtn" type="button">➕ إضافة فيديو/صورة جديدة</button>
@@ -598,7 +550,7 @@ function showAdmin(){
   loadUsers();
   loadCoupons();
   loadCraftItems();
-});
+}
 
 document.addEventListener("click", async (event) => {
   if(event.target.id !== "loginBtn") return;
@@ -692,14 +644,13 @@ function loadOrders(){
     const revenue = orders.filter(order => order.status !== 4).reduce((total, order) => total + Number(order.total || 0), 0);
     $("#stRevenue").textContent = money(revenue);
     
-    // الحالات المعروفة
     const statusList = ["قيد المراجعة", "جاري التجهيز", "تم الشحن", "تم التسليم", "ملغي"];
     
     $("#ordersBody").innerHTML = orders.map(order => {
       const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString("ar-EG") : "-";
       const optionsHtml = statusList.map((status, index) => 
         `<option value="${index}"${order.status === index ? " selected" : ""}>${status}</option>`
-      }).join("");
+      ).join("");
       
       return `
         <tr>
@@ -716,7 +667,6 @@ function loadOrders(){
         </tr>`;
     }).join("");
     
-    // ربط حدث تغيير الحالة
     document.querySelectorAll(".order-status-select").forEach(select => {
       select.addEventListener("change", function() {
         const newStatus = Number(this.value);
@@ -725,7 +675,6 @@ function loadOrders(){
           window.FB.update("orders", oid, { status: newStatus })
             .then(() => {
               toast("✅ تم تحديث الحالة إلى: " + ["قيد المراجعة","جاري التجهيز","تم الشحن","تم التسليم","ملغي"][newStatus]);
-              // تحديث الإيرادات
               loadOrders();
             })
             .catch(() => toast("⚠️ فشل تحديث الحالة"));
@@ -844,7 +793,6 @@ function renderAdminProducts(){
   }
   
   body.innerHTML = list.map(product => {
-    const imgsCount = (Array.isArray(product.imgs) && product.imgs.length) ? product.imgs.length : (Array.isArray(product.images) && product.images.length ? product.images.length : 1);
     const pinIcon = product.pinned ? ' 📌' : '';
     return `
     <tr>
@@ -1039,24 +987,6 @@ function loadCoupons(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("coupons").then(coupons => {
     ALL_COUPONS = coupons || [];
-    // إذا كانت القائمة فارغة، أضف كوبون افتراضي WELCOME10
-    if (ALL_COUPONS.length === 0) {
-      const defaultCoupon = {
-        code: "WELCOME10",
-        type: "percent",
-        value: 10,
-        maxUses: 100,
-        usedCount: 0,
-        active: true,
-        createdAt: Date.now()
-      };
-      window.FB.set("coupons", "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), defaultCoupon)
-        .then(() => {
-          toast("🎉 تم إضافة كوبون ترحيبي WELCOME10 تلقائياً");
-          loadCoupons(); // إعادة التحميل
-        })
-        .catch(() => toast("⚠️ فشل إضافة الكوبون الافتراضي"));
-    }
     renderCoupons(ALL_COUPONS);
   }).catch(err => { console.error("Coupons error:", err); toast("⚠️ تعذر تحميل الكوبونات"); });
 }
@@ -1231,7 +1161,6 @@ function loadReviews(){
   }).catch(error => { console.error("Reviews error:", error); toast("⚠️ تعذر تحميل المراجعات"); });
 }
 
-/* ================= CRAFTSMANSHIP (Behind the Scenes) ================= */
 let CRAFT_ITEMS = [];
 
 function loadCraftItems(){
