@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>لوحة التحكم | VelaLight</title>
+<!-- ═══ تعديل: تم إضافة meta لمنع الفهرسة (موجود) ═══ -->
 <meta name="robots" content="noindex,nofollow">
 
 <link rel="stylesheet" href="style.css">
@@ -13,6 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* === جميع التنسيقات الموجودة + تعديلات البحث والفلتر === */
 .login-wrap{
   min-height:100vh;
   display:flex;
@@ -65,6 +67,7 @@
   gap:.5rem;
   flex-wrap:wrap;
 }
+/* ═══ تنسيقات جدول الأدمن (مظهر فاتح) ═══ */
 .adm-head{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.6rem}
 .adm-stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1rem 1.5rem;min-width:150px;box-shadow:var(--sh)}
 .adm-stat b{font-family:var(--fd);font-size:1.6rem;color:var(--gold2);display:block}
@@ -80,14 +83,18 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 .pform .g{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
 .pform label{font-size:.75rem;color:var(--dim);display:block;margin:.6rem 0 .25rem}
 .hidden{display:none!important}
+/* ═══ Export Button ═══ */
 .export-btn{background:linear-gradient(135deg,#4a8a5c,#2e6b3f);color:#fff;padding:.5rem 1rem;border-radius:10px;font-size:.8rem;cursor:pointer;border:none;transition:.2s;font-weight:700}
 .export-btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px -8px rgba(74,138,92,.5)}
+/* ═══ تنسيقات الكوبونات ═══ */
 .coupon-active{background:#d4edda;color:#155724;padding:.2rem .6rem;border-radius:99px;font-size:.72rem;font-weight:700}
 .coupon-inactive{background:#f8d7da;color:#721c24;padding:.2rem .6rem;border-radius:99px;font-size:.72rem;font-weight:700}
 .coupon-code{font-family:monospace;font-weight:700;background:#fef5e7;padding:.2rem .5rem;border-radius:6px;color:#d4af37;font-size:.85rem}
+/* ═══ Gallery Preview ═══ */
 .gallery-preview{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
 .gallery-preview img{width:60px;height:60px;border-radius:10px;object-fit:cover;border:2px solid var(--line);background:var(--panel2)}
 .gallery-hint{font-size:.7rem;color:var(--dim);margin-top:.3rem;font-style:italic}
+/* ═══ تعديل: تنسيقات شريط البحث والفلتر للطلبات ═══ */
 .order-filters{
   display:flex;
   gap:.8rem;
@@ -157,6 +164,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
     <!-- ================= ORDERS ================= -->
     <div id="tab-orders">
+      <!-- ═══ تعديل: إضافة شريط بحث وفلتر للطلبات ═══ -->
       <div class="order-filters">
         <input id="orderSearch" type="search" placeholder="🔎 ابحث برقم الطلب أو اسم العميل">
         <select id="orderStatusFilter">
@@ -215,6 +223,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
     <!-- ================= PRODUCTS ================= -->
     <div id="tab-products" class="hidden">
+      <!-- ... (نفس المحتوى السابق) ... -->
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addProductBtn" type="button">➕ إضافة منتج جديد</button>
         <div style="display:flex;gap:.5rem;flex:1;min-width:260px;max-width:760px;flex-wrap:wrap">
@@ -243,6 +252,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       </p>
 
       <div class="pform hidden" id="productForm">
+        <!-- ... (نفس المحتوى) ... -->
         <h3 style="color:var(--gold2);margin-bottom:1rem" id="formTitle">منتج جديد</h3>
         <div class="g">
           <div><label>اسم المنتج (عربي) *</label><input id="pf_name"></div>
@@ -290,6 +300,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
     <!-- ================= COUPONS ================= -->
     <div id="tab-coupons" class="hidden">
+      <!-- ... (نفس المحتوى) ... -->
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addCouponBtn" type="button">➕ إضافة كوبون جديد</button>
       </div>
@@ -379,13 +390,14 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 let loggedIn = false;
 let ALL_USERS = [];
 let ALL_COUPONS = [];
-let ALL_ORDERS = [];
+let ALL_ORDERS = []; // ═══ تعديل: لتخزين الطلبات للتصفية
 
 document.addEventListener("DOMContentLoaded", () => {
   initTabs();
   initProductForm();
   initCouponForm();
   initCraftForm();
+  // ═══ تعديل: ربط أحداث البحث والفلتر
   document.getElementById("orderSearch")?.addEventListener("input", filterOrders);
   document.getElementById("orderStatusFilter")?.addEventListener("change", filterOrders);
   document.getElementById("orderDateFrom")?.addEventListener("change", filterOrders);
@@ -526,6 +538,7 @@ function initTabs(){
   });
 }
 
+// ═══ تعديل: دالة تحميل الطلبات مع حفظها في ALL_ORDERS ═══
 function loadOrders(){
   if(!window.FB || typeof window.FB.watch !== "function") return;
   window.FB.watch("orders", orders => {
@@ -534,10 +547,11 @@ function loadOrders(){
     $("#stOrders").textContent = orders.length;
     const revenue = orders.filter(order => order.status !== 4).reduce((total, order) => total + Number(order.total || 0), 0);
     $("#stRevenue").textContent = money(revenue);
-    filterOrders();
+    filterOrders(); // ═══ تطبيق الفلاتر بعد التحميل
   }, error => console.error("Orders error:", error));
 }
 
+// ═══ تعديل: دالة تصفية الطلبات ═══
 function filterOrders(){
   const search = (document.getElementById("orderSearch")?.value || "").trim().toLowerCase();
   const statusFilter = document.getElementById("orderStatusFilter")?.value || "";
@@ -612,6 +626,7 @@ function renderOrders(orders){
   });
 }
 
+// ═══ تعديل: مسح الفلاتر ═══
 function clearOrderFilters(){
   document.getElementById("orderSearch").value = "";
   document.getElementById("orderStatusFilter").value = "";
@@ -727,7 +742,7 @@ function renderAdminProducts(){
   }
   
   body.innerHTML = list.map(product => {
-    const stockDisplay = (product.stock === null || product.stock === undefined || product.stock === "") ? "∞" : product.stock;
+    const imgsCount = (Array.isArray(product.imgs) && product.imgs.length) ? product.imgs.length : (Array.isArray(product.images) && product.images.length ? product.images.length : 1);
     const pinIcon = product.pinned ? ' 📌' : '';
     return `
     <tr>
@@ -735,7 +750,7 @@ function renderAdminProducts(){
       <td><b>${product.name || ""}${pinIcon}</b><br><small style="color:var(--dim);font-size:.7rem">ID: ${product.id}</small></td>
       <td>${CATS.ar[product.cat] || product.cat || ""}</td>
       <td>${money(product.price || 0)}</td>
-      <td>${stockDisplay}</td>
+      <td>${(product.stock===null||product.stock===undefined||product.stock==="")?"∞":product.stock}</td>
       <td>${product.video ? '🎥 نعم' : '-'}</td>
       <td>${product.active === false ? "❌ مخفي" : "✅ ظاهر"}</td>
       <td style="display:flex;gap:.3rem;flex-wrap:wrap">
@@ -751,33 +766,19 @@ function renderAdminProducts(){
   bindProductActions(PRODUCTS_ADMIN_CACHE);
 }
 
-// ═══ تعديل: دالة loadProducts المحسنة للحفاظ على قيمة المخزون ═══
 function loadProducts(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("products").then(cloud => {
     const map = new Map();
-    // أولاً: تحميل المنتجات المحلية (من data.js)
     (PRODUCTS || []).forEach(product => {
       if(!product || !product.id) return;
       map.set(product.id, { ...product, _fid:null, active:true });
     });
-    // ثانياً: دمج بيانات Firebase مع الاحتفاظ بكل الحقول الموجودة
     (cloud || []).forEach(data => {
       const slug = data.id_ || data.slug || data.pid || data.id;
       if(!slug) return;
       if(data.active === false){ map.delete(slug); return; }
-      // دمج البيانات: نأخذ البيانات الموجودة محلياً (إن وجدت) ونضيف عليها بيانات Firebase،
-      // مع التأكد من الاحتفاظ بقيمة stock إذا لم تأت من Firebase
-      const local = map.get(slug) || {};
-      map.set(slug, {
-        ...local,
-        ...data,
-        id: slug,
-        _fid: data.id || null,
-        active: data.active !== false,
-        // ═══ إصلاح المخزون: الاحتفاظ بالقيمة القديمة إذا لم ترد من Firebase ═══
-        stock: data.stock !== undefined ? data.stock : (local.stock ?? null)
-      });
+      map.set(slug, { ...(map.get(slug) || {}), ...data, id:slug, _fid:data.id || null, active:data.active !== false });
     });
     PRODUCTS_ADMIN_CACHE = [...map.values()];
     renderAdminProducts();
@@ -867,7 +868,6 @@ function initProductForm(){
     const data = {
       name, nameEn, price,
       old: Number($("#pf_old").value || 0),
-      // ═══ إصلاح: إرسال stock بشكل صريح حتى لو null ═══
       stock: stockVal === "" ? null : Number(stockVal || 0),
       cat: $("#pf_cat").value,
       img: mainImgVal || (imagesArr[0] || ""),
@@ -1111,7 +1111,7 @@ function loadReviews(){
   }).catch(error => { console.error("Reviews error:", error); toast("⚠️ تعذر تحميل المراجعات"); });
 }
 
-/* ================= CRAFTSMANSHIP ================= */
+/* ================= CRAFTSMANSHIP (Behind the Scenes) ================= */
 let CRAFT_ITEMS = [];
 
 function loadCraftItems(){
