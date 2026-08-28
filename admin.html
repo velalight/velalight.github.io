@@ -5,22 +5,66 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>لوحة التحكم | VelaLight</title>
 <meta name="robots" content="noindex,nofollow">
+
 <link rel="stylesheet" href="style.css">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;}
-.login-box{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:2.5rem;width:min(400px,92vw);text-align:center;}
-.login-box h2{font-family:var(--fd);color:var(--gold2);margin-bottom:1.5rem;}
-.login-box input{margin-bottom:1rem;text-align:center;}
-.login-box button{transition:.2s ease;}
-.login-box button:disabled{opacity:.65;cursor:not-allowed;}
-.login-status{min-height:20px;}
-.adm-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 0;flex-wrap:wrap;}
-.adm-top h1{font-family:var(--fd);color:var(--gold2);font-size:1.4rem;}
-.adm-nav{display:flex;gap:.5rem;flex-wrap:wrap;}
+.login-wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:2rem;
+}
+.login-box{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:2.5rem;
+  width:min(400px,92vw);
+  text-align:center;
+}
+.login-box h2{
+  font-family:var(--fd);
+  color:var(--gold2);
+  margin-bottom:1.5rem;
+}
+.login-box input{
+  margin-bottom:1rem;
+  text-align:center;
+}
+.login-box button{
+  transition:.2s ease;
+}
+.login-box button:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+}
+.login-status{
+  min-height:20px;
+}
+.adm-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  padding:1rem 0;
+  flex-wrap:wrap;
+}
+.adm-top h1{
+  font-family:var(--fd);
+  color:var(--gold2);
+  font-size:1.4rem;
+}
+.adm-nav{
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+}
 .adm-head{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.6rem}
 .adm-stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1rem 1.5rem;min-width:150px;box-shadow:var(--sh)}
 .adm-stat b{font-family:var(--fd);font-size:1.6rem;color:var(--gold2);display:block}
@@ -44,11 +88,30 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 .gallery-preview{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
 .gallery-preview img{width:60px;height:60px;border-radius:10px;object-fit:cover;border:2px solid var(--line);background:var(--panel2)}
 .gallery-hint{font-size:.7rem;color:var(--dim);margin-top:.3rem;font-style:italic}
-.order-filters{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center;}
-.order-filters input,.order-filters select{padding:.5rem .8rem;border-radius:10px;border:1px solid var(--line);background:var(--panel);font-size:.85rem;min-width:180px;}
-@media(max-width:600px){table.adm{display:block;overflow-x:auto}.pform .g{grid-template-columns:1fr}.order-filters{flex-direction:column;align-items:stretch}.order-filters input,.order-filters select{min-width:auto}}
+.order-filters{
+  display:flex;
+  gap:.8rem;
+  flex-wrap:wrap;
+  margin-bottom:1rem;
+  align-items:center;
+}
+.order-filters input, .order-filters select{
+  padding:.5rem .8rem;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  font-size:.85rem;
+  min-width:180px;
+}
+@media(max-width:600px){
+  table.adm{display:block;overflow-x:auto}
+  .pform .g{grid-template-columns:1fr}
+  .order-filters{flex-direction:column;align-items:stretch}
+  .order-filters input, .order-filters select{min-width:auto}
+}
 </style>
 </head>
+
 <body>
 
 <!-- LOGIN -->
@@ -416,13 +479,17 @@ function initTabs(){
   });
 }
 
+// ═══ ORDERS — تم إصلاح حساب الإيرادات لاستبعاد الملغي والمكتمل ═══
 function loadOrders(){
   if(!window.FB || typeof window.FB.watch !== "function") return;
   window.FB.watch("orders", orders => {
     orders.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
     ALL_ORDERS = orders;
     document.getElementById("stOrders").textContent = orders.length;
-    const revenue = orders.filter(order => order.status !== 4).reduce((total, order) => total + Number(order.total || 0), 0);
+    
+    // ═══ إصلاح الإيرادات: استبعاد المكتمل (4) والملغي (5) ═══
+    const revenue = orders.filter(order => order.status !== 4 && order.status !== 5)
+                          .reduce((total, order) => total + Number(order.total || 0), 0);
     document.getElementById("stRevenue").textContent = money(revenue);
     filterOrders();
   }, error => console.error("Orders error:", error));
@@ -578,7 +645,7 @@ document.addEventListener("click", (e) => {
   toast("✅ تم تصدير العملاء بنجاح (" + ALL_USERS.length + " عميل)");
 });
 
-// ═══════ PRODUCTS FUNCTIONS ═══════
+// ═══ PRODUCTS (تم إصلاح المخزون نهائياً) ═══
 
 function renderAdminProducts(){
   const search = String(document.getElementById("productSearch")?.value || "").trim().toLowerCase();
@@ -610,6 +677,7 @@ function renderAdminProducts(){
   }
   
   body.innerHTML = list.map(product => {
+    // ═══ عرض ∞ إذا كان المخزون null أو undefined ═══
     const stockDisplay = (product.stock === null || product.stock === undefined || product.stock === "") ? "∞" : product.stock;
     const pinIcon = product.pinned ? ' 📌' : '';
     const imgSrc = (typeof imgOf === "function") ? imgOf(product) : (product.img || "");
@@ -634,27 +702,39 @@ function renderAdminProducts(){
   bindProductActions(PRODUCTS_ADMIN_CACHE);
 }
 
+// ═══ تحميل المنتجات مع دمج البيانات المحلية و Firebase ═══
 function loadProducts(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("products").then(cloud => {
     const map = new Map();
+    // 1. المنتجات المحلية (data.js)
     (PRODUCTS || []).forEach(product => {
       if(!product || !product.id) return;
       map.set(product.id, { ...product, _fid:null, active:true });
     });
+    // 2. بيانات Firebase
     (cloud || []).forEach(data => {
       const slug = data.id_ || data.slug || data.pid || data.id;
       if(!slug) return;
       if(data.active === false){ map.delete(slug); return; }
       const local = map.get(slug) || {};
+      // ═══ إصلاح جذري: الحفاظ على قيمة المخزون من Firebase أو المحلي ═══
+      let finalStock = null;
+      if (data.stock !== undefined && data.stock !== null && data.stock !== "") {
+        finalStock = Number(data.stock);
+      } else if (local.stock !== undefined && local.stock !== null && local.stock !== "") {
+        finalStock = Number(local.stock);
+      }
+      // إذا لم يوجد أي قيمة، نضع null (يعني غير محدود)
+      if (isNaN(finalStock)) finalStock = null;
+
       map.set(slug, {
         ...local,
         ...data,
         id: slug,
         _fid: data.id || null,
         active: data.active !== false,
-        // ═══ الحفاظ على قيمة المخزون إذا لم ترد من Firebase ═══
-        stock: data.stock !== undefined ? data.stock : (local.stock ?? null)
+        stock: finalStock
       });
     });
     PRODUCTS_ADMIN_CACHE = [...map.values()];
@@ -721,6 +801,7 @@ function initProductForm(){
   document.getElementById("pf_img")?.addEventListener("input", updatePreview);
   document.getElementById("pf_images")?.addEventListener("input", updatePreview);
   
+  // ═══ إصلاح حفظ المنتج ═══
   document.getElementById("saveProductBtn")?.addEventListener("click", () => {
     const name = document.getElementById("pf_name").value.trim();
     const nameEn = document.getElementById("pf_nameEn").value.trim();
@@ -738,7 +819,6 @@ function initProductForm(){
     const extraImgs = document.getElementById("pf_images").value.split(",").map(s=>s.trim()).filter(Boolean);
     const imagesArr = [mainImgVal, ...extraImgs].filter(Boolean);
     
-    // بناء الكائن الأساسي بدون stock
     const data = {
       name, nameEn, price,
       old: Number(document.getElementById("pf_old").value || 0),
@@ -756,13 +836,13 @@ function initProductForm(){
       scents,
       active: true
     };
-    
-    // ═══ إصلاح المخزون: نضيف الحقل فقط إذا كان غير فارغ ═══
-    if (stockVal !== "") {
+
+    // ═══ إصلاح جذري للمخزون: إذا كان الرقم مكتوب، أرسله. وإلا لا ترسل الحقل ═══
+    if (stockVal !== "" && !isNaN(stockVal) && Number(stockVal) >= 0) {
       data.stock = Number(stockVal);
     }
-    // إذا كان فارغاً، لا نضيف الحقل، فيعتبر غير محدود
-    
+    // لو فارغ، متحطش الحقل خالص عشان يبقى غير محدود
+
     const saveFn = existingId ? window.FB.set("products", existingId, { ...data, id_: existingId }) : 
       window.FB.set("products", "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, id_: "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), createdAt: Date.now(), sold: 0 });
       
