@@ -1384,16 +1384,16 @@ function renderStock(){
   if(!box) return;
   const s=Number(P.stock);
   if(P.stock===undefined||P.stock===null||P.stock===""||isNaN(s)){
-    box.innerHTML=`<span class="stock-badge ok" data-i18n="stock_available">✓ متوفر</span>`;
+    box.innerHTML=`<span class="stock-badge ok">✓ متوفر</span>`;
   }else if(s===0){
-    box.innerHTML=`<span class="stock-badge out" data-i18n="stock_out">✕ نفدت الكمية</span>`;
+    box.innerHTML=`<span class="stock-badge out">✕ نفدت الكمية</span>`;
     $("#pdAddBtn").disabled=true;
-    $("#pdAddBtn").textContent=t("stock_out");
+    $("#pdAddBtn").textContent="نفدت الكمية";
     $("#pdBuyBtn").disabled=true;
   }else if(s<=5){
-    box.innerHTML=`<span class="stock-badge low">⚡ ${t("stock_remaining").replace("{n}",s)}</span>`;
+    box.innerHTML=`<span class="stock-badge low">⚡ باقي ${s} فقط</span>`;
   }else{
-    box.innerHTML=`<span class="stock-badge ok">✓ ${t("stock_available_count").replace("{n}",s)}</span>`;
+    box.innerHTML=`<span class="stock-badge ok">✓ متوفر (${s})</span>`;
   }
 }
      
