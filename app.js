@@ -878,7 +878,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initMarquee();
   initEmbers();
   initReveal();
-  initSubscriptionForm(); // ═══ تعديل: تهيئة نموذج الاشتراك
 
   // تحقق إذا كنا في صفحة المنتجات أو الآراء
   const isProductsPage = window.location.pathname.includes('products.html');
@@ -3145,62 +3144,6 @@ if (typeof window.addToCart === "function") {
   };
 }
 
-/* ═══ تعديل: دالة الاشتراك ═══ */
-async function subscribeUser(email, phone) {
-  if (!email && !phone) {
-    toast("⚠️ من فضلك اكتب الإيميل أو رقم الهاتف");
-    return false;
-  }
-
-  try {
-    // Firebase هو النظام الأساسي لتسجيل المشتركين
-    if (window.FB && typeof window.FB.add === "function") {
-
-      await window.FB.add("subscribers", {
-        email: email || "",
-        phone: phone || "",
-        createdAt: Date.now(),
-        source: window.location.pathname
-      });
-
-      toast("✅ تم الاشتراك بنجاح! شكراً لانضمامك لعائلة VelaLight 💛");
-      return true;
-    }
-
-    // Firebase لم يجهز بعد
-    toast("⏳ جاري الاتصال بالخادم، حاول مرة أخرى بعد لحظات");
-    return false;
-
-  } catch (e) {
-
-    console.error("❌ Subscription error:", e);
-
-    toast("⚠️ حدث خطأ أثناء الاشتراك، حاول مرة أخرى");
-
-    return false;
-  }
-}
-/* ═══ تعديل: تهيئة نموذج الاشتراك ═══ */
-function initSubscriptionForm() {
-  const form = document.getElementById("subscribeForm");
-  if (!form) return;
-  
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = document.getElementById("subEmail")?.value.trim() || "";
-    const phone = document.getElementById("subPhone")?.value.trim() || "";
-    const success = await subscribeUser(email, phone);
-    if (success) {
-      form.reset();
-      const msg = document.getElementById("subMsg");
-      if (msg) {
-        msg.textContent = "✅ شكراً لك! تم الاشتراك بنجاح.";
-        msg.style.display = "block";
-        setTimeout(() => { msg.style.display = "none"; }, 5000);
-      }
-    }
-  });
-}
 
 /* ═══ EXPOSE GLOBALLY ═══ */
 window.renderProductsPage = renderProductsPage;
