@@ -424,7 +424,7 @@ faq8a:"نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، 
     foot_designed:"🛠️ صُمم وصُنع بواسطة",
     foot_designer_cta:"⚡ عايز موقع احترافي زي ده لمشروعك؟",
     foot_designer_link:"تواصل معانا النهاردة",
-    foot_rights:"© 2026 - 2030 VelaLight — جميع الحقوق محفوظة",
+    foot_rights:"© 2026 VelaLight — جميع الحقوق محفوظة",
 
     foot_exchange:"سياسة الشحن",
     foot_privacy:"سياسة الخصوصية",
