@@ -9,7 +9,6 @@
 <link rel="canonical" href="https://velalight.github.io/products.html">
 
 <!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
-<!-- 1. Google Analytics 4 (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -18,7 +17,6 @@
   gtag('config', 'G-BWBD8ZZD23'); 
 </script>
 
-<!-- 2. Meta Pixel (Facebook Pixel) -->
 <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -35,7 +33,6 @@
   <img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=1377896053806991&ev=PageView&noscript=1"/>
 </noscript>
-<!-- ═══ End Tracking Codes ═══ -->
 
 <!-- ═══ Preconnect & Fonts ═══ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -190,7 +187,7 @@
   </div>
 </main>
 
-  <!-- ═══ SCENT MODAL ═══ -->
+<!-- ═══ SCENT MODAL ═══ -->
 <div class="modal" id="scentOv">
   <div class="mpanel">
     <button class="icobtn" id="closeScent" style="float:left" aria-label="إغلاق">✕</button>
@@ -206,408 +203,7 @@
     <button class="btn" id="scentModalAdd" style="width:100%;margin-top:1.2rem" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
   </div>
 </div>
-  
-<!-- ═══ CART DRAWER ═══ -->
-<div class="ovl" id="cartOv"></div>
-<aside class="drawer" id="cartDrawer">
-  <div class="dhead"><h3 data-i18n="cart_title">🛍️ سلة الشراء</h3><button class="icobtn" id="closeCart">✕</button></div>
-  <div class="dbody" id="cartItems"></div>
-  <div class="dfoot">
-    <h4 style="color:var(--gold2);font-size:.9rem;margin-bottom:.3rem" data-i18n="delivery_h">بيانات التوصيل</h4>
-    <div class="co-form">
-      <input id="coName" data-i18n-ph="ph_name" placeholder="الاسم بالكامل *">
-      <input id="coPhone" type="tel" data-i18n-ph="ph_phone" placeholder="رقم الموبايل *">
-      <input id="coEmail" type="email" placeholder="الإيميل (اختياري)">
-      <select id="coCity"></select>
-      <input id="coAddr" data-i18n-ph="ph_addr" placeholder="العنوان بالتفصيل *">
-      <textarea id="coNotes" rows="2" data-i18n-ph="ph_notes" placeholder="ملاحظات"></textarea>
-    </div>
-    <div class="trow"><span data-i18n="subtotal">قيمة المنتجات</span><b id="cartSub">0</b></div>
-    <div class="trow total"><span data-i18n="total">الإجمالي</span><b id="cartTotal">0</b></div>
-    <p class="cart-shipping-note" data-i18n="ship_note">🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.</p>
-    <button class="btn wa" id="checkoutBtn" style="width:100%;margin-top:.8rem" data-i18n="checkout_wa">✅ إتمام الطلب عبر واتساب</button>
-    <button class="btn ghost sm" id="emptyCartBtn" style="width:100%;margin-top:.5rem" data-i18n="empty_cart">🗑️ إفراغ السلة</button>
-  </div>
-</aside>
 
-<!-- ═══ FOOTER ═══ -->
-<footer>
-  <div class="wrap">
-    <div class="fgrid">
-      <div>
-        <a class="logo" href="index.html"><span class="flame"></span><div><b>VelaLight</b><small>Luxury Candle Studio</small></div></a>
-        <p style="margin-top:1rem;color:var(--mut);font-size:.88rem" data-i18n="foot_tag1">شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب</p>
-        <p style="color:var(--dim);font-size:.8rem" data-i18n="foot_tag2">Luxury handmade candles - Signature scents - Custom gifts</p>
-        <div style="display:flex; gap:1rem; margin-top:1.2rem;">
-          <a href="https://www.instagram.com/velalight" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="color:var(--mut); transition:.3s;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          </a>
-          <a href="https://www.facebook.com/velalight" target="_blank" rel="noopener noreferrer" aria-label="Facebook" style="color:var(--mut); transition:.3s;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-          </a>
-          <a href="https://wa.me/201223526105" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style="color:var(--mut); transition:.3s;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.669.15-.198.297-.768.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347z"/></svg>
-          </a>
-          <a href="https://www.tiktok.com/@velalight" target="_blank" rel="noopener noreferrer" aria-label="TikTok" style="color:var(--mut); transition:.3s;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.76-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-          </a>
-          <a href="https://www.youtube.com/@velalight" target="_blank" rel="noopener noreferrer" aria-label="YouTube" style="color:var(--mut); transition:.3s;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          </a>
-        </div>
-      </div>
-      <div>
-        <h4 data-i18n="foot_quick">روابط سريعة</h4>
-        <a href="index.html" data-i18n="nav_home">الرئيسية</a>
-        <a href="products.html" data-i18n="foot_shop">تسوق</a>
-        <a href="wishlist.html" style="color:var(--gold2)" data-i18n="foot_wishlist">❤️ المفضلة</a>
-        <a href="my-orders.html" data-i18n="foot_orders">📦 طلباتي</a>
-        <a href="index.html#about-us" data-i18n="nav_about">من نحن</a>
-        <a href="index.html#faq-section" data-i18n="nav_faq">الأسئلة الشائعة</a>
-        <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
-        <a href="reviews.html" data-i18n="mn_rev">آراء العملاء</a>
-      </div>
-      <div>
-        <h4 data-i18n="mn_cats">تصنيفات الشموع</h4>
-        <a href="products.html" data-cat="wood" data-i18n="cat_wood">شموع خشبية</a>
-        <a href="products.html" data-cat="glass" data-i18n="cat_glass">شموع زجاجية</a>
-        <a href="products.html" data-cat="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
-        <a href="products.html" data-cat="metal" data-i18n="cat_metal">شموع معدنية</a>
-        <a href="products.html" data-cat="massage" data-i18n="cat_massage">شموع المساج</a>
-        <a href="products.html" data-cat="bride" data-i18n="cat_bride">بوكس العروسة</a>
-        <a href="products.html" data-cat="gift" data-i18n="cat_gift">الهدايا</a>
-      </div>
-      <div>
-        <h4 data-i18n="foot_pay_h">الدفع والشحن</h4>
-        <div class="paybox">
-          <b data-i18n="pay_title">InstaPay — تحويل مقدم</b>
-          <p style="margin-top:.5rem" data-i18n="foot_pay_note">ملحوظة هامة: قيمة المنتجات بتتحول مقدمًا عبر InstaPay، أما تكلفة الشحن فتُدفع كاش لمندوب شركة الشحن وقت استلام الأوردر مباشرة.</p>
-        </div>
-      </div>
-    </div>
-    <div class="fbot">
-      <span data-i18n="foot_rights">© 2026 - 2030 VelaLight — جميع الحقوق محفوظة</span>
-      <div><a href="privacy.html" data-i18n="foot_privacy">سياسة الخصوصية</a> <a href="terms.html" data-i18n="foot_terms">شروط الاستخدام</a></div>
-    </div>
-  </div>
-  <div class="fbot" style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:10px;">
-    <span data-i18n="foot_rights" style="font-size:0.85rem;color:var(--dim);">© 2026 VelaLight — جميع الحقوق محفوظة</span>
-    <div style="font-size:0.8rem;color:var(--mut);display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;">
-      <span data-i18n="foot_designer_label">صُمم وتطوير بعناية بواسطة</span>
-      <a href="https://wa.me/201226690050" target="_blank" style="color:var(--gold2);text-decoration:none;font-weight:600;">Wagdy</a>
-      <span>&</span>
-      <a href="https://wa.me/201277741748" target="_blank" style="color:var(--gold2);text-decoration:none;font-weight:600;">Philopater</a>
-    </div>
-    <div style="display:flex;gap:15px;font-size:0.8rem;">
-      <a href="privacy.html" data-i18n="foot_privacy" style="color:var(--dim);text-decoration:none;">سياسة الخصوصية</a>
-      <a href="terms.html" data-i18n="foot_terms" style="color:var(--dim);text-decoration:none;">شروط الاستخدام</a>
-    </div>
-  </div>
-</footer>
-
-<div id="toasts"></div>
-
-<!-- ═══ SCRIPTS ═══ -->
-<script src="data.js"></script>
-<script type="module" src="firebase.js"></script>
-<script src="app.js"></script>
-
-<script>
-(function() {
-  "use strict";
-
-  // تهيئة الفلاتر والترتيب
-  const chips = document.querySelectorAll("#chips .chip");
-  const sortSelect = document.getElementById("sortSelect");
-  const grid = document.getElementById("productsGrid");
-
-  function updateFilters() {
-    const activeChip = document.querySelector("#chips .chip.on");
-    const cat = activeChip ? activeChip.dataset.cat : "all";
-    const sort = sortSelect ? sortSelect.value : "new";
-    
-    // حفظ الحالة في localStorage عشان تفضل ثابتة
-    localStorage.setItem("vl_products_filter", JSON.stringify({ cat, sort }));
-    
-    // استدعاء دالة الرسم من app.js
-    // استدعاء الدالة الأساسية لرسم المنتجات مع ربط أزرار الإضافة
-if (typeof renderProducts === "function") {
-  renderProducts();
-} else {
-  console.warn("renderProducts function not found!");
-}
-  }
-
-  // ربط الأحداث
-  chips.forEach(chip => {
-    chip.addEventListener("click", function() {
-      chips.forEach(c => c.classList.remove("on"));
-      this.classList.add("on");
-      updateFilters();
-    });
-  });
-
-  if (sortSelect) {
-    sortSelect.addEventListener("change", updateFilters);
-  }
-
-  // استعادة الفلتر المخزن
-  try {
-    const saved = JSON.parse(localStorage.getItem("vl_products_filter") || "{}");
-    if (saved.cat) {
-      chips.forEach(c => {
-        c.classList.toggle("on", c.dataset.cat === saved.cat);
-      });
-    }
-    if (saved.sort && sortSelect) {
-      sortSelect.value = saved.sort;
-    }
-  } catch(e) {}
-
-  // دالة مساعدة لتحديث اللغة
-  function applyProductsTranslations() {
-    if (typeof t !== "function") return;
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-      const key = el.dataset.i18n;
-      const val = t(key);
-      if (val && val !== key) el.textContent = val;
-    });
-  }
-
-  // مراقبة تغيير اللغة
-  const langObserver = new MutationObserver(() => {
-    applyProductsTranslations();
-    if (typeof renderProductsPage === "function") renderProductsPage();
-  });
-  langObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
-
-  // تهيئة أولية
-  document.addEventListener("DOMContentLoaded", function() {
-    applyProductsTranslations();
-    updateFilters();
-    
-    // تهيئة السلة
-    if (typeof initCart === "function") initCart();
-    if (typeof cartBadge === "function") cartBadge();
-  });
-
-  // تصدير الدوال لاستخدامها من app.js
-  window.updateFilters = updateFilters;
-
-})();
-</script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>كل المنتجات | VelaLight</title>
-<meta name="description" content="استعرضي جميع منتجات VelaLight من الشموع والعطور الفاخرة. صناعة يدوية 100% بخامات طبيعية.">
-<meta name="theme-color" content="#faf6f0">
-<link rel="canonical" href="https://velalight.github.io/products.html">
-
-<!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
-<!-- 1. Google Analytics 4 (GA4) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-BWBD8ZZD23'); 
-</script>
-
-<!-- 2. Meta Pixel (Facebook Pixel) -->
-<script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1377896053806991');
-  fbq('track', 'PageView');
-</script>
-<noscript>
-  <img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1377896053806991&ev=PageView&noscript=1"/>
-</noscript>
-<!-- ═══ End Tracking Codes ═══ -->
-
-<!-- ═══ Preconnect & Fonts ═══ -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="mobile-luxury-fix.css">
-
-<style>
-  .products-header { padding: 2rem 0 1rem; text-align: center; }
-  .products-header h1 { font-family: var(--fd); font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 0.5rem; }
-  .products-header p { color: var(--mut); font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
-  
-  .filter-bar { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin: 1.5rem 0 2rem; align-items: center; }
-  .filter-bar select, .filter-bar button { padding: 0.6rem 1.2rem; border-radius: 99px; border: 1px solid var(--line); background: var(--panel); font-family: inherit; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
-  .filter-bar select:hover, .filter-bar button:hover { border-color: var(--gold); }
-  .filter-bar .chip.on { background: var(--gold); color: #fff; border-color: var(--gold); }
-  
-  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
-  .products-count { text-align: center; color: var(--dim); margin-bottom: 1rem; }
-  
-  @media (max-width: 600px) {
-    .filter-bar { gap: 0.5rem; }
-    .filter-bar select, .filter-bar button { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
-    .products-grid { gap: 1rem; }
-  }
-</style>
-</head>
-
-<body>
-
-<!-- ═══ TOP BAR ═══ -->
-<div class="topbar">
-  <div class="mq-track" id="mqTrack">
-    <span data-i18n="mq_delivery">🚚 توصيل سريع لكل محافظات مصر</span>
-    <span data-i18n="mq_discounts">🏷️ خصومات حصرية على مجموعات مختارة</span>
-    <span data-i18n="mq_gift">🎁 تغليف هدايا مجاني مع كل طلب</span>
-    <span data-i18n="mq_handmade">🤲 صناعة يدوية 100% بخامات طبيعية</span>
-    <span data-i18n="mq_scents">🕯️ أكثر من 23 عطر فاخر متاح</span>
-    <span data-i18n="mq_shipping">📦 شحن آمن من الورشة لحد باب بيتك</span>
-    <span data-i18n="mq_support">💬 دعم فني يومي لخدمتك</span>
-    <span data-i18n="mq_delivery">🚚 توصيل سريع لكل محافظات مصر</span>
-    <span data-i18n="mq_discounts">🏷️ خصومات حصرية على مجموعات مختارة</span>
-    <span data-i18n="mq_gift">🎁 تغليف هدايا مجاني مع كل طلب</span>
-    <span data-i18n="mq_handmade">🤲 صناعة يدوية 100% بخامات طبيعية</span>
-    <span data-i18n="mq_scents">🕯️ أكثر من 23 عطر فاخر متاح</span>
-    <span data-i18n="mq_shipping">📦 شحن آمن من الورشة لحد باب بيتك</span>
-    <span data-i18n="mq_support">💬 دعم فني يومي لخدمتك</span>
-  </div>
-</div>
-
-<!-- ═══ HEADER ═══ -->
-<header>
-  <div class="wrap hrow">
-    <a class="logo" href="index.html" aria-label="VelaLight">
-      <span class="flame"></span>
-      <div><b>VelaLight</b><small>Luxury Candle Studio</small></div>
-    </a>
-    <nav class="mainnav" aria-label="Main navigation">
-      <div><a href="index.html" data-i18n="nav_home">الرئيسية</a></div>
-      <div>
-        <a href="products.html" data-i18n="nav_shop">تسوق</a>
-        <a href="products.html" aria-label="عرض تصنيفات المنتجات" aria-haspopup="true">▾</a>
-        <div class="dd">
-          <a href="products.html" data-cat="all" data-i18n="cat_all">كل الشموع</a>
-          <a href="products.html" data-cat="wood" data-i18n="cat_wood">شموع خشبية</a>
-          <a href="products.html" data-cat="glass" data-i18n="cat_glass">شموع زجاجية</a>
-          <a href="products.html" data-cat="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
-          <a href="products.html" data-cat="metal" data-i18n="cat_metal">شموع معدنية</a>
-          <a href="products.html" data-cat="massage" data-i18n="cat_massage">شموع المساج</a>
-          <a href="products.html" data-cat="gift" data-i18n="cat_gift">الهدايا</a>
-          <a href="products.html" data-cat="bride" data-i18n="cat_bride">بوكس العروسة</a>
-        </div>
-      </div>
-      <div><a href="index.html#about-us" data-i18n="nav_about">من نحن</a></div>
-      <div><a href="index.html#faq-section" data-i18n="nav_faq">الأسئلة الشائعة</a></div>
-      <div><a href="contact.html" data-i18n="nav_contact">تواصل معنا</a></div>
-    </nav>
-    <div class="hact">
-      <button class="langbtn" id="langBtn" type="button">EN</button>
-      <button class="icobtn" id="cartBtn" type="button">🛍️ <span class="badge" id="cartCount">0</span></button>
-    </div>
-  </div>
-</header>
-
-<!-- ═══ MOBILE NAV ═══ -->
-<nav class="mnav" id="mnav">
-  <h5 data-i18n="mn_cats">تصنيفات الشموع</h5>
-  <a href="products.html" data-cat="all" data-i18n="cat_all">كل الشموع</a>
-  <a href="products.html" data-cat="wood" data-i18n="cat_wood">شموع خشبية</a>
-  <a href="products.html" data-cat="glass" data-i18n="cat_glass">شموع زجاجية</a>
-  <a href="products.html" data-cat="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
-  <a href="products.html" data-cat="metal" data-i18n="cat_metal">شموع معدنية</a>
-  <a href="products.html" data-cat="massage" data-i18n="cat_massage">شموع المساج</a>
-  <a href="products.html" data-cat="gift" data-i18n="cat_gift">الهدايا</a>
-  <a href="products.html" data-cat="bride" data-i18n="cat_bride">بوكس العروسة</a>
-  <h5 data-i18n="mn_explore">اكتشف</h5>
-  <a href="index.html#about-us" data-i18n="nav_about">من نحن</a>
-  <a href="index.html#scents" data-i18n="mn_scents">العطور الفاخرة</a>
-  <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
-</nav>
-<div class="ovl" id="ovl"></div>
-
-<!-- ═══════════════════════════════════════════════
-     MAIN CONTENT — جميع المنتجات
-     ═══════════════════════════════════════════════ -->
-<main>
-  <div class="wrap">
-
-    <div class="products-header">
-      <div class="kick" data-i18n="products_kick">Our Collection</div>
-      <h1 data-i18n="products_title">كل المنتجات</h1>
-      <p data-i18n="products_sub">اكتشفي تشكيلتنا الكاملة من الشموع الفاخرة</p>
-    </div>
-
-    <!-- ═══ Filter Bar ═══ -->
-    <div class="filter-bar" id="filterBar">
-      <div class="chips" id="chips">
-        <button class="chip on" data-cat="all" data-i18n="filter_all">الكل</button>
-        <button class="chip" data-cat="wood" data-i18n="filter_wood">خشبية</button>
-        <button class="chip" data-cat="glass" data-i18n="filter_glass">زجاجية</button>
-        <button class="chip" data-cat="crystal" data-i18n="filter_crystal">كريستالية</button>
-        <button class="chip" data-cat="metal" data-i18n="filter_metal">معدنية</button>
-        <button class="chip" data-cat="massage" data-i18n="filter_massage">مساج</button>
-        <button class="chip" data-cat="gift" data-i18n="filter_gift">هدايا</button>
-        <button class="chip" data-cat="bride" data-i18n="filter_bride">بوكس العروسة</button>
-      </div>
-      <select id="sortSelect" data-i18n-title="sort_by" title="ترتيب حسب">
-        <option value="new" data-i18n="sort_new">الأحدث</option>
-        <option value="asc" data-i18n="sort_asc">السعر: من الأقل</option>
-        <option value="desc" data-i18n="sort_desc">السعر: من الأعلى</option>
-        <option value="rating" data-i18n="sort_rating">التقييم</option>
-        <option value="best" data-i18n="sort_best">الأكثر مبيعاً</option>
-        <option value="disc" data-i18n="sort_disc">أكبر خصم</option>
-      </select>
-    </div>
-
-    <div class="products-count" id="productsCount"></div>
-
-    <div class="products-grid" id="productsGrid">
-      <!-- سيتم تحميل المنتجات عبر JavaScript من app.js -->
-      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.5rem; padding:1rem 0;">
-        <div class="skel" style="height:380px;border-radius:18px;"></div>
-        <div class="skel" style="height:380px;border-radius:18px;"></div>
-        <div class="skel" style="height:380px;border-radius:18px;"></div>
-        <div class="skel" style="height:380px;border-radius:18px;"></div>
-        <div class="skel" style="height:380px;border-radius:18px;"></div>
-        <div class="skel" style="height:380px;border-radius:18px;"></div>
-      </div>
-    </div>
-
-  </div>
-</main>
-
-  <!-- ═══ SCENT MODAL ═══ -->
-<div class="modal" id="scentOv">
-  <div class="mpanel">
-    <button class="icobtn" id="closeScent" style="float:left" aria-label="إغلاق">✕</button>
-    <h3 class="fd" style="color:var(--gold2)" id="scentModalTitle"></h3>
-    <div class="opt-t" data-i18n="pd_scent_t">🌸 اختاري العطر:</div>
-    <div class="scents-pick" id="scentModalScents"></div>
-    <div class="opt-t" data-i18n="pd_qty_t">الكمية:</div>
-    <div class="qty">
-      <button id="smQMinus" aria-label="تقليل الكمية">−</button>
-      <b id="smQVal">1</b>
-      <button id="smQPlus" aria-label="زيادة الكمية">+</button>
-    </div>
-    <button class="btn" id="scentModalAdd" style="width:100%;margin-top:1.2rem" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
-  </div>
-</div>
-  
 <!-- ═══ CART DRAWER ═══ -->
 <div class="ovl" id="cartOv"></div>
 <aside class="drawer" id="cartDrawer">
@@ -737,25 +333,23 @@ if (typeof renderProducts === "function") {
   // تهيئة الفلاتر والترتيب
   const chips = document.querySelectorAll("#chips .chip");
   const sortSelect = document.getElementById("sortSelect");
-  const grid = document.getElementById("productsGrid");
 
   function updateFilters() {
     const activeChip = document.querySelector("#chips .chip.on");
     const cat = activeChip ? activeChip.dataset.cat : "all";
     const sort = sortSelect ? sortSelect.value : "new";
     
-    // حفظ الحالة في localStorage عشان تفضل ثابتة
     localStorage.setItem("vl_products_filter", JSON.stringify({ cat, sort }));
     
-    // استدعاء دالة الرسم من app.js
-    if (typeof renderProducts === "function") {
+    if (typeof renderProductsPage === "function") {
+      renderProductsPage();
+    } else if (typeof renderProducts === "function") {
       renderProducts();
     } else {
-      console.warn("renderProducts function not found!");
+      console.warn("No render function found!");
     }
   }
 
-  // ربط الأحداث
   chips.forEach(chip => {
     chip.addEventListener("click", function() {
       chips.forEach(c => c.classList.remove("on"));
@@ -768,7 +362,6 @@ if (typeof renderProducts === "function") {
     sortSelect.addEventListener("change", updateFilters);
   }
 
-  // استعادة الفلتر المخزن
   try {
     const saved = JSON.parse(localStorage.getItem("vl_products_filter") || "{}");
     if (saved.cat) {
@@ -781,7 +374,6 @@ if (typeof renderProducts === "function") {
     }
   } catch(e) {}
 
-  // دالة مساعدة لتحديث اللغة
   function applyProductsTranslations() {
     if (typeof t !== "function") return;
     document.querySelectorAll("[data-i18n]").forEach(el => {
@@ -791,24 +383,20 @@ if (typeof renderProducts === "function") {
     });
   }
 
-  // مراقبة تغيير اللغة
   const langObserver = new MutationObserver(() => {
     applyProductsTranslations();
-    if (typeof renderProductsPage === "function") renderProductsPage();
+    updateFilters();
   });
   langObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
 
-  // تهيئة أولية
   document.addEventListener("DOMContentLoaded", function() {
     applyProductsTranslations();
     updateFilters();
     
-    // تهيئة السلة
     if (typeof initCart === "function") initCart();
     if (typeof cartBadge === "function") cartBadge();
   });
 
-  // تصدير الدوال لاستخدامها من app.js
   window.updateFilters = updateFilters;
 
 })();
