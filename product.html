@@ -13,7 +13,7 @@
 <meta property="og:locale" content="ar_EG">
 <meta property="og:title" content="منتج | VelaLight">
 <meta property="og:description" content="شموع يدوية فاخرة بعطور مميزة - صناعة يدوية 100%">
-<meta property="og:image" id="ogImage" content="https://velalight.github.io/logo.png">
+<meta property="og:image" content="https://velalight.github.io/RR.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://velalight.github.io/product.html">
 
@@ -61,7 +61,7 @@
   "@context":"https://schema.org",
   "@type":"Product",
   "name":"منتج VelaLight",
-  "image":"https://velalight.github.io/velalight-wooden-luxury-set-3candles-detail.webp",
+  "image":"https://velalight.github.io/RR.jpg",
   "description":"شموع يدوية فاخرة",
   "brand":{"@type":"Brand","name":"VelaLight"},
   "offers":{
@@ -788,7 +788,7 @@
   "@context":"https://schema.org",
   "@type":"Product",
   "name":"منتج VelaLight",
-  "image":"https://velalight.github.io/velalight-wooden-luxury-set-3candles-detail.webp",
+  "image":"https://velalight.github.io/RR.jpg",
   "description":"شموع يدوية فاخرة",
   "brand":{"@type":"Brand","name":"VelaLight"},
   "offers":{
@@ -1334,37 +1334,13 @@ function render(){
 
   const name=(typeof pname === "function") ? pname(P) : (P.name || "منتج");
   document.title=name+" | VelaLight";
-  // ═══ تحديث وسوم Open Graph (فيسبوك، تويتر، لينكدإن) ═══
-let ogTitle = document.querySelector('meta[property="og:title"]');
-if (ogTitle) ogTitle.content = name + ' - VelaLight';
-
-let ogDesc = document.querySelector('meta[property="og:description"]');
-if (ogDesc) ogDesc.content = (typeof pdesc === "function" ? pdesc(P) : (P.desc || "")).slice(0, 160);
-
-// ═══ الأهم: تحديث صورة المنتج ديناميكياً ═══
-let ogImage = document.querySelector('meta[property="og:image"]');
-if (ogImage) {
-    let imgUrl = zoomImages.length ? zoomImages[0] : (P.img || "https://velalight.github.io/RR.jpg");
-    imgUrl = (typeof CDN === "function") ? CDN(imgUrl) : imgUrl;
-    ogImage.content = imgUrl;
-}
-
-// ═══ تحديث رابط الصفحة الحالي ═══
-let ogUrl = document.querySelector('meta[property="og:url"]');
-if (ogUrl) ogUrl.content = window.location.href;
+  let ogTitle=document.querySelector('meta[property="og:title"]');
+  if(ogTitle) ogTitle.content=name;
+  let ogDesc=document.querySelector('meta[property="og:description"]');
+  if(ogDesc) ogDesc.content=(typeof pdesc === "function" ? pdesc(P) : (P.desc || "")).slice(0,160);
   
- // ═══ تحديث الـ JSON-LD ديناميكيًا ═══
-if (typeof updateJsonLd === "function") updateJsonLd();
-
-// ═══════ تحديث صورة المعاينة (og:image) ديناميكيًا ═══════
-let ogImage = document.querySelector('meta[property="og:image"]');
-if (ogImage && zoomImages.length) {
-    let firstImage = zoomImages[0];
-    if (!firstImage.startsWith('http')) {
-        firstImage = 'https://velalight.github.io/' + firstImage.replace(/^\//, '');
-    }
-    ogImage.setAttribute('content', firstImage);
-}
+  // تحديث الـ JSON-LD ديناميكيًا
+  if(typeof updateJsonLd === "function") updateJsonLd();
 
   $("#crumbName").textContent=name;
   $("#pdName").textContent=name;
