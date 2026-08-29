@@ -1,23 +1,5 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <script>
-    // استخراج رقم المنتج من الرابط
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('p');
-
-    // بناء رابط الصورة بناءً على رقم المنتج
-    let imageUrl = '';
-    if (productId) {
-        // افترض أن صور المنتجات موجودة في مجلد images
-        // وأن الاسم يتبع النمط: product-{id}-main.jpg
-        imageUrl = `https://velalight.github.io/images/product-${productId}-main.jpg`;
-    }
-
-    // كتابة وسم og:image مباشرة في الصفحة
-    if (imageUrl) {
-        document.write(`<meta property="og:image" content="${imageUrl}" />`);
-    }
-</script>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -31,7 +13,7 @@
 <meta property="og:locale" content="ar_EG">
 <meta property="og:title" content="منتج | VelaLight">
 <meta property="og:description" content="شموع يدوية فاخرة بعطور مميزة - صناعة يدوية 100%">
-<meta property="og:image" id="ogImage" content="" />
+<meta property="og:image" content="https://velalight.github.io/velalight-wooden-luxury-set-3candles-detail.webp">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://velalight.github.io/product.html">
 
