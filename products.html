@@ -321,87 +321,112 @@
 <script type="module" src="firebase.js"></script>
 <script src="app.js"></script>
 
+<!-- ═══ تسريع ظهور الصور من الكاش المحلي ═══ -->
 <script>
 (function() {
   "use strict";
-
-  // تهيئة الفلاتر والترتيب
-  const chips = document.querySelectorAll("#chips .chip");
-  const sortSelect = document.getElementById("sortSelect");
-  const grid = document.getElementById("productsGrid");
-
-  function updateFilters() {
-    const activeChip = document.querySelector("#chips .chip.on");
-    const cat = activeChip ? activeChip.dataset.cat : "all";
-    const sort = sortSelect ? sortSelect.value : "new";
+  
+  // دالة لعرض المنتجات من الكاش المحلي فوراً (قبل Firebase)
+  function renderFromCache() {
+    const grid = document.getElementById('productsGrid');
+    if (!grid) return;
     
-    // حفظ الحالة في localStorage عشان تفضل ثابتة
-    localStorage.setItem("vl_products_filter", JSON.stringify({ cat, sort }));
-    
-    // استدعاء دالة الرسم من app.js
-    if (typeof renderProductsPage === "function") {
-      renderProductsPage();
-    } else {
-      console.warn("renderProductsPage function not found!");
-    }
-  }
-
-  // ربط الأحداث
-  chips.forEach(chip => {
-    chip.addEventListener("click", function() {
-      chips.forEach(c => c.classList.remove("on"));
-      this.classList.add("on");
-      updateFilters();
-    });
-  });
-
-  if (sortSelect) {
-    sortSelect.addEventListener("change", updateFilters);
-  }
-
-  // استعادة الفلتر المخزن
-  try {
-    const saved = JSON.parse(localStorage.getItem("vl_products_filter") || "{}");
-    if (saved.cat) {
-      chips.forEach(c => {
-        c.classList.toggle("on", c.dataset.cat === saved.cat);
+    try {
+      const cached = JSON.parse(localStorage.getItem('vl_products_v3') || '[]');
+      if (!cached.length) return;
+      
+      // تصفية المنتجات النشطة
+      const products = cached.filter(p => p.active !== false);
+      if (!products.length) return;
+      
+      // تطبيق الفلتر والترتيب الحالي (نفس منطق app.js)
+      const activeChip = document.querySelector('#chips .chip.on');
+      const cat = activeChip ? activeChip.dataset.cat : 'all';
+      const sort = document.getElementById('sortSelect')?.value || 'new';
+      
+      let list = products.filter(p => {
+        if (cat !== 'all' && p.cat !== cat) return false;
+        return true;
       });
+      
+      // ترتيب بسيط (نفس منطق app.js)
+      list.sort((a, b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        if (a.pinned && b.pinned) {
+          return (b.pinnedAt || 0) - (a.pinnedAt || 0);
+        }
+        switch(sort) {
+          case 'asc': return (a.price || 0) - (b.price || 0);
+          case 'desc': return (b.price || 0) - (a.price || 0);
+          default: return (b.createdAt || 0) - (a.createdAt || 0);
+        }
+      });
+      
+      // عرض أول 8 منتجات فقط في البداية (لتسريع الظهور)
+      const displayList = list.slice(0, 8);
+      
+      let html = '';
+      const placeholderSvg = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>`;
+      
+      displayList.forEach((p, index) => {
+        const imgSrc = p.img ? (typeof CDN === 'function' ? CDN(p.img) : p.img) : placeholderSvg;
+        const isFirstBatch = index < 4;
+        const loadingAttr = isFirstBatch ? 'eager' : 'lazy';
+        const fetchPriority = isFirstBatch ? 'high' : 'auto';
+        
+        html += `
+          <article class="p-card" data-id="${p.id}">
+            <a class="p-media" href="product.html?p=${p.id}" aria-label="${p.name || ''}">
+              <img src="${imgSrc}" alt="${p.name || ''}" loading="${loadingAttr}" fetchpriority="${fetchPriority}" width="400" height="400" onerror="window.handleImageError(this, '${p.id}')">
+              <span class="p-quick">${(typeof t === 'function' ? t('view_details') : 'عرض التفاصيل')}</span>
+            </a>
+            <div class="p-body">
+              <span class="p-cat">${(typeof cat === 'function' ? cat(p.cat) : p.cat) || ''}</span>
+              <h3><a href="product.html?p=${p.id}">${p.name || ''}</a></h3>
+              <div class="p-foot">
+                <div class="p-price">
+                  <span class="current-price">${(typeof money === 'function' ? money(p.price) : p.price + ' ج.م')}</span>
+                  ${p.old > p.price ? `<del>${(typeof money === 'function' ? money(p.old) : p.old + ' ج.م')}</del>` : ''}
+                </div>
+                <button class="p-add" data-id="${p.id}">${(typeof t === 'function' ? t('add_cart') : 'أضف للسلة')}</button>
+              </div>
+            </div>
+          </article>
+        `;
+      });
+      
+      // نضيف باقي المنتجات بعد تحميل الصفحة
+      grid.innerHTML = html;
+      
+      // ربط أحداث الأزرار
+      grid.querySelectorAll('.p-add').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const id = this.dataset.id;
+          const product = products.find(p => p.id === id);
+          if (product && typeof openQuickAdd === 'function') {
+            openQuickAdd(product);
+          }
+        });
+      });
+      
+      // إخفاء الـ skeleton مؤقتاً (تم استبداله بالصور)
+      // بعد تحميل البيانات من Firebase، سيتم تحديث الشبكة بواسطة renderProductsPage
+      
+    } catch(e) {
+      console.warn('Cache render failed:', e);
     }
-    if (saved.sort && sortSelect) {
-      sortSelect.value = saved.sort;
-    }
-  } catch(e) {}
-
-  // دالة مساعدة لتحديث اللغة
-  function applyProductsTranslations() {
-    if (typeof t !== "function") return;
-    document.querySelectorAll("[data-i18n]").forEach(el => {
-      const key = el.dataset.i18n;
-      const val = t(key);
-      if (val && val !== key) el.textContent = val;
-    });
   }
-
-  // مراقبة تغيير اللغة
-  const langObserver = new MutationObserver(() => {
-    applyProductsTranslations();
-    if (typeof renderProductsPage === "function") renderProductsPage();
-  });
-  langObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
-
-  // تهيئة أولية
-  document.addEventListener("DOMContentLoaded", function() {
-    applyProductsTranslations();
-    updateFilters();
-    
-    // تهيئة السلة
-    if (typeof initCart === "function") initCart();
-    if (typeof cartBadge === "function") cartBadge();
-  });
-
-  // تصدير الدوال لاستخدامها من app.js
-  window.updateFilters = updateFilters;
-
+  
+  // تنفيذ عند تحميل الصفحة
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderFromCache);
+  } else {
+    renderFromCache();
+  }
+  
 })();
 </script>
 
