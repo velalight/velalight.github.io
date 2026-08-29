@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
-   VelaLight — AI Smart Assistant (Pro Sales v4)
-   الميزة: مساعد مبيعات ذكي، يذكر الأسعار، الأسماء، ويطرح أسئلة تفاعلية
+   VelaLight — AI Smart Assistant (Pro Sales v5 - Debug Mode)
+   الميزة: يظهر سبب الخطأ الحقيقي على الشاشة، ويذكر الأسعار والأسماء بدقة
    ═══════════════════════════════════════════════════════════ */
 
 const GEMINI_API_KEY = "AIzaSyAWKkRA3aGtr2O32dGTOayEuCoun2jOybo"; 
@@ -13,10 +13,10 @@ const BASE_SYSTEM_PROMPT = `
 قواعد الرد الذهبية (التزم بها بدقة):
 1. 🎯 التفاصيل الدقيقة: عند اقتراح منتج، اذكر دائماً (اسم المنتج + سعره + العطور المتاحة فيه).
 2. 🌸 الغنى بالمعلومات: لا تقل "عندنا عطور كثيرة". بل قل: "نوفر عطوراً مثل اللافندر، العود، الفانيلا، والياسمين...".
-3. 💬 التفاعل: اختم ردك بسؤال بسيط يشجع العميل على الاستمرار (مثال: "هل تفضلين العطور الهادئة أم القوية؟" أو "هل المناسبة هدية أم للاستخدام الشخصي؟").
-4. 📏 الطول المثالي: الرد يجب أن يكون مفيداً وغنياً بالمعلومات (3-5 جمل)، ليس قصيراً جداً ومملاً، وليس طويلاً جداً ومملاً.
+3. 💬 التفاعل: اختم ردك بسؤال بسيط يشجع العميل على الاستمرار (مثال: "هل تفضلين العطور الهادئة أم القوية؟").
+4. 📏 الطول المثالي: الرد يجب أن يكون مفيداً وغنياً بالمعلومات (3-5 جمل).
 5. 🛡️ المصداقية: استخدم فقط البيانات الموجودة في "معلومات الموقع الحالية" أدناه. لا تخترع أسعاراً أو منتجات.
-6. 🚨 الخروج عن المألوف: إذا لم تجد الإجابة، قل بلباقة: "سأقوم بتحويلك فوراً لخدمة العملاء على واتساب لإتمام طلبك بأفضل طريقة 📱".
+6. 🚨 الخروج عن المألوف: إذا لم تجد الإجابة، قل بلباقة: "سأقوم بتحويلك فوراً لخدمة العملاء على واتساب لإتمام طلبك 📱".
 
 معلومات الموقع الأساسية:
 - الشحن: لكل محافظات مصر خلال 3-7 أيام عمل.
@@ -33,7 +33,6 @@ function getDynamicContext() {
     let context = "### 📦 قائمة المنتجات الحالية (استخدم هذه الأسماء والأسعار بدقة):\n";
     
     if (typeof PRODUCTS !== 'undefined' && Array.isArray(PRODUCTS)) {
-        // نأخذ أول 10 منتجات كعينة قوية للذكاء الاصطناعي لتوفير الـ Tokens مع إعطاء أمثلة دقيقة
         const sampleProducts = PRODUCTS.slice(0, 10); 
         sampleProducts.forEach(p => {
             const name = p.name || "منتج";
@@ -43,8 +42,8 @@ function getDynamicContext() {
         });
         context += "(ملاحظة: هناك منتجات أخرى في الموقع، يمكنك توجيه العميل لصفحة 'تسوق' لرؤية الكل).\n";
     } else {
-        console.warn("⚠️ تحذير: متغير PRODUCTS غير موجود. تأكد من تحميل data.js قبل ai-chat.js");
-        context += "- (جاري تحميل المنتجات... يرجى توجيه العميل للموقع).\n";
+        // هذا التنبيه سيظهر للذكاء الاصطناعي ليعرف أن هناك مشكلة في تحميل البيانات
+        context += "⚠️ تنبيه هام: متغير PRODUCTS غير موجود. لم يتم تحميل ملف data.js بشكل صحيح. أخبر العميل بذلك بلباقة.\n";
     }
 
     context += "\n### ❓ إجابات الأسئلة الشائعة (استخدم هذه المعلومات): \n";
@@ -53,6 +52,8 @@ function getDynamicContext() {
         context += `- مدة التجهيز والشحن: 3 إلى 7 أيام عمل لجميع المحافظات.\n`;
         context += `- خامات الشموع: شمع صويا طبيعي 100% مع فتايل خشبية أو قطنية آمنة.\n`;
         context += `- سياسة الاستبدال: خلال 24 ساعة من الاستلام في حالة وجود عيب مصنعي فقط.\n`;
+    } else {
+        context += "⚠️ تنبيه هام: متغير I18N غير موجود. لم يتم تحميل ملف data.js بشكل صحيح.\n";
     }
 
     return context;
@@ -64,8 +65,8 @@ async function sendToGemini(userMessage) {
 
     const contents = [
         { role: "user", parts: [{ text: finalPrompt }] },
-        { role: "model", parts: [{ text: "فهمت تماماً. سأعمل كمساعد مبيعات محترف لـ VelaLight، وسأذكر أسماء المنتجات، أسعارها، والعطور بدقة، وسأحرص على أن تكون ردودي مفيدة وجذابة." }] },
-        ...chatHistory.slice(-6), // الاحتفاظ بآخر 6 رسائل للحفاظ على سياق المحادثة دون استهلاك Tokens كثيرة
+        { role: "model", parts: [{ text: "فهمت تماماً. سأعمل كمساعد مبيعات محترف، وسأذكر أسماء المنتجات، أسعارها، والعطور بدقة." }] },
+        ...chatHistory.slice(-6), 
         { role: "user", parts: [{ text: userMessage }] }
     ];
 
@@ -80,8 +81,8 @@ async function sendToGemini(userMessage) {
                 body: JSON.stringify({
                     contents,
                     generationConfig: { 
-                        temperature: 0.7, // رفعنا الحرارة قليلاً لجعل الردود أكثر طبيعية وجاذبية
-                        maxOutputTokens: 400 // السماح بردود أطول وأكثر تفصيلاً
+                        temperature: 0.7, 
+                        maxOutputTokens: 400 
                     }
                 })
             });
@@ -90,12 +91,12 @@ async function sendToGemini(userMessage) {
                 const data = await response.json();
                 const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
                 if (reply) return reply;
-                lastError = new Error("رد فاضي");
+                lastError = new Error("الذكاء الاصطناعي أرجع رداً فارغاً");
             } else if (response.status === 404) {
                 continue; 
             } else {
                 const errData = await response.json().catch(() => null);
-                lastError = new Error(errData?.error?.message || ("HTTP " + response.status));
+                lastError = new Error(errData?.error?.message || ("خطأ في الخادم: HTTP " + response.status));
                 break; 
             }
         } catch (networkError) {
@@ -104,18 +105,16 @@ async function sendToGemini(userMessage) {
         }
     }
 
-    console.error("Gemini Error:", lastError);
+    // إرجاع رسالة الخطأ الحقيقية ليتم عرضها على الشاشة
     return translateGeminiError(lastError);
 }
 
-/* ═══ ترجمة الأخطاء لعربي واضح ═══ */
+/* ═══ ترجمة الأخطاء وعرضها بوضوح على الشاشة للمساعدة في التشخيص ═══ */
 function translateGeminiError(err) {
-    const msg = (err && err.message) ? err.message.toLowerCase() : "";
-    if (msg.includes("api key not valid")) return "⚠️ مفتاح الـ API غير صحيح.";
-    if (msg.includes("403") || msg.includes("permission_denied") || msg.includes("has not been used") || msg.includes("is disabled")) return "⚠️ خدمة Gemini مش مفعلة في المشروع. يرجى تفعيل Generative Language API من Google Cloud.";
-    if (msg.includes("429") || msg.includes("quota")) return "⚠️ وصلت للحد المجاني اليوم، جربي بعد شوية.";
-    if (msg.includes("failed to fetch")) return "⚠️ مشكلة في الاتصال بالإنترنت.";
-    return "⚠️ معلش، فيه مشكلة مؤقتة في الاتصال. جربي تاني بعد شوية أو تواصلي معانا على واتساب. 📱";
+    const rawMessage = (err && err.message) ? err.message : String(err);
+    
+    // هذه الرسالة ستظهر مباشرة في الشات لتعرف السبب الحقيقي
+    return `⚠️ حدث خطأ تقني يمنع الذكاء الاصطناعي من الرد: \n\n"${rawMessage}"\n\n💡 حل سريع: تأكد من أن ملف <script src="data.js"><\/script> مكتوب في index.html قبل ملف ai-chat.js.`;
 }
 
 /* ═══ دوال واجهة المستخدم (UI) ═══ */
@@ -124,7 +123,6 @@ function addAIChatMessage(text, who) {
     if (!w) return;
     const d = document.createElement("div");
     d.className = "msg " + who;
-    // تحويل الأسطر الجديدة إلى <br> لعرض أفضل، وتحويل الروابط أو الأسماء بشكل أنيق
     d.innerHTML = text.replace(/\n/g, '<br>'); 
     w.appendChild(d);
     w.scrollTop = w.scrollHeight;
@@ -172,7 +170,7 @@ function initAIChat() {
     chatMsgs.innerHTML = "";
     chatQuick.innerHTML = "";
 
-    addAIChatMessage("أهلاً بيكِ في VelaLight! ✨ أنا مساعدك الذكي. اسأليني عن أسعار الشموع، العطور، أو اقتراحات الهدايا، وسأسعد جداً بمساعدتك في اختيار الأنسب لكِ. 🕯️", "bot");
+    addAIChatMessage("أهلاً بيكِ في VelaLight! ✨ أنا مساعدك الذكي. اسأليني عن أسعار الشموع، العطور، أو اقتراحات الهدايا، وسأسعد جداً بمساعدتك. 🕯️", "bot");
 
     const quickQuestions = [
         "🎁 اقترحي لي هدية فاخرة", 
