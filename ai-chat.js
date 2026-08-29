@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
-   VelaLight — AI Smart Assistant (v6 - Smart Fallback)
-   الميزة: إذا حظر جوجل الـ API، يرد النظام بذكاء باستخدام بيانات الموقع مباشرة
+   VelaLight — AI Smart Assistant (v7 - Safe Pricing & Smart Fallback)
+   الميزة: ردود مرنة للأسعار تتجنب الأرقام القديمة، وتوجه العميل للموقع
    ═══════════════════════════════════════════════════════════ */
 
 const GEMINI_API_KEY = "AIzaSyAWKkRA3aGtr2O32dGTOayEuCoun2jOybo"; 
@@ -11,7 +11,7 @@ const BASE_SYSTEM_PROMPT = `
 دورك: مساعدة العميل على اختيار وشراء المنتج المناسب بأسلوب ودود، أنيق، واحترافي.
 
 قواعد الرد:
-1. اذكر دائماً (اسم المنتج + سعره + العطور المتاحة).
+1. اذكر دائماً (اسم المنتج + العطور المتاحة).
 2. لا تقل "عندنا عطور كثيرة"، بل اذكر أمثلة: اللافندر، العود، الفانيلا، الياسمين.
 3. اختم ردك بسؤال بسيط يشجع العميل (مثال: "هل تفضلين العطور الهادئة أم القوية؟").
 4. الرد يجب أن يكون 3-5 جمل.
@@ -20,14 +20,14 @@ const BASE_SYSTEM_PROMPT = `
 
 let chatHistory = [];
 let isTyping = false;
-let isApiBlocked = false; // متغير لتتبع حالة الحظر
+let isApiBlocked = false; 
 
 /* ═══ دالة بناء السياق الديناميكي ═══ */
 function getDynamicContext() {
-    let context = "### 📦 قائمة المنتجات (استخدم هذه الأسماء والأسعار):\n";
+    let context = "### 📦 قائمة المنتجات (استخدم هذه الأسماء):\n";
     if (typeof PRODUCTS !== 'undefined' && Array.isArray(PRODUCTS)) {
         PRODUCTS.slice(0, 8).forEach(p => {
-            context += `- ${p.name}: ${p.price} ج.م | عطور: ${p.scents ? p.scents.join('، ') : 'متنوعة'}\n`;
+            context += `- ${p.name} | عطور: ${p.scents ? p.scents.join('، ') : 'متنوعة'}\n`;
         });
     }
     context += "\n### ❓ معلومات عامة:\n";
@@ -42,10 +42,10 @@ function getSmartFallbackResponse(msg) {
     msg = msg.toLowerCase();
     
     if (msg.includes("هدي") || msg.includes("اقترح") || msg.includes("عروسة")) {
-        return "🎁 أنصحكِ بشدة بـ **بوكس العروسة** أو **شمعة المانديلا**، فهما من أكثر هدايانا طلباً لفخامتهما. هل تفضلين معرفة السعر وإضافته للسلة؟";
+        return "🎁 أنصحكِ بشدة بـ **بوكس العروسة** أو **شمعة المانديلا**، فهما من أكثر هدايانا طلباً لفخامتهما. هل تفضلين معرفة التفاصيل وإضافته للسلة؟";
     }
     if (msg.includes("استرخاء") || msg.includes("مساج") || msg.includes("تعب")) {
-        return "🧖‍♀️ للاسترخاء التام، شموع **المساج (Massage Candles)** هي الخيار الأمثل. تتوفر بعطور اللافندر والياسمين المهدئة. هل أشرح لكِ طريقة استخدامها؟";
+        return "🧖‍♀️ للاسترخاء التام، شموع **المساج (Massage Candles)** هي الخيار الأمثل. تتوفر بعطور اللافندر والياسمين المهدئة. هل أشرح لكِ طريقة استخدامها الآمنة؟";
     }
     if (msg.includes("عطور") || msg.includes("رائحة") || msg.includes("ريحه")) {
         return "🌸 لدينا تشكيلة فاخرة تشمل: اللافندر، العود، الفانيلا، الياسمين، والورد البلدي. هل تفضلين العطور الهادئة والمنعشة أم القوية والدافئة؟";
@@ -53,17 +53,18 @@ function getSmartFallbackResponse(msg) {
     if (msg.includes("شحن") || msg.includes("توصيل") || msg.includes("كام الشحن")) {
         return "🚚 نوصل لجميع محافظات مصر خلال 3-7 أيام عمل. تكلفة الشحن تدفع كاش لمندوب التوصيل عند الاستلام، بينما قيمة المنتج تحول مقدماً عبر InstaPay.";
     }
-    if (msg.includes("سعر") || msg.includes("بكام") || msg.includes("أسعار")) {
-        return "💰 أسعارنا تبدأ من 325 ج.م (مثل شمعة المانديلا) وتصل لمجموعات فاخرة مثل الجولدن كاندل بـ 2850 ج.م. جميع الأسعار تشمل تغليفاً فاخراً ومجانياً. هل تبحثين عن فئة سعرية محددة؟";
+    
+    // 🔥 التعديل الجذري: رد مرن وآمن للأسعار لا يسبب إحراجاً بتغيير الأسعار
+    if (msg.includes("سعر") || msg.includes("بكام") || msg.includes("أسعار") || msg.includes("جولدن")) {
+        return "💰 أسعارنا محدثة دائماً على الموقع، وتبدأ من 325 ج.م للشموع الفردية (مثل المانديلا) وتصل إلى 3000+ ج.م للمجموعات الفاخرة (مثل الجولدن كاندل). \n\n✨ جميع الأسعار تشمل تغليفاً فاخراً ومجانياً. هل تبحثين عن هدية بميزانية محددة لأقترح لكِ الأنسب؟";
     }
     
     // الرد الافتراضي إذا لم يفهم السؤال
-    return "عذراً، نظام الذكاء الاصطناعي السحابي متوقف مؤقتاً بسبب تحديثات أمنية. لكن يسعدني مساعدتك يدوياً! يمكنك سؤالي عن: الأسعار، العطور، الشحن، أو اقتراحات الهدايا. أو يمكنك التواصل معنا مباشرة عبر واتساب 📱";
+    return "عذراً، يسعدني مساعدتك يدوياً! يمكنك سؤالي عن: الأسعار، العطور، الشحن، أو اقتراحات الهدايا. أو يمكنك التواصل معنا مباشرة عبر واتساب لمشاهدة الكاتالوج 📱";
 }
 
 /* ═══ إرسال لـ Gemini ═══ */
 async function sendToGemini(userMessage) {
-    // إذا تم اكتشاف الحظر مسبقاً، استخدم النظام البديل فوراً لتوفير الوقت
     if (isApiBlocked) {
         return getSmartFallbackResponse(userMessage);
     }
@@ -96,10 +97,8 @@ async function sendToGemini(userMessage) {
                 const errData = await response.json().catch(() => null);
                 const errMsg = errData?.error?.message || "";
                 
-                // 🔥 الكشف عن كلمة "blocked" وتفعيل النظام البديل
                 if (errMsg.includes("blocked") || response.status === 403) {
                     isApiBlocked = true;
-                    console.warn("⚠️ تم اكتشاف حظر للـ API. جاري التحويل للنظام البديل الذكي.");
                     return getSmartFallbackResponse(userMessage);
                 }
                 
@@ -112,7 +111,6 @@ async function sendToGemini(userMessage) {
         }
     }
 
-    // إذا فشل لسبب آخر غير الحظر، نستخدم النظام البديل أيضاً كخطة طوارئ
     return getSmartFallbackResponse(userMessage);
 }
 
@@ -150,7 +148,6 @@ async function handleUserMessage(text) {
     chatHistory.push({ role: "user", parts: [{ text }] });
     showTypingIndicator();
     
-    // محاكاة تأخير بسيط لجعل الرد يبدو طبيعياً حتى لو كان بديلاً
     await new Promise(r => setTimeout(r, 800)); 
     
     const reply = await sendToGemini(text);
