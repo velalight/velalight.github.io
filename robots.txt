@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 
+Disallow: /admin.html
+Disallow: /wishlist.html
+Disallow: /my-orders.html
+Disallow: /cart
+
 Sitemap: https://velalight.github.io/sitemap.xml

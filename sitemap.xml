@@ -2,134 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://velalight.github.io/</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-08-29</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/index.html</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>daily</changefreq>
+    <loc>https://velalight.github.io/products.html</loc>
+    <lastmod>2026-08-29</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/product.html?p=1</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=2</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=3</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=4</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=5</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=6</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=7</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=8</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=9</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=10</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=11</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=12</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=13</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/product.html?p=14</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://velalight.github.io/reviews.html</loc>
+    <lastmod>2026-08-29</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://velalight.github.io/contact.html</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <lastmod>2026-08-29</lastmod>
+    <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://velalight.github.io/privacy.html</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/terms.html</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/exchange-policy.html</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/track.html</loc>
-    <lastmod>2026-08-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
+  <!-- لو عندك صفحات منتجات مهمة، زودها هنا. مثال: -->
+  <!-- <url><loc>https://velalight.github.io/product.html?p=1</loc><priority>0.6</priority></url> -->
 </urlset>
