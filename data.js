@@ -3,7 +3,7 @@ const CFG = {
   INSTAPAY: "",
   REPO: "velalight/velalight.github.io@main",
   FIREBASE: {
-    apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",
+    apiKey: "AIzaSyDTX0J7Fccv2oLvpGYYZXiHteGuiE8y8o",
     authDomain: "velalight.firebaseapp.com",
     projectId: "velalight",
     storageBucket: "velalight.firebasestorage.app",
@@ -42,23 +42,29 @@ let LANG=localStorage.getItem("vl_lang")||"ar";
 const money=n=>Number(n||0).toLocaleString("en-US")+" "+(LANG==="en"?"EGP":"ج.م");
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ CDN — مع آلية كسر الكاش (Cache Busting) + تحسين السرعة (WebP)
-   ملاحظة للأدمن: تم تحديث الدالة لاستخدام weserv.nl لتحويل الصور تلقائياً
-   إلى صيغة WebP الخفيفة وتسريع التحميل على الموبايل بنسبة تصل لـ 60%
+   ✨ CDN — مع آلية كسر الكاش (Cache Busting) + تحسين السرعة
+   ✅ تم تعديل الدالة لتكون أكثر ذكاءً:
+   - استخدام أحجام مناسبة للشاشات (موبايل/ديسكتوب)
+   - الحفاظ على جودة عالية مع حجم صغير
+   - دعم WebP تلقائيًا
    ═══════════════════════════════════════════════════════════ */
-const IMG_CACHE_VERSION = "v6"; // تم رفع الإصدار لإجبار المتصفح على تحميل النسخة المحسنة
+const IMG_CACHE_VERSION = "v7"; // 🔥 رفع الإصدار لإجبار المتصفح على التحديث
 
-const CDN = u => {
+const CDN = (u, options = {}) => {
   if (!u) return "";
-  // إذا كان الرابط بيانات أو رابط خارجي بالفعل، اتركه كما هو
+  // لو الرابط بيانات أو رابط خارجي، اتركه كما هو
   if (u.startsWith("data:") || u.startsWith("http")) return u;
 
-  // استخدام وكيل الصور (Image Proxy) لتحويل الصور تلقائياً وتقليل حجمها
+  // تحديد الحجم المناسب حسب الجهاز
+  const isMobile = window.innerWidth <= 768;
+  const width = options.width || (isMobile ? 500 : 800);
+  const quality = options.quality || (isMobile ? 80 : 85);
+
   const rawUrl = `https://velalight.github.io/${u}`;
   const encodedUrl = encodeURIComponent(rawUrl);
 
-  // w=800 (عرض مناسب لبطاقات المنتجات), q=80 (جودة ممتازة وحجم صغير), output=webp
-  return `https://images.weserv.nl/?url=${encodedUrl}&w=800&q=80&output=webp&v=${IMG_CACHE_VERSION}`;
+  // استخدام weserv.nl مع إعدادات محسّنة للموبايل
+  return `https://images.weserv.nl/?url=${encodedUrl}&w=${width}&q=${quality}&output=webp&fit=cover&v=${IMG_CACHE_VERSION}`;
 };
 
 function toast(m){
@@ -128,10 +134,14 @@ const imgsOf=p=>{
   return [];
 };
 
-const imgOf=p=>{
-  const a=imgsOf(p);
-  if(!a.length) return ph(p);
-  return CDN(a[0]);
+// 🔥 دالة imgOf المحسّنة: تراعي حجم الشاشة
+const imgOf = (p, options = {}) => {
+  const a = imgsOf(p);
+  if (!a.length) return ph(p);
+  const isMobile = window.innerWidth <= 768;
+  const width = options.width || (isMobile ? 500 : 800);
+  const quality = options.quality || (isMobile ? 80 : 85);
+  return CDN(a[0], { width, quality });
 };
 
 const pname=p=>LANG==="en"?(p.nameEn||p.en||p.name):p.name;
