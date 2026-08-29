@@ -1353,8 +1353,18 @@ if (ogImage) {
 let ogUrl = document.querySelector('meta[property="og:url"]');
 if (ogUrl) ogUrl.content = window.location.href;
   
-  // تحديث الـ JSON-LD ديناميكيًا
-  if(typeof updateJsonLd === "function") updateJsonLd();
+ // ═══ تحديث الـ JSON-LD ديناميكيًا ═══
+if (typeof updateJsonLd === "function") updateJsonLd();
+
+// ═══════ تحديث صورة المعاينة (og:image) ديناميكيًا ═══════
+let ogImage = document.querySelector('meta[property="og:image"]');
+if (ogImage && zoomImages.length) {
+    let firstImage = zoomImages[0];
+    if (!firstImage.startsWith('http')) {
+        firstImage = 'https://velalight.github.io/' + firstImage.replace(/^\//, '');
+    }
+    ogImage.setAttribute('content', firstImage);
+}
 
   $("#crumbName").textContent=name;
   $("#pdName").textContent=name;
