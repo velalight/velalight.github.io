@@ -11,6 +11,11 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://velalight.github.io/product.html</loc>
+    <lastmod>2026-08-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://velalight.github.io/reviews.html</loc>
     <lastmod>2026-08-29</lastmod>
     <priority>0.8</priority>
@@ -20,6 +25,4 @@
     <lastmod>2026-08-29</lastmod>
     <priority>0.7</priority>
   </url>
-  <!-- لو عندك صفحات منتجات مهمة، زودها هنا. مثال: -->
-  <!-- <url><loc>https://velalight.github.io/product.html?p=1</loc><priority>0.6</priority></url> -->
 </urlset>
