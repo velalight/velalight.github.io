@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://velalight.github.io/product.html">
 
-  <!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
+<!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
 <!-- 1. Google Analytics 4 (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
 <script>
@@ -55,30 +55,29 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="mobile-luxury-fix.css">
 
+<!-- ═══ JSON-LD ديناميكي — سيتم تحديثه بواسطة JavaScript ═══ -->
+<script type="application/ld+json" id="pdJsonLd">
+{
+  "@context":"https://schema.org",
+  "@type":"Product",
+  "name":"منتج VelaLight",
+  "image":"https://velalight.github.io/RR.jpg",
+  "description":"شموع يدوية فاخرة",
+  "brand":{"@type":"Brand","name":"VelaLight"},
+  "offers":{
+    "@type":"Offer",
+    "priceCurrency":"EGP",
+    "price":"0",
+    "availability":"https://schema.org/InStock"
+  }
+}
+</script>
+
 <style>
 /* ═══ Layout ═══ */
-.pd-hero{
-  padding:1.5rem 0 3rem;
-}
+.pd-hero{padding:1.5rem 0 3rem}
+.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
 
-.pd-grid{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:3rem;
-  align-items:start;
-}
-
-.pd-gallery{
-  position:sticky;
-  top:80px;
-  min-width:0;
-  width:100%;
-}
-
-.pd-info{
-  min-width:0;
-  width:100%;
-}
 /* ═══ Breadcrumb ═══ */
 .crumb{display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--dim);margin-bottom:1.8rem;flex-wrap:wrap}
 .crumb a{color:var(--mut);text-decoration:none;transition:.2s}
@@ -121,7 +120,7 @@
   z-index:2;
   background:var(--panel2);
 }
-  .pd-img img.loaded{opacity:1}
+.pd-img img.loaded{opacity:1}
 .pd-img .zoom-hint{
   position:absolute;
   bottom:16px;
@@ -214,40 +213,14 @@
 }
 
 @media(max-width:768px){
-
-  #pdThumbs{
-    min-height:68px !important;
-    gap:.55rem !important;
-    margin-top:.8rem !important;
-    padding-bottom:6px !important;
-  }
-
-  #pdThumbs img{
-    width:68px !important;
-    height:68px !important;
-    min-width:68px !important;
-    min-height:68px !important;
-    max-width:68px !important;
-    max-height:68px !important;
-  }
+  #pdThumbs{min-height:68px !important;gap:.55rem !important;margin-top:.8rem !important;padding-bottom:6px !important}
+  #pdThumbs img{width:68px !important;height:68px !important;min-width:68px !important;min-height:68px !important;max-width:68px !important;max-height:68px !important}
 }
-
 @media(max-width:480px){
-
-  #pdThumbs{
-    min-height:64px !important;
-  }
-
-  #pdThumbs img{
-    width:64px !important;
-    height:64px !important;
-    min-width:64px !important;
-    min-height:64px !important;
-    max-width:64px !important;
-    max-height:64px !important;
-  }
+  #pdThumbs{min-height:64px !important}
+  #pdThumbs img{width:64px !important;height:64px !important;min-width:64px !important;min-height:64px !important;max-width:64px !important;max-height:64px !important}
 }
-  
+     
 /* ═══ Info Panel ═══ */
 .pd-info{display:flex;flex-direction:column;gap:1rem}
 .pd-info h1{
@@ -752,7 +725,7 @@
   border-radius: 0 0 22px 22px;
 }
 
-/* ═══ Trust Badges (تكتيك تسويقي) ═══ */
+/* ═══ Trust Badges ═══ */
 .trust-badges{
   display:flex;
   justify-content:space-around;
@@ -777,45 +750,11 @@
 
 /* ═══ Responsive ═══ */
 @media(max-width:960px){
-
-  .pd-grid{
-    display:grid !important;
-    grid-template-columns:1fr !important;
-    gap:1.5rem !important;
-    width:100% !important;
-  }
-
-  .pd-gallery{
-    position:static !important;
-    width:100% !important;
-    min-width:0 !important;
-    max-width:100% !important;
-  }
-
-  .pd-info{
-    width:100% !important;
-    min-width:0 !important;
-    max-width:100% !important;
-  }
-
-  .pd-img{
-    width:100% !important;
-    max-width:100% !important;
-    aspect-ratio:1 / 1 !important;
-  }
-
-  .pd-img img{
-    width:100% !important;
-    height:100% !important;
-    object-fit:contain !important;
-    object-position:center !important;
-  }
-
-  .info-boxes{
-    grid-template-columns:repeat(3,1fr);
-  }
+  .pd-grid{grid-template-columns:1fr;gap:2rem}
+  .pd-gallery{position:static}
+  .info-boxes{grid-template-columns:repeat(3,1fr)}
 }
-  @media(max-width:768px){
+@media(max-width:768px){
   .pd-actions{grid-template-columns:1fr;gap:.6rem}
   .pd-actions .btn,.wish-btn{width:100%}
   .rel-grid{grid-template-columns:repeat(2,1fr)}
@@ -843,14 +782,14 @@
 }
 </style>
 
-<!-- ═══ JSON-LD for SEO ═══ -->
+<!-- ═══ JSON-LD ديناميكي — سيتم تحديثه بواسطة JavaScript ═══ -->
 <script type="application/ld+json" id="pdJsonLd">
 {
   "@context":"https://schema.org",
   "@type":"Product",
-  "name":"VelaLight Product",
+  "name":"منتج VelaLight",
   "image":"https://velalight.github.io/RR.jpg",
-  "description":"Luxury handmade candle",
+  "description":"شموع يدوية فاخرة",
   "brand":{"@type":"Brand","name":"VelaLight"},
   "offers":{
     "@type":"Offer",
@@ -992,7 +931,7 @@
             <span class="save-badge" id="pdSave" style="display:none"></span>
           </div>
 
-          <!-- ═══ Trust Badges (تحفيز الشراء) ═══ -->
+          <!-- ═══ Trust Badges ═══ -->
           <div class="trust-badges">
             <span><span class="icon">🕯️</span> صناعة يدوية</span>
             <span><span class="icon">🚚</span> توصيل سريع</span>
@@ -1399,6 +1338,8 @@ function render(){
   if(ogTitle) ogTitle.content=name;
   let ogDesc=document.querySelector('meta[property="og:description"]');
   if(ogDesc) ogDesc.content=(typeof pdesc === "function" ? pdesc(P) : (P.desc || "")).slice(0,160);
+  
+  // تحديث الـ JSON-LD ديناميكيًا
   if(typeof updateJsonLd === "function") updateJsonLd();
 
   $("#crumbName").textContent=name;
@@ -1463,30 +1404,24 @@ function render(){
 function renderStock(){
   const box = document.getElementById("pdStockInfo");
   if(!box) return;
-  
-  // إذا كان المخزون غير محدد أو null أو فارغ، اعتبره غير محدود
-  if(P.stock === undefined || P.stock === null || P.stock === ""){
-    box.innerHTML = `<span class="stock-badge ok">✓ متوفر</span>`;
-    return;
+  const stockValue = Number(P.stock);
+  const isUnlimited = (P.stock === undefined || P.stock === null || P.stock === "");
+
+  if (isUnlimited || isNaN(stockValue)) {
+    box.innerHTML = '<span class="stock-badge ok">✓ متوفر</span>';
+  } else if (stockValue === 0) {
+    box.innerHTML = '<span class="stock-badge out">✕ نفدت الكمية</span>';
+    var addBtn = document.getElementById("pdAddBtn");
+    if (addBtn) { addBtn.disabled = true; addBtn.textContent = "نفدت الكمية"; }
+    var buyBtn = document.getElementById("pdBuyBtn");
+    if (buyBtn) { buyBtn.disabled = true; }
+  } else if (stockValue <= 5) {
+    box.innerHTML = '<span class="stock-badge low">⚡ باقي ' + stockValue + ' فقط</span>';
+  } else {
+    box.innerHTML = '<span class="stock-badge ok">✓ متوفر (' + stockValue + ')</span>';
   }
-  
-  const s = Number(P.stock);
-  if(isNaN(s)){
-    box.innerHTML = `<span class="stock-badge ok">✓ متوفر</span>`;
-    return;
-  }
-  
-  if(s === 0){
-    box.innerHTML = `<span class="stock-badge out">✕ نفدت الكمية</span>`;
-    document.getElementById("pdAddBtn").disabled = true;
-    document.getElementById("pdAddBtn").textContent = "نفدت الكمية";
-    document.getElementById("pdBuyBtn").disabled = true;
-  }else if(s <= 5){
-    box.innerHTML = `<span class="stock-badge low">⚡ باقي ${s} فقط</span>`;
-  }else{
-    box.innerHTML = `<span class="stock-badge ok">✓ متوفر (${s})</span>`;
-  }
-}     
+}
+
 /* ═══════ THUMBS ═══════ */
 function renderThumbs(){
   const thumbs=$("#pdThumbs");
@@ -1653,15 +1588,55 @@ function renderShare(){
   $("#copyLink")?.addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText(url); if(typeof toast==="function") toast("✅ تم نسخ الرابط"); }catch(e){ if(typeof toast==="function") toast("⚠️ فشل النسخ"); } });
 }
 
-/* ═══════ JSON-LD ═══════ */
+/* ═══════ JSON-LD — توليد ديناميكي للمنتج ═══════ */
 function updateJsonLd(){
-  const ld=$("#pdJsonLd");
-  if(!ld||!P) return;
-  const imgs=zoomImages.map(u=> (typeof CDN === "function") ? CDN(u) : u);
-  const data={ "@context":"https://schema.org", "@type":"Product", "name":(typeof pname === "function" ? pname(P) : P.name), "image":imgs.length?imgs:[(P.img || "")], "description":(typeof pdesc === "function" ? pdesc(P) : (P.desc || "")).slice(0,500), "brand":{"@type":"Brand","name":"VelaLight"}, "offers":{ "@type":"Offer", "priceCurrency":"EGP", "price":P.price||0, "availability":Number(P.stock)===0 ?"https://schema.org/OutOfStock" :"https://schema.org/InStock" } };
-  const revs=(typeof prodReviews==="function")?prodReviews(P.id):[];
-  if(revs.length){ const avg=revs.reduce((a,r)=>a+Number(r.rating||5),0)/revs.length; data.aggregateRating={ "@type":"AggregateRating", "ratingValue":avg.toFixed(1), "reviewCount":revs.length }; }
-  ld.textContent=JSON.stringify(data,null,2);
+  const ld = document.getElementById("pdJsonLd");
+  if(!ld || !P) return;
+
+  // تجهيز الصور
+  const imgs = zoomImages.length 
+    ? zoomImages.map(u => (typeof CDN === "function" ? CDN(u) : u))
+    : [(P.img || "https://velalight.github.io/RR.jpg")];
+
+  // تجهيز التقييمات
+  const revs = (typeof prodReviews === "function") ? prodReviews(P.id) : [];
+  let aggregateRating = undefined;
+  if(revs.length){
+    const avg = revs.reduce((a,r) => a + Number(r.rating || 5), 0) / revs.length;
+    aggregateRating = {
+      "@type": "AggregateRating",
+      "ratingValue": avg.toFixed(1),
+      "reviewCount": revs.length
+    };
+  }
+
+  // بناء البيانات
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": (typeof pname === "function" ? pname(P) : P.name) || "منتج VelaLight",
+    "image": imgs,
+    "description": (typeof pdesc === "function" ? pdesc(P) : (P.desc || "")).slice(0, 500) || "شموع يدوية فاخرة من VelaLight",
+    "brand": {
+      "@type": "Brand",
+      "name": "VelaLight"
+    },
+    "offers": {
+      "@type": "Offer",
+      "priceCurrency": "EGP",
+      "price": P.price || 0,
+      "availability": (Number(P.stock) === 0) 
+        ? "https://schema.org/OutOfStock" 
+        : "https://schema.org/InStock"
+    }
+  };
+
+  if(aggregateRating){
+    data.aggregateRating = aggregateRating;
+  }
+
+  // وضع البيانات في الـ JSON-LD
+  ld.textContent = JSON.stringify(data, null, 2);
 }
 
 /* ═══════ NOT FOUND ═══════ */
@@ -1704,90 +1679,3 @@ function showNotFound(){ $("#pdLoading").classList.add("hidden"); $("#pdNotFound
 </script>
 </body>
 </html>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>منتج | VelaLight</title>
-<meta name="description" content="اكتشفي تفاصيل المنتج من VelaLight — شموع يدوية فاخرة بعطور مميزة. صناعة يدوية 100% بخامات طبيعية.">
-<meta name="theme-color" content="#faf6f0">
-
-<!-- ═══ SEO ═══ -->
-<meta property="og:type" content="product">
-<meta property="og:site_name" content="VelaLight">
-<meta property="og:locale" content="ar_EG">
-<meta property="og:title" content="منتج | VelaLight">
-<meta property="og:description" content="شموع يدوية فاخرة بعطور مميزة - صناعة يدوية 100%">
-<meta property="og:image" content="https://velalight.github.io/RR.jpg">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://velalight.github.io/product.html">
-
-  <!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
-<!-- 1. Google Analytics 4 (GA4) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-BWBD8ZZD23'); 
-</script>
-
-<!-- 2. Meta Pixel (Facebook Pixel) -->
-<script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1377896053806991');
-  fbq('track', 'PageView');
-</script>
-<noscript>
-  <img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1377896053806991&ev=PageView&noscript=1"/>
-</noscript>
-<!-- ═══ End Tracking Codes ═══ -->
-  
-<!-- ═══ Preconnect ═══ -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="mobile-luxury-fix.css">
-
-<style>
-/* ═══ Layout ═══ */
-.pd-hero{padding:1.5rem 0 3rem}
-.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
-
-/* ═══ Breadcrumb ═══ */
-.crumb{display:
-
-       <script>
-function renderStock() {
-    var box = document.getElementById("pdStockInfo");
-    if (!box) return;
-    var stockValue = Number(P.stock);
-    var isUnlimited = (P.stock === undefined || P.stock === null || P.stock === "");
-
-    if (isUnlimited || isNaN(stockValue)) {
-        box.innerHTML = '<span class="stock-badge ok">✓ متوفر</span>';
-    } else if (stockValue === 0) {
-        box.innerHTML = '<span class="stock-badge out">✕ نفدت الكمية</span>';
-        var addBtn = document.getElementById("pdAddBtn");
-        if (addBtn) { addBtn.disabled = true; addBtn.textContent = "نفدت الكمية"; }
-        var buyBtn = document.getElementById("pdBuyBtn");
-        if (buyBtn) { buyBtn.disabled = true; }
-    } else if (stockValue <= 5) {
-        box.innerHTML = '<span class="stock-badge low">⚡ باقي ' + stockValue + ' فقط</span>';
-    } else {
-        box.innerHTML = '<span class="stock-badge ok">✓ متوفر (' + stockValue + ')</span>';
-    }
-}
-</script>
