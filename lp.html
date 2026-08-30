@@ -10,11 +10,13 @@
   <meta property="og:description" content="شموع يدوية فاخرة">
   <meta property="og:image" content="https://velalight.github.io/RRRR.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=El+Messiri:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Firebase SDK -->
+  
+  <!-- Firebase SDK (النسخة 9 compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  
   <style>
-    /* ===== نفس الأنماط السابقة ===== */
+    /* ===== نفس أنماط product.html ===== */
     :root {
       --bg: #faf6f0;
       --panel: #fff;
@@ -32,6 +34,8 @@
       padding-bottom: 100px;
     }
     .container { width: min(1180px, 92%); margin: auto; }
+    
+    /* ===== الهيدر ===== */
     .header {
       background: var(--panel);
       padding: 1rem 0;
@@ -50,6 +54,9 @@
       font-size: 1.3rem;
       font-weight: 700;
     }
+    .back-link { color: var(--gold2); text-decoration: none; }
+    
+    /* ===== تخطيط الصفحة ===== */
     .layout {
       display: flex;
       gap: 2rem;
@@ -83,10 +90,8 @@
       opacity: 0.6;
       flex-shrink: 0;
     }
-    .thumb.on {
-      border-color: var(--gold);
-      opacity: 1;
-    }
+    .thumb.on { border-color: var(--gold); opacity: 1; }
+    
     .info { flex: 1; }
     h1 {
       font-family: 'El Messiri', serif;
@@ -99,12 +104,21 @@
       color: var(--gold2);
       margin-bottom: 1rem;
     }
+    .old-price {
+      text-decoration: line-through;
+      color: #aaa;
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-right: 0.5rem;
+    }
     .desc {
       color: var(--mut);
       line-height: 1.8;
       margin-bottom: 1.5rem;
       white-space: pre-line;
     }
+    
+    /* ===== صندوق العطور ===== */
     .scent-box {
       background: var(--panel);
       padding: 1rem;
@@ -123,7 +137,10 @@
       border: 1px solid var(--line);
       border-radius: 10px;
       font-size: 1rem;
+      background: #fff;
     }
+    
+    /* ===== الأزرار ===== */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -144,6 +161,8 @@
     .btn-wa:hover { background: #1da851; }
     .btn-cart { background: var(--gold); }
     .btn-cart:hover { background: var(--gold2); }
+    
+    /* ===== الشريط السفلي الثابت ===== */
     .sticky {
       position: fixed;
       bottom: 0;
@@ -152,7 +171,7 @@
       background: var(--panel);
       border-top: 1px solid var(--line);
       padding: 0.8rem;
-      display: flex;
+      display: none;
       gap: 0.8rem;
       align-items: center;
       box-shadow: 0 -4px 20px rgba(0,0,0,.1);
@@ -170,6 +189,8 @@
       margin: 0;
       flex: 1;
     }
+    
+    /* ===== رسائل الحالة ===== */
     .loading, .error {
       text-align: center;
       padding: 3rem;
@@ -177,6 +198,8 @@
       color: var(--mut);
     }
     .error { color: #c0392b; }
+    
+    /* ===== التجاوب ===== */
     @media (max-width: 768px) {
       .layout { flex-direction: column; }
       .gallery { position: static; }
@@ -184,18 +207,22 @@
   </style>
 </head>
 <body>
+
+  <!-- ===== الهيدر ===== -->
   <header class="header">
     <div class="container">
       <div class="logo">VelaLight</div>
-      <a href="https://velalight.github.io/" style="color:var(--gold2)">← العودة</a>
+      <a href="https://velalight.github.io/" class="back-link">← العودة</a>
     </div>
   </header>
 
+  <!-- ===== المحتوى الرئيسي ===== -->
   <main class="container" id="main">
     <div class="loading">⏳ جاري تحميل المنتج...</div>
   </main>
 
-  <div class="sticky" id="sticky" style="display:none">
+  <!-- ===== الشريط السفلي الثابت ===== -->
+  <div class="sticky" id="sticky">
     <div class="sticky-price" id="sPrice">0 ج.م</div>
     <button class="btn btn-cart" id="sCart">أضيفي للسلة</button>
     <a href="#" class="btn btn-wa" id="sWa" target="_blank">واتساب</a>
@@ -203,7 +230,7 @@
 
   <script>
     // ================================================================
-    // 1️⃣ إعداد Firebase (استبدل القيم أدناه بقيم مشروعك)
+    // 1️⃣ إعدادات Firebase - 🔥 استبدل هذه القيم بقيم مشروعك من Firebase
     // ================================================================
     const firebaseConfig = {
       apiKey: "AIzaSyB3...",          // ⚠️ ضع المفتاح الصحيح هنا
@@ -215,6 +242,7 @@
       appId: "1:123456789:web:abcdef"
     };
 
+    // تهيئة Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
@@ -225,37 +253,40 @@
     const productId = urlParams.get('id') || urlParams.get('product');
 
     // ================================================================
-    // 3️⃣ متغيرات عامة
+    // 3️⃣ المتغيرات العامة
     // ================================================================
     let currentProduct = null;
     let selectedScent = '';
-    const WA_NUMBER = '201223526105'; // رقم واتساب
+    const WA_NUMBER = '201223526105'; // رقم واتساب - غيّره حسب رغبتك
 
     // ================================================================
-    // 4️⃣ جلب المنتج من Firebase
+    // 4️⃣ جلب المنتج من Firebase وعرضه
     // ================================================================
     async function loadProduct() {
       const mainEl = document.getElementById('main');
       
+      // التحقق من وجود ID في الرابط
       if (!productId) {
         mainEl.innerHTML = `<div class="error">❌ لم يتم تحديد المنتج. أضف ?id=رقم_المنتج في الرابط.</div>`;
         return;
       }
 
       try {
+        // جلب جميع المنتجات من Firebase
         const snapshot = await db.ref('products').once('value');
         const data = snapshot.val();
+        
         if (!data) {
           mainEl.innerHTML = `<div class="error">❌ لا توجد منتجات في قاعدة البيانات.</div>`;
           return;
         }
 
-        // البحث عن المنتج بالـ id (أو id_)
+        // البحث عن المنتج بالـ id (يدعم id أو id_ أو مفتاح العقدة)
         let product = null;
         for (const key in data) {
           const item = data[key];
           if (String(item.id || item.id_ || key) === String(productId)) {
-            product = { ...item, id: key };
+            product = { ...item, firebaseKey: key };
             break;
           }
         }
@@ -267,6 +298,7 @@
 
         currentProduct = product;
         renderProduct(product);
+        document.getElementById('sticky').style.display = 'flex';
 
       } catch (err) {
         console.error('خطأ في جلب البيانات:', err);
@@ -275,10 +307,10 @@
     }
 
     // ================================================================
-    // 5️⃣ عرض المنتج
+    // 5️⃣ عرض المنتج في الصفحة (بنفس هيكل product.html)
     // ================================================================
     function renderProduct(p) {
-      // تجميع الصور
+      // --- تجميع الصور ---
       let images = [];
       if (p.imgs && Array.isArray(p.imgs)) images = p.imgs;
       else if (p.images && Array.isArray(p.images)) images = p.images;
@@ -291,11 +323,13 @@
       }
       if (images.length === 0) images = ['placeholder.jpg'];
 
-      // تصحيح المسارات
-      const fullImages = images.map(src => src.startsWith('http') ? src : `https://velalight.github.io/${src}`);
+      // تصحيح المسارات (إضافة domain إذا كان الرابط نسبيًا)
+      const fullImages = images.map(src => 
+        src.startsWith('http') ? src : `https://velalight.github.io/${src}`
+      );
       const mainImg = fullImages[0] || '';
 
-      // بناء HTML
+      // --- بناء HTML ---
       const html = `
         <div class="layout">
           <div class="gallery">
@@ -310,11 +344,14 @@
           </div>
           <div class="info">
             <h1>${p.name || 'منتج'}</h1>
-            <div class="price">${p.price || 0} ج.م${p.old ? ` <span style="text-decoration:line-through;color:#aaa;font-size:1.2rem;">${p.old} ج.م</span>` : ''}</div>
+            <div class="price">
+              ${p.price || 0} ج.م
+              ${p.old ? `<span class="old-price">${p.old} ج.م</span>` : ''}
+            </div>
             <div class="desc">${p.desc || ''}</div>
             
             <div class="scent-box">
-              <label> اختاري العطر</label>
+              <label for="scentSelect">✨ اختاري العطر</label>
               <select id="scentSelect" onchange="selectedScent=this.value; updateWaLinks()">
                 <option value="">-- اختار العطر --</option>
                 ${(p.scents || []).map(s => `<option value="${s}">${s}</option>`).join('')}
@@ -322,33 +359,34 @@
             </div>
 
             <div>
-              <button class="btn btn-cart" onclick="addToCart()">أضيفي للسلة</button>
-              <a href="#" class="btn btn-wa" id="waBtn" target="_blank">اطلبي عبر واتساب</a>
+              <button class="btn btn-cart" onclick="addToCart()">🛒 أضيفي للسلة</button>
+              <a href="#" class="btn btn-wa" id="waBtn" target="_blank">📱 اطلبي عبر واتساب</a>
             </div>
           </div>
         </div>
       `;
 
       document.getElementById('main').innerHTML = html;
-      document.getElementById('sticky').style.display = 'flex';
+      
+      // تحديث الشريط السفلي
       document.getElementById('sPrice').textContent = `${p.price || 0} ج.م`;
       
-      // تحديث روابط واتساب
-      updateWaLinks();
-
-      // زر السلة في الشريط السفلي
+      // ربط أزرار الشريط السفلي
       document.getElementById('sCart').onclick = addToCart;
       document.getElementById('sWa').onclick = function(e) {
         e.preventDefault();
         window.open(this.href, '_blank');
       };
 
+      // تحديث روابط واتساب
+      updateWaLinks();
+
       // تغيير عنوان الصفحة
       document.title = `${p.name || 'منتج'} | VelaLight`;
     }
 
     // ================================================================
-    // 6️⃣ تغيير الصورة الرئيسية
+    // 6️⃣ تغيير الصورة الرئيسية عند النقر على الصورة المصغرة
     // ================================================================
     function changeImage(src, el) {
       document.getElementById('mainImg').src = src;
@@ -357,7 +395,7 @@
     }
 
     // ================================================================
-    // 7️⃣ تحديث روابط واتساب
+    // 7️⃣ تحديث روابط واتساب (في الزر الرئيسي والشريط السفلي)
     // ================================================================
     function updateWaLinks() {
       if (!currentProduct) return;
@@ -379,17 +417,22 @@
     function addToCart() {
       if (!currentProduct) return;
       if (!selectedScent) {
-        alert('من فضلك اختاري العطر أولاً');
+        alert('⚠️ من فضلك اختاري العطر أولاً');
         document.getElementById('scentSelect')?.focus();
         return;
       }
+      
+      // يمكنك هنا استدعاء دالة الإضافة من data.js إذا كانت موجودة
+      // أو تنفيذ منطقك الخاص (مثل التخزين في localStorage)
+      
       alert(`✅ تم إضافة ${currentProduct.name} (العطر: ${selectedScent}) إلى السلة`);
-      // اختياري: فتح واتساب
+      
+      // اختياري: فتح واتساب مباشرة لإتمام الطلب
       // document.getElementById('waBtn')?.click();
     }
 
     // ================================================================
-    // 9️⃣ تحميل الصفحة
+    // 9️⃣ تشغيل التطبيق عند تحميل الصفحة
     // ================================================================
     window.addEventListener('DOMContentLoaded', loadProduct);
   </script>
