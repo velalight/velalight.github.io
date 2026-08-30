@@ -1171,3 +1171,12 @@ html[dir=ltr] .mnav{right:auto;left:0;transform:translateX(-105%)}
 .p-media img[src=""] {
   opacity: 0 !important;
 }
+
+/* ═══ إخفاء عناصر التكرار في الفوتر ═══ */
+footer .features,
+footer .trust-badges,
+footer .footer-features,
+footer [class*="feature"],
+footer [class*="trust"] {
+  display: none !important;
+}
