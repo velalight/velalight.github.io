@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- وسوم احتياطية سيتم تحديثها ديناميكياً بواسطة الجافاسكريبت -->
+  <title>منتج فاخر | VelaLight</title>
+  <meta name="description" content="شموع يدوية فاخرة بعطور مميزة - صناعة يدوية 100%">
+  <meta property="og:type" content="product">
+  <meta property="og:site_name" content="VelaLight">
+  <meta property="og:title" content="منتج فاخر | VelaLight">
+  <meta property="og:description" content="اكتشف مجموعتنا الفاخرة من الشموع اليدوية.">
+  <meta property="og:image" content="https://velalight.github.io/RRRR.jpg">
+  <meta property="og:url" content="https://velalight.github.io/lp.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #faf6f0; --panel: #ffffff; --ink: #1a1512; --mut: #5a4a3a;
+      --gold: #d9ab5f; --gold2: #b8863f; --line: rgba(26,21,18,.10);
+      --ff: 'Tajawal', sans-serif; --fd: 'El Messiri', serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--ff); background: var(--bg); color: var(--ink); line-height: 1.6; overflow-x: hidden; padding-bottom: 80px; }
+    img { max-width: 100%; height: auto; display: block; }
+    a { text-decoration: none; color: inherit; }
+    .container { width: min(1180px, 92%); margin-inline: auto; }
+    
+    .lp-header { background: var(--panel); border-bottom: 1px solid var(--line); padding: 1rem 0; text-align: center; position: sticky; top: 0; z-index: 50; }
+    .lp-logo { font-family: var(--fd); font-size: 1.4rem; font-weight: 700; color: var(--ink); }
+    .back-link { display: inline-block; margin-top: 0.3rem; font-size: 0.8rem; color: var(--mut); }
+
+    /* Gallery */
+    .gallery-wrap { margin: 1.5rem auto; max-width: 500px; }
+    .main-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 16px; background: var(--panel); box-shadow: 0 10px 30px -10px rgba(100,70,30,.15); }
+    .thumbs { display: flex; gap: 0.5rem; margin-top: 0.8rem; overflow-x: auto; padding-bottom: 0.5rem; }
+    .thumb { width: 70px; height: 70px; object-fit: cover; border-radius: 10px; cursor: pointer; border: 2px solid transparent; opacity: 0.7; transition: 0.3s; flex-shrink: 0; }
+    .thumb.active { border-color: var(--gold); opacity: 1; }
+
+    /* Content */
+    .product-info { padding: 1rem 0 2rem; text-align: center; }
+    .product-info h1 { font-family: var(--fd); font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--ink); margin-bottom: 0.5rem; }
+    .price-tag { font-size: 1.8rem; font-weight: 800; color: var(--gold2); margin-bottom: 1rem; }
+    .price-tag .old { font-size: 1rem; color: var(--mut); text-decoration: line-through; margin-inline-start: 0.5rem; font-weight: 500; }
+    .desc { color: var(--mut); font-size: 1.05rem; margin-bottom: 1.5rem; line-height: 1.7; max-width: 600px; margin-inline: auto; }
+
+    .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 2rem 0; text-align: center; }
+    .detail-box { background: var(--panel); padding: 1rem; border-radius: 12px; border: 1px solid var(--line); }
+    .detail-box .icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+    .detail-box h4 { font-family: var(--fd); font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .detail-box p { font-size: 0.8rem; color: var(--mut); }
+
+    .scents-section { text-align: center; margin: 2rem 0; }
+    .scents-section h3 { font-family: var(--fd); font-size: 1.3rem; margin-bottom: 1rem; }
+    .scent-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
+    .scent-tag { background: rgba(217,171,95,0.1); color: var(--gold2); padding: 0.4rem 1rem; border-radius: 99px; font-weight: 700; font-size: 0.9rem; border: 1px solid rgba(217,171,95,0.3); }
+
+    /* Sticky CTA */
+    .sticky-cta {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--panel); border-top: 1px solid var(--line);
+      padding: 0.8rem 1rem; display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08); z-index: 100;
+    }
+    .sticky-price { font-weight: 800; font-size: 1.2rem; color: var(--gold2); }
+    .btn-wa {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: linear-gradient(135deg, #25D366, #128C7E); color: #fff;
+      font-weight: 800; padding: 0.8rem 1.5rem; border-radius: 99px; font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); transition: 0.3s;
+    }
+    .btn-wa:hover { transform: translateY(-2px); }
+
+    @media (min-width: 768px) {
+      body { padding-bottom: 0; }
+      .hero-layout { display: flex; gap: 3rem; align-items: flex-start; margin-top: 2rem; }
+      .gallery-wrap { flex: 1; position: sticky; top: 100px; }
+      .product-info { flex: 1; text-align: right; padding: 0; }
+      .sticky-cta { display: none; } /* إخفاء الشريط السفلي على الديسكتوب */
+      .desktop-cta { display: block; margin-top: 1.5rem; }
+    }
+    .desktop-cta { display: none; }
+  </style>
+</head>
+<body>
+
+  <header class="lp-header">
+    <div class="container">
+      <div class="lp-logo">VelaLight 🕯️</div>
+      <a href="https://velalight.github.io/" class="back-link">← العودة للمتجر الرئيسي</a>
+    </div>
+  </header>
+
+  <main class="container hero-layout" id="productContainer">
+    <!-- سيتم ملء هذا القسم ديناميكياً بواسطة الجافاسكريبت -->
+    <div style="text-align:center; padding: 4rem 0; width: 100%;">
+      <p>جاري تحميل بيانات المنتج...</p>
+    </div>
+  </main>
+
+  <!-- شريط الطلب الثابت للموبايل -->
+  <div class="sticky-cta" id="stickyCta" style="display:none;">
+    <div class="sticky-price" id="stickyPrice">0 ج.م</div>
+    <a href="#" class="btn-wa" id="stickyWaBtn" target="_blank" rel="noopener">
+      🛍️ اطلبي الآن عبر واتساب
+    </a>
+  </div>
+
+  <!-- استدعاء ملف البيانات الأساسي -->
+  <script src="data.js?v=9"></script>
+  
+  <script>
+    // 1. الحصول على رقم المنتج من الرابط (مثال: lp.html?id=12)
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id') || '12'; // 12 كقيمة افتراضية للتجربة
+
+    // 2. الانتظار حتى يتم تحميل data.js ثم البحث عن المنتج
+    window.addEventListener('DOMContentLoaded', () => {
+      // البحث في مصفوفة PRODUCTS القادمة من data.js
+      const P = PRODUCTS.find(p => String(p.id) === String(productId));
+
+      if (!P) {
+        document.getElementById('productContainer').innerHTML = `
+          <div style="text-align:center; padding: 4rem 0; width: 100%;">
+            <h2 style="font-family: var(--fd); margin-bottom: 1rem;">عذراً، المنتج غير موجود</h2>
+            <a href="https://velalight.github.io/" class="btn-wa" style="background: var(--gold);">العودة للمتجر</a>
+          </div>`;
+        return;
+      }
+
+      // 3. تحديث وسوم Meta ديناميكياً (للمتصفحات ومشاركة أفضل)
+      const mainImg = (P.imgs && P.imgs.length > 0) ? P.imgs[0] : P.img;
+      const imgUrl = `https://velalight.github.io/${mainImg}`;
+      document.title = `${P.name} | VelaLight`;
+      document.querySelector('meta[property="og:title"]').setAttribute("content", `${P.name} | VelaLight`);
+      document.querySelector('meta[property="og:description"]').setAttribute("content", P.desc || "شموع يدوية فاخرة");
+      document.querySelector('meta[property="og:image"]').setAttribute("content", imgUrl);
+      document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href);
+
+      // 4. بناء معرض الصور
+      const images = (P.imgs && P.imgs.length > 0) ? P.imgs : [P.img];
+      const thumbsHtml = images.map((img, idx) => 
+        `<img src="https://velalight.github.io/${img}" class="thumb ${idx === 0 ? 'active' : ''}" onclick="changeImage(this, 'https://velalight.github.io/${img}')" alt="${P.name}">`
+      ).join('');
+
+      // 5. بناء نوتات العطر
+      const scentsHtml = (P.scents || []).map(s => `<span class="scent-tag">${s}</span>`).join('');
+
+      // 6. بناء رابط الواتساب الديناميكي
+      const waMessage = encodeURIComponent(`مرحباً، أريد طلب *${P.name}* بسعر ${P.price} ج.م. يرجى تأكيد الطلب وتفاصيل الدفع.`);
+      const waLink = `https://wa.me/201223526105?text=${waMessage}`;
+
+      // 7. حقن البيانات في HTML
+      document.getElementById('productContainer').innerHTML = `
+        <div class="gallery-wrap">
+          <img id="mainImage" src="${imgUrl}" alt="${P.name}" class="main-img" loading="eager">
+          ${images.length > 1 ? `<div class="thumbs">${thumbsHtml}</div>` : ''}
+        </div>
+        
+        <div class="product-info">
+          <h1>${P.name}</h1>
+          <div class="price-tag">
+            ${P.price} ج.م
+            ${P.old && P.old > P.price ? `<span class="old">${P.old} ج.م</span>` : ''}
+          </div>
+          <p class="desc">${P.desc || ''}</p>
+          
+          <div class="details-grid">
+            <div class="detail-box">
+              <div class="icon">⏱️</div>
+              <h4>مدة الاشتعال</h4>
+              <p>${P.hours || '72 ساعة'}</p>
+            </div>
+            <div class="detail-box">
+              <div class="icon">🌿</div>
+              <h4>الخامات</h4>
+              <p>شمع صويا طبيعي 100%</p>
+            </div>
+            <div class="detail-box">
+              <div class="icon">🎁</div>
+              <h4>التغليف</h4>
+              <p>فاخر ومجاني مع كل طلب</p>
+            </div>
+          </div>
+
+          ${scentsHtml ? `
+          <div class="scents-section">
+            <h3>نوتات العطر المتاحة</h3>
+            <div class="scent-tags">${scentsHtml}</div>
+          </div>` : ''}
+
+          <div class="desktop-cta">
+            <a href="${waLink}" class="btn-wa" target="_blank" rel="noopener" style="width: 100%; font-size: 1.1rem; padding: 1rem;">
+              🛍️ اطلبي الآن عبر واتساب
+            </a>
+            <p style="text-align: center; font-size: 0.85rem; color: var(--mut); margin-top: 0.8rem;">
+              🚚 شحن لجميع المحافظات • دفع آمن عند الاستلام
+            </p>
+          </div>
+        </div>
+      `;
+
+      // 8. تفعيل الشريط السفلي للموبايل
+      document.getElementById('stickyCta').style.display = 'flex';
+      document.getElementById('stickyPrice').textContent = `${P.price} ج.م`;
+      document.getElementById('stickyWaBtn').href = waLink;
+    });
+
+    // دالة تغيير الصورة عند الضغط على المصغرات
+    function changeImage(thumb, newSrc) {
+      document.getElementById('mainImage').src = newSrc;
+      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+    }
+  </script>
+</body>
+</html>
