@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- وسوم احتياطية سيتم تحديثها ديناميكياً بواسطة الجافاسكريبت -->
   <title>منتج فاخر | VelaLight</title>
   <meta name="description" content="شموع يدوية فاخرة بعطور مميزة - صناعة يدوية 100%">
   <meta property="og:type" content="product">
@@ -35,14 +34,12 @@
     .lp-logo { font-family: var(--fd); font-size: 1.4rem; font-weight: 700; color: var(--ink); }
     .back-link { display: inline-block; margin-top: 0.3rem; font-size: 0.8rem; color: var(--mut); }
 
-    /* Gallery */
     .gallery-wrap { margin: 1.5rem auto; max-width: 500px; }
     .main-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 16px; background: var(--panel); box-shadow: 0 10px 30px -10px rgba(100,70,30,.15); }
     .thumbs { display: flex; gap: 0.5rem; margin-top: 0.8rem; overflow-x: auto; padding-bottom: 0.5rem; }
     .thumb { width: 70px; height: 70px; object-fit: cover; border-radius: 10px; cursor: pointer; border: 2px solid transparent; opacity: 0.7; transition: 0.3s; flex-shrink: 0; }
     .thumb.active { border-color: var(--gold); opacity: 1; }
 
-    /* Content */
     .product-info { padding: 1rem 0 2rem; text-align: center; }
     .product-info h1 { font-family: var(--fd); font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--ink); margin-bottom: 0.5rem; }
     .price-tag { font-size: 1.8rem; font-weight: 800; color: var(--gold2); margin-bottom: 1rem; }
@@ -60,7 +57,6 @@
     .scent-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
     .scent-tag { background: rgba(217,171,95,0.1); color: var(--gold2); padding: 0.4rem 1rem; border-radius: 99px; font-weight: 700; font-size: 0.9rem; border: 1px solid rgba(217,171,95,0.3); }
 
-    /* Sticky CTA */
     .sticky-cta {
       position: fixed; bottom: 0; left: 0; right: 0;
       background: var(--panel); border-top: 1px solid var(--line);
@@ -81,7 +77,7 @@
       .hero-layout { display: flex; gap: 3rem; align-items: flex-start; margin-top: 2rem; }
       .gallery-wrap { flex: 1; position: sticky; top: 100px; }
       .product-info { flex: 1; text-align: right; padding: 0; }
-      .sticky-cta { display: none; } /* إخفاء الشريط السفلي على الديسكتوب */
+      .sticky-cta { display: none; }
       .desktop-cta { display: block; margin-top: 1.5rem; }
     }
     .desktop-cta { display: none; }
@@ -97,32 +93,27 @@
   </header>
 
   <main class="container hero-layout" id="productContainer">
-    <!-- سيتم ملء هذا القسم ديناميكياً بواسطة الجافاسكريبت -->
     <div style="text-align:center; padding: 4rem 0; width: 100%;">
       <p>جاري تحميل بيانات المنتج...</p>
     </div>
   </main>
 
-  <!-- شريط الطلب الثابت للموبايل -->
   <div class="sticky-cta" id="stickyCta" style="display:none;">
     <div class="sticky-price" id="stickyPrice">0 ج.م</div>
-    <a href="#" class="btn-wa" id="stickyWaBtn" target="_blank" rel="noopener">
-      🛍️ اطلبي الآن عبر واتساب
-    </a>
+    <a href="#" class="btn-wa" id="stickyWaBtn" target="_blank" rel="noopener">🛍️ اطلبي الآن عبر واتساب</a>
   </div>
 
   <!-- استدعاء ملف البيانات الأساسي -->
   <script src="data.js?v=9"></script>
   
   <script>
-    // 1. الحصول على رقم المنتج من الرابط (مثال: lp.html?id=12)
     const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id') || '12'; // 12 كقيمة افتراضية للتجربة
+    const productId = urlParams.get('id'); // يأخذ الـ ID مهما كان نوعه (رقم أو نص)
 
-    // 2. الانتظار حتى يتم تحميل data.js ثم البحث عن المنتج
     window.addEventListener('DOMContentLoaded', () => {
-      // البحث في مصفوفة PRODUCTS القادمة من data.js
-      const P = PRODUCTS.find(p => String(p.id) === String(productId));
+      // 🔥 التعديل العبقرى هنا: البحث في ALL_PRODUCTS بدلاً من PRODUCTS
+      // ALL_PRODUCTS تحتوي على المنتجات اليدوية + منتجات فايربيز المدمجة
+      const P = ALL_PRODUCTS.find(p => String(p.id) === String(productId));
 
       if (!P) {
         document.getElementById('productContainer').innerHTML = `
@@ -133,29 +124,24 @@
         return;
       }
 
-      // 3. تحديث وسوم Meta ديناميكياً (للمتصفحات ومشاركة أفضل)
       const mainImg = (P.imgs && P.imgs.length > 0) ? P.imgs[0] : P.img;
       const imgUrl = `https://velalight.github.io/${mainImg}`;
+      
       document.title = `${P.name} | VelaLight`;
       document.querySelector('meta[property="og:title"]').setAttribute("content", `${P.name} | VelaLight`);
       document.querySelector('meta[property="og:description"]').setAttribute("content", P.desc || "شموع يدوية فاخرة");
       document.querySelector('meta[property="og:image"]').setAttribute("content", imgUrl);
       document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href);
 
-      // 4. بناء معرض الصور
       const images = (P.imgs && P.imgs.length > 0) ? P.imgs : [P.img];
       const thumbsHtml = images.map((img, idx) => 
         `<img src="https://velalight.github.io/${img}" class="thumb ${idx === 0 ? 'active' : ''}" onclick="changeImage(this, 'https://velalight.github.io/${img}')" alt="${P.name}">`
       ).join('');
 
-      // 5. بناء نوتات العطر
       const scentsHtml = (P.scents || []).map(s => `<span class="scent-tag">${s}</span>`).join('');
-
-      // 6. بناء رابط الواتساب الديناميكي
       const waMessage = encodeURIComponent(`مرحباً، أريد طلب *${P.name}* بسعر ${P.price} ج.م. يرجى تأكيد الطلب وتفاصيل الدفع.`);
       const waLink = `https://wa.me/201223526105?text=${waMessage}`;
 
-      // 7. حقن البيانات في HTML
       document.getElementById('productContainer').innerHTML = `
         <div class="gallery-wrap">
           <img id="mainImage" src="${imgUrl}" alt="${P.name}" class="main-img" loading="eager">
@@ -205,13 +191,11 @@
         </div>
       `;
 
-      // 8. تفعيل الشريط السفلي للموبايل
       document.getElementById('stickyCta').style.display = 'flex';
       document.getElementById('stickyPrice').textContent = `${P.price} ج.م`;
       document.getElementById('stickyWaBtn').href = waLink;
     });
 
-    // دالة تغيير الصورة عند الضغط على المصغرات
     function changeImage(thumb, newSrc) {
       document.getElementById('mainImage').src = newSrc;
       document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
