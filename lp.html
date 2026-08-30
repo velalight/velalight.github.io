@@ -319,7 +319,7 @@
 <main class="container">
   <h1 style="font-family:'El Messiri',serif; margin-top:1rem;">✨ تشكيلتنا</h1>
   <div id="productGrid" class="products-grid">
-    <div class="empty-msg">جاري تحميل المنتجات...</div>
+    <div class="empty-msg">⏳ جاري تحميل المنتجات...</div>
   </div>
 </main>
 
@@ -354,10 +354,10 @@
 
 <script>
   // ================================================================
-  // 1️⃣ إعداد Firebase (غيّر القيم أدناه بقيم مشروعك)
+  // 1️⃣ إعداد Firebase (استبدل القيم أدناه بقيم مشروعك)
   // ================================================================
   const firebaseConfig = {
-    apiKey: "AIzaSyB3...",          // ضع المفتاح الصحيح هنا
+    apiKey: "AIzaSyB3...",          // ⚠️ ضع المفتاح الصحيح هنا
     authDomain: "your-project.firebaseapp.com",
     databaseURL: "https://your-project-default-rtdb.firebaseio.com/",
     projectId: "your-project",
@@ -371,50 +371,83 @@
   const db = firebase.database();
 
   // ================================================================
-  // 2️⃣ المتغيرات العامة
+  // 2️⃣ بيانات تجريبية (في حال فشل الاتصال بـ Firebase)
+  //    يمكنك تعديلها أو استبدالها ببياناتك الخاصة
   // ================================================================
-  let allProducts = [];           // جميع المنتجات من Firebase
-  let currentProduct = null;      // المنتج المعروض في المودال
-  let selectedScent = '';         // العطر المختار في المودال
-
-  // رقم واتساب (غيّره حسب رغبتك)
-  const WA_NUMBER = '201223526105';
+  const FALLBACK_PRODUCTS = [
+    {
+      id: "1",
+      name: "الشمعة الفاخرة (مجموعة 3 شموع)",
+      price: 650,
+      old: 800,
+      badge: "خصم",
+      img: "https://velalight.github.io/images/1.jpg",
+      imgs: ["https://velalight.github.io/images/1.jpg", "https://velalight.github.io/images/1-2.jpg"],
+      desc: "مجموعة من 3 شموع فاخرة برائحة خشبية مميزة، تدوم لأكثر من 50 ساعة.",
+      scents: ["عود", "فانيليا"]
+    },
+    {
+      id: "2",
+      name: "شمعة نبضين",
+      price: 650,
+      old: null,
+      badge: "الأكثر مبيعًا",
+      img: "https://velalight.github.io/images/2.jpg",
+      imgs: ["https://velalight.github.io/images/2.jpg"],
+      desc: "شمعة برائحة نبضات الحب، تضفي جوًا رومانسيًا.",
+      scents: ["ورد", "مسك"]
+    }
+    // أضف باقي المنتجات هنا حسب الحاجة
+  ];
 
   // ================================================================
-  // 3️⃣ جلب المنتجات من Firebase وعرضها
+  // 3️⃣ المتغيرات العامة
+  // ================================================================
+  let allProducts = [];
+  let currentProduct = null;
+  let selectedScent = '';
+  const WA_NUMBER = '201223526105'; // رقم واتساب (غيّره)
+
+  // ================================================================
+  // 4️⃣ جلب المنتجات من Firebase أو استخدام البيانات التجريبية
   // ================================================================
   async function loadProducts() {
     const grid = document.getElementById('productGrid');
     grid.innerHTML = '<div class="empty-msg">⏳ جاري التحميل...</div>';
 
     try {
+      // محاولة جلب البيانات من Firebase
       const snapshot = await db.ref('products').once('value');
       const data = snapshot.val();
 
-      if (!data) {
-        grid.innerHTML = '<div class="empty-msg">😕 لا توجد منتجات حالياً</div>';
-        return;
+      if (data) {
+        // تحويل الكائن إلى مصفوفة
+        allProducts = Object.keys(data).map(key => {
+          const item = data[key];
+          return { ...item, id: item.id || key };
+        });
+        console.log('✅ تم جلب المنتجات من Firebase:', allProducts.length);
+      } else {
+        // لا توجد بيانات في Firebase → استخدام البيانات التجريبية
+        console.warn('⚠️ لا توجد منتجات في Firebase، سيتم استخدام البيانات التجريبية.');
+        allProducts = FALLBACK_PRODUCTS;
       }
-
-      // تحويل الكائن إلى مصفوفة مع الاحتفاظ بالمفاتيح (id)
-      allProducts = Object.keys(data).map(key => {
-        const item = data[key];
-        // نضيف id مأخوذ من المفتاح أو من الحقل id إن وجد
-        return { ...item, id: item.id || key };
-      });
-
-      // (اختياري) ترتيب المنتجات حسب السعر أو الاسم
-      // allProducts.sort((a,b) => a.name.localeCompare(b.name));
-
-      renderProducts(allProducts);
     } catch (err) {
-      console.error('خطأ في جلب البيانات:', err);
-      grid.innerHTML = `<div class="empty-msg" style="color:red;">❌ حدث خطأ: ${err.message}</div>`;
+      // خطأ في الاتصال → استخدام البيانات التجريبية
+      console.error('❌ فشل الاتصال بـ Firebase:', err);
+      allProducts = FALLBACK_PRODUCTS;
+      // عرض رسالة للمستخدم
+      grid.innerHTML = `<div class="empty-msg" style="color:var(--gold2);">
+        ⚠️ تعذر الاتصال بقاعدة البيانات، لكن سيتم عرض منتجات تجريبية.
+      </div>`;
     }
+
+    // عرض المنتجات (سواء من Firebase أو التجريبية)
+    renderProducts(allProducts);
   }
 
   // ================================================================
-  // 4️⃣ عرض المنتجات في الشبكة
+  // 5️⃣ عرض المنتجات في الشبكة
   // ================================================================
   function renderProducts(products) {
     const grid = document.getElementById('productGrid');
@@ -440,7 +473,7 @@
 
       html += `
         <div class="product-card" data-id="${p.id}">
-          <img src="${imgSrc}" alt="${p.name || 'منتج'}" loading="lazy">
+          <img src="${imgSrc}" alt="${p.name || 'منتج'}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
           <div class="card-body">
             <h3>${p.name || 'منتج'}</h3>
             <div class="price-tag">${p.price || 0} ج.م ${oldPrice}</div>
@@ -453,7 +486,7 @@
 
     grid.innerHTML = html;
 
-    // إضافة مستمعات الأحداث للأزرار والبطاقات
+    // إضافة مستمعات الأحداث
     document.querySelectorAll('.btn-detail').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -470,7 +503,7 @@
   }
 
   // ================================================================
-  // 5️⃣ فتح المودال بعرض تفاصيل المنتج
+  // 6️⃣ فتح المودال
   // ================================================================
   function openModal(productId) {
     const product = allProducts.find(p => String(p.id) === String(productId));
@@ -481,7 +514,7 @@
     currentProduct = product;
     selectedScent = '';
 
-    // تجميع قائمة الصور
+    // تجميع الصور
     let images = [];
     if (product.imgs && Array.isArray(product.imgs)) images = product.imgs;
     else if (product.images && Array.isArray(product.images)) images = product.images;
@@ -492,13 +525,11 @@
         images = [product.img];
       }
     }
-    // إذا لم توجد صور، نضع صورة افتراضية
     if (images.length === 0) images = ['placeholder.jpg'];
 
-    // تحويل الروابط إلى كاملة
     const fullImages = images.map(src => src.startsWith('http') ? src : `https://velalight.github.io/${src}`);
 
-    // تعبئة عناصر المودال
+    // تعبئة العناصر
     document.getElementById('modalMainImg').src = fullImages[0];
     document.getElementById('modalName').textContent = product.name || 'منتج';
     const priceText = `${product.price || 0} ج.م`;
@@ -506,7 +537,7 @@
     document.getElementById('modalPrice').innerHTML = priceText + oldText;
     document.getElementById('modalDesc').textContent = product.desc || '';
 
-    // تعبئة قائمة العطور
+    // العطور
     const scentSelect = document.getElementById('modalScent');
     scentSelect.innerHTML = '<option value="">-- اختار العطر --</option>';
     if (product.scents && Array.isArray(product.scents)) {
@@ -517,10 +548,9 @@
         scentSelect.appendChild(opt);
       });
     }
-    // إعادة تعيين الاختيار
     scentSelect.value = '';
 
-    // تعبئة الصور المصغرة
+    // الصور المصغرة
     const thumbsContainer = document.getElementById('modalThumbs');
     thumbsContainer.innerHTML = '';
     fullImages.forEach((src, idx) => {
@@ -536,13 +566,11 @@
       thumbsContainer.appendChild(thumb);
     });
 
-    // تحديث روابط واتساب وزر السلة
     updateModalWa();
-    // إظهار المودال
     document.getElementById('modal').classList.add('active');
     document.body.style.overflow = 'hidden';
 
-    // مستمعات الأحداث في المودال
+    // مستمعات الأحداث
     document.getElementById('modalScent').onchange = function() {
       selectedScent = this.value;
       updateModalWa();
@@ -553,7 +581,7 @@
   }
 
   // ================================================================
-  // 6️⃣ تحديث رابط واتساب في المودال
+  // 7️⃣ تحديث رابط واتساب
   // ================================================================
   function updateModalWa() {
     if (!currentProduct) return;
@@ -566,7 +594,7 @@
   }
 
   // ================================================================
-  // 7️⃣ إضافة للمودال (زر السلة)
+  // 8️⃣ إضافة للسلة
   // ================================================================
   function addToCartModal() {
     if (!currentProduct) return;
@@ -575,17 +603,13 @@
       document.getElementById('modalScent').focus();
       return;
     }
-
-    // هنا يمكنك استدعاء دالة إضافة للسلة من data.js إن وجدت
-    // أو تنفيذ منطقك الخاص (مثل تخزين في localStorage أو إرسال إلى Firebase)
-    // على سبيل المثال، نفتح واتساب بدلاً من ذلك:
     alert(`✅ تم إضافة ${currentProduct.name} (العطر: ${selectedScent}) إلى السلة`);
-    // يمكنك أيضاً فتح واتساب:
+    // يمكنك فتح واتساب أيضاً:
     // document.getElementById('modalWa').click();
   }
 
   // ================================================================
-  // 8️⃣ إغلاق المودال
+  // 9️⃣ إغلاق المودال
   // ================================================================
   function closeModal() {
     document.getElementById('modal').classList.remove('active');
@@ -600,7 +624,7 @@
   });
 
   // ================================================================
-  // 9️⃣ تحميل الصفحة
+  // 🔟 تحميل الصفحة
   // ================================================================
   window.addEventListener('DOMContentLoaded', () => {
     loadProducts();
