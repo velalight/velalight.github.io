@@ -42,29 +42,22 @@ let LANG=localStorage.getItem("vl_lang")||"ar";
 const money=n=>Number(n||0).toLocaleString("en-US")+" "+(LANG==="en"?"EGP":"ج.م");
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ CDN — مع آلية كسر الكاش (Cache Busting) + تحسين السرعة
-   ✅ تم تعديل الدالة لتكون أكثر ذكاءً:
-   - استخدام أحجام مناسبة للشاشات (موبايل/ديسكتوب)
-   - الحفاظ على جودة عالية مع حجم صغير
-   - دعم WebP تلقائيًا
+   ✨ CDN — النسخة فائقة السرعة للموبايل (Direct Load)
+   السبب: صور WebP في الريبو مضغوطة بالفعل. الوسيط (Proxy) كان يسبب بطء.
    ═══════════════════════════════════════════════════════════ */
-const IMG_CACHE_VERSION = "v7"; // 🔥 رفع الإصدار لإجبار المتصفح على التحديث
+const IMG_CACHE_VERSION = "v8"; // ترقية الإصدار لكسر أي كاش قديم
 
 const CDN = (u, options = {}) => {
-  if (!u) return "";
-  // لو الرابط بيانات أو رابط خارجي، اتركه كما هو
-  if (u.startsWith("data:") || u.startsWith("http")) return u;
-
-  // تحديد الحجم المناسب حسب الجهاز
-  const isMobile = window.innerWidth <= 768;
-  const width = options.width || (isMobile ? 500 : 800);
-  const quality = options.quality || (isMobile ? 80 : 85);
-
-  const rawUrl = `https://velalight.github.io/${u}`;
-  const encodedUrl = encodeURIComponent(rawUrl);
-
-  // استخدام weserv.nl مع إعدادات محسّنة للموبايل
-  return `https://images.weserv.nl/?url=${encodedUrl}&w=${width}&q=${quality}&output=webp&fit=cover&v=${IMG_CACHE_VERSION}`;
+    if (!u) return "";
+    // لو الرابط بيانات أو رابط خارجي، اتركه كما هو
+    if (u.startsWith("data:") || u.startsWith("http")) return u;
+    
+    // 🔥 التحسين الجذري: الطلب المباشر من سيرفرات GitHub السريعة جداً
+    // لأن الصور بالفعل بصيغة WebP ومضغوطة، فلا حاجة لمعالجتها مجدداً عبر وسيط
+    const rawUrl = `https://velalight.github.io/${u}`;
+    
+    // إضافة رقم الإصدار لمنع مشاكل الكاش فقط إذا لزم الأمر
+    return `${rawUrl}?v=${IMG_CACHE_VERSION}`;
 };
 
 function toast(m){
