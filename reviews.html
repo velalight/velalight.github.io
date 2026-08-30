@@ -419,12 +419,13 @@
 
     <!-- ═══ QUOTE SECTION ═══ -->
     <section class="quote-section">
-      <blockquote data-i18n="rev_testimonial_text">
-        مش مجرد شمعة… دي لحظة بتتعاش!
+      <blockquote>
+        <p data-i18n="rev_testimonial_text" style="margin:0; display:inline;">مش مجرد شمعة… دي لحظة بتتعاش!</p>
+        <br>
         <span class="quote-author" data-i18n="rev_testimonial_author">— واحدة من عملائنا</span>
       </blockquote>
     </section>
-
+    
     <!-- ═══ GALLERY ═══ -->
     <section class="gallery-container" aria-label="معرض آراء العملاء">
       <div class="gallery-grid" id="galleryGrid"></div>
@@ -569,6 +570,46 @@
 
     })();
   </script>
+    <!-- ═══ محرك الترجمة الخاص بصفحة المراجعات ═══ -->
+    <script>
+      (function() {
+        "use strict";
+        function applyReviewsTranslations() {
+          if (typeof t !== "function") return; // تأكد أن ملف data.js محمل
+          
+          const lang = localStorage.getItem("vl_lang") || "ar";
+          document.documentElement.lang = lang;
+          document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
 
+          // ترجمة جميع العناصر التي تحمل data-i18n
+          document.querySelectorAll("[data-i18n]").forEach(function(el) {
+            var key = el.getAttribute("data-i18n");
+            if (!key) return;
+            var value = t(key);
+            if (value && value !== key && el.textContent !== value) {
+              el.textContent = value;
+            }
+          });
+        }
+
+        // تشغيل الترجمة عند تحميل الصفحة
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(applyReviewsTranslations, 100);
+          });
+        } else {
+          setTimeout(applyReviewsTranslations, 100);
+        }
+
+        // الاستماع لتغيير اللغة من صفحات أخرى
+        window.addEventListener("storage", function(e) {
+          if (e.key === "vl_lang") {
+            setTimeout(applyReviewsTranslations, 100);
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
 </body>
 </html>
