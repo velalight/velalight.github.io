@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>منتج | VelaLight</title>
   <meta property="og:type" content="product" />
   <meta property="og:site_name" content="VelaLight" />
@@ -11,12 +11,11 @@
   <meta property="og:image" content="https://velalight.github.io/RRRR.jpg" />
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=El+Messiri:wght@400;700&display=swap" rel="stylesheet" />
   
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-
+  <!-- تحميل data.js أولاً (لضمان وجود البيانات) -->
+  <script src="data.js?v=15"></script>
+  
   <style>
-    /* ===== الأساسيات ===== */
+    /* ===== نفس الأنماط السابقة المحسّنة ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --bg: #f9f5f0;
@@ -36,8 +35,6 @@
       padding-bottom: 90px;
     }
     .container { width: min(1200px, 94%); margin: auto; }
-
-    /* ===== الهيدر ===== */
     .header {
       background: var(--panel);
       padding: 0.9rem 0;
@@ -69,8 +66,6 @@
       align-items: center;
       gap: 0.3rem;
     }
-
-    /* ===== تخطيط الصفحة ===== */
     .layout {
       display: flex;
       gap: 2.5rem;
@@ -116,7 +111,6 @@
     }
     .thumb.on { border-color: var(--gold); opacity: 1; }
     .thumb:hover { opacity: 0.9; }
-
     .info {
       flex: 1;
       background: var(--panel);
@@ -135,6 +129,7 @@
       align-items: baseline;
       gap: 1rem;
       margin-bottom: 0.8rem;
+      flex-wrap: wrap;
     }
     .price {
       font-size: 2rem;
@@ -176,8 +171,6 @@
       color: var(--mut);
     }
     .meta span { font-weight: 700; color: var(--ink); }
-
-    /* ===== العطور ===== */
     .scent-box {
       background: #f6f1ea;
       padding: 1.2rem 1.2rem 1rem;
@@ -202,8 +195,6 @@
       transition: 0.2s;
     }
     .scent-box select:focus { border-color: var(--gold); }
-
-    /* ===== الأزرار ===== */
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -231,8 +222,6 @@
     .btn-wa:hover { background: #1da851; transform: scale(1.02); }
     .btn-cart { background: var(--gold); }
     .btn-cart:hover { background: var(--gold2); transform: scale(1.02); }
-
-    /* ===== الشريط السفلي ===== */
     .sticky {
       position: fixed;
       bottom: 0;
@@ -261,8 +250,6 @@
       flex: 1;
       min-width: 0;
     }
-
-    /* ===== رسائل الحالة ===== */
     .loading, .error {
       text-align: center;
       padding: 4rem 1rem;
@@ -270,8 +257,6 @@
       color: var(--mut);
     }
     .error { color: #c0392b; }
-
-    /* ===== معرض التكبير (Lightbox) ===== */
     .lightbox {
       display: none;
       position: fixed;
@@ -292,8 +277,6 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
       object-fit: contain;
     }
-
-    /* ===== التجاوب ===== */
     @media (max-width: 768px) {
       .layout { flex-direction: column; gap: 1.5rem; }
       .gallery { position: static; padding: 0.8rem; }
@@ -311,7 +294,6 @@
 </head>
 <body>
 
-<!-- ===== الهيدر ===== -->
 <header class="header">
   <div class="container">
     <div class="logo">Vela<span>Light</span></div>
@@ -319,55 +301,44 @@
   </div>
 </header>
 
-<!-- ===== المحتوى ===== -->
 <main class="container" id="main">
   <div class="loading">⏳ جاري تحميل المنتج...</div>
 </main>
 
-<!-- ===== الشريط السفلي ===== -->
 <div class="sticky" id="sticky">
   <div class="sticky-price" id="sPrice">0 ج.م</div>
   <button class="btn btn-cart" id="sCart">🛒 أضيفي للسلة</button>
   <a href="#" class="btn btn-wa" id="sWa" target="_blank">📱 واتساب</a>
 </div>
 
-<!-- ===== معرض التكبير ===== -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <img src="" alt="تكبير الصورة" id="lightboxImg" />
 </div>
 
 <script>
   // ================================================================
-  // 1️⃣ إعداد Firebase - 🔥 استبدل هذه القيم بقيم مشروعك
-  // ================================================================
-  const firebaseConfig = {
-    apiKey: "AIzaSyB3...",          // ⚠️ ضع المفتاح الصحيح هنا
-    authDomain: "your-project.firebaseapp.com",
-    databaseURL: "https://your-project-default-rtdb.firebaseio.com/",
-    projectId: "your-project",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-
-  // ================================================================
-  // 2️⃣ قراءة ID المنتج من الرابط
+  // 1️⃣ الحصول على ID المنتج من الرابط
   // ================================================================
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('id') || urlParams.get('product');
 
   // ================================================================
-  // 3️⃣ المتغيرات العامة
+  // 2️⃣ متغيرات عامة
   // ================================================================
   let currentProduct = null;
   let selectedScent = '';
-  const WA_NUMBER = '201223526105'; // رقم واتساب - غيّره
+  const WA_NUMBER = '201223526105'; // غيّر حسب رغبتك
 
   // ================================================================
-  // 4️⃣ جلب المنتج من Firebase
+  // 3️⃣ دالة البحث عن المنتج في البيانات (من data.js أو Firebase)
+  // ================================================================
+  function findProduct(productsArray, id) {
+    if (!productsArray || !Array.isArray(productsArray)) return null;
+    return productsArray.find(p => String(p.id || p.id_ || p.key) === String(id));
+  }
+
+  // ================================================================
+  // 4️⃣ تحميل المنتج من data.js (الأولوية) ثم Firebase إن وجد
   // ================================================================
   async function loadProduct() {
     const mainEl = document.getElementById('main');
@@ -377,41 +348,49 @@
       return;
     }
 
-    try {
-      const snapshot = await db.ref('products').once('value');
-      const data = snapshot.val();
-
-      if (!data) {
-        mainEl.innerHTML = `<div class="error">❌ لا توجد منتجات في قاعدة البيانات.</div>`;
+    // --- أولاً: محاولة القراءة من data.js (المتغير PRODUCTS) ---
+    let product = null;
+    if (typeof PRODUCTS !== 'undefined' && Array.isArray(PRODUCTS)) {
+      product = findProduct(PRODUCTS, productId);
+      if (product) {
+        console.log('✅ تم العثور على المنتج في data.js');
+        currentProduct = product;
+        renderProduct(product);
+        document.getElementById('sticky').style.display = 'flex';
         return;
       }
+    }
 
-      let product = null;
-      for (const key in data) {
-        const item = data[key];
-        if (String(item.id || item.id_ || key) === String(productId)) {
-          product = { ...item, firebaseKey: key };
-          break;
+    // --- ثانياً: محاولة جلب البيانات من Firebase (إذا كان معرفاً) ---
+    try {
+      // تحقق من وجود Firebase وتهيئته
+      if (typeof firebase !== 'undefined' && firebase.app) {
+        const db = firebase.database();
+        const snapshot = await db.ref('products').once('value');
+        const data = snapshot.val();
+        if (data) {
+          // تحويل الكائن إلى مصفوفة
+          const productsArray = Object.keys(data).map(key => ({ ...data[key], key }));
+          product = findProduct(productsArray, productId);
+          if (product) {
+            console.log('✅ تم العثور على المنتج في Firebase');
+            currentProduct = product;
+            renderProduct(product);
+            document.getElementById('sticky').style.display = 'flex';
+            return;
+          }
         }
       }
-
-      if (!product) {
-        mainEl.innerHTML = `<div class="error">❌ المنتج برقم ${productId} غير موجود.</div>`;
-        return;
-      }
-
-      currentProduct = product;
-      renderProduct(product);
-      document.getElementById('sticky').style.display = 'flex';
-
     } catch (err) {
-      console.error('❌ خطأ في جلب البيانات:', err);
-      mainEl.innerHTML = `<div class="error">❌ فشل الاتصال بقاعدة البيانات: ${err.message}</div>`;
+      console.warn('⚠️ فشل الاتصال بـ Firebase، سيتم استخدام data.js فقط.', err);
     }
+
+    // --- إذا لم يتم العثور على المنتج في أي مصدر ---
+    mainEl.innerHTML = `<div class="error">❌ المنتج برقم ${productId} غير موجود في أي مصدر بيانات.</div>`;
   }
 
   // ================================================================
-  // 5️⃣ عرض المنتج (بتفاصيل كاملة)
+  // 5️⃣ عرض المنتج (نفس الكود السابق)
   // ================================================================
   function renderProduct(p) {
     // --- تجميع الصور ---
@@ -427,7 +406,7 @@
     }
     if (images.length === 0) images = ['placeholder.jpg'];
 
-    // تصحيح المسارات
+    // تصحيح المسارات (إضافة domain للصور النسبية)
     const fullImages = images.map(src =>
       src.startsWith('http') ? src : `https://velalight.github.io/${src}`
     );
@@ -496,15 +475,16 @@
 
     // تغيير عنوان الصفحة و meta
     document.title = `${p.name || 'منتج'} | VelaLight`;
-    document.querySelector('meta[property="og:title"]').content = `${p.name || 'منتج'} | VelaLight`;
-    document.querySelector('meta[property="og:description"]').content = p.desc || 'شموع يدوية فاخرة';
-    if (mainImg) {
-      document.querySelector('meta[property="og:image"]').content = mainImg;
-    }
+    const metaTitle = document.querySelector('meta[property="og:title"]');
+    const metaDesc = document.querySelector('meta[property="og:description"]');
+    const metaImg = document.querySelector('meta[property="og:image"]');
+    if (metaTitle) metaTitle.content = `${p.name || 'منتج'} | VelaLight`;
+    if (metaDesc) metaDesc.content = p.desc || 'شموع يدوية فاخرة';
+    if (metaImg && mainImg) metaImg.content = mainImg;
   }
 
   // ================================================================
-  // 6️⃣ تغيير الصورة الرئيسية
+  // 6️⃣ دوال مساعدة (تغيير الصورة، لايت بوكس، واتساب، السلة)
   // ================================================================
   function changeImage(src, el) {
     document.getElementById('mainImg').src = src;
@@ -512,9 +492,6 @@
     el.classList.add('on');
   }
 
-  // ================================================================
-  // 7️⃣ معرض التكبير (Lightbox)
-  // ================================================================
   function openLightbox(src) {
     document.getElementById('lightboxImg').src = src;
     document.getElementById('lightbox').classList.add('active');
@@ -525,9 +502,6 @@
     document.body.style.overflow = '';
   }
 
-  // ================================================================
-  // 8️⃣ تحديث روابط واتساب
-  // ================================================================
   function updateWaLinks() {
     if (!currentProduct) return;
     const name = currentProduct.name || 'منتج';
@@ -542,9 +516,6 @@
     if (sWa) sWa.href = link;
   }
 
-  // ================================================================
-  // 9️⃣ إضافة للسلة
-  // ================================================================
   function addToCart() {
     if (!currentProduct) return;
     if (!selectedScent) {
@@ -558,7 +529,7 @@
   }
 
   // ================================================================
-  // 🔟 تشغيل التطبيق
+  // 7️⃣ تشغيل التطبيق عند تحميل الصفحة
   // ================================================================
   window.addEventListener('DOMContentLoaded', loadProduct);
 </script>
