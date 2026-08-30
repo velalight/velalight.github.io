@@ -379,6 +379,69 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
 #pdThumbs img.loaded {
   opacity: 1;
 }
+/* ═══════════════════════════════════════════════════════════
+    الصفحة الرئيسية فقط - بدون التأثير على صفحة المنتج
+   ═══════════════════════════════════════════════════════════ */
+
+/* توحيد أبعاد صور الكروت في الصفحة الرئيسية */
+.pgrid .p-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5; /* نسبة طولية جميلة للشموع */
+  background: var(--bg2);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pgrid .p-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* 🔥 يظهر الشمعة كاملة بدون قص */
+  object-position: center;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+/* للموبايل - تعديل خاص */
+@media (max-width: 768px) {
+  .pgrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+  
+  .pgrid .p-media {
+    aspect-ratio: 3 / 4; /* نسبة أطول قليلاً للموبايل */
+  }
+  
+  .pgrid .p-media img {
+    object-fit: contain; /* يظهر المنتج كاملاً */
+  }
+  
+  /* النص الوصفي - يظهر سطرين فقط */
+  .pgrid .p-desc {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* سطرين فقط */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0.3rem 0;
+  }
+  
+  .pgrid .p-body h3 {
+    font-size: 0.85rem;
+    margin: 0.2rem 0;
+  }
+  
+  .pgrid .p-body {
+    padding: 0.6rem;
+  }
+}
+
+
+
 .p-media img:not([src]),
 .p-media img[src=""]{
  opacity:0;
