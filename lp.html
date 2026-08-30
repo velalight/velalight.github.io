@@ -3,43 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تشكيلتنا | VelaLight</title>
-  <meta property="og:type" content="website">
+  <title>منتج | VelaLight</title>
+  <meta property="og:type" content="product">
   <meta property="og:site_name" content="VelaLight">
-  <meta property="og:title" content="تشكيلة شموع VelaLight الفاخرة">
-  <meta property="og:description" content="شموع يدوية فاخرة بأعلى جودة">
+  <meta property="og:title" content="منتج | VelaLight">
+  <meta property="og:description" content="شموع يدوية فاخرة">
   <meta property="og:image" content="https://velalight.github.io/RRRR.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=El+Messiri:wght@400;700&display=swap" rel="stylesheet">
-  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
   <style>
     /* ===== نفس الأنماط السابقة ===== */
     :root {
       --bg: #faf6f0;
-      --panel: #ffffff;
+      --panel: #fff;
       --ink: #1a1512;
       --gold: #d9ab5f;
       --gold2: #b8863f;
       --mut: #5a4a3a;
       --line: rgba(0,0,0,.1);
-      --radius: 16px;
-      --shadow: 0 8px 30px rgba(0,0,0,0.08);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Tajawal', sans-serif;
       background: var(--bg);
       color: var(--ink);
-      padding-bottom: 30px;
+      padding-bottom: 100px;
     }
-    .container { width: min(1200px, 94%); margin: auto; }
+    .container { width: min(1180px, 92%); margin: auto; }
     .header {
       background: var(--panel);
-      padding: 0.8rem 0;
+      padding: 1rem 0;
       border-bottom: 1px solid var(--line);
       position: sticky;
       top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      z-index: 50;
     }
     .header .container {
       display: flex;
@@ -48,150 +47,33 @@
     }
     .logo {
       font-family: 'El Messiri', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gold2);
-    }
-    .logo span { color: var(--ink); }
-    .back-link {
-      color: var(--gold2);
-      text-decoration: none;
+      font-size: 1.3rem;
       font-weight: 700;
     }
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 1.8rem;
-      margin: 2rem 0;
-    }
-    .product-card {
-      background: var(--panel);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
-      cursor: pointer;
+    .layout {
       display: flex;
-      flex-direction: column;
-      border: 1px solid var(--line);
+      gap: 2rem;
+      margin-top: 1.5rem;
     }
-    .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-    }
-    .product-card img {
-      width: 100%;
-      aspect-ratio: 1/1;
-      object-fit: cover;
-      background: #f5efe5;
-    }
-    .product-card .card-body {
-      padding: 1rem 0.8rem 0.8rem;
+    .gallery {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .product-card .card-body h3 {
-      font-family: 'El Messiri', serif;
-      font-size: 1.1rem;
-      margin-bottom: 0.3rem;
-      color: var(--ink);
-      line-height: 1.4;
-    }
-    .product-card .price-tag {
-      font-weight: 800;
-      color: var(--gold2);
-      font-size: 1.2rem;
-      margin: 0.2rem 0 0.5rem;
-    }
-    .product-card .old-price {
-      text-decoration: line-through;
-      color: #aaa;
-      font-size: 0.9rem;
-      margin-right: 0.5rem;
-      font-weight: 400;
-    }
-    .product-card .badge {
-      display: inline-block;
-      background: var(--gold);
-      color: #fff;
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 0.2rem 0.7rem;
-      border-radius: 20px;
-      align-self: flex-start;
-      margin-top: 0.2rem;
-    }
-    .product-card .btn-detail {
-      background: var(--gold);
-      color: #fff;
-      border: none;
-      padding: 0.5rem;
-      border-radius: 99px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-top: 0.6rem;
-    }
-    .product-card .btn-detail:hover {
-      background: var(--gold2);
-    }
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
-      z-index: 999;
-      justify-content: center;
-      align-items: center;
-      padding: 1.5rem;
-    }
-    .modal-overlay.active { display: flex; }
-    .modal-box {
-      background: var(--panel);
-      border-radius: var(--radius);
-      max-width: 850px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      padding: 1.8rem 2rem 2rem;
-      position: relative;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    }
-    .modal-close {
       position: sticky;
-      top: 0;
-      float: left;
-      background: none;
-      border: none;
-      font-size: 2rem;
-      cursor: pointer;
-      color: var(--mut);
-      padding: 0 0.5rem;
-      line-height: 1;
+      top: 80px;
     }
-    .modal-close:hover { color: #000; }
-    .modal-gallery {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-    .modal-main-img {
+    .main-img {
       width: 100%;
       aspect-ratio: 1/1;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: 16px;
       background: #f5efe5;
     }
-    .modal-thumbs {
+    .thumbs {
       display: flex;
       gap: 0.5rem;
+      margin-top: 0.8rem;
       overflow-x: auto;
-      flex-wrap: nowrap;
     }
-    .modal-thumb {
+    .thumb {
       width: 70px;
       height: 70px;
       object-fit: cover;
@@ -201,52 +83,46 @@
       opacity: 0.6;
       flex-shrink: 0;
     }
-    .modal-thumb.active {
+    .thumb.on {
       border-color: var(--gold);
       opacity: 1;
     }
-    .modal-info h2 {
+    .info { flex: 1; }
+    h1 {
       font-family: 'El Messiri', serif;
-      font-size: 1.8rem;
-      margin: 0.5rem 0 0.2rem;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
     }
-    .modal-info .price {
-      font-size: 1.7rem;
+    .price {
+      font-size: 1.8rem;
       font-weight: 800;
       color: var(--gold2);
-      margin: 0.3rem 0 0.8rem;
-    }
-    .modal-info .desc {
-      color: var(--mut);
-      line-height: 1.9;
-      white-space: pre-line;
       margin-bottom: 1rem;
     }
-    .modal-info .scent-box {
-      background: #f9f5ee;
+    .desc {
+      color: var(--mut);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      white-space: pre-line;
+    }
+    .scent-box {
+      background: var(--panel);
       padding: 1rem;
       border-radius: 12px;
       border: 1px solid var(--line);
-      margin: 1rem 0 1.2rem;
+      margin: 1.5rem 0;
     }
-    .modal-info .scent-box label {
-      font-weight: 700;
+    .scent-box label {
       display: block;
-      margin-bottom: 0.3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
     }
-    .modal-info .scent-box select {
+    .scent-box select {
       width: 100%;
-      padding: 0.7rem;
-      border-radius: 10px;
+      padding: 0.9rem;
       border: 1px solid var(--line);
+      border-radius: 10px;
       font-size: 1rem;
-      background: #fff;
-    }
-    .modal-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-      margin-top: 1rem;
     }
     .btn {
       display: inline-flex;
@@ -254,12 +130,13 @@
       justify-content: center;
       gap: 0.5rem;
       font-weight: 800;
-      padding: 0.7rem 1.6rem;
+      padding: 0.9rem 1.5rem;
       border-radius: 99px;
+      margin: 0.5rem 0.3rem 0 0;
+      cursor: pointer;
       border: none;
       font-size: 1rem;
-      cursor: pointer;
-      transition: 0.2s;
+      transition: 0.3s;
       text-decoration: none;
       color: #fff;
     }
@@ -267,314 +144,254 @@
     .btn-wa:hover { background: #1da851; }
     .btn-cart { background: var(--gold); }
     .btn-cart:hover { background: var(--gold2); }
-    .btn-close-modal {
-      background: #eee;
-      color: var(--ink);
+    .sticky {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+      padding: 0.8rem;
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      box-shadow: 0 -4px 20px rgba(0,0,0,.1);
+      z-index: 100;
     }
-    .btn-close-modal:hover { background: #ddd; }
-    .empty-msg {
+    .sticky-price {
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--gold2);
+      white-space: nowrap;
+    }
+    .sticky .btn {
+      padding: 0.7rem 1rem;
+      font-size: 0.9rem;
+      margin: 0;
+      flex: 1;
+    }
+    .loading, .error {
       text-align: center;
       padding: 3rem;
       font-size: 1.3rem;
       color: var(--mut);
     }
-    @media (max-width: 600px) {
-      .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-      .modal-box { padding: 1rem; }
-      .modal-info h2 { font-size: 1.4rem; }
-    }
-    @media (max-width: 400px) {
-      .products-grid { grid-template-columns: 1fr; }
+    .error { color: #c0392b; }
+    @media (max-width: 768px) {
+      .layout { flex-direction: column; }
+      .gallery { position: static; }
     }
   </style>
 </head>
 <body>
-
-<header class="header">
-  <div class="container">
-    <div class="logo">Vela<span>Light</span></div>
-    <a href="https://velalight.github.io/" class="back-link">← الرئيسية</a>
-  </div>
-</header>
-
-<main class="container">
-  <h1 style="font-family:'El Messiri',serif; margin-top:1rem;">✨ تشكيلتنا</h1>
-  <div id="productGrid" class="products-grid">
-    <div class="empty-msg">⏳ جاري التحميل...</div>
-  </div>
-</main>
-
-<!-- المودال -->
-<div class="modal-overlay" id="modal">
-  <div class="modal-box">
-    <button class="modal-close" id="modalClose">&times;</button>
-    <div class="modal-gallery">
-      <img src="" alt="" class="modal-main-img" id="modalMainImg">
-      <div class="modal-thumbs" id="modalThumbs"></div>
+  <header class="header">
+    <div class="container">
+      <div class="logo">VelaLight</div>
+      <a href="https://velalight.github.io/" style="color:var(--gold2)">← العودة</a>
     </div>
-    <div class="modal-info">
-      <h2 id="modalName"></h2>
-      <div class="price" id="modalPrice"></div>
-      <div class="desc" id="modalDesc"></div>
-      <div class="scent-box">
-        <label for="modalScent">اختاري العطر</label>
-        <select id="modalScent"><option value="">-- اختار العطر --</option></select>
-      </div>
-      <div class="modal-actions">
-        <button class="btn btn-cart" id="modalCart">أضيفي للسلة</button>
-        <a href="#" class="btn btn-wa" id="modalWa" target="_blank">اطلبي عبر واتساب</a>
-        <button class="btn btn-close-modal" id="modalCloseBtn">إغلاق</button>
-      </div>
-    </div>
+  </header>
+
+  <main class="container" id="main">
+    <div class="loading">⏳ جاري تحميل المنتج...</div>
+  </main>
+
+  <div class="sticky" id="sticky" style="display:none">
+    <div class="sticky-price" id="sPrice">0 ج.م</div>
+    <button class="btn btn-cart" id="sCart">أضيفي للسلة</button>
+    <a href="#" class="btn btn-wa" id="sWa" target="_blank">واتساب</a>
   </div>
-</div>
 
-<!-- ============================================================ -->
-<!-- تحميل data.js أولاً، ثم تشغيل الكود الذي يعتمد عليه        -->
-<!-- ============================================================ -->
-<script src="data.js?v=14"></script>
-<script>
-  (function() {
-    // ============================================================
-    // 1️⃣ قراءة البيانات من المتغير العام PRODUCTS (من data.js)
-    //    أو من window.PRODUCTS إذا كان معرّفاً.
-    // ============================================================
-    function getProducts() {
-      // تحقق من وجود PRODUCTS في النطاق العام
-      if (typeof PRODUCTS !== 'undefined' && Array.isArray(PRODUCTS)) {
-        return PRODUCTS;
-      }
-      // قد يكون البيانات مخزنة في window.PRODUCTS
-      if (window.PRODUCTS && Array.isArray(window.PRODUCTS)) {
-        return window.PRODUCTS;
-      }
-      // إذا لم توجد، نعود بمصفوفة فارغة مع رسالة في الكونسول
-      console.error('❌ PRODUCTS غير معرف في data.js');
-      return [];
-    }
+  <script>
+    // ================================================================
+    // 1️⃣ إعداد Firebase (استبدل القيم أدناه بقيم مشروعك)
+    // ================================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyB3...",          // ⚠️ ضع المفتاح الصحيح هنا
+      authDomain: "your-project.firebaseapp.com",
+      databaseURL: "https://your-project-default-rtdb.firebaseio.com/",
+      projectId: "your-project",
+      storageBucket: "your-project.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef"
+    };
 
-    // ============================================================
-    // 2️⃣ المتغيرات العامة
-    // ============================================================
-    let allProducts = [];
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // ================================================================
+    // 2️⃣ قراءة ID المنتج من الرابط
+    // ================================================================
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id') || urlParams.get('product');
+
+    // ================================================================
+    // 3️⃣ متغيرات عامة
+    // ================================================================
     let currentProduct = null;
     let selectedScent = '';
-    const WA_NUMBER = '201223526105'; // رقم واتساب (عدّله حسب رغبتك)
+    const WA_NUMBER = '201223526105'; // رقم واتساب
 
-    // ============================================================
-    // 3️⃣ عرض المنتجات في الشبكة
-    // ============================================================
-    function renderProducts(products) {
-      const grid = document.getElementById('productGrid');
-      if (!products || products.length === 0) {
-        grid.innerHTML = '<div class="empty-msg">😕 لا توجد منتجات</div>';
+    // ================================================================
+    // 4️⃣ جلب المنتج من Firebase
+    // ================================================================
+    async function loadProduct() {
+      const mainEl = document.getElementById('main');
+      
+      if (!productId) {
+        mainEl.innerHTML = `<div class="error">❌ لم يتم تحديد المنتج. أضف ?id=رقم_المنتج في الرابط.</div>`;
         return;
       }
 
-      let html = '';
-      products.forEach(p => {
-        // استخراج الصورة الأساسية
-        let mainImg = p.img || '';
-        if (p.imgs && Array.isArray(p.imgs) && p.imgs.length > 0) {
-          mainImg = p.imgs[0];
-        } else if (p.images && Array.isArray(p.images) && p.images.length > 0) {
-          mainImg = p.images[0];
+      try {
+        const snapshot = await db.ref('products').once('value');
+        const data = snapshot.val();
+        if (!data) {
+          mainEl.innerHTML = `<div class="error">❌ لا توجد منتجات في قاعدة البيانات.</div>`;
+          return;
         }
-        // إذا كان المسار نسبيًا، نضيف المجلد الرئيسي (يمكن تعديله)
-        const imgSrc = mainImg.startsWith('http') ? mainImg : `https://velalight.github.io/${mainImg}`;
 
-        const oldPrice = p.old ? `<span class="old-price">${p.old} ج.م</span>` : '';
-        const badge = p.badge ? `<span class="badge">${p.badge}</span>` : '';
+        // البحث عن المنتج بالـ id (أو id_)
+        let product = null;
+        for (const key in data) {
+          const item = data[key];
+          if (String(item.id || item.id_ || key) === String(productId)) {
+            product = { ...item, id: key };
+            break;
+          }
+        }
 
-        html += `
-          <div class="product-card" data-id="${p.id || p.id_}">
-            <img src="${imgSrc}" alt="${p.name || 'منتج'}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
-            <div class="card-body">
-              <h3>${p.name || 'منتج'}</h3>
-              <div class="price-tag">${p.price || 0} ج.م ${oldPrice}</div>
-              ${badge}
-              <button class="btn-detail" data-id="${p.id || p.id_}">عرض التفاصيل</button>
-            </div>
-          </div>
-        `;
-      });
+        if (!product) {
+          mainEl.innerHTML = `<div class="error">❌ المنتج برقم ${productId} غير موجود.</div>`;
+          return;
+        }
 
-      grid.innerHTML = html;
+        currentProduct = product;
+        renderProduct(product);
 
-      // مستمعات الأحداث
-      document.querySelectorAll('.btn-detail').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const id = btn.getAttribute('data-id');
-          openModal(id);
-        });
-      });
-      document.querySelectorAll('.product-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const id = card.getAttribute('data-id');
-          openModal(id);
-        });
-      });
+      } catch (err) {
+        console.error('خطأ في جلب البيانات:', err);
+        mainEl.innerHTML = `<div class="error">❌ حدث خطأ في الاتصال بقاعدة البيانات: ${err.message}</div>`;
+      }
     }
 
-    // ============================================================
-    // 4️⃣ فتح المودال
-    // ============================================================
-    function openModal(productId) {
-      // البحث عن المنتج باستخدام id أو id_ (حسب ما ورد في data.js)
-      const product = allProducts.find(p => String(p.id || p.id_) === String(productId));
-      if (!product) {
-        alert('المنتج غير موجود');
-        return;
-      }
-      currentProduct = product;
-      selectedScent = '';
-
+    // ================================================================
+    // 5️⃣ عرض المنتج
+    // ================================================================
+    function renderProduct(p) {
       // تجميع الصور
       let images = [];
-      if (product.imgs && Array.isArray(product.imgs)) images = product.imgs;
-      else if (product.images && Array.isArray(product.images)) images = product.images;
-      else if (product.img) {
-        if (typeof product.img === 'string' && product.img.includes(',')) {
-          images = product.img.split(',').map(s => s.trim());
+      if (p.imgs && Array.isArray(p.imgs)) images = p.imgs;
+      else if (p.images && Array.isArray(p.images)) images = p.images;
+      else if (p.img) {
+        if (typeof p.img === 'string' && p.img.includes(',')) {
+          images = p.img.split(',').map(s => s.trim());
         } else {
-          images = [product.img];
+          images = [p.img];
         }
       }
       if (images.length === 0) images = ['placeholder.jpg'];
 
+      // تصحيح المسارات
       const fullImages = images.map(src => src.startsWith('http') ? src : `https://velalight.github.io/${src}`);
+      const mainImg = fullImages[0] || '';
 
-      document.getElementById('modalMainImg').src = fullImages[0];
-      document.getElementById('modalName').textContent = product.name || 'منتج';
-      const priceText = `${product.price || 0} ج.م`;
-      const oldText = product.old ? ` <span style="text-decoration:line-through;color:#aaa;font-size:1.2rem;">${product.old} ج.م</span>` : '';
-      document.getElementById('modalPrice').innerHTML = priceText + oldText;
-      document.getElementById('modalDesc').textContent = product.desc || '';
+      // بناء HTML
+      const html = `
+        <div class="layout">
+          <div class="gallery">
+            <img src="${mainImg}" class="main-img" alt="${p.name || 'منتج'}" id="mainImg">
+            ${fullImages.length > 1 ? `
+              <div class="thumbs">
+                ${fullImages.map((src, i) => `
+                  <img src="${src}" class="thumb ${i===0?'on':''}" onclick="changeImage('${src}', this)">
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+          <div class="info">
+            <h1>${p.name || 'منتج'}</h1>
+            <div class="price">${p.price || 0} ج.م${p.old ? ` <span style="text-decoration:line-through;color:#aaa;font-size:1.2rem;">${p.old} ج.م</span>` : ''}</div>
+            <div class="desc">${p.desc || ''}</div>
+            
+            <div class="scent-box">
+              <label> اختاري العطر</label>
+              <select id="scentSelect" onchange="selectedScent=this.value; updateWaLinks()">
+                <option value="">-- اختار العطر --</option>
+                ${(p.scents || []).map(s => `<option value="${s}">${s}</option>`).join('')}
+              </select>
+            </div>
 
-      // العطور
-      const scentSelect = document.getElementById('modalScent');
-      scentSelect.innerHTML = '<option value="">-- اختار العطر --</option>';
-      if (product.scents && Array.isArray(product.scents)) {
-        product.scents.forEach(s => {
-          const opt = document.createElement('option');
-          opt.value = s;
-          opt.textContent = s;
-          scentSelect.appendChild(opt);
-        });
-      }
-      scentSelect.value = '';
+            <div>
+              <button class="btn btn-cart" onclick="addToCart()">أضيفي للسلة</button>
+              <a href="#" class="btn btn-wa" id="waBtn" target="_blank">اطلبي عبر واتساب</a>
+            </div>
+          </div>
+        </div>
+      `;
 
-      // الصور المصغرة
-      const thumbsContainer = document.getElementById('modalThumbs');
-      thumbsContainer.innerHTML = '';
-      fullImages.forEach((src, idx) => {
-        const thumb = document.createElement('img');
-        thumb.src = src;
-        thumb.className = `modal-thumb ${idx === 0 ? 'active' : ''}`;
-        thumb.addEventListener('click', () => {
-          document.getElementById('modalMainImg').src = src;
-          document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
-          thumb.classList.add('active');
-        });
-        thumbsContainer.appendChild(thumb);
-      });
+      document.getElementById('main').innerHTML = html;
+      document.getElementById('sticky').style.display = 'flex';
+      document.getElementById('sPrice').textContent = `${p.price || 0} ج.م`;
+      
+      // تحديث روابط واتساب
+      updateWaLinks();
 
-      updateModalWa();
-      document.getElementById('modal').classList.add('active');
-      document.body.style.overflow = 'hidden';
-
-      document.getElementById('modalScent').onchange = function() {
-        selectedScent = this.value;
-        updateModalWa();
+      // زر السلة في الشريط السفلي
+      document.getElementById('sCart').onclick = addToCart;
+      document.getElementById('sWa').onclick = function(e) {
+        e.preventDefault();
+        window.open(this.href, '_blank');
       };
-      document.getElementById('modalCart').onclick = function() {
-        addToCartModal();
-      };
+
+      // تغيير عنوان الصفحة
+      document.title = `${p.name || 'منتج'} | VelaLight`;
     }
 
-    // ============================================================
-    // 5️⃣ تحديث رابط واتساب
-    // ============================================================
-    function updateModalWa() {
+    // ================================================================
+    // 6️⃣ تغيير الصورة الرئيسية
+    // ================================================================
+    function changeImage(src, el) {
+      document.getElementById('mainImg').src = src;
+      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('on'));
+      el.classList.add('on');
+    }
+
+    // ================================================================
+    // 7️⃣ تحديث روابط واتساب
+    // ================================================================
+    function updateWaLinks() {
       if (!currentProduct) return;
       const name = currentProduct.name || 'منتج';
       const price = currentProduct.price || 0;
       const scent = selectedScent || 'لم يختار';
       const msg = encodeURIComponent(`أريد طلب ${name} بسعر ${price} ج.م\nالعطر: ${scent}`);
       const link = `https://wa.me/${WA_NUMBER}?text=${msg}`;
-      document.getElementById('modalWa').href = link;
+      
+      const waBtn = document.getElementById('waBtn');
+      const sWa = document.getElementById('sWa');
+      if (waBtn) waBtn.href = link;
+      if (sWa) sWa.href = link;
     }
 
-    // ============================================================
-    // 6️⃣ إضافة للسلة (منطق بسيط)
-    // ============================================================
-    function addToCartModal() {
+    // ================================================================
+    // 8️⃣ إضافة للسلة
+    // ================================================================
+    function addToCart() {
       if (!currentProduct) return;
       if (!selectedScent) {
         alert('من فضلك اختاري العطر أولاً');
-        document.getElementById('modalScent').focus();
+        document.getElementById('scentSelect')?.focus();
         return;
       }
       alert(`✅ تم إضافة ${currentProduct.name} (العطر: ${selectedScent}) إلى السلة`);
-      // اختياري: فتح واتساب مباشرة
-      // document.getElementById('modalWa').click();
+      // اختياري: فتح واتساب
+      // document.getElementById('waBtn')?.click();
     }
 
-    // ============================================================
-    // 7️⃣ إغلاق المودال
-    // ============================================================
-    function closeModal() {
-      document.getElementById('modal').classList.remove('active');
-      document.body.style.overflow = '';
-      currentProduct = null;
-      selectedScent = '';
-    }
-    document.getElementById('modalClose').addEventListener('click', closeModal);
-    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
-    document.getElementById('modal').addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) closeModal();
-    });
-
-    // ============================================================
-    // 8️⃣ التهيئة عند تحميل الصفحة
-    // ============================================================
-    function init() {
-      // محاولة قراءة البيانات من data.js
-      const products = getProducts();
-      if (products.length > 0) {
-        allProducts = products;
-        renderProducts(allProducts);
-        console.log(`✅ تم تحميل ${allProducts.length} منتج من data.js`);
-      } else {
-        document.getElementById('productGrid').innerHTML = `
-          <div class="empty-msg" style="color:red;">
-            ❌ لم يتم العثور على بيانات المنتجات. تأكد من وجود ملف data.js ويعرف المتغير PRODUCTS.
-          </div>
-        `;
-      }
-    }
-
-    // الانتظار حتى يتم تحميل data.js بالكامل
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-      init();
-    } else {
-      document.addEventListener('DOMContentLoaded', init);
-    }
-
-    // في حال تأخر تحميل data.js، نعيد المحاولة بعد ثانية
-    setTimeout(() => {
-      if (allProducts.length === 0) {
-        const products = getProducts();
-        if (products.length > 0) {
-          allProducts = products;
-          renderProducts(allProducts);
-          console.log('✅ تم تحميل البيانات بعد التأخير');
-        }
-      }
-    }, 1000);
-
-  })();
-</script>
+    // ================================================================
+    // 9️⃣ تحميل الصفحة
+    // ================================================================
+    window.addEventListener('DOMContentLoaded', loadProduct);
+  </script>
 </body>
 </html>
