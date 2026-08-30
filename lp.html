@@ -11,12 +11,8 @@
   <meta property="og:image" content="https://velalight.github.io/RRRR.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=El+Messiri:wght@400;700&display=swap" rel="stylesheet">
   
-  <!-- Firebase SDK (النسخة 9 compat) -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-  
   <style>
-    /* ===== المتغيرات العامة ===== */
+    /* ===== نفس الأنماط السابقة ===== */
     :root {
       --bg: #faf6f0;
       --panel: #ffffff;
@@ -35,11 +31,7 @@
       color: var(--ink);
       padding-bottom: 30px;
     }
-    .container {
-      width: min(1200px, 94%);
-      margin: auto;
-    }
-    /* ===== الهيدر ===== */
+    .container { width: min(1200px, 94%); margin: auto; }
     .header {
       background: var(--panel);
       padding: 0.8rem 0;
@@ -66,7 +58,6 @@
       text-decoration: none;
       font-weight: 700;
     }
-    /* ===== شبكة المنتجات ===== */
     .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -146,8 +137,6 @@
     .product-card .btn-detail:hover {
       background: var(--gold2);
     }
-
-    /* ===== المودال (نافذة التفاصيل) ===== */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -159,9 +148,7 @@
       align-items: center;
       padding: 1.5rem;
     }
-    .modal-overlay.active {
-      display: flex;
-    }
+    .modal-overlay.active { display: flex; }
     .modal-box {
       background: var(--panel);
       border-radius: var(--radius);
@@ -285,16 +272,12 @@
       color: var(--ink);
     }
     .btn-close-modal:hover { background: #ddd; }
-
-    /* ===== رسالة "لا توجد منتجات" ===== */
     .empty-msg {
       text-align: center;
       padding: 3rem;
       font-size: 1.3rem;
       color: var(--mut);
     }
-
-    /* ===== متجاوب ===== */
     @media (max-width: 600px) {
       .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
       .modal-box { padding: 1rem; }
@@ -307,7 +290,6 @@
 </head>
 <body>
 
-<!-- ===== الهيدر ===== -->
 <header class="header">
   <div class="container">
     <div class="logo">Vela<span>Light</span></div>
@@ -315,15 +297,14 @@
   </div>
 </header>
 
-<!-- ===== شبكة المنتجات ===== -->
 <main class="container">
   <h1 style="font-family:'El Messiri',serif; margin-top:1rem;">✨ تشكيلتنا</h1>
   <div id="productGrid" class="products-grid">
-    <div class="empty-msg">⏳ جاري تحميل المنتجات...</div>
+    <div class="empty-msg">⏳ جاري التحميل...</div>
   </div>
 </main>
 
-<!-- ===== المودال ===== -->
+<!-- المودال -->
 <div class="modal-overlay" id="modal">
   <div class="modal-box">
     <button class="modal-close" id="modalClose">&times;</button>
@@ -335,14 +316,10 @@
       <h2 id="modalName"></h2>
       <div class="price" id="modalPrice"></div>
       <div class="desc" id="modalDesc"></div>
-      
       <div class="scent-box">
         <label for="modalScent">اختاري العطر</label>
-        <select id="modalScent">
-          <option value="">-- اختار العطر --</option>
-        </select>
+        <select id="modalScent"><option value="">-- اختار العطر --</option></select>
       </div>
-
       <div class="modal-actions">
         <button class="btn btn-cart" id="modalCart">أضيفي للسلة</button>
         <a href="#" class="btn btn-wa" id="modalWa" target="_blank">اطلبي عبر واتساب</a>
@@ -352,284 +329,252 @@
   </div>
 </div>
 
+<!-- ============================================================ -->
+<!-- تحميل data.js أولاً، ثم تشغيل الكود الذي يعتمد عليه        -->
+<!-- ============================================================ -->
+<script src="data.js?v=14"></script>
 <script>
-  // ================================================================
-  // 1️⃣ إعداد Firebase (استبدل القيم أدناه بقيم مشروعك)
-  // ================================================================
-  const firebaseConfig = {
-    apiKey: "AIzaSyB3...",          // ⚠️ ضع المفتاح الصحيح هنا
-    authDomain: "your-project.firebaseapp.com",
-    databaseURL: "https://your-project-default-rtdb.firebaseio.com/",
-    projectId: "your-project",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef"
-  };
-
-  // تهيئة Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-
-  // ================================================================
-  // 2️⃣ بيانات تجريبية (في حال فشل الاتصال بـ Firebase)
-  //    يمكنك تعديلها أو استبدالها ببياناتك الخاصة
-  // ================================================================
-  const FALLBACK_PRODUCTS = [
-    {
-      id: "1",
-      name: "الشمعة الفاخرة (مجموعة 3 شموع)",
-      price: 650,
-      old: 800,
-      badge: "خصم",
-      img: "https://velalight.github.io/images/1.jpg",
-      imgs: ["https://velalight.github.io/images/1.jpg", "https://velalight.github.io/images/1-2.jpg"],
-      desc: "مجموعة من 3 شموع فاخرة برائحة خشبية مميزة، تدوم لأكثر من 50 ساعة.",
-      scents: ["عود", "فانيليا"]
-    },
-    {
-      id: "2",
-      name: "شمعة نبضين",
-      price: 650,
-      old: null,
-      badge: "الأكثر مبيعًا",
-      img: "https://velalight.github.io/images/2.jpg",
-      imgs: ["https://velalight.github.io/images/2.jpg"],
-      desc: "شمعة برائحة نبضات الحب، تضفي جوًا رومانسيًا.",
-      scents: ["ورد", "مسك"]
-    }
-    // أضف باقي المنتجات هنا حسب الحاجة
-  ];
-
-  // ================================================================
-  // 3️⃣ المتغيرات العامة
-  // ================================================================
-  let allProducts = [];
-  let currentProduct = null;
-  let selectedScent = '';
-  const WA_NUMBER = '201223526105'; // رقم واتساب (غيّره)
-
-  // ================================================================
-  // 4️⃣ جلب المنتجات من Firebase أو استخدام البيانات التجريبية
-  // ================================================================
-  async function loadProducts() {
-    const grid = document.getElementById('productGrid');
-    grid.innerHTML = '<div class="empty-msg">⏳ جاري التحميل...</div>';
-
-    try {
-      // محاولة جلب البيانات من Firebase
-      const snapshot = await db.ref('products').once('value');
-      const data = snapshot.val();
-
-      if (data) {
-        // تحويل الكائن إلى مصفوفة
-        allProducts = Object.keys(data).map(key => {
-          const item = data[key];
-          return { ...item, id: item.id || key };
-        });
-        console.log('✅ تم جلب المنتجات من Firebase:', allProducts.length);
-      } else {
-        // لا توجد بيانات في Firebase → استخدام البيانات التجريبية
-        console.warn('⚠️ لا توجد منتجات في Firebase، سيتم استخدام البيانات التجريبية.');
-        allProducts = FALLBACK_PRODUCTS;
+  (function() {
+    // ============================================================
+    // 1️⃣ قراءة البيانات من المتغير العام PRODUCTS (من data.js)
+    //    أو من window.PRODUCTS إذا كان معرّفاً.
+    // ============================================================
+    function getProducts() {
+      // تحقق من وجود PRODUCTS في النطاق العام
+      if (typeof PRODUCTS !== 'undefined' && Array.isArray(PRODUCTS)) {
+        return PRODUCTS;
       }
-    } catch (err) {
-      // خطأ في الاتصال → استخدام البيانات التجريبية
-      console.error('❌ فشل الاتصال بـ Firebase:', err);
-      allProducts = FALLBACK_PRODUCTS;
-      // عرض رسالة للمستخدم
-      grid.innerHTML = `<div class="empty-msg" style="color:var(--gold2);">
-        ⚠️ تعذر الاتصال بقاعدة البيانات، لكن سيتم عرض منتجات تجريبية.
-      </div>`;
-    }
-
-    // عرض المنتجات (سواء من Firebase أو التجريبية)
-    renderProducts(allProducts);
-  }
-
-  // ================================================================
-  // 5️⃣ عرض المنتجات في الشبكة
-  // ================================================================
-  function renderProducts(products) {
-    const grid = document.getElementById('productGrid');
-    if (!products || products.length === 0) {
-      grid.innerHTML = '<div class="empty-msg">😕 لا توجد منتجات</div>';
-      return;
-    }
-
-    let html = '';
-    products.forEach(p => {
-      // تحديد الصورة الأساسية
-      let mainImg = p.img || '';
-      if (p.imgs && Array.isArray(p.imgs) && p.imgs.length > 0) {
-        mainImg = p.imgs[0];
-      } else if (p.images && Array.isArray(p.images) && p.images.length > 0) {
-        mainImg = p.images[0];
+      // قد يكون البيانات مخزنة في window.PRODUCTS
+      if (window.PRODUCTS && Array.isArray(window.PRODUCTS)) {
+        return window.PRODUCTS;
       }
-      // إذا كان الرابط نسبيًا نضيف domain
-      const imgSrc = mainImg.startsWith('http') ? mainImg : `https://velalight.github.io/${mainImg}`;
+      // إذا لم توجد، نعود بمصفوفة فارغة مع رسالة في الكونسول
+      console.error('❌ PRODUCTS غير معرف في data.js');
+      return [];
+    }
 
-      const oldPrice = p.old ? `<span class="old-price">${p.old} ج.م</span>` : '';
-      const badge = p.badge ? `<span class="badge">${p.badge}</span>` : '';
+    // ============================================================
+    // 2️⃣ المتغيرات العامة
+    // ============================================================
+    let allProducts = [];
+    let currentProduct = null;
+    let selectedScent = '';
+    const WA_NUMBER = '201223526105'; // رقم واتساب (عدّله حسب رغبتك)
 
-      html += `
-        <div class="product-card" data-id="${p.id}">
-          <img src="${imgSrc}" alt="${p.name || 'منتج'}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
-          <div class="card-body">
-            <h3>${p.name || 'منتج'}</h3>
-            <div class="price-tag">${p.price || 0} ج.م ${oldPrice}</div>
-            ${badge}
-            <button class="btn-detail" data-id="${p.id}">عرض التفاصيل</button>
+    // ============================================================
+    // 3️⃣ عرض المنتجات في الشبكة
+    // ============================================================
+    function renderProducts(products) {
+      const grid = document.getElementById('productGrid');
+      if (!products || products.length === 0) {
+        grid.innerHTML = '<div class="empty-msg">😕 لا توجد منتجات</div>';
+        return;
+      }
+
+      let html = '';
+      products.forEach(p => {
+        // استخراج الصورة الأساسية
+        let mainImg = p.img || '';
+        if (p.imgs && Array.isArray(p.imgs) && p.imgs.length > 0) {
+          mainImg = p.imgs[0];
+        } else if (p.images && Array.isArray(p.images) && p.images.length > 0) {
+          mainImg = p.images[0];
+        }
+        // إذا كان المسار نسبيًا، نضيف المجلد الرئيسي (يمكن تعديله)
+        const imgSrc = mainImg.startsWith('http') ? mainImg : `https://velalight.github.io/${mainImg}`;
+
+        const oldPrice = p.old ? `<span class="old-price">${p.old} ج.م</span>` : '';
+        const badge = p.badge ? `<span class="badge">${p.badge}</span>` : '';
+
+        html += `
+          <div class="product-card" data-id="${p.id || p.id_}">
+            <img src="${imgSrc}" alt="${p.name || 'منتج'}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
+            <div class="card-body">
+              <h3>${p.name || 'منتج'}</h3>
+              <div class="price-tag">${p.price || 0} ج.م ${oldPrice}</div>
+              ${badge}
+              <button class="btn-detail" data-id="${p.id || p.id_}">عرض التفاصيل</button>
+            </div>
           </div>
-        </div>
-      `;
-    });
-
-    grid.innerHTML = html;
-
-    // إضافة مستمعات الأحداث
-    document.querySelectorAll('.btn-detail').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const id = btn.getAttribute('data-id');
-        openModal(id);
+        `;
       });
-    });
-    document.querySelectorAll('.product-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const id = card.getAttribute('data-id');
-        openModal(id);
-      });
-    });
-  }
 
-  // ================================================================
-  // 6️⃣ فتح المودال
-  // ================================================================
-  function openModal(productId) {
-    const product = allProducts.find(p => String(p.id) === String(productId));
-    if (!product) {
-      alert('المنتج غير موجود');
-      return;
+      grid.innerHTML = html;
+
+      // مستمعات الأحداث
+      document.querySelectorAll('.btn-detail').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const id = btn.getAttribute('data-id');
+          openModal(id);
+        });
+      });
+      document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const id = card.getAttribute('data-id');
+          openModal(id);
+        });
+      });
     }
-    currentProduct = product;
-    selectedScent = '';
 
-    // تجميع الصور
-    let images = [];
-    if (product.imgs && Array.isArray(product.imgs)) images = product.imgs;
-    else if (product.images && Array.isArray(product.images)) images = product.images;
-    else if (product.img) {
-      if (typeof product.img === 'string' && product.img.includes(',')) {
-        images = product.img.split(',').map(s => s.trim());
+    // ============================================================
+    // 4️⃣ فتح المودال
+    // ============================================================
+    function openModal(productId) {
+      // البحث عن المنتج باستخدام id أو id_ (حسب ما ورد في data.js)
+      const product = allProducts.find(p => String(p.id || p.id_) === String(productId));
+      if (!product) {
+        alert('المنتج غير موجود');
+        return;
+      }
+      currentProduct = product;
+      selectedScent = '';
+
+      // تجميع الصور
+      let images = [];
+      if (product.imgs && Array.isArray(product.imgs)) images = product.imgs;
+      else if (product.images && Array.isArray(product.images)) images = product.images;
+      else if (product.img) {
+        if (typeof product.img === 'string' && product.img.includes(',')) {
+          images = product.img.split(',').map(s => s.trim());
+        } else {
+          images = [product.img];
+        }
+      }
+      if (images.length === 0) images = ['placeholder.jpg'];
+
+      const fullImages = images.map(src => src.startsWith('http') ? src : `https://velalight.github.io/${src}`);
+
+      document.getElementById('modalMainImg').src = fullImages[0];
+      document.getElementById('modalName').textContent = product.name || 'منتج';
+      const priceText = `${product.price || 0} ج.م`;
+      const oldText = product.old ? ` <span style="text-decoration:line-through;color:#aaa;font-size:1.2rem;">${product.old} ج.م</span>` : '';
+      document.getElementById('modalPrice').innerHTML = priceText + oldText;
+      document.getElementById('modalDesc').textContent = product.desc || '';
+
+      // العطور
+      const scentSelect = document.getElementById('modalScent');
+      scentSelect.innerHTML = '<option value="">-- اختار العطر --</option>';
+      if (product.scents && Array.isArray(product.scents)) {
+        product.scents.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s;
+          opt.textContent = s;
+          scentSelect.appendChild(opt);
+        });
+      }
+      scentSelect.value = '';
+
+      // الصور المصغرة
+      const thumbsContainer = document.getElementById('modalThumbs');
+      thumbsContainer.innerHTML = '';
+      fullImages.forEach((src, idx) => {
+        const thumb = document.createElement('img');
+        thumb.src = src;
+        thumb.className = `modal-thumb ${idx === 0 ? 'active' : ''}`;
+        thumb.addEventListener('click', () => {
+          document.getElementById('modalMainImg').src = src;
+          document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+          thumb.classList.add('active');
+        });
+        thumbsContainer.appendChild(thumb);
+      });
+
+      updateModalWa();
+      document.getElementById('modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+
+      document.getElementById('modalScent').onchange = function() {
+        selectedScent = this.value;
+        updateModalWa();
+      };
+      document.getElementById('modalCart').onclick = function() {
+        addToCartModal();
+      };
+    }
+
+    // ============================================================
+    // 5️⃣ تحديث رابط واتساب
+    // ============================================================
+    function updateModalWa() {
+      if (!currentProduct) return;
+      const name = currentProduct.name || 'منتج';
+      const price = currentProduct.price || 0;
+      const scent = selectedScent || 'لم يختار';
+      const msg = encodeURIComponent(`أريد طلب ${name} بسعر ${price} ج.م\nالعطر: ${scent}`);
+      const link = `https://wa.me/${WA_NUMBER}?text=${msg}`;
+      document.getElementById('modalWa').href = link;
+    }
+
+    // ============================================================
+    // 6️⃣ إضافة للسلة (منطق بسيط)
+    // ============================================================
+    function addToCartModal() {
+      if (!currentProduct) return;
+      if (!selectedScent) {
+        alert('من فضلك اختاري العطر أولاً');
+        document.getElementById('modalScent').focus();
+        return;
+      }
+      alert(`✅ تم إضافة ${currentProduct.name} (العطر: ${selectedScent}) إلى السلة`);
+      // اختياري: فتح واتساب مباشرة
+      // document.getElementById('modalWa').click();
+    }
+
+    // ============================================================
+    // 7️⃣ إغلاق المودال
+    // ============================================================
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+      document.body.style.overflow = '';
+      currentProduct = null;
+      selectedScent = '';
+    }
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+
+    // ============================================================
+    // 8️⃣ التهيئة عند تحميل الصفحة
+    // ============================================================
+    function init() {
+      // محاولة قراءة البيانات من data.js
+      const products = getProducts();
+      if (products.length > 0) {
+        allProducts = products;
+        renderProducts(allProducts);
+        console.log(`✅ تم تحميل ${allProducts.length} منتج من data.js`);
       } else {
-        images = [product.img];
+        document.getElementById('productGrid').innerHTML = `
+          <div class="empty-msg" style="color:red;">
+            ❌ لم يتم العثور على بيانات المنتجات. تأكد من وجود ملف data.js ويعرف المتغير PRODUCTS.
+          </div>
+        `;
       }
     }
-    if (images.length === 0) images = ['placeholder.jpg'];
 
-    const fullImages = images.map(src => src.startsWith('http') ? src : `https://velalight.github.io/${src}`);
-
-    // تعبئة العناصر
-    document.getElementById('modalMainImg').src = fullImages[0];
-    document.getElementById('modalName').textContent = product.name || 'منتج';
-    const priceText = `${product.price || 0} ج.م`;
-    const oldText = product.old ? ` <span style="text-decoration:line-through;color:#aaa;font-size:1.2rem;">${product.old} ج.م</span>` : '';
-    document.getElementById('modalPrice').innerHTML = priceText + oldText;
-    document.getElementById('modalDesc').textContent = product.desc || '';
-
-    // العطور
-    const scentSelect = document.getElementById('modalScent');
-    scentSelect.innerHTML = '<option value="">-- اختار العطر --</option>';
-    if (product.scents && Array.isArray(product.scents)) {
-      product.scents.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s;
-        opt.textContent = s;
-        scentSelect.appendChild(opt);
-      });
+    // الانتظار حتى يتم تحميل data.js بالكامل
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      init();
+    } else {
+      document.addEventListener('DOMContentLoaded', init);
     }
-    scentSelect.value = '';
 
-    // الصور المصغرة
-    const thumbsContainer = document.getElementById('modalThumbs');
-    thumbsContainer.innerHTML = '';
-    fullImages.forEach((src, idx) => {
-      const thumb = document.createElement('img');
-      thumb.src = src;
-      thumb.className = `modal-thumb ${idx === 0 ? 'active' : ''}`;
-      thumb.dataset.index = idx;
-      thumb.addEventListener('click', () => {
-        document.getElementById('modalMainImg').src = src;
-        document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
-        thumb.classList.add('active');
-      });
-      thumbsContainer.appendChild(thumb);
-    });
+    // في حال تأخر تحميل data.js، نعيد المحاولة بعد ثانية
+    setTimeout(() => {
+      if (allProducts.length === 0) {
+        const products = getProducts();
+        if (products.length > 0) {
+          allProducts = products;
+          renderProducts(allProducts);
+          console.log('✅ تم تحميل البيانات بعد التأخير');
+        }
+      }
+    }, 1000);
 
-    updateModalWa();
-    document.getElementById('modal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-
-    // مستمعات الأحداث
-    document.getElementById('modalScent').onchange = function() {
-      selectedScent = this.value;
-      updateModalWa();
-    };
-    document.getElementById('modalCart').onclick = function() {
-      addToCartModal();
-    };
-  }
-
-  // ================================================================
-  // 7️⃣ تحديث رابط واتساب
-  // ================================================================
-  function updateModalWa() {
-    if (!currentProduct) return;
-    const name = currentProduct.name || 'منتج';
-    const price = currentProduct.price || 0;
-    const scent = selectedScent || 'لم يختار';
-    const msg = encodeURIComponent(`أريد طلب ${name} بسعر ${price} ج.م\nالعطر: ${scent}`);
-    const link = `https://wa.me/${WA_NUMBER}?text=${msg}`;
-    document.getElementById('modalWa').href = link;
-  }
-
-  // ================================================================
-  // 8️⃣ إضافة للسلة
-  // ================================================================
-  function addToCartModal() {
-    if (!currentProduct) return;
-    if (!selectedScent) {
-      alert('من فضلك اختاري العطر أولاً');
-      document.getElementById('modalScent').focus();
-      return;
-    }
-    alert(`✅ تم إضافة ${currentProduct.name} (العطر: ${selectedScent}) إلى السلة`);
-    // يمكنك فتح واتساب أيضاً:
-    // document.getElementById('modalWa').click();
-  }
-
-  // ================================================================
-  // 9️⃣ إغلاق المودال
-  // ================================================================
-  function closeModal() {
-    document.getElementById('modal').classList.remove('active');
-    document.body.style.overflow = '';
-    currentProduct = null;
-    selectedScent = '';
-  }
-  document.getElementById('modalClose').addEventListener('click', closeModal);
-  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
-  document.getElementById('modal').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) closeModal();
-  });
-
-  // ================================================================
-  // 🔟 تحميل الصفحة
-  // ================================================================
-  window.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
-  });
+  })();
 </script>
-
 </body>
 </html>
