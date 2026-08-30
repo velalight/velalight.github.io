@@ -11,10 +11,6 @@
   <meta property="og:image" content="https://velalight.github.io/RRRR.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=El+Messiri:wght@400;700&display=swap" rel="stylesheet">
   
-  <!-- Firebase SDK (النسخة 9 compat) -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-  
   <style>
     /* ===== نفس أنماط product.html ===== */
     :root {
@@ -228,86 +224,59 @@
     <a href="#" class="btn btn-wa" id="sWa" target="_blank">واتساب</a>
   </div>
 
+  <!-- ===== تحميل data.js ===== -->
+  <script src="data.js?v=14"></script>
+  
   <script>
     // ================================================================
-    // 1️⃣ إعدادات Firebase - 🔥 استبدل هذه القيم بقيم مشروعك من Firebase
-    // ================================================================
-    const firebaseConfig = {
-      apiKey: "AIzaSyB3...",          // ⚠️ ضع المفتاح الصحيح هنا
-      authDomain: "your-project.firebaseapp.com",
-      databaseURL: "https://your-project-default-rtdb.firebaseio.com/",
-      projectId: "your-project",
-      storageBucket: "your-project.appspot.com",
-      messagingSenderId: "123456789",
-      appId: "1:123456789:web:abcdef"
-    };
-
-    // تهيئة Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    // ================================================================
-    // 2️⃣ قراءة ID المنتج من الرابط
+    // 1️⃣ قراءة ID المنتج من الرابط
     // ================================================================
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id') || urlParams.get('product');
 
     // ================================================================
-    // 3️⃣ المتغيرات العامة
+    // 2️⃣ المتغيرات العامة
     // ================================================================
     let currentProduct = null;
     let selectedScent = '';
-    const WA_NUMBER = '201223526105'; // رقم واتساب - غيّره حسب رغبتك
+    const WA_NUMBER = '201223526105'; // رقم واتساب
 
     // ================================================================
-    // 4️⃣ جلب المنتج من Firebase وعرضه
+    // 3️⃣ دالة جلب المنتج من data.js
     // ================================================================
-    async function loadProduct() {
-      const mainEl = document.getElementById('main');
+    function getProductFromDataJS() {
+      // التحقق من وجود PRODUCTS من data.js
+      if (typeof PRODUCTS === 'undefined' && typeof window.PRODUCTS === 'undefined') {
+        document.getElementById('main').innerHTML = `
+          <div class="error">❌ لم يتم العثور على بيانات المنتجات. تأكد من وجود ملف data.js.</div>
+        `;
+        return null;
+      }
+
+      const products = (typeof PRODUCTS !== 'undefined') ? PRODUCTS : window.PRODUCTS;
       
-      // التحقق من وجود ID في الرابط
-      if (!productId) {
-        mainEl.innerHTML = `<div class="error">❌ لم يتم تحديد المنتج. أضف ?id=رقم_المنتج في الرابط.</div>`;
-        return;
+      if (!Array.isArray(products) || products.length === 0) {
+        document.getElementById('main').innerHTML = `
+          <div class="error">❌ لا توجد منتجات في data.js.</div>
+        `;
+        return null;
       }
 
-      try {
-        // جلب جميع المنتجات من Firebase
-        const snapshot = await db.ref('products').once('value');
-        const data = snapshot.val();
-        
-        if (!data) {
-          mainEl.innerHTML = `<div class="error">❌ لا توجد منتجات في قاعدة البيانات.</div>`;
-          return;
-        }
-
-        // البحث عن المنتج بالـ id (يدعم id أو id_ أو مفتاح العقدة)
-        let product = null;
-        for (const key in data) {
-          const item = data[key];
-          if (String(item.id || item.id_ || key) === String(productId)) {
-            product = { ...item, firebaseKey: key };
-            break;
-          }
-        }
-
-        if (!product) {
-          mainEl.innerHTML = `<div class="error">❌ المنتج برقم ${productId} غير موجود.</div>`;
-          return;
-        }
-
-        currentProduct = product;
-        renderProduct(product);
-        document.getElementById('sticky').style.display = 'flex';
-
-      } catch (err) {
-        console.error('خطأ في جلب البيانات:', err);
-        mainEl.innerHTML = `<div class="error">❌ حدث خطأ في الاتصال بقاعدة البيانات: ${err.message}</div>`;
+      // البحث عن المنتج بالـ id (يدعم id أو id_)
+      const product = products.find(p => String(p.id || p.id_) === String(productId));
+      
+      if (!product) {
+        document.getElementById('main').innerHTML = `
+          <div class="error">❌ المنتج برقم ${productId} غير موجود في data.js.</div>
+        `;
+        return null;
       }
+
+      return product;
     }
 
     // ================================================================
-    // 5️⃣ عرض المنتج في الصفحة (بنفس هيكل product.html)
+    // 4️⃣ عرض المنتج في الصفحة
     // ================================================================
     function renderProduct(p) {
       // --- تجميع الصور ---
@@ -369,6 +338,7 @@
       document.getElementById('main').innerHTML = html;
       
       // تحديث الشريط السفلي
+      document.getElementById('sticky').style.display = 'flex';
       document.getElementById('sPrice').textContent = `${p.price || 0} ج.م`;
       
       // ربط أزرار الشريط السفلي
@@ -386,7 +356,7 @@
     }
 
     // ================================================================
-    // 6️⃣ تغيير الصورة الرئيسية عند النقر على الصورة المصغرة
+    // 5️⃣ تغيير الصورة الرئيسية
     // ================================================================
     function changeImage(src, el) {
       document.getElementById('mainImg').src = src;
@@ -395,7 +365,7 @@
     }
 
     // ================================================================
-    // 7️⃣ تحديث روابط واتساب (في الزر الرئيسي والشريط السفلي)
+    // 6️⃣ تحديث روابط واتساب
     // ================================================================
     function updateWaLinks() {
       if (!currentProduct) return;
@@ -412,7 +382,7 @@
     }
 
     // ================================================================
-    // 8️⃣ إضافة للسلة
+    // 7️⃣ إضافة للسلة
     // ================================================================
     function addToCart() {
       if (!currentProduct) return;
@@ -422,19 +392,49 @@
         return;
       }
       
-      // يمكنك هنا استدعاء دالة الإضافة من data.js إذا كانت موجودة
-      // أو تنفيذ منطقك الخاص (مثل التخزين في localStorage)
-      
       alert(`✅ تم إضافة ${currentProduct.name} (العطر: ${selectedScent}) إلى السلة`);
       
-      // اختياري: فتح واتساب مباشرة لإتمام الطلب
+      // يمكنك تفعيل فتح واتساب مباشرة:
       // document.getElementById('waBtn')?.click();
     }
 
     // ================================================================
-    // 9️⃣ تشغيل التطبيق عند تحميل الصفحة
+    // 8️⃣ تشغيل التطبيق
     // ================================================================
-    window.addEventListener('DOMContentLoaded', loadProduct);
+    function init() {
+      // التحقق من وجود ID في الرابط
+      if (!productId) {
+        document.getElementById('main').innerHTML = `
+          <div class="error">❌ لم يتم تحديد المنتج. أضف ?id=رقم_المنتج في الرابط.</div>
+        `;
+        return;
+      }
+
+      // جلب المنتج من data.js
+      const product = getProductFromDataJS();
+      if (product) {
+        currentProduct = product;
+        renderProduct(product);
+      }
+    }
+
+    // الانتظار حتى تحميل data.js
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      init();
+    } else {
+      document.addEventListener('DOMContentLoaded', init);
+    }
+
+    // في حال تأخر تحميل data.js، نعيد المحاولة
+    setTimeout(() => {
+      if (!currentProduct) {
+        const product = getProductFromDataJS();
+        if (product) {
+          currentProduct = product;
+          renderProduct(product);
+        }
+      }
+    }, 1000);
   </script>
 </body>
 </html>
