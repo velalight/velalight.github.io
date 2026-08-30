@@ -3,184 +3,609 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منتج | VelaLight</title>
-  <meta property="og:type" content="product">
+  <title>تشكيلتنا | VelaLight</title>
+  <meta property="og:type" content="website">
   <meta property="og:site_name" content="VelaLight">
-  <meta property="og:title" content="منتج | VelaLight">
-  <meta property="og:description" content="شموع يدوية فاخرة">
+  <meta property="og:title" content="تشكيلة شموع VelaLight الفاخرة">
+  <meta property="og:description" content="شموع يدوية فاخرة بأعلى جودة">
   <meta property="og:image" content="https://velalight.github.io/RRRR.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=El+Messiri:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDK (النسخة 9 compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  
   <style>
-    :root { --bg:#faf6f0; --panel:#fff; --ink:#1a1512; --gold:#d9ab5f; --gold2:#b8863f; --mut:#5a4a3a; --line:rgba(0,0,0,.1); }
+    /* ===== المتغيرات العامة ===== */
+    :root {
+      --bg: #faf6f0;
+      --panel: #ffffff;
+      --ink: #1a1512;
+      --gold: #d9ab5f;
+      --gold2: #b8863f;
+      --mut: #5a4a3a;
+      --line: rgba(0,0,0,.1);
+      --radius: 16px;
+      --shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Tajawal',sans-serif; background:var(--bg); color:var(--ink); padding-bottom:100px; }
-    .container { width:min(1180px,92%); margin:auto; }
-    .header { background:var(--panel); padding:1rem 0; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:50; }
-    .header .container { display:flex; justify-content:space-between; align-items:center; }
-    .logo { font-family:'El Messiri',serif; font-size:1.3rem; font-weight:700; }
-    .layout { display:flex; gap:2rem; margin-top:1.5rem; }
-    .gallery { flex:1; position:sticky; top:80px; }
-    .main-img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:16px; background:#f5efe5; }
-    .thumbs { display:flex; gap:0.5rem; margin-top:0.8rem; overflow-x:auto; }
-    .thumb { width:70px; height:70px; object-fit:cover; border-radius:10px; cursor:pointer; border:2px solid transparent; opacity:0.6; }
-    .thumb.on { border-color:var(--gold); opacity:1; }
-    .info { flex:1; }
-    h1 { font-family:'El Messiri',serif; font-size:2rem; margin-bottom:0.5rem; }
-    .price { font-size:1.8rem; font-weight:800; color:var(--gold2); margin-bottom:1rem; }
-    .desc { color:var(--mut); line-height:1.8; margin-bottom:1.5rem; white-space:pre-line; }
-    .scent-box { background:var(--panel); padding:1rem; border-radius:12px; border:1px solid var(--line); margin:1.5rem 0; }
-    .scent-box label { display:block; font-weight:700; margin-bottom:0.5rem; }
-    .scent-box select { width:100%; padding:0.9rem; border:1px solid var(--line); border-radius:10px; font-size:1rem; }
-    .btn { display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; font-weight:800; padding:0.9rem 1.5rem; border-radius:99px; margin:0.5rem 0.3rem 0 0; cursor:pointer; border:none; font-size:1rem; transition:0.3s; }
-    .btn-wa { background:#25D366; color:#fff; }
-    .btn-cart { background:var(--gold); color:#fff; }
-    .sticky { position:fixed; bottom:0; left:0; right:0; background:var(--panel); border-top:1px solid var(--line); padding:0.8rem; display:flex; gap:0.8rem; align-items:center; box-shadow:0 -4px 20px rgba(0,0,0,.1); z-index:100; }
-    .sticky-price { font-weight:800; font-size:1.2rem; color:var(--gold2); white-space:nowrap; }
-    .sticky .btn { padding:0.7rem 1rem; font-size:0.9rem; margin:0; flex:1; }
-    @media(max-width:768px) { .layout { flex-direction:column; } .gallery { position:static; } }
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      padding-bottom: 30px;
+    }
+    .container {
+      width: min(1200px, 94%);
+      margin: auto;
+    }
+    /* ===== الهيدر ===== */
+    .header {
+      background: var(--panel);
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+    .header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-family: 'El Messiri', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold2);
+    }
+    .logo span { color: var(--ink); }
+    .back-link {
+      color: var(--gold2);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    /* ===== شبكة المنتجات ===== */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.8rem;
+      margin: 2rem 0;
+    }
+    .product-card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line);
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+    .product-card img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      background: #f5efe5;
+    }
+    .product-card .card-body {
+      padding: 1rem 0.8rem 0.8rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .product-card .card-body h3 {
+      font-family: 'El Messiri', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+    .product-card .price-tag {
+      font-weight: 800;
+      color: var(--gold2);
+      font-size: 1.2rem;
+      margin: 0.2rem 0 0.5rem;
+    }
+    .product-card .old-price {
+      text-decoration: line-through;
+      color: #aaa;
+      font-size: 0.9rem;
+      margin-right: 0.5rem;
+      font-weight: 400;
+    }
+    .product-card .badge {
+      display: inline-block;
+      background: var(--gold);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.7rem;
+      border-radius: 20px;
+      align-self: flex-start;
+      margin-top: 0.2rem;
+    }
+    .product-card .btn-detail {
+      background: var(--gold);
+      color: #fff;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 99px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 0.6rem;
+    }
+    .product-card .btn-detail:hover {
+      background: var(--gold2);
+    }
+
+    /* ===== المودال (نافذة التفاصيل) ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-box {
+      background: var(--panel);
+      border-radius: var(--radius);
+      max-width: 850px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.8rem 2rem 2rem;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal-close {
+      position: sticky;
+      top: 0;
+      float: left;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: var(--mut);
+      padding: 0 0.5rem;
+      line-height: 1;
+    }
+    .modal-close:hover { color: #000; }
+    .modal-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .modal-main-img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #f5efe5;
+    }
+    .modal-thumbs {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+    }
+    .modal-thumb {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
+    .modal-thumb.active {
+      border-color: var(--gold);
+      opacity: 1;
+    }
+    .modal-info h2 {
+      font-family: 'El Messiri', serif;
+      font-size: 1.8rem;
+      margin: 0.5rem 0 0.2rem;
+    }
+    .modal-info .price {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--gold2);
+      margin: 0.3rem 0 0.8rem;
+    }
+    .modal-info .desc {
+      color: var(--mut);
+      line-height: 1.9;
+      white-space: pre-line;
+      margin-bottom: 1rem;
+    }
+    .modal-info .scent-box {
+      background: #f9f5ee;
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      margin: 1rem 0 1.2rem;
+    }
+    .modal-info .scent-box label {
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .modal-info .scent-box select {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      font-size: 1rem;
+      background: #fff;
+    }
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-weight: 800;
+      padding: 0.7rem 1.6rem;
+      border-radius: 99px;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      text-decoration: none;
+      color: #fff;
+    }
+    .btn-wa { background: #25D366; }
+    .btn-wa:hover { background: #1da851; }
+    .btn-cart { background: var(--gold); }
+    .btn-cart:hover { background: var(--gold2); }
+    .btn-close-modal {
+      background: #eee;
+      color: var(--ink);
+    }
+    .btn-close-modal:hover { background: #ddd; }
+
+    /* ===== رسالة "لا توجد منتجات" ===== */
+    .empty-msg {
+      text-align: center;
+      padding: 3rem;
+      font-size: 1.3rem;
+      color: var(--mut);
+    }
+
+    /* ===== متجاوب ===== */
+    @media (max-width: 600px) {
+      .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .modal-box { padding: 1rem; }
+      .modal-info h2 { font-size: 1.4rem; }
+    }
+    @media (max-width: 400px) {
+      .products-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="container">
-      <div class="logo">VelaLight</div>
-      <a href="https://velalight.github.io/" style="color:var(--gold2)">← العودة</a>
-    </div>
-  </header>
 
-  <main class="container" id="main">
-    <div style="text-align:center;padding:3rem">جاري التحميل...</div>
-  </main>
-
-  <div class="sticky" id="sticky" style="display:none">
-    <div class="sticky-price" id="sPrice">0 ج.م</div>
-    <button class="btn btn-cart" id="sCart">أضيفي للسلة</button>
-    <a href="#" class="btn btn-wa" id="sWa" target="_blank">واتساب</a>
+<!-- ===== الهيدر ===== -->
+<header class="header">
+  <div class="container">
+    <div class="logo">Vela<span>Light</span></div>
+    <a href="https://velalight.github.io/" class="back-link">← الرئيسية</a>
   </div>
+</header>
 
-  <script src="data.js?v=13"></script>
-  <script>
-    const pid = new URLSearchParams(window.location.search).get('id');
-    let selScent = '';
+<!-- ===== شبكة المنتجات ===== -->
+<main class="container">
+  <h1 style="font-family:'El Messiri',serif; margin-top:1rem;">✨ تشكيلتنا</h1>
+  <div id="productGrid" class="products-grid">
+    <div class="empty-msg">جاري تحميل المنتجات...</div>
+  </div>
+</main>
 
-    // 🔥 انتظار تحميل data.js تماماً
-    window.addEventListener('load', async () => {
-      try {
-        // محاولة تحميل من Firebase لو موجود
-        let P = null;
-        if (window.DB && typeof DB.list === 'function') {
-          try {
-            const products = await DB.list('products');
-            P = products.find(x => String(x.id) === String(pid) || String(x.id_) === String(pid));
-          } catch(e) { console.log('Firebase error:', e); }
-        }
-        
-        // لو مفيش Firebase، دور في PRODUCTS
-        if (!P && typeof PRODUCTS !== 'undefined') {
-          P = PRODUCTS.find(x => String(x.id) === String(pid));
-        }
+<!-- ===== المودال ===== -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-gallery">
+      <img src="" alt="" class="modal-main-img" id="modalMainImg">
+      <div class="modal-thumbs" id="modalThumbs"></div>
+    </div>
+    <div class="modal-info">
+      <h2 id="modalName"></h2>
+      <div class="price" id="modalPrice"></div>
+      <div class="desc" id="modalDesc"></div>
+      
+      <div class="scent-box">
+        <label for="modalScent">اختاري العطر</label>
+        <select id="modalScent">
+          <option value="">-- اختار العطر --</option>
+        </select>
+      </div>
 
-        if (!P) {
-          document.getElementById('main').innerHTML = '<div style="text-align:center;padding:3rem"><h2>المنتج مش موجود</h2><a href="https://velalight.github.io/" class="btn btn-cart">العودة</a></div>';
-          return;
-        }
+      <div class="modal-actions">
+        <button class="btn btn-cart" id="modalCart">أضيفي للسلة</button>
+        <a href="#" class="btn btn-wa" id="modalWa" target="_blank">اطلبي عبر واتساب</a>
+        <button class="btn btn-close-modal" id="modalCloseBtn">إغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-        // جلب الصور
-        const imgs = [];
-        if (P.imgs && Array.isArray(P.imgs)) imgs.push(...P.imgs);
-        else if (P.images && Array.isArray(P.images)) imgs.push(...P.images);
-        else if (P.img) {
-          if (typeof P.img === 'string' && P.img.includes(',')) imgs.push(...P.img.split(',').map(s=>s.trim()));
-          else imgs.push(P.img);
-        }
+<script>
+  // ================================================================
+  // 1️⃣ إعداد Firebase (غيّر القيم أدناه بقيم مشروعك)
+  // ================================================================
+  const firebaseConfig = {
+    apiKey: "AIzaSyB3...",          // ضع المفتاح الصحيح هنا
+    authDomain: "your-project.firebaseapp.com",
+    databaseURL: "https://your-project-default-rtdb.firebaseio.com/",
+    projectId: "your-project",
+    storageBucket: "your-project.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef"
+  };
 
-        const mainImg = imgs[0] || '';
-        const imgUrl = mainImg.startsWith('http') ? mainImg : `https://velalight.github.io/${mainImg}`;
-        const name = P.name || 'منتج';
-        const price = P.price || 0;
-        const desc = P.desc || '';
-        const scents = P.scents || [];
-        
-        // تحديث العنوان
-        document.title = `${name} | VelaLight`;
+  // تهيئة Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-        // بناء HTML
-        let html = `<div class="layout">
-          <div class="gallery">
-            <img src="${imgUrl}" class="main-img" alt="${name}" id="mainImg">
-            ${imgs.length > 1 ? `<div class="thumbs">${imgs.map((img,i) => {
-              const src = img.startsWith('http') ? img : `https://velalight.github.io/${img}`;
-              return `<img src="${src}" class="thumb ${i===0?'on':''}" onclick="chgImg('${src}',this)">`;
-            }).join('')}</div>` : ''}
-          </div>
-          <div class="info">
-            <h1>${name}</h1>
-            <div class="price">${price} ج.م</div>
-            <div class="desc">${desc}</div>
-            
-            <div class="scent-box">
-              <label> اختاري العطر</label>
-              <select id="scent" onchange="selScent=this.value;updWa()">
-                <option value="">-- اختار العطر --</option>
-                ${scents.map(s => `<option value="${s}">${s}</option>`).join('')}
-              </select>
-            </div>
+  // ================================================================
+  // 2️⃣ المتغيرات العامة
+  // ================================================================
+  let allProducts = [];           // جميع المنتجات من Firebase
+  let currentProduct = null;      // المنتج المعروض في المودال
+  let selectedScent = '';         // العطر المختار في المودال
 
-            <div>
-              <button class="btn btn-cart" onclick="addToCart()">أضيفي للسلة</button>
-              <a href="#" class="btn btn-wa" id="waBtn" target="_blank">اطلبي عبر واتساب</a>
-            </div>
-          </div>
-        </div>`;
+  // رقم واتساب (غيّره حسب رغبتك)
+  const WA_NUMBER = '201223526105';
 
-        document.getElementById('main').innerHTML = html;
-        document.getElementById('sticky').style.display = 'flex';
-        document.getElementById('sPrice').textContent = `${price} ج.م`;
-        updWa();
-        
-        document.getElementById('sCart').onclick = addToCart;
+  // ================================================================
+  // 3️⃣ جلب المنتجات من Firebase وعرضها
+  // ================================================================
+  async function loadProducts() {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = '<div class="empty-msg">⏳ جاري التحميل...</div>';
 
-      } catch(err) {
-        console.error('Error:', err);
-        document.getElementById('main').innerHTML = '<div style="text-align:center;padding:3rem;color:red">حدث خطأ في تحميل الصفحة</div>';
-      }
-    });
+    try {
+      const snapshot = await db.ref('products').once('value');
+      const data = snapshot.val();
 
-    function chgImg(src, el) {
-      document.getElementById('mainImg').src = src;
-      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('on'));
-      el.classList.add('on');
-    }
-
-    function updWa() {
-      const name = document.querySelector('h1')?.textContent || 'منتج';
-      const price = document.querySelector('.price')?.textContent || '0';
-      const scent = selScent || 'لم يختار';
-      const msg = encodeURIComponent(`أريد طلب ${name} بسعر ${price}\nالعطر: ${scent}`);
-      const link = `https://wa.me/201223526105?text=${msg}`;
-      const waBtn = document.getElementById('waBtn');
-      const sWa = document.getElementById('sWa');
-      if (waBtn) waBtn.href = link;
-      if (sWa) sWa.href = link;
-    }
-
-    function addToCart() {
-      if (!selScent) {
-        alert('من فضلك اختاري العطر أولاً');
-        document.getElementById('scent').focus();
+      if (!data) {
+        grid.innerHTML = '<div class="empty-msg">😕 لا توجد منتجات حالياً</div>';
         return;
       }
-      
-      // محاولة استخدام addToCart من data.js لو موجود
-      if (typeof addToCartGlobal === 'function' && typeof P !== 'undefined') {
-        addToCartGlobal(P, {scent: selScent, qty: 1});
-        alert('✅ تم الإضافة');
+
+      // تحويل الكائن إلى مصفوفة مع الاحتفاظ بالمفاتيح (id)
+      allProducts = Object.keys(data).map(key => {
+        const item = data[key];
+        // نضيف id مأخوذ من المفتاح أو من الحقل id إن وجد
+        return { ...item, id: item.id || key };
+      });
+
+      // (اختياري) ترتيب المنتجات حسب السعر أو الاسم
+      // allProducts.sort((a,b) => a.name.localeCompare(b.name));
+
+      renderProducts(allProducts);
+    } catch (err) {
+      console.error('خطأ في جلب البيانات:', err);
+      grid.innerHTML = `<div class="empty-msg" style="color:red;">❌ حدث خطأ: ${err.message}</div>`;
+    }
+  }
+
+  // ================================================================
+  // 4️⃣ عرض المنتجات في الشبكة
+  // ================================================================
+  function renderProducts(products) {
+    const grid = document.getElementById('productGrid');
+    if (!products || products.length === 0) {
+      grid.innerHTML = '<div class="empty-msg">😕 لا توجد منتجات</div>';
+      return;
+    }
+
+    let html = '';
+    products.forEach(p => {
+      // تحديد الصورة الأساسية
+      let mainImg = p.img || '';
+      if (p.imgs && Array.isArray(p.imgs) && p.imgs.length > 0) {
+        mainImg = p.imgs[0];
+      } else if (p.images && Array.isArray(p.images) && p.images.length > 0) {
+        mainImg = p.images[0];
+      }
+      // إذا كان الرابط نسبيًا نضيف domain
+      const imgSrc = mainImg.startsWith('http') ? mainImg : `https://velalight.github.io/${mainImg}`;
+
+      const oldPrice = p.old ? `<span class="old-price">${p.old} ج.م</span>` : '';
+      const badge = p.badge ? `<span class="badge">${p.badge}</span>` : '';
+
+      html += `
+        <div class="product-card" data-id="${p.id}">
+          <img src="${imgSrc}" alt="${p.name || 'منتج'}" loading="lazy">
+          <div class="card-body">
+            <h3>${p.name || 'منتج'}</h3>
+            <div class="price-tag">${p.price || 0} ج.م ${oldPrice}</div>
+            ${badge}
+            <button class="btn-detail" data-id="${p.id}">عرض التفاصيل</button>
+          </div>
+        </div>
+      `;
+    });
+
+    grid.innerHTML = html;
+
+    // إضافة مستمعات الأحداث للأزرار والبطاقات
+    document.querySelectorAll('.btn-detail').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        openModal(id);
+      });
+    });
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.getAttribute('data-id');
+        openModal(id);
+      });
+    });
+  }
+
+  // ================================================================
+  // 5️⃣ فتح المودال بعرض تفاصيل المنتج
+  // ================================================================
+  function openModal(productId) {
+    const product = allProducts.find(p => String(p.id) === String(productId));
+    if (!product) {
+      alert('المنتج غير موجود');
+      return;
+    }
+    currentProduct = product;
+    selectedScent = '';
+
+    // تجميع قائمة الصور
+    let images = [];
+    if (product.imgs && Array.isArray(product.imgs)) images = product.imgs;
+    else if (product.images && Array.isArray(product.images)) images = product.images;
+    else if (product.img) {
+      if (typeof product.img === 'string' && product.img.includes(',')) {
+        images = product.img.split(',').map(s => s.trim());
       } else {
-        // لو مفيش، افتح واتساب مباشرة
-        alert('سيتم تحويلك للواتساب لإتمام الطلب');
-        document.getElementById('waBtn')?.click();
+        images = [product.img];
       }
     }
-  </script>
+    // إذا لم توجد صور، نضع صورة افتراضية
+    if (images.length === 0) images = ['placeholder.jpg'];
+
+    // تحويل الروابط إلى كاملة
+    const fullImages = images.map(src => src.startsWith('http') ? src : `https://velalight.github.io/${src}`);
+
+    // تعبئة عناصر المودال
+    document.getElementById('modalMainImg').src = fullImages[0];
+    document.getElementById('modalName').textContent = product.name || 'منتج';
+    const priceText = `${product.price || 0} ج.م`;
+    const oldText = product.old ? ` <span style="text-decoration:line-through;color:#aaa;font-size:1.2rem;">${product.old} ج.م</span>` : '';
+    document.getElementById('modalPrice').innerHTML = priceText + oldText;
+    document.getElementById('modalDesc').textContent = product.desc || '';
+
+    // تعبئة قائمة العطور
+    const scentSelect = document.getElementById('modalScent');
+    scentSelect.innerHTML = '<option value="">-- اختار العطر --</option>';
+    if (product.scents && Array.isArray(product.scents)) {
+      product.scents.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        scentSelect.appendChild(opt);
+      });
+    }
+    // إعادة تعيين الاختيار
+    scentSelect.value = '';
+
+    // تعبئة الصور المصغرة
+    const thumbsContainer = document.getElementById('modalThumbs');
+    thumbsContainer.innerHTML = '';
+    fullImages.forEach((src, idx) => {
+      const thumb = document.createElement('img');
+      thumb.src = src;
+      thumb.className = `modal-thumb ${idx === 0 ? 'active' : ''}`;
+      thumb.dataset.index = idx;
+      thumb.addEventListener('click', () => {
+        document.getElementById('modalMainImg').src = src;
+        document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+      });
+      thumbsContainer.appendChild(thumb);
+    });
+
+    // تحديث روابط واتساب وزر السلة
+    updateModalWa();
+    // إظهار المودال
+    document.getElementById('modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // مستمعات الأحداث في المودال
+    document.getElementById('modalScent').onchange = function() {
+      selectedScent = this.value;
+      updateModalWa();
+    };
+    document.getElementById('modalCart').onclick = function() {
+      addToCartModal();
+    };
+  }
+
+  // ================================================================
+  // 6️⃣ تحديث رابط واتساب في المودال
+  // ================================================================
+  function updateModalWa() {
+    if (!currentProduct) return;
+    const name = currentProduct.name || 'منتج';
+    const price = currentProduct.price || 0;
+    const scent = selectedScent || 'لم يختار';
+    const msg = encodeURIComponent(`أريد طلب ${name} بسعر ${price} ج.م\nالعطر: ${scent}`);
+    const link = `https://wa.me/${WA_NUMBER}?text=${msg}`;
+    document.getElementById('modalWa').href = link;
+  }
+
+  // ================================================================
+  // 7️⃣ إضافة للمودال (زر السلة)
+  // ================================================================
+  function addToCartModal() {
+    if (!currentProduct) return;
+    if (!selectedScent) {
+      alert('من فضلك اختاري العطر أولاً');
+      document.getElementById('modalScent').focus();
+      return;
+    }
+
+    // هنا يمكنك استدعاء دالة إضافة للسلة من data.js إن وجدت
+    // أو تنفيذ منطقك الخاص (مثل تخزين في localStorage أو إرسال إلى Firebase)
+    // على سبيل المثال، نفتح واتساب بدلاً من ذلك:
+    alert(`✅ تم إضافة ${currentProduct.name} (العطر: ${selectedScent}) إلى السلة`);
+    // يمكنك أيضاً فتح واتساب:
+    // document.getElementById('modalWa').click();
+  }
+
+  // ================================================================
+  // 8️⃣ إغلاق المودال
+  // ================================================================
+  function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+    document.body.style.overflow = '';
+    currentProduct = null;
+    selectedScent = '';
+  }
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+  document.getElementById('modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  // ================================================================
+  // 9️⃣ تحميل الصفحة
+  // ================================================================
+  window.addEventListener('DOMContentLoaded', () => {
+    loadProducts();
+  });
+</script>
+
 </body>
 </html>
