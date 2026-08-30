@@ -140,7 +140,15 @@ const imgOf = (p, options = {}) => {
 const pname=p=>LANG==="en"?(p.nameEn||p.en||p.name):p.name;
 const pdesc=p=>LANG==="en"?(p.descEn||p.desc||""):(p.desc||"");
 const phours=p=>LANG==="en"?(p.hoursEn||p.hours||"72h"):(p.hours||"72 ساعة");
-const pbadge=p=>LANG==="en"?(p.badgeEn||p.badge||""):(p.badge||"");
+const pbadge=p=>{
+  if(!p||!p.badge) return "";
+  const lang=LANG==="en"?"en":"ar";
+  if(lang==="en"&&p.badgeEn) return p.badgeEn;
+  const badgeMap={"خصم":"badge_sale","الأكثر مبيعًا":"badge_best","مميز":"badge_featured","الأكثر طلبًا":"badge_most","جديد":"badge_new","نفدت الكمية":"badge_out","Sale":"badge_sale","Best Seller":"badge_best","Featured":"badge_featured","Most Requested":"badge_most","New":"badge_new","Sold Out":"badge_out"};
+  const key=badgeMap[p.badge]||badgeMap[p.badgeEn]||null;
+  if(key&&typeof t==="function") return t(key);
+  return lang==="en"?(p.badgeEn||p.badge):p.badge;
+};
 
 const LocalDB={
   k:c=>"vl_"+c,
