@@ -555,7 +555,11 @@ faq8a:"نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، 
     pd_shipping_title:"الشحن كاش عند الاستلام",
     pd_shipping_desc:"تكلفة التوصيل تُدفع لمندوب الشحن عند وصول الطلب",
     pd_handmade:"✦ قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
-
+    pd_feat_1: "🕯️ صناعة يدوية",
+    pd_feat_2: "🚚 توصيل سريع",
+    pd_feat_3: "🎁 تغليف فاخر",
+    pd_feat_4: "💳 دفع آمن",
+    
     stock_remaining:"⚡ باقي {n} فقط — اطلبي الآن!",
 
     chat_name:"مساعد VelaLight",
@@ -906,7 +910,11 @@ faq8a:"Due to the nature of our handmade products, returns or exchanges are not 
     pd_shipping_title:"Cash on Delivery",
     pd_shipping_desc:"Delivery fees are paid to the courier when your order arrives.",
     pd_handmade:"✦ A handmade piece carefully prepared to order — every candle is unique and special.",
-
+    pd_feat_1: "🕯️ Handmade",
+    pd_feat_2: "🚚 Fast Delivery",
+    pd_feat_3: "🎁 Luxury Wrapping",
+    pd_feat_4: "💳 Secure Payment",
+    
     stock_remaining:"⚡ Only {n} left — Order now!",
 
     chat_name:"VelaLight Assistant",
