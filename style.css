@@ -313,71 +313,58 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  -webkit-tap-highlight-color:transparent;
 }
 
-/* ═══ Product Page Images - Full Coverage ═══ */
-#pdImgWrap {
+/* ═══ Products Grid Images - Unified Height Without Cropping ═══ */
+.p-media {
   position: relative;
   width: 100%;
-  min-height: 500px; /* ارتفاع مناسب للابتوب */
+  aspect-ratio: 1 / 1; /* مربع مثالي */
   background: var(--bg2);
-  border-radius: 22px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#pdImg {
+.p-media img {
   width: 100%;
   height: 100%;
-  min-height: 500px; /* للابتوب */
-  object-fit: cover; /* 🔥 يملأ المساحة بالكامل */
+  object-fit: contain; /* 🔥 يظهر الصورة كاملة بدون قص */
   object-position: center;
   display: block;
   transition: transform 0.3s ease;
 }
 
-/* للموبايل */
-@media (max-width: 768px) {
-  #pdImgWrap {
-    min-height: 350px; /* ارتفاع أقل للموبايل */
-  }
-  
-  #pdImg {
-    min-height: 350px;
-    object-fit: cover;
-  }
-}
-
-/* Hover effect */
-#pdImg:hover {
-  transform: scale(1.02);
-}
-
-/* للـ Thumbnails */
-#pdThumbs {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  overflow-x: auto;
-  padding: 0.5rem 0;
-}
-
-#pdThumbs img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 10px;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-}
-
-#pdThumbs img.on,
-#pdThumbs img:hover {
-  border-color: var(--gold);
+.p-card:hover .p-media img {
   transform: scale(1.05);
 }
 
-#pdThumbs img.loaded {
-  opacity: 1;
+/* للموبايل - عمودين */
+@media (max-width: 768px) {
+  .pgrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+  
+  .p-media {
+    aspect-ratio: 1 / 1; /* مربع مثالي على الموبايل أيضاً */
+  }
+  
+  .p-body {
+    padding: 0.6rem;
+  }
+  
+  .p-body h3 {
+    font-size: 0.85rem;
+    margin: 0.2rem 0;
+  }
+  
+  .p-desc {
+    font-size: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* يظهر سطرين فقط */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 .p-media img:not([src]),
 .p-media img[src=""]{
