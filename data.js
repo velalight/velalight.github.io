@@ -3,16 +3,19 @@ const CFG = {
   INSTAPAY: "",
   REPO: "velalight/velalight.github.io@main",
   FIREBASE: {
-    apiKey: "AIzaSyDTX0J7Fccv2oLvpGYYZXiHteGuiE8y8o",
+    apiKey: "AIzaSyDTX0J7Fccv2oLvpGYYZXiHteGuiE8y8o", // ⚠️ ملاحظة أمان في الأسفل
     authDomain: "velalight.firebaseapp.com",
     projectId: "velalight",
     storageBucket: "velalight.firebasestorage.app",
     messagingSenderId: "1095485535268",
     appId: "1:1095485535268:web:4d17ee9de6f5acdacbd4b1"
   },
-  GA4_ID: "G-BWBD8ZZD23",
-  META_PIXEL_ID: "YOUR_META_PIXEL_ID",
-  TIKTOK_PIXEL_ID: "YOUR_TIKTOK_PIXEL_ID"
+  GA4_ID: "G-BWBD8ZZD23", // ✅ هذا ممتاز
+  
+  // 🔥 هنا التعديل المطلوب: استبدل النص برقم البيكسل الحقيقي الخاص بك
+  META_PIXEL_ID: "1377896053806991", // <-- ضع رقم البيكسل الحقيقي هنا
+  
+  TIKTOK_PIXEL_ID: "YOUR_TIKTOK_PIXEL_ID" // اتركه هكذا إذا لم تكن تستخدم تيك توك
 };
 
 /* ═══ Analytics (unchanged) ═══ */
