@@ -1581,15 +1581,40 @@ function renderRelated(){
 }
 
 /* ═══════ SHARE ═══════ */
-function renderShare(){
-  const box=$("#pdShare");
-  if(!box) return;
-  const url=location.href;
-  const text=((typeof LANG !== "undefined" && LANG==="en")?"Check out ":"شوفي ")+ (typeof pname === "function" ? pname(P) : P.name) + ((typeof LANG !== "undefined" && LANG==="en")?" from VelaLight ✨":" من VelaLight ✨");
-  box.innerHTML=`<b>🔗 مشاركة:</b><a href="https://wa.me/?text=${encodeURIComponent(text+" "+url)}" target="_blank" rel="noopener">WhatsApp</a><a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener">Facebook</a><a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}" target="_blank" rel="noopener">Twitter</a><button type="button" id="copyLink">📋 نسخ الرابط</button>`;
-  $("#copyLink")?.addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText(url); if(typeof toast==="function") toast("✅ تم نسخ الرابط"); }catch(e){ if(typeof toast==="function") toast("⚠️ فشل النسخ"); } });
+function renderShare() {
+  const box = $("#pdShare");
+  if (!box) return;
+  
+  const url = location.href;
+  const text = ((typeof LANG !== "undefined" && LANG === "en") ? "Check out " : "شوفي ") + 
+               (typeof pname === "function" ? pname(P) : P.name) + 
+               ((typeof LANG !== "undefined" && LANG === "en") ? " from VelaLight ✨" : " من VelaLight ✨");
+  
+  // 🔥 استخدام دالة t() للترجمة
+  const shareLabel = (typeof t === "function") ? t("share") : "مشاركة:";
+  const whatsappText = (typeof t === "function") ? t("share_whatsapp") : "WhatsApp";
+  const facebookText = (typeof t === "function") ? t("share_facebook") : "Facebook";
+  const twitterText = (typeof t === "function") ? t("share_twitter") : "Twitter";
+  const copyLinkText = (typeof t === "function") ? t("copy_link") : " نسخ الرابط";
+  
+  box.innerHTML = `
+    <b>🔗 ${shareLabel}</b>
+    <a href="https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}" target="_blank" rel="noopener">${whatsappText}</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener">${facebookText}</a>
+    <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}" target="_blank" rel="noopener">${twitterText}</a>
+    <button type="button" id="copyLink">${copyLinkText}</button>
+  `;
+  
+  $("#copyLink")?.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      if (typeof toast === "function") toast("✅ " + ((typeof t === "function") ? t("copied") : "تم نسخ الرابط"));
+    } catch (e) {
+      if (typeof toast === "function") toast("⚠️ فشل النسخ");
+    }
+  });
 }
-
+  
 /* ═══════ JSON-LD — توليد ديناميكي للمنتج ═══════ */
 function updateJsonLd(){
   const ld = document.getElementById("pdJsonLd");
