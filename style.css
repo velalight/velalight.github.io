@@ -313,13 +313,71 @@ nav.mainnav>div:hover .dd{opacity:1;visibility:visible;transform:none}
  -webkit-tap-highlight-color:transparent;
 }
 
-.p-media img {
+/* ═══ Product Page Images - Full Coverage ═══ */
+#pdImgWrap {
+  position: relative;
   width: 100%;
-  height: auto;
-  max-height: 400px;
-  object-fit: contain;
+  min-height: 500px; /* ارتفاع مناسب للابتوب */
   background: var(--bg2);
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+#pdImg {
+  width: 100%;
+  height: 100%;
+  min-height: 500px; /* للابتوب */
+  object-fit: cover; /* 🔥 يملأ المساحة بالكامل */
+  object-position: center;
   display: block;
+  transition: transform 0.3s ease;
+}
+
+/* للموبايل */
+@media (max-width: 768px) {
+  #pdImgWrap {
+    min-height: 350px; /* ارتفاع أقل للموبايل */
+  }
+  
+  #pdImg {
+    min-height: 350px;
+    object-fit: cover;
+  }
+}
+
+/* Hover effect */
+#pdImg:hover {
+  transform: scale(1.02);
+}
+
+/* للـ Thumbnails */
+#pdThumbs {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+}
+
+#pdThumbs img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+#pdThumbs img.on,
+#pdThumbs img:hover {
+  border-color: var(--gold);
+  transform: scale(1.05);
+}
+
+#pdThumbs img.loaded {
+  opacity: 1;
 }
 .p-media img:not([src]),
 .p-media img[src=""]{
