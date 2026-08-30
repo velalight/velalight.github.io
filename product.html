@@ -1337,10 +1337,28 @@ function render(){
 
   const name=(typeof pname === "function") ? pname(P) : (P.name || "منتج");
   document.title=name+" | VelaLight";
-  let ogTitle=document.querySelector('meta[property="og:title"]');
-  if(ogTitle) ogTitle.content=name;
-  let ogDesc=document.querySelector('meta[property="og:description"]');
-  if(ogDesc) ogDesc.content=(typeof pdesc === "function" ? pdesc(P) : (P.desc || "")).slice(0,160);
+
+  // 🔥 تحديث وسوم المشاركة الاجتماعية (فيسبوك، واتساب، إلخ) ديناميكياً 🔥
+  const currentUrl = window.location.href;
+  const mainImgSrc = (typeof imgsOf === "function" && imgsOf(P).length > 0) ? imgsOf(P)[0] : (P.img || "");
+  const imageUrl = (typeof CDN === "function") ? CDN(mainImgSrc) : `https://velalight.github.io/${mainImgSrc}`;
+  const description = (typeof pdesc === "function" ? pdesc(P) : (P.desc || "")).slice(0, 160);
+
+  let ogTitle = document.querySelector('meta[property="og:title"]');
+  if(ogTitle) ogTitle.setAttribute("content", name + " | VelaLight");
+
+  let ogDesc = document.querySelector('meta[property="og:description"]');
+  if(ogDesc) ogDesc.setAttribute("content", description);
+
+  let ogImage = document.querySelector('meta[property="og:image"]');
+  if(ogImage) ogImage.setAttribute("content", imageUrl);
+
+  let ogUrl = document.querySelector('meta[property="og:url"]');
+  if(ogUrl) ogUrl.setAttribute("content", currentUrl);
+
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if(canonical) canonical.setAttribute("href", currentUrl);
+  // ==================================================================================
   
   // تحديث الـ JSON-LD ديناميكيًا
   if(typeof updateJsonLd === "function") updateJsonLd();
@@ -1353,12 +1371,14 @@ function render(){
   $("#pdDescFull").innerHTML=desc.split("\n").filter(Boolean).map(p=>`<p style="margin-bottom:.9rem">${p}</p>`).join("") || `<p>${desc}</p>`;
 
   zoomImages=(typeof imgsOf === "function") ? imgsOf(P) : (P.img ? [P.img] : []);
-  const mainImg=$("#pdImg");
-  mainImg.classList.remove("loaded");
-  mainImg.onerror=()=>{ mainImg.src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>"; mainImg.classList.add("loaded"); };
-  mainImg.onload=()=>mainImg.classList.add("loaded");
-  mainImg.src=(typeof CDN === "function" ? CDN(zoomImages[0]) : zoomImages[0]) || (P.img || "");
-  mainImg.alt=name;
+  
+  // ⚠️ ملاحظة: تم تغيير الاسم إلى mainImgEl لتجنب التعارض مع متغير mainImgSrc أعلاه
+  const mainImgEl=$("#pdImg"); 
+  mainImgEl.classList.remove("loaded");
+  mainImgEl.onerror=()=>{ mainImgEl.src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>"; mainImgEl.classList.add("loaded"); };
+  mainImgEl.onload=()=>mainImgEl.classList.add("loaded");
+  mainImgEl.src=(typeof CDN === "function" ? CDN(zoomImages[0]) : zoomImages[0]) || (P.img || "");
+  mainImgEl.alt=name;
 
   const reviewSummary=(typeof prodReviews==="function")?prodReviews(P.id):[];
   $("#revCount").textContent=reviewSummary.length;
@@ -1402,7 +1422,7 @@ function render(){
   if(typeof bindEvents === "function") bindEvents();
   if(typeof updateWishButton === "function") updateWishButton();
 }
-
+  
 /* ═══════ STOCK ═══════ */
 function renderStock(){
   const box = document.getElementById("pdStockInfo");
