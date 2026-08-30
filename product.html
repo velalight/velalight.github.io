@@ -1418,7 +1418,13 @@ function renderStock(){
     var buyBtn = document.getElementById("pdBuyBtn");
     if (buyBtn) { buyBtn.disabled = true; }
   } else if (stockValue <= 5) {
-    box.innerHTML = '<span class="stock-badge low">⚡ باقي ' + stockValue + ' فقط</span>';
+    // استخدام دالة الترجمة t() مع استبدال الرقم ديناميكياً
+const stockText = (typeof t === "function") 
+    ? t("stock_remaining").replace("{n}", stockValue) 
+    : "⚡ باقي " + stockValue + " فقط";
+
+box.innerHTML = '<span class="stock-badge low">' + stockText + '</span>';
+    
   } else {
     box.innerHTML = '<span class="stock-badge ok">✓ متوفر (' + stockValue + ')</span>';
   }
