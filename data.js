@@ -145,10 +145,25 @@ const pdesc=p=>LANG==="en"?(p.descEn||p.desc||""):(p.desc||"");
 const phours=p=>LANG==="en"?(p.hoursEn||p.hours||"72h"):(p.hours||"72 ساعة");
 const pbadge = (p) => {
   if (!p || !p.badge) return "";
-  const currentLang = localStorage.getItem("vl_lang") || "ar";
-  if (currentLang === "en") {
-    return p.badgeEn || p.badge;
+  
+  // نستخدم المتغير العام LANG الموجود في أعلى الملف مباشرة
+  if (LANG === "en") {
+    // 1. جرب badgeEn أولاً
+    if (p.badgeEn) return p.badgeEn;
+    
+    // 2. خريطة احتياطية لو badgeEn مش موجودة في الداتابيز
+    const fallbackMap = {
+      "خصم": "Sale", 
+      "الأكثر مبيعًا": "Best Seller", 
+      "مميز": "Featured", 
+      "الأكثر طلبًا": "Most Requested", 
+      "جديد": "New", 
+      "نفدت الكمية": "Sold Out"
+    };
+    
+    return fallbackMap[p.badge] || p.badge;
   }
+  
   return p.badge;
 };
 
