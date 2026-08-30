@@ -11,272 +11,57 @@
   <meta property="og:image" content="https://velalight.github.io/RRRR.jpg" />
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=El+Messiri:wght@400;700&display=swap" rel="stylesheet" />
   
-  <!-- تحميل data.js أولاً (لضمان وجود البيانات) -->
-  <script src="data.js?v=15"></script>
+  <!-- تحميل data.js أولاً (لضمان وجود كل البيانات والدوال) -->
+  <script src="data.js?v=17"></script>
   
   <style>
-    /* ===== نفس الأنماط السابقة المحسّنة ===== */
+    /* ===== نفس الأنماط الرائعة التي كتبتها ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --bg: #f9f5f0;
-      --panel: #ffffff;
-      --ink: #1a1512;
-      --gold: #d4a85a;
-      --gold2: #b8893f;
-      --mut: #4a3f38;
-      --line: rgba(0,0,0,0.08);
-      --shadow: 0 10px 35px rgba(0,0,0,0.06);
-      --radius: 20px;
+      --bg: #f9f5f0; --panel: #ffffff; --ink: #1a1512; --gold: #d4a85a;
+      --gold2: #b8893f; --mut: #4a3f38; --line: rgba(0,0,0,0.08);
+      --shadow: 0 10px 35px rgba(0,0,0,0.06); --radius: 20px;
     }
-    body {
-      font-family: 'Tajawal', sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      padding-bottom: 90px;
-    }
+    body { font-family: 'Tajawal', sans-serif; background: var(--bg); color: var(--ink); padding-bottom: 90px; }
     .container { width: min(1200px, 94%); margin: auto; }
-    .header {
-      background: var(--panel);
-      padding: 0.9rem 0;
-      border-bottom: 1px solid var(--line);
-      position: sticky;
-      top: 0;
-      z-index: 60;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.02);
-    }
-    .header .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo {
-      font-family: 'El Messiri', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gold2);
-    }
+    .header { background: var(--panel); padding: 0.9rem 0; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 60; backdrop-filter: blur(6px); box-shadow: 0 2px 12px rgba(0,0,0,0.02); }
+    .header .container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-family: 'El Messiri', serif; font-size: 1.5rem; font-weight: 700; color: var(--gold2); }
     .logo span { color: var(--ink); }
-    .back-link {
-      color: var(--gold2);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-    .layout {
-      display: flex;
-      gap: 2.5rem;
-      margin-top: 2rem;
-      align-items: flex-start;
-    }
-    .gallery {
-      flex: 1;
-      position: sticky;
-      top: 90px;
-      background: var(--panel);
-      border-radius: var(--radius);
-      padding: 1.2rem;
-      box-shadow: var(--shadow);
-    }
-    .main-img {
-      width: 100%;
-      aspect-ratio: 1/1;
-      object-fit: cover;
-      border-radius: 14px;
-      background: #ede7df;
-      cursor: zoom-in;
-      transition: 0.3s;
-    }
+    .back-link { color: var(--gold2); text-decoration: none; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 0.3rem; }
+    .layout { display: flex; gap: 2.5rem; margin-top: 2rem; align-items: flex-start; }
+    .gallery { flex: 1; position: sticky; top: 90px; background: var(--panel); border-radius: var(--radius); padding: 1.2rem; box-shadow: var(--shadow); }
+    .main-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 14px; background: #ede7df; cursor: zoom-in; transition: 0.3s; }
     .main-img:hover { transform: scale(1.01); }
-    .thumbs {
-      display: flex;
-      gap: 0.6rem;
-      margin-top: 0.9rem;
-      overflow-x: auto;
-      padding-bottom: 0.3rem;
-    }
-    .thumb {
-      width: 70px;
-      height: 70px;
-      object-fit: cover;
-      border-radius: 12px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      opacity: 0.55;
-      flex-shrink: 0;
-      transition: 0.2s;
-    }
+    .thumbs { display: flex; gap: 0.6rem; margin-top: 0.9rem; overflow-x: auto; padding-bottom: 0.3rem; }
+    .thumb { width: 70px; height: 70px; object-fit: cover; border-radius: 12px; cursor: pointer; border: 2px solid transparent; opacity: 0.55; flex-shrink: 0; transition: 0.2s; }
     .thumb.on { border-color: var(--gold); opacity: 1; }
     .thumb:hover { opacity: 0.9; }
-    .info {
-      flex: 1;
-      background: var(--panel);
-      border-radius: var(--radius);
-      padding: 2rem 2rem 2.2rem;
-      box-shadow: var(--shadow);
-    }
-    .info h1 {
-      font-family: 'El Messiri', serif;
-      font-size: 2.2rem;
-      margin-bottom: 0.3rem;
-      line-height: 1.3;
-    }
-    .price-row {
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-      margin-bottom: 0.8rem;
-      flex-wrap: wrap;
-    }
-    .price {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--gold2);
-    }
-    .old-price {
-      text-decoration: line-through;
-      color: #b0a095;
-      font-size: 1.3rem;
-    }
-    .badge {
-      display: inline-block;
-      background: var(--gold);
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.2rem 0.9rem;
-      border-radius: 30px;
-      margin-right: 0.5rem;
-      vertical-align: middle;
-    }
-    .desc {
-      color: var(--mut);
-      line-height: 1.9;
-      margin: 1.2rem 0 1.5rem;
-      white-space: pre-line;
-      font-size: 1.05rem;
-    }
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem 1.5rem;
-      background: #f6f1ea;
-      padding: 0.8rem 1.2rem;
-      border-radius: 14px;
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
-      color: var(--mut);
-    }
+    .info { flex: 1; background: var(--panel); border-radius: var(--radius); padding: 2rem 2rem 2.2rem; box-shadow: var(--shadow); }
+    .info h1 { font-family: 'El Messiri', serif; font-size: 2.2rem; margin-bottom: 0.3rem; line-height: 1.3; }
+    .price-row { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+    .price { font-size: 2rem; font-weight: 800; color: var(--gold2); }
+    .old-price { text-decoration: line-through; color: #b0a095; font-size: 1.3rem; }
+    .badge { display: inline-block; background: var(--gold); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.9rem; border-radius: 30px; margin-right: 0.5rem; vertical-align: middle; }
+    .desc { color: var(--mut); line-height: 1.9; margin: 1.2rem 0 1.5rem; white-space: pre-line; font-size: 1.05rem; }
+    .meta { display: flex; flex-wrap: wrap; gap: 0.8rem 1.5rem; background: #f6f1ea; padding: 0.8rem 1.2rem; border-radius: 14px; margin-bottom: 1.5rem; font-size: 0.95rem; color: var(--mut); }
     .meta span { font-weight: 700; color: var(--ink); }
-    .scent-box {
-      background: #f6f1ea;
-      padding: 1.2rem 1.2rem 1rem;
-      border-radius: 16px;
-      margin: 1.5rem 0 1.8rem;
-    }
-    .scent-box label {
-      display: block;
-      font-weight: 700;
-      margin-bottom: 0.4rem;
-      font-size: 1.05rem;
-    }
-    .scent-box select {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      font-size: 1rem;
-      background: #fff;
-      color: var(--ink);
-      outline: none;
-      transition: 0.2s;
-    }
+    .scent-box { background: #f6f1ea; padding: 1.2rem 1.2rem 1rem; border-radius: 16px; margin: 1.5rem 0 1.8rem; }
+    .scent-box label { display: block; font-weight: 700; margin-bottom: 0.4rem; font-size: 1.05rem; }
+    .scent-box select { width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--line); border-radius: 12px; font-size: 1rem; background: #fff; color: var(--ink); outline: none; transition: 0.2s; }
     .scent-box select:focus { border-color: var(--gold); }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      margin-top: 0.3rem;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      font-weight: 800;
-      padding: 0.85rem 2rem;
-      border-radius: 60px;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: 0.25s ease;
-      text-decoration: none;
-      color: #fff;
-      flex: 1 1 auto;
-      min-width: 140px;
-    }
-    .btn-wa { background: #25D366; }
-    .btn-wa:hover { background: #1da851; transform: scale(1.02); }
-    .btn-cart { background: var(--gold); }
-    .btn-cart:hover { background: var(--gold2); transform: scale(1.02); }
-    .sticky {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(8px);
-      border-top: 1px solid var(--line);
-      padding: 0.7rem 1.2rem;
-      display: none;
-      gap: 0.8rem;
-      align-items: center;
-      box-shadow: 0 -6px 25px rgba(0,0,0,0.06);
-      z-index: 100;
-    }
-    .sticky-price {
-      font-weight: 800;
-      font-size: 1.3rem;
-      color: var(--gold2);
-      white-space: nowrap;
-      min-width: 80px;
-    }
-    .sticky .btn {
-      padding: 0.65rem 1rem;
-      font-size: 0.95rem;
-      flex: 1;
-      min-width: 0;
-    }
-    .loading, .error {
-      text-align: center;
-      padding: 4rem 1rem;
-      font-size: 1.4rem;
-      color: var(--mut);
-    }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.3rem; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 800; padding: 0.85rem 2rem; border-radius: 60px; border: none; font-size: 1rem; cursor: pointer; transition: 0.25s ease; text-decoration: none; color: #fff; flex: 1 1 auto; min-width: 140px; }
+    .btn-wa { background: #25D366; } .btn-wa:hover { background: #1da851; transform: scale(1.02); }
+    .btn-cart { background: var(--gold); } .btn-cart:hover { background: var(--gold2); transform: scale(1.02); }
+    .sticky { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.96); backdrop-filter: blur(8px); border-top: 1px solid var(--line); padding: 0.7rem 1.2rem; display: none; gap: 0.8rem; align-items: center; box-shadow: 0 -6px 25px rgba(0,0,0,0.06); z-index: 100; }
+    .sticky-price { font-weight: 800; font-size: 1.3rem; color: var(--gold2); white-space: nowrap; min-width: 80px; }
+    .sticky .btn { padding: 0.65rem 1rem; font-size: 0.95rem; flex: 1; min-width: 0; }
+    .loading, .error { text-align: center; padding: 4rem 1rem; font-size: 1.4rem; color: var(--mut); }
     .error { color: #c0392b; }
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(6px);
-      z-index: 200;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-      cursor: zoom-out;
-    }
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); z-index: 200; justify-content: center; align-items: center; padding: 2rem; cursor: zoom-out; }
     .lightbox.active { display: flex; }
-    .lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-      object-fit: contain;
-    }
+    .lightbox img { max-width: 90%; max-height: 90%; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); object-fit: contain; }
     @media (max-width: 768px) {
       .layout { flex-direction: column; gap: 1.5rem; }
       .gallery { position: static; padding: 0.8rem; }
@@ -316,113 +101,59 @@
 </div>
 
 <script>
-  // ================================================================
-  // 1️⃣ الحصول على ID المنتج من الرابط
-  // ================================================================
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('id') || urlParams.get('product');
 
-  // ================================================================
-  // 2️⃣ متغيرات عامة
-  // ================================================================
   let currentProduct = null;
   let selectedScent = '';
-  const WA_NUMBER = '201223526105'; // غيّر حسب رغبتك
+  const WA_NUMBER = '201223526105';
 
-  // ================================================================
-  // 3️⃣ دالة البحث عن المنتج في البيانات (من data.js أو Firebase)
-  // ================================================================
-  function findProduct(productsArray, id) {
-    if (!productsArray || !Array.isArray(productsArray)) return null;
-    return productsArray.find(p => String(p.id || p.id_ || p.key) === String(id));
-  }
-
-  // ================================================================
-  // 4️⃣ تحميل المنتج من data.js (الأولوية) ثم Firebase إن وجد
-  // ================================================================
   async function loadProduct() {
     const mainEl = document.getElementById('main');
-
     if (!productId) {
-      mainEl.innerHTML = `<div class="error">❌ لم يتم تحديد المنتج. أضف ?id=رقم_المنتج في الرابط.</div>`;
+      mainEl.innerHTML = `<div class="error">❌ لم يتم تحديد المنتج. الرابط يجب أن يكون مثل: ?id=12</div>`;
       return;
     }
 
-    // --- أولاً: محاولة القراءة من data.js (المتغير PRODUCTS) ---
-    let product = null;
-    if (typeof PRODUCTS !== 'undefined' && Array.isArray(PRODUCTS)) {
-      product = findProduct(PRODUCTS, productId);
-      if (product) {
-        console.log('✅ تم العثور على المنتج في data.js');
-        currentProduct = product;
-        renderProduct(product);
-        document.getElementById('sticky').style.display = 'flex';
-        return;
-      }
+    // 🔥 1. البحث في ALL_PRODUCTS أولاً (تحتوي على المحلي + Firebase المحدث)
+    let p = null;
+    if (typeof ALL_PRODUCTS !== 'undefined') {
+      p = ALL_PRODUCTS.find(item => String(item.id) === String(productId) || String(item.id_) === String(productId));
+    }
+    
+    // 🔥 2. إذا لم يوجد، البحث في PRODUCTS المحلية كاحتياط
+    if (!p && typeof PRODUCTS !== 'undefined') {
+      p = PRODUCTS.find(item => String(item.id) === String(productId));
     }
 
-    // --- ثانياً: محاولة جلب البيانات من Firebase (إذا كان معرفاً) ---
-    try {
-      // تحقق من وجود Firebase وتهيئته
-      if (typeof firebase !== 'undefined' && firebase.app) {
-        const db = firebase.database();
-        const snapshot = await db.ref('products').once('value');
-        const data = snapshot.val();
-        if (data) {
-          // تحويل الكائن إلى مصفوفة
-          const productsArray = Object.keys(data).map(key => ({ ...data[key], key }));
-          product = findProduct(productsArray, productId);
-          if (product) {
-            console.log('✅ تم العثور على المنتج في Firebase');
-            currentProduct = product;
-            renderProduct(product);
-            document.getElementById('sticky').style.display = 'flex';
-            return;
-          }
-        }
-      }
-    } catch (err) {
-      console.warn('⚠️ فشل الاتصال بـ Firebase، سيتم استخدام data.js فقط.', err);
+    if (!p) {
+      mainEl.innerHTML = `<div class="error">❌ المنتج برقم ${productId} غير موجود.</div>`;
+      return;
     }
 
-    // --- إذا لم يتم العثور على المنتج في أي مصدر ---
-    mainEl.innerHTML = `<div class="error">❌ المنتج برقم ${productId} غير موجود في أي مصدر بيانات.</div>`;
+    currentProduct = p;
+    renderProduct(p);
+    document.getElementById('sticky').style.display = 'flex';
   }
 
-  // ================================================================
-  // 5️⃣ عرض المنتج (نفس الكود السابق)
-  // ================================================================
   function renderProduct(p) {
-    // --- تجميع الصور ---
-    let images = [];
-    if (p.imgs && Array.isArray(p.imgs)) images = p.imgs;
-    else if (p.images && Array.isArray(p.images)) images = p.images;
-    else if (p.img) {
-      if (typeof p.img === 'string' && p.img.includes(',')) {
-        images = p.img.split(',').map(s => s.trim());
-      } else {
-        images = [p.img];
-      }
-    }
-    if (images.length === 0) images = ['placeholder.jpg'];
+    // 🔥 استخدام دوال الموقع الأصلية لضمان دقة البيانات 100%
+    const images = (typeof imgsOf === 'function') ? imgsOf(p) : [p.img];
+    const fullImages = images.map(img => (typeof CDN === 'function') ? CDN(img) : (img.startsWith('http') ? img : `https://velalight.github.io/${img}`));
+    
+    const mainImg = fullImages[0] || 'https://velalight.github.io/RRRR.jpg';
+    const name = (typeof pname === 'function') ? pname(p) : (p.name || 'منتج');
+    const price = (typeof money === 'function') ? money(p.price) : `${p.price} ج.م`;
+    const oldPriceVal = (p.old && p.old > p.price) ? ((typeof money === 'function') ? money(p.old) : `${p.old} ج.م`) : '';
+    const badgeText = (typeof pbadge === 'function') ? pbadge(p) : (p.badge || '');
+    const desc = (typeof pdesc === 'function') ? pdesc(p) : (p.desc || '');
+    const hours = p.hours || '72 ساعة';
+    const catName = (typeof cat === 'function') ? cat(p.cat) : (p.cat || '');
 
-    // تصحيح المسارات (إضافة domain للصور النسبية)
-    const fullImages = images.map(src =>
-      src.startsWith('http') ? src : `https://velalight.github.io/${src}`
-    );
-    const mainImg = fullImages[0] || '';
-
-    // --- بيانات إضافية ---
-    const oldPrice = p.old ? `<span class="old-price">${p.old} ج.م</span>` : '';
-    const badge = p.badge ? `<span class="badge">${p.badge}</span>` : '';
-    const hours = p.hours ? `<span>⏳ ${p.hours}</span>` : '';
-    const category = p.cat ? `<span>📂 ${p.cat}</span>` : '';
-
-    // --- بناء HTML ---
     const html = `
       <div class="layout">
         <div class="gallery">
-          <img src="${mainImg}" class="main-img" alt="${p.name || 'منتج'}" id="mainImg" onclick="openLightbox('${mainImg}')" />
+          <img src="${mainImg}" class="main-img" alt="${name}" id="mainImg" onclick="openLightbox('${mainImg}')" />
           ${fullImages.length > 1 ? `
             <div class="thumbs">
               ${fullImages.map((src, i) => `
@@ -432,23 +163,24 @@
           ` : ''}
         </div>
         <div class="info">
-          <h1>${p.name || 'منتج'} ${badge}</h1>
+          <h1>${name} ${badgeText ? `<span class="badge">${badgeText}</span>` : ''}</h1>
           <div class="price-row">
-            <span class="price">${p.price || 0} ج.م</span>
-            ${oldPrice}
+            <span class="price">${price}</span>
+            ${oldPriceVal ? `<span class="old-price">${oldPriceVal}</span>` : ''}
           </div>
-          ${(hours || category) ? `
-            <div class="meta">
-              ${hours} ${category}
-            </div>
-          ` : ''}
-          <div class="desc">${p.desc || ''}</div>
+          <div class="meta">
+            <span>⏳ ${hours}</span>
+            <span>📂 ${catName}</span>
+          </div>
+          <div class="desc">${desc}</div>
 
           <div class="scent-box">
             <label for="scentSelect">✨ اختاري العطر</label>
             <select id="scentSelect" onchange="selectedScent=this.value; updateWaLinks()">
               <option value="">-- اختار العطر --</option>
-              ${(p.scents || []).map(s => `<option value="${s}">${s}</option>`).join('')}
+              ${(typeof getProductScents === 'function' ? getProductScents() : (p.scents || [])).map(s => 
+                `<option value="${s}">${(typeof velaScentTr === 'function') ? velaScentTr(s) : s}</option>`
+              ).join('')}
             </select>
           </div>
 
@@ -461,31 +193,21 @@
     `;
 
     document.getElementById('main').innerHTML = html;
-
-    // تحديث الشريط السفلي
-    document.getElementById('sPrice').textContent = `${p.price || 0} ج.م`;
+    document.getElementById('sPrice').textContent = price;
     document.getElementById('sCart').onclick = addToCart;
-    document.getElementById('sWa').onclick = function(e) {
-      e.preventDefault();
-      window.open(this.href, '_blank');
-    };
-
-    // تحديث روابط واتساب
+    
     updateWaLinks();
 
-    // تغيير عنوان الصفحة و meta
-    document.title = `${p.name || 'منتج'} | VelaLight`;
+    // تحديث SEO Meta Tags ديناميكياً
+    document.title = `${name} | VelaLight`;
     const metaTitle = document.querySelector('meta[property="og:title"]');
     const metaDesc = document.querySelector('meta[property="og:description"]');
     const metaImg = document.querySelector('meta[property="og:image"]');
-    if (metaTitle) metaTitle.content = `${p.name || 'منتج'} | VelaLight`;
-    if (metaDesc) metaDesc.content = p.desc || 'شموع يدوية فاخرة';
-    if (metaImg && mainImg) metaImg.content = mainImg;
+    if (metaTitle) metaTitle.content = `${name} | VelaLight`;
+    if (metaDesc) metaDesc.content = desc;
+    if (metaImg) metaImg.content = mainImg;
   }
 
-  // ================================================================
-  // 6️⃣ دوال مساعدة (تغيير الصورة، لايت بوكس، واتساب، السلة)
-  // ================================================================
   function changeImage(src, el) {
     document.getElementById('mainImg').src = src;
     document.querySelectorAll('.thumb').forEach(t => t.classList.remove('on'));
@@ -497,6 +219,7 @@
     document.getElementById('lightbox').classList.add('active');
     document.body.style.overflow = 'hidden';
   }
+  
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('active');
     document.body.style.overflow = '';
@@ -504,12 +227,12 @@
 
   function updateWaLinks() {
     if (!currentProduct) return;
-    const name = currentProduct.name || 'منتج';
-    const price = currentProduct.price || 0;
+    const name = (typeof pname === 'function') ? pname(currentProduct) : currentProduct.name;
+    const price = currentProduct.price;
     const scent = selectedScent || 'لم يختار';
-    const msg = encodeURIComponent(`أريد طلب ${name} بسعر ${price} ج.م\nالعطر: ${scent}`);
+    const msg = encodeURIComponent(`مرحباً، أريد طلب *${name}* بسعر ${price} ج.م\nالعطر: ${scent}\nيرجى تأكيد الطلب.`);
     const link = `https://wa.me/${WA_NUMBER}?text=${msg}`;
-
+    
     const waBtn = document.getElementById('waBtn');
     const sWa = document.getElementById('sWa');
     if (waBtn) waBtn.href = link;
@@ -523,14 +246,28 @@
       document.getElementById('scentSelect')?.focus();
       return;
     }
-    alert(`✅ تم إضافة ${currentProduct.name} (العطر: ${selectedScent}) إلى السلة`);
-    // اختياري: فتح واتساب مباشرة
-    // document.getElementById('waBtn')?.click();
+    
+    // 🔥 إضافة فعلية للسلة (LocalStorage) لتتزامن مع الموقع الرئيسي
+    const cart = JSON.parse(localStorage.getItem('vl_cart') || '[]');
+    const images = (typeof imgsOf === 'function') ? imgsOf(currentProduct) : [currentProduct.img];
+    const mainImg = (typeof CDN === 'function') ? CDN(images[0]) : images[0];
+    
+    cart.push({
+      id: currentProduct.id,
+      name: currentProduct.name,
+      nameEn: currentProduct.nameEn,
+      price: currentProduct.price,
+      scent: selectedScent,
+      qty: 1,
+      img: mainImg
+    });
+    localStorage.setItem('vl_cart', JSON.stringify(cart));
+    
+    if (typeof cartBadge === 'function') cartBadge(); // تحديث عداد السلة
+    
+    alert(`✅ تم إضافة "${currentProduct.name}" (عطر: ${selectedScent}) إلى السلة بنجاح!`);
   }
 
-  // ================================================================
-  // 7️⃣ تشغيل التطبيق عند تحميل الصفحة
-  // ================================================================
   window.addEventListener('DOMContentLoaded', loadProduct);
 </script>
 </body>
