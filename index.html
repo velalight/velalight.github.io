@@ -451,12 +451,21 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
     </div>
     <div class="rv">
       <div style="border-radius:26px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh);transform:rotate(-1.5deg)">
-        <img src="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2FRR.jpg&w=800&q=75&output=webp" alt="VelaLight" style="width:100%;height:auto;display:block" loading="lazy">
+        
+        <!-- 🔥 هنا تم وضع اسم الصورة المطلوب مباشرة -->
+        <img 
+          src="velalight-wooden-luxury-set-3candles-detail.webp" 
+          alt="VelaLight - شموع خشبية فاخرة" 
+          style="width:100%; height:auto; display:block;" 
+          loading="lazy" 
+          onerror="this.src='https://velalight.github.io/RRRR.jpg'"
+        >
+        
       </div>
     </div>
   </div>
 </section>
-
+  
 <!-- ═══════════════════════════════════════════════
      REVIEWS — ENHANCED (بطاقات مع صور وتقييمات)
      ═══════════════════════════════════════════════ -->
