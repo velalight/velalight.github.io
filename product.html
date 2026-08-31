@@ -1602,7 +1602,7 @@ function renderRelated(){
   if(!list.length){ box.innerHTML = `<p style="color:var(--dim);text-align:center;padding:1.5rem">${(typeof LANG !== "undefined" && LANG==="en")?"No similar products":"لا توجد منتجات مشابهة"}</p>`; return; }
   box.innerHTML = list.map(p => {
     const pImgs = p.images || p.imgs || (p.img ? [p.img] : []);
-    const imgSrc = pImgs.length ? ((typeof CDN === "function") ? CDN(pImgs[0]) : pImgs[0]) : ((typeof CDN === "function") ? CDN(P.img || "RR.jpg") : (P.img || "RR.jpg"));
+    const imgSrc = pImgs.length ? ((typeof CDN === "function") ? CDN(pImgs[0]) : pImgs[0]) : ((typeof CDN === "function") ? CDN(P.img || "velalight-wooden-luxury-set-3candles-detail.webp") : (P.img || "velalight-wooden-luxury-set-3candles-detail.webp"));
     return `<a href="product.html?p=${p.id}" class="p-card" style="text-decoration:none"><div class="p-media"><img src="${imgSrc}" alt="${(typeof pname === "function" ? pname(p) : p.name)}" loading="lazy" decoding="async" onload="this.classList.add('loaded')"></div><div class="p-body"><h3>${(typeof pname === "function" ? pname(p) : p.name)}</h3><div class="p-price">${(typeof money === "function" ? money(p.price) : (p.price + " ج.م"))}</div></div></a>`;
   }).join("");
 }
@@ -1650,7 +1650,7 @@ function updateJsonLd(){
   // تجهيز الصور
   const imgs = zoomImages.length 
     ? zoomImages.map(u => (typeof CDN === "function" ? CDN(u) : u))
-    : [(P.img || "https://velalight.github.io/RR.jpg")];
+    : [(P.img || "https://velalight.github.io/velalight-wooden-luxury-set-3candles-detail.webp")];
 
   // تجهيز التقييمات
   const revs = (typeof prodReviews === "function") ? prodReviews(P.id) : [];
