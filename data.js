@@ -45,22 +45,19 @@ let LANG=localStorage.getItem("vl_lang")||"ar";
 const money=n=>Number(n||0).toLocaleString("en-US")+" "+(LANG==="en"?"EGP":"ج.م");
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ CDN — النسخة فائقة السرعة للموبايل (Direct Load)
-   السبب: صور WebP في الريبو مضغوطة بالفعل. الوسيط (Proxy) كان يسبب بطء.
+   ✨ CDN — النسخة فائقة السرعة (jsDelivr Global CDN)
+   السبب: توزيع الصور على سيرفرات حول العالم لتقليل زمن الاستجابة (TTFB)
    ═══════════════════════════════════════════════════════════ */
-const IMG_CACHE_VERSION = "v8"; // ترقية الإصدار لكسر أي كاش قديم
+const IMG_CACHE_VERSION = "v9"; // ترقية الإصدار لكسر أي كاش قديم وتطبيق الـ CDN الجديد
 
 const CDN = (u, options = {}) => {
     if (!u) return "";
     // لو الرابط بيانات أو رابط خارجي، اتركه كما هو
     if (u.startsWith("data:") || u.startsWith("http")) return u;
     
-    // 🔥 التحسين الجذري: الطلب المباشر من سيرفرات GitHub السريعة جداً
-    // لأن الصور بالفعل بصيغة WebP ومضغوطة، فلا حاجة لمعالجتها مجدداً عبر وسيط
-    const rawUrl = `https://velalight.github.io/${u}`;
-    
-    // إضافة رقم الإصدار لمنع مشاكل الكاش فقط إذا لزم الأمر
-    return `${rawUrl}?v=${IMG_CACHE_VERSION}`;
+    // 🔥 التحسين الجذري: استخدام jsDelivr CDN لسرعة تحميل عالمية
+    // الصيغة: https://cdn.jsdelivr.net/gh/username/repo@branch/path/to/file
+    return `https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/${u}?v=${IMG_CACHE_VERSION}`;
 };
 
 function toast(m){
