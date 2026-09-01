@@ -20,15 +20,17 @@
 .order-card .status-badge{padding:.3rem .9rem;border-radius:99px;font-size:.72rem;font-weight:700;color:#fff;white-space:nowrap}
 .order-card .st-review{background:#e67e22}
 .order-card .st-prep{background:#3498db}
-.order-card .st-ship{background:#9b59b6}
-.order-card .st-done{background:#27ae60}
+.order-card .st-ready{background:#9b59b6}
+.order-card .st-ship{background:#27ae60}
 .order-card .st-cancel{background:#e74c3c}
+.order-card .st-done{background:#2ecc71}
 .order-card .order-items{list-style:none;margin:.6rem 0;padding:.6rem;background:var(--panel2);border-radius:12px;font-size:.85rem}
 .order-card .order-items li{padding:.25rem 0;border-bottom:1px solid rgba(0,0,0,0.03)}
 .order-card .order-items li:last-child{border-bottom:0}
 .order-card .order-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:.7rem;font-size:.9rem}
 .order-card .order-foot b{color:var(--gold2);font-family:var(--fd)}
 .order-card .order-actions{margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.order-card .payment-status{font-size:.7rem;color:var(--dim);margin-top:.3rem}
 .loading,.empty,.error{text-align:center;padding:3rem 1rem;color:var(--dim);font-size:.95rem}
 .login-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:2.5rem;text-align:center;max-width:420px;margin:3rem auto}
 .login-card h2{font-family:var(--fd);color:var(--gold2);margin-bottom:1rem}
@@ -86,9 +88,23 @@ window.cancelOrder = async function(orderId) {
   if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري...'; }
   
   try {
-    await window.FB.update('orders', orderId, { status: 4 }); // 4 = ملغي
+    // ⭐ إضافة سجل في تاريخ الحالات
+    const orderDoc = await window.FB.get('orders', orderId);
+    const currentStatus = Number(orderDoc?.status || 0);
+    const history = orderDoc?.statusHistory || [];
+    history.push({
+      from: currentStatus,
+      to: 4,
+      changedAt: Date.now(),
+      changedBy: 'customer'
+    });
+
+    await window.FB.update('orders', orderId, { 
+      status: 4,
+      statusHistory: history,
+      updatedAt: Date.now()
+    });
     toast('✅ تم إلغاء الطلب بنجاح');
-    // إعادة تحميل الطلبات
     const user = window.FB.auth.currentUser;
     if(user) await loadOrders(user);
     else location.reload();
@@ -100,8 +116,18 @@ window.cancelOrder = async function(orderId) {
 };
 
 // ═══ المتغيرات والتهيئة ═══
+// ═══ الحالات مع الألوان المناسبة ═══
 const STATUS_AR = ["قيد المراجعة", "قيد التجهيز", "تم التجهيز", "تم الشحن", "ملغي", "مكتمل"];
-const STATUS_CLS = ["st-review", "st-prep", "st-ship", "st-done", "st-cancel", "st-done"];
+const STATUS_CLS = ["st-review", "st-prep", "st-ready", "st-ship", "st-cancel", "st-done"];
+
+// ═══ حالات الدفع ═══
+const PAYMENT_STATUS = {
+  pending: 'قيد الانتظار',
+  paid: 'تم الدفع',
+  failed: 'فشل الدفع',
+  refunded: 'تم الاسترجاع'
+};
+
 const box = document.getElementById("ordersContainer");
 
 let started = false;
@@ -188,6 +214,13 @@ function orderCard(o, user){
     cancelBtn = `<button class="btn danger sm" data-cancel="${o.id}" onclick="window.cancelOrder('${o.id}')">🗑️ إلغاء الطلب</button>`;
   }
 
+  // ═══ عرض حالة الدفع (إن وجدت) ═══
+  let paymentStatusText = '';
+  if(o.paymentStatus) {
+    const ps = PAYMENT_STATUS[o.paymentStatus] || o.paymentStatus;
+    paymentStatusText = `<div class="payment-status">💳 حالة الدفع: ${ps}</div>`;
+  }
+
   const cardClass = isCancelled ? 'order-card cancelled' : 'order-card';
   const statusText = STATUS_AR[idx] || "قيد المراجعة";
   const statusClass = STATUS_CLS[idx] || "st-review";
@@ -200,6 +233,7 @@ function orderCard(o, user){
     </div>
     <ul class="order-items">${itemsHtml}</ul>
     <div class="order-foot"><span>💰 الإجمالي</span><b>${o.total || 0} جنيه</b></div>
+    ${paymentStatusText}
     <div class="order-actions">
       <a class="btn ghost sm" href="index.html#products">🛍️ تسوق المزيد</a>
       ${cancelBtn}
