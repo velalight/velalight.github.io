@@ -103,167 +103,7 @@ function toggleWishlist(productId) {
 function isInWishlist(productId) {
   return getWishlist().includes(productId);
 }
-// ═══════════════════════════════════════════════════════════
-// 🎟️ COUPON SYSTEM — مع دعم الحقول الجديدة
-// ═══════════════════════════════════════════════════════════
 
-let appliedCoupon = null;
-let couponDiscount = 0;
-
-async function fetchCoupon(code) {
-  if (!window.FB || typeof window.FB.list !== "function") return null;
-  try {
-    const coupons = await window.FB.list("coupons");
-    return coupons.find(c => c.code === code.toUpperCase() && c.active !== false) || null;
-  } catch(e) {
-    console.error("❌ Failed to fetch coupon:", e);
-    return null;
-  }
-}
-
-function validateCoupon(coupon, cartTotal, userId) {
-  if (!coupon) return { valid: false, msg: "❌ كوبون غير صالح" };
-  if (coupon.active === false) return { valid: false, msg: "❌ الكوبون غير مفعل" };
-  if (coupon.startDate && Date.now() < coupon.startDate) {
-    return { valid: false, msg: "⏳ الكوبون لم يبدأ بعد" };
-  }
-  if (coupon.expiresAt && Date.now() > coupon.expiresAt) {
-    return { valid: false, msg: "⏳ انتهت صلاحية الكوبون" };
-  }
-  if (coupon.minOrder && cartTotal < coupon.minOrder) {
-    return { valid: false, msg: `💰 الحد الأدنى للطلب هو ${money(coupon.minOrder)}` };
-  }
-  if (coupon.maxUses && (coupon.usedCount || 0) >= coupon.maxUses) {
-    return { valid: false, msg: "❌ تم استخدام الكوبون بأقصى عدد مرات" };
-  }
-  if (coupon.onePerCustomer && userId) {
-    const usedBy = coupon.usedBy || [];
-    if (usedBy.includes(userId)) {
-      return { valid: false, msg: "🔒 سبق لك استخدام هذا الكوبون" };
-    }
-  }
-  return { valid: true };
-}
-
-function calculateDiscount(coupon, cartTotal) {
-  let discount = 0;
-  if (coupon.type === "percent") {
-    discount = (cartTotal * coupon.value) / 100;
-  } else {
-    discount = coupon.value;
-  }
-  if (coupon.maxDiscount && discount > coupon.maxDiscount) {
-    discount = coupon.maxDiscount;
-  }
-  return Math.min(discount, cartTotal);
-}
-
-function calcCouponDiscount(cartTotal) {
-  if (!appliedCoupon) return 0;
-  return calculateDiscount(appliedCoupon, cartTotal);
-}
-
-async function applyCoupon() {
-  const input = document.getElementById("couponInput");
-  const status = document.getElementById("couponStatus");
-  if (!input || !status) return;
-
-  const code = input.value.trim();
-  if (!code) {
-    status.textContent = "⚠️ ادخل كود الكوبون";
-    status.className = "coupon-status err";
-    return;
-  }
-
-  const cart = getCart();
-  const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.qty || 0), 0);
-  const userId = localStorage.getItem("vl_user_phone") || localStorage.getItem("vl_user_email") || null;
-
-  const coupon = await fetchCoupon(code);
-  if (!coupon) {
-    status.textContent = "❌ كوبون غير صالح";
-    status.className = "coupon-status err";
-    appliedCoupon = null;
-    couponDiscount = 0;
-    updateTotals(getCart());
-    return;
-  }
-
-  const validation = validateCoupon(coupon, subtotal, userId);
-  if (!validation.valid) {
-    status.textContent = validation.msg;
-    status.className = "coupon-status err";
-    appliedCoupon = null;
-    couponDiscount = 0;
-    updateTotals(getCart());
-    return;
-  }
-
-  appliedCoupon = coupon;
-  couponDiscount = calculateDiscount(coupon, subtotal);
-  status.textContent = `✅ خصم ${money(couponDiscount)} مطبق!`;
-  status.className = "coupon-status ok";
-  
-  try {
-    localStorage.setItem("vl_applied_coupon", JSON.stringify({ id: coupon.id, code: coupon.code, discount: couponDiscount }));
-  } catch(e) {}
-  
-  updateTotals(getCart());
-}
-
-function restoreAppliedCoupon() {
-  try {
-    const saved = localStorage.getItem("vl_applied_coupon");
-    if (saved) {
-      const data = JSON.parse(saved);
-      if (data && data.code) {
-        const status = document.getElementById("couponStatus");
-        if (status) {
-          status.textContent = `✅ كوبون ${data.code} مطبق (خصم ${money(data.discount)})`;
-          status.className = "coupon-status ok";
-        }
-        couponDiscount = data.discount || 0;
-      }
-    }
-  } catch(e) {}
-}
-
-async function consumeCoupon() {
-  if (!appliedCoupon) return;
-  try {
-    const userId = localStorage.getItem("vl_user_phone") || localStorage.getItem("vl_user_email") || null;
-    const updates = { usedCount: (appliedCoupon.usedCount || 0) + 1 };
-    if (appliedCoupon.onePerCustomer && userId) {
-      const usedBy = appliedCoupon.usedBy || [];
-      if (!usedBy.includes(userId)) {
-        updates.usedBy = [...usedBy, userId];
-      }
-    }
-    if (window.FB && typeof window.FB.update === "function") {
-      await window.FB.update("coupons", appliedCoupon.id, updates);
-      console.log("✅ Coupon usage recorded");
-    }
-    localStorage.removeItem("vl_applied_coupon");
-  } catch(e) {
-    console.error("❌ Failed to record coupon usage:", e);
-  }
-}
-
-// ربط أحداث الكوبون
-document.addEventListener("DOMContentLoaded", function() {
-  const applyBtn = document.getElementById("applyCouponBtn");
-  const couponInput = document.getElementById("couponInput");
-  
-  if (applyBtn && couponInput) {
-    applyBtn.addEventListener("click", applyCoupon);
-    couponInput.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") applyCoupon();
-    });
-  }
-  
-  restoreAppliedCoupon();
-});
- 
 /* ═══ QUICK ADD STATE ═══ */
 let quickAddProduct=null;
 let quickAddScent="";
@@ -2390,13 +2230,9 @@ function updateTotals(c){
   });
 
   const couponDisc = (typeof calcCouponDiscount === "function") ? calcCouponDiscount(sub) : 0;
-const totalDisc = qtyDiscount + couponDisc;
+  const totalDisc = qtyDiscount + couponDisc;
   const total = Math.max(0, sub - totalDisc);
-  const dRow = document.getElementById("discountRow");
-  if (dRow) dRow.style.display = (couponDisc > 0) ? "flex" : "none";
-  if (document.getElementById("cartDiscount")) {
-    document.getElementById("cartDiscount").textContent = "-" + money(couponDisc);
-  }
+
   if(document.getElementById("cartSub")){document.getElementById("cartSub").textContent=money(sub);}
   
   const qtyDiscRow = document.getElementById("qtyDiscountRow");
@@ -2654,19 +2490,18 @@ async function checkout(){
     console.error("❌ Failed to save order to Firebase after retries");
   }
   
-    try {
+  try {
     await decrementStock(c);
   } catch(e) {
     console.warn("⚠️ Stock decrement failed:", e);
   }
   
-  // ═══ تسجيل استخدام الكوبون ═══
   try {
-    await consumeCoupon();
+    if (typeof consumeCoupon === "function") consumeCoupon();
   } catch(e) {
     console.warn("⚠️ Coupon consume failed:", e);
   }
-    
+  
   const u=getSavedUser();
   u.orders=(u.orders||0)+1;
   u.name=name;u.phone=phone;u.email=email;u.city=city;u.addr=addr;u.notes=notes;
@@ -3230,6 +3065,51 @@ function stockBadge(p){
   }
 }
 
+let appliedCoupon=null;
+
+function calcCouponDiscount(sub){
+  if(!appliedCoupon)return 0;
+  let d=0;
+  if(appliedCoupon.type==="percent"){
+    d=sub*(Number(appliedCoupon.value||0)/100);
+  }else{
+    d=Number(appliedCoupon.value||0);
+  }
+  return Math.min(sub,Math.round(d));
+}
+
+async function applyCoupon(){
+  const code=(document.getElementById("couponInput")?.value||"").trim().toUpperCase();
+  if(!code){toast("⚠️ اكتب كود الكوبون");return;}
+  
+  let list=[];
+  try{list=await window.FB.list("coupons")||[];}
+  catch(e){toast("⚠️ تعذر التحقق من الكوبون");return;}
+  
+  const c=list.find(x=>(x.code||"").toUpperCase()===code);
+  if(!c){toast("❌ كود الكوبون غير صحيح");return;}
+  if(c.active===false){toast("❌ الكوبون ده متوقف");return;}
+  if(c.expiresAt&&Date.now()>Number(c.expiresAt)){toast("⚠️ الكوبون منتهي الصلاحية");return;}
+  if(c.maxUses&&Number(c.usedCount||0)>=Number(c.maxUses)){toast("⚠️ انتهت استخدامات الكوبون");return;}
+  
+  appliedCoupon={...c,_fid:c.id};
+  const sub=getCart().reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
+  toast("🎟️ تم تطبيق الكوبون! وفرت "+money(calcCouponDiscount(sub)));
+  renderCart();
+}
+
+async function consumeCoupon(){
+  if(!appliedCoupon||!appliedCoupon._fid)return;
+  if(window.FB&&typeof window.FB.update==="function"){
+    try{
+      await window.FB.update("coupons",appliedCoupon._fid,{
+        usedCount:Number(appliedCoupon.usedCount||0)+1
+      });
+    }catch(e){console.warn("⚠️ coupon update failed",e);}
+  }
+  appliedCoupon=null;
+  if(document.getElementById("couponInput"))document.getElementById("couponInput").value="";
+}
 
 /* ═══ REVIEWS COUNT HELPER ═══ */
 window.getReviewsCount = function() {

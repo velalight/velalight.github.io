@@ -57,54 +57,10 @@
   .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
   .products-count { text-align: center; color: var(--dim); margin-bottom: 1rem; }
   
-  /* ═══ كود الكوبون في السلة ═══ */
-  .coupon-row {
-    display: flex;
-    gap: 0.5rem;
-    margin: 0.5rem 0 0.3rem;
-    flex-wrap: wrap;
-  }
-  .coupon-row input {
-    flex: 1;
-    min-width: 120px;
-    padding: 0.5rem 0.8rem;
-    border-radius: 10px;
-    border: 1px solid var(--line);
-    background: var(--panel);
-    font-size: 0.85rem;
-    font-family: inherit;
-  }
-  .coupon-row button {
-    padding: 0.5rem 1.2rem;
-    border-radius: 10px;
-    border: none;
-    background: var(--gold);
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.2s;
-    font-size: 0.85rem;
-  }
-  .coupon-row button:hover {
-    transform: scale(0.97);
-    opacity: 0.9;
-  }
-  .coupon-status {
-    font-size: 0.8rem;
-    min-height: 1.5rem;
-    color: var(--dim);
-    margin-top: 0.2rem;
-  }
-  .coupon-status.ok { color: var(--ok); }
-  .coupon-status.err { color: var(--bad); }
-  
-  .trow.discount-row { color: var(--ok); font-weight: 600; }
-  
   @media (max-width: 600px) {
     .filter-bar { gap: 0.5rem; }
     .filter-bar select, .filter-bar button { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
     .products-grid { gap: 1rem; }
-    .coupon-row input { min-width: 100px; }
   }
 </style>
 </head>
@@ -174,8 +130,8 @@
   <a href="products.html" data-cat="crystal" data-i18n="cat_crystal">شموع كريستالية</a>
   <a href="products.html" data-cat="metal" data-i18n="cat_metal">شموع معدنية</a>
   <a href="products.html" data-cat="massage" data-i18n="cat_massage">شموع المساج</a>
-  <a href="products.html" data-cat="bride" data-i18n="cat_bride">بوكس العروسة</a>
   <a href="products.html" data-cat="gift" data-i18n="cat_gift">الهدايا</a>
+  <a href="products.html" data-cat="bride" data-i18n="cat_bride">بوكس العروسة</a>
   <h5 data-i18n="mn_explore">اكتشف</h5>
   <a href="index.html#about-us" data-i18n="nav_about">من نحن</a>
   <a href="index.html#scents" data-i18n="mn_scents">العطور الفاخرة</a>
@@ -251,21 +207,12 @@
   </div>
 </div>
 
-<!-- ═══ CART DRAWER (تم إضافة الكوبون) ═══ -->
+<!-- ═══ CART DRAWER ═══ -->
 <div class="ovl" id="cartOv"></div>
 <aside class="drawer" id="cartDrawer">
   <div class="dhead"><h3 data-i18n="cart_title">🛍️ سلة الشراء</h3><button class="icobtn" id="closeCart">✕</button></div>
   <div class="dbody" id="cartItems"></div>
   <div class="dfoot">
-    <!-- ═══ كود الكوبون ═══ -->
-    <div style="margin-bottom:0.8rem;">
-      <div class="coupon-row">
-        <input type="text" id="couponInput" placeholder="🎟️ كود الخصم" autocomplete="off">
-        <button id="applyCouponBtn" type="button">تطبيق</button>
-      </div>
-      <div class="coupon-status" id="couponStatus"></div>
-    </div>
-    
     <h4 style="color:var(--gold2);font-size:.9rem;margin-bottom:.3rem" data-i18n="delivery_h">بيانات التوصيل</h4>
     <div class="co-form">
       <input id="coName" data-i18n-ph="ph_name" placeholder="الاسم بالكامل *">
@@ -276,11 +223,6 @@
       <textarea id="coNotes" rows="2" data-i18n-ph="ph_notes" placeholder="ملاحظات"></textarea>
     </div>
     <div class="trow"><span data-i18n="subtotal">قيمة المنتجات</span><b id="cartSub">0</b></div>
-    <!-- ✅ صف الخصم (يظهر فقط عند وجود خصم) -->
-    <div class="trow discount-row" id="discountRow" style="display:none;">
-      <span>🎟️ الخصم</span>
-      <b id="cartDiscount">-0</b>
-    </div>
     <div class="trow total"><span data-i18n="total">الإجمالي</span><b id="cartTotal">0</b></div>
     <p class="cart-shipping-note" data-i18n="ship_note">🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.</p>
     <button class="btn wa" id="checkoutBtn" style="width:100%;margin-top:.8rem" data-i18n="checkout_wa">✅ إتمام الطلب عبر واتساب</button>
