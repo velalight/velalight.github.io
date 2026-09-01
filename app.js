@@ -2220,100 +2220,38 @@ function handleCartChange(e){
 }
 
 function updateTotals(c){
-  const sub = c.reduce((a,i) => a + (Number(i.price||0) * Number(i.qty||1)), 0);
+  const sub=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
   
-  // 1. حساب خصم الكمية (5% على المنتجات اللي كميتها 3+)
   let qtyDiscount = 0;
   c.forEach(it => {
     if (Number(it.qty) >= 3) {
       qtyDiscount += (Number(it.price||0) * Number(it.qty||1) * 0.05);
     }
   });
-  qtyDiscount = Math.round(qtyDiscount * 100) / 100;
 
-  // 2. حساب خصم الكوبون (نظرياً)
   const couponDisc = (typeof calcCouponDiscount === "function") ? calcCouponDiscount(sub) : 0;
+  const totalDisc = qtyDiscount + couponDisc;
+  const total = Math.max(0, sub - totalDisc);
 
-  // 3. ⭐ القاعدة الجديدة: العميل ياخد أكتر خصم (الأعلى فقط)
-  let finalDiscount = 0;
-  let appliedType = "none"; // none, qty, coupon
-
-  if (qtyDiscount > 0 && couponDisc > 0) {
-    if (qtyDiscount >= couponDisc) {
-      finalDiscount = qtyDiscount;
-      appliedType = "qty";
-    } else {
-      finalDiscount = couponDisc;
-      appliedType = "coupon";
-    }
-  } else if (qtyDiscount > 0) {
-    finalDiscount = qtyDiscount;
-    appliedType = "qty";
-  } else if (couponDisc > 0) {
-    finalDiscount = couponDisc;
-    appliedType = "coupon";
-  }
-
-  const total = Math.max(0, sub - finalDiscount);
-
-  // ========== تحديث واجهة المستخدم ==========
-
-  if(document.getElementById("cartSub")){
-    document.getElementById("cartSub").textContent = money(sub);
-  }
-
-  // ⭐ سطر خصم الكمية
+  if(document.getElementById("cartSub")){document.getElementById("cartSub").textContent=money(sub);}
+  
   const qtyDiscRow = document.getElementById("qtyDiscountRow");
   if (qtyDiscRow) {
-    if (appliedType === "qty") {
+    if (qtyDiscount > 0) {
       qtyDiscRow.style.display = "flex";
-      qtyDiscRow.style.color = "var(--ok)";
-      if(document.getElementById("qtyDiscountVal")) {
-        document.getElementById("qtyDiscountVal").textContent = "-" + money(finalDiscount);
-      }
-      qtyDiscRow.querySelector("span").innerHTML = "🎁 خصم الكمية (مطبق)";
-    } else if (appliedType === "coupon" && qtyDiscount > 0) {
-      qtyDiscRow.style.display = "flex";
-      qtyDiscRow.style.color = "var(--dim)";
-      qtyDiscRow.style.textDecoration = "line-through";
-      if(document.getElementById("qtyDiscountVal")) {
-        document.getElementById("qtyDiscountVal").textContent = "-" + money(qtyDiscount) + " (غير مطبق)";
-      }
-      qtyDiscRow.querySelector("span").innerHTML = "🎁 خصم الكمية";
+      if(document.getElementById("qtyDiscountVal")) document.getElementById("qtyDiscountVal").textContent = "-" + money(qtyDiscount);
     } else {
       qtyDiscRow.style.display = "none";
     }
   }
 
-  // ⭐ سطر خصم الكوبون
-  const dRow = document.getElementById("discountRow");
-  if (dRow) {
-    if (appliedType === "coupon") {
-      dRow.style.display = "flex";
-      dRow.style.color = "var(--ok)";
-      if(document.getElementById("cartDiscount")) {
-        document.getElementById("cartDiscount").textContent = "-" + money(finalDiscount);
-      }
-      if(document.getElementById("couponCodeLbl") && appliedCoupon) {
-        document.getElementById("couponCodeLbl").textContent = appliedCoupon.code + " (مطبق)";
-      }
-    } else if (appliedType === "qty" && couponDisc > 0) {
-      dRow.style.display = "flex";
-      dRow.style.color = "var(--dim)";
-      dRow.style.textDecoration = "line-through";
-      if(document.getElementById("cartDiscount")) {
-        document.getElementById("cartDiscount").textContent = "-" + money(couponDisc) + " (غير مطبق)";
-      }
-      if(document.getElementById("couponCodeLbl") && appliedCoupon) {
-        document.getElementById("couponCodeLbl").textContent = appliedCoupon.code + " (غير مطبق)";
-      }
-    } else {
-      dRow.style.display = "none";
-    }
-  }
-
-  // ========== شريط الشحن المجاني (منفصل) ==========
-  const freeShippingThreshold = 3000;
+  const dRow=document.getElementById("discountRow");
+  if(dRow){dRow.style.display=couponDisc>0?"flex":"none";}
+  if(document.getElementById("cartDiscount")){document.getElementById("cartDiscount").textContent="-"+money(couponDisc);}
+  if(document.getElementById("couponCodeLbl")&&appliedCoupon){document.getElementById("couponCodeLbl").textContent=appliedCoupon.code;}
+  
+    // ✨ تكتيك زيادة المبيعات: شريط الشحن المجاني التفاعلي
+  const freeShippingThreshold = 3000; // حد الشحن المجاني
   const remaining = Math.max(0, freeShippingThreshold - sub);
   const progressPercent = Math.min(100, (sub / freeShippingThreshold) * 100);
 
@@ -2322,10 +2260,12 @@ function updateTotals(c){
   
   if (freeShipRow && shipNote) {
     if (sub >= freeShippingThreshold) {
+      // حالة تحقيق الشحن المجاني
       freeShipRow.style.display = "flex";
       freeShipRow.innerHTML = `<span style="color:#27ae60; font-weight:700;">🎉 مبروك! طلبك مؤهل لشحن مجاني</span>`;
       shipNote.style.display = "none";
     } else {
+      // حالة عدم تحقيق الشحن المجاني (عرض الشريط التحفيزي)
       freeShipRow.style.display = "block";
       freeShipRow.style.background = "#fdf5ed";
       freeShipRow.style.padding = "1rem";
@@ -2340,13 +2280,11 @@ function updateTotals(c){
           <div style="background:linear-gradient(90deg, #d4af37, #f9d877); height:100%; width:${progressPercent}%; transition:width 0.5s ease-in-out; border-radius:4px;"></div>
         </div>
       `;
-      shipNote.style.display = "none";
+      shipNote.style.display = "none"; // إخفاء ملاحظة الشحن العادية لاستبدالها بالشريط التحفيزي
     }
   }
   
-  if(document.getElementById("cartTotal")){
-    document.getElementById("cartTotal").textContent = money(total);
-  }
+  if(document.getElementById("cartTotal")){document.getElementById("cartTotal").textContent=money(total);}
 }
 
 function getSavedUser(){
@@ -2435,37 +2373,16 @@ async function checkout(){
   const orderId=genOrderId();
   const subTotal=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
   
-  // ⭐ حساب الخصمين بنفس منطق الأعلى فقط
   let qtyDiscount = 0;
   c.forEach(it => {
     if (Number(it.qty) >= 3) {
       qtyDiscount += (Number(it.price||0) * Number(it.qty||1) * 0.05);
     }
   });
-  qtyDiscount = Math.round(qtyDiscount * 100) / 100;
   
-  const couponDiscount = (typeof calcCouponDiscount==="function") ? calcCouponDiscount(subTotal) : 0;
-
-  // ⭐ اختيار الأعلى فقط
-  let finalDiscount = 0;
-  let appliedType = "none";
-  if (qtyDiscount > 0 && couponDiscount > 0) {
-    if (qtyDiscount >= couponDiscount) {
-      finalDiscount = qtyDiscount;
-      appliedType = "qty";
-    } else {
-      finalDiscount = couponDiscount;
-      appliedType = "coupon";
-    }
-  } else if (qtyDiscount > 0) {
-    finalDiscount = qtyDiscount;
-    appliedType = "qty";
-  } else if (couponDiscount > 0) {
-    finalDiscount = couponDiscount;
-    appliedType = "coupon";
-  }
-
-  const total = Math.max(0, subTotal - finalDiscount);
+  const couponDiscount=(typeof calcCouponDiscount==="function")?calcCouponDiscount(subTotal):0;
+  const totalDiscount = qtyDiscount + couponDiscount;
+  const total=Math.max(0,subTotal-totalDiscount);
   
   if (typeof fbq === "function") {
     fbq("track", "InitiateCheckout", {
@@ -2499,22 +2416,12 @@ async function checkout(){
 
   msg+=`━━━━━━━━━━━━━━━━━━━━\n`;
   
-  // ⭐ نعرض الخصم المطبق فقط
-  if (finalDiscount > 0) {
-    if (appliedType === "qty") {
-      msg+=`🎁 خصم الكمية (مطبق): -${money(finalDiscount)}\n`;
-    } else if (appliedType === "coupon") {
-      msg+=`🎟️ كوبون ${appliedCoupon ? appliedCoupon.code : ''} (مطبق): -${money(finalDiscount)}\n`;
-    }
+  if(qtyDiscount > 0){
+    msg+=`🎁 خصم الكمية (3+ قطع): -${money(qtyDiscount)}\n`;
   }
-  // لو فيه خصم تاني مش مطبق، نقدر نضيفه كملاحظة (اختياري)
-  if (qtyDiscount > 0 && appliedType !== "qty") {
-    msg+=`💡 خصم الكمية (غير مطبق - تم اختيار الخصم الأعلى)\n`;
+  if(couponDiscount>0&&appliedCoupon){
+    msg+=`🎟️ كوبون ${appliedCoupon.code}: -${money(couponDiscount)}\n`;
   }
-  if (couponDiscount > 0 && appliedType !== "coupon") {
-    msg+=`💡 خصم الكوبون (غير مطبق - تم اختيار الخصم الأعلى)\n`;
-  }
-
   msg+=`🎁 هدية ليك: كود THANKS10 لخصم 10% على طلبك الجاي\n`;
   
   msg+=`${waTotalLabel()} ${money(total)}\n`;
@@ -2553,11 +2460,10 @@ async function checkout(){
     items:c,
     total,
     productsTotal:subTotal,
-    discount: finalDiscount,          // الخصم المطبق فقط
-    qtyDiscount: qtyDiscount,         // نحتفظ بالقيم الأصلية للتوثيق
+    discount: totalDiscount,
+    qtyDiscount: qtyDiscount,
     couponDiscount: couponDiscount,
-    couponCode: appliedCoupon ? appliedCoupon.code : "",
-    appliedType: appliedType,         // نوع الخصم المطبق
+    couponCode:appliedCoupon?appliedCoupon.code:"",
     paymentMethod:"WhatsApp Confirmation",
     shippingPayment:"Cash to courier",
     shippingIncluded: subTotal >= 3000,
@@ -2685,20 +2591,8 @@ async function sendOrderConfirmationEmail(orderData) {
     }).join("\n") || "منتجات متعددة";
     
     let discountText = "";
-    if (orderData.discount > 0) {
-      if (orderData.appliedType === "qty") {
-        discountText += `🎁 خصم الكمية (مطبق): -${orderData.discount} جنيه\n`;
-      } else if (orderData.appliedType === "coupon") {
-        discountText += `🎟️ كوبون ${orderData.couponCode || ''} (مطبق): -${orderData.discount} جنيه\n`;
-      }
-    }
-    // لو فيه خصومات غير مطبقة، نضيفها كملاحظة (اختياري)
-    if (orderData.qtyDiscount > 0 && orderData.appliedType !== "qty") {
-      discountText += `💡 خصم الكمية (غير مطبق): -${orderData.qtyDiscount} جنيه (تم اختيار الخصم الأعلى)\n`;
-    }
-    if (orderData.couponDiscount > 0 && orderData.appliedType !== "coupon") {
-      discountText += `💡 خصم الكوبون (غير مطبق): -${orderData.couponDiscount} جنيه (تم اختيار الخصم الأعلى)\n`;
-    }
+    if(orderData.qtyDiscount > 0) discountText += `🎁 خصم الكمية: -${orderData.qtyDiscount} جنيه\n`;
+    if(orderData.couponDiscount > 0) discountText += `🎟️ كوبون ${orderData.couponCode}: -${orderData.couponDiscount} جنيه\n`;
 
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
@@ -2710,60 +2604,6 @@ async function sendOrderConfirmationEmail(orderData) {
         reply_to: orderData.email || orderData.phone || "",
         message: `
 ═══════════════════════════════════════
-🛒 طلب جديد من موقع VelaLight
-═══════════════════════════════════════
-
-📋 رقم الطلب: ${orderData.orderId}
-📅 التاريخ: ${new Date().toLocaleString("ar-EG")}
-
-═══════════════════════════════════════
-👤 بيانات العميل:
-═══════════════════════════════════════
-الاسم: ${orderData.name}
-الموبايل: ${orderData.phone}
-الإيميل: ${orderData.email || "غير متوفر"}
-المدينة: ${orderData.city || "غير محدد"}
-العنوان: ${orderData.address}
-ملاحظات: ${orderData.notes || "لا توجد"}
-
-═══════════════════════════════════════
-🛍️ المنتجات:
-═══════════════════════════════════════
-${itemsText}
-
-═══════════════════════════════════════
-💰 الإجمالي: ${orderData.total} جنيه
-${discountText ? discountText : ""}
-${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
-═══════════════════════════════════════
-
-═══════════════════════════════════════
-💳 طريقة الدفع:
-═══════════════════════════════════════
-• سيتم إرسال تفاصيل الدفع (InstaPay / فودافون كاش / تحويل بنكي) للعميل عبر الواتساب.
-• الشحن: كاش للمندوب عند الاستلام.
-═══════════════════════════════════════
-
-⏳ الحالة: قيد المراجعة
-
-— VelaLight Admin Panel
-        `.trim()
-      })
-    });
-    
-    if (response.ok) {
-      console.log("✅ Admin notification sent");
-      return true;
-    } else {
-      console.error("Email failed:", await response.text());
-      return false;
-    }
-  } catch (err) {
-    console.error("Email error:", err);
-    return false;
-  }
-}
- ═══════════════════════════════════════
 🛒 طلب جديد من موقع VelaLight
 ═══════════════════════════════════════
 
