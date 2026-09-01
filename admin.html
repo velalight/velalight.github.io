@@ -263,7 +263,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addCouponBtn" type="button">➕ إضافة كوبون جديد</button>
       </div>
-      <p style="color:var(--dim);font-size:.78rem;margin:-.35rem 0 1rem">أنشئ كوبونات خصم لعملائك — نسبتك المئوية أو مبلغ ثابت. الكوبون يظهر للعميل في السلة.</p>
+      <p style="color:var(--dim);font-size:.78rem;margin:-.35rem 0 1rem">أنشئ كوبونات خصم ذكية لعملائك — مع تحكم كامل في التواريخ، الحد الأدنى، الحد الأقصى، وأول عميل فقط.</p>
       <div class="pform hidden" id="couponForm">
         <h3 style="color:var(--gold2);margin-bottom:1rem" id="couponFormTitle">كوبون جديد</h3>
         <div class="g">
@@ -274,8 +274,22 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
           <div><label>قيمة الخصم *</label><input id="cf_value" type="number" min="0" placeholder="مثال: 10 أو 50"></div>
           <div><label>أقصى عدد استخدامات (فارغ = غير محدود)</label><input id="cf_maxUses" type="number" min="0" placeholder="مثال: 100"></div>
         </div>
+        <!-- ✅ الحقول الجديدة الذكية -->
         <div class="g">
-          <div><label>تاريخ الانتهاء (اختياري)</label><input id="cf_expires" type="date"></div>
+          <div><label>تاريخ البدء *</label><input id="cf_startDate" type="date" /></div>
+          <div><label>تاريخ الانتهاء *</label><input id="cf_expires" type="date" /></div>
+        </div>
+        <div class="g">
+          <div><label>الحد الأدنى للطلب (ج.م) *</label><input id="cf_minOrder" type="number" placeholder="مثال: 200" /></div>
+          <div><label>الحد الأقصى للخصم (ج.م) *</label><input id="cf_maxDiscount" type="number" placeholder="مثال: 50" /></div>
+        </div>
+        <div style="margin:0.5rem 0 1rem;">
+          <label style="display:flex;align-items:center;gap:0.6rem;font-weight:700;cursor:pointer;">
+            <input type="checkbox" id="cf_firstOrderOnly" style="width:20px;height:20px;" />
+            🎯 تفعيل لأول عميل فقط (أول طلب)
+          </label>
+        </div>
+        <div class="g">
           <div><label>الحالة</label><select id="cf_active"><option value="true">✅ مفعل</option><option value="false">❌ متوقف</option></select></div>
         </div>
         <div style="display:flex;gap:.6rem;margin-top:1rem">
@@ -284,7 +298,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         </div>
       </div>
       <table class="adm">
-        <thead><tr><th>الكود</th><th>النوع</th><th>القيمة</th><th>الاستخدام</th><th>الانتهاء</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+        <thead><tr><th>الكود</th><th>النوع</th><th>القيمة</th><th>الاستخدام</th><th>تاريخ البدء</th><th>تاريخ الانتهاء</th><th>حد أدنى</th><th>حد أقصى للخصم</th><th>أول عميل</th><th>الحالة</th><th>إجراءات</th></tr></thead>
         <tbody id="couponsBody"></tbody>
       </table>
     </div>
@@ -479,15 +493,13 @@ function initTabs(){
   });
 }
 
-// ═══ ORDERS — تم إصلاح حساب الإيرادات لاستبعاد الملغي والمكتمل ═══
+// ═══ ORDERS ═══
 function loadOrders(){
   if(!window.FB || typeof window.FB.watch !== "function") return;
   window.FB.watch("orders", orders => {
     orders.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
     ALL_ORDERS = orders;
     document.getElementById("stOrders").textContent = orders.length;
-    
-    // ═══ إصلاح الإيرادات: استبعاد المكتمل (4) والملغي (5) ═══
     const revenue = orders.filter(order => order.status !== 4 && order.status !== 5)
                           .reduce((total, order) => total + Number(order.total || 0), 0);
     document.getElementById("stRevenue").textContent = money(revenue);
@@ -570,6 +582,7 @@ function clearOrderFilters(){
   filterOrders();
 }
 
+// ═══ USERS ═══
 function loadUsers(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("users").then(users => {
@@ -645,8 +658,7 @@ document.addEventListener("click", (e) => {
   toast("✅ تم تصدير العملاء بنجاح (" + ALL_USERS.length + " عميل)");
 });
 
-// ═══ PRODUCTS (تم إصلاح المخزون نهائياً) ═══
-
+// ═══ PRODUCTS ═══
 function renderAdminProducts(){
   const search = String(document.getElementById("productSearch")?.value || "").trim().toLowerCase();
   const cat = document.getElementById("productCatFilter")?.value || "";
@@ -677,7 +689,6 @@ function renderAdminProducts(){
   }
   
   body.innerHTML = list.map(product => {
-    // ═══ عرض ∞ إذا كان المخزون null أو undefined ═══
     const stockDisplay = (product.stock === null || product.stock === undefined || product.stock === "") ? "∞" : product.stock;
     const pinIcon = product.pinned ? ' 📌' : '';
     const imgSrc = (typeof imgOf === "function") ? imgOf(product) : (product.img || "");
@@ -702,32 +713,26 @@ function renderAdminProducts(){
   bindProductActions(PRODUCTS_ADMIN_CACHE);
 }
 
-// ═══ تحميل المنتجات مع دمج البيانات المحلية و Firebase ═══
 function loadProducts(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("products").then(cloud => {
     const map = new Map();
-    // 1. المنتجات المحلية (data.js)
     (PRODUCTS || []).forEach(product => {
       if(!product || !product.id) return;
       map.set(product.id, { ...product, _fid:null, active:true });
     });
-    // 2. بيانات Firebase
     (cloud || []).forEach(data => {
       const slug = data.id_ || data.slug || data.pid || data.id;
       if(!slug) return;
       if(data.active === false){ map.delete(slug); return; }
       const local = map.get(slug) || {};
-      // ═══ إصلاح جذري: الحفاظ على قيمة المخزون من Firebase أو المحلي ═══
       let finalStock = null;
       if (data.stock !== undefined && data.stock !== null && data.stock !== "") {
         finalStock = Number(data.stock);
       } else if (local.stock !== undefined && local.stock !== null && local.stock !== "") {
         finalStock = Number(local.stock);
       }
-      // إذا لم يوجد أي قيمة، نضع null (يعني غير محدود)
       if (isNaN(finalStock)) finalStock = null;
-
       map.set(slug, {
         ...local,
         ...data,
@@ -801,7 +806,6 @@ function initProductForm(){
   document.getElementById("pf_img")?.addEventListener("input", updatePreview);
   document.getElementById("pf_images")?.addEventListener("input", updatePreview);
   
-  // ═══ إصلاح حفظ المنتج ═══
   document.getElementById("saveProductBtn")?.addEventListener("click", () => {
     const name = document.getElementById("pf_name").value.trim();
     const nameEn = document.getElementById("pf_nameEn").value.trim();
@@ -837,11 +841,9 @@ function initProductForm(){
       active: true
     };
 
-    // ═══ إصلاح جذري للمخزون: إذا كان الرقم مكتوب، أرسله. وإلا لا ترسل الحقل ═══
     if (stockVal !== "" && !isNaN(stockVal) && Number(stockVal) >= 0) {
       data.stock = Number(stockVal);
     }
-    // لو فارغ، متحطش الحقل خالص عشان يبقى غير محدود
 
     const saveFn = existingId ? window.FB.set("products", existingId, { ...data, id_: existingId }) : 
       window.FB.set("products", "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, id_: "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), createdAt: Date.now(), sold: 0 });
@@ -891,7 +893,7 @@ function openProductForm(product){
   form.scrollIntoView({ behavior:"smooth" });
 }
 
-// ================= COUPONS =================
+// ═══ COUPONS (الإصدار الذكي) ═══
 function loadCoupons(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("coupons").then(coupons => {
@@ -906,12 +908,17 @@ function renderCoupons(coupons){
   let list = coupons || [];
   list.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
   if(!list.length){
-    body.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد كوبونات بعد. أنشئ أول كوبون الآن!</td></tr>`;
+    body.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد كوبونات بعد. أنشئ أول كوبون الآن!</td></tr>`;
     return;
   }
   body.innerHTML = list.map(c => {
     const isActive = c.active !== false;
     const usesText = c.maxUses ? `${Number(c.usedCount||0)} / ${c.maxUses}` : `${Number(c.usedCount||0)} استخدام`;
+    let startText = "-";
+    if(c.startDate){
+      const d = new Date(c.startDate);
+      startText = d.toLocaleDateString("ar-EG");
+    }
     let expiresText = "-";
     if(c.expiresAt){
       const exp = Number(c.expiresAt);
@@ -920,13 +927,20 @@ function renderCoupons(coupons){
     }
     const valueText = c.type === "percent" ? `${c.value}%` : `${money(c.value||0)}`;
     const typeText = c.type === "percent" ? "نسبة مئوية" : "مبلغ ثابت";
+    const minOrderText = c.minOrder ? money(c.minOrder) : "-";
+    const maxDiscountText = c.maxDiscount ? money(c.maxDiscount) : "-";
+    const firstOnlyText = c.firstOrderOnly ? "✅ نعم" : "❌ لا";
     return `
       <tr>
         <td><span class="coupon-code">${c.code || "-"}</span></td>
         <td>${typeText}</td>
         <td><b>${valueText}</b></td>
         <td>${usesText}</td>
+        <td>${startText}</td>
         <td>${expiresText}</td>
+        <td>${minOrderText}</td>
+        <td>${maxDiscountText}</td>
+        <td>${firstOnlyText}</td>
         <td><span class="${isActive ? 'coupon-active' : 'coupon-inactive'}">${isActive ? '✅ مفعل' : '❌ متوقف'}</span></td>
         <td style="display:flex;gap:.3rem;flex-wrap:wrap">
           <button class="btn sm ghost" data-editc="${c.id}" type="button">✏️</button>
@@ -986,12 +1000,12 @@ function openCouponForm(coupon){
     document.getElementById("cf_value").value = coupon.value || "";
     document.getElementById("cf_maxUses").value = coupon.maxUses || "";
     document.getElementById("cf_active").value = coupon.active !== false ? "true" : "false";
-    if(coupon.expiresAt){
-      const date = new Date(Number(coupon.expiresAt));
-      document.getElementById("cf_expires").value = date.toISOString().slice(0,10);
-    } else {
-      document.getElementById("cf_expires").value = "";
-    }
+    // الحقول الجديدة
+    document.getElementById("cf_startDate").value = coupon.startDate || "";
+    document.getElementById("cf_expires").value = coupon.expiresAt ? new Date(Number(coupon.expiresAt)).toISOString().slice(0,10) : "";
+    document.getElementById("cf_minOrder").value = coupon.minOrder || "";
+    document.getElementById("cf_maxDiscount").value = coupon.maxDiscount || "";
+    document.getElementById("cf_firstOrderOnly").checked = coupon.firstOrderOnly === true;
   } else {
     form.dataset.editId = "";
     document.getElementById("couponFormTitle").textContent = "كوبون جديد";
@@ -999,8 +1013,12 @@ function openCouponForm(coupon){
     document.getElementById("cf_type").value = "percent";
     document.getElementById("cf_value").value = "";
     document.getElementById("cf_maxUses").value = "";
-    document.getElementById("cf_expires").value = "";
     document.getElementById("cf_active").value = "true";
+    document.getElementById("cf_startDate").value = "";
+    document.getElementById("cf_expires").value = "";
+    document.getElementById("cf_minOrder").value = "";
+    document.getElementById("cf_maxDiscount").value = "";
+    document.getElementById("cf_firstOrderOnly").checked = false;
   }
   form.scrollIntoView({ behavior: "smooth" });
 }
@@ -1010,7 +1028,11 @@ function saveCoupon(){
   const type = document.getElementById("cf_type").value;
   const value = Number(document.getElementById("cf_value").value || 0);
   const maxUses = document.getElementById("cf_maxUses").value === "" ? null : Number(document.getElementById("cf_maxUses").value || 0);
+  const startDate = document.getElementById("cf_startDate").value;
   const expiresVal = document.getElementById("cf_expires").value;
+  const minOrder = document.getElementById("cf_minOrder").value === "" ? null : Number(document.getElementById("cf_minOrder").value || 0);
+  const maxDiscount = document.getElementById("cf_maxDiscount").value === "" ? null : Number(document.getElementById("cf_maxDiscount").value || 0);
+  const firstOrderOnly = document.getElementById("cf_firstOrderOnly").checked;
   const active = document.getElementById("cf_active").value === "true";
   const editId = document.getElementById("couponForm").dataset.editId || "";
   
@@ -1024,19 +1046,29 @@ function saveCoupon(){
   let expiresAt = null;
   if(expiresVal) expiresAt = new Date(expiresVal).setHours(23,59,59,999);
   
-  const data = { code, type, value, maxUses, expiresAt, active };
+  const data = {
+    code, type, value,
+    maxUses,
+    startDate: startDate || null,
+    expiresAt,
+    minOrder,
+    maxDiscount,
+    firstOrderOnly: !!firstOrderOnly,
+    active,
+    // نحافظ على usedCount و usedBy
+  };
   
   const saveFn = editId ? window.FB.update("coupons", editId, data) : 
-    window.FB.set("coupons", "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, usedCount: 0, createdAt: Date.now() });
+    window.FB.set("coupons", "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, usedCount: 0, usedBy: [], createdAt: Date.now() });
     
   saveFn.then(() => {
-    toast("💾 تم حفظ الكوبون");
+    toast("💾 تم حفظ الكوبون الذكي");
     document.getElementById("couponForm").classList.add("hidden");
     loadCoupons();
   }).catch(err => { console.error(err); toast("⚠️ فشل الحفظ — راجع Firestore Rules"); });
 }
 
-// ================= REVIEWS =================
+// ═══ REVIEWS ═══
 function loadReviews(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("reviews").then(reviews => {
@@ -1071,7 +1103,7 @@ function loadReviews(){
   }).catch(error => { console.error("Reviews error:", error); toast("⚠️ تعذر تحميل المراجعات"); });
 }
 
-// ================= CRAFTSMANSHIP =================
+// ═══ CRAFTSMANSHIP ═══
 let CRAFT_ITEMS = [];
 
 function loadCraftItems(){
