@@ -49,7 +49,6 @@
   <div class="mo-top">
     <h1>📦 طلباتي</h1>
     <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-      <button class="btn ghost sm" onclick="clearLocalOrders()" style="font-size:.75rem;">🗑️ مسح الكاش</button>
       <a class="btn ghost sm" href="index.html">↩ المتجر</a>
     </div>
   </div>
@@ -61,7 +60,7 @@
 
 <script src="data.js"></script>
 <script type="module" src="firebase.js"></script>
-<script type="module"src="auth.js"></script>
+<script type="module" src="auth.js"></script>
 
 <script>
 (function(){
@@ -77,17 +76,6 @@ function toast(msg){
   el._timer=setTimeout(()=>el.classList.remove('show'),3000);
 }
 
-// ═══ دوال مسح الكاش المحلي (لحل مشكلة الطلبات الوهمية) ═══
-window.clearLocalOrders = function() {
-  try {
-    localStorage.removeItem('vl_orders');
-    toast('✅ تم مسح الكاش المحلي للطلبات');
-    setTimeout(()=>location.reload(), 600);
-  } catch(e) {
-    toast('⚠️ فشل المسح');
-  }
-};
-
 // ═══ دالة إلغاء الطلب ═══
 window.cancelOrder = async function(orderId) {
   if(!orderId) return;
@@ -97,9 +85,8 @@ window.cancelOrder = async function(orderId) {
   if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري...'; }
   
   try {
-    await window.FB.update('orders', orderId, { status: 5 });
+    await window.FB.update('orders', orderId, { status: 4 }); // 4 = ملغي
     toast('✅ تم إلغاء الطلب بنجاح');
-    // إعادة تحميل الطلبات
     const user = window.FB.auth.currentUser;
     if(user) await loadOrders(user);
     else location.reload();
@@ -142,14 +129,31 @@ async function loadOrders(user){
   box.innerHTML='<div class="loading">⏳ جاري تحميل طلباتك...</div>';
   try{
     const all = await window.FB.list("orders");
-    // تصفية الطلبات الخاصة بالمستخدم الحالي
+    
+    // ⭐ التصفية: الطلبات الخاصة بالمستخدم + استبعاد الطلبات القديمة "قيد المراجعة" (أكثر من ساعة)
+    const ONE_HOUR = 60 * 60 * 1000;
+    const now = Date.now();
+    
     const mine = (all||[]).filter(o => {
       // نتأكد من أن الطلب يخص هذا المستخدم
       const matchUserId = o.userId === user.uid;
       const matchEmail = o.userEmail && o.userEmail === user.email;
       const matchCustomerEmail = o.customer && o.customer.email && o.customer.email === user.email;
       const matchPhone = o.phone && user.phone && o.phone === user.phone;
-      return matchUserId || matchEmail || matchCustomerEmail || matchPhone;
+      const isMine = matchUserId || matchEmail || matchCustomerEmail || matchPhone;
+      
+      if(!isMine) return false;
+      
+      // ⭐ فلترة الطلبات القديمة "قيد المراجعة" (status = 0)
+      const status = Number(o.status || 0);
+      const createdAt = Number(o.createdAt || 0);
+      
+      // لو الطلب "قيد المراجعة" واتعمل من أكتر من ساعة، نتجاهله (يعتبر طلب تجريبي ملغي)
+      if(status === 0 && (now - createdAt) > ONE_HOUR) {
+        return false;
+      }
+      
+      return true;
     });
     
     // ترتيب تنازلي (الأحدث أولاً)
@@ -168,7 +172,7 @@ async function loadOrders(user){
 
 function orderCard(o, user){
   const idx = Number(o.status||0);
-  const isCancelled = (idx === 4); // 4 = ملغي حسب STATUS_AR
+  const isCancelled = (idx === 4); // 4 = ملغي
   const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString("ar-EG", {year:"numeric", month:"long", day:"numeric"}) : "-";
   
   let itemsHtml = "";
@@ -184,13 +188,12 @@ function orderCard(o, user){
     itemsHtml = "<li>منتجات متعددة</li>";
   }
 
-  // ═══ زر إلغاء الطلب (يظهر فقط للطلبات غير الملغية وقيد المراجعة أو التجهيز) ═══
+  // ═══ زر إلغاء الطلب (يظهر فقط للطلبات غير الملغية وقيد المراجعة) ═══
   let cancelBtn = '';
-  if(idx < 3 && !isCancelled) {
+  if(idx === 0 && !isCancelled) {
     cancelBtn = `<button class="btn danger sm" data-cancel="${o.id}" onclick="window.cancelOrder('${o.id}')">🗑️ إلغاء الطلب</button>`;
   }
 
-  // ═══ عرض حالة ملغي بشكل مميز ═══
   const cardClass = isCancelled ? 'order-card cancelled' : 'order-card';
   const statusText = STATUS_AR[idx] || "قيد المراجعة";
   const statusClass = STATUS_CLS[idx] || "st-review";
@@ -211,7 +214,6 @@ function orderCard(o, user){
   </div>`;
 }
 
-// ═══ تصدير دوال للنطاق العام ═══
 window.loadOrders = loadOrders;
 
 })();
