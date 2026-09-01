@@ -13,29 +13,28 @@
 .mo-top h1{font-family:var(--fd);color:var(--gold2);font-size:1.5rem;margin:0}
 .mo-wrap{padding:1rem 0 4rem}
 .order-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1.2rem;margin-bottom:1rem;box-shadow:var(--sh);transition:.3s}
-.order-card.cancelled{opacity:0.6;border-color:#e74c3c;background:var(--panel2)}
-.order-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.8rem}
-.oid{font-family:var(--fd);color:var(--gold2);font-size:1rem;display:block}
-.odate{color:var(--dim);font-size:.75rem}
-.status-badge{padding:.3rem .9rem;border-radius:99px;font-size:.72rem;font-weight:700;color:#fff;white-space:nowrap}
-.st-review{background:#e67e22}
-.st-prep{background:#3498db}
-.st-ship{background:#9b59b6}
-.st-done{background:#27ae60}
-.st-cancel{background:#e74c3c}
-.order-items{list-style:none;margin:.6rem 0;padding:.6rem;background:var(--panel2);border-radius:12px;font-size:.85rem}
-.order-items li{padding:.25rem 0;border-bottom:1px solid rgba(0,0,0,0.03)}
-.order-items li:last-child{border-bottom:0}
-.order-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:.7rem;font-size:.9rem}
-.order-foot b{color:var(--gold2);font-family:var(--fd)}
-.order-actions{margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.order-card.cancelled{opacity:0.5;border-color:#e74c3c;background:var(--panel2)}
+.order-card .order-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.8rem}
+.order-card .oid{font-family:var(--fd);color:var(--gold2);font-size:1rem;display:block}
+.order-card .odate{color:var(--dim);font-size:.75rem}
+.order-card .status-badge{padding:.3rem .9rem;border-radius:99px;font-size:.72rem;font-weight:700;color:#fff;white-space:nowrap}
+.order-card .st-review{background:#e67e22}
+.order-card .st-prep{background:#3498db}
+.order-card .st-ship{background:#9b59b6}
+.order-card .st-done{background:#27ae60}
+.order-card .st-cancel{background:#e74c3c}
+.order-card .order-items{list-style:none;margin:.6rem 0;padding:.6rem;background:var(--panel2);border-radius:12px;font-size:.85rem}
+.order-card .order-items li{padding:.25rem 0;border-bottom:1px solid rgba(0,0,0,0.03)}
+.order-card .order-items li:last-child{border-bottom:0}
+.order-card .order-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:.7rem;font-size:.9rem}
+.order-card .order-foot b{color:var(--gold2);font-family:var(--fd)}
+.order-card .order-actions{margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
 .loading,.empty,.error{text-align:center;padding:3rem 1rem;color:var(--dim);font-size:.95rem}
 .login-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:2.5rem;text-align:center;max-width:420px;margin:3rem auto}
 .login-card h2{font-family:var(--fd);color:var(--gold2);margin-bottom:1rem}
 .btn.danger.sm{background:#e74c3c;color:#fff;border:0;padding:.3rem .8rem;border-radius:8px;font-size:.7rem;font-weight:700;cursor:pointer;transition:.2s}
 .btn.danger.sm:hover{background:#c0392b;transform:scale(1.02)}
-.btn.warning.sm{background:#e67e22;color:#fff;border:0;padding:.3rem .8rem;border-radius:8px;font-size:.7rem;font-weight:700;cursor:pointer;transition:.2s}
-.btn.warning.sm:hover{background:#d35400;transform:scale(1.02)}
+.btn.danger.sm:disabled{opacity:0.5;cursor:not-allowed}
 .btn.outline.sm{background:transparent;border:1px solid var(--line);padding:.3rem .8rem;border-radius:8px;font-size:.7rem;cursor:pointer;transition:.2s}
 .btn.outline.sm:hover{border-color:var(--gold);color:var(--gold)}
 .toast-msg{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1512;color:#fff;padding:.8rem 1.8rem;border-radius:99px;font-size:.85rem;z-index:9999;opacity:0;transition:opacity .4s ease;box-shadow:0 8px 25px rgba(0,0,0,0.2)}
@@ -51,7 +50,6 @@
   <div class="mo-top">
     <h1>📦 طلباتي</h1>
     <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-      <button class="btn warning sm" id="cleanOrdersBtn" style="display:none;">🧹 تنظيف الطلبات</button>
       <a class="btn ghost sm" href="index.html">↩ المتجر</a>
     </div>
   </div>
@@ -76,60 +74,10 @@ function toast(msg){
   el.textContent=msg;
   el.classList.add('show');
   clearTimeout(el._timer);
-  el._timer=setTimeout(()=>el.classList.remove('show'),3000);
+  el._timer=setTimeout(()=>el.classList.remove('show'),3500);
 }
 
-// ═══ دالة حذف الطلبات غير المكتملة (دقيقة جداً) ═══
-window.cleanIncompleteOrders = async function() {
-  if(!confirm('🧹 هل أنت متأكد من حذف جميع الطلبات "قيد المراجعة" التي ليس لها حساب مرتبط؟')) return;
-  
-  const btn = document.getElementById('cleanOrdersBtn');
-  if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري...'; }
-  
-  try {
-    const all = await window.FB.list('orders');
-    const user = window.FB.auth.currentUser;
-    if(!user) { toast('⚠️ يرجى تسجيل الدخول أولاً'); return; }
-    
-    // نختار الطلبات اللي "قيد المراجعة" ومش تابعة للمستخدم الحالي (أو بدون userId)
-    const toDelete = all.filter(o => {
-      const status = Number(o.status || 0);
-      const orderUserId = o.userId || '';
-      // الشرط: الطلب قيد المراجعة (status=0) و (مفيش userId أو مختلف عن المستخدم الحالي)
-      return status === 0 && (orderUserId === '' || orderUserId !== user.uid);
-    });
-    
-    if(!toDelete.length) {
-      toast('✅ لا توجد طلبات غير مكتملة للحذف');
-      if(btn) { btn.disabled = false; btn.textContent = '🧹 تنظيف الطلبات'; }
-      return;
-    }
-    
-    let deleted = 0;
-    for(const order of toDelete) {
-      try {
-        await window.FB.remove('orders', order.id);
-        deleted++;
-      } catch(e) {
-        console.warn('Failed to delete order:', order.id, e);
-      }
-    }
-    
-    toast(`✅ تم حذف ${deleted} طلب غير مكتمل`);
-    // إعادة تحميل الطلبات
-    const userNow = window.FB.auth.currentUser;
-    if(userNow) await loadOrders(userNow);
-    else location.reload();
-    
-  } catch(e) {
-    console.error(e);
-    toast('⚠️ فشل تنظيف الطلبات، حاول مرة أخرى');
-  } finally {
-    if(btn) { btn.disabled = false; btn.textContent = '🧹 تنظيف الطلبات'; }
-  }
-};
-
-// ═══ دالة إلغاء الطلب (لطلبات معينة) ═══
+// ═══ دالة إلغاء الطلب (العميل يلغي طلبه قبل التأكيد) ═══
 window.cancelOrder = async function(orderId) {
   if(!orderId) return;
   if(!confirm('⚠️ هل أنت متأكد من إلغاء هذا الطلب؟ لا يمكن التراجع بعد الإلغاء.')) return;
@@ -138,23 +86,23 @@ window.cancelOrder = async function(orderId) {
   if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري...'; }
   
   try {
-    await window.FB.update('orders', orderId, { status: 4 });
+    await window.FB.update('orders', orderId, { status: 4 }); // 4 = ملغي
     toast('✅ تم إلغاء الطلب بنجاح');
+    // إعادة تحميل الطلبات
     const user = window.FB.auth.currentUser;
     if(user) await loadOrders(user);
     else location.reload();
   } catch(e) {
     console.error(e);
     toast('⚠️ فشل إلغاء الطلب، حاول مرة أخرى');
-    if(btn) { btn.disabled = false; btn.textContent = '🗑️ إلغاء'; }
+    if(btn) { btn.disabled = false; btn.textContent = '🗑️ إلغاء الطلب'; }
   }
 };
 
 // ═══ المتغيرات والتهيئة ═══
-const STATUS_AR = ["قيد المراجعة", "قيد التجهيز", "تم الشحن", "تم التسليم", "ملغي"];
-const STATUS_CLS = ["st-review", "st-prep", "st-ship", "st-done", "st-cancel"];
+const STATUS_AR = ["قيد المراجعة", "قيد التجهيز", "تم التجهيز", "تم الشحن", "ملغي", "مكتمل"];
+const STATUS_CLS = ["st-review", "st-prep", "st-ship", "st-done", "st-cancel", "st-done"];
 const box = document.getElementById("ordersContainer");
-const cleanBtn = document.getElementById("cleanOrdersBtn");
 
 let started = false;
 function tryStart(){ if(started)return; if(window.FB&&window.FB.auth){started=true;init();} }
@@ -165,15 +113,8 @@ const poll=setInterval(()=>{tries++;tryStart();if(started||tries>30)clearInterva
 
 function init(){
   window.FB.auth.onAuthStateChanged(user=>{
-    if(user){ 
-      cleanBtn.style.display = 'inline-block';
-      cleanBtn.onclick = window.cleanIncompleteOrders;
-      loadOrders(user); 
-    }
-    else{ 
-      cleanBtn.style.display = 'none';
-      showLogin(); 
-    }
+    if(user){ loadOrders(user); }
+    else{ showLogin(); }
   });
 }
 
@@ -191,7 +132,7 @@ async function loadOrders(user){
   try{
     const all = await window.FB.list("orders");
     
-    // ⭐ التصفية: الطلبات الخاصة بالمستخدم فقط
+    // ⭐ التصفية: الطلبات الخاصة بالمستخدم الحالي
     const mine = (all||[]).filter(o => {
       const matchUserId = o.userId === user.uid;
       const matchEmail = o.userEmail && o.userEmail === user.email;
@@ -200,14 +141,22 @@ async function loadOrders(user){
       return matchUserId || matchEmail || matchCustomerEmail || matchPhone;
     });
     
-    // ترتيب تنازلي (الأحدث أولاً)
-    mine.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+    // ⭐ استبعاد الطلبات المكتملة أو الملغية (نعرض فقط النشطة)
+    const activeOrders = mine.filter(o => {
+      const status = Number(o.status || 0);
+      // نعرض: قيد المراجعة (0)، قيد التجهيز (1)، تم التجهيز (2)، تم الشحن (3)
+      // نستبعد: ملغي (4)، مكتمل (5)
+      return status >= 0 && status <= 3;
+    });
     
-    if(!mine.length){
-      box.innerHTML=`<div class="empty">🕯️ لسه مفيش طلبات.<br><br><a class="btn" href="index.html#products">🛍️ ابدأ التسوق</a></div>`;
+    // ترتيب تنازلي (الأحدث أولاً)
+    activeOrders.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+    
+    if(!activeOrders.length){
+      box.innerHTML=`<div class="empty">🕯️ ليس لديك طلبات نشطة حالياً.<br><br><a class="btn" href="index.html#products">🛍️ ابدأ التسوق</a></div>`;
       return;
     }
-    box.innerHTML = mine.map(o => orderCard(o, user)).join("");
+    box.innerHTML = activeOrders.map(o => orderCard(o, user)).join("");
   }catch(e){
     console.error(e);
     box.innerHTML='<div class="error">⚠️ تعذر تحميل الطلبات. جرب تاني.</div>';
@@ -232,9 +181,10 @@ function orderCard(o, user){
     itemsHtml = "<li>منتجات متعددة</li>";
   }
 
-  // ═══ زر إلغاء الطلب (يظهر فقط للطلبات غير الملغية وقيد المراجعة) ═══
+  // ═══ زر إلغاء الطلب (يظهر فقط للطلبات غير الملغية وقيد المراجعة أو التجهيز) ═══
   let cancelBtn = '';
-  if(idx === 0 && !isCancelled) {
+  // يسمح بالإلغاء إذا كان الطلب قيد المراجعة (0) أو قيد التجهيز (1)
+  if((idx === 0 || idx === 1) && !isCancelled) {
     cancelBtn = `<button class="btn danger sm" data-cancel="${o.id}" onclick="window.cancelOrder('${o.id}')">🗑️ إلغاء الطلب</button>`;
   }
 
@@ -258,6 +208,7 @@ function orderCard(o, user){
   </div>`;
 }
 
+// ═══ تصدير دوال للنطاق العام ═══
 window.loadOrders = loadOrders;
 
 })();
