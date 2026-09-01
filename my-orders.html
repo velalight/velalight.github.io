@@ -23,7 +23,6 @@
 .st-ship{background:#9b59b6}
 .st-done{background:#27ae60}
 .st-cancel{background:#e74c3c}
-.st-old{background:#95a5a6}
 .order-items{list-style:none;margin:.6rem 0;padding:.6rem;background:var(--panel2);border-radius:12px;font-size:.85rem}
 .order-items li{padding:.25rem 0;border-bottom:1px solid rgba(0,0,0,0.03)}
 .order-items li:last-child{border-bottom:0}
@@ -80,9 +79,9 @@ function toast(msg){
   el._timer=setTimeout(()=>el.classList.remove('show'),3000);
 }
 
-// ═══ دالة حذف الطلبات غير المكتملة (قيد المراجعة أو القديمة) ═══
+// ═══ دالة حذف الطلبات غير المكتملة (دقيقة جداً) ═══
 window.cleanIncompleteOrders = async function() {
-  if(!confirm('🧹 هل أنت متأكد من حذف جميع الطلبات "قيد المراجعة" و القديمة؟ هذا الإجراء نهائي.')) return;
+  if(!confirm('🧹 هل أنت متأكد من حذف جميع الطلبات "قيد المراجعة" التي ليس لها حساب مرتبط؟')) return;
   
   const btn = document.getElementById('cleanOrdersBtn');
   if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري...'; }
@@ -92,20 +91,12 @@ window.cleanIncompleteOrders = async function() {
     const user = window.FB.auth.currentUser;
     if(!user) { toast('⚠️ يرجى تسجيل الدخول أولاً'); return; }
     
-    const now = Date.now();
-    const ONE_HOUR = 60 * 60 * 1000;
-    
-    // نختار الطلبات اللي تخص المستخدم الحالي أو مفيش userId
+    // نختار الطلبات اللي "قيد المراجعة" ومش تابعة للمستخدم الحالي (أو بدون userId)
     const toDelete = all.filter(o => {
       const status = Number(o.status || 0);
-      const createdAt = Number(o.createdAt || 0);
       const orderUserId = o.userId || '';
-      
-      // شرط الحذف: (قيد المراجعة) OR (قديم أكثر من ساعة وملوش userId)
-      const isReview = status === 0;
-      const isOldAndNoUser = (orderUserId === '' || orderUserId === null || orderUserId === undefined) && (now - createdAt) > ONE_HOUR;
-      
-      return isReview || isOldAndNoUser;
+      // الشرط: الطلب قيد المراجعة (status=0) و (مفيش userId أو مختلف عن المستخدم الحالي)
+      return status === 0 && (orderUserId === '' || orderUserId !== user.uid);
     });
     
     if(!toDelete.length) {
@@ -200,7 +191,7 @@ async function loadOrders(user){
   try{
     const all = await window.FB.list("orders");
     
-    // ⭐ التصفية: الطلبات الخاصة بالمستخدم
+    // ⭐ التصفية: الطلبات الخاصة بالمستخدم فقط
     const mine = (all||[]).filter(o => {
       const matchUserId = o.userId === user.uid;
       const matchEmail = o.userEmail && o.userEmail === user.email;
