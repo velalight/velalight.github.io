@@ -10,6 +10,10 @@
 
   <link rel="stylesheet" href="style.css">
   
+  <!-- ═══ Lightbox2 (لتكبير الصور) ═══ -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
+
   <!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
   <script>
@@ -50,7 +54,7 @@
     .reviews-header {
       background: radial-gradient(700px 300px at 50% -20%, rgba(217,171,95,.12), transparent 65%),
                   linear-gradient(135deg, var(--bg2) 0%, var(--bg) 100%);
-      padding: 3rem 1rem 2.5rem;
+      padding: 2.8rem 1rem 2rem;
       text-align: center;
       border-bottom: 1px solid var(--line);
       position: relative;
@@ -178,7 +182,7 @@
     }
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 1.25rem;
     }
     .gallery-item {
@@ -189,7 +193,7 @@
       overflow: hidden;
       box-shadow: 0 5px 16px -7px rgba(100,70,30,.12);
       transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
-      cursor: zoom-in;
+      cursor: pointer;
       -webkit-tap-highlight-color: transparent;
     }
     .gallery-item:hover {
@@ -197,42 +201,19 @@
       border-color: rgba(217,171,95,.35);
       box-shadow: 0 12px 28px -8px rgba(100,70,30,.18);
     }
-    .gallery-image-wrap {
-      position: relative;
-      background: var(--bg2);
-      overflow: hidden;
+    .gallery-item a {
+      display: block;
+      text-decoration: none;
     }
     .gallery-item img {
       width: 100%;
-      height: 330px;
+      height: 280px;
       object-fit: cover;
       display: block;
       background: var(--bg2);
       transition: transform .4s ease;
     }
     .gallery-item:hover img { transform: scale(1.025); }
-
-    .gallery-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity .35s ease;
-      backdrop-filter: blur(2px);
-    }
-    .gallery-item:hover .gallery-overlay { opacity: 1; }
-    .gallery-overlay span {
-      background: rgba(255,255,255,.92);
-      color: var(--ink);
-      padding: .4rem 1.2rem;
-      border-radius: 99px;
-      font-size: .8rem;
-      font-weight: 700;
-      box-shadow: 0 4px 16px rgba(0,0,0,.15);
-    }
 
     .gallery-item-info {
       min-height: 50px;
@@ -289,58 +270,8 @@
     }
     .cta-section .btn { font-size: 1rem; padding: .9rem 2.2rem; }
 
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1.25rem;
-      background: rgba(0,0,0,.94);
-      z-index: 10000;
-      cursor: zoom-out;
-      backdrop-filter: blur(7px);
-      -webkit-backdrop-filter: blur(7px);
-    }
-    .lightbox.open { display: flex; animation: reviewsLightboxIn .25s ease; }
-    @keyframes reviewsLightboxIn { from { opacity: 0; } to { opacity: 1; } }
-    .lightbox img {
-      max-width: min(1100px, 95vw);
-      max-height: 88vh;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-      border-radius: 12px;
-      box-shadow: 0 20px 70px rgba(0,0,0,.55);
-      cursor: default;
-      user-select: none;
-      -webkit-user-drag: none;
-      animation: reviewsImageIn .25s ease;
-    }
-    @keyframes reviewsImageIn { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
-    .lightbox-close {
-      position: absolute;
-      top: 18px;
-      inset-inline-end: 18px;
-      width: 46px;
-      height: 46px;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(255,255,255,.25);
-      border-radius: 50%;
-      background: rgba(255,255,255,.12);
-      color: #fff;
-      font-size: 1.5rem;
-      line-height: 1;
-      cursor: pointer;
-      transition: .25s;
-      z-index: 2;
-    }
-    .lightbox-close:hover { background: rgba(255,255,255,.25); transform: rotate(90deg); }
-    .lightbox-close:active { transform: scale(.94); }
-
     @media(max-width:768px) {
-      .reviews-header { padding: 2.2rem 1rem 2rem; }
+      .reviews-header { padding: 2rem 1rem 1.8rem; }
       .reviews-header h1 { font-size: 1.65rem; }
       .reviews-header p { font-size: .8rem; }
       .back-link { font-size: .78rem; }
@@ -355,21 +286,17 @@
       .gallery-container { width: 94%; padding: 2rem 0; }
       .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
       .gallery-item { border-radius: 12px; }
-      .gallery-item img { height: 220px; }
-      .gallery-overlay { display: none; }
+      .gallery-item img { height: 200px; }
       .gallery-item-info { min-height: 42px; padding: .5rem .55rem; }
       .gallery-item-badge { font-size: .6rem; }
       .gallery-item-stars { font-size: .62rem; letter-spacing: .5px; }
       .cta-section { padding: 2.5rem 1rem; }
       .cta-section h2 { font-size: 1.3rem; }
       .cta-section p { font-size: .75rem; }
-      .lightbox { padding: .6rem; }
-      .lightbox img { max-width: 96vw; max-height: 84vh; border-radius: 9px; }
-      .lightbox-close { top: 10px; inset-inline-end: 10px; width: 40px; height: 40px; font-size: 1.25rem; }
     }
     @media(max-width:400px) {
       .gallery-grid { gap: .6rem; }
-      .gallery-item img { height: 190px; }
+      .gallery-item img { height: 150px; }
       .gallery-item-info { padding: .45rem; }
       .gallery-item-badge { font-size: .55rem; }
       .gallery-item-stars { font-size: .55rem; }
@@ -382,8 +309,7 @@
       .gallery-item:active { transform: scale(.985); }
     }
     @media(prefers-reduced-motion:reduce) {
-      .gallery-item, .gallery-item img, .back-link, .lightbox-close { transition: none !important; }
-      .lightbox.open, .lightbox img { animation: none !important; }
+      .gallery-item, .gallery-item img, .back-link { transition: none !important; }
     }
   </style>
 </head>
@@ -417,8 +343,15 @@
       </div>
     </section>
 
-    
-    <!-- ═══ GALLERY ═══ -->
+    <!-- ═══ QUOTE ═══ -->
+    <section class="quote-section">
+      <blockquote>
+        مش مجرد شمعة… دي لحظة بتتعاش!
+        <span class="quote-author">— واحدة من عملائنا</span>
+      </blockquote>
+    </section>
+
+    <!-- ═══ GALLERY (كل الصور مع Lightbox) ═══ -->
     <section class="gallery-container" aria-label="معرض آراء العملاء">
       <div class="gallery-grid" id="galleryGrid"></div>
     </section>
@@ -432,12 +365,6 @@
 
   </main>
 
-  <!-- ═══ LIGHTBOX ═══ -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="عرض صورة رأي العميل">
-    <button type="button" class="lightbox-close" id="lightboxClose" aria-label="إغلاق الصورة">×</button>
-    <img id="lightboxImg" src="" alt="رأي عميل VelaLight">
-  </div>
-
   <script src="data.js"></script>
 
   <script>
@@ -446,22 +373,6 @@
 
       const grid = document.getElementById("galleryGrid");
       const totalEl = document.getElementById("totalReviews");
-      const lightbox = document.getElementById("lightbox");
-      const lightboxImg = document.getElementById("lightboxImg");
-      const lightboxClose = document.getElementById("lightboxClose");
-
-      function closeLightbox() {
-        lightbox.classList.remove("open");
-        lightboxImg.src = "";
-        document.body.style.overflow = "";
-      }
-
-      function openLightbox(url, altText) {
-        lightboxImg.src = url;
-        lightboxImg.alt = altText || "VelaLight Customer Review";
-        lightbox.classList.add("open");
-        document.body.style.overflow = "hidden";
-      }
 
       function createGalleryItem(imgName, index) {
         const imgUrl = typeof CDN === "function"
@@ -472,8 +383,11 @@
         item.className = "gallery-item";
         item.setAttribute("aria-label", (typeof t === "function" ? t("rev_verified") : "عميلة موثّقة") + " " + (index + 1));
 
-        const imageWrap = document.createElement("div");
-        imageWrap.className = "gallery-image-wrap";
+        // استخدم <a> مع data-lightbox عشان lightbox2 يشتغل
+        const link = document.createElement("a");
+        link.href = imgUrl;
+        link.setAttribute("data-lightbox", "reviews-all");
+        link.setAttribute("data-title", "💛 " + ((typeof t === "function" ? t("rev_verified") : "عميلة موثّقة") + " " + (index + 1)));
 
         const img = document.createElement("img");
         img.src = imgUrl;
@@ -481,40 +395,22 @@
         img.loading = "lazy";
         img.decoding = "async";
 
-        const overlay = document.createElement("div");
-        overlay.className = "gallery-overlay";
-        overlay.innerHTML = `<span>👁️ ${typeof t === "function" ? t("view_details") : "شاهد التفاصيل"}</span>`;
-
         const info = document.createElement("div");
         info.className = "gallery-item-info";
 
         const badge = document.createElement("span");
         badge.className = "gallery-item-badge";
-        // 🔥 هنا التعديل: استخدام دالة الترجمة t() لعرض "عميلة موثّقة"
         badge.textContent = "✓ " + (typeof t === "function" ? t("rev_verified") : "عميلة موثّقة");
 
         const stars = document.createElement("span");
         stars.className = "gallery-item-stars";
         stars.textContent = "★★★★★";
 
-        imageWrap.appendChild(img);
-        imageWrap.appendChild(overlay);
+        link.appendChild(img);
+        item.appendChild(link);
         info.appendChild(badge);
         info.appendChild(stars);
-        item.appendChild(imageWrap);
         item.appendChild(info);
-
-        item.addEventListener("click", function () {
-          openLightbox(imgUrl, (typeof t === "function" ? t("rev_verified") : "عميلة موثّقة") + " " + (index + 1));
-        });
-
-        item.setAttribute("tabindex", "0");
-        item.addEventListener("keydown", function (event) {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            openLightbox(imgUrl, (typeof t === "function" ? t("rev_verified") : "عميلة موثّقة") + " " + (index + 1));
-          }
-        });
 
         return item;
       }
@@ -541,19 +437,6 @@
         grid.appendChild(fragment);
       }
 
-      lightboxClose.addEventListener("click", closeLightbox);
-      lightbox.addEventListener("click", function (event) {
-        if (event.target === lightbox) closeLightbox();
-      });
-      lightboxImg.addEventListener("click", function (event) {
-        event.stopPropagation();
-      });
-      document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape" && lightbox.classList.contains("open")) {
-          closeLightbox();
-        }
-      });
-
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", initGallery);
       } else {
@@ -562,46 +445,42 @@
 
     })();
   </script>
-    <!-- ═══ محرك الترجمة الخاص بصفحة المراجعات ═══ -->
-    <script>
-      (function() {
-        "use strict";
-        function applyReviewsTranslations() {
-          if (typeof t !== "function") return; // تأكد أن ملف data.js محمل
-          
-          const lang = localStorage.getItem("vl_lang") || "ar";
-          document.documentElement.lang = lang;
-          document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
 
-          // ترجمة جميع العناصر التي تحمل data-i18n
-          document.querySelectorAll("[data-i18n]").forEach(function(el) {
-            var key = el.getAttribute("data-i18n");
-            if (!key) return;
-            var value = t(key);
-            if (value && value !== key && el.textContent !== value) {
-              el.textContent = value;
-            }
-          });
-        }
+  <!-- ═══ محرك الترجمة الخاص بصفحة المراجعات ═══ -->
+  <script>
+    (function() {
+      "use strict";
+      function applyReviewsTranslations() {
+        if (typeof t !== "function") return;
+        
+        const lang = localStorage.getItem("vl_lang") || "ar";
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
 
-        // تشغيل الترجمة عند تحميل الصفحة
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", function() {
-            setTimeout(applyReviewsTranslations, 100);
-          });
-        } else {
-          setTimeout(applyReviewsTranslations, 100);
-        }
-
-        // الاستماع لتغيير اللغة من صفحات أخرى
-        window.addEventListener("storage", function(e) {
-          if (e.key === "vl_lang") {
-            setTimeout(applyReviewsTranslations, 100);
+        document.querySelectorAll("[data-i18n]").forEach(function(el) {
+          var key = el.getAttribute("data-i18n");
+          if (!key) return;
+          var value = t(key);
+          if (value && value !== key && el.textContent !== value) {
+            el.textContent = value;
           }
         });
-      })();
-    </script>
-  </body>
-</html>
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function() {
+          setTimeout(applyReviewsTranslations, 100);
+        });
+      } else {
+        setTimeout(applyReviewsTranslations, 100);
+      }
+
+      window.addEventListener("storage", function(e) {
+        if (e.key === "vl_lang") {
+          setTimeout(applyReviewsTranslations, 100);
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
