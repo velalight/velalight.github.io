@@ -3121,20 +3121,41 @@ async function applyCoupon(){
     return;
   }
   
-  // 3. التحقق من أول عميل فقط
+  // 3. التحقق من "أول عميل فقط" – مع استثناء الطلبات الملغية
   if(c.firstOrderOnly) {
     const user = getSavedUser();
-    const orders = user.orders || 0;
-    if(orders > 0) {
-      toast("⚠️ هذا الكوبون مخصص للطلبات الأولى فقط.");
+    const userEmail = user.email || "";
+    const userPhone = user.phone || "";
+    
+    // نجيب جميع الطلبات من Firebase
+    let allOrders = [];
+    try {
+      allOrders = await window.FB.list("orders") || [];
+    } catch(e) {
+      console.warn("⚠️ Could not fetch orders for first-order check", e);
+      toast("⚠️ تعذر التحقق من الطلبات السابقة");
+      return;
+    }
+    
+    // نفلتر الطلبات اللي بتطابق العميل (بالإيميل أو الموبايل)
+    const customerOrders = allOrders.filter(order => {
+      const orderEmail = order.email || order.customer?.email || "";
+      const orderPhone = order.phone || order.customer?.phone || "";
+      return (userEmail && orderEmail === userEmail) || (userPhone && orderPhone === userPhone);
+    });
+    
+    // نستثني الطلبات الملغية (status = 5)
+    const nonCancelledOrders = customerOrders.filter(order => order.status !== 5);
+    
+    if(nonCancelledOrders.length > 0) {
+      toast("⚠️ هذا الكوبون مخصص للطلبات الأولى فقط (الطلبات الملغية غير محسوبة).");
       return;
     }
   }
   
   // 4. منع التكرار (usedBy)
-  const userEmail = getSavedUser().email || "";
-  const userPhone = getSavedUser().phone || "";
-  const identifier = userEmail || userPhone;
+  const user = getSavedUser();
+  const identifier = user.email || user.phone;
   if(identifier && c.usedBy && Array.isArray(c.usedBy) && c.usedBy.includes(identifier)) {
     toast("⚠️ لقد استخدمت هذا الكوبون من قبل.");
     return;
@@ -3191,7 +3212,7 @@ async function consumeCoupon(){
   appliedCoupon = null;
   if(document.getElementById("couponInput")) document.getElementById("couponInput").value = "";
 }
-
+ 
 /* ═══ REVIEWS COUNT HELPER ═══ */
 window.getReviewsCount = function() {
   if (typeof REVIEWS_IMAGES !== 'undefined' && Array.isArray(REVIEWS_IMAGES)) {
