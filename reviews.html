@@ -47,7 +47,7 @@
 
   <style>
     /* ═══════════════════════════════════════════════════════
-       VelaLight — REVIEWS PAGE
+       VelaLight — REVIEWS PAGE (جدار الحب)
        ═══════════════════════════════════════════════════════ */
     .reviews-page { min-height: 100vh; }
 
@@ -69,6 +69,19 @@
       left: 10%;
       transform: rotate(-10deg);
       pointer-events: none;
+    }
+    .reviews-header .kick {
+      display: inline-block;
+      background: rgba(212,175,55,0.12);
+      color: #b68d2e;
+      padding: 0.3rem 1.2rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid rgba(212,175,55,0.2);
+      margin-bottom: 0.5rem;
     }
     .reviews-header h1 {
       font-family: var(--fd);
@@ -318,27 +331,28 @@
 
   <main class="reviews-page">
 
-    <!-- ═══ HEADER ═══ -->
+    <!-- ═══ HEADER (تم التعديل) ═══ -->
     <section class="reviews-header">
-      <h1 data-i18n="rev_eyebrow">💛 آراء عملائنا</h1>
-      <p data-i18n="rev_sub">تجارب عملاء VelaLight مع شموعنا اليدوية الفاخرة</p>
-      <a href="index.html" class="back-link" data-i18n="rev_back_home">← الرجوع للرئيسية</a>
+      <span class="kick">💛 ثقتكم هي تاجنا</span>
+      <h1>❤️ جدار الحب</h1>
+      <p>كلامكم أحلى هدية.. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.</p>
+      <a href="index.html" class="back-link">← الرجوع للرئيسية</a>
     </section>
 
-    <!-- ═══ STATS ═══ -->
+    <!-- ═══ STATS (بدون أرقام) ═══ -->
     <section class="stats-bar" aria-label="إحصائيات آراء العملاء">
       <div class="stats-grid">
         <div class="stat-item">
-          <span class="stat-number" id="totalReviews">💛</span>
-          <span class="stat-label" data-i18n="rev_stat_label">تجربة عميل</span>
+          <span class="stat-number">💛</span>
+          <span class="stat-label">ثقة تتجدد</span>
         </div>
         <div class="stat-item">
           <span class="stat-rating-stars">★★★★★</span>
-          <span class="stat-label" data-i18n="rev_rating_title">تقييم العملاء</span>
+          <span class="stat-label">تقييم العملاء</span>
         </div>
         <div class="stat-item">
           <span class="stat-number">🕯️</span>
-          <span class="stat-label" data-i18n="rev_testimonial_title">ثقة تتجدد</span>
+          <span class="stat-label">لحظات لا تُنسى</span>
         </div>
       </div>
     </section>
@@ -358,9 +372,9 @@
 
     <!-- ═══ CTA SECTION ═══ -->
     <section class="cta-section">
-      <h2 data-i18n="rev_cta_title">جاهزة تنضمي لعائلة VelaLight؟ 🕯️</h2>
-      <p data-i18n="rev_cta_desc">اختاري شمعتك الفاخرة واصنعي لحظتك الخاصة</p>
-      <a href="index.html#products" class="btn" data-i18n="rev_cta_btn">تسوقي الآن 🛍️</a>
+      <h2>جاهزة تنضمي لعائلة VelaLight؟ 🕯️</h2>
+      <p>اختاري شمعتك الفاخرة واصنعي لحظتك الخاصة</p>
+      <a href="index.html#products" class="btn">تسوقي الآن 🛍️</a>
     </section>
 
   </main>
@@ -381,17 +395,16 @@
 
         const item = document.createElement("article");
         item.className = "gallery-item";
-        item.setAttribute("aria-label", (typeof t === "function" ? t("rev_verified") : "عميلة موثّقة") + " " + (index + 1));
+        item.setAttribute("aria-label", "عميلة موثّقة " + (index + 1));
 
-        // استخدم <a> مع data-lightbox عشان lightbox2 يشتغل
         const link = document.createElement("a");
         link.href = imgUrl;
         link.setAttribute("data-lightbox", "reviews-all");
-        link.setAttribute("data-title", "💛 " + ((typeof t === "function" ? t("rev_verified") : "عميلة موثّقة") + " " + (index + 1)));
+        link.setAttribute("data-title", "💛 تجربة عميلة VelaLight");
 
         const img = document.createElement("img");
         img.src = imgUrl;
-        img.alt = (typeof t === "function" ? t("rev_verified") : "عميلة موثّقة") + " " + (index + 1);
+        img.alt = "عميلة موثّقة " + (index + 1);
         img.loading = "lazy";
         img.decoding = "async";
 
@@ -400,7 +413,7 @@
 
         const badge = document.createElement("span");
         badge.className = "gallery-item-badge";
-        badge.textContent = "✓ " + (typeof t === "function" ? t("rev_verified") : "عميلة موثّقة");
+        badge.textContent = "✓ عميلة موثّقة";
 
         const stars = document.createElement("span");
         stars.className = "gallery-item-stars";
@@ -420,14 +433,14 @@
           grid.innerHTML = `
             <div class="reviews-empty">
               <div class="reviews-empty-icon">🕯️</div>
-              <p>${typeof t === "function" ? t("no_products") : "لا توجد تجارب للعرض حالياً"}</p>
+              <p>لا توجد تجارب للعرض حالياً</p>
             </div>
           `;
-          totalEl.textContent = "0";
+          if (totalEl) totalEl.textContent = "0";
           return;
         }
 
-        totalEl.textContent = REVIEWS_IMAGES.length;
+        if (totalEl) totalEl.textContent = REVIEWS_IMAGES.length;
 
         const fragment = document.createDocumentFragment();
         REVIEWS_IMAGES.forEach(function (imgName, index) {
@@ -446,41 +459,38 @@
     })();
   </script>
 
-  <!-- ═══ محرك الترجمة الخاص بصفحة المراجعات ═══ -->
+  <!-- ═══ محرك الترجمة (للنصوص الثابتة) ═══ -->
   <script>
     (function() {
       "use strict";
-      function applyReviewsTranslations() {
+      function applyTranslations() {
         if (typeof t !== "function") return;
-        
         const lang = localStorage.getItem("vl_lang") || "ar";
         document.documentElement.lang = lang;
         document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
-
         document.querySelectorAll("[data-i18n]").forEach(function(el) {
-          var key = el.getAttribute("data-i18n");
+          const key = el.getAttribute("data-i18n");
           if (!key) return;
-          var value = t(key);
-          if (value && value !== key && el.textContent !== value) {
-            el.textContent = value;
+          const val = t(key);
+          if (val && val !== key && el.textContent !== val) {
+            el.textContent = val;
           }
         });
       }
-
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", function() {
-          setTimeout(applyReviewsTranslations, 100);
+          setTimeout(applyTranslations, 100);
         });
       } else {
-        setTimeout(applyReviewsTranslations, 100);
+        setTimeout(applyTranslations, 100);
       }
-
       window.addEventListener("storage", function(e) {
         if (e.key === "vl_lang") {
-          setTimeout(applyReviewsTranslations, 100);
+          setTimeout(applyTranslations, 100);
         }
       });
     })();
   </script>
+
 </body>
 </html>
