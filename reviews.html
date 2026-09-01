@@ -14,6 +14,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
 
+  <!-- ═══ AOS (للتأثيرات الحركية أثناء التمرير) ═══ -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
   <!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
   <script>
@@ -47,14 +51,14 @@
 
   <style>
     /* ═══════════════════════════════════════════════════════
-       VelaLight — REVIEWS PAGE
+       VelaLight — REVIEWS PAGE (مع جدار الحب)
        ═══════════════════════════════════════════════════════ */
     .reviews-page { min-height: 100vh; }
 
     .reviews-header {
-      background: radial-gradient(700px 300px at 50% -20%, rgba(217,171,95,.12), transparent 65%),
-                  linear-gradient(135deg, var(--bg2) 0%, var(--bg) 100%);
-      padding: 2.8rem 1rem 2rem;
+      background: radial-gradient(700px 300px at 50% -20%, rgba(217,171,95,.15), transparent 65%),
+                  linear-gradient(135deg, #fdf8f0 0%, #faf1e6 100%);
+      padding: 3rem 1rem 2.2rem;
       text-align: center;
       border-bottom: 1px solid var(--line);
       position: relative;
@@ -63,16 +67,16 @@
     .reviews-header::after {
       content: "🕯️";
       position: absolute;
-      font-size: 8rem;
-      opacity: .04;
-      bottom: -30px;
-      left: 10%;
-      transform: rotate(-10deg);
+      font-size: 10rem;
+      opacity: .05;
+      bottom: -40px;
+      left: 5%;
+      transform: rotate(-15deg);
       pointer-events: none;
     }
     .reviews-header h1 {
       font-family: var(--fd);
-      font-size: clamp(1.7rem, 5vw, 2.5rem);
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
       color: var(--ink);
       line-height: 1.3;
       margin-bottom: .45rem;
@@ -123,7 +127,7 @@
     .stat-number {
       display: block;
       font-family: var(--fd);
-      font-size: 1.55rem;
+      font-size: 1.8rem;
       font-weight: 800;
       color: var(--gold2);
       line-height: 1.25;
@@ -132,19 +136,19 @@
       display: block;
       margin-top: .2rem;
       color: var(--mut);
-      font-size: .72rem;
+      font-size: .75rem;
     }
-    .stat-rating-stars { color: var(--gold); font-size: 1.2rem; letter-spacing: 2px; }
+    .stat-rating-stars { color: var(--gold); font-size: 1.4rem; letter-spacing: 2px; }
 
     .quote-section {
       text-align: center;
-      padding: 2.5rem 1.5rem;
-      background: linear-gradient(135deg, rgba(217,171,95,.06), rgba(217,171,95,.02));
+      padding: 2.8rem 1.5rem;
+      background: linear-gradient(135deg, rgba(217,171,95,.08), rgba(217,171,95,.03));
       border-bottom: 1px solid var(--line);
     }
     .quote-section blockquote {
       font-family: var(--fd);
-      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      font-size: clamp(1.2rem, 2.8vw, 1.6rem);
       color: var(--ink);
       max-width: 700px;
       margin: 0 auto;
@@ -153,16 +157,16 @@
     }
     .quote-section blockquote::before {
       content: "“";
-      font-size: 2.5rem;
+      font-size: 3rem;
       color: var(--gold2);
-      opacity: .5;
+      opacity: .4;
       margin-inline-end: .3rem;
     }
     .quote-section blockquote::after {
       content: "”";
-      font-size: 2.5rem;
+      font-size: 3rem;
       color: var(--gold2);
-      opacity: .5;
+      opacity: .4;
       margin-inline-start: .3rem;
     }
     .quote-author {
@@ -170,7 +174,7 @@
       margin-top: .5rem;
       font-family: var(--fd);
       color: var(--gold2);
-      font-size: .85rem;
+      font-size: .9rem;
       font-style: normal;
       font-weight: 600;
     }
@@ -197,9 +201,9 @@
       -webkit-tap-highlight-color: transparent;
     }
     .gallery-item:hover {
-      transform: translateY(-4px);
-      border-color: rgba(217,171,95,.35);
-      box-shadow: 0 12px 28px -8px rgba(100,70,30,.18);
+      transform: translateY(-6px) scale(1.01);
+      border-color: rgba(217,171,95,.4);
+      box-shadow: 0 15px 35px -8px rgba(100,70,30,.2);
     }
     .gallery-item a {
       display: block;
@@ -211,9 +215,9 @@
       object-fit: cover;
       display: block;
       background: var(--bg2);
-      transition: transform .4s ease;
+      transition: transform .5s ease;
     }
-    .gallery-item:hover img { transform: scale(1.025); }
+    .gallery-item:hover img { transform: scale(1.04); }
 
     .gallery-item-info {
       min-height: 50px;
@@ -278,9 +282,9 @@
       .stats-bar { padding: 1rem .5rem; }
       .stats-grid { width: 100%; }
       .stat-item { padding: .2rem .45rem; }
-      .stat-number { font-size: 1.15rem; }
+      .stat-number { font-size: 1.3rem; }
       .stat-label { font-size: .6rem; }
-      .stat-rating-stars { font-size: 1rem; }
+      .stat-rating-stars { font-size: 1.1rem; }
       .quote-section { padding: 1.8rem 1rem; }
       .quote-section blockquote { font-size: 1rem; }
       .gallery-container { width: 94%; padding: 2rem 0; }
@@ -319,14 +323,14 @@
   <main class="reviews-page">
 
     <!-- ═══ HEADER ═══ -->
-    <section class="reviews-header">
+    <section class="reviews-header" data-aos="fade-down" data-aos-duration="800">
       <h1 data-i18n="rev_eyebrow">💛 آراء عملائنا</h1>
       <p data-i18n="rev_sub">تجارب عملاء VelaLight مع شموعنا اليدوية الفاخرة</p>
       <a href="index.html" class="back-link" data-i18n="rev_back_home">← الرجوع للرئيسية</a>
     </section>
 
     <!-- ═══ STATS ═══ -->
-    <section class="stats-bar" aria-label="إحصائيات آراء العملاء">
+    <section class="stats-bar" aria-label="إحصائيات آراء العملاء" data-aos="fade-up" data-aos-delay="100">
       <div class="stats-grid">
         <div class="stat-item">
           <span class="stat-number" id="totalReviews">💛</span>
@@ -344,7 +348,7 @@
     </section>
 
     <!-- ═══ QUOTE ═══ -->
-    <section class="quote-section">
+    <section class="quote-section" data-aos="fade-up" data-aos-delay="200">
       <blockquote>
         مش مجرد شمعة… دي لحظة بتتعاش!
         <span class="quote-author">— واحدة من عملائنا</span>
@@ -353,11 +357,11 @@
 
     <!-- ═══ GALLERY (كل الصور مع Lightbox) ═══ -->
     <section class="gallery-container" aria-label="معرض آراء العملاء">
-      <div class="gallery-grid" id="galleryGrid"></div>
+      <div class="gallery-grid" id="galleryGrid" data-aos="fade-up" data-aos-delay="300"></div>
     </section>
 
     <!-- ═══ CTA SECTION ═══ -->
-    <section class="cta-section">
+    <section class="cta-section" data-aos="fade-up" data-aos-delay="400">
       <h2 data-i18n="rev_cta_title">جاهزة تنضمي لعائلة VelaLight؟ 🕯️</h2>
       <p data-i18n="rev_cta_desc">اختاري شمعتك الفاخرة واصنعي لحظتك الخاصة</p>
       <a href="index.html#products" class="btn" data-i18n="rev_cta_btn">تسوقي الآن 🛍️</a>
@@ -383,7 +387,6 @@
         item.className = "gallery-item";
         item.setAttribute("aria-label", (typeof t === "function" ? t("rev_verified") : "عميلة موثّقة") + " " + (index + 1));
 
-        // استخدم <a> مع data-lightbox عشان lightbox2 يشتغل
         const link = document.createElement("a");
         link.href = imgUrl;
         link.setAttribute("data-lightbox", "reviews-all");
@@ -412,6 +415,18 @@
         info.appendChild(stars);
         item.appendChild(info);
 
+        // تأثيرات hover مخصصة (للتوافق مع الموبايل)
+        item.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-6px) scale(1.01)';
+          this.style.borderColor = 'rgba(217,171,95,.4)';
+          this.style.boxShadow = '0 15px 35px -8px rgba(100,70,30,.2)';
+        });
+        item.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0) scale(1)';
+          this.style.borderColor = 'var(--line)';
+          this.style.boxShadow = '0 5px 16px -7px rgba(100,70,30,.12)';
+        });
+
         return item;
       }
 
@@ -435,6 +450,16 @@
           fragment.appendChild(createGalleryItem(imgName, index));
         });
         grid.appendChild(fragment);
+
+        // تهيئة AOS
+        if (typeof AOS !== 'undefined') {
+          AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100,
+            easing: 'ease-in-out'
+          });
+        }
       }
 
       if (document.readyState === "loading") {
