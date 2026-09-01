@@ -47,151 +47,126 @@
 
   <style>
     /* ═══════════════════════════════════════════════════════
-       VelaLight — REVIEWS PAGE (جدار الحب)
+       VelaLight — REVIEWS PAGE (جدار الحب - تنسيق مضغوط)
        ═══════════════════════════════════════════════════════ */
     .reviews-page { min-height: 100vh; }
 
-    .reviews-header {
-      background: radial-gradient(700px 300px at 50% -20%, rgba(217,171,95,.12), transparent 65%),
+    /* ═══ الهيدر مع الإحصائيات والاقتباس في شريط واحد ═══ */
+    .reviews-compact-header {
+      background: radial-gradient(700px 200px at 50% -20%, rgba(217,171,95,.10), transparent 65%),
                   linear-gradient(135deg, var(--bg2) 0%, var(--bg) 100%);
-      padding: 2.8rem 1rem 2rem;
-      text-align: center;
+      padding: 1.2rem 1rem 0.8rem;
       border-bottom: 1px solid var(--line);
       position: relative;
       overflow: hidden;
     }
-    .reviews-header::after {
+    .reviews-compact-header::after {
       content: "🕯️";
       position: absolute;
-      font-size: 8rem;
+      font-size: 6rem;
       opacity: .04;
-      bottom: -30px;
-      left: 10%;
+      bottom: -20px;
+      left: 5%;
       transform: rotate(-10deg);
       pointer-events: none;
     }
-    .reviews-header .kick {
+
+    .compact-top {
+      text-align: center;
+      margin-bottom: 0.4rem;
+    }
+    .compact-top .kick {
       display: inline-block;
-      background: rgba(212,175,55,0.12);
+      background: rgba(212,175,55,0.10);
       color: #b68d2e;
-      padding: 0.3rem 1.2rem;
+      padding: 0.15rem 0.8rem;
       border-radius: 50px;
-      font-size: 0.75rem;
+      font-size: 0.6rem;
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      border: 1px solid rgba(212,175,55,0.2);
-      margin-bottom: 0.5rem;
+      border: 1px solid rgba(212,175,55,0.15);
+      margin-bottom: 0.2rem;
     }
-    .reviews-header h1 {
+    .compact-top h1 {
       font-family: var(--fd);
-      font-size: clamp(1.7rem, 5vw, 2.5rem);
+      font-size: clamp(1.3rem, 3.5vw, 1.8rem);
       color: var(--ink);
-      line-height: 1.3;
-      margin-bottom: .45rem;
+      line-height: 1.2;
+      margin: 0 0 0.1rem;
     }
-    .reviews-header p {
+    .compact-top p {
       color: var(--mut);
-      font-size: .95rem;
+      font-size: 0.75rem;
       margin: 0;
-      max-width: 600px;
+      max-width: 480px;
       margin-inline: auto;
     }
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: .4rem;
-      margin-top: 1rem;
+    .compact-top .back-link {
+      display: inline-block;
+      margin-top: 0.3rem;
       color: var(--gold2);
       font-weight: 700;
-      font-size: .85rem;
+      font-size: 0.7rem;
+      text-decoration: none;
       transition: .25s;
-      -webkit-tap-highlight-color: transparent;
     }
-    .back-link:hover { color: var(--gold); transform: translateX(3px); }
+    .compact-top .back-link:hover { color: var(--gold); transform: translateX(3px); }
 
-    .stats-bar {
-      background: var(--panel);
-      padding: 1.25rem 1rem;
+    /* ═══ شريط الإحصائيات والاقتباس (صف واحد) ═══ */
+    .compact-stats-quote {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem 1.2rem;
+      padding: 0.4rem 0.5rem;
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(4px);
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
+      margin: 0 -1rem;
+      padding-inline: 1rem;
     }
-    .stats-grid {
-      width: min(800px, 94%);
-      margin: 0 auto;
+    .compact-stats-quote .stat-item {
       display: flex;
-      justify-content: center;
-      align-items: stretch;
-      gap: 0;
-    }
-    .stat-item {
-      flex: 1;
-      min-width: 0;
-      text-align: center;
-      padding: .25rem 1.5rem;
-      border-inline-start: 1px solid var(--line);
-    }
-    .stat-item:first-child { border-inline-start: 0; }
-    .stat-number {
-      display: block;
-      font-family: var(--fd);
-      font-size: 1.55rem;
-      font-weight: 800;
-      color: var(--gold2);
-      line-height: 1.25;
-    }
-    .stat-label {
-      display: block;
-      margin-top: .2rem;
+      align-items: center;
+      gap: 0.2rem;
+      font-size: 0.7rem;
       color: var(--mut);
-      font-size: .72rem;
+      white-space: nowrap;
     }
-    .stat-rating-stars { color: var(--gold); font-size: 1.2rem; letter-spacing: 2px; }
-
-    .quote-section {
-      text-align: center;
-      padding: 2.5rem 1.5rem;
-      background: linear-gradient(135deg, rgba(217,171,95,.06), rgba(217,171,95,.02));
-      border-bottom: 1px solid var(--line);
+    .compact-stats-quote .stat-item .icon {
+      font-size: 0.85rem;
     }
-    .quote-section blockquote {
-      font-family: var(--fd);
-      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    .compact-stats-quote .stat-item .stars {
+      color: var(--gold);
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+    }
+    .compact-stats-quote .quote-block {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      font-size: 0.7rem;
       color: var(--ink);
-      max-width: 700px;
-      margin: 0 auto;
-      line-height: 1.8;
       font-style: italic;
+      white-space: nowrap;
+      border-inline-start: 1px solid var(--line);
+      padding-inline-start: 0.6rem;
     }
-    .quote-section blockquote::before {
-      content: "“";
-      font-size: 2.5rem;
+    .compact-stats-quote .quote-block .author {
       color: var(--gold2);
-      opacity: .5;
-      margin-inline-end: .3rem;
-    }
-    .quote-section blockquote::after {
-      content: "”";
-      font-size: 2.5rem;
-      color: var(--gold2);
-      opacity: .5;
-      margin-inline-start: .3rem;
-    }
-    .quote-author {
-      display: block;
-      margin-top: .5rem;
-      font-family: var(--fd);
-      color: var(--gold2);
-      font-size: .85rem;
       font-style: normal;
       font-weight: 600;
+      font-size: 0.6rem;
     }
 
+    /* ═══ المعرض ═══ */
     .gallery-container {
       width: min(1180px, 92%);
       margin-inline: auto;
-      padding: 3rem 0;
+      padding: 2rem 0;
     }
     .gallery-grid {
       display: grid;
@@ -229,12 +204,12 @@
     .gallery-item:hover img { transform: scale(1.025); }
 
     .gallery-item-info {
-      min-height: 50px;
-      padding: .65rem .8rem;
+      min-height: 46px;
+      padding: .5rem .7rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: .5rem;
+      gap: .4rem;
       background: var(--panel);
       border-top: 1px solid var(--line);
     }
@@ -243,13 +218,13 @@
       align-items: center;
       gap: .3rem;
       color: var(--ok);
-      font-size: .72rem;
+      font-size: .68rem;
       font-weight: 700;
       white-space: nowrap;
     }
     .gallery-item-stars {
       color: var(--gold);
-      font-size: .75rem;
+      font-size: .7rem;
       letter-spacing: 1px;
       white-space: nowrap;
     }
@@ -257,71 +232,74 @@
     .reviews-empty {
       grid-column: 1 / -1;
       text-align: center;
-      padding: 4rem 1rem;
+      padding: 3rem 1rem;
       color: var(--dim);
     }
-    .reviews-empty-icon { font-size: 2.5rem; margin-bottom: .7rem; opacity: .7; }
-    .reviews-empty p { margin: 0; font-size: .9rem; }
+    .reviews-empty-icon { font-size: 2rem; margin-bottom: .5rem; opacity: .7; }
+    .reviews-empty p { margin: 0; font-size: .85rem; }
 
     .cta-section {
       text-align: center;
-      padding: 3.5rem 1rem;
-      background: radial-gradient(600px 250px at 50% 100%, rgba(217,171,95,.10), transparent 65%),
+      padding: 2.5rem 1rem;
+      background: radial-gradient(600px 200px at 50% 100%, rgba(217,171,95,.08), transparent 65%),
                   var(--bg2);
       border-top: 1px solid var(--line);
     }
     .cta-section h2 {
       font-family: var(--fd);
-      font-size: clamp(1.35rem, 4vw, 1.9rem);
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
       color: var(--ink);
-      margin-bottom: .55rem;
+      margin-bottom: .4rem;
     }
     .cta-section p {
       color: var(--mut);
-      font-size: .85rem;
-      margin-bottom: 1.25rem;
+      font-size: .8rem;
+      margin-bottom: 1rem;
     }
-    .cta-section .btn { font-size: 1rem; padding: .9rem 2.2rem; }
+    .cta-section .btn { font-size: .9rem; padding: .7rem 1.8rem; }
 
-    @media(max-width:768px) {
-      .reviews-header { padding: 2rem 1rem 1.8rem; }
-      .reviews-header h1 { font-size: 1.65rem; }
-      .reviews-header p { font-size: .8rem; }
-      .back-link { font-size: .78rem; }
-      .stats-bar { padding: 1rem .5rem; }
-      .stats-grid { width: 100%; }
-      .stat-item { padding: .2rem .45rem; }
-      .stat-number { font-size: 1.15rem; }
-      .stat-label { font-size: .6rem; }
-      .stat-rating-stars { font-size: 1rem; }
-      .quote-section { padding: 1.8rem 1rem; }
-      .quote-section blockquote { font-size: 1rem; }
-      .gallery-container { width: 94%; padding: 2rem 0; }
-      .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
-      .gallery-item { border-radius: 12px; }
+    /* ═══ استجابة للشاشات الصغيرة ═══ */
+    @media (max-width: 768px) {
+      .reviews-compact-header { padding: 0.8rem 0.6rem 0.5rem; }
+      .compact-top h1 { font-size: 1.2rem; }
+      .compact-top p { font-size: 0.65rem; }
+      .compact-top .back-link { font-size: 0.6rem; margin-top: 0.2rem; }
+      .compact-stats-quote { gap: 0.2rem 0.6rem; padding: 0.25rem 0.3rem; flex-wrap: wrap; justify-content: center; }
+      .compact-stats-quote .stat-item { font-size: 0.55rem; }
+      .compact-stats-quote .stat-item .icon { font-size: 0.7rem; }
+      .compact-stats-quote .stat-item .stars { font-size: 0.55rem; }
+      .compact-stats-quote .quote-block { font-size: 0.55rem; padding-inline-start: 0.3rem; white-space: normal; }
+      .compact-stats-quote .quote-block .author { font-size: 0.5rem; }
+      .gallery-container { padding: 1.5rem 0; }
+      .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; }
       .gallery-item img { height: 200px; }
-      .gallery-item-info { min-height: 42px; padding: .5rem .55rem; }
-      .gallery-item-badge { font-size: .6rem; }
-      .gallery-item-stars { font-size: .62rem; letter-spacing: .5px; }
-      .cta-section { padding: 2.5rem 1rem; }
-      .cta-section h2 { font-size: 1.3rem; }
-      .cta-section p { font-size: .75rem; }
-    }
-    @media(max-width:400px) {
-      .gallery-grid { gap: .6rem; }
-      .gallery-item img { height: 150px; }
-      .gallery-item-info { padding: .45rem; }
+      .gallery-item-info { min-height: 38px; padding: .4rem .5rem; }
       .gallery-item-badge { font-size: .55rem; }
       .gallery-item-stars { font-size: .55rem; }
-      .stat-number { font-size: 1rem; }
-      .stat-label { font-size: .55rem; }
+      .cta-section { padding: 1.8rem 1rem; }
+      .cta-section h2 { font-size: 1.1rem; }
+      .cta-section p { font-size: .7rem; }
     }
-    @media(hover:none) and (pointer:coarse) {
+    @media (max-width: 400px) {
+      .gallery-grid { gap: .5rem; }
+      .gallery-item img { height: 150px; }
+      .compact-top h1 { font-size: 1rem; }
+      .compact-top p { font-size: 0.55rem; }
+      .compact-stats-quote .stat-item { font-size: 0.5rem; }
+      .compact-stats-quote .stat-item .icon { font-size: 0.6rem; }
+      .compact-stats-quote .stat-item .stars { font-size: 0.5rem; }
+      .compact-stats-quote .quote-block { font-size: 0.5rem; }
+      .compact-stats-quote .quote-block .author { font-size: 0.45rem; }
+      .gallery-item-info { padding: .3rem .4rem; }
+      .gallery-item-badge { font-size: .5rem; }
+      .gallery-item-stars { font-size: .5rem; }
+    }
+    @media (hover:none) and (pointer:coarse) {
       .gallery-item:hover { transform: none; box-shadow: 0 5px 16px -7px rgba(100,70,30,.12); }
       .gallery-item:hover img { transform: none; }
       .gallery-item:active { transform: scale(.985); }
     }
-    @media(prefers-reduced-motion:reduce) {
+    @media (prefers-reduced-motion:reduce) {
       .gallery-item, .gallery-item img, .back-link { transition: none !important; }
     }
   </style>
@@ -331,46 +309,32 @@
 
   <main class="reviews-page">
 
-    <!-- ═══ HEADER (تم التعديل) ═══ -->
-    <section class="reviews-header">
-      <span class="kick">💛 ثقتكم هي تاجنا</span>
-      <h1>❤️ جدار الحب</h1>
-      <p>كلامكم أحلى هدية.. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.</p>
-      <a href="index.html" class="back-link">← الرجوع للرئيسية</a>
-    </section>
-
-    <!-- ═══ STATS (بدون أرقام) ═══ -->
-    <section class="stats-bar" aria-label="إحصائيات آراء العملاء">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <span class="stat-number">💛</span>
-          <span class="stat-label">ثقة تتجدد</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-rating-stars">★★★★★</span>
-          <span class="stat-label">تقييم العملاء</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number">🕯️</span>
-          <span class="stat-label">لحظات لا تُنسى</span>
-        </div>
+    <!-- ═══ شريط الهيدر + الإحصائيات + الاقتباس (مضغوط جداً) ═══ -->
+    <div class="reviews-compact-header">
+      <div class="compact-top">
+        <span class="kick">💛 ثقتكم هي تاجنا</span>
+        <h1>❤️ جدار الحب</h1>
+        <p>كلامكم أحلى هدية.. لقطات حقيقية من عملائنا</p>
+        <a href="index.html" class="back-link">← الرجوع للرئيسية</a>
       </div>
-    </section>
 
-    <!-- ═══ QUOTE ═══ -->
-    <section class="quote-section">
-      <blockquote>
-        مش مجرد شمعة… دي لحظة بتتعاش!
-        <span class="quote-author">— واحدة من عملائنا</span>
-      </blockquote>
-    </section>
+      <div class="compact-stats-quote">
+        <span class="stat-item"><span class="icon">💛</span> ثقة تتجدد</span>
+        <span class="stat-item"><span class="stars">★★★★★</span> تقييم العملاء</span>
+        <span class="stat-item"><span class="icon">🕯️</span> لحظات لا تُنسى</span>
+        <span class="quote-block">
+          “مش مجرد شمعة… دي لحظة بتتعاش!”
+          <span class="author">— واحدة من عملائنا</span>
+        </span>
+      </div>
+    </div>
 
-    <!-- ═══ GALLERY (كل الصور مع Lightbox) ═══ -->
+    <!-- ═══ معرض الصور ═══ -->
     <section class="gallery-container" aria-label="معرض آراء العملاء">
       <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
-    <!-- ═══ CTA SECTION ═══ -->
+    <!-- ═══ CTA ═══ -->
     <section class="cta-section">
       <h2>جاهزة تنضمي لعائلة VelaLight؟ 🕯️</h2>
       <p>اختاري شمعتك الفاخرة واصنعي لحظتك الخاصة</p>
@@ -386,7 +350,6 @@
       "use strict";
 
       const grid = document.getElementById("galleryGrid");
-      const totalEl = document.getElementById("totalReviews");
 
       function createGalleryItem(imgName, index) {
         const imgUrl = typeof CDN === "function"
@@ -436,11 +399,8 @@
               <p>لا توجد تجارب للعرض حالياً</p>
             </div>
           `;
-          if (totalEl) totalEl.textContent = "0";
           return;
         }
-
-        if (totalEl) totalEl.textContent = REVIEWS_IMAGES.length;
 
         const fragment = document.createDocumentFragment();
         REVIEWS_IMAGES.forEach(function (imgName, index) {
