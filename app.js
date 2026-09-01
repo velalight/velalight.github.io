@@ -2219,6 +2219,10 @@ function handleCartChange(e){
   }
 }
 
+// ═══════════════════════════════════════════════════════════
+//   التعديلات الجديدة على الخصومات (خصم واحد فقط - الأعلى)
+// ═══════════════════════════════════════════════════════════
+
 function updateTotals(c){
   const sub = c.reduce((a,i) => a + (Number(i.price||0) * Number(i.qty||1)), 0);
   
@@ -2236,7 +2240,7 @@ function updateTotals(c){
 
   // 3. اختيار الخصم الأعلى فقط
   let finalDiscount = 0;
-  let appliedType = "none"; // "qty" أو "coupon"
+  let appliedType = "none";
 
   if (qtyDiscount > 0 && couponDisc > 0) {
     if (qtyDiscount >= couponDisc) {
@@ -2256,7 +2260,7 @@ function updateTotals(c){
 
   const total = Math.max(0, sub - finalDiscount);
 
-  // ===== تحديث واجهة السلة =====
+  // ===== تحديث واجهة المستخدم =====
   if(document.getElementById("cartSub")) {
     document.getElementById("cartSub").textContent = money(sub);
   }
@@ -2347,8 +2351,8 @@ function updateTotals(c){
     document.getElementById("cartTotal").textContent = money(total);
   }
 }
- 
-function getSavedUser(){
+
+ function getSavedUser(){
   try{return JSON.parse(localStorage.getItem("vl_user")||"{}");}
   catch(e){return {};}
 }
@@ -2399,6 +2403,9 @@ function genOrderId(){
   return "VL-"+s;
 }
 
+// ═══════════════════════════════════════════════════════════
+//   التعديلات الجديدة على دالة checkout (منع الطلبات الوهمية)
+// ═══════════════════════════════════════════════════════════
 async function checkout(){
   const c=getCart();
 
@@ -2434,7 +2441,7 @@ async function checkout(){
   const orderId=genOrderId();
   const subTotal=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
   
-  // ⭐ حساب الخصمين واختيار الأعلى
+  // حساب الخصمين واختيار الأعلى
   let qtyDiscount = 0;
   c.forEach(it => {
     if (Number(it.qty) >= 3) {
@@ -2497,7 +2504,7 @@ async function checkout(){
 
   msg+=`━━━━━━━━━━━━━━━━━━━━\n`;
   
-  // عرض الخصم المطبق فقط (مع إشارة للآخر إن وجد)
+  // عرض الخصم المطبق فقط
   if (finalDiscount > 0) {
     if (appliedType === "qty") {
       msg+=`🎁 خصم الكمية (مطبق): -${money(finalDiscount)}\n`;
@@ -2505,7 +2512,6 @@ async function checkout(){
       msg+=`🎟️ كوبون ${appliedCoupon ? appliedCoupon.code : ''} (مطبق): -${money(finalDiscount)}\n`;
     }
   }
-  // لو فيه خصم تاني غير مطبق، نذكره كملاحظة
   if (qtyDiscount > 0 && appliedType !== "qty") {
     msg+=`💡 خصم الكمية (غير مطبق - تم اختيار الخصم الأعلى)\n`;
   }
@@ -2536,6 +2542,7 @@ async function checkout(){
     ttclid: localStorage.getItem('vl_ttclid') || ''
   };
 
+  // ⭐ إضافة statusHistory عند إنشاء الطلب
   const orderData={
     orderId,
     userId,
@@ -2557,11 +2564,16 @@ async function checkout(){
     couponCode: appliedCoupon ? appliedCoupon.code : "",
     appliedType: appliedType,
     paymentMethod:"WhatsApp Confirmation",
+    paymentStatus:"pending",
     shippingPayment:"Cash to courier",
     shippingIncluded: subTotal >= 3000,
-    status:"قيد المراجعة",statusEn:"Under Review",
+    status: 0, // قيد المراجعة
+    statusHistory: [
+      { status: 0, changedAt: Date.now(), changedBy: "customer" }
+    ],
     tracking: trackingData,
     createdAt:Date.now(),
+    updatedAt:Date.now(),
     orderDate:new Date().toISOString()
   };
 
@@ -2664,7 +2676,7 @@ async function checkout(){
     console.warn("Tracking event fire failed:", e);
   }
 }
- 
+
 function waTotalLabel(){
   if(I18N&&I18N[LANG]&&I18N[LANG].wa_total){return I18N[LANG].wa_total;}
   return LANG==="en"?"💰 Products Total:":"💰 إجمالي المنتجات:";
@@ -2690,7 +2702,6 @@ async function sendOrderConfirmationEmail(orderData) {
         discountText += `🎟️ كوبون ${orderData.couponCode || ''} (مطبق): -${orderData.discount} جنيه\n`;
       }
     }
-    // لو فيه خصومات غير مطبقة، نضيفها كملاحظة
     if (orderData.qtyDiscount > 0 && orderData.appliedType !== "qty") {
       discountText += `💡 خصم الكمية (غير مطبق): -${orderData.qtyDiscount} جنيه (تم اختيار الخصم الأعلى)\n`;
     }
@@ -2761,7 +2772,7 @@ ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
     return false;
   }
 }
- 
+
 function openWhatsAppConfirmation(orderData, waWindow) {
   if (!CFG || !CFG.WHATSAPP) return;
   
@@ -2777,8 +2788,11 @@ function openWhatsAppConfirmation(orderData, waWindow) {
     .join("\n");
   
   let discountText = "";
-  if(orderData.qtyDiscount > 0) discountText += `🎁 خصم الكمية: -${orderData.qtyDiscount} جنيه\n`;
-  if(orderData.couponDiscount > 0) discountText += `🎟️ كوبون ${orderData.couponCode}: -${orderData.couponDiscount} جنيه\n`;
+  if(orderData.qtyDiscount > 0 && orderData.appliedType === "qty") {
+    discountText += `🎁 خصم الكمية: -${orderData.discount} جنيه\n`;
+  } else if(orderData.couponDiscount > 0 && orderData.appliedType === "coupon") {
+    discountText += `🎟️ كوبون ${orderData.couponCode}: -${orderData.discount} جنيه\n`;
+  }
 
   const message = `✨ أهلاً VelaLight!
 
@@ -3097,7 +3111,6 @@ function closeModal(id){
 function stockBadge(p){
   if(!p) return "";
 
-  // إذا كان المخزون غير محدد، لا يظهر ليبل المخزون
   if(p.stock === undefined || p.stock === null || p.stock === "") return "";
 
   const s = Number(p.stock);
@@ -3118,20 +3131,18 @@ function stockBadge(p){
     white-space:nowrap;
   `;
 
-  // نفدت الكمية
   if(s === 0){
     return `<span class="stock-badge" style="${baseStyle}background:#e74c3c;">نفدت الكمية</span>`;
   }
 
-  // باقي 5 أو أقل
   if(s <= 5){
     return `<span class="stock-badge" style="${baseStyle}background:#e67e22;">باقي ${s} فقط</span>`;
   }
 
-  // متوفر
   return `<span class="stock-badge" style="${baseStyle}background:#27ae60;">متوفر</span>`;
 }
-  async function decrementStock(items){
+
+async function decrementStock(items){
   if(!window.FB || !window.FB.db) return;
   
   const { runTransaction, doc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
@@ -3183,13 +3194,13 @@ function calcCouponDiscount(sub){
   } else {
     d = Number(appliedCoupon.value || 0);
   }
-  // تطبيق الحد الأقصى للخصم
   if(appliedCoupon.maxDiscount && d > appliedCoupon.maxDiscount) {
     d = appliedCoupon.maxDiscount;
   }
   return Math.min(sub, Math.round(d));
 }
 
+// ═══ التعديل الجديد على applyCoupon (يدعم usedBy وكل الشروط) ═══
 async function applyCoupon(){
   const code = (document.getElementById("couponInput")?.value || "").trim().toUpperCase();
   if(!code){ toast("⚠️ اكتب كود الكوبون"); return; }
@@ -3202,7 +3213,6 @@ async function applyCoupon(){
   if(!c){ toast("❌ كود الكوبون غير صحيح"); return; }
   if(c.active === false){ toast("❌ الكوبون ده متوقف"); return; }
   
-  // 1. التحقق من التواريخ
   const now = Date.now();
   if(c.startDate && now < new Date(c.startDate).getTime()) {
     toast("⏳ هذا الكوبون لم يبدأ بعد.");
@@ -3217,7 +3227,6 @@ async function applyCoupon(){
     return;
   }
   
-  // 2. التحقق من الحد الأدنى للطلب
   const cart = getCart();
   const sub = cart.reduce((a,i) => a + (Number(i.price || 0) * Number(i.qty || 1)), 0);
   if(c.minOrder && sub < c.minOrder) {
@@ -3225,13 +3234,12 @@ async function applyCoupon(){
     return;
   }
   
-  // 3. التحقق من "أول عميل فقط" – مع استثناء الطلبات الملغية
+  // التحقق من "أول عميل فقط" – مع استثناء الطلبات الملغية (status = 4)
   if(c.firstOrderOnly) {
     const user = getSavedUser();
     const userEmail = user.email || "";
     const userPhone = user.phone || "";
     
-    // نجيب جميع الطلبات من Firebase
     let allOrders = [];
     try {
       allOrders = await window.FB.list("orders") || [];
@@ -3241,15 +3249,14 @@ async function applyCoupon(){
       return;
     }
     
-    // نفلتر الطلبات اللي بتطابق العميل (بالإيميل أو الموبايل)
     const customerOrders = allOrders.filter(order => {
       const orderEmail = order.email || order.customer?.email || "";
       const orderPhone = order.phone || order.customer?.phone || "";
       return (userEmail && orderEmail === userEmail) || (userPhone && orderPhone === userPhone);
     });
     
-    // نستثني الطلبات الملغية (status = 5)
-    const nonCancelledOrders = customerOrders.filter(order => order.status !== 5);
+    // استثناء الطلبات الملغية (status = 4)
+    const nonCancelledOrders = customerOrders.filter(order => order.status !== 4);
     
     if(nonCancelledOrders.length > 0) {
       toast("⚠️ هذا الكوبون مخصص للطلبات الأولى فقط (الطلبات الملغية غير محسوبة).");
@@ -3257,7 +3264,7 @@ async function applyCoupon(){
     }
   }
   
-  // 4. منع التكرار (usedBy)
+  // منع التكرار (usedBy)
   const user = getSavedUser();
   const identifier = user.email || user.phone;
   if(identifier && c.usedBy && Array.isArray(c.usedBy) && c.usedBy.includes(identifier)) {
@@ -3265,7 +3272,6 @@ async function applyCoupon(){
     return;
   }
   
-  // 5. حساب الخصم
   let discount = 0;
   if(c.type === "percent"){
     discount = sub * (Number(c.value || 0) / 100);
@@ -3282,10 +3288,10 @@ async function applyCoupon(){
   renderCart();
 }
 
+// ═══ التعديل الجديد على consumeCoupon (يسجل المستخدم في usedBy) ═══
 async function consumeCoupon(){
   if(!appliedCoupon || !appliedCoupon._fid) return;
   
-  // تسجيل المستخدم في usedBy
   const user = getSavedUser();
   const identifier = user.email || user.phone;
   if(identifier) {
@@ -3299,11 +3305,9 @@ async function consumeCoupon(){
         });
       } catch(e) {
         console.warn("⚠️ coupon update failed", e);
-        // فشل التحديث لا يمنع إتمام الطلب
       }
     }
   } else {
-    // إذا لم يوجد معرف، نزيد الاستخدام فقط
     try {
       await window.FB.update("coupons", appliedCoupon._fid, {
         usedCount: (Number(appliedCoupon.usedCount || 0) + 1)
@@ -3316,7 +3320,7 @@ async function consumeCoupon(){
   appliedCoupon = null;
   if(document.getElementById("couponInput")) document.getElementById("couponInput").value = "";
 }
- 
+
 /* ═══ REVIEWS COUNT HELPER ═══ */
 window.getReviewsCount = function() {
   if (typeof REVIEWS_IMAGES !== 'undefined' && Array.isArray(REVIEWS_IMAGES)) {
