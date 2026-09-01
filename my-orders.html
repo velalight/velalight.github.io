@@ -12,28 +12,44 @@
 .mo-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1.2rem 0;flex-wrap:wrap}
 .mo-top h1{font-family:var(--fd);color:var(--gold2);font-size:1.5rem;margin:0}
 .mo-wrap{padding:1rem 0 4rem}
-.order-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1.2rem;margin-bottom:1rem;box-shadow:var(--sh)}
+.order-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1.2rem;margin-bottom:1rem;box-shadow:var(--sh);transition:.3s}
+.order-card.cancelled{opacity:0.6;border-color:#e74c3c;background:var(--panel2)}
 .order-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.8rem}
 .oid{font-family:var(--fd);color:var(--gold2);font-size:1rem;display:block}
 .odate{color:var(--dim);font-size:.75rem}
-.status-badge{padding:.3rem .9rem;border-radius:99px;font-size:.72rem;font-weight:700;color:#fff}
-.st-review{background:#e67e22}.st-prep{background:#3498db}.st-ship{background:#9b59b6}.st-done{background:#27ae60}.st-cancel{background:#e74c3c}
+.status-badge{padding:.3rem .9rem;border-radius:99px;font-size:.72rem;font-weight:700;color:#fff;white-space:nowrap}
+.st-review{background:#e67e22}
+.st-prep{background:#3498db}
+.st-ship{background:#9b59b6}
+.st-done{background:#27ae60}
+.st-cancel{background:#e74c3c}
 .order-items{list-style:none;margin:.6rem 0;padding:.6rem;background:var(--panel2);border-radius:12px;font-size:.85rem}
-.order-items li{padding:.25rem 0}
+.order-items li{padding:.25rem 0;border-bottom:1px solid rgba(0,0,0,0.03)}
+.order-items li:last-child{border-bottom:0}
 .order-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:.7rem;font-size:.9rem}
 .order-foot b{color:var(--gold2);font-family:var(--fd)}
-.order-actions{margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap}
+.order-actions{margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
 .loading,.empty,.error{text-align:center;padding:3rem 1rem;color:var(--dim);font-size:.95rem}
 .login-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:2.5rem;text-align:center;max-width:420px;margin:3rem auto}
 .login-card h2{font-family:var(--fd);color:var(--gold2);margin-bottom:1rem}
+.btn.danger.sm{background:#e74c3c;color:#fff;border:0;padding:.3rem .8rem;border-radius:8px;font-size:.7rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn.danger.sm:hover{background:#c0392b;transform:scale(1.02)}
+.btn.outline.sm{background:transparent;border:1px solid var(--line);padding:.3rem .8rem;border-radius:8px;font-size:.7rem;cursor:pointer;transition:.2s}
+.btn.outline.sm:hover{border-color:var(--gold);color:var(--gold)}
+.toast-msg{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1512;color:#fff;padding:.8rem 1.8rem;border-radius:99px;font-size:.85rem;z-index:9999;opacity:0;transition:opacity .4s ease;box-shadow:0 8px 25px rgba(0,0,0,0.2)}
+.toast-msg.show{opacity:1}
 </style>
 </head>
 <body>
 
+<!-- ═══ TOAST ═══ -->
+<div class="toast-msg" id="toastMsg"></div>
+
 <div class="wrap">
   <div class="mo-top">
     <h1>📦 طلباتي</h1>
-    <div style="display:flex;gap:.5rem">
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+      <button class="btn ghost sm" onclick="clearLocalOrders()" style="font-size:.75rem;">🗑️ مسح الكاش</button>
       <a class="btn ghost sm" href="index.html">↩ المتجر</a>
     </div>
   </div>
@@ -45,16 +61,61 @@
 
 <script src="data.js"></script>
 <script type="module" src="firebase.js"></script>
-<script type="module" src="auth.js"></script>
+<script type="module"src="auth.js"></script>
 
 <script>
 (function(){
 "use strict";
-const STATUS_AR=["قيد المراجعة","قيد التجهيز","تم الشحن","تم التسليم","ملغي"];
-const STATUS_CLS=["st-review","st-prep","st-ship","st-done","st-cancel"];
-const box=document.getElementById("ordersContainer");
 
-let started=false;
+// ═══ دوال المساعدة ═══
+function toast(msg){
+  const el=document.getElementById('toastMsg');
+  if(!el) return;
+  el.textContent=msg;
+  el.classList.add('show');
+  clearTimeout(el._timer);
+  el._timer=setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+// ═══ دوال مسح الكاش المحلي (لحل مشكلة الطلبات الوهمية) ═══
+window.clearLocalOrders = function() {
+  try {
+    localStorage.removeItem('vl_orders');
+    toast('✅ تم مسح الكاش المحلي للطلبات');
+    setTimeout(()=>location.reload(), 600);
+  } catch(e) {
+    toast('⚠️ فشل المسح');
+  }
+};
+
+// ═══ دالة إلغاء الطلب ═══
+window.cancelOrder = async function(orderId) {
+  if(!orderId) return;
+  if(!confirm('⚠️ هل أنت متأكد من إلغاء هذا الطلب؟ لا يمكن التراجع بعد الإلغاء.')) return;
+  
+  const btn = document.querySelector(`[data-cancel="${orderId}"]`);
+  if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري...'; }
+  
+  try {
+    await window.FB.update('orders', orderId, { status: 5 });
+    toast('✅ تم إلغاء الطلب بنجاح');
+    // إعادة تحميل الطلبات
+    const user = window.FB.auth.currentUser;
+    if(user) await loadOrders(user);
+    else location.reload();
+  } catch(e) {
+    console.error(e);
+    toast('⚠️ فشل إلغاء الطلب، حاول مرة أخرى');
+    if(btn) { btn.disabled = false; btn.textContent = '🗑️ إلغاء'; }
+  }
+};
+
+// ═══ المتغيرات والتهيئة ═══
+const STATUS_AR = ["قيد المراجعة", "قيد التجهيز", "تم الشحن", "تم التسليم", "ملغي"];
+const STATUS_CLS = ["st-review", "st-prep", "st-ship", "st-done", "st-cancel"];
+const box = document.getElementById("ordersContainer");
+
+let started = false;
 function tryStart(){ if(started)return; if(window.FB&&window.FB.auth){started=true;init();} }
 tryStart();
 window.addEventListener("fb-ready",tryStart);
@@ -80,40 +141,79 @@ function showLogin(){
 async function loadOrders(user){
   box.innerHTML='<div class="loading">⏳ جاري تحميل طلباتك...</div>';
   try{
-    const all=await window.FB.list("orders");
-    const mine=(all||[]).filter(o=>o.userId===user.uid||(o.userEmail&&o.userEmail===user.email));
-    mine.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    const all = await window.FB.list("orders");
+    // تصفية الطلبات الخاصة بالمستخدم الحالي
+    const mine = (all||[]).filter(o => {
+      // نتأكد من أن الطلب يخص هذا المستخدم
+      const matchUserId = o.userId === user.uid;
+      const matchEmail = o.userEmail && o.userEmail === user.email;
+      const matchCustomerEmail = o.customer && o.customer.email && o.customer.email === user.email;
+      const matchPhone = o.phone && user.phone && o.phone === user.phone;
+      return matchUserId || matchEmail || matchCustomerEmail || matchPhone;
+    });
+    
+    // ترتيب تنازلي (الأحدث أولاً)
+    mine.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+    
     if(!mine.length){
       box.innerHTML=`<div class="empty">🕯️ لسه مفيش طلبات.<br><br><a class="btn" href="index.html#products">🛍️ ابدأ التسوق</a></div>`;
       return;
     }
-    box.innerHTML=mine.map(orderCard).join("");
+    box.innerHTML = mine.map(o => orderCard(o, user)).join("");
   }catch(e){
     console.error(e);
     box.innerHTML='<div class="error">⚠️ تعذر تحميل الطلبات. جرب تاني.</div>';
   }
 }
 
-function orderCard(o){
-  const idx=Number(o.status||0);
-  const date=o.createdAt?new Date(o.createdAt).toLocaleDateString("ar-EG",{year:"numeric",month:"long",day:"numeric"}):"-";
-  const items=(o.products||o.items||[]).map(it=>{
-    const name=it.name||it.title||"منتج";
-    const qty=it.quantity||it.qty||1;
-    const scent=(it.scentName||it.scent)?` (${it.scentName||it.scent})`:"";
-    return `<li>🕯️ ${name}${scent} × ${qty}</li>`;
-  }).join("")||"<li>منتجات متعددة</li>";
+function orderCard(o, user){
+  const idx = Number(o.status||0);
+  const isCancelled = (idx === 4); // 4 = ملغي حسب STATUS_AR
+  const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString("ar-EG", {year:"numeric", month:"long", day:"numeric"}) : "-";
+  
+  let itemsHtml = "";
+  const itemsList = o.products || o.items || [];
+  if(itemsList.length){
+    itemsHtml = itemsList.map(it => {
+      const name = it.name || it.title || "منتج";
+      const qty = it.quantity || it.qty || 1;
+      const scent = (it.scentName || it.scent) ? ` (${it.scentName || it.scent})` : "";
+      return `<li>🕯️ ${name}${scent} × ${qty}</li>`;
+    }).join("");
+  } else {
+    itemsHtml = "<li>منتجات متعددة</li>";
+  }
+
+  // ═══ زر إلغاء الطلب (يظهر فقط للطلبات غير الملغية وقيد المراجعة أو التجهيز) ═══
+  let cancelBtn = '';
+  if(idx < 3 && !isCancelled) {
+    cancelBtn = `<button class="btn danger sm" data-cancel="${o.id}" onclick="window.cancelOrder('${o.id}')">🗑️ إلغاء الطلب</button>`;
+  }
+
+  // ═══ عرض حالة ملغي بشكل مميز ═══
+  const cardClass = isCancelled ? 'order-card cancelled' : 'order-card';
+  const statusText = STATUS_AR[idx] || "قيد المراجعة";
+  const statusClass = STATUS_CLS[idx] || "st-review";
+
   return `
-  <div class="order-card">
+  <div class="${cardClass}">
     <div class="order-head">
-      <div><b class="oid">📋 ${o.orderId||o.id||"-"}</b><small class="odate">📅 ${date}</small></div>
-      <span class="status-badge ${STATUS_CLS[idx]||"st-review"}">${STATUS_AR[idx]||"قيد المراجعة"}</span>
+      <div><b class="oid">📋 ${o.orderId || o.id || "-"}</b> <small class="odate">📅 ${date}</small></div>
+      <span class="status-badge ${statusClass}">${statusText}</span>
     </div>
-    <ul class="order-items">${items}</ul>
-    <div class="order-foot"><span>💰 الإجمالي</span><b>${o.total||0} جنيه</b></div>
-    <div class="order-actions"><a class="btn ghost sm" href="index.html#products">🛍️ تسوق المزيد</a></div>
+    <ul class="order-items">${itemsHtml}</ul>
+    <div class="order-foot"><span>💰 الإجمالي</span><b>${o.total || 0} جنيه</b></div>
+    <div class="order-actions">
+      <a class="btn ghost sm" href="index.html#products">🛍️ تسوق المزيد</a>
+      ${cancelBtn}
+      ${isCancelled ? '<span style="font-size:.7rem;color:var(--dim);">❌ تم الإلغاء</span>' : ''}
+    </div>
   </div>`;
 }
+
+// ═══ تصدير دوال للنطاق العام ═══
+window.loadOrders = loadOrders;
+
 })();
 </script>
 </body>
