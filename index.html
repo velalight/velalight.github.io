@@ -34,7 +34,6 @@
 <link rel="apple-touch-icon" href="velalight-wooden-luxury-set-3candles-detail.webp">
 
 <!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
-<!-- 1. Google Analytics 4 (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -43,7 +42,6 @@
   gtag('config', 'G-BWBD8ZZD23'); 
 </script>
 
-<!-- 2. Meta Pixel (Facebook Pixel) -->
 <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -71,6 +69,10 @@
 <link rel="preload" as="image" href="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2Fvelalight-wooden-luxury-set-3candles-detail.webp&w=1000&q=75&output=webp" fetchpriority="high">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="mobile-luxury-fix.css">
+
+<!-- ═══ Lightbox2 (لتكبير الصور) ═══ -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -465,161 +467,87 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
     </div>
   </div>
 </section>
-  
+
 <!-- ═══════════════════════════════════════════════
-     REVIEWS — ENHANCED (بطاقات مع صور وتقييمات)
+     REVIEWS — ENHANCED (بطاقات مع صور وتقييمات) - تم التعديل بالكامل
      ═══════════════════════════════════════════════ -->
-<section id="reviews" class="sec vl-reviews-enhanced">
+<section id="reviews" class="sec vl-reviews-enhanced" style="padding: 2.5rem 0;">
   <div class="wrap">
-    <div class="reviews-header-enhanced rv">
-      <span class="kick" data-i18n="rev_eyebrow">✨ ثقتكم هي تاجنا</span>
-      <h2 data-i18n="rev_title">ماذا يقولون عن VelaLight؟</h2>
-      <p data-i18n="rev_body">ليست مجرد شموع، بل لحظات لا تُنسى. اكتشفي كيف أضأت شموعنا منازل عملائنا وأضفت لمسة من الفخامة والدفء إلى يومياتهم.</p>
+    <div class="reviews-header-enhanced rv" style="text-align:center; max-width:760px; margin:0 auto 1.8rem;">
+      <span class="kick" style="color:var(--gold2); font-size:0.82rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:700;" data-i18n="reviews_kicker">💛 كلامكم أحلى هدية</span>
+      <h2 style="font-family:var(--fd); font-size:clamp(1.7rem,3.6vw,2.6rem); margin:0.3rem 0 0.5rem; color:var(--ink);" data-i18n="reviews_title">آراء عملائنا</h2>
+      <p style="color:var(--mut); font-size:0.95rem; max-width:560px; margin:0 auto;" data-i18n="reviews_desc">مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.</p>
     </div>
-    
-    <div class="reviews-grid-enhanced" id="reviewsGridEnhanced">
-      <div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--dim);" data-i18n="rev_loading">⏳ جاري تحميل التجارب...</div>
+
+    <!-- ═══ شبكة الصور (أول 6 صور) مع Lightbox ═══ -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:1.2rem; max-width:1100px; margin:0 auto;" id="reviewsGridHome">
+      <!-- سيتم تعبئتها بالجافاسكريبت -->
     </div>
-    
-    <div class="reviews-actions-enhanced">
-      <a href="reviews.html" class="btn-primary-lux" data-i18n="rev_see_all">📸 شاهدي كل التجارب</a>
+
+    <!-- ═══ زر "شوفي كل التجارب" ═══ -->
+    <div style="text-align:center; margin-top:2rem;">
+      <a href="reviews.html" class="btn-primary-lux" style="display:inline-block; padding:14px 40px; font-size:1.05rem;" data-i18n="rev_see_all">📸 شاهدي كل التجارب</a>
     </div>
   </div>
 </section>
 
-<style>
-.vl-reviews-enhanced { background: var(--bg); padding: 4rem 0; }
-.reviews-header-enhanced { text-align: center; max-width: 760px; margin: 0 auto 2rem; }
-.reviews-header-enhanced .kick { color: var(--gold2); font-size: 0.82rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; }
-.reviews-header-enhanced h2 { font-family: var(--fd); font-size: clamp(1.7rem, 3.6vw, 2.6rem); margin: 0.3rem 0 0.5rem; color: var(--ink); }
-.reviews-header-enhanced p { color: var(--mut); font-size: 0.95rem; max-width: 560px; margin: 0 auto; }
-.reviews-stats { display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-top: 1.2rem; flex-wrap: wrap; }
-.reviews-stats .stat-number { font-family: var(--fd); font-size: 2rem; font-weight: 800; color: var(--gold2); }
-.reviews-stats .stat-label { color: var(--mut); font-size: 0.85rem; }
-.reviews-stats .stat-stars { color: var(--gold); font-size: 1.2rem; letter-spacing: 2px; }
-.reviews-grid-enhanced { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
-.review-card-enhanced { background: var(--panel); border-radius: 16px; overflow: hidden; border: 1px solid var(--line); transition: all 0.3s ease; cursor: zoom-in; }
-.review-card-enhanced:hover { transform: translateY(-4px); border-color: var(--gold); box-shadow: 0 12px 28px rgba(100,70,30,0.12); }
-.review-card-enhanced img { width: 100%; height: 220px; object-fit: cover; display: block; background: var(--bg2); }
-.review-card-enhanced .review-meta { padding: 0.6rem 0.8rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); }
-.review-card-enhanced .review-meta .name { font-weight: 700; font-size: 0.75rem; color: var(--dark); }
-.review-card-enhanced .review-meta .stars { color: var(--gold); font-size: 0.7rem; letter-spacing: 1px; }
-.reviews-actions-enhanced { text-align: center; margin-top: 2.5rem; }
-.reviews-actions-enhanced .btn-primary-lux { display: inline-block; padding: 14px 40px; font-size: 1.05rem; }
-@media (max-width: 600px) {
-  .reviews-grid-enhanced { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
-  .review-card-enhanced img { height: 160px; }
-  .reviews-stats { gap: 0.8rem; }
-  .reviews-stats .stat-number { font-size: 1.5rem; }
-  .reviews-stats .stat-label { font-size: 0.7rem; }
-}
-@media (max-width: 400px) {
-  .reviews-grid-enhanced { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
-  .review-card-enhanced img { height: 130px; }
-}
-</style>
-
 <script>
 (function() {
   "use strict";
-  const grid = document.getElementById('reviewsGridEnhanced');
-  const countEl = document.getElementById('totalReviewsCount');
-  
   function getReviewImages() {
     if (typeof REVIEWS_IMAGES !== 'undefined' && Array.isArray(REVIEWS_IMAGES)) {
       return REVIEWS_IMAGES;
     }
     return [];
   }
-  
-  function renderEnhancedReviews() {
+
+  function renderHomeReviews() {
+    const grid = document.getElementById('reviewsGridHome');
+    if (!grid) return;
     const images = getReviewImages();
     if (!images.length) {
-      grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--dim);">💛 ${(typeof LANG !== 'undefined' && LANG === 'en') ? 'No reviews yet' : 'لا توجد تجارب للعرض حالياً'}</div>`;
-      if (countEl) countEl.textContent = '0';
+      grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:1.5rem; color:var(--dim);">💛 ${(typeof LANG !== 'undefined' && LANG === 'en') ? 'No reviews yet' : 'لا توجد تجارب للعرض حالياً'}</div>`;
       return;
     }
-    if (countEl) countEl.textContent = images.length + '+';
-    const frag = document.createDocumentFragment();
-    const maxDisplay = Math.min(images.length, 8);
-    for (let i = 0; i < maxDisplay; i++) {
-      const name = images[i];
+    // خد أول 6 صور
+    const firstSix = images.slice(0, 6);
+    let html = '';
+    firstSix.forEach(function(imgName) {
       const imgUrl = typeof CDN === 'function' 
-        ? CDN('testimonials/' + name) 
-        : 'https://velalight.github.io/testimonials/' + encodeURIComponent(name);
-      const card = document.createElement('div');
-      card.className = 'review-card-enhanced';
-      card.innerHTML = `
-        <img src="${imgUrl}" alt="تجربة عميل VelaLight" loading="lazy" decoding="async">
-        <div class="review-meta">
-          <span class="name">${(typeof LANG !== 'undefined' && LANG === 'en') ? 'Customer' : 'عميلة'} ${i+1}</span>
-          <span class="stars">★★★★★</span>
-        </div>
+        ? CDN('testimonials/' + imgName) 
+        : 'https://velalight.github.io/testimonials/' + encodeURIComponent(imgName);
+      html += `
+        <a href="${imgUrl}" data-lightbox="reviews-home" data-title="💛 تجربة عميلة من VelaLight" style="display:block; border-radius:16px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.06); transition:transform .3s ease, box-shadow .3s ease; background:var(--panel);">
+          <img src="${imgUrl}" alt="تجربة عميل VelaLight" loading="lazy" style="width:100%; height:220px; object-fit:cover; display:block; transition:transform .3s ease;">
+        </a>
       `;
-      card.addEventListener('click', function() {
-        const lightbox = document.getElementById('reviewLightbox');
-        const lightboxImg = document.getElementById('reviewLightboxImg');
-        if (lightbox && lightboxImg) {
-          lightboxImg.src = imgUrl;
-          lightbox.classList.add('is-open');
-          document.body.style.overflow = 'hidden';
-        }
+    });
+    grid.innerHTML = html;
+
+    // تحسين التأثيرات (اختياري)
+    grid.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.02)';
+        this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.12)';
       });
-      frag.appendChild(card);
-    }
-    grid.innerHTML = '';
-    grid.appendChild(frag);
+      a.addEventListener('mouseleave', function() {
+        this.style.transform = 'scale(1)';
+        this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.06)';
+      });
+    });
   }
-  document.addEventListener('DOMContentLoaded', renderEnhancedReviews);
-  const langObs = new MutationObserver(function() { renderEnhancedReviews(); });
+
+  // تشغيل عند تحميل DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderHomeReviews);
+  } else {
+    renderHomeReviews();
+  }
+
+  // مراقبة تغيير اللغة
+  const langObs = new MutationObserver(function() { renderHomeReviews(); });
   langObs.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
-  window.renderEnhancedReviews = renderEnhancedReviews;
-})();
-</script>
-
-<!-- ═══ REVIEW LIGHTBOX ═══ -->
-<div class="vl-review-lightbox" id="reviewLightbox" aria-hidden="true">
-  <button class="vl-review-lightbox-close" id="reviewLightboxClose" type="button" aria-label="Close">✕</button>
-  <div class="vl-review-lightbox-stage" id="reviewLightboxStage">
-    <img id="reviewLightboxImg" src="" alt="Customer review" draggable="false">
-  </div>
-</div>
-
-<style>
-.vl-review-lightbox { position:fixed; inset:0; z-index:20000; display:none; align-items:center; justify-content:center; padding:clamp(16px,3vw,32px); background:rgba(15,11,8,.94); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
-.vl-review-lightbox.is-open { display:flex; }
-.vl-review-lightbox-stage { width:min(92vw,900px); height:min(88vh,900px); display:flex; align-items:center; justify-content:center; overflow:hidden; }
-.vl-review-lightbox-stage img { display:block; max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; border-radius:12px; box-shadow:0 20px 70px rgba(0,0,0,.45); user-select:none; -webkit-user-drag:none; }
-.vl-review-lightbox-close { position:fixed; top:16px; inset-inline-end:16px; z-index:20003; width:42px; height:42px; display:grid; place-items:center; border:0; border-radius:50%; background:#fff; color:#1a1512; font-size:1.2rem; cursor:pointer; box-shadow:0 8px 25px rgba(0,0,0,.25); }
-.vl-review-lightbox-close:hover { background:#f5f5f5; transform:rotate(90deg); }
-@media(max-width:900px){ .vl-review-lightbox{padding:12px} .vl-review-lightbox-stage{width:100%;height:84vh} .vl-review-lightbox-close{top:10px;inset-inline-end:10px} }
-</style>
-
-<script>
-(function() {
-  const closeBtn = document.getElementById('reviewLightboxClose');
-  const lightbox = document.getElementById('reviewLightbox');
-  const stage = document.getElementById('reviewLightboxStage');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', function() {
-      lightbox.classList.remove('is-open');
-      document.body.style.overflow = '';
-    });
-  }
-  if (lightbox) {
-    lightbox.addEventListener('click', function(e) {
-      if (e.target === lightbox || e.target === stage) {
-        lightbox.classList.remove('is-open');
-        document.body.style.overflow = '';
-      }
-    });
-  }
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && lightbox && lightbox.classList.contains('is-open')) {
-      lightbox.classList.remove('is-open');
-      document.body.style.overflow = '';
-    }
-  });
+  window.renderHomeReviews = renderHomeReviews;
 })();
 </script>
 
