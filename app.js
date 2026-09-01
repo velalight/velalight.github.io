@@ -1990,208 +1990,6 @@ function renderFAQ(){
   });
 }
 
-// ═══════════════════════════════════════════════════════════
-// 🎟️ COUPON SYSTEM — مع دعم الحقول الجديدة
-// ═══════════════════════════════════════════════════════════
-
-let appliedCoupon = null; // تخزين الكوبون المطبق مؤقتاً
-let couponDiscount = 0;
-
-async function fetchCoupon(code) {
-  if (!window.FB || typeof window.FB.list !== "function") return null;
-  try {
-    const coupons = await window.FB.list("coupons");
-    return coupons.find(c => c.code === code.toUpperCase() && c.active !== false) || null;
-  } catch(e) {
-    console.error("❌ Failed to fetch coupon:", e);
-    return null;
-  }
-}
-
-function validateCoupon(coupon, cartTotal, userId) {
-  // 1. التحقق من وجود الكوبون
-  if (!coupon) return { valid: false, msg: "❌ كوبون غير صالح" };
-
-  // 2. التحقق من الحالة (active)
-  if (coupon.active === false) return { valid: false, msg: "❌ الكوبون غير مفعل" };
-
-  // 3. التحقق من تاريخ البدء (جديد)
-  if (coupon.startDate && Date.now() < coupon.startDate) {
-    return { valid: false, msg: "⏳ الكوبون لم يبدأ بعد" };
-  }
-
-  // 4. التحقق من تاريخ الانتهاء
-  if (coupon.expiresAt && Date.now() > coupon.expiresAt) {
-    return { valid: false, msg: "⏳ انتهت صلاحية الكوبون" };
-  }
-
-  // 5. التحقق من الحد الأدنى للطلب (جديد)
-  if (coupon.minOrder && cartTotal < coupon.minOrder) {
-    return { valid: false, msg: `💰 الحد الأدنى للطلب هو ${money(coupon.minOrder)}` };
-  }
-
-  // 6. التحقق من الحد الأقصى للاستخدامات
-  if (coupon.maxUses && (coupon.usedCount || 0) >= coupon.maxUses) {
-    return { valid: false, msg: "❌ تم استخدام الكوبون بأقصى عدد مرات" };
-  }
-
-  // 7. التحقق من منع التكرار لكل عميل (جديد)
-  if (coupon.onePerCustomer && userId) {
-    const usedBy = coupon.usedBy || [];
-    if (usedBy.includes(userId)) {
-      return { valid: false, msg: "🔒 سبق لك استخدام هذا الكوبون" };
-    }
-  }
-
-  // ✅ كل الشروط صحيحة
-  return { valid: true };
-}
-
-function calculateDiscount(coupon, cartTotal) {
-  let discount = 0;
-  if (coupon.type === "percent") {
-    discount = (cartTotal * coupon.value) / 100;
-  } else {
-    discount = coupon.value;
-  }
-  // تطبيق الحد الأقصى للخصم (جديد)
-  if (coupon.maxDiscount && discount > coupon.maxDiscount) {
-    discount = coupon.maxDiscount;
-  }
-  return Math.min(discount, cartTotal); // لا يزيد عن إجمالي السلة
-}
-
-function calcCouponDiscount(cartTotal) {
-  if (!appliedCoupon) return 0;
-  return calculateDiscount(appliedCoupon, cartTotal);
-}
-
-async function applyCoupon() {
-  const input = document.getElementById("couponInput");
-  const status = document.getElementById("couponStatus");
-  if (!input || !status) return;
-
-  const code = input.value.trim();
-  if (!code) {
-    status.textContent = "⚠️ ادخل كود الكوبون";
-    status.className = "coupon-status err";
-    return;
-  }
-
-  // جلب إجمالي السلة الحالي
-  const cart = getCart();
-  const subtotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.qty || 0), 0);
-  
-  // جلب معرف المستخدم (رقم الهاتف أو الإيميل)
-  const userId = localStorage.getItem("vl_user_phone") || localStorage.getItem("vl_user_email") || null;
-
-  const coupon = await fetchCoupon(code);
-  if (!coupon) {
-    status.textContent = "❌ كوبون غير صالح";
-    status.className = "coupon-status err";
-    appliedCoupon = null;
-    couponDiscount = 0;
-    updateTotals(getCart());
-    return;
-  }
-
-  const validation = validateCoupon(coupon, subtotal, userId);
-  if (!validation.valid) {
-    status.textContent = validation.msg;
-    status.className = "coupon-status err";
-    appliedCoupon = null;
-    couponDiscount = 0;
-    updateTotals(getCart());
-    return;
-  }
-
-  // الكوبون صالح ✅
-  appliedCoupon = coupon;
-  couponDiscount = calculateDiscount(coupon, subtotal);
-  status.textContent = `✅ خصم ${money(couponDiscount)} مطبق!`;
-  status.className = "coupon-status ok";
-  
-  // تخزين الكوبون المطبق في localStorage لاستعادته بعد إعادة التحميل
-  try {
-    localStorage.setItem("vl_applied_coupon", JSON.stringify({ id: coupon.id, code: coupon.code, discount: couponDiscount }));
-  } catch(e) {}
-  
-  updateTotals(getCart());
-}
-
-// استعادة الكوبون المطبق من localStorage عند تحميل الصفحة
-function restoreAppliedCoupon() {
-  try {
-    const saved = localStorage.getItem("vl_applied_coupon");
-    if (saved) {
-      const data = JSON.parse(saved);
-      if (data && data.code) {
-        // نبحث عن الكوبون في ALL_COUPONS (متاح من admin.html لكن قد لا يكون موجوداً هنا)
-        // بدلاً من ذلك نستخدم البيانات المخزنة فقط للتذكير
-        const status = document.getElementById("couponStatus");
-        if (status) {
-          status.textContent = `✅ كوبون ${data.code} مطبق (خصم ${money(data.discount)})`;
-          status.className = "coupon-status ok";
-        }
-        // نعيد تعيين المتغيرات العامة بقدر الإمكان
-        couponDiscount = data.discount || 0;
-        // سنحاول جلب الكوبون من Firebase عند تطبيقه مرة أخرى
-      }
-    }
-  } catch(e) {}
-}
-
-// دالة لتسجيل استخدام الكوبون عند إتمام الطلب
-async function consumeCoupon() {
-  if (!appliedCoupon) return;
-  try {
-    const userId = localStorage.getItem("vl_user_phone") || localStorage.getItem("vl_user_email") || null;
-    const updates = { usedCount: (appliedCoupon.usedCount || 0) + 1 };
-    if (appliedCoupon.onePerCustomer && userId) {
-      const usedBy = appliedCoupon.usedBy || [];
-      if (!usedBy.includes(userId)) {
-        updates.usedBy = [...usedBy, userId];
-      }
-    }
-    if (window.FB && typeof window.FB.update === "function") {
-      await window.FB.update("coupons", appliedCoupon.id, updates);
-      console.log("✅ Coupon usage recorded");
-    }
-    // مسح الكوبون من localStorage بعد الاستخدام
-    localStorage.removeItem("vl_applied_coupon");
-  } catch(e) {
-    console.error("❌ Failed to record coupon usage:", e);
-  }
-}
-
-// ربط أحداث الكوبون عند تحميل الصفحة
-document.addEventListener("DOMContentLoaded", function() {
-  const applyBtn = document.getElementById("applyCouponBtn");
-  const couponInput = document.getElementById("couponInput");
-  
-  if (applyBtn && couponInput) {
-    applyBtn.addEventListener("click", applyCoupon);
-    couponInput.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") applyCoupon();
-    });
-  }
-  
-  // استعادة الكوبون المطبق من localStorage
-  restoreAppliedCoupon();
-});
-
-// تعديل دالة updateTotals لتشمل خصم الكوبون
-// الدالة موجودة بالفعل، لكننا نضيف لها دعم الكوبون (الكود موجود بالفعل في updateTotals)
-// نتركها كما هي لأنها تستدعي calcCouponDiscount
-
-// تعديل دالة checkout لإضافة consumeCoupon
-// نضيف استدعاء consumeCoupon في نهاية الدالة (قبل حفظ السلة وتحديث الواجهة)
-// سيتم تعديلها لاحقاً في الملف النهائي
-
-// ═══════════════════════════════════════════════════════════
-// باقي الكود الأصلي موجود هنا (لم يتم حذف أي شيء)
-// ═══════════════════════════════════════════════════════════
-
 function initCart(){
   cartBadge();
   fillCitySelect(document.getElementById("coCity"));
@@ -2383,8 +2181,7 @@ function renderCart(){
   
   updateTotals(c);
 }
-
-function handleCartClick(e){
+  function handleCartClick(e){
   const rmBtn = e.target.closest('.rm');
   const plusBtn = e.target.closest('.cq-plus');
   const minusBtn = e.target.closest('.cq-minus');
@@ -2699,9 +2496,8 @@ async function checkout(){
     console.warn("⚠️ Stock decrement failed:", e);
   }
   
-  // ═══ تسجيل استخدام الكوبون ═══
   try {
-    await consumeCoupon();
+    if (typeof consumeCoupon === "function") consumeCoupon();
   } catch(e) {
     console.warn("⚠️ Coupon consume failed:", e);
   }
@@ -2810,29 +2606,10 @@ async function sendOrderConfirmationEmail(orderData) {
 ═══════════════════════════════════════
 🛒 طلب جديد من موقع VelaLight
 ═══════════════════════════════════════
-🧾 رقم الطلب: ${orderData.orderId}
-📅 التاريخ: ${new Date(orderData.createdAt).toLocaleString('ar-EG')}
-${discountText}
-💳 إجمالي الطلب: ${orderData.total || 0} جنيه
-👤 العميل: ${orderData.name || ''}
-📱 الهاتف: ${orderData.phone || ''}
-📧 الإيميل: ${orderData.email || 'غير موجود'}
-🏙️ المحافظة: ${orderData.city || ''}
-📍 العنوان: ${orderData.address || ''}
-📝 ملاحظات: ${orderData.notes || 'لا توجد'}
 
-🕯️ تفاصيل المنتجات:
-${itemsText}
-═══════════════════════════════════════
-        `,
-      })
-    });
-    return response.ok;
-  } catch (error) {
-    console.error("Email sending error:", error);
-    return false;
-  }
-}
+📋 رقم الطلب: ${orderData.orderId}
+📅 التاريخ: ${new Date().toLocaleString("ar-EG")}
+
 ═══════════════════════════════════════
 👤 بيانات العميل:
 ═══════════════════════════════════════
