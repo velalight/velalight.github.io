@@ -7,11 +7,11 @@
   <meta name="description" content="شاهدي تجارب وآراء عملاء VelaLight الحقيقية">
   <link rel="stylesheet" href="style.css">
   
-  <!-- Lightbox2 -->
+  <!-- ═══ Lightbox2 ═══ -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
 
-  <!-- AOS -->
+  <!-- ═══ AOS (للتأثيرات الحركية) ═══ -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
@@ -20,37 +20,188 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    /* ═══════════════════════════════════════════════════════
+       REVIEWS PAGE — تصميم عبقري جديد بالكامل
+       ═══════════════════════════════════════════════════════ */
     .reviews-page { min-height: 100vh; }
-    .rev-hero { background: linear-gradient(160deg, #fcf7f0 0%, #f5ede2 100%); padding: 3.5rem 1rem 2.5rem; text-align: center; border-bottom: 1px solid var(--line); position: relative; overflow: hidden; }
-    .rev-hero::after { content: '🕯️'; position: absolute; font-size: 10rem; opacity: .04; bottom: -40px; left: 5%; transform: rotate(-15deg); pointer-events: none; }
-    .rev-hero h1 { font-family: var(--fd); font-size: clamp(2rem, 5vw, 3rem); margin-bottom: .5rem; color: var(--ink); }
-    .rev-hero p { color: var(--mut); max-width: 600px; margin: 0 auto; font-size: 1rem; }
-    .rev-hero .back-link { display: inline-block; margin-top: 1.2rem; color: var(--gold2); font-weight: 700; text-decoration: none; font-size: .9rem; transition: .3s; }
+    
+    /* الهيدر الجذاب */
+    .rev-hero {
+      background: linear-gradient(160deg, #fcf7f0 0%, #f5ede2 100%);
+      padding: 3.5rem 1rem 2.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+    }
+    .rev-hero::after {
+      content: '🕯️';
+      position: absolute;
+      font-size: 10rem;
+      opacity: .04;
+      bottom: -40px;
+      left: 5%;
+      transform: rotate(-15deg);
+      pointer-events: none;
+    }
+    .rev-hero .love-kick {
+      display: inline-block;
+      background: rgba(212,175,55,0.12);
+      color: #b68d2e;
+      padding: 0.3rem 1.2rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid rgba(212,175,55,0.2);
+      margin-bottom: 0.5rem;
+    }
+    .rev-hero h1 {
+      font-family: var(--fd);
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin: 0.2rem 0 0.5rem;
+      color: var(--ink);
+    }
+    .rev-hero p {
+      color: var(--mut);
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .rev-hero .back-link {
+      display: inline-block;
+      margin-top: 1.2rem;
+      color: var(--gold2);
+      font-weight: 700;
+      text-decoration: none;
+      font-size: .9rem;
+      transition: .3s;
+    }
     .rev-hero .back-link:hover { transform: translateX(-4px); }
 
-    .rev-stats { display: flex; justify-content: center; gap: 2rem; padding: 1.5rem 1rem; background: var(--panel); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-    .rev-stats .stat-item { text-align: center; padding: 0 1.5rem; border-inline-start: 1px solid var(--line); }
+    /* الإحصائيات (بدون أرقام) */
+    .rev-stats {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1.5rem 1rem;
+      background: var(--panel);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+    }
+    .rev-stats .stat-item {
+      text-align: center;
+      padding: 0 1.5rem;
+      border-inline-start: 1px solid var(--line);
+    }
     .rev-stats .stat-item:first-child { border-inline-start: 0; }
     .rev-stats .stat-icon { font-size: 1.8rem; display: block; }
-    .rev-stats .stat-label { font-size: .75rem; color: var(--mut); margin-top: .2rem; }
+    .rev-stats .stat-label {
+      font-size: .75rem;
+      color: var(--mut);
+      margin-top: .2rem;
+      font-weight: 600;
+    }
 
-    .rev-gallery { width: min(1180px, 92%); margin: 0 auto; padding: 3rem 0; }
-    .rev-gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.2rem; }
-    .rev-gallery-grid .gallery-item { border-radius: 16px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: all .3s ease; background: #fff; border: 1px solid var(--line); cursor: pointer; }
-    .rev-gallery-grid .gallery-item:hover { transform: translateY(-6px); box-shadow: 0 15px 40px rgba(212,175,55,0.12); border-color: rgba(212,175,55,0.3); }
-    .rev-gallery-grid .gallery-item img { width: 100%; height: 260px; object-fit: cover; display: block; transition: transform .4s ease; }
-    .rev-gallery-grid .gallery-item:hover img { transform: scale(1.04); }
-    .rev-gallery-grid .gallery-item .item-info { padding: .6rem .8rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); }
-    .rev-gallery-grid .gallery-item .item-info .badge { color: var(--ok); font-size: .7rem; font-weight: 700; }
-    .rev-gallery-grid .gallery-item .item-info .stars { color: var(--gold); font-size: .7rem; letter-spacing: 1px; }
+    /* معرض الصور العبقري */
+    .rev-gallery {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+      padding: 3rem 0;
+    }
+    .rev-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.2rem;
+    }
+    .rev-gallery-grid .gallery-item {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      background: #fff;
+      border: 1px solid rgba(212,175,55,0.08);
+      cursor: pointer;
+    }
+    .rev-gallery-grid .gallery-item:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 18px 45px rgba(212,175,55,0.15);
+      border-color: rgba(212,175,55,0.3);
+    }
+    .rev-gallery-grid .gallery-item a {
+      display: block;
+      text-decoration: none;
+    }
+    .rev-gallery-grid .gallery-item img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      display: block;
+      transition: transform .5s ease;
+    }
+    .rev-gallery-grid .gallery-item:hover img { transform: scale(1.05); }
+    .rev-gallery-grid .gallery-item .item-info {
+      padding: .65rem .8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--line);
+    }
+    .rev-gallery-grid .gallery-item .item-info .badge {
+      color: var(--ok);
+      font-size: .7rem;
+      font-weight: 700;
+    }
+    .rev-gallery-grid .gallery-item .item-info .stars {
+      color: var(--gold);
+      font-size: .7rem;
+      letter-spacing: 1px;
+    }
 
-    .rev-cta { text-align: center; padding: 3rem 1rem; background: linear-gradient(135deg, rgba(217,171,95,.08), transparent); border-top: 1px solid var(--line); }
-    .rev-cta h2 { font-family: var(--fd); font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: .5rem; }
-    .rev-cta p { color: var(--mut); margin-bottom: 1.5rem; }
-    .rev-cta .btn { padding: .9rem 2.5rem; font-size: 1rem; }
+    /* CTA النهائي */
+    .rev-cta {
+      text-align: center;
+      padding: 3.5rem 1rem;
+      background: radial-gradient(600px 250px at 50% 100%, rgba(217,171,95,.08), transparent 65%),
+                  var(--bg2);
+      border-top: 1px solid var(--line);
+    }
+    .rev-cta h2 {
+      font-family: var(--fd);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      margin-bottom: .5rem;
+    }
+    .rev-cta p {
+      color: var(--mut);
+      margin-bottom: 1.5rem;
+      font-size: .95rem;
+    }
+    .rev-cta .btn {
+      padding: .9rem 2.5rem;
+      font-size: 1rem;
+      background: linear-gradient(135deg, #b68d2e, #d4af37);
+      color: #fff;
+      border: none;
+      border-radius: 99px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 10px 30px rgba(212,175,55,0.3);
+      transition: all .3s ease;
+    }
+    .rev-cta .btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 45px rgba(212,175,55,0.4);
+    }
 
+    /* استجابة للشاشات الصغيرة */
     @media (max-width: 600px) {
       .rev-hero { padding: 2rem 1rem; }
+      .rev-hero h1 { font-size: 1.6rem; }
+      .rev-hero p { font-size: .85rem; }
       .rev-stats { gap: 0.5rem; padding: 1rem .5rem; }
       .rev-stats .stat-item { padding: 0 .5rem; }
       .rev-stats .stat-icon { font-size: 1.3rem; }
@@ -60,6 +211,8 @@
     }
     @media (max-width: 400px) {
       .rev-gallery-grid .gallery-item img { height: 140px; }
+      .rev-gallery-grid { gap: .5rem; }
+      .rev-cta h2 { font-size: 1.2rem; }
     }
   </style>
 </head>
@@ -68,22 +221,38 @@
 
 <main class="reviews-page">
 
+  <!-- ═══ الهيدر الجذاب ═══ -->
   <section class="rev-hero" data-aos="fade-down" data-aos-duration="800">
-    <h1>💛 آراء عملائنا</h1>
-    <p>كل صورة هي قصة… كل قصة هي تجربة حقيقية من عميلة من عملائنا.</p>
+    <span class="love-kick">💛 ثقتكم هي تاجنا</span>
+    <h1>❤️ جدار الحب</h1>
+    <p>لحظات حقيقية من عملائنا… كل صورة بتحكي قصة، وكل اقتباس بيوصف شعور.</p>
     <a href="index.html" class="back-link">← الرجوع للرئيسية</a>
   </section>
 
+  <!-- ═══ الإحصائيات (بدون أرقام) ═══ -->
   <section class="rev-stats" data-aos="fade-up" data-aos-delay="100">
-    <div class="stat-item"><span class="stat-icon">💛</span><span class="stat-label">ثقة تتجدد</span></div>
-    <div class="stat-item"><span class="stat-icon">★★★★★</span><span class="stat-label">تقييم العملاء</span></div>
-    <div class="stat-item"><span class="stat-icon">🕯️</span><span class="stat-label">لحظات لا تُنسى</span></div>
+    <div class="stat-item">
+      <span class="stat-icon">💛</span>
+      <span class="stat-label">ثقة تتجدد</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon">★★★★★</span>
+      <span class="stat-label">تقييم العملاء</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon">🕯️</span>
+      <span class="stat-label">لحظات لا تُنسى</span>
+    </div>
   </section>
 
+  <!-- ═══ معرض الصور العبقري ═══ -->
   <section class="rev-gallery" data-aos="fade-up" data-aos-delay="200">
-    <div class="rev-gallery-grid" id="galleryGrid"></div>
+    <div class="rev-gallery-grid" id="galleryGrid">
+      <!-- سيتم تعبئتها بالجافاسكريبت -->
+    </div>
   </section>
 
+  <!-- ═══ الـ CTA النهائي ═══ -->
   <section class="rev-cta" data-aos="fade-up" data-aos-delay="300">
     <h2>🎁 جربي سحر VelaLight بنفسك</h2>
     <p>اختاري شمعتك الفاخرة واصنعي لحظتك الخاصة</p>
@@ -92,58 +261,97 @@
 
 </main>
 
+<!-- ═══ جافاسكريبت ═══ -->
 <script src="data.js"></script>
 <script>
-(function() {
-  const grid = document.getElementById('galleryGrid');
-  function renderGallery() {
-    if (!grid) return;
-    const images = typeof REVIEWS_IMAGES !== 'undefined' && Array.isArray(REVIEWS_IMAGES) ? REVIEWS_IMAGES : [];
-    if (!images.length) {
-      grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--dim);">🕯️ لا توجد تجارب للعرض حالياً</div>`;
-      return;
-    }
-    let html = '';
-    images.forEach(function(name) {
-      const url = typeof CDN === 'function' ? CDN('testimonials/' + name) : 'https://velalight.github.io/testimonials/' + encodeURIComponent(name);
-      html += `
-        <div class="gallery-item">
-          <a href="${url}" data-lightbox="reviews-all" data-title="💛 تجربة عميلة VelaLight">
-            <img src="${url}" alt="تجربة عميل VelaLight" loading="lazy">
-          </a>
-          <div class="item-info">
-            <span class="badge">✓ عميلة موثّقة</span>
-            <span class="stars">★★★★★</span>
+  (function() {
+    "use strict";
+    const grid = document.getElementById('galleryGrid');
+
+    function renderGallery() {
+      if (!grid) return;
+      const images = (typeof REVIEWS_IMAGES !== 'undefined' && Array.isArray(REVIEWS_IMAGES)) ? REVIEWS_IMAGES : [];
+      
+      if (!images.length) {
+        grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--dim);">🕯️ لا توجد تجارب للعرض حالياً</div>`;
+        return;
+      }
+
+      let html = '';
+      images.forEach(function(name) {
+        const url = (typeof CDN === 'function') 
+          ? CDN('testimonials/' + name) 
+          : 'https://velalight.github.io/testimonials/' + encodeURIComponent(name);
+        
+        html += `
+          <div class="gallery-item" data-aos="fade-up" data-aos-delay="50">
+            <a href="${url}" data-lightbox="reviews-all" data-title="💛 تجربة عميلة VelaLight">
+              <img src="${url}" alt="تجربة عميل VelaLight" loading="lazy" decoding="async">
+            </a>
+            <div class="item-info">
+              <span class="badge">✓ عميلة موثّقة</span>
+              <span class="stars">★★★★★</span>
+            </div>
           </div>
-        </div>
-      `;
-    });
-    grid.innerHTML = html;
-    if (typeof AOS !== 'undefined') AOS.init({ duration: 800, once: true, offset: 100 });
-  }
-  document.addEventListener('DOMContentLoaded', renderGallery);
-  const obs = new MutationObserver(renderGallery);
-  obs.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
-})();
+        `;
+      });
+      grid.innerHTML = html;
+
+      // إعادة تهيئة AOS للعناصر الجديدة
+      if (typeof AOS !== 'undefined') {
+        AOS.refresh();
+      }
+    }
+
+    // تشغيل عند تحميل الصفحة
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderGallery);
+    } else {
+      renderGallery();
+    }
+
+    // إعادة التحميل عند تغيير اللغة (لتحديث النصوص إن وجدت)
+    const langObserver = new MutationObserver(function() { renderGallery(); });
+    langObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+
+  })();
 </script>
 
+<!-- ═══ محرك الترجمة (للنصوص الثابتة) ═══ -->
 <script>
-(function() {
-  function applyTranslations() {
-    if (typeof t !== 'function') return;
-    const lang = localStorage.getItem('vl_lang') || 'ar';
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
-    document.querySelectorAll('[data-i18n]').forEach(function(el) {
-      const key = el.getAttribute('data-i18n');
-      if (!key) return;
-      const val = t(key);
-      if (val && val !== key && el.textContent !== val) el.textContent = val;
+  (function() {
+    "use strict";
+    function applyTranslations() {
+      if (typeof t !== 'function') return;
+      const lang = localStorage.getItem('vl_lang') || 'ar';
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
+      
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        const key = el.getAttribute('data-i18n');
+        if (!key) return;
+        const val = t(key);
+        if (val && val !== key && el.textContent !== val) {
+          el.textContent = val;
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(applyTranslations, 100);
+      });
+    } else {
+      setTimeout(applyTranslations, 100);
+    }
+
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'vl_lang') {
+        setTimeout(applyTranslations, 100);
+      }
     });
-  }
-  document.addEventListener('DOMContentLoaded', function() { setTimeout(applyTranslations, 100); });
-  window.addEventListener('storage', function(e) { if (e.key === 'vl_lang') setTimeout(applyTranslations, 100); });
-})();
+  })();
 </script>
+
 </body>
 </html>
