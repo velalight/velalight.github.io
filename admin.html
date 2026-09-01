@@ -103,6 +103,20 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   font-size:.85rem;
   min-width:180px;
 }
+.status-badge{padding:.2rem .6rem;border-radius:99px;font-size:.7rem;font-weight:700;color:#fff}
+.st-0{background:#e67e22}
+.st-1{background:#3498db}
+.st-2{background:#9b59b6}
+.st-3{background:#2ecc71}
+.st-4{background:#e74c3c}
+.st-5{background:#27ae60}
+.payment-badge{padding:.1rem .5rem;border-radius:99px;font-size:.6rem;font-weight:700}
+.payment-paid{background:#d4edda;color:#155724}
+.payment-pending{background:#fff3cd;color:#856404}
+.payment-failed{background:#f8d7da;color:#721c24}
+.payment-refunded{background:#e2e3e5;color:#383d41}
+.delete-btn{background:transparent;border:0;color:#e74c3c;cursor:pointer;font-size:.85rem;padding:0 .3rem}
+.delete-btn:hover{color:#c0392b}
 @media(max-width:600px){
   table.adm{display:block;overflow-x:auto}
   .pform .g{grid-template-columns:1fr}
@@ -159,16 +173,31 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         <input id="orderSearch" type="search" placeholder="🔎 ابحث برقم الطلب أو اسم العميل">
         <select id="orderStatusFilter">
           <option value="">كل الحالات</option>
-          <option value="0">قيد المراجعة</option><option value="1">قيد التجهيز</option>
-          <option value="2">تم التجهيز</option><option value="3">تم الشحن</option>
-          <option value="4">مكتمل</option><option value="5">ملغي</option>
+          <option value="0">قيد المراجعة</option>
+          <option value="1">قيد التجهيز</option>
+          <option value="2">تم التجهيز</option>
+          <option value="3">تم الشحن</option>
+          <option value="4">ملغي</option>
+          <option value="5">مكتمل</option>
         </select>
         <input id="orderDateFrom" type="date" placeholder="من تاريخ">
         <input id="orderDateTo" type="date" placeholder="إلى تاريخ">
         <button class="btn sm ghost" id="clearOrderFilters" type="button">✖️ مسح</button>
       </div>
       <table class="adm">
-        <thead><tr><th>رقم الطلب</th><th>التاريخ</th><th>العميل</th><th>الموبايل</th><th>الإجمالي</th><th>الحالة</th></tr></thead>
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>التاريخ</th>
+            <th>آخر تحديث</th>
+            <th>العميل</th>
+            <th>الموبايل</th>
+            <th>الإجمالي</th>
+            <th>حالة الدفع</th>
+            <th>حالة الطلب</th>
+            <th>إجراءات</th>
+          </tr>
+        </thead>
         <tbody id="ordersBody"></tbody>
       </table>
     </div>
@@ -274,7 +303,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
           <div><label>قيمة الخصم *</label><input id="cf_value" type="number" min="0" placeholder="مثال: 10 أو 50"></div>
           <div><label>أقصى عدد استخدامات (فارغ = غير محدود)</label><input id="cf_maxUses" type="number" min="0" placeholder="مثال: 100"></div>
         </div>
-        <!-- ✅ الحقول الجديدة الذكية -->
         <div class="g">
           <div><label>تاريخ البدء *</label><input id="cf_startDate" type="date" /></div>
           <div><label>تاريخ الانتهاء *</label><input id="cf_expires" type="date" /></div>
@@ -500,6 +528,7 @@ function loadOrders(){
     orders.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
     ALL_ORDERS = orders;
     document.getElementById("stOrders").textContent = orders.length;
+    // الإيرادات: استبعاد الملغي (4) والمكتمل (5) لأنهم مش طلبات نشطة مالية
     const revenue = orders.filter(order => order.status !== 4 && order.status !== 5)
                           .reduce((total, order) => total + Number(order.total || 0), 0);
     document.getElementById("stRevenue").textContent = money(revenue);
@@ -515,7 +544,7 @@ function filterOrders(){
   let filtered = ALL_ORDERS;
   if(search){
     filtered = filtered.filter(order => {
-      const haystack = (order.id || "") + " " + (order.name || "") + " " + (order.phone || "");
+      const haystack = (order.orderId || order.id || "") + " " + (order.name || "") + " " + (order.phone || "");
       return haystack.toLowerCase().includes(search);
     });
   }
@@ -544,32 +573,140 @@ function filterOrders(){
   renderOrders(filtered);
 }
 
+// ═══ التحقق من صحة تغيير الحالة (منع التعديل العشوائي) ═══
+function isValidStatusTransition(current, target) {
+  // 0: قيد المراجعة, 1: قيد التجهيز, 2: تم التجهيز, 3: تم الشحن, 4: ملغي, 5: مكتمل
+  const allowed = {
+    0: [1, 4],    // قيد المراجعة -> قيد التجهيز أو ملغي
+    1: [2, 4],    // قيد التجهيز -> تم التجهيز أو ملغي
+    2: [3],       // تم التجهيز -> تم الشحن فقط
+    3: [5],       // تم الشحن -> مكتمل فقط
+    4: [],        // ملغي -> لا شيء (ممنوع التغيير)
+    5: []         // مكتمل -> لا شيء (ممنوع التغيير)
+  };
+  // إذا كانت الحالة الحالية غير معرفة، نسمح (للأمان)
+  if(!allowed[current]) return true;
+  return allowed[current].includes(target);
+}
+
 function renderOrders(orders){
   const body = document.getElementById("ordersBody");
   if(!body) return;
   if(!orders.length){
-    body.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد طلبات تطابق الفلتر</td></tr>`;
+    body.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد طلبات تطابق الفلتر</td></tr>`;
     return;
   }
-  const STATUS = ["قيد المراجعة", "قيد التجهيز", "تم التجهيز", "تم الشحن", "مكتمل", "ملغي"];
+  // الحالات حسب الترتيب الجديد (0-5)
+  const STATUS = ["قيد المراجعة", "قيد التجهيز", "تم التجهيز", "تم الشحن", "ملغي", "مكتمل"];
+  
   body.innerHTML = orders.map(order => {
     const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString("ar-EG") : "-";
-    const statusOptions = STATUS.map((status,index) => `<option value="${index}"${order.status === index ? " selected" : ""}>${status}</option>`).join("");
+    const updatedDate = order.updatedAt ? new Date(order.updatedAt).toLocaleDateString("ar-EG") : (order.createdAt ? new Date(order.createdAt).toLocaleDateString("ar-EG") : "-");
+    const currentStatus = Number(order.status || 0);
+    const statusOptions = STATUS.map((status, index) => 
+      `<option value="${index}"${currentStatus === index ? " selected" : ""}>${status}</option>`
+    ).join("");
+    
+    // حالة الدفع
+    const paymentStatus = order.paymentStatus || 'pending';
+    const paymentLabels = {
+      pending: 'قيد الانتظار',
+      paid: 'تم الدفع',
+      failed: 'فشل الدفع',
+      refunded: 'تم الاسترجاع'
+    };
+    const paymentClasses = {
+      pending: 'payment-pending',
+      paid: 'payment-paid',
+      failed: 'payment-failed',
+      refunded: 'payment-refunded'
+    };
+    const paymentText = paymentLabels[paymentStatus] || paymentStatus;
+    const paymentClass = paymentClasses[paymentStatus] || 'payment-pending';
+    
+    // معرف الطلب
+    const orderId = order.orderId || order.id || "-";
+    
     return `
       <tr>
-        <td style="direction:ltr;font-size:.78rem">${order.id || "-"}</td>
-        <td>${date}</td>
+        <td style="direction:ltr;font-size:.78rem;font-weight:700;">${orderId}</td>
+        <td style="font-size:.75rem;">${date}</td>
+        <td style="font-size:.75rem;color:var(--dim);">${updatedDate}</td>
         <td>${order.name || "-"}</td>
         <td style="direction:ltr">${order.phone || "-"}</td>
-        <td>${money(order.total || 0)}</td>
-        <td><select data-oid="${order._fid || order.id}">${statusOptions}</select></td>
+        <td><b>${money(order.total || 0)}</b></td>
+        <td><span class="payment-badge ${paymentClass}">${paymentText}</span></td>
+        <td>
+          <select data-oid="${order._fid || order.id}" data-current="${currentStatus}" class="status-select">
+            ${statusOptions}
+          </select>
+        </td>
+        <td style="display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;">
+          <button class="delete-btn" data-del="${order._fid || order.id}" title="حذف الطلب نهائياً (لا يمكن التراجع)">🗑️</button>
+        </td>
       </tr>`;
   }).join("");
-  document.querySelectorAll("#ordersBody select").forEach(select => {
-    select.addEventListener("change", () => {
-      window.FB.update("orders", select.dataset.oid, { status: Number(select.value) })
-        .then(() => toast("✅ تم تحديث الحالة"))
-        .catch(error => { console.error(error); toast("⚠️ فشل تحديث الحالة"); });
+  
+  // ربط أحداث تغيير الحالة مع التحقق من الصحة
+  document.querySelectorAll("#ordersBody .status-select").forEach(select => {
+    select.addEventListener("change", async function() {
+      const oid = this.dataset.oid;
+      const current = Number(this.dataset.current);
+      const target = Number(this.value);
+      
+      // التحقق من صحة الانتقال
+      if(!isValidStatusTransition(current, target)) {
+        toast(`⚠️ لا يمكن تغيير الحالة من "${STATUS[current]}" إلى "${STATUS[target]}"`);
+        this.value = current; // إعادة القيمة القديمة
+        return;
+      }
+      
+      // تأكيد قبل التغيير
+      if(!confirm(`هل أنت متأكد من تغيير حالة الطلب ${oid} من "${STATUS[current]}" إلى "${STATUS[target]}"؟`)) {
+        this.value = current;
+        return;
+      }
+      
+      try {
+        // جلب الطلب الحالي لإضافة سجل في statusHistory
+        const orderDoc = await window.FB.get('orders', oid);
+        const history = orderDoc?.statusHistory || [];
+        history.push({
+          from: current,
+          to: target,
+          changedAt: Date.now(),
+          changedBy: 'admin'
+        });
+        
+        await window.FB.update("orders", oid, { 
+          status: target,
+          statusHistory: history,
+          updatedAt: Date.now()
+        });
+        toast("✅ تم تحديث الحالة بنجاح");
+        // تحديث current في الـ dataset
+        this.dataset.current = target;
+      } catch(error) {
+        console.error(error);
+        toast("⚠️ فشل تحديث الحالة");
+        this.value = current;
+      }
+    });
+  });
+
+  // ربط أحداث حذف الطلب
+  document.querySelectorAll("#ordersBody .delete-btn").forEach(btn => {
+    btn.addEventListener("click", async function() {
+      const oid = this.dataset.del;
+      if(!confirm(`🗑️ هل أنت متأكد من حذف الطلب ${oid} نهائياً؟ لا يمكن التراجع عن هذا الإجراء.`)) return;
+      try {
+        await window.FB.remove("orders", oid);
+        toast("🗑️ تم حذف الطلب");
+        loadOrders(); // إعادة تحميل القائمة
+      } catch(error) {
+        console.error(error);
+        toast("⚠️ فشل حذف الطلب");
+      }
     });
   });
 }
@@ -893,7 +1030,7 @@ function openProductForm(product){
   form.scrollIntoView({ behavior:"smooth" });
 }
 
-// ═══ COUPONS (الإصدار الذكي) ═══
+// ═══ COUPONS ═══
 function loadCoupons(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("coupons").then(coupons => {
@@ -1000,7 +1137,6 @@ function openCouponForm(coupon){
     document.getElementById("cf_value").value = coupon.value || "";
     document.getElementById("cf_maxUses").value = coupon.maxUses || "";
     document.getElementById("cf_active").value = coupon.active !== false ? "true" : "false";
-    // الحقول الجديدة
     document.getElementById("cf_startDate").value = coupon.startDate || "";
     document.getElementById("cf_expires").value = coupon.expiresAt ? new Date(Number(coupon.expiresAt)).toISOString().slice(0,10) : "";
     document.getElementById("cf_minOrder").value = coupon.minOrder || "";
@@ -1055,7 +1191,6 @@ function saveCoupon(){
     maxDiscount,
     firstOrderOnly: !!firstOrderOnly,
     active,
-    // نحافظ على usedCount و usedBy
   };
   
   const saveFn = editId ? window.FB.update("coupons", editId, data) : 
