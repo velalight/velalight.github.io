@@ -2236,7 +2236,7 @@ function updateTotals(c){
 
   // 3. اختيار الخصم الأعلى فقط
   let finalDiscount = 0;
-  let appliedType = "none";
+  let appliedType = "none"; // "qty" أو "coupon"
 
   if (qtyDiscount > 0 && couponDisc > 0) {
     if (qtyDiscount >= couponDisc) {
@@ -2256,7 +2256,7 @@ function updateTotals(c){
 
   const total = Math.max(0, sub - finalDiscount);
 
-  // ===== تحديث واجهة المستخدم =====
+  // ===== تحديث واجهة السلة =====
   if(document.getElementById("cartSub")) {
     document.getElementById("cartSub").textContent = money(sub);
   }
@@ -2434,7 +2434,7 @@ async function checkout(){
   const orderId=genOrderId();
   const subTotal=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
   
-  // حساب الخصمين واختيار الأعلى
+  // ⭐ حساب الخصمين واختيار الأعلى
   let qtyDiscount = 0;
   c.forEach(it => {
     if (Number(it.qty) >= 3) {
@@ -2497,7 +2497,7 @@ async function checkout(){
 
   msg+=`━━━━━━━━━━━━━━━━━━━━\n`;
   
-  // عرض الخصم المطبق فقط
+  // عرض الخصم المطبق فقط (مع إشارة للآخر إن وجد)
   if (finalDiscount > 0) {
     if (appliedType === "qty") {
       msg+=`🎁 خصم الكمية (مطبق): -${money(finalDiscount)}\n`;
@@ -2505,6 +2505,7 @@ async function checkout(){
       msg+=`🎟️ كوبون ${appliedCoupon ? appliedCoupon.code : ''} (مطبق): -${money(finalDiscount)}\n`;
     }
   }
+  // لو فيه خصم تاني غير مطبق، نذكره كملاحظة
   if (qtyDiscount > 0 && appliedType !== "qty") {
     msg+=`💡 خصم الكمية (غير مطبق - تم اختيار الخصم الأعلى)\n`;
   }
@@ -2535,7 +2536,6 @@ async function checkout(){
     ttclid: localStorage.getItem('vl_ttclid') || ''
   };
 
-  // ⭐ إضافة statusHistory عند إنشاء الطلب
   const orderData={
     orderId,
     userId,
@@ -2557,16 +2557,11 @@ async function checkout(){
     couponCode: appliedCoupon ? appliedCoupon.code : "",
     appliedType: appliedType,
     paymentMethod:"WhatsApp Confirmation",
-    paymentStatus:"pending",
     shippingPayment:"Cash to courier",
     shippingIncluded: subTotal >= 3000,
-    status: 0, // قيد المراجعة
-    statusHistory: [
-      { status: 0, changedAt: Date.now(), changedBy: "customer" }
-    ],
+    status:"قيد المراجعة",statusEn:"Under Review",
     tracking: trackingData,
     createdAt:Date.now(),
-    updatedAt:Date.now(),
     orderDate:new Date().toISOString()
   };
 
@@ -3207,6 +3202,7 @@ async function applyCoupon(){
   if(!c){ toast("❌ كود الكوبون غير صحيح"); return; }
   if(c.active === false){ toast("❌ الكوبون ده متوقف"); return; }
   
+  // 1. التحقق من التواريخ
   const now = Date.now();
   if(c.startDate && now < new Date(c.startDate).getTime()) {
     toast("⏳ هذا الكوبون لم يبدأ بعد.");
@@ -3221,6 +3217,7 @@ async function applyCoupon(){
     return;
   }
   
+  // 2. التحقق من الحد الأدنى للطلب
   const cart = getCart();
   const sub = cart.reduce((a,i) => a + (Number(i.price || 0) * Number(i.qty || 1)), 0);
   if(c.minOrder && sub < c.minOrder) {
@@ -3228,12 +3225,13 @@ async function applyCoupon(){
     return;
   }
   
-  // التحقق من "أول عميل فقط" – مع استثناء الطلبات الملغية
+  // 3. التحقق من "أول عميل فقط" – مع استثناء الطلبات الملغية
   if(c.firstOrderOnly) {
     const user = getSavedUser();
     const userEmail = user.email || "";
     const userPhone = user.phone || "";
     
+    // نجيب جميع الطلبات من Firebase
     let allOrders = [];
     try {
       allOrders = await window.FB.list("orders") || [];
@@ -3243,14 +3241,15 @@ async function applyCoupon(){
       return;
     }
     
+    // نفلتر الطلبات اللي بتطابق العميل (بالإيميل أو الموبايل)
     const customerOrders = allOrders.filter(order => {
       const orderEmail = order.email || order.customer?.email || "";
       const orderPhone = order.phone || order.customer?.phone || "";
       return (userEmail && orderEmail === userEmail) || (userPhone && orderPhone === userPhone);
     });
     
-    // نستثني الطلبات الملغية (status = 4)
-    const nonCancelledOrders = customerOrders.filter(order => order.status !== 4);
+    // نستثني الطلبات الملغية (status = 5)
+    const nonCancelledOrders = customerOrders.filter(order => order.status !== 5);
     
     if(nonCancelledOrders.length > 0) {
       toast("⚠️ هذا الكوبون مخصص للطلبات الأولى فقط (الطلبات الملغية غير محسوبة).");
@@ -3258,7 +3257,7 @@ async function applyCoupon(){
     }
   }
   
-  // منع التكرار (usedBy)
+  // 4. منع التكرار (usedBy)
   const user = getSavedUser();
   const identifier = user.email || user.phone;
   if(identifier && c.usedBy && Array.isArray(c.usedBy) && c.usedBy.includes(identifier)) {
@@ -3266,6 +3265,7 @@ async function applyCoupon(){
     return;
   }
   
+  // 5. حساب الخصم
   let discount = 0;
   if(c.type === "percent"){
     discount = sub * (Number(c.value || 0) / 100);
@@ -3281,7 +3281,10 @@ async function applyCoupon(){
   toast("🎟️ تم تطبيق الكوبون! وفرت " + money(discount));
   renderCart();
 }
- 
+
+async function consumeCoupon(){
+  if(!appliedCoupon || !appliedCoupon._fid) return;
+  
   // تسجيل المستخدم في usedBy
   const user = getSavedUser();
   const identifier = user.email || user.phone;
