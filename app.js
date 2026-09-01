@@ -2654,25 +2654,19 @@ async function checkout(){
     console.error("❌ Failed to save order to Firebase after retries");
   }
   
-  try {
+    try {
     await decrementStock(c);
   } catch(e) {
     console.warn("⚠️ Stock decrement failed:", e);
   }
   
-  try {
-    if (typeof consumeCoupon === "function") consumeCoupon();
-  } catch(e) {
-    console.warn("⚠️ Coupon consume failed:", e);
-  }
-
-   // ═══ تسجيل استخدام الكوبون ═══
+  // ═══ تسجيل استخدام الكوبون ═══
   try {
     await consumeCoupon();
   } catch(e) {
     console.warn("⚠️ Coupon consume failed:", e);
   }
- 
+    
   const u=getSavedUser();
   u.orders=(u.orders||0)+1;
   u.name=name;u.phone=phone;u.email=email;u.city=city;u.addr=addr;u.notes=notes;
@@ -3236,51 +3230,6 @@ function stockBadge(p){
   }
 }
 
-let appliedCoupon=null;
-
-function calcCouponDiscount(sub){
-  if(!appliedCoupon)return 0;
-  let d=0;
-  if(appliedCoupon.type==="percent"){
-    d=sub*(Number(appliedCoupon.value||0)/100);
-  }else{
-    d=Number(appliedCoupon.value||0);
-  }
-  return Math.min(sub,Math.round(d));
-}
-
-async function applyCoupon(){
-  const code=(document.getElementById("couponInput")?.value||"").trim().toUpperCase();
-  if(!code){toast("⚠️ اكتب كود الكوبون");return;}
-  
-  let list=[];
-  try{list=await window.FB.list("coupons")||[];}
-  catch(e){toast("⚠️ تعذر التحقق من الكوبون");return;}
-  
-  const c=list.find(x=>(x.code||"").toUpperCase()===code);
-  if(!c){toast("❌ كود الكوبون غير صحيح");return;}
-  if(c.active===false){toast("❌ الكوبون ده متوقف");return;}
-  if(c.expiresAt&&Date.now()>Number(c.expiresAt)){toast("⚠️ الكوبون منتهي الصلاحية");return;}
-  if(c.maxUses&&Number(c.usedCount||0)>=Number(c.maxUses)){toast("⚠️ انتهت استخدامات الكوبون");return;}
-  
-  appliedCoupon={...c,_fid:c.id};
-  const sub=getCart().reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
-  toast("🎟️ تم تطبيق الكوبون! وفرت "+money(calcCouponDiscount(sub)));
-  renderCart();
-}
-
-async function consumeCoupon(){
-  if(!appliedCoupon||!appliedCoupon._fid)return;
-  if(window.FB&&typeof window.FB.update==="function"){
-    try{
-      await window.FB.update("coupons",appliedCoupon._fid,{
-        usedCount:Number(appliedCoupon.usedCount||0)+1
-      });
-    }catch(e){console.warn("⚠️ coupon update failed",e);}
-  }
-  appliedCoupon=null;
-  if(document.getElementById("couponInput"))document.getElementById("couponInput").value="";
-}
 
 /* ═══ REVIEWS COUNT HELPER ═══ */
 window.getReviewsCount = function() {
