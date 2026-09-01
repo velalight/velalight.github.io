@@ -1395,7 +1395,7 @@ const mediaContent = isBrideBox
   }
 }
 
-/* ═══ PRODUCTS PAGE — عرض كل المنتجات مع فلترة وترتيب ═══ */
+ /* ═══ PRODUCTS PAGE — عرض كل المنتجات مع فلترة وترتيب ═══ */
 function renderProductsPage() {
   const grid = document.getElementById("productsGrid");
   if (!grid) return;
@@ -3065,50 +3065,131 @@ function stockBadge(p){
   }
 }
 
-let appliedCoupon=null;
+// ================================================================
+// ✨ COUPONS SYSTEM — النسخة الذكية المطورة (مع كل الشروط)
+// ================================================================
+
+let appliedCoupon = null;
 
 function calcCouponDiscount(sub){
-  if(!appliedCoupon)return 0;
-  let d=0;
-  if(appliedCoupon.type==="percent"){
-    d=sub*(Number(appliedCoupon.value||0)/100);
-  }else{
-    d=Number(appliedCoupon.value||0);
+  if(!appliedCoupon) return 0;
+  let d = 0;
+  if(appliedCoupon.type === "percent"){
+    d = sub * (Number(appliedCoupon.value || 0) / 100);
+  } else {
+    d = Number(appliedCoupon.value || 0);
   }
-  return Math.min(sub,Math.round(d));
+  // تطبيق الحد الأقصى للخصم
+  if(appliedCoupon.maxDiscount && d > appliedCoupon.maxDiscount) {
+    d = appliedCoupon.maxDiscount;
+  }
+  return Math.min(sub, Math.round(d));
 }
 
 async function applyCoupon(){
-  const code=(document.getElementById("couponInput")?.value||"").trim().toUpperCase();
-  if(!code){toast("⚠️ اكتب كود الكوبون");return;}
+  const code = (document.getElementById("couponInput")?.value || "").trim().toUpperCase();
+  if(!code){ toast("⚠️ اكتب كود الكوبون"); return; }
   
-  let list=[];
-  try{list=await window.FB.list("coupons")||[];}
-  catch(e){toast("⚠️ تعذر التحقق من الكوبون");return;}
+  let list = [];
+  try { list = await window.FB.list("coupons") || []; }
+  catch(e){ toast("⚠️ تعذر التحقق من الكوبون"); return; }
   
-  const c=list.find(x=>(x.code||"").toUpperCase()===code);
-  if(!c){toast("❌ كود الكوبون غير صحيح");return;}
-  if(c.active===false){toast("❌ الكوبون ده متوقف");return;}
-  if(c.expiresAt&&Date.now()>Number(c.expiresAt)){toast("⚠️ الكوبون منتهي الصلاحية");return;}
-  if(c.maxUses&&Number(c.usedCount||0)>=Number(c.maxUses)){toast("⚠️ انتهت استخدامات الكوبون");return;}
+  const c = list.find(x => (x.code || "").toUpperCase() === code);
+  if(!c){ toast("❌ كود الكوبون غير صحيح"); return; }
+  if(c.active === false){ toast("❌ الكوبون ده متوقف"); return; }
   
-  appliedCoupon={...c,_fid:c.id};
-  const sub=getCart().reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
-  toast("🎟️ تم تطبيق الكوبون! وفرت "+money(calcCouponDiscount(sub)));
+  // 1. التحقق من التواريخ
+  const now = Date.now();
+  if(c.startDate && now < new Date(c.startDate).getTime()) {
+    toast("⏳ هذا الكوبون لم يبدأ بعد.");
+    return;
+  }
+  if(c.expiresAt && now > Number(c.expiresAt)) {
+    toast("⚠️ الكوبون منتهي الصلاحية");
+    return;
+  }
+  if(c.maxUses && Number(c.usedCount || 0) >= Number(c.maxUses)){
+    toast("⚠️ انتهت استخدامات الكوبون");
+    return;
+  }
+  
+  // 2. التحقق من الحد الأدنى للطلب
+  const cart = getCart();
+  const sub = cart.reduce((a,i) => a + (Number(i.price || 0) * Number(i.qty || 1)), 0);
+  if(c.minOrder && sub < c.minOrder) {
+    toast(`⚠️ الحد الأدنى للطلب هو ${c.minOrder} ج.م`);
+    return;
+  }
+  
+  // 3. التحقق من أول عميل فقط
+  if(c.firstOrderOnly) {
+    const user = getSavedUser();
+    const orders = user.orders || 0;
+    if(orders > 0) {
+      toast("⚠️ هذا الكوبون مخصص للطلبات الأولى فقط.");
+      return;
+    }
+  }
+  
+  // 4. منع التكرار (usedBy)
+  const userEmail = getSavedUser().email || "";
+  const userPhone = getSavedUser().phone || "";
+  const identifier = userEmail || userPhone;
+  if(identifier && c.usedBy && Array.isArray(c.usedBy) && c.usedBy.includes(identifier)) {
+    toast("⚠️ لقد استخدمت هذا الكوبون من قبل.");
+    return;
+  }
+  
+  // 5. حساب الخصم
+  let discount = 0;
+  if(c.type === "percent"){
+    discount = sub * (Number(c.value || 0) / 100);
+  } else {
+    discount = Number(c.value || 0);
+  }
+  if(c.maxDiscount && discount > c.maxDiscount) {
+    discount = c.maxDiscount;
+  }
+  discount = Math.round(discount);
+  
+  appliedCoupon = { ...c, _fid: c.id, discount: discount };
+  toast("🎟️ تم تطبيق الكوبون! وفرت " + money(discount));
   renderCart();
 }
 
 async function consumeCoupon(){
-  if(!appliedCoupon||!appliedCoupon._fid)return;
-  if(window.FB&&typeof window.FB.update==="function"){
-    try{
-      await window.FB.update("coupons",appliedCoupon._fid,{
-        usedCount:Number(appliedCoupon.usedCount||0)+1
+  if(!appliedCoupon || !appliedCoupon._fid) return;
+  
+  // تسجيل المستخدم في usedBy
+  const user = getSavedUser();
+  const identifier = user.email || user.phone;
+  if(identifier) {
+    const usedBy = appliedCoupon.usedBy || [];
+    if(!usedBy.includes(identifier)) {
+      usedBy.push(identifier);
+      try {
+        await window.FB.update("coupons", appliedCoupon._fid, {
+          usedCount: (Number(appliedCoupon.usedCount || 0) + 1),
+          usedBy: usedBy
+        });
+      } catch(e) {
+        console.warn("⚠️ coupon update failed", e);
+        // فشل التحديث لا يمنع إتمام الطلب
+      }
+    }
+  } else {
+    // إذا لم يوجد معرف، نزيد الاستخدام فقط
+    try {
+      await window.FB.update("coupons", appliedCoupon._fid, {
+        usedCount: (Number(appliedCoupon.usedCount || 0) + 1)
       });
-    }catch(e){console.warn("⚠️ coupon update failed",e);}
+    } catch(e) {
+      console.warn("⚠️ coupon update failed", e);
+    }
   }
-  appliedCoupon=null;
-  if(document.getElementById("couponInput"))document.getElementById("couponInput").value="";
+  
+  appliedCoupon = null;
+  if(document.getElementById("couponInput")) document.getElementById("couponInput").value = "";
 }
 
 /* ═══ REVIEWS COUNT HELPER ═══ */
