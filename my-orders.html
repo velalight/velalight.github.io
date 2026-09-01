@@ -23,6 +23,7 @@
 .st-ship{background:#9b59b6}
 .st-done{background:#27ae60}
 .st-cancel{background:#e74c3c}
+.st-old{background:#95a5a6}
 .order-items{list-style:none;margin:.6rem 0;padding:.6rem;background:var(--panel2);border-radius:12px;font-size:.85rem}
 .order-items li{padding:.25rem 0;border-bottom:1px solid rgba(0,0,0,0.03)}
 .order-items li:last-child{border-bottom:0}
@@ -34,6 +35,8 @@
 .login-card h2{font-family:var(--fd);color:var(--gold2);margin-bottom:1rem}
 .btn.danger.sm{background:#e74c3c;color:#fff;border:0;padding:.3rem .8rem;border-radius:8px;font-size:.7rem;font-weight:700;cursor:pointer;transition:.2s}
 .btn.danger.sm:hover{background:#c0392b;transform:scale(1.02)}
+.btn.warning.sm{background:#e67e22;color:#fff;border:0;padding:.3rem .8rem;border-radius:8px;font-size:.7rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn.warning.sm:hover{background:#d35400;transform:scale(1.02)}
 .btn.outline.sm{background:transparent;border:1px solid var(--line);padding:.3rem .8rem;border-radius:8px;font-size:.7rem;cursor:pointer;transition:.2s}
 .btn.outline.sm:hover{border-color:var(--gold);color:var(--gold)}
 .toast-msg{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1512;color:#fff;padding:.8rem 1.8rem;border-radius:99px;font-size:.85rem;z-index:9999;opacity:0;transition:opacity .4s ease;box-shadow:0 8px 25px rgba(0,0,0,0.2)}
@@ -49,6 +52,7 @@
   <div class="mo-top">
     <h1>📦 طلباتي</h1>
     <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+      <button class="btn warning sm" id="cleanOrdersBtn" style="display:none;">🧹 تنظيف الطلبات</button>
       <a class="btn ghost sm" href="index.html">↩ المتجر</a>
     </div>
   </div>
@@ -76,7 +80,65 @@ function toast(msg){
   el._timer=setTimeout(()=>el.classList.remove('show'),3000);
 }
 
-// ═══ دالة إلغاء الطلب ═══
+// ═══ دالة حذف الطلبات غير المكتملة (قيد المراجعة أو القديمة) ═══
+window.cleanIncompleteOrders = async function() {
+  if(!confirm('🧹 هل أنت متأكد من حذف جميع الطلبات "قيد المراجعة" و القديمة؟ هذا الإجراء نهائي.')) return;
+  
+  const btn = document.getElementById('cleanOrdersBtn');
+  if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري...'; }
+  
+  try {
+    const all = await window.FB.list('orders');
+    const user = window.FB.auth.currentUser;
+    if(!user) { toast('⚠️ يرجى تسجيل الدخول أولاً'); return; }
+    
+    const now = Date.now();
+    const ONE_HOUR = 60 * 60 * 1000;
+    
+    // نختار الطلبات اللي تخص المستخدم الحالي أو مفيش userId
+    const toDelete = all.filter(o => {
+      const status = Number(o.status || 0);
+      const createdAt = Number(o.createdAt || 0);
+      const orderUserId = o.userId || '';
+      
+      // شرط الحذف: (قيد المراجعة) OR (قديم أكثر من ساعة وملوش userId)
+      const isReview = status === 0;
+      const isOldAndNoUser = (orderUserId === '' || orderUserId === null || orderUserId === undefined) && (now - createdAt) > ONE_HOUR;
+      
+      return isReview || isOldAndNoUser;
+    });
+    
+    if(!toDelete.length) {
+      toast('✅ لا توجد طلبات غير مكتملة للحذف');
+      if(btn) { btn.disabled = false; btn.textContent = '🧹 تنظيف الطلبات'; }
+      return;
+    }
+    
+    let deleted = 0;
+    for(const order of toDelete) {
+      try {
+        await window.FB.remove('orders', order.id);
+        deleted++;
+      } catch(e) {
+        console.warn('Failed to delete order:', order.id, e);
+      }
+    }
+    
+    toast(`✅ تم حذف ${deleted} طلب غير مكتمل`);
+    // إعادة تحميل الطلبات
+    const userNow = window.FB.auth.currentUser;
+    if(userNow) await loadOrders(userNow);
+    else location.reload();
+    
+  } catch(e) {
+    console.error(e);
+    toast('⚠️ فشل تنظيف الطلبات، حاول مرة أخرى');
+  } finally {
+    if(btn) { btn.disabled = false; btn.textContent = '🧹 تنظيف الطلبات'; }
+  }
+};
+
+// ═══ دالة إلغاء الطلب (لطلبات معينة) ═══
 window.cancelOrder = async function(orderId) {
   if(!orderId) return;
   if(!confirm('⚠️ هل أنت متأكد من إلغاء هذا الطلب؟ لا يمكن التراجع بعد الإلغاء.')) return;
@@ -85,7 +147,7 @@ window.cancelOrder = async function(orderId) {
   if(btn) { btn.disabled = true; btn.textContent = '⏳ جاري...'; }
   
   try {
-    await window.FB.update('orders', orderId, { status: 4 }); // 4 = ملغي
+    await window.FB.update('orders', orderId, { status: 4 });
     toast('✅ تم إلغاء الطلب بنجاح');
     const user = window.FB.auth.currentUser;
     if(user) await loadOrders(user);
@@ -101,6 +163,7 @@ window.cancelOrder = async function(orderId) {
 const STATUS_AR = ["قيد المراجعة", "قيد التجهيز", "تم الشحن", "تم التسليم", "ملغي"];
 const STATUS_CLS = ["st-review", "st-prep", "st-ship", "st-done", "st-cancel"];
 const box = document.getElementById("ordersContainer");
+const cleanBtn = document.getElementById("cleanOrdersBtn");
 
 let started = false;
 function tryStart(){ if(started)return; if(window.FB&&window.FB.auth){started=true;init();} }
@@ -111,8 +174,15 @@ const poll=setInterval(()=>{tries++;tryStart();if(started||tries>30)clearInterva
 
 function init(){
   window.FB.auth.onAuthStateChanged(user=>{
-    if(user){ loadOrders(user); }
-    else{ showLogin(); }
+    if(user){ 
+      cleanBtn.style.display = 'inline-block';
+      cleanBtn.onclick = window.cleanIncompleteOrders;
+      loadOrders(user); 
+    }
+    else{ 
+      cleanBtn.style.display = 'none';
+      showLogin(); 
+    }
   });
 }
 
@@ -130,30 +200,13 @@ async function loadOrders(user){
   try{
     const all = await window.FB.list("orders");
     
-    // ⭐ التصفية: الطلبات الخاصة بالمستخدم + استبعاد الطلبات القديمة "قيد المراجعة" (أكثر من ساعة)
-    const ONE_HOUR = 60 * 60 * 1000;
-    const now = Date.now();
-    
+    // ⭐ التصفية: الطلبات الخاصة بالمستخدم
     const mine = (all||[]).filter(o => {
-      // نتأكد من أن الطلب يخص هذا المستخدم
       const matchUserId = o.userId === user.uid;
       const matchEmail = o.userEmail && o.userEmail === user.email;
       const matchCustomerEmail = o.customer && o.customer.email && o.customer.email === user.email;
       const matchPhone = o.phone && user.phone && o.phone === user.phone;
-      const isMine = matchUserId || matchEmail || matchCustomerEmail || matchPhone;
-      
-      if(!isMine) return false;
-      
-      // ⭐ فلترة الطلبات القديمة "قيد المراجعة" (status = 0)
-      const status = Number(o.status || 0);
-      const createdAt = Number(o.createdAt || 0);
-      
-      // لو الطلب "قيد المراجعة" واتعمل من أكتر من ساعة، نتجاهله (يعتبر طلب تجريبي ملغي)
-      if(status === 0 && (now - createdAt) > ONE_HOUR) {
-        return false;
-      }
-      
-      return true;
+      return matchUserId || matchEmail || matchCustomerEmail || matchPhone;
     });
     
     // ترتيب تنازلي (الأحدث أولاً)
@@ -172,7 +225,7 @@ async function loadOrders(user){
 
 function orderCard(o, user){
   const idx = Number(o.status||0);
-  const isCancelled = (idx === 4); // 4 = ملغي
+  const isCancelled = (idx === 4);
   const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString("ar-EG", {year:"numeric", month:"long", day:"numeric"}) : "-";
   
   let itemsHtml = "";
