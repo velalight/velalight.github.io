@@ -2592,26 +2592,7 @@ async function checkout(){
   
   if (!savedToFirebase) {
     console.error("❌ Failed to save order to Firebase after retries");
-  } else {
-    try {
-      if (typeof fbq === "function") {
-        fbq("track", "Purchase", {
-          value: total,
-          currency: "EGP",
-          content_ids: c.map(it => it.id),
-          num_items: c.length
-        });
-      }
-    } catch (e) {
-      console.warn("⚠️ Meta Purchase tracking failed:", e);
-    }
   }
-    console.log("✅ Meta Purchase fired:", orderId);
-
-  } catch (e) {
-    console.warn("⚠️ Meta Purchase tracking failed:", e);
-  }
-}
   
   try {
     await decrementStock(c);
@@ -2682,7 +2663,14 @@ async function checkout(){
         }))
       });
     }
-    
+    if (typeof fbq === "function") {
+      fbq("track", "Purchase", {
+        value: total,
+        currency: "EGP",
+        content_ids: c.map(it => it.id),
+        num_items: c.length
+      });
+    }
     ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
   } catch (e) {
     console.warn("Tracking event fire failed:", e);
