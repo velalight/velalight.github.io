@@ -1527,12 +1527,65 @@ function renderScents(){
 
 /* ═══════ EVENTS ═══════ */
 function bindEvents(){
-  $("#pdQMinus")?.addEventListener("click",()=>{ if(qty>1){qty--;$("#pdQVal").textContent=qty;} });
-  $("#pdQPlus")?.addEventListener("click",()=>{ const maxStock=Number(P.stock)||999; if(qty<maxStock){ qty++; $("#pdQVal").textContent=qty; }else{ if(typeof toast==="function") toast("⚠️ وصلتِ للحد الأقصى المتاح"); } });
-  $("#pdAddBtn")?.addEventListener("click",()=>{ if(!selScent){ if(typeof toast==="function") toast("⚠️ من فضلك اختاري العطر الأول"); return; } if(typeof addToCart==="function"){ addToCart(P,{scent:selScent,qty}); if(typeof track==="function"){ track("add_to_cart",{items:[{item_id:P.id,item_name:P.name,price:P.price,quantity:qty}]}); } } });
-  $("#pdBuyBtn")?.addEventListener("click",()=>{ if(!selScent){ if(typeof toast==="function") toast("⚠️ من فضلك اختاري العطر الأول"); return; } const msg=`✨ أهلاً VelaLight!\n\nعايزة أطلب:\n🕯️ ${(typeof pname === "function" ? pname(P) : P.name)}\n🌸 العطر: ${velaScentTr(selScent)}\n📦 الكمية: ${qty}\n💰 الإجمالي: ${(typeof money === "function" ? money(P.price*qty) : (P.price*qty + " ج.م"))}`; const wa=(typeof CFG!=="undefined"&&CFG.WHATSAPP) ? CFG.WHATSAPP : ""; if(wa) window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`,"_blank"); });
+  // 1. زر إنقاص الكمية
+  $("#pdQMinus")?.addEventListener("click",()=>{ 
+    if(qty>1){ qty--; $("#pdQVal").textContent=qty; } 
+  });
+  
+  // 2. زر زيادة الكمية
+  $("#pdQPlus")?.addEventListener("click",()=>{ 
+    const maxStock=Number(P.stock)||999; 
+    if(qty<maxStock){ 
+      qty++; 
+      $("#pdQVal").textContent=qty; 
+    } else { 
+      if(typeof toast==="function") toast("⚠️ وصلتِ للحد الأقصى المتاح"); 
+    } 
+  });
+  
+  // 3. زر إضافة إلى عربة التسوق
+  $("#pdAddBtn")?.addEventListener("click",()=>{ 
+    if(!selScent){ 
+      if(typeof toast==="function") toast("⚠️ من فضلك اختاري العطر الأول"); 
+      return; 
+    } 
+    if(typeof addToCart==="function"){ 
+      addToCart(P,{scent:selScent,qty}); 
+      if(typeof track==="function"){ 
+        track("add_to_cart",{items:[{item_id:P.id,item_name:P.name,price:P.price,quantity:qty}]}); 
+      } 
+    } 
+  });
+  
+  // 4. زر الشراء المباشر (واتساب) + إطلاق حدث Purchase
+  $("#pdBuyBtn")?.addEventListener("click",()=>{ 
+    if(!selScent){ 
+      if(typeof toast==="function") toast("⚠️ من فضلك اختاري العطر الأول"); 
+      return; 
+    } 
+    
+    const totalPrice = P.price * qty;
+    const productName = (typeof pname === "function" ? pname(P) : P.name);
+    
+    // 🔥 إرسال حدث الشراء لفيسبوك بيكسل 🔥
+    if(typeof window.fbq === 'function') {
+      window.fbq('track', 'Purchase', {
+        value: totalPrice,
+        currency: 'EGP',
+        content_ids: [P.id],
+        content_name: productName,
+        content_type: 'product'
+      });
+      console.log("✅ تم إرسال حدث Purchase بنجاح بقيمة: " + totalPrice);
+    }
+    
+    // فتح الواتساب
+    const msg = `✨ أهلاً VelaLight!\n\nعايزة أطلب:\n🕯️ ${productName}\n🌸 العطر: ${velaScentTr(selScent)}\n📦 الكمية: ${qty}\n💰 الإجمالي: ${(typeof money === "function" ? money(totalPrice) : (totalPrice + " ج.م"))}`; 
+    const wa = (typeof CFG !== "undefined" && CFG.WHATSAPP) ? CFG.WHATSAPP : ""; 
+    
+    if(wa) window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, "_blank");
+  });
 }
-
 /* ═══════ WISHLIST ═══════ */
 function initWishButton(){ $("#pdWishBtn")?.addEventListener("click",()=>{ if(!P) return; toggleWishlist(P.id); updateWishButton(); }); }
 function updateWishButton(){ const btn=$("#pdWishBtn"); if(!btn||!P) return; if(isInWishlist(P.id)){ btn.textContent="❤️"; btn.classList.add("on"); btn.setAttribute("aria-label","إزالة من المفضلة"); }else{ btn.textContent="🤍"; btn.classList.remove("on"); btn.setAttribute("aria-label","أضف للمفضلة"); } }
