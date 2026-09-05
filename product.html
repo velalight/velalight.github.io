@@ -963,13 +963,16 @@
             </div>
           </div>
 
-          <!-- ═══ Actions ═══ -->
+                    <!-- ═══ Actions ═══ -->
           <div class="pd-actions">
             <button class="btn" id="pdAddBtn" type="button" data-i18n="pd_add" style="background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(217,171,95,.4);">🛍️ أضيفي للسلة</button>
-            <button class="btn wa" id="pdBuyBtn" type="button" data-i18n="pd_buy" style="font-weight:700;">💬 اطلبي عبر واتساب</button>
+            
+            <!-- تم إخفاء زر الواتساب المباشر لحل مشكلة الطلبات غير المكتملة -->
+            <button class="btn wa" id="pdBuyBtn" type="button" data-i18n="pd_buy" style="font-weight:700; display: none;">💬 اطلب عبر واتساب</button>
+            
             <button class="wish-btn" id="pdWishBtn" type="button" aria-label="إضافة إلى المفضلة" data-i18n-title="pd_wishlist" title="إضافة إلى المفضلة">🤍</button>
           </div>
-
+          
           <!-- ═══ Payment Info ═══ -->
           <div class="pay-info">
             <div class="pay-row">
