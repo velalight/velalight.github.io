@@ -1675,137 +1675,133 @@ function handleProductGridClick(e){
   }
 }
 
-function initQuickAdd(){
+/* ═══ QUICK ADD MODAL (النسخة المصححة نهائياً) ═══ */
+function initQuickAdd() {
   const closeBtn = document.getElementById("closeScent");
   const overlay = document.getElementById("scentOv");
-  const minusBtn = document.getElementById("smQMinus");
-  const plusBtn = document.getElementById("smQPlus");
   const addBtn = document.getElementById("scentModalAdd");
 
-  closeBtn?.addEventListener("click",()=>closeModal("scentOv"));
-
-  overlay?.addEventListener("click",e=>{
-    if(e.target.id==="scentOv") closeModal("scentOv");
+  closeBtn?.addEventListener("click", () => closeModal("scentOv"));
+  overlay?.addEventListener("click", e => {
+    if (e.target.id === "scentOv") closeModal("scentOv");
   });
 
-  minusBtn?.addEventListener("click",()=>{
-    if(quickAddQty>1){
-      quickAddQty--;
-      updateQuickAddQtyUI();
-    }
-  });
-
-  plusBtn?.addEventListener("click",()=>{
-    if(quickAddQty < quickAddMaxStock){
-      quickAddQty++;
-      updateQuickAddQtyUI();
-    } else {
-      toast(LANG === "en"
-        ? `⚠️ Only ${quickAddMaxStock} available`
-        : `⚠️ المتاح ${quickAddMaxStock} قطعة فقط`);
-    }
-  });
-
-  addBtn?.addEventListener("click",()=>{
-    if(!quickAddProduct) return;
+  // 1. زر الإضافة للسلة مع التحقق الدقيق من العطر والكمية لحظة الضغط
+  addBtn?.addEventListener("click", () => {
+    if (!quickAddProduct) return;
 
     const modalSelect = document.getElementById("modalScentSelect");
-    if(modalSelect && !quickAddScent) quickAddScent = modalSelect.value;
+    const currentScent = modalSelect ? modalSelect.value : quickAddScent;
+    const currentQty = parseInt(document.getElementById("smQVal")?.textContent || "1", 10) || 1;
 
-    if(!quickAddScent){
-      toast(t("t_scentwarn"));
+    if (!currentScent) {
+      toast(t("t_scentwarn") || "⚠️ من فضلك اختاري العطر أولاً");
       modalSelect?.focus();
       return;
     }
 
-    if(quickAddQty < 1) quickAddQty = 1;
-
-    const added = addToCart(quickAddProduct,{
-      scent:quickAddScent,
-      qty:quickAddQty
+    const added = addToCart(quickAddProduct, {
+      scent: currentScent,
+      qty: currentQty
     });
 
-    if(added){
+    if (added) {
       const originalText = addBtn.textContent;
       addBtn.disabled = true;
-      addBtn.textContent = t("quick_add_added");
+      addBtn.textContent = t("quick_add_added") || "✓ تمت الإضافة";
 
-      setTimeout(()=>{
+      setTimeout(() => {
         addBtn.disabled = false;
         addBtn.textContent = originalText || t("quick_add_add");
         closeModal("scentOv");
-      },450);
+        // تصفير المتغيرات للمرة القادمة
+        quickAddProduct = null;
+        quickAddScent = "";
+        quickAddQty = 1;
+      }, 450);
+    }
+  });
+
+  // 2. 🔥 الحل السحري لمشكلة العد المزدوج: Event Delegation 🔥
+  // نربط الحدث بالأب (المربع) مرة واحدة فقط، مما يمنع التكرار مهما أعاد الكود رسم الأزرار
+  document.getElementById("scentOv")?.addEventListener("click", (e) => {
+    if (e.target.id === "smQMinus") {
+      if (quickAddQty > 1) {
+        quickAddQty--;
+        updateQuickAddQtyUI();
+      }
+    } else if (e.target.id === "smQPlus") {
+      if (quickAddQty < quickAddMaxStock) {
+        quickAddQty++;
+        updateQuickAddQtyUI();
+      } else {
+        toast(LANG === "en" ? `⚠️ Only ${quickAddMaxStock} available` : `⚠️ المتاح ${quickAddMaxStock} قطعة فقط`);
+      }
+    }
+  });
+
+  // 3. ربط اختيار العطر أيضاً بالأب لمنع فقدان الرابط
+  document.getElementById("scentOv")?.addEventListener("change", (e) => {
+    if (e.target.id === "modalScentSelect") {
+      quickAddScent = e.target.value;
+      const modalAdd = document.getElementById("scentModalAdd");
+      if (modalAdd) modalAdd.disabled = !quickAddScent;
     }
   });
 }
 
-function updateQuickAddQtyUI(){
+function updateQuickAddQtyUI() {
   const qv = document.getElementById("smQVal");
-  if(qv) qv.textContent = quickAddQty;
+  if (qv) qv.textContent = quickAddQty;
 
   const minus = document.getElementById("smQMinus");
   const plus = document.getElementById("smQPlus");
 
-  if(minus){
-    minus.disabled = quickAddQty <= 1;
-    minus.setAttribute("aria-disabled", String(quickAddQty <= 1));
+  if (minus) {
+    minus.style.opacity = quickAddQty <= 1 ? "0.4" : "1";
+    minus.style.pointerEvents = quickAddQty <= 1 ? "none" : "auto";
   }
-
-  if(plus){
-    plus.disabled = quickAddQty >= quickAddMaxStock;
-    plus.setAttribute("aria-disabled", String(quickAddQty >= quickAddMaxStock));
+  if (plus) {
+    plus.style.opacity = quickAddQty >= quickAddMaxStock ? "0.4" : "1";
+    plus.style.pointerEvents = quickAddQty >= quickAddMaxStock ? "none" : "auto";
   }
 }
 
-function openQuickAdd(p){
-  if(!p) return;
+function openQuickAdd(p) {
+  if (!p) return;
 
-  quickAddProduct=p;
-  quickAddScent="";
-  quickAddQty=1;
+  quickAddProduct = p;
+  quickAddScent = "";
+  quickAddQty = 1;
 
   const stockNum = Number(p.stock);
-  quickAddMaxStock = Number.isFinite(stockNum) && stockNum > 0
-    ? Math.floor(stockNum)
-    : 99;
+  quickAddMaxStock = Number.isFinite(stockNum) && stockNum > 0 ? Math.floor(stockNum) : 99;
 
-  const title=document.getElementById("scentModalTitle");
-  if(title){
-    title.textContent=pname(p);
+  const title = document.getElementById("scentModalTitle");
+  if (title) {
+    title.textContent = pname(p);
     title.setAttribute("aria-label", pname(p));
   }
 
-  const qv=document.getElementById("smQVal");
-  if(qv) qv.textContent="1";
-
-  const minus=document.getElementById("smQMinus");
-  const plus=document.getElementById("smQPlus");
-  if(minus) minus.disabled=true;
-  if(plus) plus.disabled=quickAddMaxStock <= 1;
-
-  const addBtn=document.getElementById("scentModalAdd");
-  if(addBtn){
-    addBtn.disabled=true;
-    addBtn.textContent=t("quick_add_add");
+  const addBtn = document.getElementById("scentModalAdd");
+  if (addBtn) {
+    addBtn.disabled = true; // معطل حتى يتم اختيار العطر
+    addBtn.textContent = t("quick_add_add") || "🛍️ أضيفي للسلة";
   }
 
-  const w=document.getElementById("scentModalScents");
-  if(!w) return;
+  const w = document.getElementById("scentModalScents");
+  if (!w) return;
 
-  let imgSrc="";
-  try{
-    imgSrc=(typeof imgOf === "function") ? imgOf(p) : (p.img || "");
-  }catch(e){
-    imgSrc=p.img || "";
-  }
-
-  if(!imgSrc){
-    imgSrc="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect fill='%23f5efe5' width='120' height='120'/><text x='60' y='60' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='18' fill='%23d9ab5f'>✦</text></svg>";
+  let imgSrc = "";
+  try { imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || ""); } catch (e) { imgSrc = p.img || ""; }
+  if (!imgSrc) {
+    imgSrc = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect fill='%23f5efe5' width='120' height='120'/><text x='60' y='60' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='18' fill='%23d9ab5f'>✦</text></svg>";
   }
 
   const safeName = pname(p);
   const priceText = money(p.price);
 
+  // حقن الكود النظيف (يحتوي على حقل الكمية مرة واحدة فقط)
   w.innerHTML = `
     <div class="vl-quick-preview" style="display:flex;align-items:center;gap:.9rem;margin-bottom:1rem;padding:.65rem;border:1px solid var(--line);border-radius:14px;background:var(--bg);">
       <img src="${imgSrc}" alt="${safeName}" width="72" height="72" loading="eager" decoding="async" style="width:72px;height:72px;object-fit:cover;border-radius:11px;flex:0 0 72px;" onerror="this.style.display='none'">
@@ -1821,43 +1817,26 @@ function openQuickAdd(p){
       <option value="">${LANG === "en" ? "Choose a scent..." : "اختاري العطر..."}</option>
       ${VELA_SCENTS.map(s => `<option value="${s[0]}">${velaScentTr(s[0])}</option>`).join('')}
     </select>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:1rem;">
+      <span style="font-weight:700;">${t("quick_add_qty")}</span>
+      <div style="display:flex;align-items:center;gap:.65rem;border:1px solid var(--line);border-radius:11px;padding:.25rem;background:var(--bg);">
+        <button id="smQMinus" type="button" aria-label="${LANG === "en" ? "Decrease quantity" : "تقليل الكمية"}" style="width:36px;height:36px;border:0;border-radius:8px;background:transparent;font-size:1.25rem;cursor:pointer;">−</button>
+        <b id="smQVal" style="min-width:22px;text-align:center;">1</b>
+        <button id="smQPlus" type="button" aria-label="${LANG === "en" ? "Increase quantity" : "زيادة الكمية"}" style="width:36px;height:36px;border:0;border-radius:8px;background:transparent;font-size:1.25rem;cursor:pointer;">+</button>
+      </div>
+    </div>
   `;
- 
-  // إعادة ربط أزرار الكمية بعد إعادة بناء محتوى الـ Quick Add.
-  const newMinus=document.getElementById("smQMinus");
-  const newPlus=document.getElementById("smQPlus");
-  const newSelect=document.getElementById("modalScentSelect");
-
-  newMinus?.addEventListener("click",()=>{
-    if(quickAddQty>1){
-      quickAddQty--;
-      updateQuickAddQtyUI();
-    }
-  });
-
-  newPlus?.addEventListener("click",()=>{
-    if(quickAddQty < quickAddMaxStock){
-      quickAddQty++;
-      updateQuickAddQtyUI();
-    } else {
-      toast(LANG === "en"
-        ? `⚠️ Only ${quickAddMaxStock} available`
-        : `⚠️ المتاح ${quickAddMaxStock} قطعة فقط`);
-    }
-  });
-
-  newSelect?.addEventListener("change",e=>{
-    quickAddScent=e.target.value;
-    const modalAdd=document.getElementById("scentModalAdd");
-    if(modalAdd) modalAdd.disabled=!quickAddScent;
-  });
 
   updateQuickAddQtyUI();
   openDrawer("scentOv");
 
-  setTimeout(()=>newSelect?.focus(),60);
+  setTimeout(() => {
+    const newSelect = document.getElementById("modalScentSelect");
+    if (newSelect) newSelect.focus();
+  }, 60);
 }
-
+ 
 const debouncedRenderProducts = debounce(renderProducts, 250);
 
 document.addEventListener("change",e=>{
