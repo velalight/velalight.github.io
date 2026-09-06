@@ -1821,17 +1821,8 @@ function openQuickAdd(p){
       <option value="">${LANG === "en" ? "Choose a scent..." : "اختاري العطر..."}</option>
       ${VELA_SCENTS.map(s => `<option value="${s[0]}">${velaScentTr(s[0])}</option>`).join('')}
     </select>
-
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:1rem;">
-      <span style="font-weight:700;">${t("quick_add_qty")}</span>
-      <div style="display:flex;align-items:center;gap:.65rem;border:1px solid var(--line);border-radius:11px;padding:.25rem;background:var(--bg);">
-        <button id="smQMinus" type="button" aria-label="${LANG === "en" ? "Decrease quantity" : "تقليل الكمية"}" style="width:36px;height:36px;border:0;border-radius:8px;background:transparent;font-size:1.25rem;cursor:pointer;">−</button>
-        <b id="smQVal" style="min-width:22px;text-align:center;">1</b>
-        <button id="smQPlus" type="button" aria-label="${LANG === "en" ? "Increase quantity" : "زيادة الكمية"}" style="width:36px;height:36px;border:0;border-radius:8px;background:transparent;font-size:1.25rem;cursor:pointer;">+</button>
-      </div>
-    </div>
   `;
-
+ 
   // إعادة ربط أزرار الكمية بعد إعادة بناء محتوى الـ Quick Add.
   const newMinus=document.getElementById("smQMinus");
   const newPlus=document.getElementById("smQPlus");
