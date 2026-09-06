@@ -788,18 +788,15 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
   <div class="mpanel">
     <button class="icobtn" id="closeScent" style="float:left" aria-label="إغلاق">✕</button>
     <h3 class="fd" style="color:var(--gold2)" id="scentModalTitle"></h3>
+    
     <div class="opt-t" data-i18n="pd_scent_t">🌸 اختاري العطر:</div>
+    <!-- هنا سيقوم ملف app.js برسم قائمة العطور وحقل الكمية الصحيح مرة واحدة فقط -->
     <div class="scents-pick" id="scentModalScents"></div>
-    <div class="opt-t" data-i18n="pd_qty_t">الكمية:</div>
-    <div class="qty">
-      <button id="smQMinus" aria-label="تقليل الكمية">−</button>
-      <b id="smQVal">1</b>
-      <button id="smQPlus" aria-label="زيادة الكمية">+</button>
-    </div>
+    
     <button class="btn" id="scentModalAdd" style="width:100%;margin-top:1.2rem" data-i18n="pd_add">🛍️ أضيفي للسلة</button>
   </div>
 </div>
-
+  
 <!-- ═══ ACCOUNT MODAL ═══ -->
 <div class="modal" id="accOv">
   <div class="mpanel">
