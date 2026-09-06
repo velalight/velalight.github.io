@@ -1675,7 +1675,7 @@ function handleProductGridClick(e){
   }
 }
 
-/* ═══ QUICK ADD MODAL (النسخة المصححة نهائياً) ═══ */
+/* ═══ QUICK ADD MODAL (النسخة المصححة نهائياً - بدون تعطيل الزر + Event Delegation) ═══ */
 function initQuickAdd() {
   const closeBtn = document.getElementById("closeScent");
   const overlay = document.getElementById("scentOv");
@@ -1686,45 +1686,9 @@ function initQuickAdd() {
     if (e.target.id === "scentOv") closeModal("scentOv");
   });
 
-  // 1. زر الإضافة للسلة مع التحقق الدقيق من العطر والكمية لحظة الضغط
-  addBtn?.addEventListener("click", () => {
-    if (!quickAddProduct) return;
-
-    const modalSelect = document.getElementById("modalScentSelect");
-    const currentScent = modalSelect ? modalSelect.value : quickAddScent;
-    const currentQty = parseInt(document.getElementById("smQVal")?.textContent || "1", 10) || 1;
-
-    if (!currentScent) {
-      toast(t("t_scentwarn") || "⚠️ من فضلك اختاري العطر أولاً");
-      modalSelect?.focus();
-      return;
-    }
-
-    const added = addToCart(quickAddProduct, {
-      scent: currentScent,
-      qty: currentQty
-    });
-
-    if (added) {
-      const originalText = addBtn.textContent;
-      addBtn.disabled = true;
-      addBtn.textContent = t("quick_add_added") || "✓ تمت الإضافة";
-
-      setTimeout(() => {
-        addBtn.disabled = false;
-        addBtn.textContent = originalText || t("quick_add_add");
-        closeModal("scentOv");
-        // تصفير المتغيرات للمرة القادمة
-        quickAddProduct = null;
-        quickAddScent = "";
-        quickAddQty = 1;
-      }, 450);
-    }
-  });
-
-  // 2. 🔥 الحل السحري لمشكلة العد المزدوج: Event Delegation 🔥
-  // نربط الحدث بالأب (المربع) مرة واحدة فقط، مما يمنع التكرار مهما أعاد الكود رسم الأزرار
-  document.getElementById("scentOv")?.addEventListener("click", (e) => {
+  // 🔥 الحل الجذري: Event Delegation - نربط الأحداث بالأب مرة واحدة فقط
+  // هذا يمنع العد المزدوج (1,3,5) ويضمن أن الأزرار تعمل حتى بعد إعادة رسم HTML
+  overlay?.addEventListener("click", (e) => {
     if (e.target.id === "smQMinus") {
       if (quickAddQty > 1) {
         quickAddQty--;
@@ -1740,12 +1704,43 @@ function initQuickAdd() {
     }
   });
 
-  // 3. ربط اختيار العطر أيضاً بالأب لمنع فقدان الرابط
-  document.getElementById("scentOv")?.addEventListener("change", (e) => {
+  overlay?.addEventListener("change", (e) => {
     if (e.target.id === "modalScentSelect") {
       quickAddScent = e.target.value;
-      const modalAdd = document.getElementById("scentModalAdd");
-      if (modalAdd) modalAdd.disabled = !quickAddScent;
+    }
+  });
+
+  // 1. زر الإضافة للسلة - بدون تعطيل، يتحقق دائماً ويظهر الرسالة
+  addBtn?.addEventListener("click", () => {
+    if (!quickAddProduct) return;
+
+    const modalSelect = document.getElementById("modalScentSelect");
+    const currentScent = modalSelect ? modalSelect.value : quickAddScent;
+    const currentQty = parseInt(document.getElementById("smQVal")?.textContent || "1", 10) || 1;
+
+    // ⚠️ التحقق الصارم من العطر وإظهار الرسالة (مثل صفحة المنتج تماماً)
+    if (!currentScent) {
+      toast("⚠️ من فضلك اختاري العطر أولاً");
+      if (modalSelect) modalSelect.focus();
+      return;
+    }
+
+    const added = addToCart(quickAddProduct, {
+      scent: currentScent,
+      qty: currentQty
+    });
+
+    if (added) {
+      const originalText = addBtn.textContent;
+      addBtn.textContent = "✓ تمت الإضافة";
+
+      setTimeout(() => {
+        addBtn.textContent = originalText || "🛍️ أضيفي للسلة";
+        closeModal("scentOv");
+        quickAddProduct = null;
+        quickAddScent = "";
+        quickAddQty = 1;
+      }, 450);
     }
   });
 }
@@ -1785,8 +1780,9 @@ function openQuickAdd(p) {
 
   const addBtn = document.getElementById("scentModalAdd");
   if (addBtn) {
-    addBtn.disabled = true; // معطل حتى يتم اختيار العطر
-    addBtn.textContent = t("quick_add_add") || "🛍️ أضيفي للسلة";
+    // ✅ هام جداً: الزر يبقى مفعّل دائماً عشان يستقبل الضغط ويظهر رسالة التحذير
+    addBtn.disabled = false;
+    addBtn.textContent = t("quick_add_add") || "️ أضيفي للسلة";
   }
 
   const w = document.getElementById("scentModalScents");
@@ -1801,7 +1797,7 @@ function openQuickAdd(p) {
   const safeName = pname(p);
   const priceText = money(p.price);
 
-  // حقن الكود النظيف (يحتوي على حقل الكمية مرة واحدة فقط)
+  // حقن الكود النظيف (حقل الكمية مرة واحدة فقط)
   w.innerHTML = `
     <div class="vl-quick-preview" style="display:flex;align-items:center;gap:.9rem;margin-bottom:1rem;padding:.65rem;border:1px solid var(--line);border-radius:14px;background:var(--bg);">
       <img src="${imgSrc}" alt="${safeName}" width="72" height="72" loading="eager" decoding="async" style="width:72px;height:72px;object-fit:cover;border-radius:11px;flex:0 0 72px;" onerror="this.style.display='none'">
@@ -1836,7 +1832,7 @@ function openQuickAdd(p) {
     if (newSelect) newSelect.focus();
   }, 60);
 }
- 
+
 const debouncedRenderProducts = debounce(renderProducts, 250);
 
 document.addEventListener("change",e=>{
@@ -2006,7 +2002,7 @@ function initCart(){
     badges.id = 'trustBadges';
     badges.style.cssText = 'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
     badges.innerHTML = `
-      <span style="display:flex; align-items:center; gap:4px;">🔒 دفع آمن</span>
+      <span style="display:flex; align-items:center; gap:4px;"> دفع آمن</span>
       <span style="display:flex; align-items:center; gap:4px;">🔄 ضمان استرجاع</span>
       <span style="display:flex; align-items:center; gap:4px;">🚚 توصيل موثوق</span>
     `;
@@ -2044,7 +2040,7 @@ function renderCart(){
       <div class="citem-info">
         <h5>${pname({name:it.name,nameEn:it.nameEn})}</h5>
         <label class="cart-scent-picker">
-          <span class="cart-scent-label">🌸 ${t("scent_lbl")}</span>
+          <span class="cart-scent-label"> ${t("scent_lbl")}</span>
           <select class="cart-scent-select" data-i="${i}" aria-label="${t("scent_lbl")}">
             <option value="">${LANG==="en"?"Choose a scent":"اختار العطر"}</option>
             ${VELA_SCENTS.map(scent=>`
@@ -2102,7 +2098,7 @@ function renderCart(){
       <div style="display:flex; align-items:center; gap:1rem;">
         <img src="${suggestedProduct.img || ''}" style="width:60px; height:60px; object-fit:cover; border-radius:8px;" onerror="this.style.display='none'">
         <div style="flex:1">
-          <div style="font-weight:700; font-size:0.9rem;">💡 أرشح لك فوحات شمع معطره لدولابك: ${pname(suggestedProduct)}</div>
+          <div style="font-weight:700; font-size:0.9rem;"> أرشح لك فوحات شمع معطره لدولابك: ${pname(suggestedProduct)}</div>
           <div style="font-size:0.8rem; color:var(--mut); margin:0.2rem 0;">${money(suggestedProduct.price)} فقط</div>
           <button class="btn sm" id="addSuggestBtn" style="margin-top:0.3rem; width:100%;">أضف للسلة</button>
         </div>
@@ -2151,7 +2147,8 @@ function renderCart(){
   
   updateTotals(c);
 }
-  function handleCartClick(e){
+
+function handleCartClick(e){
   const rmBtn = e.target.closest('.rm');
   const plusBtn = e.target.closest('.cq-plus');
   const minusBtn = e.target.closest('.cq-minus');
@@ -2192,7 +2189,6 @@ function handleCartChange(e){
 // ═══════════════════════════════════════════════════════════
 //   التعديلات الجديدة على الخصومات (خصم واحد فقط - الأعلى)
 // ═══════════════════════════════════════════════════════════
-
 function updateTotals(c){
   const sub = c.reduce((a,i) => a + (Number(i.price||0) * Number(i.qty||1)), 0);
   
