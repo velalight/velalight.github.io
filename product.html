@@ -7,7 +7,6 @@
 <meta name="description" content="اكتشفي تفاصيل المنتج من VelaLight — شموع يدوية فاخرة بعطور مميزة. صناعة يدوية 100% بخامات طبيعية.">
 <meta name="theme-color" content="#faf6f0">
 
-  
 <!-- ═══ SEO & Social Sharing (Fallback) ═══ -->
 <meta property="og:type" content="product">
 <meta property="og:site_name" content="VelaLight">
@@ -784,23 +783,6 @@
 }
 </style>
 
-<!-- ═══ JSON-LD ديناميكي — سيتم تحديثه بواسطة JavaScript ═══ -->
-<script type="application/ld+json" id="pdJsonLd">
-{
-  "@context":"https://schema.org",
-  "@type":"Product",
-  "name":"منتج VelaLight",
-  "image":"https://velalight.github.io/velalight-wooden-luxury-set-3candles-detail.webp",
-  "description":"شموع يدوية فاخرة",
-  "brand":{"@type":"Brand","name":"VelaLight"},
-  "offers":{
-    "@type":"Offer",
-    "priceCurrency":"EGP",
-    "price":"0",
-    "availability":"https://schema.org/InStock"
-  }
-}
-</script>
 </head>
 <body>
 
@@ -935,12 +917,10 @@
 
           <!-- ═══ Trust Badges ═══ -->
           <div class="trust-badges">
-            <!-- الكود الجديد الذي سيترجم تلقائياً -->
-<span data-i18n="pd_feat_1">🕯️ صناعة يدوية</span>
-<span data-i18n="pd_feat_2">🚚 توصيل سريع</span>
-<span data-i18n="pd_feat_3">🎁 تغليف فاخر</span>
-<span data-i18n="pd_feat_4">💳 دفع آمن</span>
-            
+            <span data-i18n="pd_feat_1">🕯️ صناعة يدوية</span>
+            <span data-i18n="pd_feat_2">🚚 توصيل سريع</span>
+            <span data-i18n="pd_feat_3">🎁 تغليف فاخر</span>
+            <span data-i18n="pd_feat_4">💳 دفع آمن</span>
           </div>
 
           <!-- ═══ Description ═══ -->
@@ -963,7 +943,7 @@
             </div>
           </div>
 
-                    <!-- ═══ Actions ═══ -->
+          <!-- ═══ Actions ═══ -->
           <div class="pd-actions">
             <button class="btn" id="pdAddBtn" type="button" data-i18n="pd_add" style="background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(217,171,95,.4);">🛍️ أضيفي للسلة</button>
             
@@ -1342,7 +1322,6 @@ function render(){
   const name=(typeof pname === "function") ? pname(P) : (P.name || "منتج");
   document.title=name+" | VelaLight";
 
-  // 🔥 تحديث وسوم المشاركة الاجتماعية (فيسبوك، واتساب، إلخ) ديناميكياً 🔥
   const currentUrl = window.location.href;
   const mainImgSrc = (typeof imgsOf === "function" && imgsOf(P).length > 0) ? imgsOf(P)[0] : (P.img || "");
   const imageUrl = (typeof CDN === "function") ? CDN(mainImgSrc) : `https://velalight.github.io/${mainImgSrc}`;
@@ -1362,9 +1341,7 @@ function render(){
 
   let canonical = document.querySelector('link[rel="canonical"]');
   if(canonical) canonical.setAttribute("href", currentUrl);
-  // ==================================================================================
   
-  // تحديث الـ JSON-LD ديناميكيًا
   if(typeof updateJsonLd === "function") updateJsonLd();
 
   $("#crumbName").textContent=name;
@@ -1376,7 +1353,6 @@ function render(){
 
   zoomImages=(typeof imgsOf === "function") ? imgsOf(P) : (P.img ? [P.img] : []);
   
-  // ⚠️ ملاحظة: تم تغيير الاسم إلى mainImgEl لتجنب التعارض مع متغير mainImgSrc أعلاه
   const mainImgEl=$("#pdImg"); 
   mainImgEl.classList.remove("loaded");
   mainImgEl.onerror=()=>{ mainImgEl.src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>"; mainImgEl.classList.add("loaded"); };
@@ -1443,13 +1419,10 @@ function renderStock(){
     var buyBtn = document.getElementById("pdBuyBtn");
     if (buyBtn) { buyBtn.disabled = true; }
   } else if (stockValue <= 5) {
-    // استخدام دالة الترجمة t() مع استبدال الرقم ديناميكياً
-const stockText = (typeof t === "function") 
-    ? t("stock_remaining").replace("{n}", stockValue) 
-    : "⚡ باقي " + stockValue + " فقط";
-
-box.innerHTML = '<span class="stock-badge low">' + stockText + '</span>';
-    
+    const stockText = (typeof t === "function") 
+        ? t("stock_remaining").replace("{n}", stockValue) 
+        : "⚡ باقي " + stockValue + " فقط";
+    box.innerHTML = '<span class="stock-badge low">' + stockText + '</span>';
   } else {
     box.innerHTML = '<span class="stock-badge ok">✓ متوفر (' + stockValue + ')</span>';
   }
@@ -1547,16 +1520,22 @@ function bindEvents(){
     } 
   });
   
-  // 3. زر إضافة إلى عربة التسوق
+  // 3. زر إضافة إلى عربة التسوق (معدل لحل مشكلة الكمية نهائياً)
   $("#pdAddBtn")?.addEventListener("click",()=>{ 
     if(!selScent){ 
       if(typeof toast==="function") toast("⚠️ من فضلك اختاري العطر الأول"); 
       return; 
     } 
+    
+    // 🔥 الحل الجذري: اقرأ الكمية مباشرة من الشاشة لحظة الضغط
+    const qtyElement = $("#pdQVal");
+    const currentQtyText = qtyElement ? qtyElement.textContent.trim() : "1";
+    const finalQty = parseInt(currentQtyText, 10) || 1;
+    
     if(typeof addToCart==="function"){ 
-      addToCart(P,{scent:selScent,qty}); 
+      addToCart(P, {scent: selScent, qty: finalQty}); 
       if(typeof track==="function"){ 
-        track("add_to_cart",{items:[{item_id:P.id,item_name:P.name,price:P.price,quantity:qty}]}); 
+        track("add_to_cart", {items: [{item_id: P.id, item_name: P.name, price: P.price, quantity: finalQty}]}); 
       } 
     } 
   });
@@ -1571,7 +1550,6 @@ function bindEvents(){
     const totalPrice = P.price * qty;
     const productName = (typeof pname === "function" ? pname(P) : P.name);
     
-    // 🔥 إرسال حدث الشراء لفيسبوك بيكسل 🔥
     if(typeof window.fbq === 'function') {
       window.fbq('track', 'Purchase', {
         value: totalPrice,
@@ -1580,16 +1558,15 @@ function bindEvents(){
         content_name: productName,
         content_type: 'product'
       });
-      console.log("✅ تم إرسال حدث Purchase بنجاح بقيمة: " + totalPrice);
     }
     
-    // فتح الواتساب
     const msg = `✨ أهلاً VelaLight!\n\nعايزة أطلب:\n🕯️ ${productName}\n🌸 العطر: ${velaScentTr(selScent)}\n📦 الكمية: ${qty}\n💰 الإجمالي: ${(typeof money === "function" ? money(totalPrice) : (totalPrice + " ج.م"))}`; 
     const wa = (typeof CFG !== "undefined" && CFG.WHATSAPP) ? CFG.WHATSAPP : ""; 
     
     if(wa) window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, "_blank");
   });
 }
+
 /* ═══════ WISHLIST ═══════ */
 function initWishButton(){ $("#pdWishBtn")?.addEventListener("click",()=>{ if(!P) return; toggleWishlist(P.id); updateWishButton(); }); }
 function updateWishButton(){ const btn=$("#pdWishBtn"); if(!btn||!P) return; if(isInWishlist(P.id)){ btn.textContent="❤️"; btn.classList.add("on"); btn.setAttribute("aria-label","إزالة من المفضلة"); }else{ btn.textContent="🤍"; btn.classList.remove("on"); btn.setAttribute("aria-label","أضف للمفضلة"); } }
@@ -1674,7 +1651,6 @@ function renderShare() {
                (typeof pname === "function" ? pname(P) : P.name) + 
                ((typeof LANG !== "undefined" && LANG === "en") ? " from VelaLight ✨" : " من VelaLight ✨");
   
-  // 🔥 استخدام دالة t() للترجمة
   const shareLabel = (typeof t === "function") ? t("share") : "مشاركة:";
   const whatsappText = (typeof t === "function") ? t("share_whatsapp") : "WhatsApp";
   const facebookText = (typeof t === "function") ? t("share_facebook") : "Facebook";
@@ -1704,12 +1680,10 @@ function updateJsonLd(){
   const ld = document.getElementById("pdJsonLd");
   if(!ld || !P) return;
 
-  // تجهيز الصور
   const imgs = zoomImages.length 
     ? zoomImages.map(u => (typeof CDN === "function" ? CDN(u) : u))
     : [(P.img || "https://velalight.github.io/velalight-wooden-luxury-set-3candles-detail.webp")];
 
-  // تجهيز التقييمات
   const revs = (typeof prodReviews === "function") ? prodReviews(P.id) : [];
   let aggregateRating = undefined;
   if(revs.length){
@@ -1721,7 +1695,6 @@ function updateJsonLd(){
     };
   }
 
-  // بناء البيانات
   const data = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -1746,7 +1719,6 @@ function updateJsonLd(){
     data.aggregateRating = aggregateRating;
   }
 
-  // وضع البيانات في الـ JSON-LD
   ld.textContent = JSON.stringify(data, null, 2);
 }
 
