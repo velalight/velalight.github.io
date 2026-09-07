@@ -75,6 +75,9 @@
 </script>
 
 <style>
+/* ═══ منع وميض رسالة "المنتج غير متاح" ═══ */
+#pdNotFound { display: none !important; }
+
 /* ═══ Layout ═══ */
 .pd-hero{padding:1.5rem 0 3rem}
 .pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
@@ -875,8 +878,8 @@
       </div>
     </div>
 
-    <!-- ═══ PRODUCT NOT FOUND ═══ -->
-    <div id="pdNotFound" class="empty hidden" role="alert" aria-live="polite">
+    <!-- ═══ PRODUCT NOT FOUND ═══ (مخفي بشكل دائم حتى يظهر عند الحاجة) -->
+    <div id="pdNotFound" class="hidden" role="alert" aria-live="polite">
       <div style="font-size:4rem;margin-bottom:1rem" aria-hidden="true">🕯️</div>
       <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem" data-i18n="pd_not_found_title">😕 المنتج غير متاح</h2>
       <p style="color:var(--mut);margin-bottom:1.5rem" data-i18n="pd_not_found_desc">عذراً، لم نتمكن من العثور على هذا المنتج</p>
@@ -1723,7 +1726,10 @@ function updateJsonLd(){
 }
 
 /* ═══════ NOT FOUND ═══════ */
-function showNotFound(){ $("#pdLoading").classList.add("hidden"); $("#pdNotFound").classList.remove("hidden"); }
+function showNotFound(){ 
+  $("#pdLoading").classList.add("hidden"); 
+  $("#pdNotFound").classList.remove("hidden"); 
+}
 
 })();
 </script>
