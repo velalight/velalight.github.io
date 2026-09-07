@@ -515,18 +515,18 @@ reviews_cta_btn: "Shop Now 🛍️",
 foot_wishlist: "❤️ Wishlist",
 foot_orders: "📦 My Orders",
       
-      /* Shipping & Payment */
+            /* Shipping & Payment */
       ship_note:
         "🚚 Shipping: paid cash to the courier on delivery.",
 
       pay_products_note:
-        "💳 Payment details (InstaPay / Wallet / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
+        " Payment details (InstaPay / Vodafone Cash / Orange Cash / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
 
       pay_title:
-        "Payment via InstaPay",
+        "InstaPay / Vodafone Cash / Orange Cash",
 
       paymethod_d:
-        "Product payment is made upfront upon order confirmation.",
+        "Upfront transfer (InstaPay / Vodafone Cash / Orange Cash), shipping cash on delivery.",
 
 
       /* Scent */
@@ -2487,7 +2487,7 @@ async function checkout(){
   msg+=`🎁 هدية ليك: كود THANKS10 لخصم 10% على طلبك الجاي\n`;
   
   msg+=`${waTotalLabel()} ${money(total)}\n`;
-  msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.\n`;
+msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.\n`;
   
   msg+=`${t("ship_note")}\n\n`;
   msg+=`${t("wa_name")} ${name}\n`;
@@ -2714,7 +2714,7 @@ ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
 ═══════════════════════════════════════
 💳 طريقة الدفع:
 ═══════════════════════════════════════
-• سيتم إرسال تفاصيل الدفع (InstaPay / فودافون كاش / تحويل بنكي) للعميل عبر الواتساب.
+• سيتم إرسال تفاصيل الدفع (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) للعميل عبر الواتساب.
 • الشحن: كاش للمندوب عند الاستلام.
 ═══════════════════════════════════════
 
