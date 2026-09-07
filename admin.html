@@ -117,6 +117,9 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 .payment-refunded{background:#e2e3e5;color:#383d41}
 .delete-btn{background:transparent;border:0;color:#e74c3c;cursor:pointer;font-size:.85rem;padding:0 .3rem}
 .delete-btn:hover{color:#c0392b}
+/* ═══ نموذج الطلب اليدوي ═══ */
+#manualOrderForm .g select, #manualOrderForm .g input { width:100%; padding:.6rem; border-radius:10px; border:1px solid var(--line); background:var(--panel); font-family:inherit; font-size:.9rem; }
+#manualOrderForm .g select { cursor:pointer; }
 @media(max-width:600px){
   table.adm{display:block;overflow-x:auto}
   .pform .g{grid-template-columns:1fr}
@@ -169,6 +172,40 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
     <!-- ORDERS -->
     <div id="tab-orders">
+      <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
+        <button class="btn sm" id="manualOrderBtn" type="button">➕ إضافة طلب يدوي (واتساب / تليفون)</button>
+      </div>
+
+      <!-- نموذج الطلب اليدوي -->
+      <div id="manualOrderForm" class="pform hidden">
+        <h3 style="color:var(--gold2);margin-bottom:1rem">📝 إضافة طلب يدوي</h3>
+        <div class="g">
+          <div><label>اسم العميل *</label><input id="mo_name" placeholder="الاسم بالكامل"></div>
+          <div><label>رقم الموبايل *</label><input id="mo_phone" type="tel" placeholder="010xxxxxxx"></div>
+        </div>
+        <div class="g">
+          <div><label>المدينة</label><input id="mo_city" placeholder="القاهرة"></div>
+          <div><label>العنوان</label><input id="mo_addr" placeholder="العنوان بالتفصيل"></div>
+        </div>
+        <div class="g">
+          <div><label>المنتج *</label>
+            <select id="mo_product"><option value="">اختر المنتج</option></select>
+          </div>
+          <div><label>العطر</label>
+            <select id="mo_scent"><option value="">بدون عطر</option></select>
+          </div>
+        </div>
+        <div class="g">
+          <div><label>الكمية</label><input id="mo_qty" type="number" value="1" min="1"></div>
+          <div><label>السعر (ج.م) *</label><input id="mo_price" type="number" placeholder="السعر الفعلي" step="0.01"></div>
+        </div>
+        <div><label>ملاحظات</label><textarea id="mo_notes" rows="2" placeholder="أي تفاصيل إضافية"></textarea></div>
+        <div style="display:flex;gap:.6rem;margin-top:1rem">
+          <button class="btn sm" id="saveManualOrderBtn" type="button">💾 حفظ الطلب</button>
+          <button class="btn sm ghost" id="cancelManualOrderBtn" type="button">إلغاء</button>
+        </div>
+      </div>
+
       <div class="order-filters">
         <input id="orderSearch" type="search" placeholder="🔎 ابحث برقم الطلب أو اسم العميل">
         <select id="orderStatusFilter">
@@ -397,6 +434,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initProductForm();
   initCouponForm();
   initCraftForm();
+  initManualOrder(); // ✅ تهيئة الطلب اليدوي
   document.getElementById("orderSearch")?.addEventListener("input", filterOrders);
   document.getElementById("orderStatusFilter")?.addEventListener("change", filterOrders);
   document.getElementById("orderDateFrom")?.addEventListener("change", filterOrders);
@@ -521,6 +559,142 @@ function initTabs(){
   });
 }
 
+// ═══════════════════════════════════════════════════════════
+// ✅ MANUAL ORDER SYSTEM
+// ═══════════════════════════════════════════════════════════
+function initManualOrder() {
+  const btn = document.getElementById("manualOrderBtn");
+  const form = document.getElementById("manualOrderForm");
+  const cancelBtn = document.getElementById("cancelManualOrderBtn");
+  const saveBtn = document.getElementById("saveManualOrderBtn");
+  const productSelect = document.getElementById("mo_product");
+  const scentSelect = document.getElementById("mo_scent");
+  const priceInput = document.getElementById("mo_price");
+
+  // عرض/إخفاء النموذج
+  btn?.addEventListener("click", () => {
+    form.classList.toggle("hidden");
+    if (!form.classList.contains("hidden")) {
+      populateProductSelect();
+      // تعيين تاريخ اليوم في الحقول إذا لزم الأمر
+    }
+  });
+  cancelBtn?.addEventListener("click", () => form.classList.add("hidden"));
+
+  // عند تغيير المنتج، تحديث العطور والسعر
+  productSelect?.addEventListener("change", function() {
+    const productId = this.value;
+    if (!productId) {
+      scentSelect.innerHTML = '<option value="">بدون عطر</option>';
+      priceInput.value = '';
+      return;
+    }
+    // البحث عن المنتج في PRODUCTS_ADMIN_CACHE أو PRODUCTS
+    const allProducts = (typeof PRODUCTS_ADMIN_CACHE !== "undefined" && PRODUCTS_ADMIN_CACHE.length) 
+      ? PRODUCTS_ADMIN_CACHE 
+      : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
+    const product = allProducts.find(p => p.id === productId);
+    if (product) {
+      // تعبئة العطور
+      const scents = product.scents || [];
+      scentSelect.innerHTML = '<option value="">بدون عطر</option>' +
+        scents.map(s => `<option value="${s}">${s}</option>`).join('');
+      // تعبئة السعر
+      priceInput.value = product.price || 0;
+    } else {
+      scentSelect.innerHTML = '<option value="">بدون عطر</option>';
+      priceInput.value = '';
+    }
+  });
+
+  // حفظ الطلب
+  saveBtn?.addEventListener("click", async function() {
+    const name = document.getElementById("mo_name").value.trim();
+    const phone = document.getElementById("mo_phone").value.trim();
+    const city = document.getElementById("mo_city").value.trim();
+    const addr = document.getElementById("mo_addr").value.trim();
+    const productId = productSelect.value;
+    const scent = scentSelect.value;
+    const qty = parseInt(document.getElementById("mo_qty").value) || 1;
+    const price = parseFloat(document.getElementById("mo_price").value) || 0;
+    const notes = document.getElementById("mo_notes").value.trim();
+
+    // التحقق من الحقول المطلوبة
+    if (!name) { toast("⚠️ اكتب اسم العميل"); return; }
+    if (!phone) { toast("⚠️ اكتب رقم الموبايل"); return; }
+    if (!productId) { toast("⚠️ اختر المنتج"); return; }
+    if (price <= 0) { toast("⚠️ السعر يجب أن يكون أكبر من صفر"); return; }
+
+    // توليد رقم طلب فريد
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let orderId = "VL-";
+    for (let i = 0; i < 6; i++) orderId += chars[Math.floor(Math.random() * chars.length)];
+
+    // الحصول على اسم المنتج
+    const allProducts = (typeof PRODUCTS_ADMIN_CACHE !== "undefined" && PRODUCTS_ADMIN_CACHE.length) 
+      ? PRODUCTS_ADMIN_CACHE 
+      : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
+    const product = allProducts.find(p => p.id === productId);
+    const productName = product ? (product.name || productId) : productId;
+
+    const orderData = {
+      orderId: orderId,
+      name: name,
+      phone: phone,
+      city: city || "",
+      address: addr || "",
+      notes: notes || "",
+      total: price * qty,
+      products: [{
+        id: productId,
+        name: productName,
+        scent: scent || "",
+        quantity: qty,
+        price: price,
+        total: price * qty
+      }],
+      status: 0, // قيد المراجعة
+      paymentStatus: 'pending',
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      source: 'manual' // مصدر الطلب يدوي
+    };
+
+    try {
+      await window.FB.add("orders", orderData);
+      toast(`✅ تم تسجيل الطلب ${orderId} بنجاح`);
+      form.classList.add("hidden");
+      // إعادة تحميل الطلبات
+      loadOrders();
+      // تنظيف الحقول
+      document.getElementById("mo_name").value = "";
+      document.getElementById("mo_phone").value = "";
+      document.getElementById("mo_city").value = "";
+      document.getElementById("mo_addr").value = "";
+      document.getElementById("mo_notes").value = "";
+      document.getElementById("mo_qty").value = "1";
+      document.getElementById("mo_price").value = "";
+      productSelect.value = "";
+      scentSelect.innerHTML = '<option value="">بدون عطر</option>';
+    } catch (error) {
+      console.error("Error saving manual order:", error);
+      toast("⚠️ فشل حفظ الطلب. تأكد من الاتصال بقاعدة البيانات.");
+    }
+  });
+}
+
+function populateProductSelect() {
+  const select = document.getElementById("mo_product");
+  if (!select) return;
+  const allProducts = (typeof PRODUCTS_ADMIN_CACHE !== "undefined" && PRODUCTS_ADMIN_CACHE.length) 
+    ? PRODUCTS_ADMIN_CACHE 
+    : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
+  select.innerHTML = '<option value="">اختر المنتج</option>' +
+    allProducts.filter(p => p.active !== false).map(p => 
+      `<option value="${p.id}">${p.name || p.id}</option>`
+    ).join('');
+}
+
 // ═══ ORDERS ═══
 function loadOrders(){
   if(!window.FB || typeof window.FB.watch !== "function") return;
@@ -573,18 +747,15 @@ function filterOrders(){
   renderOrders(filtered);
 }
 
-// ═══ التحقق من صحة تغيير الحالة (منع التعديل العشوائي) ═══
 function isValidStatusTransition(current, target) {
-  // 0: قيد المراجعة, 1: قيد التجهيز, 2: تم التجهيز, 3: تم الشحن, 4: ملغي, 5: مكتمل
   const allowed = {
-    0: [1, 4],    // قيد المراجعة -> قيد التجهيز أو ملغي
-    1: [2, 4],    // قيد التجهيز -> تم التجهيز أو ملغي
-    2: [3],       // تم التجهيز -> تم الشحن فقط
-    3: [5],       // تم الشحن -> مكتمل فقط
-    4: [],        // ملغي -> لا شيء (ممنوع التغيير)
-    5: []         // مكتمل -> لا شيء (ممنوع التغيير)
+    0: [1, 4],
+    1: [2, 4],
+    2: [3],
+    3: [5],
+    4: [],
+    5: []
   };
-  // إذا كانت الحالة الحالية غير معرفة، نسمح (للأمان)
   if(!allowed[current]) return true;
   return allowed[current].includes(target);
 }
@@ -596,7 +767,6 @@ function renderOrders(orders){
     body.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد طلبات تطابق الفلتر</td></tr>`;
     return;
   }
-  // الحالات حسب الترتيب الجديد (0-5)
   const STATUS = ["قيد المراجعة", "قيد التجهيز", "تم التجهيز", "تم الشحن", "ملغي", "مكتمل"];
   
   body.innerHTML = orders.map(order => {
@@ -607,7 +777,6 @@ function renderOrders(orders){
       `<option value="${index}"${currentStatus === index ? " selected" : ""}>${status}</option>`
     ).join("");
     
-    // حالة الدفع
     const paymentStatus = order.paymentStatus || 'pending';
     const paymentLabels = {
       pending: 'قيد الانتظار',
@@ -624,7 +793,6 @@ function renderOrders(orders){
     const paymentText = paymentLabels[paymentStatus] || paymentStatus;
     const paymentClass = paymentClasses[paymentStatus] || 'payment-pending';
     
-    // معرف الطلب
     const orderId = order.orderId || order.id || "-";
     
     return `
@@ -647,44 +815,29 @@ function renderOrders(orders){
       </tr>`;
   }).join("");
   
-  // ربط أحداث تغيير الحالة مع التحقق من الصحة
   document.querySelectorAll("#ordersBody .status-select").forEach(select => {
     select.addEventListener("change", async function() {
       const oid = this.dataset.oid;
       const current = Number(this.dataset.current);
       const target = Number(this.value);
       
-      // التحقق من صحة الانتقال
       if(!isValidStatusTransition(current, target)) {
         toast(`⚠️ لا يمكن تغيير الحالة من "${STATUS[current]}" إلى "${STATUS[target]}"`);
-        this.value = current; // إعادة القيمة القديمة
+        this.value = current;
         return;
       }
       
-      // تأكيد قبل التغيير
       if(!confirm(`هل أنت متأكد من تغيير حالة الطلب ${oid} من "${STATUS[current]}" إلى "${STATUS[target]}"؟`)) {
         this.value = current;
         return;
       }
       
       try {
-        // جلب الطلب الحالي لإضافة سجل في statusHistory
-        const orderDoc = await window.FB.get('orders', oid);
-        const history = orderDoc?.statusHistory || [];
-        history.push({
-          from: current,
-          to: target,
-          changedAt: Date.now(),
-          changedBy: 'admin'
-        });
-        
         await window.FB.update("orders", oid, { 
           status: target,
-          statusHistory: history,
           updatedAt: Date.now()
         });
         toast("✅ تم تحديث الحالة بنجاح");
-        // تحديث current في الـ dataset
         this.dataset.current = target;
       } catch(error) {
         console.error(error);
@@ -694,7 +847,6 @@ function renderOrders(orders){
     });
   });
 
-  // ربط أحداث حذف الطلب
   document.querySelectorAll("#ordersBody .delete-btn").forEach(btn => {
     btn.addEventListener("click", async function() {
       const oid = this.dataset.del;
@@ -702,7 +854,7 @@ function renderOrders(orders){
       try {
         await window.FB.remove("orders", oid);
         toast("🗑️ تم حذف الطلب");
-        loadOrders(); // إعادة تحميل القائمة
+        loadOrders();
       } catch(error) {
         console.error(error);
         toast("⚠️ فشل حذف الطلب");
@@ -881,6 +1033,8 @@ function loadProducts(){
     });
     PRODUCTS_ADMIN_CACHE = [...map.values()];
     renderAdminProducts();
+    // تحديث قائمة المنتجات في الطلب اليدوي
+    populateProductSelect();
   }).catch(error => { console.error("Products error:", error); toast("⚠️ تعذر تحميل المنتجات"); });
 }
 
