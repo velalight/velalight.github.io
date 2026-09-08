@@ -156,6 +156,25 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 .product-row .scent-select { width:100%; }
 #mo_total { font-size:1.2rem; color:var(--gold2); font-weight:700; }
 .add-row-btn { margin:.6rem 0 1rem; }
+/* ═══ نافذة عرض الطلب (Modal) ═══ */
+.modal-overlay {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center;
+  z-index:9999; padding:1rem;
+}
+.modal-box {
+  background:var(--panel); border-radius:20px; max-width:560px; width:100%;
+  max-height:80vh; overflow-y:auto; padding:1.6rem; border:1px solid var(--gold);
+  box-shadow:0 20px 50px rgba(0,0,0,0.3);
+}
+.modal-box h3 { font-family:var(--fd); color:var(--gold2); margin:0 0 1rem; }
+.modal-box .close-modal { float:left; background:transparent; border:0; font-size:1.6rem; cursor:pointer; color:var(--dim); }
+.modal-box .close-modal:hover { color:#e74c3c; }
+.modal-box table { width:100%; border-collapse:collapse; font-size:.85rem; }
+.modal-box table th { text-align:start; padding:.4rem .3rem; border-bottom:2px solid var(--line); }
+.modal-box table td { padding:.4rem .3rem; border-bottom:1px solid var(--line); }
+.modal-box .total { font-size:1.2rem; font-weight:700; color:var(--gold2); margin-top:.8rem; display:flex; justify-content:space-between; border-top:2px solid var(--gold); padding-top:.8rem; }
+.modal-box .edit-mode input, .modal-box .edit-mode select { width:100%; padding:.2rem .4rem; border-radius:6px; border:1px solid var(--line); background:var(--bg); font-size:.8rem; }
 @media(max-width:600px){
   table.adm{display:block;overflow-x:auto}
   .pform .g{grid-template-columns:1fr}
@@ -163,6 +182,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   .order-filters input, .order-filters select{min-width:auto}
   .product-row { grid-template-columns:1fr; gap:.4rem; }
   .product-row .remove-row { justify-self:end; }
+  .modal-box { max-width:100%; }
 }
 </style>
 </head>
@@ -214,7 +234,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         <button class="btn sm" id="manualOrderBtn" type="button">➕ إضافة طلب يدوي (واتساب / تليفون)</button>
       </div>
 
-      <!-- نموذج الطلب اليدوي مع منتجات متعددة -->
+      <!-- نموذج الطلب اليدوي مع منتجات متعددة (محسّن) -->
       <div id="manualOrderForm" class="pform hidden">
         <h3 style="color:var(--gold2);margin-bottom:1rem">📝 إضافة طلب يدوي</h3>
         <div class="g">
@@ -229,7 +249,10 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
         <!-- منطقة المنتجات المتعددة -->
         <div style="margin:1rem 0;">
-          <label style="font-weight:700;color:var(--gold2);display:block;margin-bottom:.6rem;">🛍️ المنتجات</label>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;">
+            <label style="font-weight:700;color:var(--gold2);display:block;">🛍️ المنتجات</label>
+            <button type="button" class="btn sm ghost" id="clearAllRowsBtn" style="color:#e74c3c;border-color:#e74c3c;">🗑️ مسح الكل</button>
+          </div>
           <div id="productRowsContainer">
             <!-- سيتم إضافة الصفوف ديناميكياً -->
           </div>
@@ -238,7 +261,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.8rem;border-top:1px solid var(--line);padding-top:.8rem;">
           <span style="font-weight:700;">💰 الإجمالي الكلي:</span>
-          <span id="mo_total" style="font-size:1.4rem;">0 ج.م</span>
+          <span id="mo_total" style="font-size:1.4rem;color:var(--gold2);font-weight:700;">0 ج.م</span>
         </div>
 
         <div style="display:flex;gap:.6rem;margin-top:1rem">
@@ -270,6 +293,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
             <th>آخر تحديث</th>
             <th>العميل</th>
             <th>الموبايل</th>
+            <th>المنتجات</th>
             <th>الإجمالي</th>
             <th>حالة الدفع</th>
             <th>حالة الطلب</th>
@@ -455,6 +479,17 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   </div>
 </div>
 
+<!-- ═══ نافذة عرض/تعديل الطلب (Modal) ═══ -->
+<div id="orderModal" class="modal-overlay hidden" style="display:none;">
+  <div class="modal-box">
+    <button class="close-modal" id="closeModalBtn">&times;</button>
+    <h3 id="modalTitle">📦 تفاصيل الطلب</h3>
+    <div id="modalContent">
+      <!-- سيتم ملء المحتوى ديناميكياً -->
+    </div>
+  </div>
+</div>
+
 <div id="toasts"></div>
 
 <script src="data.js"></script>
@@ -479,6 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initCouponForm();
   initCraftForm();
   initManualOrder(); // ✅ تهيئة الطلب اليدوي
+  initOrderModal(); // ✅ تهيئة نافذة العرض
   document.getElementById("orderSearch")?.addEventListener("input", filterOrders);
   document.getElementById("orderStatusFilter")?.addEventListener("change", filterOrders);
   document.getElementById("orderDateFrom")?.addEventListener("change", filterOrders);
@@ -604,7 +640,7 @@ function initTabs(){
 }
 
 // ═══════════════════════════════════════════════════════════
-// ✅ MANUAL ORDER SYSTEM — مع منتجات متعددة وتتبع Pixel
+// ✅ MANUAL ORDER SYSTEM — مع منتجات متعددة وتتبع Pixel + تسجيل العملاء
 // ═══════════════════════════════════════════════════════════
 
 function getProductById(id) {
@@ -628,13 +664,12 @@ function createProductRow(productId, scent, qty, price) {
   const container = document.getElementById('productRowsContainer');
   const rowId = 'productRow_' + (++productRowCounter);
 
-  // بيانات المنتج
   const allProducts = (PRODUCTS_ADMIN_CACHE && PRODUCTS_ADMIN_CACHE.length) 
     ? PRODUCTS_ADMIN_CACHE 
     : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
   const productOptions = allProducts
     .filter(p => p.active !== false)
-    .map(p => `<option value="${p.id}" ${p.id === productId ? 'selected' : ''}>${p.name || p.id}</option>`)
+    .map(p => `<option value="${p.id}" ${p.id === productId ? 'selected' : ''} data-price="${p.price || 0}">${p.name || p.id} (${p.price || 0} ج.م)</option>`)
     .join('');
 
   const scents = getProductScents(productId);
@@ -669,10 +704,13 @@ function createProductRow(productId, scent, qty, price) {
   // تغيير المنتج → تحديث العطور والسعر
   productSelect.addEventListener('change', function() {
     const pid = this.value;
+    const selectedOption = this.options[this.selectedIndex];
+    const defaultPrice = selectedOption ? parseFloat(selectedOption.dataset.price) || 0 : 0;
+    
     const newScents = getProductScents(pid);
     scentSelect.innerHTML = '<option value="">بدون عطر</option>' + 
       newScents.map(s => `<option value="${s}">${s}</option>`).join('');
-    priceInput.value = getProductPrice(pid) || 0;
+    priceInput.value = defaultPrice;
     updateTotal();
   });
 
@@ -707,12 +745,51 @@ function updateTotal() {
   return total;
 }
 
+async function saveCustomer(orderData) {
+  if(!window.FB || typeof window.FB.list !== "function") return;
+  try {
+    const users = await window.FB.list("users");
+    // البحث عن العميل برقم الموبايل (أو الإيميل إذا وجد)
+    let existing = users.find(u => u.phone === orderData.phone);
+    if(!existing && orderData.email) {
+      existing = users.find(u => u.email === orderData.email);
+    }
+    if(existing) {
+      // تحديث بيانات العميل (زيادة عدد الطلبات والإجمالي)
+      const newOrdersCount = (existing.ordersCount || 0) + 1;
+      const newTotalSpent = (existing.totalSpent || 0) + Number(orderData.total || 0);
+      await window.FB.update("users", existing.id, {
+        ordersCount: newOrdersCount,
+        totalSpent: newTotalSpent,
+        lastOrder: Date.now()
+      });
+    } else {
+      // إنشاء عميل جديد
+      const newUser = {
+        name: orderData.name,
+        phone: orderData.phone,
+        email: orderData.email || '',
+        city: orderData.city || '',
+        address: orderData.address || '',
+        ordersCount: 1,
+        totalSpent: Number(orderData.total || 0),
+        createdAt: Date.now(),
+        lastOrder: Date.now()
+      };
+      await window.FB.set("users", "u" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), newUser);
+    }
+  } catch(err) {
+    console.error("Customer save error:", err);
+  }
+}
+
 function initManualOrder() {
   const btn = document.getElementById('manualOrderBtn');
   const form = document.getElementById('manualOrderForm');
   const cancelBtn = document.getElementById('cancelManualOrderBtn');
   const saveBtn = document.getElementById('saveManualOrderBtn');
   const addRowBtn = document.getElementById('addProductRowBtn');
+  const clearAllBtn = document.getElementById('clearAllRowsBtn');
 
   // عرض النموذج
   btn.addEventListener('click', function() {
@@ -740,6 +817,18 @@ function initManualOrder() {
   // إضافة صف جديد
   addRowBtn.addEventListener('click', function() {
     createProductRow('', '', 1, 0);
+  });
+
+  // مسح جميع المنتجات
+  clearAllBtn.addEventListener('click', function() {
+    if (confirm('🗑️ هل تريد مسح جميع المنتجات من الطلب الحالي؟')) {
+      const container = document.getElementById('productRowsContainer');
+      container.innerHTML = '';
+      productRowCounter = 0;
+      createProductRow('', '', 1, 0);
+      updateTotal();
+      toast('🗑️ تم مسح جميع المنتجات');
+    }
   });
 
   // حفظ الطلب
@@ -815,6 +904,9 @@ function initManualOrder() {
     try {
       await window.FB.add('orders', orderData);
 
+      // ✅ تسجيل العميل في جدول العملاء
+      await saveCustomer(orderData);
+
       // ✅ إرسال حدث الشراء إلى Facebook Pixel و Google Analytics
       if (typeof fbq === 'function') {
         fbq('track', 'Purchase', {
@@ -846,12 +938,155 @@ function initManualOrder() {
       toast(`✅ تم تسجيل الطلب ${orderId} بنجاح`);
       form.classList.add('hidden');
       loadOrders(); // إعادة تحميل الطلبات
+      loadUsers(); // إعادة تحميل العملاء
 
     } catch (error) {
       console.error('Error saving manual order:', error);
       toast('⚠️ فشل حفظ الطلب. تأكد من الاتصال بقاعدة البيانات.');
     }
   });
+}
+
+// ═══ نافذة عرض وتعديل الطلب (Modal) ═══
+let currentEditingOrderId = null;
+
+function initOrderModal() {
+  const modal = document.getElementById('orderModal');
+  const closeBtn = document.getElementById('closeModalBtn');
+
+  // إغلاق النافذة
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+    modal.classList.add('hidden');
+  });
+
+  // إغلاق عند الضغط خارج النافذة
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+      modal.classList.add('hidden');
+    }
+  });
+}
+
+function openOrderModal(orderId) {
+  const order = ALL_ORDERS.find(o => (o.orderId || o.id) === orderId);
+  if (!order) { toast('⚠️ الطلب غير موجود'); return; }
+
+  const modal = document.getElementById('orderModal');
+  const title = document.getElementById('modalTitle');
+  const content = document.getElementById('modalContent');
+
+  title.textContent = `📦 تفاصيل الطلب: ${order.orderId || order.id}`;
+
+  const productsHtml = (order.products && order.products.length) 
+    ? `<table>
+        <thead><tr><th>المنتج</th><th>العطر</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th></tr></thead>
+        <tbody>
+          ${order.products.map(p => `
+            <tr>
+              <td>${p.name || p.id}</td>
+              <td>${p.scent || '-'}</td>
+              <td>${p.quantity || 1}</td>
+              <td>${money(p.price || 0)}</td>
+              <td>${money(p.total || (p.price * p.quantity) || 0)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>`
+    : '<p style="color:var(--dim)">لا توجد منتجات مسجلة لهذا الطلب.</p>';
+
+  const statusLabels = ["قيد المراجعة", "قيد التجهيز", "تم التجهيز", "تم الشحن", "ملغي", "مكتمل"];
+  const currentStatus = Number(order.status || 0);
+  const statusOptions = statusLabels.map((label, idx) => 
+    `<option value="${idx}" ${idx === currentStatus ? 'selected' : ''}>${label}</option>`
+  ).join('');
+
+  const paymentLabels = { pending: 'قيد الانتظار', paid: 'تم الدفع', failed: 'فشل الدفع', refunded: 'تم الاسترجاع' };
+  const paymentOptions = Object.entries(paymentLabels).map(([val, label]) =>
+    `<option value="${val}" ${val === (order.paymentStatus || 'pending') ? 'selected' : ''}>${label}</option>`
+  ).join('');
+
+  content.innerHTML = `
+    <div style="margin-bottom:1rem;">
+      <p><b>العميل:</b> ${order.name || '-'}</p>
+      <p><b>رقم الموبايل:</b> ${order.phone || '-'}</p>
+      <p><b>المدينة:</b> ${order.city || '-'}</p>
+      <p><b>العنوان:</b> ${order.address || '-'}</p>
+      <p><b>ملاحظات:</b> ${order.notes || '-'}</p>
+      <p><b>تاريخ الطلب:</b> ${order.createdAt ? new Date(order.createdAt).toLocaleString('ar-EG') : '-'}</p>
+      <p><b>آخر تحديث:</b> ${order.updatedAt ? new Date(order.updatedAt).toLocaleString('ar-EG') : '-'}</p>
+    </div>
+    <div style="margin:1rem 0;">
+      <label><b>حالة الطلب:</b></label>
+      <select id="modalStatusSelect" style="width:100%;padding:.4rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-size:.9rem;margin-top:.3rem;">
+        ${statusOptions}
+      </select>
+    </div>
+    <div style="margin:1rem 0;">
+      <label><b>حالة الدفع:</b></label>
+      <select id="modalPaymentSelect" style="width:100%;padding:.4rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-size:.9rem;margin-top:.3rem;">
+        ${paymentOptions}
+      </select>
+    </div>
+    <div style="margin:1rem 0;">
+      <label><b>المنتجات:</b></label>
+      ${productsHtml}
+    </div>
+    <div class="total">
+      <span>💰 الإجمالي الكلي</span>
+      <span>${money(order.total || 0)}</span>
+    </div>
+    <div style="display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap;">
+      <button class="btn sm" id="modalSaveBtn" type="button" style="flex:1;">💾 حفظ التعديلات</button>
+      <button class="btn sm danger" id="modalDeleteBtn" type="button" style="flex:1;">🗑️ حذف الطلب</button>
+      <button class="btn sm ghost" id="modalCloseBtn" type="button" style="flex:1;">✖️ إغلاق</button>
+    </div>
+  `;
+
+  currentEditingOrderId = order._fid || order.id;
+
+  // ربط أحداث الأزرار داخل النافذة
+  document.getElementById('modalSaveBtn').addEventListener('click', async function() {
+    const newStatus = parseInt(document.getElementById('modalStatusSelect').value);
+    const newPayment = document.getElementById('modalPaymentSelect').value;
+    try {
+      await window.FB.update('orders', currentEditingOrderId, {
+        status: newStatus,
+        paymentStatus: newPayment,
+        updatedAt: Date.now()
+      });
+      toast('✅ تم تحديث الطلب بنجاح');
+      modal.style.display = 'none';
+      modal.classList.add('hidden');
+      loadOrders();
+    } catch(err) {
+      console.error(err);
+      toast('⚠️ فشل تحديث الطلب');
+    }
+  });
+
+  document.getElementById('modalDeleteBtn').addEventListener('click', function() {
+    if (!confirm('🗑️ هل أنت متأكد من حذف هذا الطلب نهائياً؟ لا يمكن التراجع.')) return;
+    window.FB.remove('orders', currentEditingOrderId).then(() => {
+      toast('🗑️ تم حذف الطلب');
+      modal.style.display = 'none';
+      modal.classList.add('hidden');
+      loadOrders();
+    }).catch(err => {
+      console.error(err);
+      toast('⚠️ فشل حذف الطلب');
+    });
+  });
+
+  document.getElementById('modalCloseBtn').addEventListener('click', function() {
+    modal.style.display = 'none';
+    modal.classList.add('hidden');
+  });
+
+  // إظهار النافذة
+  modal.style.display = 'flex';
+  modal.classList.remove('hidden');
 }
 
 function populateProductSelect() {
@@ -926,7 +1161,7 @@ function renderOrders(orders){
   const body = document.getElementById("ordersBody");
   if(!body) return;
   if(!orders.length){
-    body.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد طلبات تطابق الفلتر</td></tr>`;
+    body.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد طلبات تطابق الفلتر</td></tr>`;
     return;
   }
   const STATUS = ["قيد المراجعة", "قيد التجهيز", "تم التجهيز", "تم الشحن", "ملغي", "مكتمل"];
@@ -956,6 +1191,7 @@ function renderOrders(orders){
     const paymentClass = paymentClasses[paymentStatus] || 'payment-pending';
     
     const orderId = order.orderId || order.id || "-";
+    const productCount = (order.products && order.products.length) ? order.products.length : 0;
     
     return `
       <tr>
@@ -964,6 +1200,7 @@ function renderOrders(orders){
         <td style="font-size:.75rem;color:var(--dim);">${updatedDate}</td>
         <td>${order.name || "-"}</td>
         <td style="direction:ltr">${order.phone || "-"}</td>
+        <td style="font-size:.8rem;text-align:center;">${productCount} منتج</td>
         <td><b>${money(order.total || 0)}</b></td>
         <td><span class="payment-badge ${paymentClass}">${paymentText}</span></td>
         <td>
@@ -972,11 +1209,13 @@ function renderOrders(orders){
           </select>
         </td>
         <td style="display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;">
+          <button class="btn sm ghost" data-view="${order._fid || order.id}" title="عرض وتعديل الطلب" style="font-size:.7rem;padding:.2rem .5rem;">👁️</button>
           <button class="delete-btn" data-del="${order._fid || order.id}" title="حذف الطلب نهائياً (لا يمكن التراجع)">🗑️</button>
         </td>
       </tr>`;
   }).join("");
   
+  // ربط أحداث تغيير الحالة
   document.querySelectorAll("#ordersBody .status-select").forEach(select => {
     select.addEventListener("change", async function() {
       const oid = this.dataset.oid;
@@ -1009,6 +1248,15 @@ function renderOrders(orders){
     });
   });
 
+  // ربط زر عرض الطلب
+  document.querySelectorAll("#ordersBody [data-view]").forEach(btn => {
+    btn.addEventListener("click", function() {
+      const oid = this.dataset.view;
+      openOrderModal(oid);
+    });
+  });
+
+  // ربط زر حذف الطلب
   document.querySelectorAll("#ordersBody .delete-btn").forEach(btn => {
     btn.addEventListener("click", async function() {
       const oid = this.dataset.del;
