@@ -2346,6 +2346,63 @@ function saveUserFromCart(name,phone,email,city,addr,notes=""){
   if(document.getElementById("accAddr"))document.getElementById("accAddr").value=addr;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ [إضافة جديدة] تسجيل/تحديث العميل في مجموعة users
+   يضمن ظهور أي عميل في تبويب "العملاء" بلوحة التحكم تلقائياً
+   حتى لو لم يكن مسجلاً بحساب في Firebase Auth
+   ═══════════════════════════════════════════════════════════ */
+async function saveOrUpdateCustomer(orderData){
+  if(!window.FB || typeof window.FB.list !== "function") return null;
+  try {
+    let users = [];
+    try { users = await window.FB.list("users") || []; } catch(e) { users = []; }
+
+    const phone = String(orderData.phone || "").trim();
+    const email = String(orderData.email || "").trim();
+
+    let existing = null;
+    if (phone) existing = users.find(u => String(u.phone || "").trim() === phone);
+    if (!existing && email) existing = users.find(u => String(u.email || "").trim() === email);
+
+    if (existing) {
+      const newOrdersCount = (Number(existing.ordersCount) || 0) + 1;
+      const newTotalSpent = (Number(existing.totalSpent) || 0) + Number(orderData.total || 0);
+      await window.FB.update("users", existing.id, {
+        ordersCount: newOrdersCount,
+        totalSpent: newTotalSpent,
+        lastOrder: Date.now(),
+        name: existing.name || orderData.name || "",
+        phone: existing.phone || phone,
+        email: existing.email || email,
+        city: existing.city || orderData.city || "",
+        address: existing.address || orderData.address || ""
+      });
+      console.log("✅ Customer updated:", existing.id);
+      return existing.id;
+    } else {
+      const userId = "u" + Date.now().toString(36) + Math.random().toString(16).slice(2, 6);
+      const newUser = {
+        name: orderData.name || "",
+        phone: phone,
+        email: email,
+        city: orderData.city || "",
+        address: orderData.address || "",
+        ordersCount: 1,
+        totalSpent: Number(orderData.total || 0),
+        createdAt: Date.now(),
+        lastOrder: Date.now(),
+        provider: "guest-checkout"
+      };
+      await window.FB.set("users", userId, newUser);
+      console.log("✅ Customer created:", userId);
+      return userId;
+    }
+  } catch(err) {
+    console.error("❌ saveOrUpdateCustomer failed:", err);
+    return null;
+  }
+}
+
 function saveCartCustomer(){
   const name=document.getElementById("coName")?.value.trim()||"";
   const phone=document.getElementById("coPhone")?.value.trim()||"";
@@ -2399,6 +2456,8 @@ async function checkout(){
     document.getElementById("coAddr")?.focus();return;
   }
 
+  // ✅ هام جداً: افتح نافذة فارغة فوراً عند الضغط قبل أي await
+  // هذا يمنع المتصفح من حظر النافذة المنبثقة
   const waWindow = window.open("", "_blank");
 
   saveUserFromCart(name,phone,email,city,addr,notes);
@@ -2558,6 +2617,13 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
   if (!savedToFirebase) {
     console.error("❌ Failed to save order to Firebase after retries");
   }
+
+  /* ✨ [إضافة جديدة] تسجيل/تحديث العميل في مجموعة users */
+  try {
+    await saveOrUpdateCustomer(orderData);
+  } catch(e) {
+    console.warn("⚠️ Customer registration failed:", e);
+  }
   
   try {
     await decrementStock(c);
@@ -2605,14 +2671,19 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
   } catch (err) {
     console.warn("⚠️ Email notification failed:", err);
   }
-  
-  if (emailSent) {
-    toast(LANG==="en" ? "✅ Order placed! Check your email." : "✅ تم إرسال الطلب! تم إرسال تأكيد للأدمن.");
+
+  /* ✅ هام جداً: افتح واتساب أولاً قبل أي رسالة نجاح */
+  const waOpened = openWhatsAppConfirmation(orderData, waWindow);
+
+  if (waOpened) {
+    if (emailSent) {
+      toast(LANG==="en" ? "✅ Order placed! Opening WhatsApp..." : "✅ تم تسجيل الطلب! جاري تحويلك للواتساب...");
+    } else {
+      toast(LANG==="en" ? "✅ Opening WhatsApp..." : "✅ جاري تحويلك للواتساب...");
+    }
   } else {
     toast(t("t_order"));
   }
-  
-  openWhatsAppConfirmation(orderData, waWindow);
 
   try {
     if (typeof gtag === "function") {
@@ -2738,10 +2809,17 @@ ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
   }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ [مُعدّلة] فتح واتساب — يستخدم رقم المتجر + normalizeWhatsApp
+   ترجع true لو اتفتح، false لو فشل
+   ═══════════════════════════════════════════════════════════ */
 function openWhatsAppConfirmation(orderData, waWindow) {
-  if (!CFG || !CFG.WHATSAPP) return;
+  if (!CFG || !CFG.WHATSAPP) return false;
   
-  const whatsappNumber = String(CFG.WHATSAPP).replace(/\D/g, "");
+  // ✅ استخدم normalizeWhatsApp لو متاحة، وإلا fallback
+  const whatsappNumber = (typeof normalizeWhatsApp === "function")
+    ? normalizeWhatsApp(CFG.WHATSAPP)
+    : String(CFG.WHATSAPP).replace(/\D/g, "");
   
   const itemsSummary = (orderData.items || [])
     .map(i => {
@@ -2782,10 +2860,23 @@ ${itemsSummary}
   
   const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
-  if (waWindow && !waWindow.closed) {
-    waWindow.location.href = waUrl;
-  } else {
-    window.open(waUrl, "_blank");
+  try {
+    // ✅ الأولوية الأولى: نافذة مفتوحة مسبقاً قبل أي await
+    if (waWindow && !waWindow.closed) {
+      waWindow.location.href = waUrl;
+      return true;
+    }
+    
+    // ✅ المحاولة الثانية: افتح نافذة جديدة
+    const newWin = window.open(waUrl, "_blank");
+    if (newWin) return true;
+    
+    // ✅ الخطة الاحتياطية: انتقل في نفس الصفحة لو النوافذ محظورة
+    window.location.href = waUrl;
+    return true;
+  } catch(e) {
+    console.warn("⚠️ WhatsApp open failed:", e);
+    return false;
   }
 }
 
