@@ -2791,25 +2791,17 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
         value: total,
         currency: "EGP",
         content_ids: c.map(it => it.id),
-        num_items: c.length
+        num_items: c.length,
+        content_type: "product",
+        order_id: orderId,
+        em: advancedMatching.em,
+        ph: advancedMatching.ph,
+        fn: advancedMatching.fn,
+        ln: advancedMatching.ln,
+        ct: advancedMatching.ct,
+        country: "eg"
       });
     }
-  if (typeof fbq === "function") {
-  fbq("track", "Purchase", {
-    value: total,
-    currency: "EGP",
-    content_ids: c.map(it => it.id),
-    num_items: c.length,
-    content_type: "product",
-    order_id: orderId,           // ← جديد: لمنع التكرار
-    em: advancedMatching.em,     // ← جديد: الإيميل المشفّر
-    ph: advancedMatching.ph,     // ← جديد: الموبايل المشفّر
-    fn: advancedMatching.fn,     // ← جديد: الاسم الأول
-    ln: advancedMatching.ln,     // ← جديد: الاسم الأخير
-    ct: advancedMatching.ct,     // ← جديد: المدينة
-    country: "eg"                // ← جديد: البلد
-  });
-}
    ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
   } catch (e) {
     console.warn("Tracking event fire failed:", e);
