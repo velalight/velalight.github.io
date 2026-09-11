@@ -2091,4 +2091,38 @@ function openCraftForm(item){
     document.getElementById("cf_type").value = "video";
     document.getElementById("cf_media").value = "";
     document.getElementById("cf_thumb").value = "";
-   
+    document.getElementById("cf_order").value = "1";
+  }
+  form.scrollIntoView({ behavior: "smooth" });
+}
+
+function saveCraftItem(){
+  const title = document.getElementById("cf_title").value.trim();
+  const mediaUrl = document.getElementById("cf_media").value.trim();
+  const editId = document.getElementById("craftForm").dataset.editId || "";
+  if(!title){ toast("⚠️ اكتب العنوان"); return; }
+  if(!mediaUrl){ toast("⚠️ اكتب رابط الفيديو أو الصورة"); return; }
+  const data = {
+    title,
+    titleEn: document.getElementById("cf_titleEn").value.trim(),
+    description: document.getElementById("cf_desc").value.trim(),
+    descriptionEn: document.getElementById("cf_descEn").value.trim(),
+    mediaType: document.getElementById("cf_type").value,
+    mediaUrl,
+    thumbnail: document.getElementById("cf_thumb").value.trim(),
+    order: Number(document.getElementById("cf_order").value || 1),
+    active: true
+  };
+  const saveFn = editId ? window.FB.update("craftsmanship", editId, data) : 
+    window.FB.set("craftsmanship", "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, createdAt: Date.now() });
+  saveFn.then(() => {
+    toast("💾 تم حفظ العنصر");
+    document.getElementById("craftForm").classList.add("hidden");
+    loadCraftItems();
+  }).catch(err => { console.error(err); toast("⚠️ فشل الحفظ — راجع Firestore Rules"); });
+}
+
+})();
+</script>
+</body>
+</html>
