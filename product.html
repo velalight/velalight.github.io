@@ -7,7 +7,6 @@
 <meta name="description" content="اكتشف تفاصيل المنتج من VelaLight — شموع يدوية فاخرة بعطور مميزة. صناعة يدوية 100% بخامات طبيعية.">
 <meta name="theme-color" content="#faf6f0">
 
-<!-- ═══ SEO & Social Sharing (Fallback) ═══ -->
 <meta property="og:type" content="product">
 <meta property="og:site_name" content="VelaLight">
 <meta property="og:locale" content="ar_EG">
@@ -18,7 +17,6 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://velalight.github.io/product.html">
   
-<!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -43,7 +41,6 @@
   <img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=1377896053806991&ev=PageView&noscript=1"/>
 </noscript>
-<!-- ═══ End Tracking Codes ═══ -->
   
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -71,21 +68,17 @@
 </script>
 
 <style>
-/* ═══ منع وميض رسالة "المنتج غير متاح" ═══ */
 #pdNotFound { display: none !important; }
 
-/* ═══ Layout ═══ */
 .pd-hero{padding:1.5rem 0 3rem}
-.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start}
 
-/* ═══ Breadcrumb ═══ */
-.crumb{display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--dim);margin-bottom:1.8rem;flex-wrap:wrap}
+.crumb{display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:var(--dim);margin-bottom:1.5rem;flex-wrap:wrap}
 .crumb a{color:var(--mut);text-decoration:none;transition:.2s}
 .crumb a:hover{color:var(--gold2)}
 .crumb .sep{color:var(--dim);opacity:.5}
 .crumb .current{color:var(--gold2);font-weight:600}
 
-/* ═══ Gallery ═══ */
 .pd-gallery{position:sticky;top:80px;min-width:0}
 .pd-img{
   position:relative;
@@ -154,7 +147,6 @@
   letter-spacing:.5px;
 }
 
-/* ═══ THUMBS ═══ */
 #pdThumbs{
   display:flex !important;
   flex-direction:row !important;
@@ -219,12 +211,14 @@
   #pdThumbs{min-height:64px !important}
   #pdThumbs img{width:64px !important;height:64px !important;min-width:64px !important;min-height:64px !important;max-width:64px !important;max-height:64px !important}
 }
-     
-/* ═══ Info Panel ═══ */
-.pd-info{display:flex;flex-direction:column;gap:1rem}
+
+/* ═══════════════════════════════════════════════
+   ✨ INFO PANEL — تم تقليل الفراغات
+   ═══════════════════════════════════════════════ */
+.pd-info{display:flex;flex-direction:column;gap:.65rem}
 .pd-info h1{
   font-family:var(--fd);
-  font-size:clamp(1.7rem,3.2vw,2.4rem);
+  font-size:clamp(1.6rem,3vw,2.2rem);
   color:var(--dark);
   margin:0;
   line-height:1.25;
@@ -234,20 +228,20 @@
 .pd-price{
   display:flex;
   align-items:baseline;
-  gap:.8rem;
-  margin:.5rem 0;
+  gap:.7rem;
+  margin:.35rem 0;
   flex-wrap:wrap;
 }
 .pd-price .price-main{
   font-family:var(--fd);
-  font-size:2rem;
+  font-size:1.9rem;
   color:var(--gold2);
   font-weight:700;
   letter-spacing:-.5px;
 }
 .pd-price del{
   color:var(--dim);
-  font-size:1.05rem;
+  font-size:1rem;
   text-decoration:line-through;
 }
 .save-badge{
@@ -255,7 +249,7 @@
   color:#155724;
   padding:3px 12px;
   border-radius:99px;
-  font-size:.75rem;
+  font-size:.72rem;
   font-weight:700;
   border:1px solid rgba(21,87,36,.15);
 }
@@ -264,32 +258,50 @@
 .pd-rating{
   display:flex;
   align-items:center;
-  gap:.6rem;
-  font-size:.9rem;
+  gap:.55rem;
+  font-size:.88rem;
   color:var(--mut);
   flex-wrap:wrap;
 }
 .pd-rating .stars{color:var(--gold);letter-spacing:2px}
-.pd-rating b{color:var(--gold2);font-family:var(--fd);font-size:1.05rem}
+.pd-rating b{color:var(--gold2);font-family:var(--fd);font-size:1rem}
 .pd-rating a{
   color:var(--gold2);
   font-size:.82rem;
   font-weight:600;
   text-decoration:none;
   margin-inline-start:.3rem;
+  cursor:pointer;
 }
 .pd-rating a:hover{text-decoration:underline}
+.pd-rating .rating-cta-btn{
+  background:linear-gradient(135deg, var(--gold) 0%, #b8863f 100%);
+  color:#fff;
+  border:none;
+  padding:.3rem .8rem;
+  border-radius:99px;
+  font-size:.72rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:.25s;
+  font-family:inherit;
+  margin-inline-start:.3rem;
+}
+.pd-rating .rating-cta-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(217,171,95,.35);
+}
 
 /* ═══ Stock Badge ═══ */
 .stock-badge{
   display:inline-flex;
   align-items:center;
   gap:.4rem;
-  padding:.4rem .9rem;
+  padding:.35rem .85rem;
   border-radius:99px;
-  font-size:.78rem;
+  font-size:.75rem;
   font-weight:600;
-  margin:.3rem 0;
+  margin:.15rem 0;
 }
 .stock-badge.ok{background:#d4edda;color:#155724}
 .stock-badge.low{background:#fff4e6;color:#d97706}
@@ -298,49 +310,48 @@
 /* ═══ Description ═══ */
 .pd-desc{
   color:var(--mut);
-  line-height:1.9;
-  font-size:.95rem;
-  margin:.5rem 0 1rem;
-  padding:.9rem 1.1rem;
+  line-height:1.85;
+  font-size:.9rem;
+  margin:.5rem 0 .4rem;
+  padding:.85rem 1rem;
   background:var(--panel2);
   border-radius:12px;
   border-inline-start:3px solid var(--gold);
 }
 
-/* ═══ Scent Picker (محسّن للوضوح) ═══ */
+/* ═══ Scent Picker (مُحسَّن الحجم) ═══ */
 .opt-title{
   display:flex;
   align-items:center;
   gap:.5rem;
   font-weight:700;
-  font-size:.95rem;
-  margin-top:1rem;
-  margin-bottom:.6rem;
+  font-size:.92rem;
+  margin-top:.65rem;
+  margin-bottom:.4rem;
   color:var(--dark);
 }
 .opt-title .req-tag{
   display:inline-block;
   background:rgba(217,171,95,.18);
   color:#8a5e15;
-  font-size:.7rem;
+  font-size:.68rem;
   font-weight:700;
-  padding:2px 10px;
+  padding:2px 9px;
   border-radius:99px;
   border:1px solid rgba(217,171,95,.4);
 }
 
-/* ═══ Custom Scent Select (محسّن) ═══ */
-.scents-pick{position:relative}
+.scents-pick{position:relative;max-width:440px}
 .scents-pick select{
   width:100% !important;
-  padding:1rem 1.1rem !important;
-  padding-inline-end:2.8rem !important;
-  border:2px solid var(--gold) !important;
-  border-radius:14px !important;
+  padding:.75rem .95rem !important;
+  padding-inline-end:2.6rem !important;
+  border:1.5px solid var(--gold) !important;
+  border-radius:12px !important;
   background:linear-gradient(135deg, #fffaf0 0%, #fff5e0 100%) !important;
   color:var(--dark) !important;
   font-family:inherit !important;
-  font-size:1rem !important;
+  font-size:.92rem !important;
   font-weight:600 !important;
   cursor:pointer !important;
   outline:none !important;
@@ -349,29 +360,29 @@
   -moz-appearance:none !important;
   background-image:linear-gradient(135deg, #fffaf0 0%, #fff5e0 100%), url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b8863f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
   background-repeat:no-repeat !important;
-  background-position:left 0.9rem center, right 0.9rem center !important;
-  background-size:auto, 18px !important;
-  box-shadow:0 2px 8px rgba(217,171,95,.15) !important;
+  background-position:left 0.85rem center, right 0.85rem center !important;
+  background-size:auto, 16px !important;
+  box-shadow:0 2px 6px rgba(217,171,95,.12) !important;
   transition:all .25s ease !important;
 }
 .scents-pick select:hover{
   border-color:var(--gold2) !important;
-  box-shadow:0 4px 14px rgba(217,171,95,.25) !important;
+  box-shadow:0 4px 12px rgba(217,171,95,.2) !important;
   transform:translateY(-1px) !important;
 }
 .scents-pick select:focus{
   border-color:var(--gold2) !important;
-  box-shadow:0 0 0 4px rgba(217,171,95,.18) !important;
+  box-shadow:0 0 0 3px rgba(217,171,95,.18) !important;
 }
 .scents-pick select option{
   background:#fff;
   color:var(--dark);
-  padding:.6rem;
-  font-size:.95rem;
+  padding:.55rem;
+  font-size:.9rem;
 }
 
 /* ═══ Quantity ═══ */
-.qty-wrap{display:flex;gap:1rem;align-items:center;margin:.5rem 0}
+.qty-wrap{display:flex;gap:1rem;align-items:center;margin:.35rem 0}
 .qty{
   display:inline-flex;
   align-items:center;
@@ -383,11 +394,11 @@
 .qty button{
   background:none;
   border:none;
-  width:38px;
-  height:38px;
+  width:36px;
+  height:36px;
   border-radius:10px;
   cursor:pointer;
-  font-size:1.25rem;
+  font-size:1.2rem;
   color:var(--dark);
   transition:.2s;
   display:grid;
@@ -395,10 +406,10 @@
 }
 .qty button:hover{background:var(--panel2);color:var(--gold2)}
 .qty b{
-  min-width:44px;
+  min-width:42px;
   text-align:center;
   font-family:var(--fd);
-  font-size:1.15rem;
+  font-size:1.1rem;
   color:var(--dark);
 }
 
@@ -406,12 +417,12 @@
 .pd-actions{
   display:grid;
   grid-template-columns:1fr auto auto;
-  gap:.6rem;
-  margin-top:1.2rem;
+  gap:.55rem;
+  margin-top:.85rem;
 }
 .pd-actions .btn{
-  padding:1rem 1.3rem;
-  font-size:.95rem;
+  padding:.9rem 1.2rem;
+  font-size:.92rem;
   border-radius:12px;
   font-weight:700;
   transition:all .3s ease;
@@ -430,69 +441,93 @@
   background:var(--panel);
   border:1.5px solid var(--line);
   color:var(--dark);
-  padding:.9rem 1.1rem;
+  padding:.85rem 1rem;
   border-radius:12px;
   cursor:pointer;
   font-size:1.15rem;
   transition:.25s;
-  min-width:56px;
+  min-width:54px;
   display:grid;
   place-items:center;
 }
 .wish-btn:hover{border-color:var(--gold);transform:translateY(-2px)}
 .wish-btn.on{background:#ffe8e8;color:#e74c3c;border-color:#e74c3c}
 
+/* ═══════════════════════════════════════════════
+   ✨ TRUST BADGES — انتقلت تحت الوصف
+   ═══════════════════════════════════════════════ */
+.trust-badges{
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  gap:.5rem;
+  margin:.6rem 0 0;
+  padding:.55rem .35rem;
+  background:var(--panel);
+  border-radius:12px;
+  border:1px solid var(--line);
+  flex-wrap:wrap;
+}
+.trust-badges span{
+  display:flex;
+  align-items:center;
+  gap:.3rem;
+  font-size:.72rem;
+  color:var(--mut);
+  font-weight:600;
+}
+
 /* ═══ Payment Info ═══ */
 .pay-info{
   background:linear-gradient(135deg,var(--panel) 0%,var(--panel2) 100%);
   border:1px solid var(--line);
-  border-radius:16px;
-  padding:1.1rem;
-  margin-top:1rem;
+  border-radius:14px;
+  padding:1rem;
+  margin-top:.5rem;
 }
 .pay-info .pay-row{
   display:flex;
-  gap:.7rem;
+  gap:.65rem;
   align-items:flex-start;
-  margin-bottom:.7rem;
+  margin-bottom:.6rem;
 }
 .pay-info .pay-row:last-child{margin-bottom:0}
-.pay-info .pay-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
-.pay-info .pay-title{font-weight:700;font-size:.88rem;color:var(--dark);margin-bottom:.15rem}
-.pay-info .pay-desc{font-size:.78rem;color:var(--dim);line-height:1.5}
+.pay-info .pay-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px}
+.pay-info .pay-title{font-weight:700;font-size:.85rem;color:var(--dark);margin-bottom:.15rem}
+.pay-info .pay-desc{font-size:.76rem;color:var(--dim);line-height:1.5}
 
 /* ═══ Handmade Note ═══ */
 .handmade-note{
   display:flex;
   align-items:center;
-  gap:.7rem;
+  gap:.65rem;
   background:linear-gradient(135deg,rgba(217,171,95,.1),rgba(217,171,95,.04));
   border:1px solid rgba(217,171,95,.25);
-  border-radius:14px;
-  padding:.95rem 1.15rem;
-  font-size:.88rem;
+  border-radius:12px;
+  padding:.8rem 1rem;
+  font-size:.85rem;
   color:var(--mut);
-  margin-top:1rem;
+  margin-top:.5rem;
 }
-.handmade-note .hm-icon{font-size:1.3rem;flex-shrink:0}
+.handmade-note .hm-icon{font-size:1.2rem;flex-shrink:0}
 
 /* ═══ Share Row ═══ */
 .share-row{
   display:flex;
   align-items:center;
-  gap:.5rem;
-  margin-top:1rem;
-  padding-top:1rem;
+  gap:.45rem;
+  margin-top:.5rem;
+  padding-top:.7rem;
   border-top:1px dashed var(--line);
   flex-wrap:wrap;
 }
-.share-row b{font-size:.82rem;color:var(--dim);font-weight:600}
+.share-row b{font-size:.8rem;color:var(--dim);font-weight:600}
 .share-row a,.share-row button{
   background:var(--panel);
   border:1px solid var(--line);
-  padding:.4rem .9rem;
+  padding:.35rem .85rem;
   border-radius:99px;
-  font-size:.78rem;
+  font-size:.75rem;
   color:var(--dark);
   text-decoration:none;
   transition:.25s;
@@ -507,20 +542,20 @@
 }
 
 /* ═══ Tabs ═══ */
-.pd-tabs{margin-top:3.5rem;border-top:1px solid var(--line);padding-top:2.5rem}
+.pd-tabs{margin-top:3rem;border-top:1px solid var(--line);padding-top:2rem;scroll-margin-top:80px}
 .tabs-nav{
   display:flex;
   gap:.4rem;
   border-bottom:2px solid var(--line);
-  margin-bottom:1.8rem;
+  margin-bottom:1.5rem;
   overflow-x:auto;
 }
 .tabs-nav button{
   background:none;
   border:none;
-  padding:.9rem 1.3rem;
+  padding:.85rem 1.2rem;
   font-family:var(--fd);
-  font-size:.95rem;
+  font-size:.92rem;
   color:var(--dim);
   cursor:pointer;
   border-bottom:2px solid transparent;
@@ -546,7 +581,7 @@
 .specs-table{
   width:100%;
   border-collapse:collapse;
-  font-size:.92rem;
+  font-size:.9rem;
   background:var(--panel);
   border:1px solid var(--line);
   border-radius:14px;
@@ -555,12 +590,12 @@
 .specs-table tr{border-bottom:1px solid var(--line)}
 .specs-table tr:last-child{border-bottom:none}
 .specs-table tr:nth-child(even){background:var(--panel2)}
-.specs-table td{padding:.9rem 1.1rem;vertical-align:top}
+.specs-table td{padding:.85rem 1rem;vertical-align:top}
 .specs-table td:first-child{
   color:var(--dim);
   font-weight:600;
   width:38%;
-  font-size:.85rem;
+  font-size:.83rem;
 }
 .specs-table td:last-child{color:var(--dark)}
 
@@ -569,8 +604,8 @@
   background:var(--panel);
   border:1px solid var(--line);
   border-radius:14px;
-  padding:1.1rem 1.3rem;
-  margin-bottom:.9rem;
+  padding:1rem 1.2rem;
+  margin-bottom:.85rem;
   transition:.2s;
 }
 .rv-item:hover{border-color:rgba(217,171,95,.3)}
@@ -578,35 +613,36 @@
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:.5rem;
+  margin-bottom:.45rem;
   flex-wrap:wrap;
   gap:.4rem;
 }
-.rv-item .rv-head b{color:var(--dark);font-size:.95rem}
-.rv-item .rv-head .stars{color:var(--gold);font-size:.9rem;letter-spacing:2px}
-.rv-item .rv-date{font-size:.72rem;color:var(--dim)}
-.rv-item p{color:var(--mut);line-height:1.75;margin:0;font-size:.92rem}
+.rv-item .rv-head b{color:var(--dark);font-size:.92rem}
+.rv-item .rv-head .stars{color:var(--gold);font-size:.88rem;letter-spacing:2px}
+.rv-item .rv-date{font-size:.7rem;color:var(--dim)}
+.rv-item p{color:var(--mut);line-height:1.7;margin:0;font-size:.9rem}
 
 .rv-form{
   background:var(--panel);
   border:1px solid var(--line);
   border-radius:18px;
-  padding:1.6rem;
-  margin-top:1.8rem;
+  padding:1.5rem;
+  margin-top:1.5rem;
+  scroll-margin-top:80px;
 }
-.rv-form h3{margin:0 0 1rem;color:var(--gold2);font-family:var(--fd)}
+.rv-form h3{margin:0 0 .9rem;color:var(--gold2);font-family:var(--fd)}
 .rv-form .row{
   display:grid;
   grid-template-columns:1fr auto;
-  gap:.9rem;
+  gap:.85rem;
   align-items:center;
-  margin-bottom:.9rem;
+  margin-bottom:.85rem;
 }
 .starpick{display:flex;gap:.3rem}
 .starpick button{
   background:none;
   border:none;
-  font-size:1.9rem;
+  font-size:1.8rem;
   color:var(--dim);
   cursor:pointer;
   transition:.25s;
@@ -616,7 +652,7 @@
 .starpick button:hover{color:var(--gold)}
 
 /* ═══ Related Products ═══ */
-.rel-section{margin-top:3.5rem}
+.rel-section{margin-top:3rem}
 .rel-grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
@@ -647,7 +683,6 @@
   justify-content:center;
   padding:2rem;
   backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
 }
 .zoom-modal.open{display:flex;animation:zoomFadeIn .3s ease}
 @keyframes zoomFadeIn{from{opacity:0}to{opacity:1}}
@@ -658,7 +693,6 @@
   object-fit:contain;
   box-shadow:0 20px 60px rgba(0,0,0,.5);
   user-select:none;
-  -webkit-user-drag:none;
   transition:transform .3s ease, opacity .3s ease;
   cursor:zoom-in;
   touch-action:pan-x pan-y;
@@ -715,10 +749,8 @@
   font-size:.85rem;
   backdrop-filter:blur(8px);
   font-weight:600;
-  letter-spacing:.5px;
 }
 
-/* ═══ Product Video ═══ */
 .pd-img video {
   width: 100%;
   height: 100%;
@@ -748,36 +780,12 @@
   border-radius: 0 0 22px 22px;
 }
 
-/* ═══ Trust Badges ═══ */
-.trust-badges{
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  gap:.5rem;
-  margin:.8rem 0 1.2rem;
-  padding:.6rem .4rem;
-  background:var(--panel);
-  border-radius:14px;
-  border:1px solid var(--line);
-  flex-wrap:wrap;
-}
-.trust-badges span{
-  display:flex;
-  align-items:center;
-  gap:.3rem;
-  font-size:.72rem;
-  color:var(--mut);
-  font-weight:600;
-}
-.trust-badges .icon{font-size:1.1rem}
-
-/* ═══ Responsive ═══ */
 @media(max-width:960px){
   .pd-grid{grid-template-columns:1fr;gap:2rem}
   .pd-gallery{position:static}
 }
 @media(max-width:768px){
-  .pd-actions{grid-template-columns:1fr;gap:.6rem}
+  .pd-actions{grid-template-columns:1fr;gap:.55rem}
   .pd-actions .btn,.wish-btn{width:100%}
   .rel-grid{grid-template-columns:repeat(2,1fr)}
   .zoom-modal{padding:1rem}
@@ -791,8 +799,8 @@
   .trust-badges span{font-size:.62rem}
 }
 @media(max-width:480px){
-  .pd-info h1{font-size:1.5rem}
-  .pd-price .price-main{font-size:1.7rem}
+  .pd-info h1{font-size:1.45rem}
+  .pd-price .price-main{font-size:1.6rem}
   .rv-form .row{grid-template-columns:1fr}
   .zoom-modal{padding:.5rem}
   .zoom-close{top:8px;right:8px;width:40px;height:40px;font-size:1.2rem}
@@ -806,7 +814,6 @@
 </head>
 <body>
 
-<!-- ═══ TOP BAR ═══ -->
 <div class="topbar">
   <div class="mq-track" id="mqTrack">
     <span data-i18n="mq">🚚 توصيل سريع لكل محافظات مصر &nbsp;•&nbsp; 🏷️ خصومات حصرية &nbsp;•&nbsp; 🎁 تغليف مجاني &nbsp;•&nbsp; 📦 شحن آمن &nbsp;•&nbsp;</span>
@@ -814,7 +821,6 @@
   </div>
 </div>
      
-<!-- ═══ HEADER ═══ -->
 <header>
   <div class="wrap hrow">
     <a class="logo" href="index.html" aria-label="VelaLight">
@@ -848,7 +854,6 @@
   </div>
 </header>
 
-<!-- ═══ MOBILE NAVIGATION ═══ -->
 <nav class="mnav" id="mnav" aria-label="Mobile navigation">
   <h5 data-i18n="mn_cats">تصنيفات الشموع</h5>
   <a href="products.html" data-cat="all" data-i18n="cat_all">كل الشموع</a>
@@ -866,13 +871,9 @@
 </nav>
 <div class="ovl" id="ovl"></div>
      
-<!-- ═══════════════════════════════════════════════════════════
-     MAIN CONTENT — Product Page
-     ═══════════════════════════════════════════════════════════ -->
 <main class="sec pd-hero">
   <div class="wrap">
 
-    <!-- ═══ Breadcrumb ═══ -->
     <div class="crumb">
       <a href="index.html" data-i18n="nav_home">الرئيسية</a>
       <span class="sep">›</span>
@@ -881,7 +882,6 @@
       <span class="current" id="crumbName" data-i18n="pd_product">المنتج</span>
     </div>
 
-    <!-- ═══ LOADING SKELETON ═══ -->
     <div id="pdLoading">
       <div class="pd-grid">
         <div class="skel" style="aspect-ratio:1;border-radius:22px" aria-hidden="true"></div>
@@ -895,7 +895,6 @@
       </div>
     </div>
 
-    <!-- ═══ PRODUCT NOT FOUND ═══ -->
     <div id="pdNotFound" class="hidden" role="alert" aria-live="polite">
       <div style="font-size:4rem;margin-bottom:1rem" aria-hidden="true">🕯️</div>
       <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem" data-i18n="pd_not_found_title">😕 المنتج غير متاح</h2>
@@ -903,11 +902,9 @@
       <a href="products.html" class="btn" data-i18n="pd_browse_products">تصفح المنتجات</a>
     </div>
 
-    <!-- ═══ PRODUCT CONTENT ═══ -->
     <div id="pdWrap" class="hidden">
       <div class="pd-grid">
 
-        <!-- ═══ Gallery ═══ -->
         <div class="pd-gallery">
           <div class="pd-img" id="pdImgWrap">
             <img id="pdImg" src="" alt="" loading="eager" decoding="async" fetchpriority="high">
@@ -917,7 +914,9 @@
           <div class="pd-thumbs" id="pdThumbs"></div>
         </div>
 
-        <!-- ═══ Info Panel ═══ -->
+        <!-- ═══════════════════════════════════════════════════════
+             ✨ INFO PANEL — الترتيب الجديد المُحسَّن
+             ═══════════════════════════════════════════════════════ -->
         <div class="pd-info">
 
           <div id="pdBadge"></div>
@@ -934,19 +933,6 @@
             <del id="pdOld" style="display:none"></del>
             <span class="save-badge" id="pdSave" style="display:none"></span>
           </div>
-
-          <!-- ═══ Trust Badges ═══ -->
-          <div class="trust-badges">
-            <span data-i18n="pd_feat_1">🕯️ صناعة يدوية</span>
-            <span data-i18n="pd_feat_2">🚚 توصيل سريع</span>
-            <span data-i18n="pd_feat_3">🎁 تغليف فاخر</span>
-            <span data-i18n="pd_feat_4">💳 دفع آمن</span>
-          </div>
-
-          <!-- ═══════════════════════════════════════════════════════
-               ✨ [مُعاد الترتيب] اختيار العطر → الكمية → زر الإضافة
-               (اتحركوا فوق الوصف عشان تجربة المستخدم تبقى أسهل)
-               ═══════════════════════════════════════════════════════ -->
 
           <!-- ═══ Scent Picker ═══ -->
           <div class="opt-title">
@@ -974,8 +960,16 @@
             <button class="wish-btn" id="pdWishBtn" type="button" aria-label="إضافة إلى المفضلة" data-i18n-title="pd_wishlist" title="إضافة إلى المفضلة">🤍</button>
           </div>
 
-          <!-- ═══ Description (اتحرك لتحت بعد الأزرار) ═══ -->
+          <!-- ═══ Description ═══ -->
           <p class="pd-desc" id="pdDesc"></p>
+
+          <!-- ═══ Trust Badges (انتقلت هنا) ═══ -->
+          <div class="trust-badges">
+            <span data-i18n="pd_feat_1">🕯️ صناعة يدوية</span>
+            <span data-i18n="pd_feat_2">🚚 توصيل سريع</span>
+            <span data-i18n="pd_feat_3">🎁 تغليف فاخر</span>
+            <span data-i18n="pd_feat_4">💳 دفع آمن</span>
+          </div>
           
           <!-- ═══ Payment Info ═══ -->
           <div class="pay-info">
@@ -995,13 +989,11 @@
             </div>
           </div>
 
-          <!-- ═══ Handmade Note ═══ -->
           <div class="handmade-note">
             <span class="hm-icon">✦</span>
             <span data-i18n="handmade_note">قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة</span>
           </div>
 
-          <!-- ═══ Share ═══ -->
           <div class="share-row" id="pdShare"></div>
 
         </div>
@@ -1010,7 +1002,7 @@
     </div>
 
     <!-- ═══ TABS ═══ -->
-    <div class="pd-tabs">
+    <div class="pd-tabs" id="pdTabs">
       <div class="tabs-nav" id="tabsNav">
         <button class="on" data-tab="desc"><span data-i18n="pd_desc_tab">📝 الوصف</span></button>
         <button data-tab="specs"><span data-i18n="pd_specs_tab">📋 المواصفات</span></button>
@@ -1030,7 +1022,7 @@
       </div>
       <div class="tab-pane" id="tab-reviews">
         <div id="pdReviews"></div>
-        <div class="rv-form">
+        <div class="rv-form" id="rvForm">
           <h3 class="fd">أضف مراجعتك ⭐</h3>
           <div class="row">
             <input id="rvName" placeholder="اسمك">
@@ -1049,7 +1041,6 @@
       </div>
     </div>
 
-    <!-- ═══ Related Products ═══ -->
     <div class="rel-section">
       <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem" data-i18n="pd_rel_h2">✨ منتجات هتعجبك</h2>
       <div class="rel-grid" id="pdRelated"></div>
@@ -1058,7 +1049,6 @@
   </div>
 </main>
 
-<!-- ═══ ZOOM MODAL ═══ -->
 <div class="zoom-modal" id="zoomModal">
   <button class="zoom-close" id="zoomClose" aria-label="إغلاق">✕</button>
   <button class="zoom-nav prev" id="zoomPrev" aria-label="السابق">‹</button>
@@ -1067,7 +1057,6 @@
   <div class="zoom-counter" id="zoomCounter"></div>
 </div>
 
-<!-- ═══ CART DRAWER ═══ -->
 <div class="ovl" id="cartOv"></div>
 <aside class="drawer" id="cartDrawer">
   <div class="dhead"><h3 data-i18n="cart_title">🛍️ سلة الشراء</h3><button class="icobtn" id="closeCart" aria-label="إغلاق السلة">✕</button></div>
@@ -1096,7 +1085,6 @@
   </div>
 </aside>
 
-<!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="wrap">
     <div class="fgrid">
@@ -1143,12 +1131,10 @@
 
 <div id="toasts"></div>
 
-<!-- ═══ SCRIPTS ═══ -->
 <script src="data.js?v=9"></script>
 <script type="module" src="firebase.js"></script>
 <script src="app.js"></script>
 
-<!-- ═══ PRODUCT PAGE LOGIC ═══ -->
 <script>
 (function(){
 "use strict";
@@ -1207,6 +1193,33 @@ function catName(c){
   const map={ar:{wood:"شموع خشبية",glass:"شموع زجاجية",crystal:"شموع كريستالية",metal:"شموع معدنية",massage:"شموع المساج",gift:"الهدايا",bride:"بوكس العروسة"},en:{wood:"Wooden Candles",glass:"Glass Candles",crystal:"Crystal Candles",metal:"Metal Candles",massage:"Massage Candles",gift:"Gifts",bride:"Bride Box"}};
   return (map[LANG]||map.ar)[c]||c||"";
 }
+
+/* ═══════════════════════════════════════════════════════
+   ✨ Switch to reviews tab + scroll to form
+   ═══════════════════════════════════════════════════════ */
+function switchToReviewsTab(scrollToForm){
+  const tabs = $$("#tabsNav button");
+  tabs.forEach(b=>{
+    b.classList.remove("on");
+    if(b.dataset.tab === "reviews") b.classList.add("on");
+  });
+  $$(".tab-pane").forEach(p=>p.classList.remove("on"));
+  $("#tab-reviews")?.classList.add("on");
+
+  // Scroll to tabs section
+  setTimeout(()=>{
+    if(scrollToForm){
+      const form = document.getElementById("rvForm");
+      if(form){
+        form.scrollIntoView({behavior:"smooth", block:"center"});
+        setTimeout(()=>{ document.getElementById("rvName")?.focus(); }, 500);
+        return;
+      }
+    }
+    document.getElementById("pdTabs")?.scrollIntoView({behavior:"smooth", block:"start"});
+  }, 100);
+}
+window.switchToReviewsTab = switchToReviewsTab;
 
 document.addEventListener("DOMContentLoaded",()=>{
   if(typeof cartBadge === "function") cartBadge();
@@ -1283,22 +1296,57 @@ async function loadAllReviews(){
       const reviewSummary=(typeof prodReviews==="function") ? prodReviews(P.id) : [];
       const revCount=$("#revCount");
       if(revCount) revCount.textContent=reviewSummary.length;
-      const ratingBox=$("#pdRatingSummary");
-      if(ratingBox){
-        if(reviewSummary.length){
-          const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
-          const reviewWord=typeof t==="function" ? t("pd_review_word") : (typeof LANG!=="undefined" && LANG==="en" ? "reviews" : "مراجعة");
-          const readAll=typeof t==="function" ? t("pd_read_all") : (typeof LANG!=="undefined" && LANG==="en" ? "Read all" : "اقرأ الكل");
-          ratingBox.innerHTML=`<span class="stars">${"★".repeat(Math.round(avg))}</span><b>${avg.toFixed(1)}</b><span>(${reviewSummary.length} ${reviewWord})</span><a href="#tab-reviews">${readAll}</a>`;
-        }else{
-          const firstReview=typeof t==="function" ? t("pd_first_review") : (typeof LANG!=="undefined" && LANG==="en" ? "Be the first to review" : "كن أول من يشارك رأيه");
-          ratingBox.innerHTML=`<span class="stars" style="opacity:.4">★★★★★</span><span>${firstReview}</span>`;
-        }
-      }
+      if(typeof renderRatingSummary === "function") renderRatingSummary(reviewSummary);
     }
   }catch(e){ console.warn("Reviews load failed", e); }
 }
-     
+
+/* ═══════════════════════════════════════════════════════
+   ✨ Rating Summary — مع زر تفاعلي لما مفيش مراجعات
+   ═══════════════════════════════════════════════════════ */
+function renderRatingSummary(reviewSummary){
+  const ratingBox=$("#pdRatingSummary");
+  if(!ratingBox) return;
+  
+  if(reviewSummary.length){
+    const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
+    const reviewWord = (typeof LANG !== "undefined" && LANG==="en") ? "reviews" : "مراجعة";
+    const readAll = (typeof LANG !== "undefined" && LANG==="en") ? "Read all" : "اقرأ الكل";
+    ratingBox.innerHTML = `
+      <span class="stars">${"★".repeat(Math.round(avg))}</span>
+      <b>${avg.toFixed(1)}</b>
+      <span>(${reviewSummary.length} ${reviewWord})</span>
+      <a href="javascript:void(0)" data-goto-reviews="true">${readAll}</a>
+    `;
+  }else{
+    const firstReview = (typeof LANG !== "undefined" && LANG==="en") ? "Be the first to review" : "كن أول من يشارك رأيه";
+    const ctaLabel = (typeof LANG !== "undefined" && LANG==="en") ? "Write a review" : "أضف مراجعتك";
+    ratingBox.innerHTML = `
+      <span class="stars" style="opacity:.4">★★★★★</span>
+      <span>${firstReview}</span>
+      <button type="button" class="rating-cta-btn" data-goto-review-form="true">📝 ${ctaLabel}</button>
+    `;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   ✨ Delegation: handles "اقرأ الكل" + "أضف مراجعتك"
+   ═══════════════════════════════════════════════════════ */
+document.addEventListener("click", (e) => {
+  const goReviews = e.target.closest("[data-goto-reviews]");
+  if(goReviews){
+    e.preventDefault();
+    switchToReviewsTab(false);
+    return;
+  }
+  const goForm = e.target.closest("[data-goto-review-form]");
+  if(goForm){
+    e.preventDefault();
+    switchToReviewsTab(true);
+    return;
+  }
+});
+
 async function loadCloudCatalog(pid){
   try{
     if(typeof DB !== "undefined" && typeof DB.list === "function") {
@@ -1375,20 +1423,12 @@ function render(){
 
   const reviewSummary=(typeof prodReviews==="function")?prodReviews(P.id):[];
   $("#revCount").textContent=reviewSummary.length;
-  const ratingBox=$("#pdRatingSummary");
-  if(ratingBox){
-    if(reviewSummary.length){
-      const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
-      ratingBox.innerHTML=`<span class="stars">${"★".repeat(Math.round(avg))}</span><b>${avg.toFixed(1)}</b><span>(${reviewSummary.length} ${(typeof LANG !== "undefined" && LANG==="en")?"reviews":"مراجعة"})</span><a href="#tab-reviews">${(typeof LANG !== "undefined" && LANG==="en")?"Read all":"اقرأ الكل"}</a>`;
-    }else{
-      ratingBox.innerHTML=`<span class="stars" style="opacity:.4">★★★★★</span><span>${(typeof LANG !== "undefined" && LANG==="en")?"Be the first to review":"كن أول من يشارك رأيه"}</span>`;
-    }
-  }
+  renderRatingSummary(reviewSummary);
 
   if(typeof renderStock === "function") renderStock();
 
   const badge=(typeof pbadge === "function") ? pbadge(P) : "";
-  $("#pdBadge").innerHTML=badge ? `<span class="p-badge" style="position:static;display:inline-block;margin-bottom:.6rem">${badge}</span>` : "";
+  $("#pdBadge").innerHTML=badge ? `<span class="p-badge" style="position:static;display:inline-block;margin-bottom:.4rem">${badge}</span>` : "";
 
   $("#pdPrice").textContent=(typeof money === "function") ? money(P.price) : (P.price + " ج.م");
   if(P.old&&P.old>P.price){
@@ -1428,8 +1468,6 @@ function renderStock(){
     box.innerHTML = '<span class="stock-badge out">✕ نفدت الكمية</span>';
     var addBtn = document.getElementById("pdAddBtn");
     if (addBtn) { addBtn.disabled = true; addBtn.textContent = "نفدت الكمية"; }
-    var buyBtn = document.getElementById("pdBuyBtn");
-    if (buyBtn) { buyBtn.disabled = true; }
   } else if (stockValue <= 5) {
     const stockText = (typeof t === "function") 
         ? t("stock_remaining").replace("{n}", stockValue) 
