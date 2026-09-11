@@ -175,6 +175,11 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 .modal-box table td { padding:.4rem .3rem; border-bottom:1px solid var(--line); }
 .modal-box .total { font-size:1.2rem; font-weight:700; color:var(--gold2); margin-top:.8rem; display:flex; justify-content:space-between; border-top:2px solid var(--gold); padding-top:.8rem; }
 .modal-box .edit-mode input, .modal-box .edit-mode select { width:100%; padding:.2rem .4rem; border-radius:6px; border:1px solid var(--line); background:var(--bg); font-size:.8rem; }
+
+/* ═══ الحقول الفارغة في جدول العملاء ═══ */
+.cell-empty{color:var(--dim);font-size:.75rem;font-style:italic}
+.cell-phone{direction:ltr;text-align:left;font-family:monospace;font-size:.82rem;letter-spacing:.5px}
+
 @media(max-width:600px){
   table.adm{display:block;overflow-x:auto}
   .pform .g{grid-template-columns:1fr}
@@ -234,7 +239,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         <button class="btn sm" id="manualOrderBtn" type="button">➕ إضافة طلب يدوي (واتساب / تليفون)</button>
       </div>
 
-      <!-- نموذج الطلب اليدوي مع منتجات متعددة -->
+      <!-- نموذج الطلب اليدوي مع منتجات متعددة + خصومات -->
       <div id="manualOrderForm" class="pform hidden">
         <h3 style="color:var(--gold2);margin-bottom:1rem">📝 إضافة طلب يدوي</h3>
         <div class="g">
@@ -259,9 +264,37 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
           <button type="button" class="btn sm ghost add-row-btn" id="addProductRowBtn">➕ إضافة منتج آخر</button>
         </div>
 
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.8rem;border-top:1px solid var(--line);padding-top:.8rem;">
-          <span style="font-weight:700;">💰 الإجمالي الكلي:</span>
-          <span id="mo_total" style="font-size:1.4rem;color:var(--gold2);font-weight:700;">0 ج.م</span>
+        <!-- ✨ جديد: حقول الخصم -->
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px dashed var(--line);">
+          <label style="font-weight:700;color:var(--gold2);display:block;margin-bottom:.5rem;">🎟️ الخصومات (اختياري)</label>
+          <div class="g">
+            <div>
+              <label>🎟️ كود الخصم</label>
+              <input id="mo_coupon_code" placeholder="مثال: WELCOME10" style="text-transform:uppercase">
+              <div class="gallery-hint">سيتم التحقق تلقائياً من قائمة الكوبونات</div>
+            </div>
+            <div>
+              <label>💸 خصم يدوي (ج.م)</label>
+              <input id="mo_manual_discount" type="number" min="0" step="0.01" placeholder="مثال: 50">
+              <div class="gallery-hint">مبلغ ثابت يُخصم من الإجمالي</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ملخص الإجمالي -->
+        <div style="margin-top:1rem;border-top:1px solid var(--line);padding-top:.8rem;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:.35rem;font-size:.9rem;">
+            <span>💰 إجمالي المنتجات:</span>
+            <span id="mo_subtotal">0 ج.م</span>
+          </div>
+          <div id="mo_discount_row" style="display:none;justify-content:space-between;margin-bottom:.35rem;color:var(--ok);font-size:.9rem;">
+            <span id="mo_discount_label">🎟️ الخصم:</span>
+            <span id="mo_discount_amount">-0 ج.م</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:.4rem;border-top:1px dashed var(--line);">
+            <span style="font-weight:700;">💰 الإجمالي النهائي:</span>
+            <span id="mo_total" style="font-size:1.4rem;color:var(--gold2);font-weight:700;">0 ج.م</span>
+          </div>
         </div>
 
         <div style="display:flex;gap:.6rem;margin-top:1rem">
@@ -507,6 +540,7 @@ let PRODUCTS_ADMIN_CACHE = [];
 
 // ═══ متغيرات الطلب اليدوي ═══
 let productRowCounter = 0;
+let appliedManualCoupon = null; // { code, discount, type, value } أو null
 
 document.addEventListener("DOMContentLoaded", () => {
   initTabs();
@@ -727,17 +761,88 @@ function createProductRow(productId, scent, qty, price) {
   updateTotal();
 }
 
-function updateTotal() {
+/* ═══════════════════════════════════════════════════════════
+   ✨ [مُعدّلة] حساب الإجمالي مع دعم الخصم (كوبون + يدوي)
+   ═══════════════════════════════════════════════════════════ */
+async function updateTotal() {
   const rows = document.querySelectorAll('.product-row');
-  let total = 0;
+  let subTotal = 0;
   rows.forEach(row => {
     const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
     const price = parseFloat(row.querySelector('.price-input').value) || 0;
-    total += qty * price;
+    subTotal += qty * price;
   });
+
+  // ✅ حساب خصم الكوبون
+  let couponDiscount = 0;
+  const couponCode = (document.getElementById('mo_coupon_code')?.value || '').trim().toUpperCase();
+  appliedManualCoupon = null;
+
+  if (couponCode && window.FB && typeof window.FB.list === 'function') {
+    try {
+      const coupons = await window.FB.list('coupons') || [];
+      const c = coupons.find(x => (x.code || '').toUpperCase() === couponCode);
+
+      if (c && c.active !== false) {
+        const now = Date.now();
+        const notStarted = c.startDate && now < new Date(c.startDate).getTime();
+        const expired = c.expiresAt && now > Number(c.expiresAt);
+        const usedUp = c.maxUses && Number(c.usedCount || 0) >= Number(c.maxUses);
+        const belowMin = c.minOrder && subTotal < c.minOrder;
+
+        if (!notStarted && !expired && !usedUp && !belowMin) {
+          if (c.type === 'percent') {
+            couponDiscount = subTotal * (Number(c.value || 0) / 100);
+          } else {
+            couponDiscount = Number(c.value || 0);
+          }
+          if (c.maxDiscount && couponDiscount > c.maxDiscount) {
+            couponDiscount = c.maxDiscount;
+          }
+          couponDiscount = Math.round(couponDiscount);
+          appliedManualCoupon = { code: c.code, discount: couponDiscount, type: c.type, value: c.value };
+        }
+      }
+    } catch (e) {
+      console.warn('⚠️ Coupon lookup failed:', e);
+    }
+  }
+
+  // ✅ الخصم اليدوي
+  const manualDiscount = parseFloat(document.getElementById('mo_manual_discount')?.value) || 0;
+  const totalDiscount = couponDiscount + manualDiscount;
+  const finalTotal = Math.max(0, subTotal - totalDiscount);
+
+  // ✅ تحديث الواجهة
+  const subEl = document.getElementById('mo_subtotal');
+  if (subEl) subEl.textContent = subTotal.toFixed(2) + ' ج.م';
+
   const totalEl = document.getElementById('mo_total');
-  if (totalEl) totalEl.textContent = total.toFixed(2) + ' ج.م';
-  return total;
+  if (totalEl) totalEl.textContent = finalTotal.toFixed(2) + ' ج.م';
+
+  const discRow = document.getElementById('mo_discount_row');
+  const discAmt = document.getElementById('mo_discount_amount');
+  const discLbl = document.getElementById('mo_discount_label');
+
+  if (discRow && discAmt && discLbl) {
+    if (totalDiscount > 0) {
+      discRow.style.display = 'flex';
+      discAmt.textContent = '-' + totalDiscount.toFixed(2) + ' ج.م';
+
+      let labelParts = [];
+      if (couponDiscount > 0 && appliedManualCoupon) {
+        labelParts.push(`🎟️ كوبون ${appliedManualCoupon.code} (${couponDiscount.toFixed(0)} ج.م)`);
+      }
+      if (manualDiscount > 0) {
+        labelParts.push(`💸 خصم يدوي (${manualDiscount.toFixed(0)} ج.م)`);
+      }
+      discLbl.textContent = labelParts.join(' + ') + ':';
+    } else {
+      discRow.style.display = 'none';
+    }
+  }
+
+  return { subTotal, couponDiscount, manualDiscount, totalDiscount, finalTotal };
 }
 
 async function saveCustomer(orderData) {
@@ -753,10 +858,10 @@ async function saveCustomer(orderData) {
     
     let existing = null;
     if (orderData.phone) {
-      existing = users.find(u => u.phone === orderData.phone);
+      existing = users.find(u => String(u.phone || '').trim() === String(orderData.phone || '').trim());
     }
     if (!existing && orderData.email) {
-      existing = users.find(u => u.email === orderData.email);
+      existing = users.find(u => String(u.email || '').trim() === String(orderData.email || '').trim());
     }
     
     if (existing) {
@@ -768,8 +873,9 @@ async function saveCustomer(orderData) {
         lastOrder: Date.now(),
         name: existing.name || orderData.name || '',
         phone: existing.phone || orderData.phone || '',
-        city: existing.city || orderData.city || '',
-        address: existing.address || orderData.address || ''
+        email: existing.email || orderData.email || '',
+        city: orderData.city || existing.city || '',
+        address: orderData.address || existing.address || ''
       });
       console.log('✅ تم تحديث العميل:', existing.id);
     } else {
@@ -831,10 +937,14 @@ function initManualOrder() {
       document.getElementById('mo_city').value = '';
       document.getElementById('mo_addr').value = '';
       document.getElementById('mo_notes').value = '';
+      document.getElementById('mo_coupon_code').value = '';
+      document.getElementById('mo_manual_discount').value = '';
+      appliedManualCoupon = null;
       const container = document.getElementById('productRowsContainer');
       container.innerHTML = '';
       productRowCounter = 0;
       createProductRow('', '', 1, 0);
+      updateTotal();
     }
   });
 
@@ -856,6 +966,11 @@ function initManualOrder() {
       toast('🗑️ تم مسح جميع المنتجات');
     }
   });
+
+  // ✨ [جديد] أحداث الخصم
+  document.getElementById('mo_coupon_code')?.addEventListener('blur', () => { updateTotal(); });
+  document.getElementById('mo_coupon_code')?.addEventListener('change', () => { updateTotal(); });
+  document.getElementById('mo_manual_discount')?.addEventListener('input', () => { updateTotal(); });
 
   saveBtn.addEventListener('click', async function() {
     const name = document.getElementById('mo_name').value.trim();
@@ -901,20 +1016,34 @@ function initManualOrder() {
 
     if (hasError || products.length === 0) return;
 
-    const total = products.reduce((sum, p) => sum + p.total, 0);
+    // ✅ احسب الإجمالي والخصم
+    const calc = await updateTotal();
+    const subTotal = calc.subTotal;
+    const couponDiscount = calc.couponDiscount;
+    const manualDiscount = calc.manualDiscount;
+    const totalDiscount = calc.totalDiscount;
+    const finalTotal = calc.finalTotal;
 
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     let orderId = 'VL-';
     for (let i = 0; i < 6; i++) orderId += chars[Math.floor(Math.random() * chars.length)];
 
+    const couponCode = (document.getElementById('mo_coupon_code')?.value || '').trim().toUpperCase();
+
     const orderData = {
       orderId: orderId,
       name: name,
       phone: phone,
+      email: '',
       city: city || '',
       address: addr || '',
       notes: notes || '',
-      total: total,
+      subTotal: subTotal,
+      discount: totalDiscount,
+      couponDiscount: couponDiscount,
+      manualDiscount: manualDiscount,
+      couponCode: appliedManualCoupon ? appliedManualCoupon.code : (couponCode || ''),
+      total: finalTotal,
       products: products,
       status: 0,
       paymentStatus: 'pending',
@@ -929,7 +1058,7 @@ function initManualOrder() {
 
       if (typeof fbq === 'function') {
         fbq('track', 'Purchase', {
-          value: total,
+          value: finalTotal,
           currency: 'EGP',
           content_ids: products.map(p => p.id),
           content_names: products.map(p => p.name),
@@ -942,7 +1071,7 @@ function initManualOrder() {
       if (typeof gtag === 'function') {
         gtag('event', 'purchase', {
           transaction_id: orderId,
-          value: total,
+          value: finalTotal,
           currency: 'EGP',
           items: products.map(p => ({
             item_id: p.id,
@@ -954,7 +1083,8 @@ function initManualOrder() {
         console.log('✅ GA4 Purchase event sent');
       }
 
-      toast(`✅ تم تسجيل الطلب ${orderId} بنجاح`);
+      const discountMsg = totalDiscount > 0 ? ` (خصم: ${totalDiscount} ج.م)` : '';
+      toast(`✅ تم تسجيل الطلب ${orderId}${discountMsg}`);
       form.classList.add('hidden');
       loadOrders();
       loadUsers();
@@ -1034,6 +1164,22 @@ function openOrderModal(orderIdentifier) {
     `<option value="${val}" ${val === (order.paymentStatus || 'pending') ? 'selected' : ''}>${label}</option>`
   ).join('');
 
+  // ✨ [جديد] عرض الخصم إن وُجد
+  const subTotal = Number(order.subTotal || order.productsTotal || order.total || 0);
+  const discount = Number(order.discount || 0);
+  let discountHtml = '';
+  if (discount > 0) {
+    let parts = [];
+    if (order.couponCode) parts.push(`🎟️ كوبون ${order.couponCode}`);
+    if (order.manualDiscount > 0) parts.push(`💸 خصم يدوي`);
+    discountHtml = `
+      <div style="display:flex;justify-content:space-between;margin-top:.4rem;color:var(--ok);font-size:.9rem;">
+        <span>${parts.join(' + ') || '🎟️ الخصم'}:</span>
+        <span>-${money(discount)}</span>
+      </div>
+    `;
+  }
+
   content.innerHTML = `
     <div style="margin-bottom:1rem;">
       <p><b>العميل:</b> ${order.name || '-'}</p>
@@ -1043,6 +1189,7 @@ function openOrderModal(orderIdentifier) {
       <p><b>ملاحظات:</b> ${order.notes || '-'}</p>
       <p><b>تاريخ الطلب:</b> ${order.createdAt ? new Date(order.createdAt).toLocaleString('ar-EG') : '-'}</p>
       <p><b>آخر تحديث:</b> ${order.updatedAt ? new Date(order.updatedAt).toLocaleString('ar-EG') : '-'}</p>
+      ${order.source ? `<p><b>مصدر الطلب:</b> ${order.source === 'manual' ? '✍️ يدوي' : '🌐 من الموقع'}</p>` : ''}
     </div>
     <div style="margin:1rem 0;">
       <label><b>حالة الطلب:</b></label>
@@ -1060,6 +1207,15 @@ function openOrderModal(orderIdentifier) {
       <label><b>المنتجات:</b></label>
       ${productsHtml}
     </div>
+    ${discount > 0 ? `
+    <div style="margin-top:.8rem;padding-top:.8rem;border-top:1px dashed var(--line);">
+      <div style="display:flex;justify-content:space-between;font-size:.9rem;color:var(--mut);">
+        <span>إجمالي المنتجات:</span>
+        <span>${money(subTotal)}</span>
+      </div>
+      ${discountHtml}
+    </div>
+    ` : ''}
     <div class="total">
       <span>💰 الإجمالي الكلي</span>
       <span>${money(order.total || 0)}</span>
@@ -1216,6 +1372,9 @@ function renderOrders(orders){
     
     const orderId = order.orderId || order.id || "-";
     const productCount = (order.products && order.products.length) ? order.products.length : 0;
+    const totalDisplay = Number(order.discount || 0) > 0 
+      ? `<b>${money(order.total || 0)}</b><br><small style="color:var(--ok);font-size:.65rem">خصم ${money(order.discount)}</small>`
+      : `<b>${money(order.total || 0)}</b>`;
     
     return `
       <tr>
@@ -1223,9 +1382,9 @@ function renderOrders(orders){
         <td style="font-size:.75rem;">${date}</td>
         <td style="font-size:.75rem;color:var(--dim);">${updatedDate}</td>
         <td>${order.name || "-"}</td>
-        <td style="direction:ltr">${order.phone || "-"}</td>
+        <td class="cell-phone">${order.phone || "-"}</td>
         <td style="font-size:.8rem;text-align:center;">${productCount} منتج</td>
-        <td><b>${money(order.total || 0)}</b></td>
+        <td>${totalDisplay}</td>
         <td><span class="payment-badge ${paymentClass}">${paymentText}</span></td>
         <td>
           <select data-oid="${order._fid || order.id}" data-current="${currentStatus}" class="status-select">
@@ -1335,6 +1494,13 @@ function renderUsers(users){
     body.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--dim)">لا يوجد عملاء بعد</td></tr>`;
     return;
   }
+
+  const safeCell = (val, extraClass = '') => {
+    const v = String(val || '').trim();
+    if (!v || v === '-') return `<td class="${extraClass}"><span class="cell-empty">— لم يُسجَّل —</span></td>`;
+    return `<td class="${extraClass}">${v}</td>`;
+  };
+
   body.innerHTML = list.map((u, i) => {
     let date = "-";
     if(u.createdAt){
@@ -1343,13 +1509,13 @@ function renderUsers(users){
     }
     return `<tr>
       <td>${i+1}</td>
-      <td><b>${u.name||"-"}</b></td>
-      <td style="direction:ltr;font-size:.8rem">${u.email||"-"}</td>
-      <td style="direction:ltr">${u.phone||"-"}</td>
-      <td>${u.city||"-"}</td>
-      <td>${u.ordersCount||0}</td>
-      <td>${money(u.totalSpent||0)}</td>
-      <td style="font-size:.78rem">${date}</td>
+      <td><b>${u.name || '<span class="cell-empty">—</span>'}</b></td>
+      ${safeCell(u.email)}
+      ${safeCell(u.phone, 'cell-phone')}
+      ${safeCell(u.city)}
+      <td style="text-align:center;">${u.ordersCount || 0}</td>
+      <td style="text-align:center;">${money(u.totalSpent || 0)}</td>
+      <td style="text-align:center;font-size:.78rem">${date}</td>
     </tr>`;
   }).join("");
 }
@@ -1925,38 +2091,4 @@ function openCraftForm(item){
     document.getElementById("cf_type").value = "video";
     document.getElementById("cf_media").value = "";
     document.getElementById("cf_thumb").value = "";
-    document.getElementById("cf_order").value = "1";
-  }
-  form.scrollIntoView({ behavior: "smooth" });
-}
-
-function saveCraftItem(){
-  const title = document.getElementById("cf_title").value.trim();
-  const mediaUrl = document.getElementById("cf_media").value.trim();
-  const editId = document.getElementById("craftForm").dataset.editId || "";
-  if(!title){ toast("⚠️ اكتب العنوان"); return; }
-  if(!mediaUrl){ toast("⚠️ اكتب رابط الفيديو أو الصورة"); return; }
-  const data = {
-    title,
-    titleEn: document.getElementById("cf_titleEn").value.trim(),
-    description: document.getElementById("cf_desc").value.trim(),
-    descriptionEn: document.getElementById("cf_descEn").value.trim(),
-    mediaType: document.getElementById("cf_type").value,
-    mediaUrl,
-    thumbnail: document.getElementById("cf_thumb").value.trim(),
-    order: Number(document.getElementById("cf_order").value || 1),
-    active: true
-  };
-  const saveFn = editId ? window.FB.update("craftsmanship", editId, data) : 
-    window.FB.set("craftsmanship", "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, createdAt: Date.now() });
-  saveFn.then(() => {
-    toast("💾 تم حفظ العنصر");
-    document.getElementById("craftForm").classList.add("hidden");
-    loadCraftItems();
-  }).catch(err => { console.error(err); toast("⚠️ فشل الحفظ — راجع Firestore Rules"); });
-}
-
-})();
-</script>
-</body>
-</html>
+   
