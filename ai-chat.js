@@ -13,7 +13,7 @@ const BASE_SYSTEM_PROMPT = `
 قواعد الرد:
 1. اذكر دائماً (اسم المنتج + العطور المتاحة).
 2. لا تقل "عندنا عطور كثيرة"، بل اذكر أمثلة: اللافندر، العود، الفانيلا، الياسمين.
-3. اختم ردك بسؤال بسيط يشجع العميل (مثال: "هل تفضلين العطور الهادئة أم القوية؟").
+3. اختم ردك بسؤال بسيط يشجع العميل (مثال: "هل تفضل العطور الهادئة أم القوية؟").
 4. الرد يجب أن يكون 3-5 جمل.
 5. استخدم فقط البيانات الموجودة في "معلومات الموقع" أدناه.
 `;
@@ -42,13 +42,13 @@ function getSmartFallbackResponse(msg) {
     msg = msg.toLowerCase();
     
     if (msg.includes("هدي") || msg.includes("اقترح") || msg.includes("عروسة")) {
-        return "🎁 أنصحكِ بشدة بـ **بوكس العروسة** أو **شمعة المانديلا**، فهما من أكثر هدايانا طلباً لفخامتهما. هل تفضلين معرفة التفاصيل وإضافته للسلة؟";
+        return "🎁 أنصحك بشدة بـ **بوكس العروسة** أو **شمعة المانديلا**، فهما من أكثر هدايانا طلباً لفخامتهما. هل تفضل معرفة التفاصيل وإضافته للسلة؟";
     }
     if (msg.includes("استرخاء") || msg.includes("مساج") || msg.includes("تعب")) {
-        return "🧖‍♀️ للاسترخاء التام، شموع **المساج (Massage Candles)** هي الخيار الأمثل. تتوفر بعطور اللافندر والياسمين المهدئة. هل أشرح لكِ طريقة استخدامها الآمنة؟";
+        return "🧖‍♀️ للاسترخاء التام، شموع **المساج (Massage Candles)** هي الخيار الأمثل. تتوفر بعطور اللافندر والياسمين المهدئة. هل أشرح لك طريقة استخدامها الآمنة؟";
     }
     if (msg.includes("عطور") || msg.includes("رائحة") || msg.includes("ريحه")) {
-        return "🌸 لدينا تشكيلة فاخرة تشمل: اللافندر، العود، الفانيلا، الياسمين، والورد البلدي. هل تفضلين العطور الهادئة والمنعشة أم القوية والدافئة؟";
+        return "🌸 لدينا تشكيلة فاخرة تشمل: اللافندر، العود، الفانيلا، الياسمين، والورد البلدي. هل تفضل العطور الهادئة والمنعشة أم القوية والدافئة؟";
     }
     if (msg.includes("شحن") || msg.includes("توصيل") || msg.includes("كام الشحن")) {
         return "🚚 نوصل لجميع محافظات مصر خلال 3-7 أيام عمل. تكلفة الشحن تدفع كاش لمندوب التوصيل عند الاستلام، بينما قيمة المنتج تحول مقدماً عبر InstaPay.";
@@ -56,7 +56,7 @@ function getSmartFallbackResponse(msg) {
     
     // 🔥 التعديل الجذري: رد مرن وآمن للأسعار لا يسبب إحراجاً بتغيير الأسعار
     if (msg.includes("سعر") || msg.includes("بكام") || msg.includes("أسعار") || msg.includes("جولدن")) {
-        return "💰 أسعارنا محدثة دائماً على الموقع، وتبدأ من 325 ج.م للشموع الفردية (مثل المانديلا) وتصل إلى 3000+ ج.م للمجموعات الفاخرة (مثل الجولدن كاندل). \n\n✨ جميع الأسعار تشمل تغليفاً فاخراً ومجانياً. هل تبحثين عن هدية بميزانية محددة لأقترح لكِ الأنسب؟";
+        return "💰 أسعارنا محدثة دائماً على الموقع، وتبدأ من 325 ج.م للشموع الفردية (مثل المانديلا) وتصل إلى 3000+ ج.م للمجموعات الفاخرة (مثل الجولدن كاندل). \n\n✨ جميع الأسعار تشمل تغليفاً فاخراً ومجانياً. هل تبحث عن هدية بميزانية محددة لأقترح لك الأنسب؟";
     }
     
     // الرد الافتراضي إذا لم يفهم السؤال
@@ -131,7 +131,7 @@ function showTypingIndicator() {
     const d = document.createElement("div");
     d.className = "msg bot";
     d.id = "typingIndicator";
-    d.innerHTML = "⏳ جاري تحضير أفضل اقتراح لكِ...";
+    d.innerHTML = "⏳ جاري تحضير أفضل اقتراح لك...";
     w.appendChild(d);
     w.scrollTop = w.scrollHeight;
 }
@@ -168,14 +168,14 @@ function initAIChat() {
     chatMsgs.innerHTML = "";
     chatQuick.innerHTML = "";
 
-    addAIChatMessage("أهلاً بيكِ في VelaLight! ✨ أنا مساعدك الذكي. اسأليني عن أسعار الشموع، العطور، أو اقتراحات الهدايا. 🕯️", "bot");
+    addAIChatMessage("أهلاً بيك في VelaLight! ✨ أنا مساعدك الذكي. اسألني عن أسعار الشموع، العطور، أو اقتراحات الهدايا. 🕯️", "bot");
 
     const quickQuestions = [
-        "🎁 اقترحي لي هدية فاخرة", 
-        "🧖‍♀️ عايزة حاجة للاسترخاء في البيت", 
+        "🎁 اقترح لي هدية فاخرة", 
+        "🧖‍♀️ عايز حاجة للاسترخاء في البيت", 
         "🌸 إيه أحلى العطور المتاحة؟", 
         "🚚 إزاي الطلب والشحن؟", 
-        "👰 عايزة أعرف تفاصيل بوكس العروسة"
+        "👰 عايز أعرف تفاصيل بوكس العروسة"
     ];
 
     quickQuestions.forEach(q => {
@@ -193,7 +193,7 @@ function initAIChat() {
     const inputArea = document.createElement("div");
     inputArea.style.cssText = "display:flex;gap:.5rem;padding:.7rem;border-top:1px solid var(--line, #ddd);background:var(--panel, #fff);";
     inputArea.innerHTML = `
-        <input type="text" id="aiChatInput" placeholder="اكتبي سؤالك هنا..."
+        <input type="text" id="aiChatInput" placeholder="اكتب سؤالك هنا..."
                style="flex:1;padding:.6rem .9rem;border:1px solid var(--line, #ddd);border-radius:99px;font-size:.85rem;outline:none;">
         <button id="aiChatSend" style="background:linear-gradient(135deg,var(--gold,#d4af37),#b8863f);color:#fff;border:none;border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:1rem;">➤</button>
     `;
