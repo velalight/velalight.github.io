@@ -19,7 +19,6 @@
 <link rel="canonical" href="https://velalight.github.io/product.html">
   
 <!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
-<!-- 1. Google Analytics 4 (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -28,7 +27,6 @@
   gtag('config', 'G-BWBD8ZZD23'); 
 </script>
 
-<!-- 2. Meta Pixel (Facebook Pixel) -->
 <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -47,7 +45,6 @@
 </noscript>
 <!-- ═══ End Tracking Codes ═══ -->
   
-<!-- ═══ Preconnect ═══ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
@@ -56,7 +53,6 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="mobile-luxury-fix.css">
 
-<!-- ═══ JSON-LD ديناميكي — سيتم تحديثه بواسطة JavaScript ═══ -->
 <script type="application/ld+json" id="pdJsonLd">
 {
   "@context":"https://schema.org",
@@ -143,7 +139,6 @@
 }
 .pd-img .zoom-hint:hover{background:var(--gold2);color:#fff;transform:scale(1.05)}
 
-/* ═══ Gallery Counter ═══ */
 .gallery-counter{
   position:absolute;
   bottom:16px;
@@ -306,27 +301,73 @@
   line-height:1.9;
   font-size:.95rem;
   margin:.5rem 0 1rem;
+  padding:.9rem 1.1rem;
+  background:var(--panel2);
+  border-radius:12px;
+  border-inline-start:3px solid var(--gold);
 }
 
-/* ═══ Scent Picker ═══ */
+/* ═══ Scent Picker (محسّن للوضوح) ═══ */
 .opt-title{
   display:flex;
   align-items:center;
   gap:.5rem;
-  font-weight:600;
-  font-size:.92rem;
+  font-weight:700;
+  font-size:.95rem;
   margin-top:1rem;
   margin-bottom:.6rem;
   color:var(--dark);
 }
 .opt-title .req-tag{
   display:inline-block;
-  background:rgba(217,171,95,.12);
-  color:var(--gold2);
+  background:rgba(217,171,95,.18);
+  color:#8a5e15;
   font-size:.7rem;
   font-weight:700;
   padding:2px 10px;
   border-radius:99px;
+  border:1px solid rgba(217,171,95,.4);
+}
+
+/* ═══ Custom Scent Select (محسّن) ═══ */
+.scents-pick{position:relative}
+.scents-pick select{
+  width:100% !important;
+  padding:1rem 1.1rem !important;
+  padding-inline-end:2.8rem !important;
+  border:2px solid var(--gold) !important;
+  border-radius:14px !important;
+  background:linear-gradient(135deg, #fffaf0 0%, #fff5e0 100%) !important;
+  color:var(--dark) !important;
+  font-family:inherit !important;
+  font-size:1rem !important;
+  font-weight:600 !important;
+  cursor:pointer !important;
+  outline:none !important;
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  -moz-appearance:none !important;
+  background-image:linear-gradient(135deg, #fffaf0 0%, #fff5e0 100%), url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b8863f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+  background-repeat:no-repeat !important;
+  background-position:left 0.9rem center, right 0.9rem center !important;
+  background-size:auto, 18px !important;
+  box-shadow:0 2px 8px rgba(217,171,95,.15) !important;
+  transition:all .25s ease !important;
+}
+.scents-pick select:hover{
+  border-color:var(--gold2) !important;
+  box-shadow:0 4px 14px rgba(217,171,95,.25) !important;
+  transform:translateY(-1px) !important;
+}
+.scents-pick select:focus{
+  border-color:var(--gold2) !important;
+  box-shadow:0 0 0 4px rgba(217,171,95,.18) !important;
+}
+.scents-pick select option{
+  background:#fff;
+  color:var(--dark);
+  padding:.6rem;
+  font-size:.95rem;
 }
 
 /* ═══ Quantity ═══ */
@@ -361,7 +402,7 @@
   color:var(--dark);
 }
 
-/* ═══ Actions — تحسين الأزرار ═══ */
+/* ═══ Actions ═══ */
 .pd-actions{
   display:grid;
   grid-template-columns:1fr auto auto;
@@ -434,28 +475,6 @@
   margin-top:1rem;
 }
 .handmade-note .hm-icon{font-size:1.3rem;flex-shrink:0}
-
-/* ═══ Info Boxes ═══ */
-.info-boxes{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:.7rem;
-  margin-top:1.2rem;
-  padding-top:1.2rem;
-  border-top:1px solid var(--line);
-}
-.info-box{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:.9rem .75rem;
-  text-align:center;
-  transition:.25s;
-}
-.info-box:hover{border-color:var(--gold);transform:translateY(-2px)}
-.info-box .ib-icon{font-size:1.5rem;margin-bottom:.35rem;display:block}
-.info-box .ib-title{font-size:.78rem;font-weight:700;color:var(--dark);margin-bottom:.15rem}
-.info-box .ib-desc{font-size:.68rem;color:var(--dim);line-height:1.4}
 
 /* ═══ Share Row ═══ */
 .share-row{
@@ -756,13 +775,11 @@
 @media(max-width:960px){
   .pd-grid{grid-template-columns:1fr;gap:2rem}
   .pd-gallery{position:static}
-  .info-boxes{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:768px){
   .pd-actions{grid-template-columns:1fr;gap:.6rem}
   .pd-actions .btn,.wish-btn{width:100%}
   .rel-grid{grid-template-columns:repeat(2,1fr)}
-  .info-boxes{grid-template-columns:1fr}
   .zoom-modal{padding:1rem}
   .zoom-modal img{max-width:95vw;max-height:85vh}
   .zoom-close{top:12px;right:12px;width:44px;height:44px;font-size:1.4rem}
@@ -878,7 +895,7 @@
       </div>
     </div>
 
-    <!-- ═══ PRODUCT NOT FOUND ═══ (مخفي بشكل دائم حتى يظهر عند الحاجة) -->
+    <!-- ═══ PRODUCT NOT FOUND ═══ -->
     <div id="pdNotFound" class="hidden" role="alert" aria-live="polite">
       <div style="font-size:4rem;margin-bottom:1rem" aria-hidden="true">🕯️</div>
       <h2 class="fd" style="color:var(--gold2);margin-bottom:.5rem" data-i18n="pd_not_found_title">😕 المنتج غير متاح</h2>
@@ -926,8 +943,10 @@
             <span data-i18n="pd_feat_4">💳 دفع آمن</span>
           </div>
 
-          <!-- ═══ Description ═══ -->
-          <p class="pd-desc" id="pdDesc"></p>
+          <!-- ═══════════════════════════════════════════════════════
+               ✨ [مُعاد الترتيب] اختيار العطر → الكمية → زر الإضافة
+               (اتحركوا فوق الوصف عشان تجربة المستخدم تبقى أسهل)
+               ═══════════════════════════════════════════════════════ -->
 
           <!-- ═══ Scent Picker ═══ -->
           <div class="opt-title">
@@ -950,29 +969,31 @@
           <div class="pd-actions">
             <button class="btn" id="pdAddBtn" type="button" data-i18n="pd_add" style="background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(217,171,95,.4);">🛍️ أضف للسلة</button>
             
-            <!-- تم إخفاء زر الواتساب المباشر لحل مشكلة الطلبات غير المكتملة -->
             <button class="btn wa" id="pdBuyBtn" type="button" data-i18n="pd_buy" style="font-weight:700; display: none;">💬 اطلب عبر واتساب</button>
             
             <button class="wish-btn" id="pdWishBtn" type="button" aria-label="إضافة إلى المفضلة" data-i18n-title="pd_wishlist" title="إضافة إلى المفضلة">🤍</button>
           </div>
+
+          <!-- ═══ Description (اتحرك لتحت بعد الأزرار) ═══ -->
+          <p class="pd-desc" id="pdDesc"></p>
           
           <!-- ═══ Payment Info ═══ -->
-<div class="pay-info">
-  <div class="pay-row">
-    <span class="pay-icon">💳</span>
-    <div>
-      <div class="pay-title" data-i18n="pay_title">InstaPay / فودافون كاش / أورنج كاش</div>
-      <div class="pay-desc" data-i18n="paymethod_d">التحويل مقدمًا (InstaPay / فودافون كاش / أورنج كاش)، والشحن كاش عند الاستلام.</div>
-    </div>
-  </div>
-  <div class="pay-row">
-    <span class="pay-icon">🚚</span>
-    <div>
-      <div class="pay-title" data-i18n="pd_ship">التوصيل:</div>
-      <div class="pay-desc" data-i18n="pd_ship_v">3–7 أيام</div>
-    </div>
-  </div>
-</div>
+          <div class="pay-info">
+            <div class="pay-row">
+              <span class="pay-icon">💳</span>
+              <div>
+                <div class="pay-title" data-i18n="pay_title">InstaPay / فودافون كاش / أورنج كاش</div>
+                <div class="pay-desc" data-i18n="paymethod_d">💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.</div>
+              </div>
+            </div>
+            <div class="pay-row">
+              <span class="pay-icon">🚚</span>
+              <div>
+                <div class="pay-title" data-i18n="pd_ship">التوصيل:</div>
+                <div class="pay-desc" data-i18n="pd_ship_v">3–7 أيام</div>
+              </div>
+            </div>
+          </div>
 
           <!-- ═══ Handmade Note ═══ -->
           <div class="handmade-note">
@@ -1132,11 +1153,9 @@
 (function(){
 "use strict";
 
-/* ═══════ HELPERS ═══════ */
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
 
-/* ═══════ VELA SCENTS ═══════ */
 const VELA_SCENTS=[
   ["فانيلا","Vanilla"],["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
   ["لافندر","Lavender"],["موكا","Mocha"],["كراميل","Caramel"],
@@ -1155,7 +1174,6 @@ const velaScentTr=name=>{
   return f?(LANG==="en"?f[1]:f[0]):(name||"");
 };
 
-/* ═══════ STATE ═══════ */
 let P=null;
 let qty=1;
 let selScent="";
@@ -1165,7 +1183,6 @@ let cloudCatalog=[];
 let zoomImages=[];
 let zoomIndex=0;
 
-/* ═══════ WISHLIST ═══════ */
 const getWishlist=()=>{
   try{return JSON.parse(localStorage.getItem("vl_wishlist")||"[]")}catch(e){return[]}
 };
@@ -1185,14 +1202,12 @@ const toggleWishlist=id=>{
   return l.includes(id);
 };
 
-/* ═══════ CATEGORY TRANSLATION ═══════ */
 function catName(c){
   if(typeof cat==="function") return cat(c);
   const map={ar:{wood:"شموع خشبية",glass:"شموع زجاجية",crystal:"شموع كريستالية",metal:"شموع معدنية",massage:"شموع المساج",gift:"الهدايا",bride:"بوكس العروسة"},en:{wood:"Wooden Candles",glass:"Glass Candles",crystal:"Crystal Candles",metal:"Metal Candles",massage:"Massage Candles",gift:"Gifts",bride:"Bride Box"}};
   return (map[LANG]||map.ar)[c]||c||"";
 }
 
-/* ═══════ INIT ═══════ */
 document.addEventListener("DOMContentLoaded",()=>{
   if(typeof cartBadge === "function") cartBadge();
   buildStars();
@@ -1238,14 +1253,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   }, 2500);
 });
 
-/* ═══════ NAV ═══════ */
 function initNav(){
   $("#navToggle")?.addEventListener("click",()=>{ $("#mnav")?.classList.toggle("open"); $("#ovl")?.classList.toggle("open"); });
   $("#ovl")?.addEventListener("click",()=>{ $("#mnav")?.classList.remove("open"); $("#ovl")?.classList.remove("open"); });
   $$(".mnav a").forEach(a=>{ a.addEventListener("click",()=>{ $("#mnav")?.classList.remove("open"); $("#ovl")?.classList.remove("open"); }); });
 }
 
-/* ═══════ LANG WATCHER ═══════ */
 function initLangWatcher(){
   let lastLang=(typeof LANG !== "undefined") ? LANG : "ar";
   setInterval(()=>{
@@ -1259,7 +1272,6 @@ function initLangWatcher(){
   },150);
 }
 
-/* ═══════ LOAD ALL REVIEWS FROM FIREBASE ═══════ */
 async function loadAllReviews(){
   try{
     if(typeof DB !== "undefined" && typeof DB.list === "function"){
@@ -1287,7 +1299,6 @@ async function loadAllReviews(){
   }catch(e){ console.warn("Reviews load failed", e); }
 }
      
-/* ═══════ CLOUD CATALOG WITH CACHE UPDATE ═══════ */
 async function loadCloudCatalog(pid){
   try{
     if(typeof DB !== "undefined" && typeof DB.list === "function") {
@@ -1316,7 +1327,6 @@ async function loadCloudCatalog(pid){
   }catch(e){ console.warn("Cloud load failed",e); }
 }
 
-/* ═══════ RENDER ═══════ */
 function render(){
   $("#pdLoading").classList.add("hidden");
   $("#pdNotFound").classList.add("hidden");
@@ -1406,7 +1416,6 @@ function render(){
   if(typeof updateWishButton === "function") updateWishButton();
 }
   
-/* ═══════ STOCK ═══════ */
 function renderStock(){
   const box = document.getElementById("pdStockInfo");
   if(!box) return;
@@ -1431,7 +1440,6 @@ function renderStock(){
   }
 }
 
-/* ═══════ THUMBS ═══════ */
 function renderThumbs(){
   const thumbs=$("#pdThumbs");
   const counter=$("#galleryCounter");
@@ -1459,7 +1467,6 @@ function renderThumbs(){
   });
 }
 
-/* ═══════ VIDEO — Bride Box فقط ═══════ */
 function renderVideo(){
   const BRIDE_BOX_ID = "pmt2u7xq749e";
   const BRIDE_BOX_VIDEO = "box.mp4";
@@ -1488,7 +1495,6 @@ function renderVideo(){
   }
 }
      
-/* ═══════ SCENTS — Dropdown ═══════ */
 function getProductScents(){
   const cloudP=(cloudCatalog||[]).find(x=>String(x.id)===String(P.id)||String(x.id_)===String(P.id));
   if(cloudP&&Array.isArray(cloudP.scents)&&cloudP.scents.length) return cloudP.scents;
@@ -1500,19 +1506,16 @@ function renderScents(){
   const pick=$("#pdScents");
   if(!pick) return;
   const scents=getProductScents();
-  pick.innerHTML = `<select id="pdScentSelect" style="width:100%; padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:1rem; cursor:pointer; outline:none;"><option value="">${(typeof LANG !== "undefined" && LANG==="en")?"Choose a scent...":"اختر العطر..."}</option>${scents.map(s => `<option value="${s}">${velaScentTr(s)}</option>`).join('')}</select>`;
+  pick.innerHTML = `<select id="pdScentSelect" aria-required="true"><option value="">${(typeof LANG !== "undefined" && LANG==="en")?"Choose a scent...":"اختر العطر..."}</option>${scents.map(s => `<option value="${s}">${velaScentTr(s)}</option>`).join('')}</select>`;
   $("#pdScentSelect").addEventListener("change", (e) => { selScent = e.target.value; });
   selScent="";
 }
 
-/* ═══════ EVENTS ═══════ */
 function bindEvents(){
-  // 1. زر إنقاص الكمية
   $("#pdQMinus")?.addEventListener("click",()=>{ 
     if(qty>1){ qty--; $("#pdQVal").textContent=qty; } 
   });
   
-  // 2. زر زيادة الكمية
   $("#pdQPlus")?.addEventListener("click",()=>{ 
     const maxStock=Number(P.stock)||999; 
     if(qty<maxStock){ 
@@ -1523,14 +1526,12 @@ function bindEvents(){
     } 
   });
   
-  // 3. زر إضافة إلى عربة التسوق (معدل لحل مشكلة الكمية نهائياً)
   $("#pdAddBtn")?.addEventListener("click",()=>{ 
     if(!selScent){ 
       if(typeof toast==="function") toast("⚠️ من فضلك اختر العطر الأول"); 
       return; 
     } 
     
-    // 🔥 الحل الجذري: اقرأ الكمية مباشرة من الشاشة لحظة الضغط
     const qtyElement = $("#pdQVal");
     const currentQtyText = qtyElement ? qtyElement.textContent.trim() : "1";
     const finalQty = parseInt(currentQtyText, 10) || 1;
@@ -1543,7 +1544,6 @@ function bindEvents(){
     } 
   });
   
-  // 4. زر الشراء المباشر (واتساب) + إطلاق حدث Purchase
   $("#pdBuyBtn")?.addEventListener("click",()=>{ 
     if(!selScent){ 
       if(typeof toast==="function") toast("⚠️ من فضلك اختر العطر الأول"); 
@@ -1570,17 +1570,13 @@ function bindEvents(){
   });
 }
 
-/* ═══════ WISHLIST ═══════ */
 function initWishButton(){ $("#pdWishBtn")?.addEventListener("click",()=>{ if(!P) return; toggleWishlist(P.id); updateWishButton(); }); }
 function updateWishButton(){ const btn=$("#pdWishBtn"); if(!btn||!P) return; if(isInWishlist(P.id)){ btn.textContent="❤️"; btn.classList.add("on"); btn.setAttribute("aria-label","إزالة من المفضلة"); }else{ btn.textContent="🤍"; btn.classList.remove("on"); btn.setAttribute("aria-label","أضف للمفضلة"); } }
 
-/* ═══════ STARS ═══════ */
 function buildStars(){ const pick=$("#starPick"); if(!pick) return; pick.querySelectorAll("button").forEach(b=>{ b.addEventListener("click",()=>{ selRating=+b.dataset.v; pick.querySelectorAll("button").forEach((x,i)=>{ x.classList.toggle("lit",i<selRating); }); }); }); }
 
-/* ═══════ TABS ═══════ */
 function initTabs(){ $$("#tabsNav button").forEach(btn=>{ btn.addEventListener("click",()=>{ $$("#tabsNav button").forEach(b=>b.classList.remove("on")); btn.classList.add("on"); $$(".tab-pane").forEach(p=>p.classList.remove("on")); $("#tab-"+btn.dataset.tab)?.classList.add("on"); }); }); }
 
-/* ═══════ ZOOM MODAL ═══════ */
 let zoomTouchStartX=0, zoomTouchStartY=0, zoomTouchStartTime=0, zoomIsZoomed=false, zoomScale=1;
 function initZoom(){
   const modal=$("#zoomModal"), img=$("#zoomImg");
@@ -1606,7 +1602,6 @@ function toggleImageZoom(e){ const img=$("#zoomImg"); if(!zoomIsZoomed){ const r
 function resetImageTransform(){ const img=$("#zoomImg"); zoomIsZoomed=false; zoomScale=1; img.style.transformOrigin="center center"; img.style.transform="scale(1)"; img.style.cursor="zoom-in"; }
 function updateZoomDots(){ let dots=$("#zoomDots"); if(!dots){ dots=document.createElement("div"); dots.id="zoomDots"; dots.style.cssText="position:absolute;bottom:60px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10"; $("#zoomModal").appendChild(dots); } dots.innerHTML=zoomImages.map((_,i)=>`<span style="width:8px;height:8px;border-radius:50%;background:${i===zoomIndex?"var(--gold)":"rgba(255,255,255,.4)"};transition:.3s"></span>`).join(""); }
 
-/* ═══════ REVIEWS ═══════ */
 function renderReviews(){
   const box=$("#pdReviews");
   if(!box) return;
@@ -1628,7 +1623,6 @@ $("#rvSubmit")?.addEventListener("click",async()=>{
   }catch(e){ if(typeof toast==="function") toast("⚠️ حدث خطأ أثناء الإرسال"); }
 });
 
-/* ═══════ RELATED ═══════ */
 function renderRelated(){
   const box=$("#pdRelated");
   if(!box||!P) return;
@@ -1644,7 +1638,6 @@ function renderRelated(){
   }).join("");
 }
 
-/* ═══════ SHARE ═══════ */
 function renderShare() {
   const box = $("#pdShare");
   if (!box) return;
@@ -1678,7 +1671,6 @@ function renderShare() {
   });
 }
   
-/* ═══════ JSON-LD — توليد ديناميكي للمنتج ═══════ */
 function updateJsonLd(){
   const ld = document.getElementById("pdJsonLd");
   if(!ld || !P) return;
@@ -1725,7 +1717,6 @@ function updateJsonLd(){
   ld.textContent = JSON.stringify(data, null, 2);
 }
 
-/* ═══════ NOT FOUND ═══════ */
 function showNotFound(){ 
   $("#pdLoading").classList.add("hidden"); 
   $("#pdNotFound").classList.remove("hidden"); 
