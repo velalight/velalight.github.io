@@ -191,16 +191,16 @@ foot_orders: "📦 طلباتي",
 
       /* Scent */
       t_scentwarn:
-        "⚠️ من فضلك اختاري العطر أولاً.",
+        "⚠️ من فضلك اختر العطر أولاً.",
 
       quick_add_scent:
-        "🌸 اختاري العطر",
+        "🌸 اختر العطر",
 
       quick_add_qty:
         "الكمية",
 
       quick_add_add:
-        "🛍️ أضيفي للسلة",
+        "🛍️ أضف للسلة",
 
       quick_add_added:
         "✓ تمت الإضافة للسلة",
@@ -238,7 +238,7 @@ foot_orders: "📦 طلباتي",
 
       /* Product options */
       pd_scent_t:
-        "🌸 اختاري العطر:",
+        "🌸 اختر العطر:",
 
       pd_qty_t:
         "الكمية:",
@@ -258,10 +258,10 @@ foot_orders: "📦 طلباتي",
 
       /* Product actions */
       pd_add:
-        "🛍️ أضيفي للسلة",
+        "🛍️ أضف للسلة",
 
       pd_buy:
-        "💬 اطلبي عبر واتساب",
+        "💬 اطلب عبر واتساب",
 
 
       /* Product information */
@@ -283,10 +283,10 @@ foot_orders: "📦 طلباتي",
         "مراجعة",
 
       pd_read_all:
-        "اقرئي الكل",
+        "اقرأ الكل",
 
       pd_first_review:
-        "كوني أول من يشارك رأيه",
+        "كن أول من يشارك رأيه",
 
 
       /* Related Products */
@@ -354,7 +354,7 @@ brand_point3_title:
   "اختيار يناسبك",
 
 brand_point3_desc:
-  "نساعدك تختاري الرائحة والتفاصيل المناسبة.",
+  "نساعدك تختار الرائحة والتفاصيل المناسبة.",
 
        /* ═══ FAQ ═══ */
       faq1q:
@@ -385,13 +385,13 @@ brand_point3_desc:
         "كم تبلغ مدة احتراق الشمعة وكيف أحافظ على أفضل أداء لها؟",
 
       faq5a:
-        "تختلف مدة الاحتراق حسب وزن وحجم كل شمعة، وستجدين التفاصيل في وصف المنتج. ولأفضل نتيجة، عند الاستخدام الأول اتركي الشمعة حتى يذوب سطح الشمع بالكامل ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.",
+        "تختلف مدة الاحتراق حسب وزن وحجم كل شمعة، وستجد التفاصيل في وصف المنتج. ولأفضل نتيجة، عند الاستخدام الأول اترك الشمعة حتى يذوب سطح الشمع بالكامل ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.",
 
       faq6q:
         "كيف أختار العطر المناسب؟",
 
       faq6a:
-        "لدينا تشكيلة متنوعة من العطور الفاخرة. وإذا كنتِ محتارة، تواصلي معنا عبر WhatsApp وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلينها.",
+        "لدينا تشكيلة متنوعة من العطور الفاخرة. وإذا كنت محتار، تواصل معنا عبر WhatsApp وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلها.",
 
       faq7q:
         "هل تتوفر خدمة تغليف الهدايا؟",
@@ -455,7 +455,7 @@ brand_point3_desc:
       /* ═══ Reviews Page ═══ */
       reviews_page_title: "كل آراء عملائنا",
       reviews_page_sub: "شوف تجارب العملاء الحقيقية مع منتجات VelaLight",
-      reviews_verified: "عميل موثّقة",
+      reviews_verified: "عميل موثّق",
       reviews_customer: "عميل سعيد",
       reviews_share_your: "شاركنا رأيك ✨",
       reviews_share_sub: "جرب منتج من VelaLight؟ اكتبلنا تجربتك",
@@ -467,7 +467,7 @@ brand_point3_desc:
       /* ═══ Craftsmanship (Behind the Scenes) ═══ */
       craft_kick: "Behind the Scenes",
       craft_title: "إيد مصرية.. تفاصيل ملهاش حدود",
-      craft_desc: "شوفي ازاي بنصنع كل قطعة بحب ودقة عشان توصلك بالشكل اللي يليق بيكي",
+      craft_desc: "شوف ازاي بنصنع كل قطعة بحب ودقة عشان توصلك بالشكل اللي يليق بيك",
       craft_loading: "⏳ جاري التحميل...",
       craft_fallback1_title: "نخلط الزيوت بعناية",
       craft_fallback1_desc: "نستخدم أفضل الزيوت الطبيعية لضمان رائحة تدوم طويلاً",
@@ -1549,7 +1549,7 @@ function renderReviewsPage() {
     reviews = REVIEWS_IMAGES.map((name, index) => ({
       id: index,
       image: name,
-      name: LANG === "en" ? `Customer #${index + 1}` : `عميلة سعيدة #${index + 1}`,
+      name: LANG === "en" ? `Customer #${index + 1}` : `عميل سعيد #${index + 1}`,
       verified: true,
       rating: 5,
       text: LANG === "en" ? "Amazing candles! Highly recommend." : "شموع رائعة! أنصح بها بشدة."
@@ -1561,7 +1561,7 @@ function renderReviewsPage() {
     const fbReviews = ALL_REVIEWS.map(r => ({
       id: r.id || Date.now() + Math.random(),
       image: r.image || null,
-      name: r.name || (LANG === "en" ? "Customer" : "عميلة"),
+      name: r.name || (LANG === "en" ? "Customer" : "عميل"),
       verified: r.verified !== false,
       rating: r.rating || 5,
       text: r.text || (LANG === "en" ? "Great product!" : "منتج رائع!")
@@ -1573,7 +1573,7 @@ function renderReviewsPage() {
     grid.innerHTML = `
       <div class="empty" style="padding:3rem 0;">
         <div style="font-size:3rem;margin-bottom:1rem;">💛</div>
-        <p style="color:var(--mut);">${LANG === "en" ? "No reviews yet. Be the first!" : "لسة مفيش مراجعات. كوني أول من يشارك رأيه!"}</p>
+        <p style="color:var(--mut);">${LANG === "en" ? "No reviews yet. Be the first!" : "لسة مفيش مراجعات. كن أول من يشارك رأيه!"}</p>
       </div>
     `;
     return;
@@ -1612,7 +1612,7 @@ function renderReviewsPage() {
       <div style="flex:1; min-width:0;">
         <div style="display:flex; align-items:center; gap:.8rem; flex-wrap:wrap; margin-bottom:.4rem;">
           <strong style="font-family:var(--fd); font-size:1.05rem;">${r.name}</strong>
-          ${r.verified ? `<span style="background:#d4edda; color:#155724; padding:2px 10px; border-radius:99px; font-size:.7rem; font-weight:700;">✓ ${LANG === "en" ? "Verified" : "موثّقة"}</span>` : ""}
+          ${r.verified ? `<span style="background:#d4edda; color:#155724; padding:2px 10px; border-radius:99px; font-size:.7rem; font-weight:700;">✓ ${LANG === "en" ? "Verified" : "موثّق"}</span>` : ""}
           <span class="stars" style="color:var(--gold); letter-spacing:2px;">${"★".repeat(r.rating || 5)}</span>
         </div>
         <p style="color:var(--mut); line-height:1.8; font-size:.95rem; margin:0;">${r.text}</p>
@@ -1638,7 +1638,7 @@ function handleProductGridClick(e){
     if (navigator.share) {
       navigator.share({
         title: `VelaLight - ${pName}`,
-        text: `شوفي الشمعة الفاخرة دي من VelaLight 🕯️✨`,
+        text: `شوف الشمعة الفاخرة دي من VelaLight 🕯️✨`,
         url: shareUrl
       }).catch(err => console.log('Share canceled'));
     } else {
@@ -1719,7 +1719,7 @@ function initQuickAdd() {
 
     // ⚠️ التحقق الصارم من العطر وإظهار الرسالة (مثل صفحة المنتج تماماً)
     if (!currentScent) {
-      toast("⚠️ من فضلك اختاري العطر أولاً");
+      toast("⚠️ من فضلك اختر العطر أولاً");
       if (modalSelect) modalSelect.focus();
       return;
     }
@@ -1734,7 +1734,7 @@ function initQuickAdd() {
       addBtn.textContent = "✓ تمت الإضافة";
 
       setTimeout(() => {
-        addBtn.textContent = originalText || "🛍️ أضيفي للسلة";
+        addBtn.textContent = originalText || "🛍️ أضف للسلة";
         closeModal("scentOv");
         quickAddProduct = null;
         quickAddScent = "";
@@ -1781,7 +1781,7 @@ function openQuickAdd(p) {
   if (addBtn) {
     // ✅ هام جداً: الزر يبقى مفعّل دائماً عشان يستقبل الضغط ويظهر رسالة التحذير
     addBtn.disabled = false;
-    addBtn.textContent = t("quick_add_add") || "️ أضيفي للسلة";
+    addBtn.textContent = t("quick_add_add") || "️ أضف للسلة";
   }
 
   const w = document.getElementById("scentModalScents");
@@ -1809,7 +1809,7 @@ function openQuickAdd(p) {
 
     <label for="modalScentSelect" style="display:block;font-weight:700;margin-bottom:.45rem;">${t("quick_add_scent")}</label>
     <select id="modalScentSelect" aria-required="true" style="width:100%;padding:.85rem;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--dark);font-family:inherit;font-size:1rem;cursor:pointer;outline:none;">
-      <option value="">${LANG === "en" ? "Choose a scent..." : "اختاري العطر..."}</option>
+      <option value="">${LANG === "en" ? "Choose a scent..." : "اختر العطر..."}</option>
       ${VELA_SCENTS.map(s => `<option value="${s[0]}">${velaScentTr(s[0])}</option>`).join('')}
     </select>
 
@@ -2041,7 +2041,7 @@ function renderCart(){
         <label class="cart-scent-picker">
           <span class="cart-scent-label"> ${t("scent_lbl")}</span>
           <select class="cart-scent-select" data-i="${i}" aria-label="${t("scent_lbl")}">
-            <option value="">${LANG==="en"?"Choose a scent":"اختار العطر"}</option>
+            <option value="">${LANG==="en"?"Choose a scent":"اختر العطر"}</option>
             ${VELA_SCENTS.map(scent=>`
               <option value="${scent[0]}" ${String(it.scent||"")===String(scent[0])?"selected":""}>
                 ${velaScentTr(scent[0])}
