@@ -3,7 +3,7 @@ const CFG = {
   INSTAPAY: "",
   REPO: "velalight/velalight.github.io@main",
   FIREBASE: {
-    apiKey: "AIzaSyDTX0J7Fccv2oLvpGYYZXiHteGuiE8y8o", // ⚠️ ملاحظة أمان في الأسفل
+    apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o", // ⚠️ ملاحظة أمان في الأسفل
     authDomain: "velalight.firebaseapp.com",
     projectId: "velalight",
     storageBucket: "velalight.firebasestorage.app",
@@ -17,6 +17,19 @@ const CFG = {
   
   TIKTOK_PIXEL_ID: "YOUR_TIKTOK_PIXEL_ID" // اتركه هكذا إذا لم تكن تستخدم تيك توك
 };
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ [إضافة جديدة] تطبيع رقم واتساب للصيغة الدولية الصحيحة
+   يستخدم لضمان فتح واتساب دائماً بالشكل الصحيح
+   ═══════════════════════════════════════════════════════════ */
+function normalizeWhatsApp(phone){
+  if(!phone) return "";
+  let p = String(phone).replace(/\D/g, "");
+  if(p.startsWith("00")) p = p.slice(2);
+  if(p.startsWith("0")) p = "20" + p.slice(1);
+  if(!p.startsWith("20") && p.length <= 11) p = "20" + p;
+  return p;
+}
 
 /* ═══ Analytics (unchanged) ═══ */
 (function(){
