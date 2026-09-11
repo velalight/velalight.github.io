@@ -169,10 +169,10 @@ const velaScentTr=name=>{
 reviews_back: "← الرجوع للرئيسية",
 reviews_stats_trust: "ثقة تتجدد",
 reviews_quote: "مش مجرد شمعة… دي لحظة بتتعاش!",
-reviews_quote_author: "— واحدة من عملائنا",
-reviews_cta_title: "جاهزة تنضمي لعائلة VelaLight؟ 🕯️",
-reviews_cta_sub: "اختاري شمعتك الفاخرة واصنعي لحظتك الخاصة",
-reviews_cta_btn: "تسوقي الآن 🛍️",
+reviews_quote_author: "— واحد من عملائنا",
+reviews_cta_title: "جاهز تنضم لعائلة VelaLight؟ 🕯️",
+reviews_cta_sub: "اختار شمعتك الفاخرة واصنع لحظتك الخاصة",
+reviews_cta_btn: "تسوق الآن 🛍️",
 foot_wishlist: "❤️ المفضلة",
 foot_orders: "📦 طلباتي",
       
@@ -327,10 +327,10 @@ foot_orders: "📦 طلباتي",
         "مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.",
 
       reviews_cta:
-        "✨ جربتي سحرنا؟",
+        "✨ جربت سحرنا؟",
 
       reviews_cta_link:
-        "ابعتيلنا رأيك على الواتساب",
+        "ابعتلنا رأيك على الواتساب",
 /* ═══ Brand Promise ═══ */
 brand_promise_title:
   "تفاصيل تصنع الفرق",
@@ -429,7 +429,7 @@ brand_point3_desc:
 
       /* ═══ Products Page ═══ */
       products_title: "كل المنتجات",
-      products_sub: "اكتشفي تشكيلتنا الكاملة من الشموع الفاخرة",
+      products_sub: "اكتشف تشكيلتنا الكاملة من الشموع الفاخرة",
       filter_all: "الكل",
       filter_wood: "خشبية",
       filter_glass: "زجاجية",
@@ -450,15 +450,15 @@ brand_point3_desc:
       price_lbl: "السعر:",
       scent_lbl: "العطر:",
       cart_empty: "السلة فارغة",
-      cart_empty_sub: "أضيفي منتجاتك المفضلة",
+      cart_empty_sub: "أضف منتجاتك المفضلة",
 
       /* ═══ Reviews Page ═══ */
       reviews_page_title: "كل آراء عملائنا",
-      reviews_page_sub: "شوفي تجارب العملاء الحقيقية مع منتجات VelaLight",
-      reviews_verified: "عميلة موثّقة",
-      reviews_customer: "عميلة سعيدة",
-      reviews_share_your: "شاركينا رأيك ✨",
-      reviews_share_sub: "جربتي منتج من VelaLight؟ اكتبيلنا تجربتك",
+      reviews_page_sub: "شوف تجارب العملاء الحقيقية مع منتجات VelaLight",
+      reviews_verified: "عميل موثّقة",
+      reviews_customer: "عميل سعيد",
+      reviews_share_your: "شاركنا رأيك ✨",
+      reviews_share_sub: "جرب منتج من VelaLight؟ اكتبلنا تجربتك",
 
       /* ═══ Products Page ═══ */
       prod_word: "منتج",
@@ -477,25 +477,25 @@ brand_point3_desc:
       craft_fallback3_desc: "نتأكد من الجودة قبل ما توصل لباب بيتك",
 
       /* ═══ Reviews Enhanced ═══ */
-      rev_see_all: "📸 شوفي كل التجارب",
-      rev_stats_label: "عميلة وثقت فينا",
+      rev_see_all: "📸 شوف كل التجارب",
+      rev_stats_label: "عميل وثق فينا",
       rev_stats_rating: "تقييم 5 نجوم",
       rev_loading: "⏳ جاري تحميل التجارب...",
 
       /* ═══ FAQ & Misc ═══ */
       faq_kick: "FAQ",
-      faq_sub: "كل ما تحتاجين معرفته عن الطلب، الشحن، الشموع والعطور.",
+      faq_sub: "كل ما تحتاج معرفته عن الطلب، الشحن، الشموع والعطور.",
       foot_designer_label: "صُمم وتطوير بعناية بواسطة",
       brand_kick: "The VelaLight Touch",
       scents_kick: "Signature Scents",
       prod_kick: "Our Collection",
-      prod_sub: "اكتشفي أحدث تشكيلتنا من الشموع الفاخرة",
-      prod_see_all: "🕯️ استعرضي كل المنتجات",
+      prod_sub: "اكتشف أحدث تشكيلتنا من الشموع الفاخرة",
+      prod_see_all: "🕯️ استعرض كل المنتجات",
       about_kick: "Our Story",
       ed_kick: "A Moment of Luxury",
       ed_h2: "لحظاتٌ تُحفر في الذاكرة",
-      ed_p: "كل شمعة من VelaLight ليست مجرد إضاءة… هي لحظة كاملة. لحظة هدوء، لحظة رومانسية، لحظة فرح. اصنعي ذكرياتك الخاصة مع عطورنا الفاخرة.",
-      ed_cta: "ابدئي رحلتك ✨",
+      ed_p: "كل شمعة من VelaLight ليست مجرد إضاءة… هي لحظة كاملة. لحظة هدوء، لحظة رومانسية، لحظة فرح. اصنع ذكرياتك الخاصة مع عطورنا الفاخرة.",
+      ed_cta: "ابدأ رحلتك ✨",
 
     },
 
