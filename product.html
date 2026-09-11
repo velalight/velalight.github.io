@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>منتج | VelaLight</title>
-<meta name="description" content="اكتشفي تفاصيل المنتج من VelaLight — شموع يدوية فاخرة بعطور مميزة. صناعة يدوية 100% بخامات طبيعية.">
+<meta name="description" content="اكتشف تفاصيل المنتج من VelaLight — شموع يدوية فاخرة بعطور مميزة. صناعة يدوية 100% بخامات طبيعية.">
 <meta name="theme-color" content="#faf6f0">
 
 <!-- ═══ SEO & Social Sharing (Fallback) ═══ -->
@@ -931,7 +931,7 @@
 
           <!-- ═══ Scent Picker ═══ -->
           <div class="opt-title">
-            <span data-i18n="pd_scent_t">🌸 اختاري العطر:</span>
+            <span data-i18n="pd_scent_t">🌸 اختر العطر:</span>
             <span class="req-tag" data-i18n="pd_required">مطلوب</span>
           </div>
           <div class="scents-pick" id="pdScents"></div>
@@ -948,7 +948,7 @@
 
           <!-- ═══ Actions ═══ -->
           <div class="pd-actions">
-            <button class="btn" id="pdAddBtn" type="button" data-i18n="pd_add" style="background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(217,171,95,.4);">🛍️ أضيفي للسلة</button>
+            <button class="btn" id="pdAddBtn" type="button" data-i18n="pd_add" style="background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(217,171,95,.4);">🛍️ أضف للسلة</button>
             
             <!-- تم إخفاء زر الواتساب المباشر لحل مشكلة الطلبات غير المكتملة -->
             <button class="btn wa" id="pdBuyBtn" type="button" data-i18n="pd_buy" style="font-weight:700; display: none;">💬 اطلب عبر واتساب</button>
@@ -1010,7 +1010,7 @@
       <div class="tab-pane" id="tab-reviews">
         <div id="pdReviews"></div>
         <div class="rv-form">
-          <h3 class="fd">ضيفي مراجعتك ⭐</h3>
+          <h3 class="fd">أضف مراجعتك ⭐</h3>
           <div class="row">
             <input id="rvName" placeholder="اسمك">
             <div class="starpick" id="starPick">
@@ -1021,7 +1021,7 @@
               <button data-v="5" class="lit">★</button>
             </div>
           </div>
-          <textarea id="rvText" rows="3" placeholder="اكتبي رأيك بالتفصيل..."></textarea>
+          <textarea id="rvText" rows="3" placeholder="اكتب رأيك بالتفصيل..."></textarea>
           <button class="btn" id="rvSubmit" style="margin-top:.9rem">إرسال المراجعة</button>
           <small style="display:block;margin-top:.6rem;color:var(--dim)">✓ المراجعة بتظهر بعد الموافقة من الإدارة</small>
         </div>
@@ -1276,10 +1276,10 @@ async function loadAllReviews(){
         if(reviewSummary.length){
           const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
           const reviewWord=typeof t==="function" ? t("pd_review_word") : (typeof LANG!=="undefined" && LANG==="en" ? "reviews" : "مراجعة");
-          const readAll=typeof t==="function" ? t("pd_read_all") : (typeof LANG!=="undefined" && LANG==="en" ? "Read all" : "اقرئي الكل");
+          const readAll=typeof t==="function" ? t("pd_read_all") : (typeof LANG!=="undefined" && LANG==="en" ? "Read all" : "اقرأ الكل");
           ratingBox.innerHTML=`<span class="stars">${"★".repeat(Math.round(avg))}</span><b>${avg.toFixed(1)}</b><span>(${reviewSummary.length} ${reviewWord})</span><a href="#tab-reviews">${readAll}</a>`;
         }else{
-          const firstReview=typeof t==="function" ? t("pd_first_review") : (typeof LANG!=="undefined" && LANG==="en" ? "Be the first to review" : "كوني أول من يشارك رأيه");
+          const firstReview=typeof t==="function" ? t("pd_first_review") : (typeof LANG!=="undefined" && LANG==="en" ? "Be the first to review" : "كن أول من يشارك رأيه");
           ratingBox.innerHTML=`<span class="stars" style="opacity:.4">★★★★★</span><span>${firstReview}</span>`;
         }
       }
@@ -1369,9 +1369,9 @@ function render(){
   if(ratingBox){
     if(reviewSummary.length){
       const avg=reviewSummary.reduce((a,r)=>a+Number(r.rating||5),0)/reviewSummary.length;
-      ratingBox.innerHTML=`<span class="stars">${"★".repeat(Math.round(avg))}</span><b>${avg.toFixed(1)}</b><span>(${reviewSummary.length} ${(typeof LANG !== "undefined" && LANG==="en")?"reviews":"مراجعة"})</span><a href="#tab-reviews">${(typeof LANG !== "undefined" && LANG==="en")?"Read all":"اقرئي الكل"}</a>`;
+      ratingBox.innerHTML=`<span class="stars">${"★".repeat(Math.round(avg))}</span><b>${avg.toFixed(1)}</b><span>(${reviewSummary.length} ${(typeof LANG !== "undefined" && LANG==="en")?"reviews":"مراجعة"})</span><a href="#tab-reviews">${(typeof LANG !== "undefined" && LANG==="en")?"Read all":"اقرأ الكل"}</a>`;
     }else{
-      ratingBox.innerHTML=`<span class="stars" style="opacity:.4">★★★★★</span><span>${(typeof LANG !== "undefined" && LANG==="en")?"Be the first to review":"كوني أول من يشارك رأيه"}</span>`;
+      ratingBox.innerHTML=`<span class="stars" style="opacity:.4">★★★★★</span><span>${(typeof LANG !== "undefined" && LANG==="en")?"Be the first to review":"كن أول من يشارك رأيه"}</span>`;
     }
   }
 
@@ -1500,7 +1500,7 @@ function renderScents(){
   const pick=$("#pdScents");
   if(!pick) return;
   const scents=getProductScents();
-  pick.innerHTML = `<select id="pdScentSelect" style="width:100%; padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:1rem; cursor:pointer; outline:none;"><option value="">${(typeof LANG !== "undefined" && LANG==="en")?"Choose a scent...":"اختار العطر..."}</option>${scents.map(s => `<option value="${s}">${velaScentTr(s)}</option>`).join('')}</select>`;
+  pick.innerHTML = `<select id="pdScentSelect" style="width:100%; padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:1rem; cursor:pointer; outline:none;"><option value="">${(typeof LANG !== "undefined" && LANG==="en")?"Choose a scent...":"اختر العطر..."}</option>${scents.map(s => `<option value="${s}">${velaScentTr(s)}</option>`).join('')}</select>`;
   $("#pdScentSelect").addEventListener("change", (e) => { selScent = e.target.value; });
   selScent="";
 }
@@ -1519,14 +1519,14 @@ function bindEvents(){
       qty++; 
       $("#pdQVal").textContent=qty; 
     } else { 
-      if(typeof toast==="function") toast("⚠️ وصلتِ للحد الأقصى المتاح"); 
+      if(typeof toast==="function") toast("⚠️ وصلت للحد الأقصى المتاح"); 
     } 
   });
   
   // 3. زر إضافة إلى عربة التسوق (معدل لحل مشكلة الكمية نهائياً)
   $("#pdAddBtn")?.addEventListener("click",()=>{ 
     if(!selScent){ 
-      if(typeof toast==="function") toast("⚠️ من فضلك اختاري العطر الأول"); 
+      if(typeof toast==="function") toast("⚠️ من فضلك اختر العطر الأول"); 
       return; 
     } 
     
@@ -1546,7 +1546,7 @@ function bindEvents(){
   // 4. زر الشراء المباشر (واتساب) + إطلاق حدث Purchase
   $("#pdBuyBtn")?.addEventListener("click",()=>{ 
     if(!selScent){ 
-      if(typeof toast==="function") toast("⚠️ من فضلك اختاري العطر الأول"); 
+      if(typeof toast==="function") toast("⚠️ من فضلك اختر العطر الأول"); 
       return; 
     } 
     
@@ -1563,7 +1563,7 @@ function bindEvents(){
       });
     }
     
-    const msg = `✨ أهلاً VelaLight!\n\nعايزة أطلب:\n🕯️ ${productName}\n🌸 العطر: ${velaScentTr(selScent)}\n📦 الكمية: ${qty}\n💰 الإجمالي: ${(typeof money === "function" ? money(totalPrice) : (totalPrice + " ج.م"))}`; 
+    const msg = `✨ أهلاً VelaLight!\n\nعايز أطلب:\n🕯️ ${productName}\n🌸 العطر: ${velaScentTr(selScent)}\n📦 الكمية: ${qty}\n💰 الإجمالي: ${(typeof money === "function" ? money(totalPrice) : (totalPrice + " ج.م"))}`; 
     const wa = (typeof CFG !== "undefined" && CFG.WHATSAPP) ? CFG.WHATSAPP : ""; 
     
     if(wa) window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, "_blank");
@@ -1611,14 +1611,14 @@ function renderReviews(){
   const box=$("#pdReviews");
   if(!box) return;
   const revs=(typeof prodReviews==="function")?prodReviews(P.id):[];
-  if(!revs.length){ box.innerHTML=`<p style="color:var(--dim);text-align:center;padding:1.5rem">${(typeof LANG !== "undefined" && LANG==="en")?"No reviews yet. Be the first!":"لسة مفيش مراجعات. كوني أول من يشارك رأيه! ✨"}</p>`; return; }
-  box.innerHTML=revs.map(r=>{ const date=r.createdAt?new Date(r.createdAt).toLocaleDateString((typeof LANG !== "undefined" && LANG==="en")?"en-US":"ar-EG"):""; return `<div class="rv-item"><div class="rv-head"><b>${r.name||"عميلة"}</b><div style="display:flex;align-items:center;gap:.6rem"><span class="stars">${"★".repeat(r.rating||5)}</span><span class="rv-date">${date}</span></div></div><p>${r.text||""}</p></div>`; }).join("");
+  if(!revs.length){ box.innerHTML=`<p style="color:var(--dim);text-align:center;padding:1.5rem">${(typeof LANG !== "undefined" && LANG==="en")?"No reviews yet. Be the first!":"لسة مفيش مراجعات. كن أول من يشارك رأيه! ✨"}</p>`; return; }
+  box.innerHTML=revs.map(r=>{ const date=r.createdAt?new Date(r.createdAt).toLocaleDateString((typeof LANG !== "undefined" && LANG==="en")?"en-US":"ar-EG"):""; return `<div class="rv-item"><div class="rv-head"><b>${r.name||"عميل"}</b><div style="display:flex;align-items:center;gap:.6rem"><span class="stars">${"★".repeat(r.rating||5)}</span><span class="rv-date">${date}</span></div></div><p>${r.text||""}</p></div>`; }).join("");
 }
 
 $("#rvSubmit")?.addEventListener("click",async()=>{
   const name=$("#rvName")?.value.trim();
   const text=$("#rvText")?.value.trim();
-  if(!name||!text){ if(typeof toast==="function") toast("⚠️ اكتبي اسمك ومراجعتك"); return; }
+  if(!name||!text){ if(typeof toast==="function") toast("⚠️ اكتب اسمك ومراجعتك"); return; }
   try{
     if(typeof DB !== "undefined" && typeof DB.add === "function") {
       await DB.add("reviews",{ productSlug:P.id, name, text, rating:selRating, createdAt:Date.now(), approved:false });
@@ -1650,7 +1650,7 @@ function renderShare() {
   if (!box) return;
   
   const url = location.href;
-  const text = ((typeof LANG !== "undefined" && LANG === "en") ? "Check out " : "شوفي ") + 
+  const text = ((typeof LANG !== "undefined" && LANG === "en") ? "Check out " : "شوف ") + 
                (typeof pname === "function" ? pname(P) : P.name) + 
                ((typeof LANG !== "undefined" && LANG === "en") ? " from VelaLight ✨" : " من VelaLight ✨");
   
