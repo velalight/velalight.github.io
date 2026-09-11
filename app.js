@@ -2425,6 +2425,88 @@ function genOrderId(){
   return "VL-"+s;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ ADVANCED MATCHING — تحسين دقة تتبع فيسبوك
+   ═══════════════════════════════════════════════════════════ */
+
+// دالة تشفير SHA-256
+async function hashSHA256(str){
+  if(!str) return null;
+  try{
+    const normalized = String(str).trim().toLowerCase();
+    const encoder = new TextEncoder();
+    const data = encoder.encode(normalized);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+  }catch(e){
+    console.warn("⚠️ Hash failed:", e);
+    return null;
+  }
+}
+
+// دالة تجهيز بيانات Advanced Matching
+async function buildAdvancedMatching(userData){
+  if(!userData) return {};
+  
+  const result = {};
+  
+  // الإيميل
+  if(userData.email){
+    const em = await hashSHA256(userData.email);
+    if(em) result.em = em;
+  }
+  
+  // الموبايل (بدون 20 أو +، بأرقام إنجليزية)
+  if(userData.phone){
+    let phone = String(userData.phone).replace(/\D/g, "");
+    if(phone.startsWith("20")) phone = phone.slice(2);
+    if(phone.startsWith("0")) phone = phone.slice(1);
+    const ph = await hashSHA256(phone);
+    if(ph) result.ph = ph;
+  }
+  
+  // الاسم الأول والأخير
+  if(userData.name){
+    const parts = String(userData.name).trim().split(/\s+/);
+    if(parts[0]){
+      const fn = await hashSHA256(parts[0]);
+      if(fn) result.fn = fn;
+    }
+    if(parts.length > 1){
+      const ln = await hashSHA256(parts[parts.length - 1]);
+      if(ln) result.ln = ln;
+    }
+  }
+  
+  // المدينة
+  if(userData.city){
+    const ct = await hashSHA256(userData.city);
+    if(ct) result.ct = ct;
+  }
+  
+  // البلد (ثابت لمصر)
+  result.country = "eg";
+  
+  // Facebook Browser ID (من كوكيز _fbp)
+  const fbp = getCookie("_fbp");
+  if(fbp) result.fbp = fbp;
+  
+  // Facebook Click ID (من URL أو localStorage)
+  const fbc = localStorage.getItem("vl_fbclid");
+  if(fbc) result.fbc = `fb.1.${Date.now()}.${fbc}`;
+  
+  return result;
+}
+
+// دالة قراءة الكوكيز
+function getCookie(name){
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if(parts.length === 2) return parts.pop().split(";").shift();
+  return null;
+}
+ 
 // ═══════════════════════════════════════════════════════════
 //   التعديلات الجديدة على دالة checkout (منع الطلبات الوهمية)
 // ═══════════════════════════════════════════════════════════
@@ -2511,6 +2593,11 @@ async function checkout(){
     userEmail = window.FB.auth.currentUser.email;
   }
 
+ /* ✨ ADVANCED MATCHING — تحسين دقة التتبع */
+const advancedMatching = await buildAdvancedMatching({name, phone, email, city});
+if(typeof fbq === "function" && Object.keys(advancedMatching).length > 0){
+  fbq("init", "1377896053806991", advancedMatching);
+}
   let msg=`${t("wa_head")}\n`;
   msg+=`${t("wa_order")} ${orderId}\n`;
   msg+=`━━━━━━━━━━━━━━━━━━━━\n\n`;
@@ -2707,7 +2794,23 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
         num_items: c.length
       });
     }
-    ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
+  if (typeof fbq === "function") {
+  fbq("track", "Purchase", {
+    value: total,
+    currency: "EGP",
+    content_ids: c.map(it => it.id),
+    num_items: c.length,
+    content_type: "product",
+    order_id: orderId,           // ← جديد: لمنع التكرار
+    em: advancedMatching.em,     // ← جديد: الإيميل المشفّر
+    ph: advancedMatching.ph,     // ← جديد: الموبايل المشفّر
+    fn: advancedMatching.fn,     // ← جديد: الاسم الأول
+    ln: advancedMatching.ln,     // ← جديد: الاسم الأخير
+    ct: advancedMatching.ct,     // ← جديد: المدينة
+    country: "eg"                // ← جديد: البلد
+  });
+}
+   ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
   } catch (e) {
     console.warn("Tracking event fire failed:", e);
   }
