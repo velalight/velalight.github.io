@@ -1,7 +1,7 @@
 (function(){
 "use strict";
  
-// ☢️ تنظيف ذاتي آمن: إلغاء تسجيل أي Service Worker قديم عالق ومسح الكاش التالف
+// ☢️ تنظيف ذاتي آمن
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(function(registrations) {
     for(let registration of registrations) {
@@ -19,7 +19,7 @@ if ('serviceWorker' in navigator) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ FIX: Global Image Error Handler (يمنع اختفاء المنتجات)
+   ✨ Global Image Error Handler
    ═══════════════════════════════════════════════════════════ */
 window.handleImageError = function(imgElement, productId) {
   if (!imgElement) return;
@@ -38,9 +38,7 @@ window.handleImageError = function(imgElement, productId) {
   }
 };
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ TRACKING DATA CAPTURE (UTM & Click IDs)
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ TRACKING DATA CAPTURE ═══ */
 function captureTrackingData() {
   const params = new URLSearchParams(window.location.search);
   const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'fbclid', 'gclid', 'ttclid'];
@@ -55,9 +53,7 @@ function captureTrackingData() {
 }
 const sessionTracking = captureTrackingData();
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ WISHLIST — مع Cache للأداء
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ WISHLIST ═══ */
 const WISHLIST_KEY = "vl_wishlist";
 let wishlistCache = null;
 
@@ -111,7 +107,7 @@ let quickAddQty=1;
 let quickAddMaxStock=99;
 let productGridClickBound=false;
 
-/* ═══ PERFORMANCE OPTIMIZATIONS ═══ */
+/* ═══ PERFORMANCE ═══ */
 const requestIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
 const cancelIdle = window.cancelIdleCallback || clearTimeout;
 
@@ -125,28 +121,12 @@ function debounce(fn, ms=300){
 
 /* ═══ VELA SCENTS ═══ */
 const VELA_SCENTS=[
-["فانيلا","Vanilla"],
-["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
-["لافندر","Lavender"],
-["موكا","Mocha"],
-["كراميل","Caramel"],
-["كاريبيان فروت","Caribbean Fruit"],
-["فل","Jasmine Sambac"],
-["ياسمين","Jasmine"],
-["اناناس","Pineapple"],
-["شيكولاتة","Chocolate"],
-["كوكونات","Coconut"],
-["كاسيليا","Cassilia — Massage"],
-["اينتو زانايت","Into Zanaite — Massage"],
-["بوكيت روز","Bouquet Rose"],
-["ورد بلدى","Egyptian Rose"],
-["تيوليب","Tulip"],
-["قهوة","Coffee"],
-["قهوة فانيلا","Vanilla Coffee"],
-["قهوة بندق","Hazelnut Coffee"],
-["عود فانيليا","Vanilla Oud"],
-["عنبر","Amber"],
-["فراولة","Strawberry"],
+["فانيلا","Vanilla"],["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],["لافندر","Lavender"],
+["موكا","Mocha"],["كراميل","Caramel"],["كاريبيان فروت","Caribbean Fruit"],["فل","Jasmine Sambac"],
+["ياسمين","Jasmine"],["اناناس","Pineapple"],["شيكولاتة","Chocolate"],["كوكونات","Coconut"],
+["كاسيليا","Cassilia — Massage"],["اينتو زانايت","Into Zanaite — Massage"],["بوكيت روز","Bouquet Rose"],
+["ورد بلدى","Egyptian Rose"],["تيوليب","Tulip"],["قهوة","Coffee"],["قهوة فانيلا","Vanilla Coffee"],
+["قهوة بندق","Hazelnut Coffee"],["عود فانيليا","Vanilla Oud"],["عنبر","Amber"],["فراولة","Strawberry"],
 ["عود خشب صندل","Sandalwood Oud"]
 ];
 
@@ -156,7 +136,7 @@ const velaScentTr=name=>{
 };
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ NEW: CART UI STYLES — الحقن الديناميكي للأنماط الجديدة
+   ✨ CART UI STYLES — نسخة مضغوطة ومحسّنة
    ═══════════════════════════════════════════════════════════ */
 function injectCartStyles(){
   if(document.getElementById('vl-cart-luxe-styles')) return;
@@ -167,9 +147,9 @@ function injectCartStyles(){
     .vl-ship-bar{
       background: linear-gradient(135deg,#fdf5ed 0%,#faf0e6 100%);
       border: 1px solid rgba(212,175,55,.35);
-      border-radius: 16px;
-      padding: 14px 16px;
-      margin: 0 0 14px;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin: 0 0 10px;
       box-shadow: 0 2px 12px rgba(212,175,55,.08);
       position: relative;
       overflow: hidden;
@@ -185,17 +165,17 @@ function injectCartStyles(){
     }
     .vl-ship-bar .vl-ship-txt{
       text-align: center;
-      font-size: .88rem;
+      font-size: .82rem;
       color: var(--dark,#3d2f1f);
-      margin-bottom: 9px;
+      margin-bottom: 7px;
       font-weight: 500;
-      line-height: 1.5;
+      line-height: 1.4;
     }
     .vl-ship-bar .vl-ship-txt strong{ color: #b8860b; font-weight: 800; }
     .vl-ship-bar.vl-ship-success .vl-ship-txt strong{ color: #1e8449; }
     .vl-ship-track{
       background: #e8dcc9;
-      height: 10px;
+      height: 8px;
       border-radius: 999px;
       overflow: hidden;
       position: relative;
@@ -220,14 +200,6 @@ function injectCartStyles(){
       0%{ background-position: 200% 0; }
       100%{ background-position: -200% 0; }
     }
-    .vl-ship-emoji{
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1rem;
-      opacity: .55;
-      pointer-events: none;
-    }
 
     /* ═══ Confetti ═══ */
     .vl-confetti-piece{
@@ -244,15 +216,17 @@ function injectCartStyles(){
       100%{ transform: translateY(100vh) rotate(720deg) scale(.4); opacity: 0; }
     }
 
-    /* ═══ Luxury Item Cards ═══ */
+    /* ═══════════════════════════════════════════════════════
+       ✨ COMPACT LUXURY ITEM CARDS — مضغوطة 40%
+       ═══════════════════════════════════════════════════════ */
     .citem{
       display: flex;
-      gap: 14px;
-      padding: 14px;
+      gap: 10px;
+      padding: 10px;
       background: linear-gradient(135deg,#fffbf5 0%,#fdf8f0 100%);
       border: 1px solid rgba(212,175,55,.18);
-      border-radius: 16px;
-      margin-bottom: 12px;
+      border-radius: 14px;
+      margin-bottom: 8px;
       position: relative;
       transition: all .25s ease;
       align-items: flex-start;
@@ -261,13 +235,12 @@ function injectCartStyles(){
     .citem:hover{
       border-color: rgba(212,175,55,.4);
       box-shadow: 0 4px 18px rgba(139,90,43,.1);
-      transform: translateY(-1px);
     }
     .citem-media{
-      flex: 0 0 82px;
-      width: 82px;
-      height: 82px;
-      border-radius: 12px;
+      flex: 0 0 64px;
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
       overflow: hidden;
       background: #f5efe5;
       display: grid;
@@ -286,40 +259,41 @@ function injectCartStyles(){
       min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
+      padding-inline-end: 32px;
     }
     .citem-info h5{
       font-family: var(--fd,serif);
-      font-size: 1rem;
+      font-size: .9rem;
       margin: 0;
       font-weight: 700;
       color: var(--dark,#3d2f1f);
-      line-height: 1.3;
+      line-height: 1.25;
     }
 
-    /* Scent Pill Selector */
+    /* Scent Pill Selector — مضغوط */
     .cart-scent-picker{
       display: block;
-      margin: 2px 0;
+      margin: 1px 0;
     }
     .cart-scent-label{
-      font-size: .72rem;
+      font-size: .68rem;
       color: var(--mut,#9a8874);
       display: flex;
       align-items: center;
-      gap: 4px;
-      margin-bottom: 3px;
+      gap: 3px;
+      margin-bottom: 2px;
       font-weight: 600;
     }
     .cart-scent-select{
       width: 100%;
-      padding: 7px 30px 7px 12px;
+      padding: 5px 26px 5px 10px;
       border-radius: 999px;
       border: 1.5px solid rgba(212,175,55,.3);
-      background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='3' stroke-linecap='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 12px center;
-      background-size: 12px;
+      background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='3' stroke-linecap='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 10px center;
+      background-size: 10px;
       font-family: inherit;
-      font-size: .82rem;
+      font-size: .78rem;
       color: var(--dark,#3d2f1f);
       cursor: pointer;
       outline: none;
@@ -331,8 +305,8 @@ function injectCartStyles(){
       box-shadow: 0 1px 4px rgba(212,175,55,.08);
     }
     html[dir="rtl"] .cart-scent-select{
-      background-position: left 12px center;
-      padding: 7px 12px 7px 30px;
+      background-position: left 10px center;
+      padding: 5px 10px 5px 26px;
     }
     .cart-scent-select:hover{
       border-color: rgba(212,175,55,.6);
@@ -344,54 +318,54 @@ function injectCartStyles(){
     }
     .cart-scent-select option{ padding: 8px; }
 
-    /* Price + Line Total */
+    /* Price + Line Total — مضغوط */
     .cs{
-      font-size: .78rem;
+      font-size: .72rem;
       color: var(--mut,#9a8874);
       display: flex;
-      gap: 5px;
+      gap: 4px;
       align-items: baseline;
     }
     .cs strong{
       color: #b8860b;
       font-weight: 700;
-      font-size: .88rem;
+      font-size: .82rem;
     }
     .cart-line-total{
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      font-size: .8rem;
+      font-size: .72rem;
       color: var(--mut,#9a8874);
-      padding-top: 4px;
+      padding-top: 3px;
       border-top: 1px dashed rgba(212,175,55,.2);
     }
     .cart-line-total strong{
       color: var(--dark,#3d2f1f);
-      font-size: .95rem;
+      font-size: .88rem;
       font-weight: 800;
     }
 
-    /* Touch-friendly Qty */
+    /* Touch-friendly Qty — مضغوط */
     .qty{
       display: inline-flex;
       align-items: center;
       gap: 0;
       border: 1.5px solid rgba(212,175,55,.3);
       border-radius: 999px;
-      padding: 2px;
+      padding: 1px;
       background: #fff;
-      margin-top: 4px;
+      margin-top: 2px;
       width: fit-content;
       box-shadow: 0 1px 4px rgba(212,175,55,.08);
     }
     .qty button{
-      width: 38px;
-      height: 38px;
+      width: 32px;
+      height: 32px;
       border: none;
       background: transparent;
       border-radius: 50%;
-      font-size: 1.3rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: #b8860b;
       cursor: pointer;
@@ -410,21 +384,21 @@ function injectCartStyles(){
       transform: scale(.94);
     }
     .qty b{
-      min-width: 34px;
+      min-width: 28px;
       text-align: center;
-      font-size: 1.02rem;
+      font-size: .92rem;
       font-weight: 800;
       color: var(--dark,#3d2f1f);
-      padding: 0 4px;
+      padding: 0 2px;
     }
 
-    /* Trash Button */
+    /* Trash Button — مضغوط */
     .rm{
       position: absolute;
-      top: 10px;
-      inset-inline-end: 10px;
-      width: 34px;
-      height: 34px;
+      top: 8px;
+      inset-inline-end: 8px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       border: none;
       background: rgba(231,76,60,.08);
@@ -437,8 +411,8 @@ function injectCartStyles(){
       -webkit-tap-highlight-color: transparent;
     }
     .rm svg{
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       stroke: currentColor;
       stroke-width: 2;
       fill: none;
@@ -455,13 +429,13 @@ function injectCartStyles(){
       transform: rotate(8deg) scale(.94);
     }
 
-    /* ═══ Cross-Sell Luxe ═══ */
+    /* ═══ Cross-Sell Compact ═══ */
     .cross-sell-box{
       background: linear-gradient(135deg,#fdf5ed 0%,#faf0e6 100%);
       border: 1px dashed rgba(212,175,55,.45);
-      border-radius: 16px;
-      padding: 14px;
-      margin-top: 14px;
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-top: 8px;
       position: relative;
       overflow: hidden;
     }
@@ -478,16 +452,16 @@ function injectCartStyles(){
     .vl-cross-head{
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 6px;
+      margin-bottom: 6px;
       font-weight: 800;
-      font-size: .9rem;
+      font-size: .82rem;
       color: #b8860b;
       position: relative;
       z-index: 1;
     }
     .vl-cross-head span.emoji{
-      font-size: 1.15rem;
+      font-size: 1rem;
       animation: vlSparkle 2.4s ease-in-out infinite;
     }
     @keyframes vlSparkle{
@@ -497,21 +471,20 @@ function injectCartStyles(){
     .vl-cross-row{
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       position: relative;
       z-index: 1;
     }
     .vl-cross-img{
-      flex: 0 0 66px;
-      width: 66px;
-      height: 66px;
-      border-radius: 12px;
+      flex: 0 0 52px;
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
       overflow: hidden;
       background: #f5efe5;
       border: 1px solid rgba(212,175,55,.2);
       display: grid;
       place-items: center;
-      box-shadow: 0 2px 8px rgba(139,90,43,.08);
     }
     .vl-cross-img img{
       width: 100%;
@@ -524,50 +497,47 @@ function injectCartStyles(){
     }
     .vl-cross-meta .nm{
       font-weight: 700;
-      font-size: .88rem;
+      font-size: .82rem;
       color: var(--dark,#3d2f1f);
-      line-height: 1.35;
-      margin-bottom: 3px;
+      line-height: 1.25;
+      margin-bottom: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .vl-cross-meta .pr{
-      font-size: .82rem;
+      font-size: .76rem;
       color: #b8860b;
       font-weight: 800;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .vl-quick-add{
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 4px;
       width: 100%;
-      padding: 9px 14px;
+      padding: 7px 10px;
       border-radius: 999px;
       border: none;
       background: linear-gradient(135deg,#d4af37,#f9d877);
       color: #3d2f1f;
       font-family: inherit;
-      font-size: .82rem;
+      font-size: .76rem;
       font-weight: 800;
       cursor: pointer;
       transition: all .22s ease;
-      box-shadow: 0 3px 10px rgba(212,175,55,.3);
+      box-shadow: 0 2px 8px rgba(212,175,55,.3);
       -webkit-tap-highlight-color: transparent;
     }
     .vl-quick-add:hover{
       transform: translateY(-1px);
-      box-shadow: 0 5px 16px rgba(212,175,55,.45);
+      box-shadow: 0 4px 14px rgba(212,175,55,.45);
     }
     .vl-quick-add:active{ transform: translateY(0) scale(.98); }
     .vl-quick-add.vl-added{
       background: linear-gradient(135deg,#27ae60,#2ecc71);
       color: #fff;
-    }
-    .vl-quick-add.vl-added svg{ animation: vlCheckPop .4s ease; }
-    @keyframes vlCheckPop{
-      0%{ transform: scale(0); }
-      60%{ transform: scale(1.25); }
-      100%{ transform: scale(1); }
     }
 
     /* ═══ Discount Badges ═══ */
@@ -575,10 +545,10 @@ function injectCartStyles(){
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 12px;
-      border-radius: 12px;
-      margin: 6px 0;
-      font-size: .85rem;
+      padding: 6px 10px;
+      border-radius: 10px;
+      margin: 4px 0;
+      font-size: .78rem;
       transition: all .3s ease;
     }
     .vl-disc-row.vl-disc-active{
@@ -590,14 +560,14 @@ function injectCartStyles(){
     .vl-disc-row.vl-disc-active .vl-disc-val{
       color: #1e8449;
       font-weight: 800;
-      font-size: .95rem;
+      font-size: .88rem;
     }
     .vl-disc-row.vl-disc-cancelled{
       background: #f5f5f5;
       border: 1px dashed rgba(0,0,0,.08);
       color: #aaa;
       text-decoration: line-through;
-      opacity: .75;
+      opacity: .7;
     }
     .vl-disc-row.vl-disc-cancelled .vl-disc-val{
       color: #aaa;
@@ -606,19 +576,15 @@ function injectCartStyles(){
     .vl-disc-label{
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }
     .vl-disc-hint{
       display: block;
-      font-size: .68rem;
+      font-size: .62rem;
       font-weight: 500;
       color: #7f8c8d;
-      margin-top: 2px;
+      margin-top: 1px;
       text-decoration: none;
-    }
-    .vl-disc-row.vl-disc-cancelled .vl-disc-hint{
-      color: #999;
-      font-style: italic;
     }
 
     /* ═══ Checkout Button Pulse ═══ */
@@ -631,7 +597,7 @@ function injectCartStyles(){
         box-shadow: 0 4px 14px rgba(212,175,55,.35), 0 0 0 0 rgba(212,175,55,.4);
       }
       50%{
-        box-shadow: 0 6px 24px rgba(212,175,55,.55), 0 0 0 10px rgba(212,175,55,0);
+        box-shadow: 0 6px 24px rgba(212,175,55,.55), 0 0 0 8px rgba(212,175,55,0);
       }
     }
 
@@ -640,47 +606,38 @@ function injectCartStyles(){
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 12px;
-      margin: 12px 0 8px;
+      gap: 6px;
+      margin: 8px 0 6px;
       flex-wrap: wrap;
-      padding: 10px 8px;
+      padding: 6px 6px;
       background: linear-gradient(135deg,rgba(253,245,237,.6),rgba(250,240,230,.6));
-      border-radius: 14px;
+      border-radius: 12px;
       border: 1px solid rgba(212,175,55,.15);
     }
     .vl-trust-item{
       display: flex;
       align-items: center;
-      gap: 5px;
-      font-size: .72rem;
+      gap: 4px;
+      font-size: .65rem;
       color: #8b6f47;
       font-weight: 600;
-      padding: 3px 8px;
+      padding: 2px 6px;
       border-radius: 999px;
       background: rgba(255,255,255,.7);
-      transition: all .2s ease;
     }
-    .vl-trust-item:hover{
-      background: #fff;
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(212,175,55,.15);
-    }
-    .vl-trust-item .ic{
-      font-size: .95rem;
-      filter: drop-shadow(0 1px 2px rgba(212,175,55,.25));
-    }
+    .vl-trust-item .ic{ font-size: .85rem; }
 
     /* ═══ Empty State ═══ */
     .vl-empty-cart{
-      padding: 2.4rem 1.2rem;
+      padding: 1.5rem 1rem;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
     .vl-empty-candle{
-      font-size: 3.4rem;
+      font-size: 2.8rem;
       opacity: .55;
       animation: vlCandleFloat 3.2s ease-in-out infinite;
       filter: drop-shadow(0 6px 14px rgba(212,175,55,.28));
@@ -691,32 +648,32 @@ function injectCartStyles(){
     }
     .vl-empty-title{
       font-family: var(--fd,serif);
-      font-size: 1.12rem;
+      font-size: 1rem;
       color: #b8860b;
       font-weight: 800;
-      line-height: 1.5;
-      max-width: 260px;
+      line-height: 1.4;
+      max-width: 240px;
     }
     .vl-empty-sub{
-      font-size: .84rem;
+      font-size: .76rem;
       color: #9a8874;
-      line-height: 1.6;
-      max-width: 260px;
+      line-height: 1.5;
+      max-width: 240px;
     }
     .vl-empty-cta{
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 12px 26px;
+      padding: 10px 22px;
       border-radius: 999px;
       border: none;
       background: linear-gradient(135deg,#d4af37,#f9d877);
       color: #3d2f1f;
       font-family: inherit;
-      font-size: .92rem;
+      font-size: .85rem;
       font-weight: 800;
       cursor: pointer;
-      margin-top: 6px;
+      margin-top: 4px;
       transition: all .25s ease;
       box-shadow: 0 5px 18px rgba(212,175,55,.35);
       -webkit-tap-highlight-color: transparent;
@@ -725,85 +682,157 @@ function injectCartStyles(){
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(212,175,55,.5);
     }
-    .vl-empty-cta:active{ transform: translateY(0) scale(.97); }
 
     /* ═══════════════════════════════════════════════════════
-       ✨ NEW: Mobile Fixes — منع الفوتر الثابت من تغطية المحتوى
+       ✨ FLEX LAYOUT — رأس ثابت + محتوى متحرك + فوتر Sticky
        ═══════════════════════════════════════════════════════ */
+    #cartDrawer{
+      display: flex !important;
+      flex-direction: column !important;
+      height: 100dvh !important;
+      max-height: 100dvh !important;
+      overflow: hidden !important;
+    }
+    #cartDrawer > .dhead,
+    #cartDrawer > .drawer-head{
+      flex-shrink: 0;
+    }
+    #cartDrawer > .dbody,
+    #cartDrawer > .drawer-body{
+      flex: 1 1 auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+      min-height: 0;
+      padding-bottom: 4px !important;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+    #cartItems{
+      padding-bottom: 4px !important;
+    }
+    #cartDrawer .dfoot{
+      flex-shrink: 0;
+      background: #ffffff !important;
+      border-top: 1px solid rgba(212,175,55,.25);
+      box-shadow: 0 -4px 14px rgba(139,90,43,.06);
+      padding: 8px 12px 10px !important;
+      max-height: 45vh;
+      overflow-y: auto;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* ═══ Compact Cart Form ═══ */
+    #cartDrawer .co-form,
+    #cartDrawer form{
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #cartDrawer .co-form > *,
+    #cartDrawer form > *{
+      margin: 0 !important;
+    }
+    #cartDrawer input[type="text"],
+    #cartDrawer input[type="tel"],
+    #cartDrawer input[type="email"],
+    #cartDrawer input:not([type]),
+    #cartDrawer select,
+    #cartDrawer textarea{
+      padding: 8px 10px !important;
+      font-size: .82rem !important;
+      border-radius: 10px !important;
+      line-height: 1.3 !important;
+      min-height: 0 !important;
+    }
+    #cartDrawer textarea{
+      min-height: 38px !important;
+      max-height: 60px !important;
+      resize: none !important;
+    }
+    #cartDrawer label{
+      font-size: .75rem !important;
+      margin-bottom: 2px !important;
+      font-weight: 600;
+    }
+
+    /* ═══ Compact Payment Info ═══ */
+    #cartDrawer .pay-note,
+    #cartDrawer .payment-info,
+    #cartDrawer [class*="payment"],
+    #cartDrawer [class*="pay-"]{
+      padding: 6px 10px !important;
+      font-size: .72rem !important;
+      line-height: 1.4 !important;
+      margin: 4px 0 !important;
+      border-radius: 10px !important;
+    }
+
+    /* ═══ Totals Row Compact ═══ */
+    #cartDrawer .trow{
+      padding: 4px 0 !important;
+      font-size: .82rem !important;
+    }
+    #cartDrawer .trow.total{
+      padding-top: 8px !important;
+      margin-top: 4px !important;
+      border-top: 1px dashed rgba(212,175,55,.3) !important;
+      font-size: 1rem !important;
+      font-weight: 800 !important;
+    }
+
+    /* ═══ Mobile Specific ═══ */
     @media (max-width: 768px){
-      #cartDrawer{ padding-bottom: 0 !important; }
-      #cartItems{
-        padding-bottom: 180px;
-        scroll-behavior: smooth;
+      #cartDrawer{
+        height: 100dvh !important;
+        max-height: 100dvh !important;
       }
-      .vl-empty-cart{
-        padding: 1.2rem 1rem 2rem;
-        min-height: auto;
-        justify-content: flex-start;
+      .citem{
+        padding: 9px;
         gap: 9px;
+        margin-bottom: 7px;
       }
-      .vl-empty-candle{
-        font-size: 2.6rem;
-        margin-bottom: 2px;
+      .citem-media{
+        flex: 0 0 58px;
+        width: 58px;
+        height: 58px;
       }
-      .vl-empty-title{
-        font-size: .96rem;
-        line-height: 1.5;
-        max-width: 95%;
+      .citem-info h5{ font-size: .86rem; }
+      #cartDrawer .dfoot{
+        max-height: 50vh;
       }
-      .vl-empty-sub{
-        font-size: .76rem;
-        max-width: 95%;
-      }
-      .vl-empty-cta{
-        padding: 11px 24px;
-        font-size: .84rem;
-        margin-top: 6px;
-        margin-bottom: 20px;
-      }
-      .cross-sell-box{ margin-bottom: 40px; }
-      .citem:last-child{ margin-bottom: 40px; }
     }
 
     @media (max-width: 380px){
-      .vl-empty-candle{ font-size: 2.2rem; }
-      .vl-empty-title{ font-size: .9rem; }
-      .vl-empty-cta{ padding: 10px 20px; font-size: .8rem; }
+      .citem-media{
+        flex: 0 0 52px;
+        width: 52px;
+        height: 52px;
+      }
+      .citem-info h5{ font-size: .82rem; }
+      .qty button{
+        width: 28px;
+        height: 28px;
+        font-size: 1rem;
+      }
+      .qty b{ font-size: .85rem; min-width: 24px; }
     }
   `;
   document.head.appendChild(style);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ NEW: تعديل padding السلة تلقائياً حسب ارتفاع الفوتر
+   ✨ adjustCartDrawerPadding — مش محتاج padding كبير دلوقتي
+   لأن الفوتر sticky جوه الـ flex layout
    ═══════════════════════════════════════════════════════════ */
 function adjustCartDrawerPadding(){
-  const drawer = document.getElementById('cartDrawer');
   const items = document.getElementById('cartItems');
-  if(!drawer || !items) return;
-  
-  const isMobile = window.innerWidth <= 768;
-  
-  if(!isMobile){
-    items.style.paddingBottom = '';
-    return;
-  }
-  
-  // ابحث عن الفوتر بأي اسم كلاس محتمل
-  const footer = drawer.querySelector('.dfoot, .drawer-footer, .cart-footer');
-  if(!footer){
-    items.style.paddingBottom = '180px';
-    return;
-  }
-  
-  // احسب ارتفاع الفوتر + مساحة إضافية
-  const footerHeight = footer.offsetHeight || 140;
-  items.style.paddingBottom = (footerHeight + 30) + 'px';
+  if(!items) return;
+  // مع الـ flex layout الجديد، مش محتاجين padding كبير
+  items.style.paddingBottom = '4px';
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ Confetti Animation
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ Confetti Animation ═══ */
 function triggerConfetti(count){
   count = count || 55;
   const colors = ['#d4af37','#f9d877','#27ae60','#e74c3c','#3498db','#e67e22','#9b59b6','#f1c40f'];
@@ -827,9 +856,7 @@ function triggerConfetti(count){
   document.body.appendChild(frag);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ FREE SHIPPING — تتبع حالة الشريط لمنع تكرار الكونفيتي
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ FREE SHIPPING ═══ */
 const FREE_SHIP_THRESHOLD = 3000;
 let freeShipCelebrated = false;
 
@@ -838,330 +865,126 @@ let freeShipCelebrated = false;
   if(typeof I18N==="undefined") return;
 
   const add = {
-
     ar: {
-/* ═══ Reviews Page (reviews.html) ═══ */
-reviews_back: "← الرجوع للرئيسية",
-reviews_stats_trust: "ثقة تتجدد",
-reviews_quote: "مش مجرد شمعة… دي لحظة بتتعاش!",
-reviews_quote_author: "— واحد من عملائنا",
-reviews_cta_title: "جاهز تنضم لعائلة VelaLight؟ 🕯️",
-reviews_cta_sub: "اختار شمعتك الفاخرة واصنع لحظتك الخاصة",
-reviews_cta_btn: "تسوق الآن 🛍️",
-foot_wishlist: "❤️ المفضلة",
-foot_orders: "📦 طلباتي",
-      
-      /* Shipping & Payment */
-      ship_note:
-        "🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
-
-      pay_products_note:
-        "💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.",
-
-      pay_title:
-        "InstaPay / فودافون كاش / أورنج كاش",
-
-      paymethod_d:
-        "قيمة المنتجات تُدفع مقدماً (تحويل) عند تأكيد الطلب.",
-
-      /* Scent */
-      t_scentwarn:
-        "⚠️ من فضلك اختر العطر أولاً.",
-
-      quick_add_scent:
-        "🌸 اختر العطر",
-
-      quick_add_qty:
-        "الكمية",
-
-      quick_add_add:
-        "🛍️ أضف للسلة",
-
-      quick_add_added:
-        "✓ تمت الإضافة للسلة",
-
-      scent_req:
-        "مطلوب",
-
-      /* Handmade */
-      handmade_note:
-        "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
-
-      pd_handmade_note:
-        "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
-
-      /* Product tabs */
-      pd_desc_tab:
-        "📝 الوصف",
-
-      pd_specs_tab:
-        "📋 المواصفات",
-
-      pd_reviews_tab:
-        "⭐ المراجعات",
-
-      /* Product gallery */
-      pd_zoom:
-        "🔍 تكبير",
-
-      pd_gallery_count:
-        "الصور",
-
-      /* Product options */
-      pd_scent_t:
-        "🌸 اختر العطر:",
-
-      pd_qty_t:
-        "الكمية:",
-
-      pd_required:
-        "مطلوب",
-
-      pd_decrease:
-        "تقليل الكمية",
-
-      pd_increase:
-        "زيادة الكمية",
-
-      pd_wishlist:
-        "إضافة إلى المفضلة",
-
-      /* Product actions */
-      pd_add:
-        "🛍️ أضف للسلة",
-
-      pd_buy:
-        "💬 اطلب عبر واتساب",
-
-      /* Product information */
-      pd_hours:
-        "مدة الاشتعال:",
-
-      pd_materials:
-        "الخامات:",
-
-      pd_ship:
-        "التوصيل:",
-
-      pd_ship_v:
-        "3–7 أيام",
-
-      /* Reviews */
-      pd_review_word:
-        "مراجعة",
-
-      pd_read_all:
-        "اقرأ الكل",
-
-      pd_first_review:
-        "كن أول من يشارك رأيه",
-
-      /* Related Products */
-      pd_rel_h2:
-        "✨ منتجات هتعجبك",
-
-      /* Share */
-      pd_share:
-        "مشاركة:",
-
-      pd_copy_link:
-        "📋 نسخ الرابط",
-
-      /* Product Not Found */
-      pd_product:
-        "المنتج",
-
-      pd_not_found_title:
-        "😕 المنتج غير متاح",
-
-      pd_not_found_desc:
-        "عذراً، لم نتمكن من العثور على هذا المنتج",
-
-      pd_browse_products:
-        "تصفح المنتجات",
-
-      /* ═══ Homepage Reviews ═══ */
-      reviews_kicker:
-        "💛 كلامكم أحلى هدية",
-
-      reviews_title:
-        "آراء عملائنا",
-
-      reviews_desc:
-        "مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.",
-
-      reviews_cta:
-        "✨ جربت سحرنا؟",
-
-      reviews_cta_link:
-        "ابعتلنا رأيك على الواتساب",
-/* ═══ Brand Promise ═══ */
-brand_promise_title:
-  "تفاصيل تصنع الفرق",
-
-brand_promise_desc:
-  "شموع يدوية فاخرة، عطور مختارة، وهدايا مصممة لتضيف لمسة خاصة لكل لحظة.",
-
-brand_point1_title:
-  "صناعة يدوية",
-
-brand_point1_desc:
-  "كل قطعة تُصنع وتُجهّز بعناية.",
-
-brand_point2_title:
-  "هدية لكل مناسبة",
-
-brand_point2_desc:
-  "اختيارات تليق بكل لحظة واحتفال.",
-
-brand_point3_title:
-  "اختيار يناسبك",
-
-brand_point3_desc:
-  "نساعدك تختار الرائحة والتفاصيل المناسبة.",
-
-       /* ═══ FAQ ═══ */
-      faq1q:
-        "كيف يمكنني الطلب وما طرق الدفع المتاحة؟",
-
-      faq1a:
-        "يمكنك إضافة المنتجات إلى سلة الشراء وإتمام طلبك بسهولة. يتم دفع قيمة المنتجات مقدمًا عبر InstaPay أو Vodafone Cash أو تحويل بنكي، بينما تُدفع تكلفة الشحن نقدًا لمندوب التوصيل عند الاستلام.",
-
-      faq2q:
-        "هل تقومون بالشحن إلى جميع محافظات مصر؟",
-
-      faq2a:
-        "نعم، نوفر خدمة التوصيل إلى جميع محافظات مصر، مع الحرص على وصول طلبك بأمان.",
-
-      faq3q:
-        "كم تستغرق مدة تجهيز وشحن الطلب؟",
-
-      faq3a:
-        "لأن منتجات VelaLight تُصنع يدويًا بعناية، تستغرق مدة التجهيز عادةً من 3 إلى 7 أيام عمل، بالإضافة إلى مدة الشحن حسب المحافظة.",
-
-      faq4q:
-        "هل شموع VelaLight مصنوعة من شمع الصويا؟",
-
-      faq4a:
-        "نعم، نستخدم شمع الصويا الطبيعي 100%، الذي يتميز باحتراق أبطأ وأنظف ويساعد على انتشار العطر بكفاءة.",
-
-      faq5q:
-        "كم تبلغ مدة احتراق الشمعة وكيف أحافظ على أفضل أداء لها؟",
-
-      faq5a:
-        "تختلف مدة الاحتراق حسب وزن وحجم كل شمعة، وستجد التفاصيل في وصف المنتج. ولأفضل نتيجة، عند الاستخدام الأول اترك الشمعة حتى يذوب سطح الشمع بالكامل ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.",
-
-      faq6q:
-        "كيف أختار العطر المناسب؟",
-
-      faq6a:
-        "لدينا تشكيلة متنوعة من العطور الفاخرة. وإذا كنت محتار، تواصل معنا عبر WhatsApp وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلها.",
-
-      faq7q:
-        "هل تتوفر خدمة تغليف الهدايا؟",
-
-      faq7a:
-        "نعم، جميع منتجات VelaLight تأتي بتغليف أنيق وفاخر وجاهز للإهداء.",
-
-      faq8q:
-        "ما سياسة الاستبدال والاسترجاع؟",
-
-      faq8a:
-        "نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب. وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.",
-
-      /* ═══ Top Marquee ═══ */
-      mq_delivery:
-        "🚚 توصيل سريع لكل محافظات مصر",
-
-      mq_discounts:
-        "🏷️ خصومات حصرية على مجموعات مختارة",
-
-      mq_gift:
-        "🎁 تغليف هدايا مجاني مع كل طلب",
-
-      mq_handmade:
-        "🤲 صناعة يدوية 100% بخامات طبيعية",
-
-      mq_scents:
-        "🕯️ أكثر من 23 عطر فاخر متاح",
-
-      mq_shipping:
-        "📦 شحن آمن من الورشة لحد باب بيتك",
-
-      mq_support:
-        "💬 دعم فني يومي لخدمتك",
-
-      /* ═══ Products Page ═══ */
+      reviews_back: "← الرجوع للرئيسية",
+      reviews_stats_trust: "ثقة تتجدد",
+      reviews_quote: "مش مجرد شمعة… دي لحظة بتتعاش!",
+      reviews_quote_author: "— واحد من عملائنا",
+      reviews_cta_title: "جاهز تنضم لعائلة VelaLight؟ 🕯️",
+      reviews_cta_sub: "اختار شمعتك الفاخرة واصنع لحظتك الخاصة",
+      reviews_cta_btn: "تسوق الآن 🛍️",
+      foot_wishlist: "❤️ المفضلة",
+      foot_orders: "📦 طلباتي",
+      ship_note: "🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
+      pay_products_note: "💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.",
+      pay_title: "InstaPay / فودافون كاش / أورنج كاش",
+      paymethod_d: "قيمة المنتجات تُدفع مقدماً (تحويل) عند تأكيد الطلب.",
+      t_scentwarn: "⚠️ من فضلك اختر العطر أولاً.",
+      quick_add_scent: "🌸 اختر العطر",
+      quick_add_qty: "الكمية",
+      quick_add_add: "🛍️ أضف للسلة",
+      quick_add_added: "✓ تمت الإضافة للسلة",
+      scent_req: "مطلوب",
+      handmade_note: "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
+      pd_handmade_note: "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
+      pd_desc_tab: "📝 الوصف",
+      pd_specs_tab: "📋 المواصفات",
+      pd_reviews_tab: "⭐ المراجعات",
+      pd_zoom: "🔍 تكبير",
+      pd_gallery_count: "الصور",
+      pd_scent_t: "🌸 اختر العطر:",
+      pd_qty_t: "الكمية:",
+      pd_required: "مطلوب",
+      pd_decrease: "تقليل الكمية",
+      pd_increase: "زيادة الكمية",
+      pd_wishlist: "إضافة إلى المفضلة",
+      pd_add: "🛍️ أضف للسلة",
+      pd_buy: "💬 اطلب عبر واتساب",
+      pd_hours: "مدة الاشتعال:",
+      pd_materials: "الخامات:",
+      pd_ship: "التوصيل:",
+      pd_ship_v: "3–7 أيام",
+      pd_review_word: "مراجعة",
+      pd_read_all: "اقرأ الكل",
+      pd_first_review: "كن أول من يشارك رأيه",
+      pd_rel_h2: "✨ منتجات هتعجبك",
+      pd_share: "مشاركة:",
+      pd_copy_link: "📋 نسخ الرابط",
+      pd_product: "المنتج",
+      pd_not_found_title: "😕 المنتج غير متاح",
+      pd_not_found_desc: "عذراً، لم نتمكن من العثور على هذا المنتج",
+      pd_browse_products: "تصفح المنتجات",
+      reviews_kicker: "💛 كلامكم أحلى هدية",
+      reviews_title: "آراء عملائنا",
+      reviews_desc: "مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.",
+      reviews_cta: "✨ جربت سحرنا؟",
+      reviews_cta_link: "ابعتلنا رأيك على الواتساب",
+      brand_promise_title: "تفاصيل تصنع الفرق",
+      brand_promise_desc: "شموع يدوية فاخرة، عطور مختارة، وهدايا مصممة لتضيف لمسة خاصة لكل لحظة.",
+      brand_point1_title: "صناعة يدوية",
+      brand_point1_desc: "كل قطعة تُصنع وتُجهّز بعناية.",
+      brand_point2_title: "هدية لكل مناسبة",
+      brand_point2_desc: "اختيارات تليق بكل لحظة واحتفال.",
+      brand_point3_title: "اختيار يناسبك",
+      brand_point3_desc: "نساعدك تختار الرائحة والتفاصيل المناسبة.",
+      faq1q: "كيف يمكنني الطلب وما طرق الدفع المتاحة؟",
+      faq1a: "يمكنك إضافة المنتجات إلى سلة الشراء وإتمام طلبك بسهولة. يتم دفع قيمة المنتجات مقدمًا عبر InstaPay أو Vodafone Cash أو تحويل بنكي، بينما تُدفع تكلفة الشحن نقدًا لمندوب التوصيل عند الاستلام.",
+      faq2q: "هل تقومون بالشحن إلى جميع محافظات مصر؟",
+      faq2a: "نعم، نوفر خدمة التوصيل إلى جميع محافظات مصر، مع الحرص على وصول طلبك بأمان.",
+      faq3q: "كم تستغرق مدة تجهيز وشحن الطلب؟",
+      faq3a: "لأن منتجات VelaLight تُصنع يدويًا بعناية، تستغرق مدة التجهيز عادةً من 3 إلى 7 أيام عمل، بالإضافة إلى مدة الشحن حسب المحافظة.",
+      faq4q: "هل شموع VelaLight مصنوعة من شمع الصويا؟",
+      faq4a: "نعم، نستخدم شمع الصويا الطبيعي 100%، الذي يتميز باحتراق أبطأ وأنظف ويساعد على انتشار العطر بكفاءة.",
+      faq5q: "كم تبلغ مدة احتراق الشمعة وكيف أحافظ على أفضل أداء لها؟",
+      faq5a: "تختلف مدة الاحتراق حسب وزن وحجم كل شمعة، وستجد التفاصيل في وصف المنتج. ولأفضل نتيجة، عند الاستخدام الأول اترك الشمعة حتى يذوب سطح الشمع بالكامل ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.",
+      faq6q: "كيف أختار العطر المناسب؟",
+      faq6a: "لدينا تشكيلة متنوعة من العطور الفاخرة. وإذا كنت محتار، تواصل معنا عبر WhatsApp وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلها.",
+      faq7q: "هل تتوفر خدمة تغليف الهدايا؟",
+      faq7a: "نعم، جميع منتجات VelaLight تأتي بتغليف أنيق وفاخر وجاهز للإهداء.",
+      faq8q: "ما سياسة الاستبدال والاسترجاع؟",
+      faq8a: "نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب. وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.",
+      mq_delivery: "🚚 توصيل سريع لكل محافظات مصر",
+      mq_discounts: "🏷️ خصومات حصرية على مجموعات مختارة",
+      mq_gift: "🎁 تغليف هدايا مجاني مع كل طلب",
+      mq_handmade: "🤲 صناعة يدوية 100% بخامات طبيعية",
+      mq_scents: "🕯️ أكثر من 23 عطر فاخر متاح",
+      mq_shipping: "📦 شحن آمن من الورشة لحد باب بيتك",
+      mq_support: "💬 دعم فني يومي لخدمتك",
       products_title: "كل المنتجات",
       products_sub: "اكتشف تشكيلتنا الكاملة من الشموع الفاخرة",
-      filter_all: "الكل",
-      filter_wood: "خشبية",
-      filter_glass: "زجاجية",
-      filter_crystal: "كريستالية",
-      filter_metal: "معدنية",
-      filter_massage: "مساج",
-      filter_gift: "هدايا",
-      filter_bride: "بوكس العروسة",
-      sort_new: "الأحدث",
-      sort_asc: "السعر: من الأقل",
-      sort_desc: "السعر: من الأعلى",
-      sort_rating: "التقييم",
-      sort_best: "الأكثر مبيعاً",
-      sort_disc: "أكبر خصم",
+      filter_all: "الكل", filter_wood: "خشبية", filter_glass: "زجاجية", filter_crystal: "كريستالية",
+      filter_metal: "معدنية", filter_massage: "مساج", filter_gift: "هدايا", filter_bride: "بوكس العروسة",
+      sort_new: "الأحدث", sort_asc: "السعر: من الأقل", sort_desc: "السعر: من الأعلى",
+      sort_rating: "التقييم", sort_best: "الأكثر مبيعاً", sort_disc: "أكبر خصم",
       no_products_filter: "لا توجد منتجات تطابق الفلتر المختار",
-      view_details: "عرض التفاصيل",
-      add_cart: "أضف للسلة",
-      price_lbl: "السعر:",
-      scent_lbl: "العطر:",
-      cart_empty: "السلة فارغة",
-      cart_empty_sub: "أضف منتجاتك المفضلة",
-
-      /* ═══ Reviews Page ═══ */
+      view_details: "عرض التفاصيل", add_cart: "أضف للسلة",
+      price_lbl: "السعر:", scent_lbl: "العطر:",
+      cart_empty: "السلة فارغة", cart_empty_sub: "أضف منتجاتك المفضلة",
       reviews_page_title: "كل آراء عملائنا",
       reviews_page_sub: "شوف تجارب العملاء الحقيقية مع منتجات VelaLight",
-      reviews_verified: "عميل موثّق",
-      reviews_customer: "عميل سعيد",
+      reviews_verified: "عميل موثّق", reviews_customer: "عميل سعيد",
       reviews_share_your: "شاركنا رأيك ✨",
       reviews_share_sub: "جرب منتج من VelaLight؟ اكتبلنا تجربتك",
-
-      /* ═══ Products Page ═══ */
-      prod_word: "منتج",
-      no_products: "لا توجد منتجات",
-
-      /* ═══ Craftsmanship (Behind the Scenes) ═══ */
+      prod_word: "منتج", no_products: "لا توجد منتجات",
       craft_kick: "Behind the Scenes",
       craft_title: "إيد مصرية.. تفاصيل ملهاش حدود",
       craft_desc: "شوف ازاي بنصنع كل قطعة بحب ودقة عشان توصلك بالشكل اللي يليق بيك",
       craft_loading: "⏳ جاري التحميل...",
-      craft_fallback1_title: "نخلط الزيوت بعناية",
-      craft_fallback1_desc: "نستخدم أفضل الزيوت الطبيعية لضمان رائحة تدوم طويلاً",
-      craft_fallback2_title: "تغليف فاخر جاهز للإهداء",
-      craft_fallback2_desc: "كل قطعة بتتغلف بإيدينا عشان تكون مميزة",
-      craft_fallback3_title: "فحص دقيق لكل قطعة",
-      craft_fallback3_desc: "نتأكد من الجودة قبل ما توصل لباب بيتك",
-
-      /* ═══ Reviews Enhanced ═══ */
-      rev_see_all: "📸 شوف كل التجارب",
-      rev_stats_label: "عميل وثق فينا",
-      rev_stats_rating: "تقييم 5 نجوم",
-      rev_loading: "⏳ جاري تحميل التجارب...",
-
-      /* ═══ FAQ & Misc ═══ */
+      craft_fallback1_title: "نخلط الزيوت بعناية", craft_fallback1_desc: "نستخدم أفضل الزيوت الطبيعية لضمان رائحة تدوم طويلاً",
+      craft_fallback2_title: "تغليف فاخر جاهز للإهداء", craft_fallback2_desc: "كل قطعة بتتغلف بإيدينا عشان تكون مميزة",
+      craft_fallback3_title: "فحص دقيق لكل قطعة", craft_fallback3_desc: "نتأكد من الجودة قبل ما توصل لباب بيتك",
+      rev_see_all: "📸 شوف كل التجارب", rev_stats_label: "عميل وثق فينا",
+      rev_stats_rating: "تقييم 5 نجوم", rev_loading: "⏳ جاري تحميل التجارب...",
       faq_kick: "FAQ",
       faq_sub: "كل ما تحتاج معرفته عن الطلب، الشحن، الشموع والعطور.",
       foot_designer_label: "صُمم وتطوير بعناية بواسطة",
-      brand_kick: "The VelaLight Touch",
-      scents_kick: "Signature Scents",
-      prod_kick: "Our Collection",
-      prod_sub: "اكتشف أحدث تشكيلتنا من الشموع الفاخرة",
+      brand_kick: "The VelaLight Touch", scents_kick: "Signature Scents",
+      prod_kick: "Our Collection", prod_sub: "اكتشف أحدث تشكيلتنا من الشموع الفاخرة",
       prod_see_all: "🕯️ استعرض كل المنتجات",
-      about_kick: "Our Story",
-      ed_kick: "A Moment of Luxury",
+      about_kick: "Our Story", ed_kick: "A Moment of Luxury",
       ed_h2: "لحظاتٌ تُحفر في الذاكرة",
       ed_p: "كل شمعة من VelaLight ليست مجرد إضاءة… هي لحظة كاملة. لحظة هدوء، لحظة رومانسية، لحظة فرح. اصنع ذكرياتك الخاصة مع عطورنا الفاخرة.",
       ed_cta: "ابدأ رحلتك ✨",
-
-      /* ═══ Cart Luxe New ═══ */
       cart_luxe_empty_title: "سلتك تنتظر بعض الدفء والروائح الفاخرة...",
       cart_luxe_empty_sub: "اختار شمعتك المفضلة وابدأ لحظتك الخاصة",
       cart_luxe_empty_cta: "تصفح تشكيلتنا الآن ✨",
@@ -1173,286 +996,125 @@ brand_point3_desc:
       cart_luxe_ship_to_go: "للحصول على شحن مجاني! 🚚",
       cart_luxe_ship_success: "مبروك! فتحت خيار الشحن المجاني 🥳",
       cart_luxe_disc_applied: "تم تطبيق الخصم الأكبر لك!",
-      cart_luxe_disc_qty: "خصم الكمية",
-      cart_luxe_disc_coupon: "كوبون",
+      cart_luxe_disc_qty: "خصم الكمية", cart_luxe_disc_coupon: "كوبون",
       cart_luxe_disc_not_applied: "غير مطبق — تم تطبيق الخصم الأكبر",
       cart_luxe_checkout: "تأكيد الطلب عبر الواتساب 💬",
-      cart_luxe_trust1: "دفع آمن",
-      cart_luxe_trust2: "صناعة يدوية 100%",
-      cart_luxe_trust3: "ضمان التوصيل",
+      cart_luxe_trust1: "دفع آمن", cart_luxe_trust2: "صناعة يدوية 100%", cart_luxe_trust3: "ضمان التوصيل",
     },
-
     en: {
-/* ═══ Reviews Page (reviews.html) ═══ */
-reviews_back: "← Back to Home",
-reviews_stats_trust: "Trust Renewed",
-reviews_quote: "Not just a candle… it's a moment to live!",
-reviews_quote_author: "— One of our customers",
-reviews_cta_title: "Ready to join the VelaLight family? 🕯️",
-reviews_cta_sub: "Choose your luxury candle and create your own moment",
-reviews_cta_btn: "Shop Now 🛍️",
-foot_wishlist: "❤️ Wishlist",
-foot_orders: "📦 My Orders",
-      
-      /* Shipping & Payment */
-      ship_note:
-        "🚚 Shipping: paid cash to the courier on delivery.",
-
-      pay_products_note:
-        "Payment details (InstaPay / Vodafone Cash / Orange Cash / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
-
-      pay_title:
-        "InstaPay / Vodafone Cash / Orange Cash",
-
-      paymethod_d:
-        "Upfront transfer (InstaPay / Vodafone Cash / Orange Cash), shipping cash on delivery.",
-
-      /* Scent */
-      t_scentwarn:
-        "⚠️ Please choose a scent first.",
-
-      quick_add_scent:
-        "🌸 Choose a scent",
-
-      quick_add_qty:
-        "Quantity",
-
-      quick_add_add:
-        "🛍️ Add to Cart",
-
-      quick_add_added:
-        "✓ Added to Cart",
-
-      scent_req:
-        "Required",
-
-      /* Handmade */
-      handmade_note:
-        "Handmade piece prepared with care upon order — every candle is unique and special",
-
-      pd_handmade_note:
-        "Handmade piece prepared with care upon order — every candle is unique and special",
-
-      /* Product tabs */
-      pd_desc_tab: "📝 Description",
-      pd_specs_tab: "📋 Specifications",
-      pd_reviews_tab: "⭐ Reviews",
-
-      /* Product gallery */
-      pd_zoom: "🔍 Zoom",
-      pd_gallery_count: "Images",
-
-      /* Product options */
-      pd_scent_t: "🌸 Scent:",
-      pd_qty_t: "Quantity:",
-      pd_required: "Required",
-      pd_decrease: "Decrease quantity",
-      pd_increase: "Increase quantity",
+      reviews_back: "← Back to Home",
+      reviews_stats_trust: "Trust Renewed",
+      reviews_quote: "Not just a candle… it's a moment to live!",
+      reviews_quote_author: "— One of our customers",
+      reviews_cta_title: "Ready to join the VelaLight family? 🕯️",
+      reviews_cta_sub: "Choose your luxury candle and create your own moment",
+      reviews_cta_btn: "Shop Now 🛍️",
+      foot_wishlist: "❤️ Wishlist", foot_orders: "📦 My Orders",
+      ship_note: "🚚 Shipping: paid cash to the courier on delivery.",
+      pay_products_note: "Payment details (InstaPay / Vodafone Cash / Orange Cash / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
+      pay_title: "InstaPay / Vodafone Cash / Orange Cash",
+      paymethod_d: "Upfront transfer (InstaPay / Vodafone Cash / Orange Cash), shipping cash on delivery.",
+      t_scentwarn: "⚠️ Please choose a scent first.",
+      quick_add_scent: "🌸 Choose a scent", quick_add_qty: "Quantity",
+      quick_add_add: "🛍️ Add to Cart", quick_add_added: "✓ Added to Cart",
+      scent_req: "Required",
+      handmade_note: "Handmade piece prepared with care upon order — every candle is unique and special",
+      pd_handmade_note: "Handmade piece prepared with care upon order — every candle is unique and special",
+      pd_desc_tab: "📝 Description", pd_specs_tab: "📋 Specifications", pd_reviews_tab: "⭐ Reviews",
+      pd_zoom: "🔍 Zoom", pd_gallery_count: "Images",
+      pd_scent_t: "🌸 Scent:", pd_qty_t: "Quantity:", pd_required: "Required",
+      pd_decrease: "Decrease quantity", pd_increase: "Increase quantity",
       pd_wishlist: "Add to favorites",
-
-      /* Product actions */
-      pd_add: "🛍️ Add to Cart",
-      pd_buy: "💬 Order via WhatsApp",
-
-      /* Product information */
-      pd_hours: "Burn time:",
-      pd_materials: "Materials:",
-      pd_ship: "Delivery:",
-      pd_ship_v: "3–7 days",
-
-      /* Reviews */
-      pd_review_word: "reviews",
-      pd_read_all: "Read all",
-      pd_first_review: "Be the first to review",
-
-      /* Related Products */
-      pd_rel_h2: "✨ You May Also Like",
-
-      /* Share */
-      pd_share: "Share:",
-      pd_copy_link: "📋 Copy Link",
-
-      /* Product Not Found */
-      pd_product: "Product",
-      pd_not_found_title: "😕 Product Not Available",
-      pd_not_found_desc: "Sorry, we couldn't find this product",
-      pd_browse_products: "Browse Products",
-
-      /* ═══ Homepage Reviews ═══ */
+      pd_add: "🛍️ Add to Cart", pd_buy: "💬 Order via WhatsApp",
+      pd_hours: "Burn time:", pd_materials: "Materials:", pd_ship: "Delivery:", pd_ship_v: "3–7 days",
+      pd_review_word: "reviews", pd_read_all: "Read all", pd_first_review: "Be the first to review",
+      pd_rel_h2: "✨ You May Also Like", pd_share: "Share:", pd_copy_link: "📋 Copy Link",
+      pd_product: "Product", pd_not_found_title: "😕 Product Not Available",
+      pd_not_found_desc: "Sorry, we couldn't find this product", pd_browse_products: "Browse Products",
       reviews_kicker: "💛 Your Words Mean the Most",
       reviews_title: "Our Customers' Reviews",
       reviews_desc: "We don't just write claims — we show the real experience. These are genuine screenshots from our customers after receiving their orders.",
-      reviews_cta: "✨ Tried our candles?",
-      reviews_cta_link: "Send us your review on WhatsApp",
-
-/* ═══ Brand Promise ═══ */
-brand_promise_title:
-  "Details That Make the Difference",
-
-brand_promise_desc:
-  "Handcrafted candles, carefully selected scents, and thoughtful gifts made for every special moment.",
-
-brand_point1_title: "Handcrafted",
-brand_point1_desc: "Every piece is made and prepared with care.",
-brand_point2_title: "A Gift for Every Occasion",
-brand_point2_desc: "Thoughtful choices for every moment and celebration.",
-brand_point3_title: "Made for You",
-brand_point3_desc: "We help you choose the right scent and details for your taste.",
-
-      /* ═══ FAQ ═══ */
-      faq1q:
-        "How can I place an order and what payment methods are available?",
-      faq1a:
-        "You can add your selected products to the cart and complete your order easily. Product payment is made upfront via InstaPay, Vodafone Cash, or bank transfer, while the shipping fee is paid in cash to the courier upon delivery.",
-
-      faq2q: "Do you ship to all governorates in Egypt?",
-      faq2a: "Yes, we deliver safely and reliably to all governorates across Egypt.",
-
-      faq3q: "How long does it take to prepare and ship my order?",
-      faq3a: "Because VelaLight products are carefully handmade, preparation usually takes 3 to 7 business days, in addition to the shipping time depending on your governorate.",
-
-      faq4q: "Are VelaLight candles made from soy wax?",
-      faq4a: "Yes, we use 100% natural soy wax. It burns more slowly and cleanly and helps the fragrance diffuse effectively.",
-
-      faq5q: "How long does a candle burn, and how can I get the best performance?",
-      faq5a: "Burn time varies depending on the candle's weight and size, as detailed in each product description. For the best results, during the first use, allow the wax to melt completely across the surface and reach the edges to prevent tunneling and ensure an even burn.",
-
-      faq6q: "How can I choose the right scent?",
-      faq6a: "We offer a variety of luxurious fragrances. If you're unsure which one to choose, contact us via WhatsApp and we'll be happy to help you select the perfect scent based on your taste, occasion, and desired atmosphere.",
-
-      faq7q: "Do you offer gift wrapping?",
-      faq7a: "Yes. All VelaLight products come in elegant, luxurious packaging that is ready for gifting.",
-
-      faq8q: "What is your return and exchange policy?",
-      faq8a: "Due to the nature of our handmade products, returns or exchanges are not accepted after the product has been opened or used, or due to a change of mind after the order has been confirmed. If your order arrives with a manufacturing defect or shipping damage, please contact us within 24 hours of delivery and we will be happy to resolve the issue.",
-
-      /* ═══ Top Marquee ═══ */
-      mq_delivery: "🚚 Fast delivery across Egypt",
-      mq_discounts: "🏷️ Exclusive discounts on selected collections",
-      mq_gift: "🎁 Free gift wrapping with every order",
-      mq_handmade: "🤲 100% handmade with natural materials",
-      mq_scents: "🕯️ More than 23 luxury scents available",
-      mq_shipping: "📦 Safe shipping from our workshop to your door",
+      reviews_cta: "✨ Tried our candles?", reviews_cta_link: "Send us your review on WhatsApp",
+      brand_promise_title: "Details That Make the Difference",
+      brand_promise_desc: "Handcrafted candles, carefully selected scents, and thoughtful gifts made for every special moment.",
+      brand_point1_title: "Handcrafted", brand_point1_desc: "Every piece is made and prepared with care.",
+      brand_point2_title: "A Gift for Every Occasion", brand_point2_desc: "Thoughtful choices for every moment and celebration.",
+      brand_point3_title: "Made for You", brand_point3_desc: "We help you choose the right scent and details for your taste.",
+      faq1q: "How can I place an order and what payment methods are available?",
+      faq1a: "You can add your selected products to the cart and complete your order easily. Product payment is made upfront via InstaPay, Vodafone Cash, or bank transfer, while the shipping fee is paid in cash to the courier upon delivery.",
+      faq2q: "Do you ship to all governorates in Egypt?", faq2a: "Yes, we deliver safely and reliably to all governorates across Egypt.",
+      faq3q: "How long does it take to prepare and ship my order?", faq3a: "Because VelaLight products are carefully handmade, preparation usually takes 3 to 7 business days, in addition to the shipping time depending on your governorate.",
+      faq4q: "Are VelaLight candles made from soy wax?", faq4a: "Yes, we use 100% natural soy wax. It burns more slowly and cleanly and helps the fragrance diffuse effectively.",
+      faq5q: "How long does a candle burn, and how can I get the best performance?", faq5a: "Burn time varies depending on the candle's weight and size, as detailed in each product description. For the best results, during the first use, allow the wax to melt completely across the surface and reach the edges to prevent tunneling and ensure an even burn.",
+      faq6q: "How can I choose the right scent?", faq6a: "We offer a variety of luxurious fragrances. If you're unsure which one to choose, contact us via WhatsApp and we'll be happy to help you select the perfect scent based on your taste, occasion, and desired atmosphere.",
+      faq7q: "Do you offer gift wrapping?", faq7a: "Yes. All VelaLight products come in elegant, luxurious packaging that is ready for gifting.",
+      faq8q: "What is your return and exchange policy?", faq8a: "Due to the nature of our handmade products, returns or exchanges are not accepted after the product has been opened or used, or due to a change of mind after the order has been confirmed. If your order arrives with a manufacturing defect or shipping damage, please contact us within 24 hours of delivery and we will be happy to resolve the issue.",
+      mq_delivery: "🚚 Fast delivery across Egypt", mq_discounts: "🏷️ Exclusive discounts on selected collections",
+      mq_gift: "🎁 Free gift wrapping with every order", mq_handmade: "🤲 100% handmade with natural materials",
+      mq_scents: "🕯️ More than 23 luxury scents available", mq_shipping: "📦 Safe shipping from our workshop to your door",
       mq_support: "💬 Daily customer support",
-
-      /* ═══ Products Page ═══ */
-      products_title: "All Products",
-      products_sub: "Discover our full collection of luxury candles",
-      filter_all: "All",
-      filter_wood: "Wooden",
-      filter_glass: "Glass",
-      filter_crystal: "Crystal",
-      filter_metal: "Metal",
-      filter_massage: "Massage",
-      filter_gift: "Gifts",
-      filter_bride: "Bride Box",
-      sort_new: "Newest",
-      sort_asc: "Price: Low to High",
-      sort_desc: "Price: High to Low",
-      sort_rating: "Rating",
-      sort_best: "Best Sellers",
-      sort_disc: "Biggest Discount",
-      no_products_filter: "No products match your filter",
-      view_details: "View Details",
-      add_cart: "Add to Cart",
-      price_lbl: "Price:",
-      scent_lbl: "Scent:",
-      cart_empty: "Cart is empty",
-      cart_empty_sub: "Add your favorite products",
-
-      /* ═══ Reviews Page ═══ */
-      reviews_page_title: "All Customer Reviews",
-      reviews_page_sub: "See real experiences from VelaLight customers",
-      reviews_verified: "Verified Customer",
-      reviews_customer: "Happy Customer",
-      reviews_share_your: "Share Your Review ✨",
-      reviews_share_sub: "Tried a VelaLight product? Tell us about your experience",
-
-      /* ═══ Products Page ═══ */
-      prod_word: "products",
-      no_products: "No products found",
-
-      /* ═══ Craftsmanship (Behind the Scenes) ═══ */
-      craft_kick: "Behind the Scenes",
-      craft_title: "Egyptian Hands.. Details Beyond Limits",
+      products_title: "All Products", products_sub: "Discover our full collection of luxury candles",
+      filter_all: "All", filter_wood: "Wooden", filter_glass: "Glass", filter_crystal: "Crystal",
+      filter_metal: "Metal", filter_massage: "Massage", filter_gift: "Gifts", filter_bride: "Bride Box",
+      sort_new: "Newest", sort_asc: "Price: Low to High", sort_desc: "Price: High to Low",
+      sort_rating: "Rating", sort_best: "Best Sellers", sort_disc: "Biggest Discount",
+      no_products_filter: "No products match your filter", view_details: "View Details", add_cart: "Add to Cart",
+      price_lbl: "Price:", scent_lbl: "Scent:",
+      cart_empty: "Cart is empty", cart_empty_sub: "Add your favorite products",
+      reviews_page_title: "All Customer Reviews", reviews_page_sub: "See real experiences from VelaLight customers",
+      reviews_verified: "Verified Customer", reviews_customer: "Happy Customer",
+      reviews_share_your: "Share Your Review ✨", reviews_share_sub: "Tried a VelaLight product? Tell us about your experience",
+      prod_word: "products", no_products: "No products found",
+      craft_kick: "Behind the Scenes", craft_title: "Egyptian Hands.. Details Beyond Limits",
       craft_desc: "See how we craft every piece with love and precision to deliver it to you in the way that suits you.",
       craft_loading: "⏳ Loading...",
-      craft_fallback1_title: "Mixing oils with care",
-      craft_fallback1_desc: "We use the finest natural oils to ensure a long-lasting scent",
-      craft_fallback2_title: "Luxury gift wrapping ready",
-      craft_fallback2_desc: "Every piece is wrapped by our hands to make it special",
-      craft_fallback3_title: "Quality inspection for every piece",
-      craft_fallback3_desc: "We ensure quality before it reaches your doorstep",
-
-      /* ═══ Reviews Enhanced ═══ */
-      rev_see_all: "📸 See All Experiences",
-      rev_stats_label: "Customers Trusted Us",
-      rev_stats_rating: "5-Star Rating",
-      rev_loading: "⏳ Loading experiences...",
-
-      /* ═══ FAQ & Misc ═══ */
-      faq_kick: "FAQ",
-      faq_sub: "Everything you need to know about ordering, shipping, candles and scents.",
+      craft_fallback1_title: "Mixing oils with care", craft_fallback1_desc: "We use the finest natural oils to ensure a long-lasting scent",
+      craft_fallback2_title: "Luxury gift wrapping ready", craft_fallback2_desc: "Every piece is wrapped by our hands to make it special",
+      craft_fallback3_title: "Quality inspection for every piece", craft_fallback3_desc: "We ensure quality before it reaches your doorstep",
+      rev_see_all: "📸 See All Experiences", rev_stats_label: "Customers Trusted Us",
+      rev_stats_rating: "5-Star Rating", rev_loading: "⏳ Loading experiences...",
+      faq_kick: "FAQ", faq_sub: "Everything you need to know about ordering, shipping, candles and scents.",
       foot_designer_label: "Designed & Developed with care by",
-      brand_kick: "The VelaLight Touch",
-      scents_kick: "Signature Scents",
-      prod_kick: "Our Collection",
-      prod_sub: "Discover our latest collection of luxury candles",
+      brand_kick: "The VelaLight Touch", scents_kick: "Signature Scents",
+      prod_kick: "Our Collection", prod_sub: "Discover our latest collection of luxury candles",
       prod_see_all: "🕯️ Browse All Products",
-      about_kick: "Our Story",
-      ed_kick: "A Moment of Luxury",
+      about_kick: "Our Story", ed_kick: "A Moment of Luxury",
       ed_h2: "Moments Etched in Memory",
       ed_p: "Every VelaLight candle is more than just a light… it's a complete moment. A moment of calm, a moment of romance, a moment of joy. Create your own memories with our luxury scents.",
       ed_cta: "Start Your Journey ✨",
-
-      /* ═══ Cart Luxe New ═══ */
       cart_luxe_empty_title: "Your cart is waiting for some warmth and luxury scents...",
       cart_luxe_empty_sub: "Choose your favorite candle and start your own moment",
       cart_luxe_empty_cta: "Browse Our Collection Now ✨",
       cart_luxe_cross_title: "Complete Your Set",
       cart_luxe_cross_sub: "Add a magical touch to your order",
-      cart_luxe_cross_add: "Quick Add",
-      cart_luxe_cross_added: "Added",
-      cart_luxe_ship_add: "Add",
-      cart_luxe_ship_to_go: "to unlock FREE shipping! 🚚",
+      cart_luxe_cross_add: "Quick Add", cart_luxe_cross_added: "Added",
+      cart_luxe_ship_add: "Add", cart_luxe_ship_to_go: "to unlock FREE shipping! 🚚",
       cart_luxe_ship_success: "Congrats! You unlocked FREE shipping 🥳",
       cart_luxe_disc_applied: "The biggest discount was applied for you!",
-      cart_luxe_disc_qty: "Quantity Discount",
-      cart_luxe_disc_coupon: "Coupon",
+      cart_luxe_disc_qty: "Quantity Discount", cart_luxe_disc_coupon: "Coupon",
       cart_luxe_disc_not_applied: "Not applied — bigger discount was used",
       cart_luxe_checkout: "Confirm Order via WhatsApp 💬",
-      cart_luxe_trust1: "Secure Payment",
-      cart_luxe_trust2: "100% Handmade",
-      cart_luxe_trust3: "Delivery Guarantee",
+      cart_luxe_trust1: "Secure Payment", cart_luxe_trust2: "100% Handmade", cart_luxe_trust3: "Delivery Guarantee",
     }
-
   };
 
   Object.keys(add).forEach(L => {
-    if(!I18N[L]) {
-      I18N[L] = {};
-    }
+    if(!I18N[L]) I18N[L] = {};
     Object.keys(add[L]).forEach(k => {
-      if(
-        I18N[L][k] === undefined ||
-        I18N[L][k] === null ||
-        I18N[L][k] === ""
-      ){
+      if(I18N[L][k] === undefined || I18N[L][k] === null || I18N[L][k] === ""){
         I18N[L][k] = add[L][k];
       }
     });
   });
-
 })();
 
-  /* ═══════════════════════════════════════════════════════════
-   ✨ INIT — الحل الجذري النهائي: منع الوميض وتوحيد البيانات
+/* ═══════════════════════════════════════════════════════════
+   ✨ INIT
    ═══════════════════════════════════════════════════════════ */
 let isFirstRenderComplete = false;
 let pendingDataRefresh = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // ✨ NEW: حقن أنماط السلة اللوكس
   injectCartStyles();
 
   initLang();
@@ -1854,13 +1516,9 @@ function renderProducts(){
   list.forEach((p, index) => {
     try {
       const r=(typeof ratingOf==="function")?ratingOf(p.id):null;
-      
-      const pinBadge = p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : "";
       const badge = (typeof pbadge === "function") ? pbadge(p) : "";
-      
       const rawDesc=LANG==="en"?(p.descEn||p.desc||""):(p.desc||p.descEn||"");
       const productDesc=String(rawDesc).trim();
-      
       const isFirstBatch = index < eagerCount;
       const loadingAttr = isFirstBatch ? 'eager' : 'lazy';
       const fetchPriority = isFirstBatch ? 'high' : 'low';
@@ -1871,7 +1529,6 @@ function renderProducts(){
       } catch(e) {
         imgSrc = placeholderSvg;
       }
-      
       if (!imgSrc) imgSrc = placeholderSvg;
       
       const inWishlist = isInWishlist(p.id);
@@ -2420,9 +2077,7 @@ function renderFAQ(){
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ initCart — محسّن مع أنماط لوكس جديدة
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ initCart ═══ */
 function initCart(){
   cartBadge();
   fillCitySelect(document.getElementById("coCity"));
@@ -2464,10 +2119,8 @@ function initCart(){
     });
   });
 
-  // ✨ Trust Badges الجديدة بتصميم لوكس
   const checkoutBtn = document.getElementById('checkoutBtn');
   if (checkoutBtn) {
-    // ضيف كلاس Pulse على زر الشراء
     checkoutBtn.classList.add('vl-checkout-pulse');
 
     if (!document.getElementById('trustBadges')) {
@@ -2483,19 +2136,15 @@ function initCart(){
     }
   }
 
-  // ✨ NEW: تعديل padding السلة عند تغيير حجم الشاشة
   window.addEventListener('resize', debounce(adjustCartDrawerPadding, 200));
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ renderCart — النسخة اللوكس الكاملة
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ renderCart ═══ */
 function renderCart(){
   const c=getCart();
   const w=document.getElementById("cartItems");
   if(!w)return;
 
-  /* ═══ EMPTY STATE الدافئ ═══ */
   if(!c.length){
     freeShipCelebrated = false;
     w.innerHTML=`
@@ -2520,12 +2169,10 @@ function renderCart(){
     }, 0);
     
     updateTotals(c);
-    // ✨ NEW: عدّل الـ padding بعد الرسم
     adjustCartDrawerPadding();
     return;
   }
 
-  /* ═══ ITEMS LUXE ═══ */
   const frag = document.createDocumentFragment();
   
   c.forEach((it, i) => {
@@ -2534,7 +2181,7 @@ function renderCart(){
     item.className = 'citem';
     item.innerHTML = `
       <div class="citem-media">
-        <img src="${it.img||''}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy" width="82" height="82" onerror="window.handleImageError(this, '${it.id}')">
+        <img src="${it.img||''}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy" width="64" height="64" onerror="window.handleImageError(this, '${it.id}')">
       </div>
       <div class="citem-info">
         <h5>${pname({name:it.name,nameEn:it.nameEn})}</h5>
@@ -2578,7 +2225,7 @@ function renderCart(){
   w.innerHTML = '';
   w.appendChild(frag);
 
-  /* ═══ CROSS-SELL LUXE ═══ */
+  /* CROSS-SELL */
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   const cartProductIds = c.map(it => it.id);
   
@@ -2587,11 +2234,7 @@ function renderCart(){
     if (p.active === false) return false;
     
     const searchText = [
-      p.name || "",
-      p.nameEn || "",
-      p.desc || "",
-      p.descEn || "",
-      p.cat || ""
+      p.name || "", p.nameEn || "", p.desc || "", p.descEn || "", p.cat || ""
     ].join(" ").toLowerCase();
     
     return searchText.includes("فواحة") || 
@@ -2613,7 +2256,7 @@ function renderCart(){
         <span class="emoji">✨</span>
         <span>${t("cart_luxe_cross_title") || "أكمل مجموعتك"}</span>
       </div>
-      <div style="font-size:.74rem; color:#8b6f47; margin:-6px 0 10px 30px; position:relative; z-index:1;">${t("cart_luxe_cross_sub") || "أضيف لمسة ساحرة لطلبك"}</div>
+      <div style="font-size:.7rem; color:#8b6f47; margin:-4px 0 8px 26px; position:relative; z-index:1;">${t("cart_luxe_cross_sub") || "أضيف لمسة ساحرة لطلبك"}</div>
       <div class="vl-cross-row">
         <div class="vl-cross-img">
           <img src="${suggestImg}" alt="${pname(suggestedProduct)}" loading="lazy" onerror="this.style.display='none'">
@@ -2648,20 +2291,18 @@ function renderCart(){
     }, 0);
   }
 
-  /* ═══ FOOTER ROWS SETUP ═══ */
+  /* FOOTER ROWS SETUP */
   const dfoot = document.querySelector("#cartDrawer .dfoot");
   if (dfoot) {
-    // Free shipping row (سيتم التحكم فيه من updateTotals)
     if (!document.getElementById('freeShippingRow')) {
       const shipRow = document.createElement('div');
       shipRow.id = 'freeShippingRow';
-      shipRow.style.cssText = 'margin: 8px 0;';
+      shipRow.style.cssText = 'margin: 6px 0;';
       const totalRow = dfoot.querySelector('.trow.total');
       if (totalRow) totalRow.parentNode.insertBefore(shipRow, totalRow);
       else dfoot.appendChild(shipRow);
     }
 
-    // Qty discount row
     if (!document.getElementById('qtyDiscountRow')) {
       const qtyRow = document.createElement('div');
       qtyRow.id = 'qtyDiscountRow';
@@ -2678,7 +2319,6 @@ function renderCart(){
   w.addEventListener('change', handleCartChange);
   
   updateTotals(c);
-  // ✨ NEW: عدّل الـ padding بعد الرسم
   adjustCartDrawerPadding();
 }
 
@@ -2716,18 +2356,13 @@ function handleCartChange(e){
     if(!c[idx]) return;
     c[idx].scent = select.value;
     saveCart(c);
-    // لا تعيد renderCart كامل لتجنب فقدان التركيز
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ updateTotals — النسخة الكاملة مع الشريط التفاعلي والكونفيتي
-   ⚠️ الشحن المجاني بيتحسب على الإجمالي النهائي بعد الخصم (total)
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ updateTotals ═══ */
 function updateTotals(c){
   const sub = c.reduce((a,i) => a + (Number(i.price||0) * Number(i.qty||1)), 0);
   
-  /* 1. حساب خصم الكمية */
   let qtyDiscount = 0;
   c.forEach(it => {
     if (Number(it.qty) >= 3) {
@@ -2736,10 +2371,8 @@ function updateTotals(c){
   });
   qtyDiscount = Math.round(qtyDiscount * 100) / 100;
 
-  /* 2. حساب خصم الكوبون */
   const couponDisc = (typeof calcCouponDiscount === "function") ? calcCouponDiscount(sub) : 0;
 
-  /* 3. اختيار الخصم الأعلى فقط */
   let finalDiscount = 0;
   let appliedType = "none";
 
@@ -2751,12 +2384,10 @@ function updateTotals(c){
 
   const total = Math.max(0, sub - finalDiscount);
 
-  /* ═══ Subtotal ═══ */
   if(document.getElementById("cartSub")) {
     document.getElementById("cartSub").textContent = money(sub);
   }
 
-  /* ═══ Qty Discount Row ═══ */
   const qtyDiscRow = document.getElementById("qtyDiscountRow");
   if (qtyDiscRow) {
     const qtyValEl = qtyDiscRow.querySelector('.vl-disc-val');
@@ -2777,13 +2408,11 @@ function updateTotals(c){
     }
   }
 
-  /* ═══ Coupon Discount Row ═══ */
   const dRow = document.getElementById("discountRow");
   if (dRow) {
     if (appliedType === "coupon") {
       dRow.style.display = "flex";
       dRow.className = 'vl-disc-row vl-disc-active';
-      const valEl = dRow.querySelector('b');
       if(document.getElementById("cartDiscount")) {
         document.getElementById("cartDiscount").textContent = "-" + money(finalDiscount);
       }
@@ -2804,9 +2433,6 @@ function updateTotals(c){
     }
   }
 
-  /* ═══════════════════════════════════════════════════════
-     ✨ FREE SHIPPING PROGRESS BAR — بيتحسب على total بعد الخصم
-     ═══════════════════════════════════════════════════════ */
   const remaining = Math.max(0, FREE_SHIP_THRESHOLD - total);
   const progressPercent = Math.min(100, (total / FREE_SHIP_THRESHOLD) * 100);
   const reached = total >= FREE_SHIP_THRESHOLD;
@@ -2833,7 +2459,6 @@ function updateTotals(c){
       </div>
     `;
     
-    /* ✨ Confetti عند الوصول للحد لأول مرة */
     if (isSuccess && !freeShipCelebrated) {
       freeShipCelebrated = true;
       setTimeout(() => {
@@ -2842,7 +2467,6 @@ function updateTotals(c){
       }, 250);
     }
     
-    /* reset عند الرجوع تحت الحد */
     if (!isSuccess && freeShipCelebrated) {
       freeShipCelebrated = false;
     }
@@ -2852,7 +2476,6 @@ function updateTotals(c){
     freeShipRow.style.display = "none";
   }
   
-  /* ═══ Total ═══ */
   if(document.getElementById("cartTotal")) {
     document.getElementById("cartTotal").textContent = money(total);
   }
@@ -3152,9 +2775,7 @@ async function checkout(){
   };
 
   const orderData={
-    orderId,
-    userId,
-    userEmail,
+    orderId, userId, userEmail,
     customer:{name,phone,email,city,address:addr},
     name,phone,email,city,address:addr,notes,
     products:c.map(it=>({
@@ -3670,7 +3291,6 @@ function openDrawer(id,ovlId){
   if(ovlId){document.getElementById(ovlId)?.classList.add("open");}
   document.body.style.overflow = 'hidden';
   
-  // ✨ NEW: عدّل padding السلة بعد الفتح
   if(id === 'cartDrawer'){
     setTimeout(adjustCartDrawerPadding, 80);
   }
