@@ -1988,7 +1988,6 @@ function initCart(){
   document.getElementById("cartBtn")?.addEventListener("click",()=>{
     fillCartForm();
     renderCart();
-    showCartStage(1); // ✨ [جديد] ارجع دايماً لمرحلة السلة
     openDrawer("cartDrawer","cartOv");
   });
  document.getElementById("closeCart")?.addEventListener("click",closeDrawers);
@@ -2021,11 +2020,11 @@ function initCart(){
     });
   });
 
-  /* ✨ [جديد] تهيئة مرحلتي السلة */
-  setupCartStages();
+  /* ✨ [جديد] تهيئة السلة الموحدة (sticky footer) */
+  setupUnifiedCart();
   
   const checkoutBtn = document.getElementById('checkoutBtn');
-  if (checkoutBtn && !document.getElementById('trustBadges')) {
+ if (checkoutBtn && !document.getElementById('trustBadges')) {
    const badges = document.createElement('div');
     badges.id = 'trustBadges';
     badges.style.cssText = 'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
@@ -2841,10 +2840,6 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
     console.warn("Tracking event fire failed:", e);
   }
 
-  // ✨ [جديد] رجّع السلة لمرحلة 1 بعد نجاح الطلب
-  try {
-    if (typeof showCartStage === "function") showCartStage(1);
-  } catch (e) {}
 }
 function waTotalLabel(){
   if(I18N&&I18N[LANG]&&I18N[LANG].wa_total){return I18N[LANG].wa_total;}
@@ -3563,216 +3558,381 @@ window.WISHLIST_KEY = WISHLIST_KEY;
 window.updateReviewsCount = updateReviewsCount;
 window.getReviewsCount = getReviewsCount;
 /* ═══════════════════════════════════════════════════════════
-   ✨ CART STAGES — تقسيم السلة لمرحلتين (Cart → Checkout)
+   ✨ UNIFIED CART — سلة موحدة مع Sticky Footer
+   المنتجات + الفورم في نفس الـ scroll، والإجمالي ثابت في الأسفل
    ═══════════════════════════════════════════════════════════ */
-function setupCartStages() {
-  const dfoot = document.querySelector("#cartDrawer .dfoot");
-  if (!dfoot || dfoot.dataset.stagesReady === "1") return;
-  dfoot.dataset.stagesReady = "1";
+function setupUnifiedCart() {
+  const drawer = document.getElementById("cartDrawer");
+  if (!drawer) return;
+  if (drawer.dataset.unified === "1") return;
+  drawer.dataset.unified = "1";
 
-  // ═══ CSS مخصص للـ Stages ═══
-  if (!document.getElementById("cart-stages-css")) {
+  const dhead = drawer.querySelector(".dhead");
+  const dbody = drawer.querySelector(".dbody");
+  const dfoot = drawer.querySelector(".dfoot");
+  if (!dhead || !dbody || !dfoot) return;
+
+  // ═══ 1. CSS مخصص ═══
+  if (!document.getElementById("unified-cart-css")) {
     const style = document.createElement("style");
-    style.id = "cart-stages-css";
+    style.id = "unified-cart-css";
     style.textContent = `
-      .cart-stage {
-        display: flex;
-        flex-direction: column;
-        gap: 0.7rem;
-        animation: cartStageFadeIn 0.35s ease;
+      #cartDrawer {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        overflow: hidden !important;
       }
-      .cart-stage-1 { display: flex; }
-      .cart-stage-2 { display: none; }
-      @keyframes cartStageFadeIn {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
+      #cartDrawer .dhead {
+        flex-shrink: 0 !important;
+        position: relative;
+        z-index: 2;
+        background: var(--panel);
+        border-bottom: 1px solid var(--line);
       }
-      
-      /* ═══ Progress Bar ═══ */
-      .cart-progress {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.55rem 0;
-        margin-bottom: 0.7rem;
-        border-bottom: 1px dashed var(--line);
+      #cartDrawer .dbody {
+        flex: 1 1 auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding: 0.85rem 1rem 1rem !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        overscroll-behavior: contain;
       }
-      .cart-progress-step {
-        font-size: 0.72rem;
-        font-weight: 700;
-        color: var(--dim);
-        padding: 0.28rem 0.75rem;
-        border-radius: 99px;
-        background: var(--panel2);
-        transition: all 0.3s ease;
-        white-space: nowrap;
-      }
-      .cart-progress-step.active {
-        background: linear-gradient(135deg, var(--gold), #b8863f);
-        color: #fff;
-        box-shadow: 0 4px 12px rgba(217,171,95,0.35);
-      }
-      .cart-progress-arrow {
-        color: var(--dim);
-        font-size: 0.85rem;
+      #cartDrawer .dbody::-webkit-scrollbar { width: 6px; }
+      #cartDrawer .dbody::-webkit-scrollbar-thumb {
+        background: var(--gold);
+        border-radius: 4px;
         opacity: 0.5;
       }
-      
-      /* ═══ الأزرار الرئيسية ═══ */
-      #continueToCheckoutBtn,
-      #backToCartBtn {
-        transition: all 0.3s ease;
-        font-family: inherit;
+      #cartDrawer .dfoot {
+        flex-shrink: 0 !important;
+        background: var(--panel) !important;
+        border-top: 1px solid var(--line) !important;
+        box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.06) !important;
+        padding: 0.85rem 1rem calc(0.9rem + env(safe-area-inset-bottom, 0)) !important;
+        position: relative;
+        z-index: 3;
+        max-height: 42vh;
+        overflow-y: auto;
       }
-      #continueToCheckoutBtn:hover:not(:disabled),
-      #backToCartBtn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 22px rgba(217,171,95,0.35);
+      #cartDrawer .co-form {
+        margin-top: 0.5rem !important;
       }
-      #continueToCheckoutBtn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: none !important;
-        box-shadow: none !important;
+      #cartDrawer #checkoutBtn {
+        margin-top: 0.65rem !important;
+        font-size: 1rem !important;
+        padding: 1rem 1.2rem !important;
+        border-radius: 14px !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.2px;
+        box-shadow: 0 8px 22px rgba(46, 139, 69, 0.28) !important;
+      }
+      #cartDrawer #emptyCartBtn {
+        margin-top: 0.45rem !important;
+        font-size: 0.82rem !important;
+      }
+      @media (max-width: 768px) {
+        #cartDrawer .dfoot {
+          max-height: 48vh;
+          padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0)) !important;
+        }
+        #cartDrawer #checkoutBtn {
+          font-size: 0.95rem !important;
+          padding: 0.9rem 1rem !important;
+        }
       }
     `;
     document.head.appendChild(style);
   }
 
-  // ═══ تحديد عناصر كل مرحلة ═══
-  const children = Array.from(dfoot.children);
-  const deliveryIds = ["coName", "coPhone", "coEmail", "coCity", "coAddr", "coNotes"];
-  const stage1Items = [];
-  const stage2Items = [];
+  // ═══ 2. نقل فورم التوصيل + الكوبون + معلومات الدفع للـ dbody ═══
+  const deliveryH = dfoot.querySelector('[data-i18n="delivery_h"]');
+  if (deliveryH) {
+    deliveryH.style.marginTop = "0.85rem";
+    dbody.appendChild(deliveryH);
+  }
 
-  children.forEach(child => {
-    const isField = child.id && deliveryIds.includes(child.id);
-    const isCoForm = child.classList && child.classList.contains("co-form");
-    const isDeliveryHeader = child.dataset && child.dataset.i18n === "delivery_h";
-    const isCheckoutBtn = child.id === "checkoutBtn";
-    const isBackBtn = child.id === "backToCartBtn";
+  const coForm = dfoot.querySelector(".co-form");
+  if (coForm) dbody.appendChild(coForm);
 
-    if (isField || isCoForm || isDeliveryHeader || isCheckoutBtn || isBackBtn) {
-      stage2Items.push(child);
-    } else {
-      stage1Items.push(child);
+  const couponInput = document.getElementById("couponInput");
+  if (couponInput) {
+    const couponRow = couponInput.parentElement;
+    if (couponRow && couponRow !== dfoot) {
+      couponRow.style.cssText += ";margin-top:1rem;";
+      dbody.appendChild(couponRow);
     }
+  }
+
+  const discountRow = document.getElementById("discountRow");
+  if (discountRow) dbody.appendChild(discountRow);
+
+  const shipNote = dfoot.querySelector(".cart-shipping-note");
+  if (shipNote) {
+    shipNote.style.marginTop = "1rem";
+    dbody.appendChild(shipNote);
+  }
+
+  const paybox = dfoot.querySelector(".paybox");
+  if (paybox) {
+    paybox.style.marginTop = "0.75rem";
+    dbody.appendChild(paybox);
+  }
+
+  // ═══ 3. ترتيب الـ dfoot ═══
+  const checkoutBtn = document.getElementById("checkoutBtn");
+  if (checkoutBtn && checkoutBtn.parentElement !== dfoot) {
+    dfoot.appendChild(checkoutBtn);
+  }
+
+  const emptyBtn = document.getElementById("emptyCartBtn");
+  if (emptyBtn && emptyBtn.parentElement !== dfoot) {
+    dfoot.appendChild(emptyBtn);
+  }
+
+  const freeShip = document.getElementById("freeShippingRow");
+  if (freeShip && checkoutBtn) dfoot.insertBefore(freeShip, checkoutBtn);
+
+  // ═══ 4. ترتيب الإجماليات ═══
+  const cartSub = document.getElementById("cartSub");
+  const cartTotal = document.getElementById("cartTotal");
+  const qtyDiscountRow = document.getElementById("qtyDiscountRow");
+
+  const totalRow = cartTotal ? cartTotal.closest(".trow") : null;
+  const subRow = cartSub ? cartSub.closest(".trow") : null;
+
+  if (qtyDiscountRow && subRow && qtyDiscountRow.nextElementSibling !== subRow) {
+    if (subRow.parentElement === dfoot) {
+      dfoot.insertBefore(qtyDiscountRow, subRow);
+    }
+  }
+
+  if (totalRow && checkoutBtn && totalRow.parentElement === dfoot) {
+    dfoot.appendChild(totalRow);
+    if (freeShip) dfoot.appendChild(freeShip);
+    dfoot.appendChild(checkoutBtn);
+    if (emptyBtn) dfoot.appendChild(emptyBtn);
+  }
+
+  // ═══ 5. مسح أي أثر للـ 2-stage القديم ═══
+  drawer.querySelectorAll(".cart-stage").forEach(el => {
+    while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+    el.remove();
   });
+  const oldProgress = document.getElementById("cartProgress");
+  if (oldProgress) oldProgress.remove();
+  const continueBtn = document.getElementById("continueToCheckoutBtn");
+  if (continueBtn) continueBtn.remove();
+  const backBtn = document.getElementById("backToCartBtn");
+  if (backBtn) backBtn.remove();
 
-  // ═══ إنشاء الـ Stage Containers ═══
-  const stage1 = document.createElement("div");
-  stage1.className = "cart-stage cart-stage-1";
-
-  const stage2 = document.createElement("div");
-  stage2.className = "cart-stage cart-stage-2";
-
-  // ═══ توزيع العناصر ═══
-  stage1Items.forEach(el => stage1.appendChild(el));
-  stage2Items.forEach(el => stage2.appendChild(el));
-
-  // ═══ زر "متابعة للدفع" (مرحلة 1) ═══
-  const continueBtn = document.createElement("button");
-  continueBtn.className = "btn wa";
-  continueBtn.id = "continueToCheckoutBtn";
-  continueBtn.type = "button";
-  continueBtn.style.cssText = "width:100%; margin-top:.35rem; font-weight:700;";
-  const lang = (typeof LANG !== "undefined") ? LANG : "ar";
-  continueBtn.textContent = lang === "en" ? "📝 Continue to Checkout →" : "📝 ← متابعة للدفع";
-  stage1.appendChild(continueBtn);
-
-  // ═══ زر "الرجوع للسلة" (مرحلة 2 — فوق زر واتساب) ═══
-  const backBtn = document.createElement("button");
-  backBtn.className = "btn ghost";
-  backBtn.id = "backToCartBtn";
-  backBtn.type = "button";
-  backBtn.style.cssText = "width:100%; margin-bottom:.5rem; font-weight:700;";
-  backBtn.textContent = lang === "en" ? "← Back to Cart" : "→ الرجوع للسلة";
-  stage2.insertBefore(backBtn, stage2.firstChild);
-
-  // ═══ Progress Bar (فوق الـ stages) ═══
-  const progress = document.createElement("div");
-  progress.className = "cart-progress";
-  progress.id = "cartProgress";
-  progress.innerHTML = `
-    <span class="cart-progress-step active" data-step="1">🛒 ${lang === "en" ? "Cart" : "السلة"}</span>
-    <span class="cart-progress-arrow">←</span>
-    <span class="cart-progress-step" data-step="2">📝 ${lang === "en" ? "Details" : "البيانات"}</span>
-  `;
-
-  // ═══ إعادة بناء dfoot بالترتيب الصحيح ═══
-  dfoot.innerHTML = "";
-  dfoot.appendChild(progress);
-  dfoot.appendChild(stage1);
-  dfoot.appendChild(stage2);
-
-  // ═══ ربط الأزرار ═══
-  continueBtn.addEventListener("click", () => {
-    const cart = (typeof getCart === "function") ? getCart() : [];
-    if (!cart.length) {
-      if (typeof toast === "function") toast("⚠️ السلة فاضية — أضف منتجاتك أولاً");
-      return;
-    }
-    showCartStage(2);
-  });
-
-  backBtn.addEventListener("click", () => showCartStage(1));
-
-  // ═══ دعم ESC للرجوع من مرحلة 2 ═══
-  document.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") return;
-    const s2 = document.querySelector(".cart-stage-2");
-    if (s2 && s2.style.display === "flex") {
-      e.preventDefault();
-      e.stopPropagation();
-      showCartStage(1);
-    }
-  }, true);
-
-  console.log("✅ Cart Stages initialized (2-stage cart)");
+  console.log("✅ Unified Cart initialized (sticky footer)");
 }
-
-/* ═══════════════════════════════════════════════════════════
-   ✨ التبديل بين المرحلتين
+ /* ═══════════════════════════════════════════════════════════
+   ✨ UNIFIED CART — سلة موحدة مع Sticky Footer
+   المنتجات + الفورم في نفس الـ scroll، والإجمالي ثابت في الأسفل
    ═══════════════════════════════════════════════════════════ */
-function showCartStage(num) {
-  const stage1 = document.querySelector("#cartDrawer .cart-stage-1");
-  const stage2 = document.querySelector("#cartDrawer .cart-stage-2");
-  const progress = document.getElementById("cartProgress");
-  if (!stage1 || !stage2) return;
-
+function setupUnifiedCart() {
   const drawer = document.getElementById("cartDrawer");
-  const dbody = drawer ? drawer.querySelector(".dbody") : null;
+  if (!drawer) return;
+  if (drawer.dataset.unified === "1") return;
+  drawer.dataset.unified = "1";
 
-  if (num === 2) {
-    // ✅ عبّئ الفورم من البيانات المحفوظة
-    if (typeof fillCartForm === "function") fillCartForm();
+  const dhead = drawer.querySelector(".dhead");
+  const dbody = drawer.querySelector(".dbody");
+  const dfoot = drawer.querySelector(".dfoot");
+  if (!dhead || !dbody || !dfoot) return;
 
-    stage1.style.display = "none";
-    stage2.style.display = "flex";
+  // ═══ 1. CSS مخصص ═══
+  if (!document.getElementById("unified-cart-css")) {
+    const style = document.createElement("style");
+    style.id = "unified-cart-css";
+    style.textContent = `
+      /* Drawer: عمودي بارتفاع كامل */
+      #cartDrawer {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        overflow: hidden !important;
+      }
 
-    // ✅ Scroll لأعلى الـ drawer
-    if (dbody) dbody.scrollTop = 0;
-    if (drawer) drawer.scrollTop = 0;
+      /* Header: ثابت */
+      #cartDrawer .dhead {
+        flex-shrink: 0 !important;
+        position: relative;
+        z-index: 2;
+        background: var(--panel);
+        border-bottom: 1px solid var(--line);
+      }
 
-    // ✅ Focus على أول حقل بعد الانتقال
-    setTimeout(() => {
-      const firstInput = document.getElementById("coName");
-      if (firstInput) firstInput.focus({ preventScroll: true });
-    }, 200);
-  } else {
-    stage1.style.display = "flex";
-    stage2.style.display = "none";
+      /* Body: Scrollable */
+      #cartDrawer .dbody {
+        flex: 1 1 auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding: 0.85rem 1rem 1rem !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        overscroll-behavior: contain;
+      }
+      #cartDrawer .dbody::-webkit-scrollbar { width: 6px; }
+      #cartDrawer .dbody::-webkit-scrollbar-thumb {
+        background: var(--gold);
+        border-radius: 4px;
+        opacity: 0.5;
+      }
 
-    if (dbody) dbody.scrollTop = 0;
-    if (drawer) drawer.scrollTop = 0;
+      /* Footer: Sticky في الأسفل */
+      #cartDrawer .dfoot {
+        flex-shrink: 0 !important;
+        background: var(--panel) !important;
+        border-top: 1px solid var(--line) !important;
+        box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.06) !important;
+        padding: 0.85rem 1rem calc(0.9rem + env(safe-area-inset-bottom, 0)) !important;
+        position: relative;
+        z-index: 3;
+        max-height: 42vh;
+        overflow-y: auto;
+      }
+
+      /* كتلة البيانات في الـ body */
+      #cartDrawer .co-form {
+        margin-top: 0.5rem !important;
+      }
+
+      /* زر الإتمام الكبير */
+      #cartDrawer #checkoutBtn {
+        margin-top: 0.65rem !important;
+        font-size: 1rem !important;
+        padding: 1rem 1.2rem !important;
+        border-radius: 14px !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.2px;
+        box-shadow: 0 8px 22px rgba(46, 139, 69, 0.28) !important;
+      }
+
+      /* زر إفراغ السلة أصغر وأوضح */
+      #cartDrawer #emptyCartBtn {
+        margin-top: 0.45rem !important;
+        font-size: 0.82rem !important;
+      }
+
+      /* على الموبايل: تأكد إن زر الإتمام ظاهر */
+      @media (max-width: 768px) {
+        #cartDrawer .dfoot {
+          max-height: 48vh;
+          padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0)) !important;
+        }
+        #cartDrawer #checkoutBtn {
+          font-size: 0.95rem !important;
+          padding: 0.9rem 1rem !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
   }
 
-  // ✅ حدّث الـ Progress Bar
-  if (progress) {
-    progress.querySelectorAll(".cart-progress-step").forEach(step => {
-      step.classList.toggle("active", Number(step.dataset.step) === num);
-    });
+  // ═══ 2. ننقل فورم التوصيل + الكوبون + معلومات الدفع للـ dbody ═══
+
+  // نقل العنوان "بيانات التوصيل"
+  const deliveryH = dfoot.querySelector('[data-i18n="delivery_h"]');
+  if (deliveryH) {
+    deliveryH.style.marginTop = "0.85rem";
+    dbody.appendChild(deliveryH);
   }
+
+  // نقل الفورم (الاسم، الموبايل، الإيميل، المدينة، العنوان، الملاحظات)
+  const coForm = dfoot.querySelector(".co-form");
+  if (coForm) dbody.appendChild(coForm);
+
+  // نقل صف الكوبون
+  const couponInput = document.getElementById("couponInput");
+  if (couponInput) {
+    const couponRow = couponInput.parentElement;
+    if (couponRow && couponRow !== dfoot) {
+      couponRow.style.cssText += ";margin-top:1rem;";
+      dbody.appendChild(couponRow);
+    }
+  }
+
+  // نقل صف الخصم (لو موجود)
+  const discountRow = document.getElementById("discountRow");
+  if (discountRow) dbody.appendChild(discountRow);
+
+  // نقل ملاحظة الشحن
+  const shipNote = dfoot.querySelector(".cart-shipping-note");
+  if (shipNote) {
+    shipNote.style.marginTop = "1rem";
+    dbody.appendChild(shipNote);
+  }
+
+  // نقل صندوق الدفع (InstaPay...)
+  const paybox = dfoot.querySelector(".paybox");
+  if (paybox) {
+    paybox.style.marginTop = "0.75rem";
+    dbody.appendChild(paybox);
+  }
+
+  // ═══ 3. ترتيب الـ dfoot — يبقى فيه: الإجماليات + زر الإتمام + إفراغ السلة ═══
+
+  // ضمان إن الـ checkoutBtn في آخر الـ footer
+  const checkoutBtn = document.getElementById("checkoutBtn");
+  if (checkoutBtn && checkoutBtn.parentElement !== dfoot) {
+    dfoot.appendChild(checkoutBtn);
+  }
+
+  // ضمان إن الـ emptyCartBtn بعد الـ checkoutBtn
+  const emptyBtn = document.getElementById("emptyCartBtn");
+  if (emptyBtn && emptyBtn.parentElement !== dfoot) {
+    dfoot.appendChild(emptyBtn);
+  }
+
+  // نقل freeShippingRow لو موجود لآخر الـ dfoot (فوق الزر)
+  const freeShip = document.getElementById("freeShippingRow");
+  if (freeShip) dfoot.insertBefore(freeShip, checkoutBtn);
+
+  // ═══ 4. رتّب الإجماليات في أعلى الـ footer ═══
+  const cartSub = document.getElementById("cartSub");
+  const cartTotal = document.getElementById("cartTotal");
+  const qtyDiscountRow = document.getElementById("qtyDiscountRow");
+
+  // نأكد إن الـ subtotal و discount و total في ترتيب صح
+  const totalRow = cartTotal ? cartTotal.closest(".trow") : null;
+  const subRow = cartSub ? cartSub.closest(".trow") : null;
+
+  if (qtyDiscountRow && subRow && qtyDiscountRow.nextElementSibling !== subRow) {
+    // خلّي qtyDiscountRow فوق subtotal
+    if (subRow.parentElement === dfoot) {
+      dfoot.insertBefore(qtyDiscountRow, subRow);
+    }
+  }
+
+  if (totalRow && checkoutBtn && totalRow.nextElementSibling !== freeShip && totalRow.nextElementSibling !== checkoutBtn) {
+    // خلّي الإجمالي آخر عنصر قبل الشحن المجاني/الزر
+    if (totalRow.parentElement === dfoot) {
+      dfoot.appendChild(totalRow);
+      if (freeShip) dfoot.appendChild(freeShip);
+      dfoot.appendChild(checkoutBtn);
+      if (emptyBtn) dfoot.appendChild(emptyBtn);
+    }
+  }
+
+  // ═══ 5. مسح أي أثر للـ 2-stage القديم (احتياطي) ═══
+  drawer.querySelectorAll(".cart-stage").forEach(el => {
+    // فك أي container قديم
+    while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+    el.remove();
+  });
+  const oldProgress = document.getElementById("cartProgress");
+  if (oldProgress) oldProgress.remove();
+  const continueBtn = document.getElementById("continueToCheckoutBtn");
+  if (continueBtn) continueBtn.remove();
+  const backBtn = document.getElementById("backToCartBtn");
+  if (backBtn) backBtn.remove();
+
+  console.log("✅ Unified Cart initialized (sticky footer)");
 }
 })();
