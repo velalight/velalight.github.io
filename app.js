@@ -1,1160 +1,1278 @@
 (function(){
 "use strict";
-// ️ تنظيف ذاتي آمن: إلغاء تسجيل أي Service Worker قديم عالق ومسح الكاش التالف
+ 
+// ☢️ تنظيف ذاتي آمن: إلغاء تسجيل أي Service Worker قديم عالق ومسح الكاش التالف
 if ('serviceWorker' in navigator) {
-navigator.serviceWorker.getRegistrations().then(function(registrations) {
-for(let registration of registrations) {
-registration.unregister();
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) {
+      registration.unregister();
+    }
+  });
+  
+  if ('caches' in window) {
+    caches.keys().then(function(names) {
+      for (let name of names) {
+        caches.delete(name);
+      }
+    });
+  }
 }
-});
-if ('caches' in window) {
-caches.keys().then(function(names) {
-for (let name of names) {
-caches.delete(name);
-}
-});
-}
-}
+
 /* ═══════════════════════════════════════════════════════════
-✨ FIX: Global Image Error Handler (يمنع اختفاء المنتجات)
-═══════════════════════════════════════════════════════════ */
+   ✨ FIX: Global Image Error Handler (يمنع اختفاء المنتجات)
+   ═══════════════════════════════════════════════════════════ */
 window.handleImageError = function(imgElement, productId) {
-if (!imgElement) return;
-if (imgElement.dataset.fallback === "true") return;
-console.warn(`⚠️ Image failed to load for product: ${productId}. Applying fallback.`);
-imgElement.dataset.fallback = "true";
-const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
-const p = products.find(x => x.id === productId);
-if (p && typeof ph === "function") {
-imgElement.src = ph(p);
-} else {
-imgElement.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>";
-}
+  if (!imgElement) return;
+  if (imgElement.dataset.fallback === "true") return; 
+  
+  console.warn(`⚠️ Image failed to load for product: ${productId}. Applying fallback.`);
+  imgElement.dataset.fallback = "true";
+  
+  const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
+  const p = products.find(x => x.id === productId);
+  
+  if (p && typeof ph === "function") {
+    imgElement.src = ph(p);
+  } else {
+    imgElement.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>";
+  }
 };
+
 /* ═══════════════════════════════════════════════════════════
-✨ TRACKING DATA CAPTURE (UTM & Click IDs)
-═══════════════════════════════════════════════════════════ */
+   ✨ TRACKING DATA CAPTURE (UTM & Click IDs)
+   ═══════════════════════════════════════════════════════════ */
 function captureTrackingData() {
-const params = new URLSearchParams(window.location.search);
-const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'fbclid', 'gclid', 'ttclid'];
-const trackingData = {};
-keys.forEach(key => {
-const val = params.get(key) || localStorage.getItem('vl_' + key) || '';
-trackingData[key] = val;
-if (val) localStorage.setItem('vl_' + key, val);
-});
-return trackingData;
+  const params = new URLSearchParams(window.location.search);
+  const keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'fbclid', 'gclid', 'ttclid'];
+  const trackingData = {};
+  
+  keys.forEach(key => {
+    const val = params.get(key) || localStorage.getItem('vl_' + key) || '';
+    trackingData[key] = val;
+    if (val) localStorage.setItem('vl_' + key, val);
+  });
+  return trackingData;
 }
 const sessionTracking = captureTrackingData();
+
 /* ═══════════════════════════════════════════════════════════
-✨ WISHLIST — مع Cache للأداء
-═══════════════════════════════════════════════════════════ */
+   ✨ WISHLIST — مع Cache للأداء
+   ═══════════════════════════════════════════════════════════ */
 const WISHLIST_KEY = "vl_wishlist";
 let wishlistCache = null;
+
 function getWishlist() {
-if (wishlistCache !== null) return wishlistCache;
-try {
-wishlistCache = JSON.parse(localStorage.getItem(WISHLIST_KEY) || "[]");
-if (!Array.isArray(wishlistCache)) wishlistCache = [];
-} catch(e) {
-wishlistCache = [];
+  if (wishlistCache !== null) return wishlistCache;
+  try {
+    wishlistCache = JSON.parse(localStorage.getItem(WISHLIST_KEY) || "[]");
+    if (!Array.isArray(wishlistCache)) wishlistCache = [];
+  } catch(e) {
+    wishlistCache = [];
+  }
+  return wishlistCache;
 }
-return wishlistCache;
-}
+
 function saveWishlist(list) {
-wishlistCache = list;
-try {
-localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
-} catch(e) {
-console.warn("⚠️ Failed to save wishlist:", e);
+  wishlistCache = list;
+  try {
+    localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
+  } catch(e) {
+    console.warn("⚠️ Failed to save wishlist:", e);
+  }
 }
-}
+
 function toggleWishlist(productId) {
-const list = getWishlist();
-const idx = list.indexOf(productId);
-let added;
-if (idx === -1) {
-list.push(productId);
-added = true;
-toast("❤️ تمت الإضافة للمفضلة");
-} else {
-list.splice(idx, 1);
-added = false;
-toast("💔 تمت الإزالة من المفضلة");
+  const list = getWishlist();
+  const idx = list.indexOf(productId);
+  let added;
+  if (idx === -1) {
+    list.push(productId);
+    added = true;
+    toast("❤️ تمت الإضافة للمفضلة");
+  } else {
+    list.splice(idx, 1);
+    added = false;
+    toast("💔 تمت الإزالة من المفضلة");
+  }
+  saveWishlist(list);
+  renderProducts();
+  if (typeof renderWishlistPage === "function") renderWishlistPage();
+  return added;
 }
-saveWishlist(list);
-renderProducts();
-if (typeof renderWishlistPage === "function") renderWishlistPage();
-return added;
-}
+
 function isInWishlist(productId) {
-return getWishlist().includes(productId);
+  return getWishlist().includes(productId);
 }
+
 /* ═══ QUICK ADD STATE ═══ */
 let quickAddProduct=null;
 let quickAddScent="";
 let quickAddQty=1;
 let quickAddMaxStock=99;
 let productGridClickBound=false;
+
 /* ═══ PERFORMANCE OPTIMIZATIONS ═══ */
 const requestIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
 const cancelIdle = window.cancelIdleCallback || clearTimeout;
+
 function debounce(fn, ms=300){
-let t;
-return function(...args){
-clearTimeout(t);
-t = setTimeout(() => fn.apply(this, args), ms);
-};
+  let t;
+  return function(...args){
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), ms);
+  };
 }
-/* ══ VELA SCENTS ═══ */
+
+/* ═══ VELA SCENTS ═══ */
 const VELA_SCENTS=[
-[ "فانيلا ", "Vanilla "],
-[ "سينامون سبايس فانيلا ", "Cinnamon Spice Vanilla "],
-[ "لافندر ", "Lavender "],
-[ "موكا ", "Mocha "],
-[ "كراميل ", "Caramel "],
-[ "كاريبيان فروت ", "Caribbean Fruit "],
-[ "فل ", "Jasmine Sambac "],
-[ "ياسمين ", "Jasmine "],
-[ "اناناس ", "Pineapple "],
-[ "شيكولاتة ", "Chocolate "],
-[ "كوكونات ", "Coconut "],
-[ "كاسيليا ", "Cassilia — Massage "],
-[ "اينتو زانايت ", "Into Zanaite — Massage "],
-[ "بوكيت روز ", "Bouquet Rose "],
-[ "ورد بلدى ", "Egyptian Rose "],
-[ "تيوليب ", "Tulip "],
-[ "قهوة ", "Coffee "],
-[ "قهوة فانيلا ", "Vanilla Coffee "],
-[ "قهوة بندق ", "Hazelnut Coffee "],
-[ "عود فانيليا ", "Vanilla Oud "],
-[ "عنبر ", "Amber "],
-[ "فراولة ", "Strawberry "],
-[ "عود خشب صندل ", "Sandalwood Oud "]
+["فانيلا","Vanilla"],
+["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
+["لافندر","Lavender"],
+["موكا","Mocha"],
+["كراميل","Caramel"],
+["كاريبيان فروت","Caribbean Fruit"],
+["فل","Jasmine Sambac"],
+["ياسمين","Jasmine"],
+["اناناس","Pineapple"],
+["شيكولاتة","Chocolate"],
+["كوكونات","Coconut"],
+["كاسيليا","Cassilia — Massage"],
+["اينتو زانايت","Into Zanaite — Massage"],
+["بوكيت روز","Bouquet Rose"],
+["ورد بلدى","Egyptian Rose"],
+["تيوليب","Tulip"],
+["قهوة","Coffee"],
+["قهوة فانيلا","Vanilla Coffee"],
+["قهوة بندق","Hazelnut Coffee"],
+["عود فانيليا","Vanilla Oud"],
+["عنبر","Amber"],
+["فراولة","Strawberry"],
+["عود خشب صندل","Sandalwood Oud"]
 ];
+
 const velaScentTr=name=>{
-const f=VELA_SCENTS.find(s=>s[0]===name||s[1]===name);
-return f?(LANG==="en"?f[1]:f[0]):(name||"");
+  const f=VELA_SCENTS.find(s=>s[0]===name||s[1]===name);
+  return f?(LANG==="en"?f[1]:f[0]):(name||"");
 };
+
 /* ═══ FILL MISSING TRANSLATIONS ═══ */
 (function fillMissingI18n(){
-if(typeof I18N==="undefined") return;
-const add = {
-/* ═══════════════════════════════════════
-   🇪🇬 ARABIC
-   ═══════════════════════════════════════ */
-ar: {
+  if(typeof I18N==="undefined") return;
+
+  const add = {
+
+    /* ═══════════════════════════════════════
+       🇪🇬 ARABIC
+       ═══════════════════════════════════════ */
+    ar: {
 /* ═══ Reviews Page (reviews.html) ═══ */
-reviews_back:  "← الرجوع للرئيسية ",
-reviews_stats_trust:  "ثقة تتجدد ",
-reviews_quote:  "مش مجرد شمعة… دي لحظة بتتعاش! ",
-reviews_quote_author:  "— واحد من عملائنا ",
-reviews_cta_title:  "جاهز تنضم لعائلة VelaLight؟ 🕯️ ",
-reviews_cta_sub:  "اختار شمعتك الفاخرة واصنع لحظتك الخاصة ",
-reviews_cta_btn:  "تسوق الآن 🛍️ ",
-foot_wishlist:  "❤️ المفضلة ",
-foot_orders:  "📦 طلباتي ",
-      /* Shipping & Payment */
-   ship_note:
-     "🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
-   pay_products_note:
-     "💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.",
-   pay_title:
-     "InstaPay / فودافون كاش / أورنج كاش",
-   paymethod_d:
-     "قيمة المنتجات تُدفع مقدماً (تحويل) عند تأكيد الطلب.",
-   /* Scent */
-   t_scentwarn:
-     "⚠️ من فضلك اختر العطر أولاً.",
-   quick_add_scent:
-     "🌸 اختر العطر",
-   quick_add_qty:
-     "الكمية",
-   quick_add_add:
-     "🛍️ أضف للسلة",
-   quick_add_added:
-     "✓ تمت الإضافة للسلة",
-   scent_req:
-     "مطلوب",
-   /* Handmade */
-   handmade_note:
-     "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
-   pd_handmade_note:
-     "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
-   /* Product tabs */
-   pd_desc_tab:
-     "📝 الوصف",
-   pd_specs_tab:
-     "📋 المواصفات",
-   pd_reviews_tab:
-     "⭐ المراجعات",
-   /* Product gallery */
-   pd_zoom:
-     "🔍 تكبير",
-   pd_gallery_count:
-     "الصور",
-   /* Product options */
-   pd_scent_t:
-     "🌸 اختر العطر:",
-   pd_qty_t:
-     "الكمية:",
-   pd_required:
-     "مطلوب",
-   pd_decrease:
-     "تقليل الكمية",
-   pd_increase:
-     "زيادة الكمية",
-   pd_wishlist:
-     "إضافة إلى المفضلة",
-   /* Product actions */
-   pd_add:
-     "🛍️ أضف للسلة",
-   pd_buy:
-     "💬 اطلب عبر واتساب",
-   /* Product information */
-   pd_hours:
-     "مدة الاشتعال:",
-   pd_materials:
-     "الخامات:",
-   pd_ship:
-     "التوصيل:",
-   pd_ship_v:
-     "3–7 أيام",
-   /* Reviews */
-   pd_review_word:
-     "مراجعة",
-   pd_read_all:
-     "اقرأ الكل",
-   pd_first_review:
-     "كن أول من يشارك رأيه",
-   /* Related Products */
-   pd_rel_h2:
-     "✨ منتجات هتعجبك",
-   /* Share */
-   pd_share:
-     "مشاركة:",
-   pd_copy_link:
-     "📋 نسخ الرابط",
-   /* Product Not Found */
-   pd_product:
-     "المنتج",
-   pd_not_found_title:
-     "😕 المنتج غير متاح",
-   pd_not_found_desc:
-     "عذراً، لم نتمكن من العثور على هذا المنتج",
-   pd_browse_products:
-     "تصفح المنتجات",
-   /* ═══ Homepage Reviews ═══ */
-   reviews_kicker:
-     "💛 كلامكم أحلى هدية",
-   reviews_title:
-     "آراء عملائنا",
-   reviews_desc:
-     "مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.",
-   reviews_cta:
-     "✨ جربت سحرنا؟",
-   reviews_cta_link:
-     "ابعتلنا رأيك على الواتساب",
-/* ══ Brand Promise ═══ */
-brand_promise_title:
-"تفاصيل تصنع الفرق",
-brand_promise_desc:
-"شموع يدوية فاخرة، عطور مختارة، وهدايا مصممة لتضيف لمسة خاصة لكل لحظة.",
-brand_point1_title:
-"صناعة يدوية",
-brand_point1_desc:
-"كل قطعة تُصنع وتُجهّز بعناية.",
-brand_point2_title:
-"هدية لكل مناسبة",
-brand_point2_desc:
-"اختيارات تليق بكل لحظة واحتفال.",
-brand_point3_title:
-"اختيار يناسبك",
-brand_point3_desc:
-"نساعدك تختار الرائحة والتفاصيل المناسبة.",
-   /* ═══ FAQ ═══ */
-   faq1q:
-     "كيف يمكنني الطلب وما طرق الدفع المتاحة؟",
-   faq1a:
-     "يمكنك إضافة المنتجات إلى سلة الشراء وإتمام طلبك بسهولة. يتم دفع قيمة المنتجات مقدمًا عبر InstaPay أو Vodafone Cash أو تحويل بنكي، بينما تُدفع تكلفة الشحن نقدًا لمندوب التوصيل عند الاستلام.",
-   faq2q:
-     "هل تقومون بالشحن إلى جميع محافظات مصر؟",
-   faq2a:
-     "نعم، نوفر خدمة التوصيل إلى جميع محافظات مصر، مع الحرص على وصول طلبك بأمان.",
-   faq3q:
-     "كم تستغرق مدة تجهيز وشحن الطلب؟",
-   faq3a:
-     "لأن منتجات VelaLight تُصنع يدويًا بعناية، تستغرق مدة التجهيز عادةً من 3 إلى 7 أيام عمل، بالإضافة إلى مدة الشحن حسب المحافظة.",
-   faq4q:
-     "هل شموع VelaLight مصنوعة من شمع الصويا؟",
-   faq4a:
-     "نعم، نستخدم شمع الصويا الطبيعي 100%، الذي يتميز باحتراق أبطأ وأنظف ويساعد على انتشار العطر بكفاءة.",
-   faq5q:
-     "كم تبلغ مدة احتراق الشمعة وكيف أحافظ على أفضل أداء لها؟",
-   faq5a:
-     "تختلف مدة الاحتراق حسب وزن وحجم كل شمعة، وستجد التفاصيل في وصف المنتج. ولأفضل نتيجة، عند الاستخدام الأول اترك الشمعة حتى يذوب سطح الشمع بالكامل ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.",
-   faq6q:
-     "كيف أختار العطر المناسب؟",
-   faq6a:
-     "لدينا تشكيلة متنوعة من العطور الفاخرة. وإذا كنت محتار، تواصل معنا عبر WhatsApp وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلها.",
-   faq7q:
-     "هل تتوفر خدمة تغليف الهدايا؟",
-   faq7a:
-     "نعم، جميع منتجات VelaLight تأتي بتغليف أنيق وفاخر وجاهز للإهداء.",
-   faq8q:
-     "ما سياسة الاستبدال والاسترجاع؟",
-   faq8a:
-     "نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب. وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.",
-   /* ═══ Top Marquee ═══ */
-   mq_delivery:
-     "🚚 توصيل سريع لكل محافظات مصر",
-   mq_discounts:
-     "🏷️ خصومات حصرية على مجموعات مختارة",
-   mq_gift:
-     "🎁 تغليف هدايا مجاني مع كل طلب",
-   mq_handmade:
-     "🤲 صناعة يدوية 100% بخامات طبيعية",
-   mq_scents:
-     "🕯️ أكثر من 23 عطر فاخر متاح",
-   mq_shipping:
-     "📦 شحن آمن من الورشة لحد باب بيتك",
-   mq_support:
-     "💬 دعم فني يومي لخدمتك",
-   /* ═══ Products Page ═══ */
-   products_title: "كل المنتجات",
-   products_sub: "اكتشف تشكيلتنا الكاملة من الشموع الفاخرة",
-   filter_all: "الكل",
-   filter_wood: "خشبية",
-   filter_glass: "زجاجية",
-   filter_crystal: "كريستالية",
-   filter_metal: "معدنية",
-   filter_massage: "مساج",
-   filter_gift: "هدايا",
-   filter_bride: "بوكس العروسة",
-   sort_new: "الأحدث",
-   sort_asc: "السعر: من الأقل",
-   sort_desc: "السعر: من الأعلى",
-   sort_rating: "التقييم",
-   sort_best: "الأكثر مبيعاً",
-   sort_disc: "أكبر خصم",
-   no_products_filter: "لا توجد منتجات تطابق الفلتر المختار",
-   view_details: "عرض التفاصيل",
-   add_cart: "أضف للسلة",
-   price_lbl: "السعر:",
-   scent_lbl: "العطر:",
-   cart_empty: "السلة فارغة",
-   cart_empty_sub: "أضف منتجاتك المفضلة",
-   /* ═══ Reviews Page ═══ */
-   reviews_page_title: "كل آراء عملائنا",
-   reviews_page_sub: "شوف تجارب العملاء الحقيقية مع منتجات VelaLight",
-   reviews_verified: "عميل موثّق",
-   reviews_customer: "عميل سعيد",
-   reviews_share_your: "شاركنا رأيك ✨",
-   reviews_share_sub: "جرب منتج من VelaLight؟ اكتبلنا تجربتك",
-   /* ═══ Products Page ═══ */
-   prod_word: "منتج",
-   no_products: "لا توجد منتجات",
-   /* ═══ Craftsmanship (Behind the Scenes) ═══ */
-   craft_kick: "Behind the Scenes",
-   craft_title: "إيد مصرية.. تفاصيل ملهاش حدود",
-   craft_desc: "شوف ازاي بنصنع كل قطعة بحب ودقة عشان توصلك بالشكل اللي يليق بيك",
-   craft_loading: "⏳ جاري التحميل...",
-   craft_fallback1_title: "نخلط الزيوت بعناية",
-   craft_fallback1_desc: "نستخدم أفضل الزيوت الطبيعية لضمان رائحة تدوم طويلاً",
-   craft_fallback2_title: "تغليف فاخر جاهز للإهداء",
-   craft_fallback2_desc: "كل قطعة بتتغلف بإيدينا عشان تكون مميزة",
-   craft_fallback3_title: "فحص دقيق لكل قطعة",
-   craft_fallback3_desc: "نتأكد من الجودة قبل ما توصل لباب بيتك",
-   /* ═══ Reviews Enhanced ═══ */
-   rev_see_all: "📸 شوف كل التجارب",
-   rev_stats_label: "عميل وثق فينا",
-   rev_stats_rating: "تقييم 5 نجوم",
-   rev_loading: "⏳ جاري تحميل التجارب...",
-   /* ═══ FAQ & Misc ═══ */
-   faq_kick: "FAQ",
-   faq_sub: "كل ما تحتاج معرفته عن الطلب، الشحن، الشموع والعطور.",
-   foot_designer_label: "صُمم وتطوير بعناية بواسطة",
-   brand_kick: "The VelaLight Touch",
-   scents_kick: "Signature Scents",
-   prod_kick: "Our Collection",
-   prod_sub: "اكتشف أحدث تشكيلتنا من الشموع الفاخرة",
-   prod_see_all: "🕯️ استعرض كل المنتجات",
-   about_kick: "Our Story",
-   ed_kick: "A Moment of Luxury",
-   ed_h2: "لحظاتٌ تُحفر في الذاكرة",
-   ed_p: "كل شمعة من VelaLight ليست مجرد إضاءة… هي لحظة كاملة. لحظة هدوء، لحظة رومانسية، لحظة فرح. اصنع ذكرياتك الخاصة مع عطورنا الفاخرة.",
-   ed_cta: "ابدأ رحلتك ✨",
-   /* ═══ NEW: Cart Experience ═══ */
-   cart_title: "🛍️ سلة الشراء",
-   cart_items_title: "منتجاتك",
-   cart_coupon_title: "🎟️ كوبون الخصم",
-   cart_coupon_placeholder: "أدخل كود الكوبون",
-   cart_coupon_apply: "تطبيق",
-   cart_delivery_title: " بيانات التوصيل",
-   cart_name_ph: "الاسم بالكامل",
-   cart_phone_ph: "رقم الموبايل",
-   cart_email_ph: "البريد الإلكتروني (اختياري)",
-   cart_city_ph: "المحافظة",
-   cart_address_ph: "العنوان بالتفصيل",
-   cart_notes_ph: "ملاحظات (اختياري)",
-   cart_payment_title: "💳 طريقة الدفع",
-   cart_payment_desc: "سيتم إرسال تفاصيل الدفع (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب. الشحن يُدفع كاش عند الاستلام.",
-   cart_subtotal: "المجموع الفرعي",
-   cart_discount: "الخصم",
-   cart_total: "الإجمالي",
-   cart_free_shipping_progress: "أضف {amount} للحصول على شحن مجاني! 🚚",
-   cart_free_shipping_earned: "🎉 مبروك! طلبك مؤهل لشحن مجاني",
-   cart_qty_discount: "🎁 خصم الكمية (3+ قطع)",
-   cart_coupon_discount: "️ خصم الكوبون",
-   cart_checkout_btn: "✅ إتمام الطلب عبر واتساب",
-   cart_empty_cart_btn: "🗑️ إفراغ السلة",
-   cart_confirm_empty: "هل أنت متأكد من إفراغ السلة؟",
-   cart_trust_secure: "دفع آمن",
-   cart_trust_refund: "ضمان استرجاع",
-   cart_trust_delivery: "توصيل موثوق",
-   cart_scent_required: "اختر العطر",
-   cart_item_total: "إجمالي الصنف:",
-   cart_add_to_cart: "أضف للسلة",
-   cart_out_of_stock: "نفدت الكمية",
-   cart_cross_sell_title: "أرشح لك فوحات شمع معطره لدولابك",
-   cart_cross_sell_btn: "أضف للسلة",
- },
- /* ═══════════════════════════════════════
-    🇧 ENGLISH
-    ═══════════════════════════════════════ */
- en: {
-/* ═══ Reviews Page (reviews.html) ═══ */
-reviews_back:  "← Back to Home ",
-reviews_stats_trust:  "Trust Renewed ",
-reviews_quote:  "Not just a candle… it's a moment to live! ",
-reviews_quote_author:  "— One of our customers ",
-reviews_cta_title:  "Ready to join the VelaLight family? 🕯️ ",
-reviews_cta_sub:  "Choose your luxury candle and create your own moment ",
-reviews_cta_btn:  "Shop Now 🛍️ ",
-foot_wishlist:  "❤️ Wishlist ",
-foot_orders:  "📦 My Orders ",
-        /* Shipping & Payment */
-   ship_note:
-     "🚚 Shipping: paid cash to the courier on delivery.",
-   pay_products_note:
-     " Payment details (InstaPay / Vodafone Cash / Orange Cash / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
-   pay_title:
-     "InstaPay / Vodafone Cash / Orange Cash",
-   paymethod_d:
-     "Upfront transfer (InstaPay / Vodafone Cash / Orange Cash), shipping cash on delivery.",
-   /* Scent */
-   t_scentwarn:
-     "⚠️ Please choose a scent first.",
-   quick_add_scent:
-     " Choose a scent",
-   quick_add_qty:
-     "Quantity",
-   quick_add_add:
-     "🛍️ Add to Cart",
-   quick_add_added:
-     "✓ Added to Cart",
-   scent_req:
-     "Required",
-   /* Handmade */
-   handmade_note:
-     "Handmade piece prepared with care upon order — every candle is unique and special",
-   pd_handmade_note:
-     "Handmade piece prepared with care upon order — every candle is unique and special",
-   /* Product tabs */
-   pd_desc_tab:
-     "📝 Description",
-   pd_specs_tab:
-     " Specifications",
-   pd_reviews_tab:
-     "⭐ Reviews",
-   /* Product gallery */
-   pd_zoom:
-     "🔍 Zoom",
-   pd_gallery_count:
-     "Images",
-   /* Product options */
-   pd_scent_t:
-     "🌸 Scent:",
-   pd_qty_t:
-     "Quantity:",
-   pd_required:
-     "Required",
-   pd_decrease:
-     "Decrease quantity",
-   pd_increase:
-     "Increase quantity",
-   pd_wishlist:
-     "Add to favorites",
-   /* Product actions */
-   pd_add:
-     "🛍️ Add to Cart",
-   pd_buy:
-     "💬 Order via WhatsApp",
-   /* Product information */
-   pd_hours:
-     "Burn time:",
-   pd_materials:
-     "Materials:",
-   pd_ship:
-     "Delivery:",
-   pd_ship_v:
-     "3–7 days",
-   /* Reviews */
-   pd_review_word:
-     "reviews",
-   pd_read_all:
-     "Read all",
-   pd_first_review:
-     "Be the first to review",
-   /* Related Products */
-   pd_rel_h2:
-     "✨ You May Also Like",
-   /* Share */
-   pd_share:
-     "Share:",
-   pd_copy_link:
-     "📋 Copy Link",
-   /* Product Not Found */
-   pd_product:
-     "Product",
-   pd_not_found_title:
-     "😕 Product Not Available",
-   pd_not_found_desc:
-     "Sorry, we couldn't find this product",
-   pd_browse_products:
-     "Browse Products",
-   /* ═══ Homepage Reviews ══ */
-   reviews_kicker:
-     "💛 Your Words Mean the Most",
-   reviews_title:
-     "Our Customers' Reviews",
-   reviews_desc:
-     "We don't just write claims — we show the real experience. These are genuine screenshots from our customers after receiving their orders.",
-   reviews_cta:
-     "✨ Tried our candles?",
-   reviews_cta_link:
-     "Send us your review on WhatsApp",
+reviews_back: "← الرجوع للرئيسية",
+reviews_stats_trust: "ثقة تتجدد",
+reviews_quote: "مش مجرد شمعة… دي لحظة بتتعاش!",
+reviews_quote_author: "— واحد من عملائنا",
+reviews_cta_title: "جاهز تنضم لعائلة VelaLight؟ 🕯️",
+reviews_cta_sub: "اختار شمعتك الفاخرة واصنع لحظتك الخاصة",
+reviews_cta_btn: "تسوق الآن 🛍️",
+foot_wishlist: "❤️ المفضلة",
+foot_orders: "📦 طلباتي",
+      
+          /* Shipping & Payment */
+      ship_note:
+        "🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
+
+      pay_products_note:
+        "💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.",
+
+      pay_title:
+        "InstaPay / فودافون كاش / أورنج كاش",
+
+      paymethod_d:
+        "قيمة المنتجات تُدفع مقدماً (تحويل) عند تأكيد الطلب.",
+
+      /* Scent */
+      t_scentwarn:
+        "⚠️ من فضلك اختر العطر أولاً.",
+
+      quick_add_scent:
+        "🌸 اختر العطر",
+
+      quick_add_qty:
+        "الكمية",
+
+      quick_add_add:
+        "🛍️ أضف للسلة",
+
+      quick_add_added:
+        "✓ تمت الإضافة للسلة",
+
+      scent_req:
+        "مطلوب",
+
+
+      /* Handmade */
+      handmade_note:
+        "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
+
+      pd_handmade_note:
+        "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
+
+
+      /* Product tabs */
+      pd_desc_tab:
+        "📝 الوصف",
+
+      pd_specs_tab:
+        "📋 المواصفات",
+
+      pd_reviews_tab:
+        "⭐ المراجعات",
+
+
+      /* Product gallery */
+      pd_zoom:
+        "🔍 تكبير",
+
+      pd_gallery_count:
+        "الصور",
+
+
+      /* Product options */
+      pd_scent_t:
+        "🌸 اختر العطر:",
+
+      pd_qty_t:
+        "الكمية:",
+
+      pd_required:
+        "مطلوب",
+
+      pd_decrease:
+        "تقليل الكمية",
+
+      pd_increase:
+        "زيادة الكمية",
+
+      pd_wishlist:
+        "إضافة إلى المفضلة",
+
+
+      /* Product actions */
+      pd_add:
+        "🛍️ أضف للسلة",
+
+      pd_buy:
+        "💬 اطلب عبر واتساب",
+
+
+      /* Product information */
+      pd_hours:
+        "مدة الاشتعال:",
+
+      pd_materials:
+        "الخامات:",
+
+      pd_ship:
+        "التوصيل:",
+
+      pd_ship_v:
+        "3–7 أيام",
+
+
+      /* Reviews */
+      pd_review_word:
+        "مراجعة",
+
+      pd_read_all:
+        "اقرأ الكل",
+
+      pd_first_review:
+        "كن أول من يشارك رأيه",
+
+
+      /* Related Products */
+      pd_rel_h2:
+        "✨ منتجات هتعجبك",
+
+
+      /* Share */
+      pd_share:
+        "مشاركة:",
+
+      pd_copy_link:
+        "📋 نسخ الرابط",
+
+
+      /* Product Not Found */
+      pd_product:
+        "المنتج",
+
+      pd_not_found_title:
+        "😕 المنتج غير متاح",
+
+      pd_not_found_desc:
+        "عذراً، لم نتمكن من العثور على هذا المنتج",
+
+      pd_browse_products:
+        "تصفح المنتجات",
+
+
+      /* ═══ Homepage Reviews ═══ */
+      reviews_kicker:
+        "💛 كلامكم أحلى هدية",
+
+      reviews_title:
+        "آراء عملائنا",
+
+      reviews_desc:
+        "مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.",
+
+      reviews_cta:
+        "✨ جربت سحرنا؟",
+
+      reviews_cta_link:
+        "ابعتلنا رأيك على الواتساب",
 /* ═══ Brand Promise ═══ */
 brand_promise_title:
-"Details That Make the Difference",
+  "تفاصيل تصنع الفرق",
+
 brand_promise_desc:
-"Handcrafted candles, carefully selected scents, and thoughtful gifts made for every special moment.",
+  "شموع يدوية فاخرة، عطور مختارة، وهدايا مصممة لتضيف لمسة خاصة لكل لحظة.",
+
 brand_point1_title:
-"Handcrafted",
+  "صناعة يدوية",
+
 brand_point1_desc:
-"Every piece is made and prepared with care.",
+  "كل قطعة تُصنع وتُجهّز بعناية.",
+
 brand_point2_title:
-"A Gift for Every Occasion",
+  "هدية لكل مناسبة",
+
 brand_point2_desc:
-"Thoughtful choices for every moment and celebration.",
+  "اختيارات تليق بكل لحظة واحتفال.",
+
 brand_point3_title:
-"Made for You",
+  "اختيار يناسبك",
+
 brand_point3_desc:
-"We help you choose the right scent and details for your taste.",
-  /* ═══ FAQ ═══ */
-   faq1q:
-     "How can I place an order and what payment methods are available?",
-   faq1a:
-     "You can add your selected products to the cart and complete your order easily. Product payment is made upfront via InstaPay, Vodafone Cash, or bank transfer, while the shipping fee is paid in cash to the courier upon delivery.",
-   faq2q:
-     "Do you ship to all governorates in Egypt?",
-   faq2a:
-     "Yes, we deliver safely and reliably to all governorates across Egypt.",
-   faq3q:
-     "How long does it take to prepare and ship my order?",
-   faq3a:
-     "Because VelaLight products are carefully handmade, preparation usually takes 3 to 7 business days, in addition to the shipping time depending on your governorate.",
-   faq4q:
-     "Are VelaLight candles made from soy wax?",
-   faq4a:
-     "Yes, we use 100% natural soy wax. It burns more slowly and cleanly and helps the fragrance diffuse effectively.",
-   faq5q:
-     "How long does a candle burn, and how can I get the best performance?",
-   faq5a:
-     "Burn time varies depending on the candle's weight and size, as detailed in each product description. For the best results, during the first use, allow the wax to melt completely across the surface and reach the edges to prevent tunneling and ensure an even burn.",
-   faq6q:
-     "How can I choose the right scent?",
-   faq6a:
-     "We offer a variety of luxurious fragrances. If you're unsure which one to choose, contact us via WhatsApp and we'll be happy to help you select the perfect scent based on your taste, occasion, and desired atmosphere.",
-   faq7q:
-     "Do you offer gift wrapping?",
-   faq7a:
-     "Yes. All VelaLight products come in elegant, luxurious packaging that is ready for gifting.",
-   faq8q:
-     "What is your return and exchange policy?",
-   faq8a:
-     "Due to the nature of our handmade products, returns or exchanges are not accepted after the product has been opened or used, or due to a change of mind after the order has been confirmed. If your order arrives with a manufacturing defect or shipping damage, please contact us within 24 hours of delivery and we will be happy to resolve the issue.",
-   /* ══ Top Marquee ═══ */
-   mq_delivery:
-     "🚚 Fast delivery across Egypt",
-   mq_discounts:
-     "️ Exclusive discounts on selected collections",
-   mq_gift:
-     "🎁 Free gift wrapping with every order",
-   mq_handmade:
-     " 100% handmade with natural materials",
-   mq_scents:
-     "🕯️ More than 23 luxury scents available",
-   mq_shipping:
-     "📦 Safe shipping from our workshop to your door",
-   mq_support:
-     "💬 Daily customer support",
-   /* ═══ Products Page ═══ */
-   products_title: "All Products",
-   products_sub: "Discover our full collection of luxury candles",
-   filter_all: "All",
-   filter_wood: "Wooden",
-   filter_glass: "Glass",
-   filter_crystal: "Crystal",
-   filter_metal: "Metal",
-   filter_massage: "Massage",
-   filter_gift: "Gifts",
-   filter_bride: "Bride Box",
-   sort_new: "Newest",
-   sort_asc: "Price: Low to High",
-   sort_desc: "Price: High to Low",
-   sort_rating: "Rating",
-   sort_best: "Best Sellers",
-   sort_disc: "Biggest Discount",
-   no_products_filter: "No products match your filter",
-   view_details: "View Details",
-   add_cart: "Add to Cart",
-   price_lbl: "Price:",
-   scent_lbl: "Scent:",
-   cart_empty: "Cart is empty",
-   cart_empty_sub: "Add your favorite products",
-   /* ═══ Reviews Page ═══ */
-   reviews_page_title: "All Customer Reviews",
-   reviews_page_sub: "See real experiences from VelaLight customers",
-   reviews_verified: "Verified Customer",
-   reviews_customer: "Happy Customer",
-   reviews_share_your: "Share Your Review ✨",
-   reviews_share_sub: "Tried a VelaLight product? Tell us about your experience",
-   /* ═══ Products Page ═══ */
-   prod_word: "products",
-   no_products: "No products found",
-   /* ═══ Craftsmanship (Behind the Scenes) ═══ */
-   craft_kick: "Behind the Scenes",
-   craft_title: "Egyptian Hands.. Details Beyond Limits",
-   craft_desc: "See how we craft every piece with love and precision to deliver it to you in the way that suits you.",
-   craft_loading: "⏳ Loading...",
-   craft_fallback1_title: "Mixing oils with care",
-   craft_fallback1_desc: "We use the finest natural oils to ensure a long-lasting scent",
-   craft_fallback2_title: "Luxury gift wrapping ready",
-   craft_fallback2_desc: "Every piece is wrapped by our hands to make it special",
-   craft_fallback3_title: "Quality inspection for every piece",
-   craft_fallback3_desc: "We ensure quality before it reaches your doorstep",
-   /* ═══ Reviews Enhanced ═══ */
-   rev_see_all: "📸 See All Experiences",
-   rev_stats_label: "Customers Trusted Us",
-   rev_stats_rating: "5-Star Rating",
-   rev_loading: "⏳ Loading experiences...",
-   /* ═══ FAQ & Misc ═══ */
-   faq_kick: "FAQ",
-   faq_sub: "Everything you need to know about ordering, shipping, candles and scents.",
-   foot_designer_label: "Designed & Developed with care by",
-   brand_kick: "The VelaLight Touch",
-   scents_kick: "Signature Scents",
-   prod_kick: "Our Collection",
-   prod_sub: "Discover our latest collection of luxury candles",
-   prod_see_all: "🕯️ Browse All Products",
-   about_kick: "Our Story",
-   ed_kick: "A Moment of Luxury",
-   ed_h2: "Moments Etched in Memory",
-   ed_p: "Every VelaLight candle is more than just a light… it's a complete moment. A moment of calm, a moment of romance, a moment of joy. Create your own memories with our luxury scents.",
-   ed_cta: "Start Your Journey ✨",
-   /* ═══ NEW: Cart Experience ═══ */
-   cart_title: "🛍️ Shopping Cart",
-   cart_items_title: "Your Items",
-   cart_coupon_title: "🎟️ Coupon Code",
-   cart_coupon_placeholder: "Enter coupon code",
-   cart_coupon_apply: "Apply",
-   cart_delivery_title: " Delivery Details",
-   cart_name_ph: "Full Name",
-   cart_phone_ph: "Mobile Number",
-   cart_email_ph: "Email (Optional)",
-   cart_city_ph: "Governorate",
-   cart_address_ph: "Full Address",
-   cart_notes_ph: "Notes (Optional)",
-   cart_payment_title: "💳 Payment Method",
-   cart_payment_desc: "Payment details (InstaPay / Vodafone Cash / Orange Cash / Bank Transfer) will be sent via WhatsApp upon order confirmation. Shipping is paid cash on delivery.",
-   cart_subtotal: "Subtotal",
-   cart_discount: "Discount",
-   cart_total: "Total",
-   cart_free_shipping_progress: "Add {amount} more for FREE shipping! 🚚",
-   cart_free_shipping_earned: "🎉 Congrats! You qualify for FREE shipping",
-   cart_qty_discount: "🎁 Quantity Discount (3+ items)",
-   cart_coupon_discount: "🎟️ Coupon Discount",
-   cart_checkout_btn: "✅ Complete Order via WhatsApp",
-   cart_empty_cart_btn: "🗑️ Empty Cart",
-   cart_confirm_empty: "Are you sure you want to empty the cart?",
-   cart_trust_secure: "Secure Payment",
-   cart_trust_refund: "Refund Guarantee",
-   cart_trust_delivery: "Reliable Delivery",
-   cart_scent_required: "Choose scent",
-   cart_item_total: "Item total:",
-   cart_add_to_cart: "Add to Cart",
-   cart_out_of_stock: "Out of stock",
-   cart_cross_sell_title: "I recommend scented wax fresheners for your closet",
-   cart_cross_sell_btn: "Add to Cart",
- }
-};
-/* ═══ Add only missing keys — never overwrite existing translations ═══ */
-Object.keys(add).forEach(L => {
-if(!I18N[L]) {
-  I18N[L] = {};
-}
-Object.keys(add[L]).forEach(k => {
-  if(
-    I18N[L][k] === undefined ||
-    I18N[L][k] === null ||
-    I18N[L][k] === ""
-  ){
-    I18N[L][k] = add[L][k];
-  }
-});
-});
+  "نساعدك تختار الرائحة والتفاصيل المناسبة.",
+
+       /* ═══ FAQ ═══ */
+      faq1q:
+        "كيف يمكنني الطلب وما طرق الدفع المتاحة؟",
+
+      faq1a:
+        "يمكنك إضافة المنتجات إلى سلة الشراء وإتمام طلبك بسهولة. يتم دفع قيمة المنتجات مقدمًا عبر InstaPay أو Vodafone Cash أو تحويل بنكي، بينما تُدفع تكلفة الشحن نقدًا لمندوب التوصيل عند الاستلام.",
+
+      faq2q:
+        "هل تقومون بالشحن إلى جميع محافظات مصر؟",
+
+      faq2a:
+        "نعم، نوفر خدمة التوصيل إلى جميع محافظات مصر، مع الحرص على وصول طلبك بأمان.",
+
+      faq3q:
+        "كم تستغرق مدة تجهيز وشحن الطلب؟",
+
+      faq3a:
+        "لأن منتجات VelaLight تُصنع يدويًا بعناية، تستغرق مدة التجهيز عادةً من 3 إلى 7 أيام عمل، بالإضافة إلى مدة الشحن حسب المحافظة.",
+
+      faq4q:
+        "هل شموع VelaLight مصنوعة من شمع الصويا؟",
+
+      faq4a:
+        "نعم، نستخدم شمع الصويا الطبيعي 100%، الذي يتميز باحتراق أبطأ وأنظف ويساعد على انتشار العطر بكفاءة.",
+
+      faq5q:
+        "كم تبلغ مدة احتراق الشمعة وكيف أحافظ على أفضل أداء لها؟",
+
+      faq5a:
+        "تختلف مدة الاحتراق حسب وزن وحجم كل شمعة، وستجد التفاصيل في وصف المنتج. ولأفضل نتيجة، عند الاستخدام الأول اترك الشمعة حتى يذوب سطح الشمع بالكامل ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.",
+
+      faq6q:
+        "كيف أختار العطر المناسب؟",
+
+      faq6a:
+        "لدينا تشكيلة متنوعة من العطور الفاخرة. وإذا كنت محتار، تواصل معنا عبر WhatsApp وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلها.",
+
+      faq7q:
+        "هل تتوفر خدمة تغليف الهدايا؟",
+
+      faq7a:
+        "نعم، جميع منتجات VelaLight تأتي بتغليف أنيق وفاخر وجاهز للإهداء.",
+
+      faq8q:
+        "ما سياسة الاستبدال والاسترجاع؟",
+
+      faq8a:
+        "نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب. وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.",
+
+      /* ═══ Top Marquee ═══ */
+      mq_delivery:
+        "🚚 توصيل سريع لكل محافظات مصر",
+
+      mq_discounts:
+        "🏷️ خصومات حصرية على مجموعات مختارة",
+
+      mq_gift:
+        "🎁 تغليف هدايا مجاني مع كل طلب",
+
+      mq_handmade:
+        "🤲 صناعة يدوية 100% بخامات طبيعية",
+
+      mq_scents:
+        "🕯️ أكثر من 23 عطر فاخر متاح",
+
+      mq_shipping:
+        "📦 شحن آمن من الورشة لحد باب بيتك",
+
+      mq_support:
+        "💬 دعم فني يومي لخدمتك",
+
+      /* ═══ Products Page ═══ */
+      products_title: "كل المنتجات",
+      products_sub: "اكتشف تشكيلتنا الكاملة من الشموع الفاخرة",
+      filter_all: "الكل",
+      filter_wood: "خشبية",
+      filter_glass: "زجاجية",
+      filter_crystal: "كريستالية",
+      filter_metal: "معدنية",
+      filter_massage: "مساج",
+      filter_gift: "هدايا",
+      filter_bride: "بوكس العروسة",
+      sort_new: "الأحدث",
+      sort_asc: "السعر: من الأقل",
+      sort_desc: "السعر: من الأعلى",
+      sort_rating: "التقييم",
+      sort_best: "الأكثر مبيعاً",
+      sort_disc: "أكبر خصم",
+      no_products_filter: "لا توجد منتجات تطابق الفلتر المختار",
+      view_details: "عرض التفاصيل",
+      add_cart: "أضف للسلة",
+      price_lbl: "السعر:",
+      scent_lbl: "العطر:",
+      cart_empty: "السلة فارغة",
+      cart_empty_sub: "أضف منتجاتك المفضلة",
+
+      /* ═══ Reviews Page ═══ */
+      reviews_page_title: "كل آراء عملائنا",
+      reviews_page_sub: "شوف تجارب العملاء الحقيقية مع منتجات VelaLight",
+      reviews_verified: "عميل موثّق",
+      reviews_customer: "عميل سعيد",
+      reviews_share_your: "شاركنا رأيك ✨",
+      reviews_share_sub: "جرب منتج من VelaLight؟ اكتبلنا تجربتك",
+
+      /* ═══ Products Page ═══ */
+      prod_word: "منتج",
+      no_products: "لا توجد منتجات",
+
+      /* ═══ Craftsmanship (Behind the Scenes) ═══ */
+      craft_kick: "Behind the Scenes",
+      craft_title: "إيد مصرية.. تفاصيل ملهاش حدود",
+      craft_desc: "شوف ازاي بنصنع كل قطعة بحب ودقة عشان توصلك بالشكل اللي يليق بيك",
+      craft_loading: "⏳ جاري التحميل...",
+      craft_fallback1_title: "نخلط الزيوت بعناية",
+      craft_fallback1_desc: "نستخدم أفضل الزيوت الطبيعية لضمان رائحة تدوم طويلاً",
+      craft_fallback2_title: "تغليف فاخر جاهز للإهداء",
+      craft_fallback2_desc: "كل قطعة بتتغلف بإيدينا عشان تكون مميزة",
+      craft_fallback3_title: "فحص دقيق لكل قطعة",
+      craft_fallback3_desc: "نتأكد من الجودة قبل ما توصل لباب بيتك",
+
+      /* ═══ Reviews Enhanced ═══ */
+      rev_see_all: "📸 شوف كل التجارب",
+      rev_stats_label: "عميل وثق فينا",
+      rev_stats_rating: "تقييم 5 نجوم",
+      rev_loading: "⏳ جاري تحميل التجارب...",
+
+      /* ═══ FAQ & Misc ═══ */
+      faq_kick: "FAQ",
+      faq_sub: "كل ما تحتاج معرفته عن الطلب، الشحن، الشموع والعطور.",
+      foot_designer_label: "صُمم وتطوير بعناية بواسطة",
+      brand_kick: "The VelaLight Touch",
+      scents_kick: "Signature Scents",
+      prod_kick: "Our Collection",
+      prod_sub: "اكتشف أحدث تشكيلتنا من الشموع الفاخرة",
+      prod_see_all: "🕯️ استعرض كل المنتجات",
+      about_kick: "Our Story",
+      ed_kick: "A Moment of Luxury",
+      ed_h2: "لحظاتٌ تُحفر في الذاكرة",
+      ed_p: "كل شمعة من VelaLight ليست مجرد إضاءة… هي لحظة كاملة. لحظة هدوء، لحظة رومانسية، لحظة فرح. اصنع ذكرياتك الخاصة مع عطورنا الفاخرة.",
+      ed_cta: "ابدأ رحلتك ✨",
+
+    },
+
+
+    /* ═══════════════════════════════════════
+       🇬🇧 ENGLISH
+       ═══════════════════════════════════════ */
+    en: {
+/* ═══ Reviews Page (reviews.html) ═══ */
+reviews_back: "← Back to Home",
+reviews_stats_trust: "Trust Renewed",
+reviews_quote: "Not just a candle… it's a moment to live!",
+reviews_quote_author: "— One of our customers",
+reviews_cta_title: "Ready to join the VelaLight family? 🕯️",
+reviews_cta_sub: "Choose your luxury candle and create your own moment",
+reviews_cta_btn: "Shop Now 🛍️",
+foot_wishlist: "❤️ Wishlist",
+foot_orders: "📦 My Orders",
+      
+            /* Shipping & Payment */
+      ship_note:
+        "🚚 Shipping: paid cash to the courier on delivery.",
+
+      pay_products_note:
+        " Payment details (InstaPay / Vodafone Cash / Orange Cash / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
+
+      pay_title:
+        "InstaPay / Vodafone Cash / Orange Cash",
+
+      paymethod_d:
+        "Upfront transfer (InstaPay / Vodafone Cash / Orange Cash), shipping cash on delivery.",
+
+
+      /* Scent */
+      t_scentwarn:
+        "⚠️ Please choose a scent first.",
+
+      quick_add_scent:
+        "🌸 Choose a scent",
+
+      quick_add_qty:
+        "Quantity",
+
+      quick_add_add:
+        "🛍️ Add to Cart",
+
+      quick_add_added:
+        "✓ Added to Cart",
+
+      scent_req:
+        "Required",
+
+
+      /* Handmade */
+      handmade_note:
+        "Handmade piece prepared with care upon order — every candle is unique and special",
+
+      pd_handmade_note:
+        "Handmade piece prepared with care upon order — every candle is unique and special",
+
+
+      /* Product tabs */
+      pd_desc_tab:
+        "📝 Description",
+
+      pd_specs_tab:
+        "📋 Specifications",
+
+      pd_reviews_tab:
+        "⭐ Reviews",
+
+
+      /* Product gallery */
+      pd_zoom:
+        "🔍 Zoom",
+
+      pd_gallery_count:
+        "Images",
+
+
+      /* Product options */
+      pd_scent_t:
+        "🌸 Scent:",
+
+      pd_qty_t:
+        "Quantity:",
+
+      pd_required:
+        "Required",
+
+      pd_decrease:
+        "Decrease quantity",
+
+      pd_increase:
+        "Increase quantity",
+
+      pd_wishlist:
+        "Add to favorites",
+
+
+      /* Product actions */
+      pd_add:
+        "🛍️ Add to Cart",
+
+      pd_buy:
+        "💬 Order via WhatsApp",
+
+
+      /* Product information */
+      pd_hours:
+        "Burn time:",
+
+      pd_materials:
+        "Materials:",
+
+      pd_ship:
+        "Delivery:",
+
+      pd_ship_v:
+        "3–7 days",
+
+
+      /* Reviews */
+      pd_review_word:
+        "reviews",
+
+      pd_read_all:
+        "Read all",
+
+      pd_first_review:
+        "Be the first to review",
+
+
+      /* Related Products */
+      pd_rel_h2:
+        "✨ You May Also Like",
+
+
+      /* Share */
+      pd_share:
+        "Share:",
+
+      pd_copy_link:
+        "📋 Copy Link",
+
+
+      /* Product Not Found */
+      pd_product:
+        "Product",
+
+      pd_not_found_title:
+        "😕 Product Not Available",
+
+      pd_not_found_desc:
+        "Sorry, we couldn't find this product",
+
+      pd_browse_products:
+        "Browse Products",
+
+
+      /* ═══ Homepage Reviews ═══ */
+      reviews_kicker:
+        "💛 Your Words Mean the Most",
+
+      reviews_title:
+        "Our Customers' Reviews",
+
+      reviews_desc:
+        "We don't just write claims — we show the real experience. These are genuine screenshots from our customers after receiving their orders.",
+
+      reviews_cta:
+        "✨ Tried our candles?",
+
+      reviews_cta_link:
+        "Send us your review on WhatsApp",
+
+/* ═══ Brand Promise ═══ */
+brand_promise_title:
+  "Details That Make the Difference",
+
+brand_promise_desc:
+  "Handcrafted candles, carefully selected scents, and thoughtful gifts made for every special moment.",
+
+brand_point1_title:
+  "Handcrafted",
+
+brand_point1_desc:
+  "Every piece is made and prepared with care.",
+
+brand_point2_title:
+  "A Gift for Every Occasion",
+
+brand_point2_desc:
+  "Thoughtful choices for every moment and celebration.",
+
+brand_point3_title:
+  "Made for You",
+
+brand_point3_desc:
+  "We help you choose the right scent and details for your taste.",
+
+      /* ═══ FAQ ═══ */
+      faq1q:
+        "How can I place an order and what payment methods are available?",
+
+      faq1a:
+        "You can add your selected products to the cart and complete your order easily. Product payment is made upfront via InstaPay, Vodafone Cash, or bank transfer, while the shipping fee is paid in cash to the courier upon delivery.",
+
+      faq2q:
+        "Do you ship to all governorates in Egypt?",
+
+      faq2a:
+        "Yes, we deliver safely and reliably to all governorates across Egypt.",
+
+      faq3q:
+        "How long does it take to prepare and ship my order?",
+
+      faq3a:
+        "Because VelaLight products are carefully handmade, preparation usually takes 3 to 7 business days, in addition to the shipping time depending on your governorate.",
+
+      faq4q:
+        "Are VelaLight candles made from soy wax?",
+
+      faq4a:
+        "Yes, we use 100% natural soy wax. It burns more slowly and cleanly and helps the fragrance diffuse effectively.",
+
+      faq5q:
+        "How long does a candle burn, and how can I get the best performance?",
+
+      faq5a:
+        "Burn time varies depending on the candle's weight and size, as detailed in each product description. For the best results, during the first use, allow the wax to melt completely across the surface and reach the edges to prevent tunneling and ensure an even burn.",
+
+      faq6q:
+        "How can I choose the right scent?",
+
+      faq6a:
+        "We offer a variety of luxurious fragrances. If you're unsure which one to choose, contact us via WhatsApp and we'll be happy to help you select the perfect scent based on your taste, occasion, and desired atmosphere.",
+
+      faq7q:
+        "Do you offer gift wrapping?",
+
+      faq7a:
+        "Yes. All VelaLight products come in elegant, luxurious packaging that is ready for gifting.",
+
+      faq8q:
+        "What is your return and exchange policy?",
+
+      faq8a:
+        "Due to the nature of our handmade products, returns or exchanges are not accepted after the product has been opened or used, or due to a change of mind after the order has been confirmed. If your order arrives with a manufacturing defect or shipping damage, please contact us within 24 hours of delivery and we will be happy to resolve the issue.",
+
+      /* ═══ Top Marquee ═══ */
+      
+      mq_delivery:
+        "🚚 Fast delivery across Egypt",
+
+      mq_discounts:
+        "🏷️ Exclusive discounts on selected collections",
+
+      mq_gift:
+        "🎁 Free gift wrapping with every order",
+
+      mq_handmade:
+        "🤲 100% handmade with natural materials",
+
+      mq_scents:
+        "🕯️ More than 23 luxury scents available",
+
+      mq_shipping:
+        "📦 Safe shipping from our workshop to your door",
+
+      mq_support:
+        "💬 Daily customer support",
+
+      /* ═══ Products Page ═══ */
+      products_title: "All Products",
+      products_sub: "Discover our full collection of luxury candles",
+      filter_all: "All",
+      filter_wood: "Wooden",
+      filter_glass: "Glass",
+      filter_crystal: "Crystal",
+      filter_metal: "Metal",
+      filter_massage: "Massage",
+      filter_gift: "Gifts",
+      filter_bride: "Bride Box",
+      sort_new: "Newest",
+      sort_asc: "Price: Low to High",
+      sort_desc: "Price: High to Low",
+      sort_rating: "Rating",
+      sort_best: "Best Sellers",
+      sort_disc: "Biggest Discount",
+      no_products_filter: "No products match your filter",
+      view_details: "View Details",
+      add_cart: "Add to Cart",
+      price_lbl: "Price:",
+      scent_lbl: "Scent:",
+      cart_empty: "Cart is empty",
+      cart_empty_sub: "Add your favorite products",
+
+      /* ═══ Reviews Page ═══ */
+      reviews_page_title: "All Customer Reviews",
+      reviews_page_sub: "See real experiences from VelaLight customers",
+      reviews_verified: "Verified Customer",
+      reviews_customer: "Happy Customer",
+      reviews_share_your: "Share Your Review ✨",
+      reviews_share_sub: "Tried a VelaLight product? Tell us about your experience",
+
+      /* ═══ Products Page ═══ */
+      prod_word: "products",
+      no_products: "No products found",
+
+      /* ═══ Craftsmanship (Behind the Scenes) ═══ */
+      craft_kick: "Behind the Scenes",
+      craft_title: "Egyptian Hands.. Details Beyond Limits",
+      craft_desc: "See how we craft every piece with love and precision to deliver it to you in the way that suits you.",
+      craft_loading: "⏳ Loading...",
+      craft_fallback1_title: "Mixing oils with care",
+      craft_fallback1_desc: "We use the finest natural oils to ensure a long-lasting scent",
+      craft_fallback2_title: "Luxury gift wrapping ready",
+      craft_fallback2_desc: "Every piece is wrapped by our hands to make it special",
+      craft_fallback3_title: "Quality inspection for every piece",
+      craft_fallback3_desc: "We ensure quality before it reaches your doorstep",
+
+      /* ═══ Reviews Enhanced ═══ */
+      rev_see_all: "📸 See All Experiences",
+      rev_stats_label: "Customers Trusted Us",
+      rev_stats_rating: "5-Star Rating",
+      rev_loading: "⏳ Loading experiences...",
+
+      /* ═══ FAQ & Misc ═══ */
+      faq_kick: "FAQ",
+      faq_sub: "Everything you need to know about ordering, shipping, candles and scents.",
+      foot_designer_label: "Designed & Developed with care by",
+      brand_kick: "The VelaLight Touch",
+      scents_kick: "Signature Scents",
+      prod_kick: "Our Collection",
+      prod_sub: "Discover our latest collection of luxury candles",
+      prod_see_all: "🕯️ Browse All Products",
+      about_kick: "Our Story",
+      ed_kick: "A Moment of Luxury",
+      ed_h2: "Moments Etched in Memory",
+      ed_p: "Every VelaLight candle is more than just a light… it's a complete moment. A moment of calm, a moment of romance, a moment of joy. Create your own memories with our luxury scents.",
+      ed_cta: "Start Your Journey ✨",
+
+    }
+
+  };
+
+
+  /* ═══ Add only missing keys — never overwrite existing translations ═══ */
+  Object.keys(add).forEach(L => {
+
+    if(!I18N[L]) {
+      I18N[L] = {};
+    }
+
+    Object.keys(add[L]).forEach(k => {
+
+      if(
+        I18N[L][k] === undefined ||
+        I18N[L][k] === null ||
+        I18N[L][k] === ""
+      ){
+        I18N[L][k] = add[L][k];
+      }
+
+    });
+
+  });
+
 })();
-/* ═══════════════════════════════════════════════════════════
-✨ INIT — الحل الجذري النهائي: منع الوميض وتوحيد البيانات
-═══════════════════════════════════════════════════════════ */
+  /* ═══════════════════════════════════════════════════════════
+   ✨ INIT — الحل الجذري النهائي: منع الوميض وتوحيد البيانات
+   ═══════════════════════════════════════════════════════════ */
 let isFirstRenderComplete = false;
 let pendingDataRefresh = false;
+
 document.addEventListener("DOMContentLoaded", () => {
-initLang();
-initMarquee();
-initEmbers();
-initReveal();
-// تحقق إذا كنا في صفحة المنتجات أو الآراء
-const isProductsPage = window.location.pathname.includes('products.html');
-const isReviewsPage = window.location.pathname.includes('reviews.html');
-const isProductPage = window.location.pathname.includes('product.html');
-// 1. اعرض هيكل التحميل فوراً لمنع ظهور أي بيانات قديمة
-const grid = document.getElementById("pgrid");
-if (grid && !isProductPage) {
-grid.innerHTML = `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.4rem; padding:1rem;"> ${Array(4).fill(`<div class="skel" style="height:380px;border-radius:18px;"></div>`).join('')}</div>`;
-}
-// 2. اطلب البيانات الجديدة من Firebase مباشرة
-loadAll().then(() => {
-// 3. حفظ البيانات الجديدة في الكاش الآن
-try {
-localStorage.setItem("vl_products_v3", JSON.stringify(ALL_PRODUCTS.slice(0, 200)));
-localStorage.setItem("vl_products_v3_time", String(Date.now()));
-} catch(e) {}
-// 4. السماح بالتحديثات اللاحقة
- isFirstRenderComplete = true;
- // 5. الرسم حسب الصفحة
- if (isProductsPage) {
-   // ✅ renderChips بتقرأ التصنيف من URL تلقائياً
-   renderChips();
-   if (typeof renderProductsPage === "function") {
-     renderProductsPage();
-   } else {
-     renderProducts();
-   }
-   // ← شيلنا الـ setTimeout auto-click — مفيش فلاش للمنتجات المثبتة
- } else if (isReviewsPage) {
-   if (typeof renderReviewsPage === "function") {
-     renderReviewsPage();
-   }
- } else if (!isProductPage) {
-   // الصفحة الرئيسية
-   renderChips();
-   renderProducts();
- }
- renderScents();
- renderFAQ();
- initProductRealtimeSync();
- requestIdle(() => prefetchProductPages());
-}).catch(err => {
-console.warn("⚠️ loadAll failed, falling back to cache: ", err);
-// في حالة فشل Firebase فقط، نستخدم الكاش كملاذ أخير
-const hasCache = (typeof loadFromCache === "function") && loadFromCache();
-if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
-isFirstRenderComplete = true;
-if (isProductsPage && typeof renderProductsPage === "function") {
-renderProductsPage();
-} else if (!isProductPage) {
-renderChips();
-renderProducts();
-}
-renderScents();
-renderFAQ();
-} else {
-if (grid && !isProductPage) grid.innerHTML = `<div class="empty">⚠️ تعذر تحميل المنتجات، يرجى التحقق من اتصال الإنترنت</div>`;
-}
+  initLang();
+  initMarquee();
+  initEmbers();
+  initReveal();
+
+  // تحقق إذا كنا في صفحة المنتجات أو الآراء
+  const isProductsPage = window.location.pathname.includes('products.html');
+  const isReviewsPage = window.location.pathname.includes('reviews.html');
+  const isProductPage = window.location.pathname.includes('product.html');
+
+  // 1. اعرض هيكل التحميل فوراً لمنع ظهور أي بيانات قديمة
+  const grid = document.getElementById("pgrid");
+  if (grid && !isProductPage) {
+    grid.innerHTML = `
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.4rem; padding:1rem;">
+        ${Array(4).fill(`<div class="skel" style="height:380px;border-radius:18px;"></div>`).join('')}
+      </div>
+    `;
+  }
+
+  // 2. اطلب البيانات الجديدة من Firebase مباشرة
+  loadAll().then(() => {
+    // 3. حفظ البيانات الجديدة في الكاش الآن
+    try {
+      localStorage.setItem("vl_products_v3", JSON.stringify(ALL_PRODUCTS.slice(0, 200)));
+      localStorage.setItem("vl_products_v3_time", String(Date.now()));
+    } catch(e) {}
+
+    // 4. السماح بالتحديثات اللاحقة
+    isFirstRenderComplete = true;
+
+    // 5. الرسم حسب الصفحة
+    if (isProductsPage) {
+      // ✅ renderChips بتقرأ التصنيف من URL تلقائياً
+      renderChips();
+      
+      if (typeof renderProductsPage === "function") {
+        renderProductsPage();
+      } else {
+        renderProducts();
+      }
+      // ← شيلنا الـ setTimeout auto-click — مفيش فلاش للمنتجات المثبتة
+    } else if (isReviewsPage) {
+     
+      if (typeof renderReviewsPage === "function") {
+        renderReviewsPage();
+      }
+    } else if (!isProductPage) {
+      // الصفحة الرئيسية
+      renderChips();
+      renderProducts();
+    }
+    
+    renderScents();
+    renderFAQ();
+    initProductRealtimeSync();
+    requestIdle(() => prefetchProductPages());
+    
+  }).catch(err => {
+    console.warn("⚠️ loadAll failed, falling back to cache:", err);
+    // في حالة فشل Firebase فقط، نستخدم الكاش كملاذ أخير
+    const hasCache = (typeof loadFromCache === "function") && loadFromCache();
+    if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
+      isFirstRenderComplete = true;
+      if (isProductsPage && typeof renderProductsPage === "function") {
+        renderProductsPage();
+      } else if (!isProductPage) {
+        renderChips();
+        renderProducts();
+      }
+      renderScents();
+      renderFAQ();
+    } else {
+      if (grid && !isProductPage) grid.innerHTML = `<div class="empty">⚠️ تعذر تحميل المنتجات، يرجى التحقق من اتصال الإنترنت</div>`;
+    }
+  });
+
+  initCart();
+  initAccount();
+  initSearch();
+  initChat();
+  initNav();
+  initQuickAdd();
+  initHeroIntro();
+  
+  // تحديث عدد التجارب في قسم الآراء
+  if (typeof window.updateReviewsCount === 'function') {
+    window.updateReviewsCount();
+  }
 });
-initCart();
-initAccount();
-initSearch();
-initChat();
-initNav();
-initQuickAdd();
-initHeroIntro();
-// تحديث عدد التجارب في قسم الآراء
-if (typeof window.updateReviewsCount === 'function') {
-window.updateReviewsCount();
-}
-});
+
 // التعامل مع تحديثات Firebase اللاحقة (Realtime)
 window.addEventListener("data-refresh", () => {
-if (!isFirstRenderComplete) {
-pendingDataRefresh = true; // انتظر حتى ينتهي التحميل الأولي
-return;
-}
-const isProductsPage = window.location.pathname.includes('products.html');
-const isProductPage = window.location.pathname.includes('product.html');
-if (isProductsPage && typeof renderProductsPage === "function") {
-renderProductsPage();
-} else if (!isProductPage) {
-renderProducts();
-}
-});
-function prefetchProductPages(){
-if(!('requestIdleCallback' in window)) return;
-const products = typeof ALL_PRODUCTS !== 'undefined' ? ALL_PRODUCTS.slice(0, 4) : [];
-products.forEach((p, i) => {
-setTimeout(() => {
-const link = document.createElement('link');
-link.rel = 'prefetch';
-link.href = `product.html?p=${p.id}`;
-link.as = 'document';
-document.head.appendChild(link);
-}, i * 500);
-});
-}
-function initHeroIntro(){
-const hero=document.querySelector('.hero-content');
-if(!hero)return;
-requestAnimationFrame(()=>{
-setTimeout(()=>hero.classList.add('hero-intro'),40);
-});
-}
-let productRealtimeStarted=false;
-let productRealtimeUnsubscribe=null;
-function initProductRealtimeSync(){
-if(productRealtimeStarted)return;
-if(typeof DB==="undefined"||typeof DB.watch!=="function")return;
-productRealtimeStarted=true;
-let lastHash = "";
-productRealtimeUnsubscribe=DB.watch("products",cloud=>{
-const hash = JSON.stringify(cloud||[]).length + "-" + (cloud||[]).length;
-if (hash === lastHash) return;
-lastHash = hash;
-const map=new Map(
-  (typeof PRODUCTS!=="undefined"?PRODUCTS:[]).map(p=>[p.id,{...p}])
-);
-(cloud||[]).forEach(d=>{
-  const slug=d.id_||d.slug||d.pid||d.id;
-  if(!slug)return;
-  if(d.active===false){map.delete(slug);return;}
-  map.set(slug,{...(map.get(slug)||{}),...d,id:slug,_fid:d.id||null});
-});
-ALL_PRODUCTS=[...map.values()];
-window.dispatchEvent(new Event("data-refresh"));
-},error=>{
-console.warn("⚠️ Products realtime sync error:",error);
-});
-}
-function initLang(){
-const btn=document.getElementById("langBtn");
-if(!btn)return;
-updateLangBtn();
-btn.addEventListener("click",()=>{
-LANG=LANG==="ar"?"en":"ar";
-try { localStorage.setItem("vl_lang",LANG); } catch(e){}
-document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
-document.documentElement.lang=LANG;
-applyI18n();
-updateHeroCopy();
-updateLangBtn();
-const isProductsPage = window.location.pathname.includes('products.html');
- const isReviewsPage = window.location.pathname.includes('reviews.html');
- if (isProductsPage && typeof renderProductsPage === "function") {
-   renderProductsPage();
- } else if (isReviewsPage && typeof renderReviewsPage === "function") {
-   renderReviewsPage();
- } else {
-   renderChips();
-   renderProducts();
- }
- renderScents();
- renderFAQ();
- fillCitySelect(document.getElementById("accCity"));
- fillCitySelect(document.getElementById("coCity"));
- fillCartForm();
- initChatWelcome();
- toast(t(LANG==="ar"?"t_lang_ar":"t_lang_en"));
-});
-applyI18n();
-updateHeroCopy();
-}
-function updateHeroCopy(){
-const kick=document.querySelector('.hero-kick');
-const title=document.querySelector('.hero-title-main');
-const lead=document.querySelector('.hero-lead');
-const cta=document.querySelector('.hero-cta');
-if(!kick||!title||!lead||!cta)return;
-if(LANG==='en'){
-kick.textContent='✦ Hand-poured luxury candles';
-title.textContent='Light that feels like you.';
-lead.textContent='Candles that glow… illuminating your day with moments you deserve.';
-cta.innerHTML='Discover your collection <span aria-hidden="true">✦</span>';
-}else{
-kick.textContent='✦ شموع يدوية فاخرة';
-title.textContent='ضوءٌ يُشبهك.';
-lead.textContent='شموع تُضيء… لتنير يومك بلحظاتٍ تستحقها.';
-cta.innerHTML='اكتشف مجموعتك <span aria-hidden="true">✦</span>';
-}
-}
-function updateLangBtn(){
-const btn=document.getElementById("langBtn");
-if(btn){btn.textContent=LANG==="ar"?"EN":"ع";}
-}
-function applyI18n(){
-document.title=t("docTitle");
-/* ═══ Normal translations ═══ */
-document.querySelectorAll("[data-i18n]").forEach(el=>{
-const k=el.dataset.i18n;
-const v=t(k);
-if(v&&v!==k){
-el.textContent=v;
-}
-});
-/* ═══ Placeholder translations ═══ */
-document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
-const k=el.dataset.i18nPh;
-const v=t(k);
-if(v&&v!==k){
-el.placeholder=v;
-}
-});
-/* ═══ Title attributes ═══ */
-document.querySelectorAll("[data-i18n-title]").forEach(el=>{
-const k=el.dataset.i18nTitle;
-const v=t(k);
-if(v&&v!==k){
-el.title=v;
-}
-});
-/* ══ Top Marquee ═══ */
-const mq=document.getElementById("mqTrack");
-if(mq){
-const marqueeKeys=[
- "mq_delivery",
- "mq_discounts",
- "mq_gift",
- "mq_handmade",
- "mq_scents",
- "mq_shipping",
- "mq_support"
-];
-mq.innerHTML="";
-for(let i=0;i<2;i++){
-marqueeKeys.forEach(key=>{
-const span=document.createElement("span");
-span.textContent=t(key);
-mq.appendChild(span);
-});
-}
-}
-/* ═══ FAQ ═══ */
-const faqWrap=document.getElementById("faqWrap");
-if(faqWrap&&typeof renderFAQ==="function"){
-renderFAQ();
-}
-}
-function initMarquee(){}
-function initEmbers(){
-const w=document.getElementById("embers");
-if(!w)return;
-w.innerHTML="";
-const frag = document.createDocumentFragment();
-for(let i=0;i<12;i++){
-const s=document.createElement("span");
-s.style.left=Math.random()*100+"%";
-s.style.animationDelay=Math.random()*7+"s";
-s.style.animationDuration=(5+Math.random()*5)+"s";
-frag.appendChild(s);
-}
-w.appendChild(frag);
-}
-function initReveal(){
-if(!('IntersectionObserver' in window)) {
-document.querySelectorAll(".rv").forEach(el => el.classList.add("on"));
-return;
-}
-const io=new IntersectionObserver(es=>{
-es.forEach(e=>{
-if(e.isIntersecting){
-e.target.classList.add("on");
-io.unobserve(e.target);
-}
-});
-},{threshold:.05, rootMargin:"0px 0px 100px 0px"});
-document.querySelectorAll(".rv").forEach(el=>{
-if (el.getBoundingClientRect().top < window.innerHeight + 100) {
-el.classList.add("on");
-} else {
-io.observe(el);
-}
-});
-}
-/* ══════════════════════════════════════════════════════════
-✨ [مُعدّلة] renderChips — بتقرأ التصنيف من URL مباشرة
-بتحدد الشيب النشط من الأول — مفيش فلاش للمنتجات
-═══════════════════════════════════════════════════════════ */
-function renderChips(){
-const w=document.getElementById("chips");
-if(!w)return;
-const isProductsPage = window.location.pathname.includes('products.html');
-if (!isProductsPage) {
-w.style.display="none";
-w.setAttribute("aria-hidden","true");
-} else {
-w.style.display="";
-w.removeAttribute("aria-hidden");
-}
-// ✅ اقرأ التصنيف من URL مباشرة (بدون auto-click بعد كده)
-const urlCat = new URLSearchParams(window.location.search).get('cat');
-const activeValue = (urlCat && urlCat.trim()) ? urlCat.trim() : "all";
-const keys=["all","wood","glass","crystal","metal","massage","gift","bride"];
-const frag = document.createDocumentFragment();
-keys.forEach(k => {
-const btn = document.createElement('button');
-btn.className = 'chip' + (k===activeValue ? " on" : "");
-btn.dataset.cat = k;
-btn.textContent = cat(k);
-btn.addEventListener("click",()=>{
-w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
-btn.classList.add("on");
-  // ✅ حدّث الرابط عشان يفضل على نفس التصنيف لو عمل refresh
-  try {
-    const url = new URL(window.location);
-    if(k === "all") url.searchParams.delete('cat');
-    else url.searchParams.set('cat', k);
-    history.replaceState(null, '', url);
-  } catch(e) {}
+  if (!isFirstRenderComplete) {
+    pendingDataRefresh = true; // انتظر حتى ينتهي التحميل الأولي
+    return;
+  }
+  const isProductsPage = window.location.pathname.includes('products.html');
+  const isProductPage = window.location.pathname.includes('product.html');
+  
   if (isProductsPage && typeof renderProductsPage === "function") {
     renderProductsPage();
-  } else {
+  } else if (!isProductPage) {
     renderProducts();
   }
 });
-frag.appendChild(btn);
-});
-w.innerHTML = '';
-w.appendChild(frag);
+
+function prefetchProductPages(){
+  if(!('requestIdleCallback' in window)) return;
+  const products = typeof ALL_PRODUCTS !== 'undefined' ? ALL_PRODUCTS.slice(0, 4) : [];
+  products.forEach((p, i) => {
+    setTimeout(() => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = `product.html?p=${p.id}`;
+      link.as = 'document';
+      document.head.appendChild(link);
+    }, i * 500);
+  });
 }
+
+function initHeroIntro(){
+  const hero=document.querySelector('.hero-content');
+  if(!hero)return;
+  requestAnimationFrame(()=>{
+    setTimeout(()=>hero.classList.add('hero-intro'),40);
+  });
+}
+
+let productRealtimeStarted=false;
+let productRealtimeUnsubscribe=null;
+
+function initProductRealtimeSync(){
+  if(productRealtimeStarted)return;
+  if(typeof DB==="undefined"||typeof DB.watch!=="function")return;
+  productRealtimeStarted=true;
+  
+  let lastHash = "";
+  
+  productRealtimeUnsubscribe=DB.watch("products",cloud=>{
+    const hash = JSON.stringify(cloud||[]).length + "-" + (cloud||[]).length;
+    if (hash === lastHash) return; 
+    lastHash = hash;
+    
+    const map=new Map(
+      (typeof PRODUCTS!=="undefined"?PRODUCTS:[]).map(p=>[p.id,{...p}])
+    );
+    (cloud||[]).forEach(d=>{
+      const slug=d.id_||d.slug||d.pid||d.id;
+      if(!slug)return;
+      if(d.active===false){map.delete(slug);return;}
+      map.set(slug,{...(map.get(slug)||{}),...d,id:slug,_fid:d.id||null});
+    });
+    ALL_PRODUCTS=[...map.values()];
+    window.dispatchEvent(new Event("data-refresh"));
+  },error=>{
+    console.warn("⚠️ Products realtime sync error:",error);
+  });
+}
+
+function initLang(){
+  const btn=document.getElementById("langBtn");
+  if(!btn)return;
+  updateLangBtn();
+  btn.addEventListener("click",()=>{
+    LANG=LANG==="ar"?"en":"ar";
+    try { localStorage.setItem("vl_lang",LANG); } catch(e){}
+    document.documentElement.dir=LANG==="ar"?"rtl":"ltr";
+    document.documentElement.lang=LANG;
+    applyI18n();
+    updateHeroCopy();
+    updateLangBtn();
+    
+    const isProductsPage = window.location.pathname.includes('products.html');
+    const isReviewsPage = window.location.pathname.includes('reviews.html');
+    
+    if (isProductsPage && typeof renderProductsPage === "function") {
+      renderProductsPage();
+    } else if (isReviewsPage && typeof renderReviewsPage === "function") {
+      renderReviewsPage();
+    } else {
+      renderChips();
+      renderProducts();
+    }
+    renderScents();
+    renderFAQ();
+    fillCitySelect(document.getElementById("accCity"));
+    fillCitySelect(document.getElementById("coCity"));
+    fillCartForm();
+    initChatWelcome();
+    toast(t(LANG==="ar"?"t_lang_ar":"t_lang_en"));
+  });
+  applyI18n();
+  updateHeroCopy();
+}
+
+function updateHeroCopy(){
+  const kick=document.querySelector('.hero-kick');
+  const title=document.querySelector('.hero-title-main');
+  const lead=document.querySelector('.hero-lead');
+  const cta=document.querySelector('.hero-cta');
+  if(!kick||!title||!lead||!cta)return;
+  if(LANG==='en'){
+    kick.textContent='✦ Hand-poured luxury candles';
+    title.textContent='Light that feels like you.';
+    lead.textContent='Candles that glow… illuminating your day with moments you deserve.';
+    cta.innerHTML='Discover your collection <span aria-hidden="true">✦</span>';
+  }else{
+    kick.textContent='✦ شموع يدوية فاخرة';
+    title.textContent='ضوءٌ يُشبهك.';
+    lead.textContent='شموع تُضيء… لتنير يومك بلحظاتٍ تستحقها.';
+    cta.innerHTML='اكتشف مجموعتك <span aria-hidden="true">✦</span>';
+  }
+}
+
+function updateLangBtn(){
+  const btn=document.getElementById("langBtn");
+  if(btn){btn.textContent=LANG==="ar"?"EN":"ع";}
+}
+
+function applyI18n(){
+  document.title=t("docTitle");
+
+  /* ═══ Normal translations ═══ */
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k=el.dataset.i18n;
+    const v=t(k);
+    if(v&&v!==k){
+      el.textContent=v;
+    }
+  });
+
+  /* ═══ Placeholder translations ═══ */
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
+    const k=el.dataset.i18nPh;
+    const v=t(k);
+    if(v&&v!==k){
+      el.placeholder=v;
+    }
+  });
+
+  /* ═══ Title attributes ═══ */
+  document.querySelectorAll("[data-i18n-title]").forEach(el=>{
+    const k=el.dataset.i18nTitle;
+    const v=t(k);
+    if(v&&v!==k){
+      el.title=v;
+    }
+  });
+
+  /* ═══ Top Marquee ═══ */
+  const mq=document.getElementById("mqTrack");
+  if(mq){
+    const marqueeKeys=[
+      "mq_delivery",
+      "mq_discounts",
+      "mq_gift",
+      "mq_handmade",
+      "mq_scents",
+      "mq_shipping",
+      "mq_support"
+    ];
+    mq.innerHTML="";
+    for(let i=0;i<2;i++){
+      marqueeKeys.forEach(key=>{
+        const span=document.createElement("span");
+        span.textContent=t(key);
+        mq.appendChild(span);
+      });
+    }
+  }
+
+  /* ═══ FAQ ═══ */
+  const faqWrap=document.getElementById("faqWrap");
+  if(faqWrap&&typeof renderFAQ==="function"){
+    renderFAQ();
+  }
+}
+
+function initMarquee(){}
+
+function initEmbers(){
+  const w=document.getElementById("embers");
+  if(!w)return;
+  w.innerHTML="";
+  const frag = document.createDocumentFragment();
+  for(let i=0;i<12;i++){
+    const s=document.createElement("span");
+    s.style.left=Math.random()*100+"%";
+    s.style.animationDelay=Math.random()*7+"s";
+    s.style.animationDuration=(5+Math.random()*5)+"s";
+    frag.appendChild(s);
+  }
+  w.appendChild(frag);
+}
+
+function initReveal(){
+  if(!('IntersectionObserver' in window)) {
+    document.querySelectorAll(".rv").forEach(el => el.classList.add("on"));
+    return;
+  }
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add("on");
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:.05, rootMargin:"0px 0px 100px 0px"});
+  
+  document.querySelectorAll(".rv").forEach(el=>{
+    if (el.getBoundingClientRect().top < window.innerHeight + 100) {
+      el.classList.add("on");
+    } else {
+      io.observe(el);
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ [مُعدّلة] renderChips — بتقرأ التصنيف من URL مباشرة
+   بتحدد الشيب النشط من الأول — مفيش فلاش للمنتجات
+   ═══════════════════════════════════════════════════════════ */
+function renderChips(){
+  const w=document.getElementById("chips");
+  if(!w)return;
+  const isProductsPage = window.location.pathname.includes('products.html');
+  
+  if (!isProductsPage) {
+    w.style.display="none";
+    w.setAttribute("aria-hidden","true");
+  } else {
+    w.style.display="";
+    w.removeAttribute("aria-hidden");
+  }
+  
+  // ✅ اقرأ التصنيف من URL مباشرة (بدون auto-click بعد كده)
+  const urlCat = new URLSearchParams(window.location.search).get('cat');
+  const activeValue = (urlCat && urlCat.trim()) ? urlCat.trim() : "all";
+  
+  const keys=["all","wood","glass","crystal","metal","massage","gift","bride"];
+ 
+  const frag = document.createDocumentFragment();
+  keys.forEach(k => {
+    const btn = document.createElement('button');
+    btn.className = 'chip' + (k===activeValue ? " on" : "");
+    btn.dataset.cat = k;
+    btn.textContent = cat(k);
+    btn.addEventListener("click",()=>{
+      w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
+      btn.classList.add("on");
+      
+      // ✅ حدّث الرابط عشان يفضل على نفس التصنيف لو عمل refresh
+      try {
+        const url = new URL(window.location);
+        if(k === "all") url.searchParams.delete('cat');
+        else url.searchParams.set('cat', k);
+        history.replaceState(null, '', url);
+      } catch(e) {}
+      
+      if (isProductsPage && typeof renderProductsPage === "function") {
+        renderProductsPage();
+      } else {
+        renderProducts();
+      }
+    });
+    frag.appendChild(btn);
+  });
+  w.innerHTML = '';
+  w.appendChild(frag);
+}
+
 function activeCat(){
-const c=document.querySelector("#chips .chip.on");
-return c?c.dataset.cat:"all";
+  const c=document.querySelector("#chips .chip.on");
+  return c?c.dataset.cat:"all";
 }
+
 function renderProducts(){
-const grid=document.getElementById("pgrid");
-if(!grid)return;
-const products = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS))
-? ALL_PRODUCTS
-: (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
-const catF=activeCat();
-const min=+(document.getElementById("priceMin")?.value||0);
-const max=+(document.getElementById("priceMax")?.value||0);
-const sort=document.getElementById("sortSel")?.value||"new";
-let list=products.filter(p=>{
-if(!p || !p.id) return false;
-if(catF!=="all"&&p.cat!==catF)return false;
-if(min&&p.price<min)return false;
-if(max&&p.price>max)return false;
-if(p.active===false) return false;
-return true;
-});
-// ✨ منطق الترتيب: التثبيت بيشتغل بس في "all"
-list.sort((a, b) => {
-if (catF === "all") {
-if (a.pinned && !b.pinned) return -1;
-if (!a.pinned && b.pinned) return 1;
-if (a.pinned && b.pinned) {
-return (b.pinnedAt || 0) - (a.pinnedAt || 0);
-}
-}
-switch(sort){
-  case "asc": return (a.price||0) - (b.price||0);
-  case "desc": return (b.price||0) - (a.price||0);
-  case "rating": return ((typeof ratingOf==="function"?ratingOf(b.id)?.avg:0)||0) - ((typeof ratingOf==="function"?ratingOf(a.id)?.avg:0)||0);
-  case "best": return (b.sold||0) - (a.sold||0);
-  case "disc": return ((b.old-b.price)/Math.max(b.old,1)) - ((a.old-a.price)/Math.max(a.old,1));
-  default: return (b.createdAt||0) - (a.createdAt||0);
-}
-});
-const cnt=document.getElementById("prodCount");
-if(cnt){cnt.textContent=list.length+" "+t("prod_word");}
-if(!list.length){
-grid.innerHTML=`<div class="empty">${t("no_products")}</div>`;
-return;
-}
-const readMoreText=LANG==="en"?"Read more →":"عرض المزيد ←";
-const isMobile = window.innerWidth <= 768;
-const eagerCount = isMobile ? 4 : 8;
-const placeholderSvg = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>`;
-const frag = document.createDocumentFragment();
-list.forEach((p, index) => {
-try {
-const r=(typeof ratingOf==="function")?ratingOf(p.id):null;
-  const pinBadge = p.pinned ? `<span class="p-pin-badge"> مميز</span>` : "";
-   const badge = (typeof pbadge === "function") ? pbadge(p) : "";
-   const rawDesc=LANG==="en"?(p.descEn||p.desc||""):(p.desc||p.descEn||"");
-   const productDesc=String(rawDesc).trim();
-   const isFirstBatch = index < eagerCount;
-   const loadingAttr = isFirstBatch ? 'eager' : 'lazy';
-   const fetchPriority = isFirstBatch ? 'high' : 'low';
-   let imgSrc = "";
-   try {
-     imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || "");
-   } catch(e) {
-     imgSrc = placeholderSvg;
-   }
-   if (!imgSrc) imgSrc = placeholderSvg;
-   const inWishlist = isInWishlist(p.id);
-   const stockNum = Number(p.stock);
-   const isOutOfStock = !isNaN(stockNum) && stockNum === 0;
-   const stockBadg = (typeof stockBadge === "function") ? stockBadge(p) : "";
-   const article = document.createElement('article');
-   article.className = 'p-card';
-   article.dataset.id = p.id;
-   const isBrideBox = String(p.id) === "pmt2u7xq749e";
-const brideVideoUrl = "https://velalight.github.io/box.mp4?v=v5";
-const mediaContent = isBrideBox
-? `<video src="${brideVideoUrl}" autoplay muted loop playsinline preload="metadata" poster="${imgSrc}" style="width:100%; height:100%; object-fit:contain; background:#000; display:block; border-radius:inherit;" aria-label="${pname(p)}"></video>`
-: `<img src="${imgSrc}" alt="${pname(p)}" loading="${loadingAttr}" decoding="async" fetchpriority="${fetchPriority}" width="400" height="400" onload="this.classList.add('loaded')" onerror="window.handleImageError(this, '${p.id}')">`;
-article.innerHTML = `<a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">${mediaContent}${p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : ""}${badge ? `<span class="p-badge">${badge}</span>` : ""}${stockBadg}<span class="p-quick">${t("view_details")}</span></a><div class="p-body"><span class="p-cat">${cat(p.cat)}</span><h3><a href="product.html?p=${p.id}">${pname(p)}</a></h3>${r ? `<span class="stars" aria-label="${Math.round(r.avg)} stars">${"★".repeat(Math.round(r.avg))}</span>` : ""}<p class="p-desc">${productDesc}</p>${productDesc.length > 30 ? `<a href="product.html?p=${p.id}" class="p-desc-link">${readMoreText}</a>` : ""}<div class="p-foot"><div class="p-price"><span class="current-price">${money(p.price)}</span>${p.old > p.price ? `<del>${money(p.old)}</del>` : ""}</div><div style="display:flex; gap:6px; width:100%; margin-top:4px;"><button class="p-add" data-id="${p.id}" ${isOutOfStock ? "disabled" : ""} style="flex:1;">${isOutOfStock ? (LANG === "en" ? "Out of stock" : "نفدت الكمية") : t("add_cart")}</button><button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist ? '#fee' : 'var(--bg)'}; border:1px solid ${inWishlist ? '#e74c3c' : 'var(--line)'}; border-radius:10px; cursor:pointer; font-size:1.1rem; transition:.2s; color:${inWishlist ? '#e74c3c' : 'inherit'}; display:flex; align-items:center; justify-content:center; width:42px; height:42px; padding:0; flex-shrink:0;">${inWishlist ? "❤️" : "🤍"}</button></div></div></div>`;      
-frag.appendChild(article);
-} catch(e) {
-console.warn("⚠️ Failed to render product:", p.id, e);
-}
-});
-grid.innerHTML = '';
-grid.appendChild(frag);
-// ✨ Event delegation: اربط مستمع النقر مرة واحدة فقط
-if (!productGridClickBound) {
-grid.addEventListener('click', handleProductGridClick);
-productGridClickBound = true;
-}
-}
- /* ═══ PRODUCTS PAGE — عرض كل المنتجات مع فلترة وترتيب ═══ */
-function renderProductsPage() {
-  const grid = document.getElementById("productsGrid");
-  if (!grid) return;
-  const products = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS))
-    ? ALL_PRODUCTS
+  const grid=document.getElementById("pgrid");
+  if(!grid)return;
+
+  const products = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) 
+    ? ALL_PRODUCTS 
     : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
-  const catF = activeCat();
-  const sort = document.getElementById("sortSelect")?.value || "new";
-  let list = products.filter(p => {
-    if (!p || !p.id) return false;
-    if (catF !== "all" && p.cat !== catF) return false;
-    if (p.active === false) return false;
+
+  const catF=activeCat();
+  const min=+(document.getElementById("priceMin")?.value||0);
+  const max=+(document.getElementById("priceMax")?.value||0);
+  const sort=document.getElementById("sortSel")?.value||"new";
+
+  let list=products.filter(p=>{
+    if(!p || !p.id) return false;
+    if(catF!=="all"&&p.cat!==catF)return false;
+    if(min&&p.price<min)return false;
+    if(max&&p.price>max)return false;
+    if(p.active===false) return false;
     return true;
   });
+
+  // ✨ منطق الترتيب: التثبيت بيشتغل بس في "all"
   list.sort((a, b) => {
     if (catF === "all") {
       if (a.pinned && !b.pinned) return -1;
@@ -1163,48 +1281,251 @@ function renderProductsPage() {
         return (b.pinnedAt || 0) - (a.pinnedAt || 0);
       }
     }
-    switch(sort) {
-      case "asc": return (a.price || 0) - (b.price || 0);
-      case "desc": return (b.price || 0) - (a.price || 0);
-      case "rating": return ((typeof ratingOf === "function" ? ratingOf(b.id)?.avg : 0) || 0) - ((typeof ratingOf === "function" ? ratingOf(a.id)?.avg : 0) || 0);
-      case "best": return (b.sold || 0) - (a.sold || 0);
-      case "disc": return ((b.old - b.price) / Math.max(b.old, 1)) - ((a.old - a.price) / Math.max(a.old, 1));
-      case "new":
-      default: return (b.createdAt || 0) - (a.createdAt || 0);
+    
+    switch(sort){
+      case "asc": return (a.price||0) - (b.price||0);
+      case "desc": return (b.price||0) - (a.price||0);
+      case "rating": return ((typeof ratingOf==="function"?ratingOf(b.id)?.avg:0)||0) - ((typeof ratingOf==="function"?ratingOf(a.id)?.avg:0)||0);
+      case "best": return (b.sold||0) - (a.sold||0);
+      case "disc": return ((b.old-b.price)/Math.max(b.old,1)) - ((a.old-a.price)/Math.max(a.old,1));
+      default: return (b.createdAt||0) - (a.createdAt||0);
     }
   });
+
+  const cnt=document.getElementById("prodCount");
+  if(cnt){cnt.textContent=list.length+" "+t("prod_word");}
+
+  if(!list.length){
+    grid.innerHTML=`<div class="empty">${t("no_products")}</div>`;
+    return;
+  }
+
+  const readMoreText=LANG==="en"?"Read more →":"عرض المزيد ←";
+  const isMobile = window.innerWidth <= 768;
+  const eagerCount = isMobile ? 4 : 8;
+
+  const placeholderSvg = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>`;
+
+  const frag = document.createDocumentFragment();
+  
+  list.forEach((p, index) => {
+    try {
+      const r=(typeof ratingOf==="function")?ratingOf(p.id):null;
+      
+      const pinBadge = p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : "";
+      const badge = (typeof pbadge === "function") ? pbadge(p) : "";
+      
+      const rawDesc=LANG==="en"?(p.descEn||p.desc||""):(p.desc||p.descEn||"");
+      const productDesc=String(rawDesc).trim();
+      
+      const isFirstBatch = index < eagerCount;
+      const loadingAttr = isFirstBatch ? 'eager' : 'lazy';
+      const fetchPriority = isFirstBatch ? 'high' : 'low';
+      
+      let imgSrc = "";
+      try {
+        imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || "");
+      } catch(e) {
+        imgSrc = placeholderSvg;
+      }
+      
+      if (!imgSrc) imgSrc = placeholderSvg;
+      
+      const inWishlist = isInWishlist(p.id);
+      const stockNum = Number(p.stock);
+      const isOutOfStock = !isNaN(stockNum) && stockNum === 0;
+      const stockBadg = (typeof stockBadge === "function") ? stockBadge(p) : "";
+      
+      const article = document.createElement('article');
+      article.className = 'p-card';
+      article.dataset.id = p.id;
+      
+      const isBrideBox = String(p.id) === "pmt2u7xq749e";
+
+const brideVideoUrl = "https://velalight.github.io/box.mp4?v=v5";
+
+const mediaContent = isBrideBox
+  ? `
+    <video
+      src="${brideVideoUrl}"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster="${imgSrc}"
+      style="
+        width:100%;
+        height:100%;
+        object-fit:contain;
+        background:#000;
+        display:block;
+        border-radius:inherit;
+      "
+      aria-label="${pname(p)}"
+    ></video>
+  `
+  : `
+    <img
+      src="${imgSrc}"
+      alt="${pname(p)}"
+      loading="${loadingAttr}"
+      decoding="async"
+      fetchpriority="${fetchPriority}"
+      width="400"
+      height="400"
+      onload="this.classList.add('loaded')"
+      onerror="window.handleImageError(this, '${p.id}')"
+    >
+  `;
+
+   article.innerHTML = `
+     <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
+       ${mediaContent}
+       ${p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : ""}
+       ${badge ? `<span class="p-badge">${badge}</span>` : ""}
+       ${stockBadg}
+       <span class="p-quick">${t("view_details")}</span>
+     </a>
+     <div class="p-body">
+       <span class="p-cat">${cat(p.cat)}</span>
+       <h3><a href="product.html?p=${p.id}">${pname(p)}</a></h3>
+       ${r ? `<span class="stars" aria-label="${Math.round(r.avg)} stars">${"★".repeat(Math.round(r.avg))}</span>` : ""}
+       <p class="p-desc">${productDesc}</p>
+       ${productDesc.length > 30 ? `<a href="product.html?p=${p.id}" class="p-desc-link">${readMoreText}</a>` : ""}
+       <div class="p-foot">
+         <div class="p-price">
+           <span class="current-price">${money(p.price)}</span>
+           ${p.old > p.price ? `<del>${money(p.old)}</del>` : ""}
+         </div>
+         <div style="display:flex; gap:6px; width:100%; margin-top:4px;">
+           <button class="p-add" data-id="${p.id}" ${isOutOfStock ? "disabled" : ""} style="flex:1;">
+             ${isOutOfStock ? (LANG === "en" ? "Out of stock" : "نفدت الكمية") : t("add_cart")}
+           </button>
+           <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist ? '#fee' : 'var(--bg)'}; border:1px solid ${inWishlist ? '#e74c3c' : 'var(--line)'}; border-radius:10px; cursor:pointer; font-size:1.1rem; transition:.2s; color:${inWishlist ? '#e74c3c' : 'inherit'}; display:flex; align-items:center; justify-content:center; width:42px; height:42px; padding:0; flex-shrink:0;">
+             ${inWishlist ? "❤️" : "🤍"}
+           </button>
+         </div>
+       </div>
+     </div>
+   `;      
+      frag.appendChild(article);
+    } catch(e) {
+      console.warn("⚠️ Failed to render product:", p.id, e);
+    }
+  });
+
+  grid.innerHTML = '';
+  grid.appendChild(frag);
+
+  // ✨ Event delegation: اربط مستمع النقر مرة واحدة فقط
+  if (!productGridClickBound) {
+    grid.addEventListener('click', handleProductGridClick);
+    productGridClickBound = true;
+  }
+}
+
+ /* ═══ PRODUCTS PAGE — عرض كل المنتجات مع فلترة وترتيب ═══ */
+function renderProductsPage() {
+  const grid = document.getElementById("productsGrid");
+  if (!grid) return;
+
+  const products = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) 
+    ? ALL_PRODUCTS 
+    : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
+
+  const catF = activeCat();
+  const sort = document.getElementById("sortSelect")?.value || "new";
+
+  let list = products.filter(p => {
+    if (!p || !p.id) return false;
+    if (catF !== "all" && p.cat !== catF) return false;
+    if (p.active === false) return false;
+    return true;
+  });
+
+  // ⚠️ ترتيب المنتجات — التثبيت بيشتغل بس في "all"
+  list.sort((a, b) => {
+    if (catF === "all") {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      if (a.pinned && b.pinned) {
+        return (b.pinnedAt || 0) - (a.pinnedAt || 0);
+      }
+    }
+    
+    switch(sort) {
+      case "asc":
+        return (a.price || 0) - (b.price || 0);
+      case "desc":
+        return (b.price || 0) - (a.price || 0);
+      case "rating":
+        return ((typeof ratingOf === "function" ? ratingOf(b.id)?.avg : 0) || 0) - ((typeof ratingOf === "function" ? ratingOf(a.id)?.avg : 0) || 0);
+      case "best":
+        return (b.sold || 0) - (a.sold || 0);
+      case "disc":
+        return ((b.old - b.price) / Math.max(b.old, 1)) - ((a.old - a.price) / Math.max(a.old, 1));
+      case "new":
+      default:
+        return (b.createdAt || 0) - (a.createdAt || 0);
+    }
+  });
+
   const countEl = document.getElementById("productsCount");
   if (countEl) countEl.textContent = list.length + " " + t("prod_word");
+
   if (!list.length) {
     grid.innerHTML = `<div class="empty" style="padding:3rem 0;">${t("no_products_filter")}</div>`;
     return;
   }
+
   const isMobile = window.innerWidth <= 768;
   const eagerCount = isMobile ? 4 : 8;
   const placeholderSvg = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>`;
+
   const frag = document.createDocumentFragment();
+
   list.forEach((p, index) => {
     try {
       const r = (typeof ratingOf === "function") ? ratingOf(p.id) : null;
       const badge = (typeof pbadge === "function") ? pbadge(p) : "";
       const rawDesc = LANG === "en" ? (p.descEn || p.desc || "") : (p.desc || p.descEn || "");
       const productDesc = String(rawDesc).trim();
+      
       const isFirstBatch = index < eagerCount;
       const loadingAttr = isFirstBatch ? 'eager' : 'lazy';
       const fetchPriority = isFirstBatch ? 'high' : 'low';
+      
       let imgSrc = "";
-      try { imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || ""); } catch(e) { imgSrc = placeholderSvg; }
+      try {
+        imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || "");
+      } catch(e) {
+        imgSrc = placeholderSvg;
+      }
       if (!imgSrc) imgSrc = placeholderSvg;
+
       const inWishlist = isInWishlist(p.id);
       const stockNum = Number(p.stock);
       const isOutOfStock = !isNaN(stockNum) && stockNum === 0;
       const stockBadg = (typeof stockBadge === "function") ? stockBadge(p) : "";
+
       const article = document.createElement('article');
       article.className = 'p-card';
       article.dataset.id = p.id;
+
       article.innerHTML = `
         <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
-          <img src="${imgSrc}" alt="${pname(p)}" loading="${loadingAttr}" decoding="async" fetchpriority="${fetchPriority}" width="400" height="400" onload="this.classList.add('loaded')" onerror="window.handleImageError(this, '${p.id}')">
+          <img
+            src="${imgSrc}"
+            alt="${pname(p)}"
+            loading="${loadingAttr}"
+            decoding="async"
+            fetchpriority="${fetchPriority}"
+            width="400"
+            height="400"
+            onload="this.classList.add('loaded')"
+            onerror="window.handleImageError(this, '${p.id}')"
+          >
           ${p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : ""}
           ${badge ? `<span class="p-badge">${badge}</span>` : ""}
           ${stockBadg}
@@ -1236,8 +1557,11 @@ function renderProductsPage() {
       console.warn("⚠️ Failed to render product:", p.id, e);
     }
   });
+
   grid.innerHTML = '';
   grid.appendChild(frag);
+
+  // Event delegation
   if (!productGridClickBound) {
     grid.addEventListener('click', handleProductGridClick);
     productGridClickBound = true;
@@ -1248,7 +1572,10 @@ function renderProductsPage() {
 function renderReviewsPage() {
   const grid = document.getElementById("reviewsGrid");
   if (!grid) return;
+
+  // استخدام REVIEWS_IMAGES أو بيانات من Firebase
   let reviews = [];
+  
   if (typeof REVIEWS_IMAGES !== "undefined" && Array.isArray(REVIEWS_IMAGES)) {
     reviews = REVIEWS_IMAGES.map((name, index) => ({
       id: index,
@@ -1259,6 +1586,8 @@ function renderReviewsPage() {
       text: LANG === "en" ? "Amazing candles! Highly recommend." : "شموع رائعة! أنصح بها بشدة."
     }));
   }
+
+  // إذا كانت هناك مراجعات من Firebase، ندمجها
   if (typeof ALL_REVIEWS !== "undefined" && Array.isArray(ALL_REVIEWS) && ALL_REVIEWS.length > 0) {
     const fbReviews = ALL_REVIEWS.map(r => ({
       id: r.id || Date.now() + Math.random(),
@@ -1270,16 +1599,37 @@ function renderReviewsPage() {
     }));
     reviews = [...fbReviews, ...reviews];
   }
+
   if (!reviews.length) {
-    grid.innerHTML = `<div class="empty" style="padding:3rem 0;"><div style="font-size:3rem;margin-bottom:1rem;">💛</div><p style="color:var(--mut);">${LANG === "en" ? "No reviews yet. Be the first!" : "لسة مفيش مراجعات. كن أول من يشارك رأيه!"}</p></div>`;
+    grid.innerHTML = `
+      <div class="empty" style="padding:3rem 0;">
+        <div style="font-size:3rem;margin-bottom:1rem;">💛</div>
+        <p style="color:var(--mut);">${LANG === "en" ? "No reviews yet. Be the first!" : "لسة مفيش مراجعات. كن أول من يشارك رأيه!"}</p>
+      </div>
+    `;
     return;
   }
+
   const frag = document.createDocumentFragment();
+
   reviews.forEach((r) => {
     const card = document.createElement('article');
     card.className = 'vl-review-card-full';
-    card.style.cssText = `background:var(--panel); border:1px solid var(--line); border-radius:18px; overflow:hidden; padding:1.5rem; display:flex; gap:1.5rem; align-items:center; transition:.3s; margin-bottom:1.2rem;`;
+    card.style.cssText = `
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      padding:1.5rem;
+      display:flex;
+      gap:1.5rem;
+      align-items:center;
+      transition:.3s;
+      margin-bottom:1.2rem;
+    `;
+
     const imgSrc = r.image ? (typeof CDN === "function" ? CDN("testimonials/" + r.image) : "https://velalight.github.io/testimonials/" + r.image) : null;
+
     card.innerHTML = `
       ${imgSrc ? `
         <div style="flex:0 0 120px; border-radius:12px; overflow:hidden; border:1px solid var(--line);">
@@ -1301,6 +1651,7 @@ function renderReviewsPage() {
     `;
     frag.appendChild(card);
   });
+
   grid.innerHTML = '';
   grid.appendChild(frag);
 }
@@ -1314,10 +1665,11 @@ function handleProductGridClick(e){
     const pId = shareBtn.dataset.id;
     const pName = shareBtn.dataset.name;
     const shareUrl = `${window.location.origin}/product.html?p=${pId}`;
+    
     if (navigator.share) {
       navigator.share({
         title: `VelaLight - ${pName}`,
-        text: `شوف الشمعة الفاخرة دي من VelaLight ️✨`,
+        text: `شوف الشمعة الفاخرة دي من VelaLight 🕯️✨`,
         url: shareUrl
       }).catch(err => console.log('Share canceled'));
     } else {
@@ -1327,6 +1679,7 @@ function handleProductGridClick(e){
     }
     return;
   }
+
   const wishBtn = e.target.closest('.p-wish');
   if (wishBtn) {
     e.preventDefault();
@@ -1335,10 +1688,13 @@ function handleProductGridClick(e){
     if (pid) toggleWishlist(pid);
     return;
   }
+  
   const addBtn = e.target.closest('.p-add');
   if(!addBtn) return;
+  
   e.preventDefault();
   e.stopPropagation();
+  
   const id = addBtn.dataset.id;
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   const p = products.find(x => x.id === id);
@@ -1354,10 +1710,12 @@ function initQuickAdd() {
   const closeBtn = document.getElementById("closeScent");
   const overlay = document.getElementById("scentOv");
   const addBtn = document.getElementById("scentModalAdd");
+
   closeBtn?.addEventListener("click", () => closeModal("scentOv"));
   overlay?.addEventListener("click", e => {
     if (e.target.id === "scentOv") closeModal("scentOv");
   });
+
   overlay?.addEventListener("click", (e) => {
     if (e.target.id === "smQMinus") {
       if (quickAddQty > 1) {
@@ -1373,28 +1731,35 @@ function initQuickAdd() {
       }
     }
   });
+
   overlay?.addEventListener("change", (e) => {
     if (e.target.id === "modalScentSelect") {
       quickAddScent = e.target.value;
     }
   });
+
   addBtn?.addEventListener("click", () => {
     if (!quickAddProduct) return;
+
     const modalSelect = document.getElementById("modalScentSelect");
     const currentScent = modalSelect ? modalSelect.value : quickAddScent;
     const currentQty = parseInt(document.getElementById("smQVal")?.textContent || "1", 10) || 1;
+
     if (!currentScent) {
       toast("⚠️ من فضلك اختر العطر أولاً");
       if (modalSelect) modalSelect.focus();
       return;
     }
+
     const added = addToCart(quickAddProduct, {
       scent: currentScent,
       qty: currentQty
     });
+
     if (added) {
       const originalText = addBtn.textContent;
       addBtn.textContent = "✓ تمت الإضافة";
+
       setTimeout(() => {
         addBtn.textContent = originalText || "🛍️ أضف للسلة";
         closeModal("scentOv");
@@ -1409,8 +1774,10 @@ function initQuickAdd() {
 function updateQuickAddQtyUI() {
   const qv = document.getElementById("smQVal");
   if (qv) qv.textContent = quickAddQty;
+
   const minus = document.getElementById("smQMinus");
   const plus = document.getElementById("smQPlus");
+
   if (minus) {
     minus.style.opacity = quickAddQty <= 1 ? "0.4" : "1";
     minus.style.pointerEvents = quickAddQty <= 1 ? "none" : "auto";
@@ -1423,30 +1790,38 @@ function updateQuickAddQtyUI() {
 
 function openQuickAdd(p) {
   if (!p) return;
+
   quickAddProduct = p;
   quickAddScent = "";
   quickAddQty = 1;
+
   const stockNum = Number(p.stock);
   quickAddMaxStock = Number.isFinite(stockNum) && stockNum > 0 ? Math.floor(stockNum) : 99;
+
   const title = document.getElementById("scentModalTitle");
   if (title) {
     title.textContent = pname(p);
     title.setAttribute("aria-label", pname(p));
   }
+
   const addBtn = document.getElementById("scentModalAdd");
   if (addBtn) {
     addBtn.disabled = false;
     addBtn.textContent = t("quick_add_add") || "️ أضف للسلة";
   }
+
   const w = document.getElementById("scentModalScents");
   if (!w) return;
+
   let imgSrc = "";
   try { imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || ""); } catch (e) { imgSrc = p.img || ""; }
   if (!imgSrc) {
     imgSrc = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><rect fill='%23f5efe5' width='120' height='120'/><text x='60' y='60' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='18' fill='%23d9ab5f'>✦</text></svg>";
   }
+
   const safeName = pname(p);
   const priceText = money(p.price);
+
   w.innerHTML = `
     <div class="vl-quick-preview" style="display:flex;align-items:center;gap:.9rem;margin-bottom:1rem;padding:.65rem;border:1px solid var(--line);border-radius:14px;background:var(--bg);">
       <img src="${imgSrc}" alt="${safeName}" width="72" height="72" loading="eager" decoding="async" style="width:72px;height:72px;object-fit:cover;border-radius:11px;flex:0 0 72px;" onerror="this.style.display='none'">
@@ -1456,11 +1831,13 @@ function openQuickAdd(p) {
         ${quickAddMaxStock < 99 ? `<small style="display:block;margin-top:.2rem;color:var(--mut);">${LANG === "en" ? `${quickAddMaxStock} available` : `متاح ${quickAddMaxStock} فقط`}</small>` : ""}
       </div>
     </div>
+
     <label for="modalScentSelect" style="display:block;font-weight:700;margin-bottom:.45rem;">${t("quick_add_scent")}</label>
     <select id="modalScentSelect" aria-required="true" style="width:100%;padding:.85rem;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--dark);font-family:inherit;font-size:1rem;cursor:pointer;outline:none;">
       <option value="">${LANG === "en" ? "Choose a scent..." : "اختر العطر..."}</option>
       ${VELA_SCENTS.map(s => `<option value="${s[0]}">${velaScentTr(s[0])}</option>`).join('')}
     </select>
+
     <div style="display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:1rem;">
       <span style="font-weight:700;">${t("quick_add_qty")}</span>
       <div style="display:flex;align-items:center;gap:.65rem;border:1px solid var(--line);border-radius:11px;padding:.25rem;background:var(--bg);">
@@ -1470,8 +1847,10 @@ function openQuickAdd(p) {
       </div>
     </div>
   `;
+
   updateQuickAddQtyUI();
   openDrawer("scentOv");
+
   setTimeout(() => {
     const newSelect = document.getElementById("modalScentSelect");
     if (newSelect) newSelect.focus();
@@ -1479,6 +1858,7 @@ function openQuickAdd(p) {
 }
 
 const debouncedRenderProducts = debounce(renderProducts, 250);
+
 document.addEventListener("change",e=>{
   if(e.target.id==="priceMin"||e.target.id==="priceMax"||e.target.id==="sortSel"){
     const isProductsPage = window.location.pathname.includes('products.html');
@@ -1502,7 +1882,13 @@ function renderScents(){
   VELA_SCENTS.forEach((s, i) => {
     const div = document.createElement('div');
     div.className = 'scent';
-    div.innerHTML = `<i>${i+1}</i><div><b>${LANG==="en"?s[1]:s[0]}</b><small>${LANG==="en"?s[0]:s[1]}</small></div>`;
+    div.innerHTML = `
+      <i>${i+1}</i>
+      <div>
+        <b>${LANG==="en"?s[1]:s[0]}</b>
+        <small>${LANG==="en"?s[0]:s[1]}</small>
+      </div>
+    `;
     frag.appendChild(div);
   });
   w.innerHTML = '';
@@ -1512,6 +1898,7 @@ function renderScents(){
 function renderFAQ(){
   const w = document.getElementById("faqWrap");
   if(!w) return;
+
   const items = [
     [t("faq1q"), t("faq1a")],
     [t("faq2q"), t("faq2a")],
@@ -1522,217 +1909,676 @@ function renderFAQ(){
     [t("faq7q"), t("faq7a")],
     [t("faq8q"), t("faq8a")]
   ];
+
   const frag = document.createDocumentFragment();
+
   items.forEach(([question, answer]) => {
     const item = document.createElement("div");
     item.className = "faq-item";
+
     item.innerHTML = `
-      <button class="faq-q" type="button" aria-expanded="false">
+      <button
+        class="faq-q"
+        type="button"
+        aria-expanded="false"
+      >
         <span>${question}</span>
         <span class="faq-icon" aria-hidden="true">+</span>
       </button>
+
       <div class="faq-a">
         <div>${answer}</div>
       </div>
     `;
+
     frag.appendChild(item);
   });
+
   w.innerHTML = "";
   w.appendChild(frag);
+
   w.querySelectorAll(".faq-item").forEach(item => {
     const button = item.querySelector(".faq-q");
     const answer = item.querySelector(".faq-a");
+
     if(!button || !answer) return;
+
     button.addEventListener("click", () => {
       const wasOpen = item.classList.contains("open");
+
       w.querySelectorAll(".faq-item").forEach(other => {
         other.classList.remove("open");
+
         const otherAnswer = other.querySelector(".faq-a");
         const otherButton = other.querySelector(".faq-q");
-        if(otherAnswer){ otherAnswer.style.maxHeight = null; }
+
+        if(otherAnswer){
+          otherAnswer.style.maxHeight = null;
+        }
+
         if(otherButton){
           otherButton.setAttribute("aria-expanded", "false");
+
           const otherIcon = otherButton.querySelector(".faq-icon");
-          if(otherIcon){ otherIcon.textContent = "+"; }
+          if(otherIcon){
+            otherIcon.textContent = "+";
+          }
         }
       });
+
       if(!wasOpen){
         item.classList.add("open");
         answer.style.maxHeight = answer.scrollHeight + "px";
         button.setAttribute("aria-expanded", "true");
+
         const icon = button.querySelector(".faq-icon");
-        if(icon){ icon.textContent = "−"; }
+        if(icon){
+          icon.textContent = "−";
+        }
       }
     });
   });
 }
- /* ═══════════════════════════════════════════════════════════
-   ✨ [NEW] CART EXPERIENCE — رحلة واحدة، ضغطة واحدة، زر ثابت
+
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ Premium Cart UI helpers
+   UI-only layer: no Firebase/database contract changes.
    ═══════════════════════════════════════════════════════════ */
+function setupPremiumCartUI(){
+  const drawer=document.getElementById("cartDrawer");
+  if(!drawer || drawer.dataset.vlPremiumReady) return;
+  drawer.dataset.vlPremiumReady="1";
+
+  const style=document.createElement("style");
+  style.id="vlPremiumCartStyles";
+  style.textContent=`
+    #cartDrawer.vl-premium-cart{
+      display:flex;
+      flex-direction:column;
+      max-height:100dvh;
+      height:min(100dvh,900px);
+      overflow:hidden;
+    }
+    #cartDrawer.vl-premium-cart .dhead{
+      position:relative;
+      z-index:4;
+      flex:0 0 auto;
+      min-height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:.75rem;
+      border-bottom:1px solid var(--line,#eadfd1);
+      background:rgba(255,255,255,.96);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+    }
+    #cartDrawer.vl-premium-cart .dbody{
+      flex:1 1 auto!important;
+      min-height:0!important;
+      overflow-y:auto!important;
+      overflow-x:hidden!important;
+      overscroll-behavior:contain;
+      -webkit-overflow-scrolling:touch;
+      padding:0!important;
+      scrollbar-width:thin;
+    }
+    #cartDrawer.vl-premium-cart .dfoot{
+      flex:0 0 auto!important;
+      position:relative!important;
+      inset:auto!important;
+      z-index:5;
+      padding:.8rem .9rem calc(.8rem + env(safe-area-inset-bottom))!important;
+      border-top:1px solid var(--line,#eadfd1)!important;
+      background:rgba(255,255,255,.98)!important;
+      box-shadow:0 -10px 28px rgba(45,31,20,.08)!important;
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+    }
+    #cartDrawer.vl-premium-cart .dfoot .trow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:.8rem;
+      margin:.15rem 0;
+      font-size:.86rem;
+    }
+    #cartDrawer.vl-premium-cart .dfoot .trow.total{
+      margin:.15rem 0 .55rem;
+      font-size:1.05rem;
+      font-weight:800;
+    }
+    #cartDrawer.vl-premium-cart #checkoutBtn{
+      width:100%!important;
+      min-height:50px!important;
+      border-radius:14px!important;
+      font-weight:800!important;
+      font-size:.98rem!important;
+      letter-spacing:.01em;
+      box-shadow:0 8px 18px rgba(118,83,35,.14);
+    }
+    #cartDrawer.vl-premium-cart #emptyCartBtn{
+      width:100%!important;
+      min-height:34px!important;
+      margin-top:.35rem!important;
+      background:transparent!important;
+      border:0!important;
+      color:var(--mut,#867b70)!important;
+      font-size:.8rem!important;
+    }
+    #cartDrawer.vl-premium-cart #trustBadges{display:none!important}
+    #cartDrawer.vl-premium-cart .vl-cart-empty-state{
+      padding:4.2rem 1.25rem;
+      text-align:center;
+      color:var(--mut,#867b70);
+    }
+    #cartDrawer.vl-premium-cart .vl-cart-empty-icon{font-size:2.6rem;opacity:.55;margin-bottom:.65rem}
+    #cartDrawer.vl-premium-cart .vl-cart-empty-title{font-size:1.05rem;font-weight:800;color:var(--dark,#2c241e);margin-bottom:.3rem}
+    #cartDrawer.vl-premium-cart .vl-cart-empty-sub{font-size:.86rem}
+    #cartDrawer.vl-premium-cart #cartItems{
+      padding:.25rem .9rem 1rem;
+    }
+    #cartDrawer.vl-premium-cart .vl-cart-item{
+      position:relative;
+      display:grid;
+      grid-template-columns:70px minmax(0,1fr);
+      gap:.75rem;
+      padding:.8rem 0;
+      border-bottom:1px solid rgba(117,96,75,.12);
+    }
+    #cartDrawer.vl-premium-cart .vl-cart-item:last-child{border-bottom:0}
+    #cartDrawer.vl-premium-cart .vl-cart-item-media{
+      width:70px;height:70px;border-radius:14px;overflow:hidden;
+      background:#f7f1e9;display:flex;align-items:center;justify-content:center;
+    }
+    #cartDrawer.vl-premium-cart .vl-cart-item-media img{width:100%;height:100%;object-fit:cover;display:block}
+    #cartDrawer.vl-premium-cart .vl-cart-item-info{min-width:0}
+    #cartDrawer.vl-premium-cart .vl-cart-item-topline{display:flex;align-items:flex-start;gap:.5rem;justify-content:space-between}
+    #cartDrawer.vl-premium-cart .vl-cart-item-topline h5{margin:0;font-size:.92rem;line-height:1.35;color:var(--dark,#2c241e);font-weight:800}
+    #cartDrawer.vl-premium-cart .vl-cart-remove{
+      width:28px;height:28px;flex:0 0 28px;border:1px solid rgba(117,96,75,.16);
+      background:#fff;border-radius:9px;color:var(--mut,#867b70);font-size:1.1rem;line-height:1;cursor:pointer;
+    }
+    #cartDrawer.vl-premium-cart .vl-cart-meta-row{
+      display:flex;align-items:center;justify-content:space-between;gap:.55rem;margin-top:.42rem;
+    }
+    #cartDrawer.vl-premium-cart .vl-cart-scent-picker{display:flex;align-items:center;gap:.42rem;min-width:0;flex:1}
+    #cartDrawer.vl-premium-cart .cart-scent-label{font-size:.72rem;color:var(--mut,#867b70);white-space:nowrap}
+    #cartDrawer.vl-premium-cart .cart-scent-select{
+      min-width:0;max-width:100%;height:34px;padding:0 28px 0 .62rem;border-radius:10px;
+      border:1px solid rgba(117,96,75,.18);background:#fff;font:inherit;font-size:.78rem;outline:none;
+    }
+    #cartDrawer.vl-premium-cart .vl-cart-scent-picker.missing .cart-scent-select{border-color:rgba(184,130,48,.65);box-shadow:0 0 0 3px rgba(184,130,48,.08)}
+    #cartDrawer.vl-premium-cart .vl-cart-unit-price{font-size:.78rem;color:var(--dark,#2c241e);font-weight:700;white-space:nowrap}
+    #cartDrawer.vl-premium-cart .vl-cart-item-bottom{display:flex;align-items:center;justify-content:space-between;gap:.7rem;margin-top:.58rem}
+    #cartDrawer.vl-premium-cart .vl-cart-qty{display:inline-flex;align-items:center;gap:0;border:1px solid rgba(117,96,75,.16);border-radius:10px;overflow:hidden;background:#fff}
+    #cartDrawer.vl-premium-cart .vl-cart-qty button{width:30px;height:30px;padding:0;border:0;background:transparent;cursor:pointer;font-size:1rem;color:var(--dark,#2c241e)}
+    #cartDrawer.vl-premium-cart .vl-cart-qty b{min-width:28px;text-align:center;font-size:.8rem}
+    #cartDrawer.vl-premium-cart .vl-cart-line-total{display:flex;align-items:baseline;gap:.35rem;font-size:.72rem;color:var(--mut,#867b70)}
+    #cartDrawer.vl-premium-cart .vl-cart-line-total strong{font-size:.88rem;color:var(--dark,#2c241e)}
+    #cartDrawer.vl-premium-cart .vl-cart-scent-hint{margin-top:.35rem;font-size:.68rem;color:#9b6b1a}
+    #cartDrawer.vl-premium-cart .vl-cart-scent-hint.is-hidden{display:none}
+    #cartDrawer.vl-premium-cart .vl-free-ship-copy{font-size:.72rem;color:var(--mut,#867b70);margin-bottom:.35rem}
+    #cartDrawer.vl-premium-cart .vl-free-ship-bar{height:5px;border-radius:99px;background:#eee7dd;overflow:hidden}
+    #cartDrawer.vl-premium-cart .vl-free-ship-bar span{display:block;height:100%;background:linear-gradient(90deg,var(--c-gold,#cda35e),#efd08e);border-radius:99px}
+    #cartDrawer.vl-premium-cart .vl-free-ship-success{font-size:.74rem;color:#2f7d4f;font-weight:800}
+    #cartDrawer.vl-premium-cart .vl-discount-active{color:var(--ok,#2f7d4f)}
+    #cartDrawer.vl-premium-cart .cart-shipping-note{font-size:.7rem;line-height:1.5;margin-top:.25rem}
+
+    @media(max-width:640px){
+      #cartDrawer.vl-premium-cart{width:min(100vw,460px)!important;height:100dvh!important;max-height:100dvh!important}
+      #cartDrawer.vl-premium-cart .dhead{min-height:58px}
+      #cartDrawer.vl-premium-cart #cartItems{padding-inline:.8rem}
+      #cartDrawer.vl-premium-cart .vl-cart-item{grid-template-columns:62px minmax(0,1fr);gap:.65rem;padding:.72rem 0}
+      #cartDrawer.vl-premium-cart .vl-cart-item-media{width:62px;height:62px;border-radius:12px}
+      #cartDrawer.vl-premium-cart .dfoot{padding:.72rem .8rem calc(.72rem + env(safe-area-inset-bottom))!important}
+      #cartDrawer.vl-premium-cart #checkoutBtn{min-height:48px!important}
+      #cartDrawer.vl-premium-cart .cart-scent-select{height:33px;font-size:.76rem}
+    }
+  `;
+  document.head.appendChild(style);
+
+  drawer.querySelectorAll('.dhead,.dfoot').forEach(el=>el.classList.add('vl-cart-chrome'));
+
+  // Keep the existing coupon/form/payment markup intact, but ensure it participates
+  // in the same scroll container as the product list when the drawer HTML supports it.
+  const body=drawer.querySelector('.dbody');
+  if(body){
+    body.querySelectorAll('.cart-suggest,.cross-sell-box').forEach(el=>el.remove());
+  }
+
+  // Remove legacy dynamically-generated trust copy; the primary action should stay clean.
+  const trust=document.getElementById('trustBadges');
+  if(trust) trust.remove();
+
+  // Build a compact section marker above the form once.
+  if(body && !body.querySelector('#vlCartCheckoutDivider')){
+    const marker=document.createElement('div');
+    marker.id='vlCartCheckoutDivider';
+    marker.setAttribute('aria-hidden','true');
+    marker.innerHTML='<span></span>';
+    marker.style.cssText='height:1px;background:rgba(117,96,75,.12);margin:0 .9rem;';
+    const firstFormField=document.getElementById('coName');
+    if(firstFormField){
+      const parent=firstFormField.closest('.field,.form-group,.input-group,.checkout-form')||firstFormField.parentElement;
+      if(parent && parent.parentNode===body) body.insertBefore(marker,parent);
+    }
+  }
+
+  // Give the checkout form a consistent visual group without changing field IDs.
+  ['coName','coPhone','coEmail','coCity','coAddr','coNotes','couponInput','applyCouponBtn'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.add('vl-cart-field-control');
+  });
+
+  const checkoutBtn=document.getElementById('checkoutBtn');
+  if(checkoutBtn){
+    checkoutBtn.innerHTML=LANG==='en'?'Complete order via WhatsApp':'إتمام الطلب عبر واتساب';
+    checkoutBtn.setAttribute('aria-label',checkoutBtn.textContent.trim());
+  }
+
+  const foot=drawer.querySelector('.dfoot');
+  if(foot && !document.getElementById('vlCartFooterMeta')){
+    const meta=document.createElement('div');
+    meta.id='vlCartFooterMeta';
+    meta.innerHTML=`<div class="vl-cart-footer-total-line"><span id="vlCartFooterItems"></span><strong id="vlCartFooterTotal"></strong></div>`;
+    meta.style.cssText='display:none';
+    foot.insertBefore(meta,foot.firstChild);
+  }
+}
+
+function updateCartProgress(c){
+  const items=Array.isArray(c)?c:[];
+  const count=items.reduce((n,it)=>n+Math.max(1,Number(it.qty||1)),0);
+  const missing=items.filter(it=>!it.scent||!String(it.scent).trim()).length;
+  const drawer=document.getElementById('cartDrawer');
+  if(drawer){
+    drawer.dataset.cartCount=String(count);
+    drawer.dataset.missingScents=String(missing);
+  }
+  const checkoutBtn=document.getElementById('checkoutBtn');
+  if(checkoutBtn){
+    checkoutBtn.disabled=items.length===0;
+    checkoutBtn.setAttribute('aria-disabled',items.length===0?'true':'false');
+  }
+}
+
+function syncCartFooterState(c){
+  const items=Array.isArray(c)?c:[];
+  const missing=items.some(it=>!it.scent||!String(it.scent).trim());
+  const btn=document.getElementById('checkoutBtn');
+  if(btn){
+    btn.classList.toggle('vl-cart-needs-scent',missing);
+    btn.title=missing?(LANG==='en'?'Choose all scents first':'اختار كل العطور أولاً'):
+      (LANG==='en'?'Complete order via WhatsApp':'إتمام الطلب عبر واتساب');
+  }
+}
+
+function focusFirstCartProblem(){
+  const c=getCart();
+  if(c.some(it=>!it.scent||!String(it.scent).trim())){
+    const first=document.querySelector('#cartItems .cart-scent-select');
+    if(first) first.scrollIntoView({block:'center',behavior:'smooth'});
+    return;
+  }
+  const name=document.getElementById('coName');
+  if(name && !name.value.trim()) name.scrollIntoView({block:'center',behavior:'smooth'});
+}
+
 function initCart(){
+  /* ═══════════════════════════════════════════════════════════
+     ✨ VelaLight Premium Cart UX
+     - One scroll area for products + checkout form
+     - Sticky header / sticky summary footer
+     - No duplicated event listeners
+     - Keeps Firebase / orders / coupons / scents intact
+     ═══════════════════════════════════════════════════════════ */
+  setupPremiumCartUI();
+
   cartBadge();
   fillCitySelect(document.getElementById("coCity"));
   fillCartForm();
-  document.getElementById("cartBtn")?.addEventListener("click",()=>{
-    fillCartForm();
-    renderCart();
-    openDrawer("cartDrawer","cartOv");
-  });
-  document.getElementById("closeCart")?.addEventListener("click",closeDrawers);
-  document.getElementById("cartOv")?.addEventListener("click",closeDrawers);
+
+  const cartBtn=document.getElementById("cartBtn");
+  if(cartBtn && !cartBtn.dataset.vlCartBound){
+    cartBtn.dataset.vlCartBound="1";
+    cartBtn.addEventListener("click",()=>{
+      fillCartForm();
+      renderCart();
+      openDrawer("cartDrawer","cartOv");
+      requestAnimationFrame(()=>focusFirstCartProblem());
+    });
+  }
+
+  const closeBtn=document.getElementById("closeCart");
+  if(closeBtn && !closeBtn.dataset.vlCartBound){
+    closeBtn.dataset.vlCartBound="1";
+    closeBtn.addEventListener("click",closeDrawers);
+  }
+
+  const ov=document.getElementById("cartOv");
+  if(ov && !ov.dataset.vlCartBound){
+    ov.dataset.vlCartBound="1";
+    ov.addEventListener("click",closeDrawers);
+  }
+
+  const emptyBtn=document.getElementById("emptyCartBtn");
+  if(emptyBtn && !emptyBtn.dataset.vlCartBound){
+    emptyBtn.dataset.vlCartBound="1";
+    emptyBtn.addEventListener("click",()=>{
+      const c=getCart();
+      if(!c.length) return;
+      if(!confirm(t("t_confirm_empty"))) return;
+      saveCart([]);
+      appliedCoupon=null;
+      const ci=document.getElementById("couponInput");
+      if(ci) ci.value="";
+      renderCart();
+      cartBadge();
+    });
+  }
+
+  const checkoutBtn=document.getElementById("checkoutBtn");
+  if(checkoutBtn && !checkoutBtn.dataset.vlCartBound){
+    checkoutBtn.dataset.vlCartBound="1";
+    checkoutBtn.addEventListener("click",checkout);
+  }
+
+  const couponBtn=document.getElementById("applyCouponBtn");
+  if(couponBtn && !couponBtn.dataset.vlCartBound){
+    couponBtn.dataset.vlCartBound="1";
+    couponBtn.addEventListener("click",applyCoupon);
+  }
+
+  const couponInput=document.getElementById("couponInput");
+  if(couponInput && !couponInput.dataset.vlCartEnterBound){
+    couponInput.dataset.vlCartEnterBound="1";
+    couponInput.addEventListener("keydown",e=>{
+      if(e.key==="Enter"){
+        e.preventDefault();
+        applyCoupon();
+      }
+    });
+  }
+
+  if(!document.body.dataset.vlCartFieldsBound){
+    document.body.dataset.vlCartFieldsBound="1";
+    const saveCustomer=debounce(()=>saveCartCustomer(),500);
+    ["#coName","#coPhone","#coEmail","#coCity","#coAddr","#coNotes"].forEach(selector=>{
+      document.addEventListener("input",e=>{ if(e.target.matches(selector)) saveCustomer(); });
+      document.addEventListener("change",e=>{ if(e.target.matches(selector)) saveCustomer(); });
+    });
+  }
+
+  const cartItems=document.getElementById("cartItems");
+  if(cartItems && !cartItems.dataset.vlCartEventsBound){
+    cartItems.dataset.vlCartEventsBound="1";
+    cartItems.addEventListener("click",handleCartClick);
+    cartItems.addEventListener("change",handleCartChange);
+  }
+
   renderCart();
+
   if(new URLSearchParams(location.search).get("cart")==="1"){
     fillCartForm();
     renderCart();
     openDrawer("cartDrawer","cartOv");
   }
-  document.getElementById("emptyCartBtn")?.addEventListener("click",()=>{
-    if(!confirm(t("t_confirm_empty")))return;
-    saveCart([]);
-    renderCart();
-  });
-  document.getElementById("checkoutBtn")?.addEventListener("click",checkout);
-  document.getElementById("applyCouponBtn")?.addEventListener("click",applyCoupon);
-  const saveCustomer = debounce(() => saveCartCustomer(), 500);
-  ["#coName","#coPhone","#coEmail","#coCity","#coAddr","#coNotes"].forEach(selector=>{
-    document.addEventListener("input",e=>{
-      if(e.target.matches(selector)){saveCustomer();}
-    });
-    document.addEventListener("change",e=>{
-      if(e.target.matches(selector)){saveCustomer();}
-    });
-  });
-  const checkoutBtn = document.getElementById('checkoutBtn');
-  if (checkoutBtn && !document.getElementById('trustBadges')) {
-    const badges = document.createElement('div');
-    badges.id = 'trustBadges';
-    badges.style.cssText = 'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
-    badges.innerHTML = `<span style="display:flex; align-items:center; gap:4px;"> دفع آمن</span><span style="display:flex; align-items:center; gap:4px;"> ضمان استرجاع</span><span style="display:flex; align-items:center; gap:4px;"> توصيل موثوق</span>`;
-    checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
-  }
 }
 
+
 function renderCart(){
-  const c=getCart();
+  const c=Array.isArray(getCart()) ? getCart() : [];
   const w=document.getElementById("cartItems");
-  if(!w)return;
+  if(!w) return;
+
+  const cartDrawer=document.getElementById("cartDrawer");
+  if(cartDrawer) cartDrawer.classList.add("vl-premium-cart");
 
   if(!c.length){
-    w.innerHTML=`<div style="text-align:center; padding:3rem 1rem;"><div style="font-size:4rem; margin-bottom:1rem;">🛍️</div><h3 style="margin:0 0 0.5rem; color:var(--dark);">${t("cart_empty")}</h3><p style="color:var(--mut); margin:0;">${t("cart_empty_sub")}</p></div>`;
+    w.innerHTML=`
+      <div class="vl-cart-empty-state" role="status">
+        <div class="vl-cart-empty-icon" aria-hidden="true">🛍</div>
+        <div class="vl-cart-empty-title">${t("cart_empty")}</div>
+        <div class="vl-cart-empty-sub">${t("cart_empty_sub")}</div>
+      </div>
+    `;
     updateTotals(c);
+    updateCartProgress(c);
     return;
   }
 
-  let html = '';
-  
-  // 1. قسم المنتجات
-  html += `<div class="cart-section" style="margin-bottom:1.5rem;"><h3 style="margin:0 0 1rem; font-size:1.1rem; color:var(--dark); display:flex; align-items:center; gap:0.5rem;"><span>️</span><span>${t("cart_items_title")||"منتجاتك"}</span><span style="margin-inline-start:auto; background:var(--c-warm); color:var(--gold2); padding:0.2rem 0.7rem; border-radius:99px; font-size:0.8rem; font-weight:700;">${c.length}</span></h3><div class="cart-items-list">`;
-  c.forEach((it, i) => {
-    const lineTotal = Number(it.price||0) * Number(it.qty||1);
-    html += `<div class="citem" style="background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:1rem; margin-bottom:0.8rem; display:flex; gap:1rem; align-items:flex-start; position:relative;"><button class="rm" type="button" data-i="${i}" aria-label="remove" style="position:absolute; top:0.5rem; inset-inline-end:0.5rem; background:transparent; border:0; color:var(--mut); cursor:pointer; font-size:1.2rem; padding:0.3rem; line-height:1;">✕</button><div class="citem-media" style="flex:0 0 80px;"><img src="${it.img||''}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy" width="80" height="80" style="width:80px; height:80px; object-fit:cover; border-radius:10px;" onerror="window.handleImageError(this, '${it.id}')"></div><div class="citem-info" style="flex:1; min-width:0;"><h5 style="margin:0 0 0.5rem; font-size:0.95rem; color:var(--dark);">${pname({name:it.name,nameEn:it.nameEn})}</h5><label class="cart-scent-picker" style="display:block; margin-bottom:0.5rem;"><span class="cart-scent-label" style="font-size:0.8rem; color:var(--mut); display:block; margin-bottom:0.3rem;">${t("scent_lbl")}</span><select class="cart-scent-select" data-i="${i}" aria-label="${t("scent_lbl")}" style="width:100%; padding:0.5rem; border:1px solid var(--line); border-radius:8px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:0.9rem;"><option value="">${LANG==="en"?"Choose a scent":"اختر العطر"}</option>${VELA_SCENTS.map(scent=>`<option value="${scent[0]}" ${String(it.scent||"")===String(scent[0])?"selected":""}>${velaScentTr(scent[0])}</option>`).join("")}</select></label><div style="display:flex; align-items:center; justify-content:space-between; margin-top:0.5rem;"><div style="font-size:0.85rem; color:var(--mut);"><span>${t("price_lbl")}</span><strong style="color:var(--dark);">${money(it.price)}</strong></div><div class="qty" style="display:flex; align-items:center; gap:0.5rem; border:1px solid var(--line); border-radius:8px; padding:0.2rem;"><button class="cq-minus" type="button" data-i="${i}" aria-label="minus" style="width:28px; height:28px; border:0; background:transparent; cursor:pointer; font-size:1rem;">−</button><b style="min-width:24px; text-align:center;">${it.qty}</b><button class="cq-plus" type="button" data-i="${i}" aria-label="plus" style="width:28px; height:28px; border:0; background:transparent; cursor:pointer; font-size:1rem;">+</button></div></div><div style="margin-top:0.5rem; padding-top:0.5rem; border-top:1px dashed var(--line); font-size:0.85rem; color:var(--gold2); font-weight:700;">${t("cart_item_total")||"إجمالي الصنف:"} <strong>${money(lineTotal)}</strong></div></div></div>`;
+  const frag=document.createDocumentFragment();
+  c.forEach((it,i)=>{
+    const qty=Math.max(1,Number(it.qty||1));
+    const unitPrice=Number(it.price||0);
+    const lineTotal=unitPrice*qty;
+    const safeName=pname({name:it.name,nameEn:it.nameEn});
+    const safeScent=it.scent ? velaScentTr(it.scent) : "";
+    const scentLabel=LANG==="en"?"Scent":"العطر";
+
+    const item=document.createElement("article");
+    item.className="citem vl-cart-item";
+    item.dataset.index=i;
+    item.innerHTML=`
+      <div class="citem-media vl-cart-item-media">
+        <img src="${it.img||''}" alt="${safeName}" loading="lazy" width="72" height="72" onerror="window.handleImageError(this, '${it.id}')">
+      </div>
+
+      <div class="citem-info vl-cart-item-info">
+        <div class="vl-cart-item-topline">
+          <h5>${safeName}</h5>
+          <button class="rm vl-cart-remove" type="button" data-i="${i}" aria-label="${LANG==="en"?"Remove":"حذف"}" title="${LANG==="en"?"Remove item":"حذف المنتج"}">×</button>
+        </div>
+
+        <div class="vl-cart-meta-row">
+          <label class="cart-scent-picker vl-cart-scent-picker ${it.scent?"has-value":"missing"}">
+            <span class="cart-scent-label">${scentLabel}</span>
+            <select class="cart-scent-select" data-i="${i}" aria-label="${scentLabel}">
+              <option value="">${LANG==="en"?"Choose a scent":"اختر العطر"}</option>
+              ${VELA_SCENTS.map(s=>`<option value="${s[0]}" ${String(it.scent||"")===String(s[0])?"selected":""}>${velaScentTr(s[0])}</option>`).join("")}
+            </select>
+          </label>
+          <div class="vl-cart-unit-price">${money(unitPrice)}</div>
+        </div>
+
+        <div class="vl-cart-item-bottom">
+          <div class="qty vl-cart-qty" aria-label="${LANG==="en"?"Quantity":"الكمية"}">
+            <button class="cq-minus" type="button" data-i="${i}" aria-label="${LANG==="en"?"Decrease quantity":"تقليل الكمية"}">−</button>
+            <b>${qty}</b>
+            <button class="cq-plus" type="button" data-i="${i}" aria-label="${LANG==="en"?"Increase quantity":"زيادة الكمية"}">+</button>
+          </div>
+          <div class="vl-cart-line-total">
+            <span>${LANG==="en"?"Total":"الإجمالي"}</span>
+            <strong>${money(lineTotal)}</strong>
+          </div>
+        </div>
+
+        <div class="vl-cart-scent-hint ${it.scent?"is-hidden":""}" data-scent-hint="${i}">
+          ${LANG==="en"?"Please choose a scent before placing the order.":"اختار العطر قبل إتمام الطلب."}
+        </div>
+      </div>
+    `;
+    frag.appendChild(item);
   });
-  html += `</div></div>`;
 
-  // 2. كوبون الخصم
-  html += `<div class="cart-section" style="margin-bottom:1.5rem;"><h3 style="margin:0 0 0.8rem; font-size:1rem; color:var(--dark); display:flex; align-items:center; gap:0.5rem;"><span>️</span><span>${t("cart_coupon_title")||"كوبون الخصم"}</span></h3><div style="display:flex; gap:0.5rem;"><input type="text" id="couponInput" placeholder="${t("cart_coupon_placeholder")||"أدخل كود الكوبون"}" style="flex:1; padding:0.7rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:0.95rem; outline:none;"><button id="applyCouponBtn" type="button" style="padding:0.7rem 1.2rem; background:var(--c-warm); color:var(--gold2); border:1px solid var(--c-gold); border-radius:10px; cursor:pointer; font-weight:700; font-family:inherit; white-space:nowrap;">${t("cart_coupon_apply")||"تطبيق"}</button></div>${appliedCoupon ? `<div style="margin-top:0.5rem; font-size:0.85rem; color:var(--ok);">✓ ${appliedCoupon.code} ${LANG==="en"?"applied":"مطبق"}</div>` : ''}</div>`;
-
-  // 3. بيانات التوصيل
-  html += `<div class="cart-section" style="margin-bottom:1.5rem;"><h3 style="margin:0 0 0.8rem; font-size:1rem; color:var(--dark); display:flex; align-items:center; gap:0.5rem;"><span></span><span>${t("cart_delivery_title")||"بيانات التوصيل"}</span></h3><div class="co-form" style="display:flex; flex-direction:column; gap:0.7rem;"><input type="text" id="coName" placeholder="${t("cart_name_ph")||"الاسم بالكامل"}" style="padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:0.95rem; outline:none;"><input type="tel" id="coPhone" placeholder="${t("cart_phone_ph")||"رقم الموبايل"}" style="padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:0.95rem; outline:none;"><input type="email" id="coEmail" placeholder="${t("cart_email_ph")||"البريد الإلكتروني (اختياري)"}" style="padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:0.95rem; outline:none;"><select id="coCity" style="padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:0.95rem; outline:none;"><option value="">${t("cart_city_ph")||"المحافظة"}</option></select><input type="text" id="coAddr" placeholder="${t("cart_address_ph")||"العنوان بالتفصيل"}" style="padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:0.95rem; outline:none;"><textarea id="coNotes" placeholder="${t("cart_notes_ph")||"ملاحظات (اختياري)"}" rows="2" style="padding:0.8rem; border:1px solid var(--line); border-radius:10px; background:var(--bg); color:var(--dark); font-family:inherit; font-size:0.95rem; outline:none; resize:vertical;"></textarea></div></div>`;
-
-  // 4. طريقة الدفع
-  html += `<div class="cart-section" style="margin-bottom:1rem;"><h3 style="margin:0 0 0.5rem; font-size:1rem; color:var(--dark); display:flex; align-items:center; gap:0.5rem;"><span>💳</span><span>${t("cart_payment_title")||"طريقة الدفع"}</span></h3><div style="background:var(--c-warm); border:1px solid var(--c-gold); border-radius:10px; padding:0.8rem; font-size:0.85rem; color:var(--mut); line-height:1.6;">${t("cart_payment_desc")||"سيتم إرسال تفاصيل الدفع (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب. الشحن يُدفع كاش عند الاستلام."}</div></div>`;
-
-  w.innerHTML = html;
-  fillCitySelect(document.getElementById("coCity"));
-  fillCartForm();
-  w.addEventListener('click', handleCartClick);
-  w.addEventListener('change', handleCartChange);
+  w.innerHTML="";
+  w.appendChild(frag);
   updateTotals(c);
-  
-  // Cross-sell
-  const productsArr = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
-  const cartProductIds = c.map(it => it.id);
-  const suggestedProduct = productsArr.find(p => {
-    if (!p || cartProductIds.includes(p.id)) return false;
-    if (p.active === false) return false;
-    const searchText = [p.name || "", p.nameEn || "", p.desc || "", p.descEn || "", p.cat || ""].join(" ").toLowerCase();
-    return searchText.includes("فواحة") || searchText.includes("دولاب") || searchText.includes("freshener") || searchText.includes("closet");
-  });
-  if (suggestedProduct) {
-    const suggestDiv = document.createElement('div');
-    suggestDiv.className = 'cross-sell-box';
-    suggestDiv.style.cssText = 'background:var(--c-warm); padding:1rem; border-radius:12px; margin-top:1rem; border:1px dashed var(--c-gold);';
-    suggestDiv.innerHTML = `<div style="display:flex; align-items:center; gap:1rem;"><img src="${suggestedProduct.img || ''}" style="width:60px; height:60px; object-fit:cover; border-radius:8px;" onerror="this.style.display='none'"><div style="flex:1"><div style="font-weight:700; font-size:0.9rem;">${t("cart_cross_sell_title")||"أرشح لك فوحات شمع معطره لدولابك"}: ${pname(suggestedProduct)}</div><div style="font-size:0.8rem; color:var(--mut); margin:0.2rem 0;">${money(suggestedProduct.price)} ${LANG==="en"?"only":"فقط"}</div><button class="btn sm" id="addSuggestBtn" style="margin-top:0.3rem; width:100%; padding:0.5rem; background:var(--gold2); color:#fff; border:0; border-radius:8px; cursor:pointer; font-weight:700;">${t("cart_cross_sell_btn")||"أضف للسلة"}</button></div></div>`;
-    w.appendChild(suggestDiv);
-    setTimeout(() => {
-      const btn = document.getElementById('addSuggestBtn');
-      if(btn) { btn.addEventListener('click', () => { addToCart(suggestedProduct, {scent: suggestedProduct.scent || "بدون عطر", qty: 1}); renderCart(); cartBadge(); }); }
-    }, 0);
-  }
+  updateCartProgress(c);
+  syncCartFooterState(c);
 }
+
 
 function handleCartClick(e){
-  const rmBtn = e.target.closest('.rm');
-  const plusBtn = e.target.closest('.cq-plus');
-  const minusBtn = e.target.closest('.cq-minus');
-  const c = getCart();
-  if(rmBtn){ c.splice(+rmBtn.dataset.i, 1); saveCart(c); renderCart(); cartBadge(); } 
-  else if(plusBtn){ const idx = +plusBtn.dataset.i; c[idx].qty = Number(c[idx].qty || 1) + 1; saveCart(c); renderCart(); } 
-  else if(minusBtn){ const idx = +minusBtn.dataset.i; c[idx].qty = Number(c[idx].qty || 1) - 1; if(c[idx].qty <= 0){ c.splice(idx, 1); } saveCart(c); renderCart(); }
-}
+  const rmBtn=e.target.closest(".rm");
+  const plusBtn=e.target.closest(".cq-plus");
+  const minusBtn=e.target.closest(".cq-minus");
+  if(!rmBtn && !plusBtn && !minusBtn) return;
 
-function handleCartChange(e){
-  if(e.target.matches('.cart-scent-select')){
-    const select = e.target;
-    const idx = +select.dataset.i;
-    const c = getCart();
-    if(!c[idx]) return;
-    c[idx].scent = select.value;
+  const c=getCart();
+  let changed=false;
+
+  if(rmBtn){
+    const idx=Number(rmBtn.dataset.i);
+    if(Number.isInteger(idx) && c[idx]){
+      c.splice(idx,1);
+      changed=true;
+    }
+  }else if(plusBtn){
+    const idx=Number(plusBtn.dataset.i);
+    if(Number.isInteger(idx) && c[idx]){
+      const stock=Number(c[idx].stock);
+      const max=Number.isFinite(stock) && stock>0 ? stock : Infinity;
+      const next=Math.min(max,Number(c[idx].qty||1)+1);
+      if(next !== Number(c[idx].qty||1)){
+        c[idx].qty=next;
+        changed=true;
+      }
+    }
+  }else if(minusBtn){
+    const idx=Number(minusBtn.dataset.i);
+    if(Number.isInteger(idx) && c[idx]){
+      c[idx].qty=Number(c[idx].qty||1)-1;
+      if(c[idx].qty<=0) c.splice(idx,1);
+      changed=true;
+    }
+  }
+
+  if(changed){
     saveCart(c);
     renderCart();
+    cartBadge();
   }
 }
 
+
+function handleCartChange(e){
+  if(!e.target.matches(".cart-scent-select")) return;
+  const select=e.target;
+  const idx=Number(select.dataset.i);
+  const c=getCart();
+  if(!Number.isInteger(idx) || !c[idx]) return;
+
+  c[idx].scent=select.value;
+  saveCart(c);
+
+  const picker=select.closest(".vl-cart-scent-picker");
+  if(picker){
+    picker.classList.toggle("has-value",!!select.value);
+    picker.classList.toggle("missing",!select.value);
+  }
+  const hint=select.closest(".vl-cart-item-info")?.querySelector("[data-scent-hint]");
+  if(hint) hint.classList.toggle("is-hidden",!!select.value);
+  updateCartProgress(c);
+  syncCartFooterState(c);
+}
+
+
+// ═══════════════════════════════════════════════════════════
+//   التعديلات الجديدة على الخصومات (خصم واحد فقط - الأعلى)
+// ═══════════════════════════════════════════════════════════
 function updateTotals(c){
-  const sub = c.reduce((a,i) => a + (Number(i.price||0) * Number(i.qty||1)), 0);
-  let qtyDiscount = 0;
-  c.forEach(it => { if (Number(it.qty) >= 3) { qtyDiscount += (Number(it.price||0) * Number(it.qty||1) * 0.05); } });
-  qtyDiscount = Math.round(qtyDiscount * 100) / 100;
-  const couponDisc = (typeof calcCouponDiscount === "function") ? calcCouponDiscount(sub) : 0;
-  let finalDiscount = 0, appliedType = "none";
-  if (qtyDiscount > 0 && couponDisc > 0) {
-    if (qtyDiscount >= couponDisc) { finalDiscount = qtyDiscount; appliedType = "qty"; } 
-    else { finalDiscount = couponDisc; appliedType = "coupon"; }
-  } else if (qtyDiscount > 0) { finalDiscount = qtyDiscount; appliedType = "qty"; } 
-  else if (couponDisc > 0) { finalDiscount = couponDisc; appliedType = "coupon"; }
-  const total = Math.max(0, sub - finalDiscount);
+  c=Array.isArray(c)?c:[];
+  const sub=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
 
-  const dfoot = document.querySelector("#cartDrawer .dfoot");
-  if (dfoot) {
-    let footerHtml = '';
-    if (finalDiscount > 0) {
-      footerHtml += `<div class="trow" style="display:flex; justify-content:space-between; padding:0.3rem 0; color:var(--ok); font-size:0.9rem;"><span>${appliedType === "qty" ? (t("cart_qty_discount")||"خصم الكمية") : (t("cart_coupon_discount")||"خصم الكوبون")}</span><b>-${money(finalDiscount)}</b></div>`;
+  let qtyDiscount=0;
+  c.forEach(it=>{
+    if(Number(it.qty)>=3){
+      qtyDiscount += Number(it.price||0)*Number(it.qty||1)*0.05;
     }
-    const freeShippingThreshold = 3000;
-    const remaining = Math.max(0, freeShippingThreshold - sub);
-    const progressPercent = Math.min(100, (sub / freeShippingThreshold) * 100);
-    if (sub >= freeShippingThreshold) {
-      footerHtml += `<div class="trow" style="display:flex; justify-content:center; padding:0.5rem; background:#eafaf1; border-radius:8px; margin:0.5rem 0; color:#27ae60; font-weight:700; font-size:0.9rem;"><span>${t("cart_free_shipping_earned")||"🎉 مبروك! طلبك مؤهل لشحن مجاني"}</span></div>`;
-    } else {
-      footerHtml += `<div class="trow" style="padding:0.6rem; background:#fdf5ed; border-radius:8px; margin:0.5rem 0; border:1px solid var(--c-gold);"><div style="text-align:center; margin-bottom:0.4rem; font-size:0.85rem; color:var(--dark);">${(t("cart_free_shipping_progress")||"أضف {amount} للحصول على شحن مجاني! 🚚").replace('{amount}', money(remaining))}</div><div style="background:#e0d6c8; height:6px; border-radius:3px; overflow:hidden;"><div style="background:linear-gradient(90deg, #d4af37, #f9d877); height:100%; width:${progressPercent}%; transition:width 0.5s ease-in-out; border-radius:3px;"></div></div></div>`;
-    }
-    footerHtml += `<div class="trow total" style="display:flex; justify-content:space-between; align-items:center; padding:0.8rem 0; border-top:2px solid var(--line); margin-top:0.5rem;"><span style="font-size:1.1rem; font-weight:700; color:var(--dark);">${t("cart_total")||"الإجمالي"}</span><b id="cartTotal" style="font-size:1.3rem; color:var(--gold2);">${money(total)}</b></div>`;
-    footerHtml += `<div style="display:flex; justify-content:center; gap:1rem; margin:0.5rem 0; font-size:0.75rem; color:var(--mut); flex-wrap:wrap;"><span style="display:flex; align-items:center; gap:4px;">🔒 ${t("cart_trust_secure")||"دفع آمن"}</span><span style="display:flex; align-items:center; gap:4px;">🔄 ${t("cart_trust_refund")||"ضمان استرجاع"}</span><span style="display:flex; align-items:center; gap:4px;">🚚 ${t("cart_trust_delivery")||"توصيل موثوق"}</span></div>`;
-    footerHtml += `<button id="checkoutBtn" type="button" style="width:100%; padding:1rem; background:#25D366; color:#fff; border:0; border-radius:12px; cursor:pointer; font-weight:700; font-size:1rem; font-family:inherit; margin-bottom:0.5rem; display:flex; align-items:center; justify-content:center; gap:0.5rem;"><span>✅</span><span>${t("cart_checkout_btn")||"إتمام الطلب عبر واتساب"}</span></button>`;
-    footerHtml += `<button id="emptyCartBtn" type="button" style="width:100%; padding:0.7rem; background:transparent; color:var(--mut); border:1px solid var(--line); border-radius:10px; cursor:pointer; font-size:0.9rem; font-family:inherit;">🗑️ ${t("cart_empty_cart_btn")||"إفراغ السلة"}</button>`;
-    dfoot.innerHTML = footerHtml;
-    document.getElementById("checkoutBtn")?.addEventListener("click", checkout);
-    document.getElementById("emptyCartBtn")?.addEventListener("click", () => { if(!confirm(t("cart_confirm_empty")||t("t_confirm_empty"))) return; saveCart([]); renderCart(); cartBadge(); });
-    document.getElementById("applyCouponBtn")?.addEventListener("click", applyCoupon);
+  });
+  qtyDiscount=Math.round(qtyDiscount*100)/100;
+
+  const couponDisc=(typeof calcCouponDiscount==="function")?calcCouponDiscount(sub):0;
+
+  let finalDiscount=0;
+  let appliedType="none";
+  if(qtyDiscount>0 && couponDisc>0){
+    if(qtyDiscount>=couponDisc){ finalDiscount=qtyDiscount; appliedType="qty"; }
+    else { finalDiscount=couponDisc; appliedType="coupon"; }
+  }else if(qtyDiscount>0){
+    finalDiscount=qtyDiscount; appliedType="qty";
+  }else if(couponDisc>0){
+    finalDiscount=couponDisc; appliedType="coupon";
   }
+
+  const total=Math.max(0,sub-finalDiscount);
+
+  const subEl=document.getElementById("cartSub");
+  if(subEl) subEl.textContent=money(sub);
+  const totalEl=document.getElementById("cartTotal");
+  if(totalEl) totalEl.textContent=money(total);
+
+  const qtyDiscRow=document.getElementById("qtyDiscountRow");
+  if(qtyDiscRow){
+    if(appliedType==="qty"){
+      qtyDiscRow.style.display="flex";
+      qtyDiscRow.style.textDecoration="none";
+      qtyDiscRow.classList.add("vl-discount-active");
+      const v=document.getElementById("qtyDiscountVal");
+      if(v) v.textContent="-"+money(finalDiscount);
+    }else{
+      qtyDiscRow.style.display=qtyDiscount>0?"flex":"none";
+      qtyDiscRow.style.textDecoration=qtyDiscount>0?"line-through":"none";
+      qtyDiscRow.classList.remove("vl-discount-active");
+      const v=document.getElementById("qtyDiscountVal");
+      if(v) v.textContent=qtyDiscount>0?"-"+money(qtyDiscount):"-0";
+    }
+  }
+
+  const dRow=document.getElementById("discountRow");
+  if(dRow){
+    if(appliedType==="coupon"){
+      dRow.style.display="flex";
+      dRow.style.textDecoration="none";
+      const v=document.getElementById("cartDiscount");
+      if(v) v.textContent="-"+money(finalDiscount);
+      const lbl=document.getElementById("couponCodeLbl");
+      if(lbl && appliedCoupon) lbl.textContent=appliedCoupon.code+" (مطبق)";
+    }else if(appliedType==="qty" && couponDisc>0){
+      dRow.style.display="flex";
+      dRow.style.textDecoration="line-through";
+      const v=document.getElementById("cartDiscount");
+      if(v) v.textContent="-"+money(couponDisc);
+      const lbl=document.getElementById("couponCodeLbl");
+      if(lbl && appliedCoupon) lbl.textContent=appliedCoupon.code+" (غير مطبق)";
+    }else{
+      dRow.style.display="none";
+    }
+  }
+
+  const freeShippingThreshold=3000;
+  const remaining=Math.max(0,freeShippingThreshold-sub);
+  const progressPercent=Math.min(100,(sub/freeShippingThreshold)*100);
+  const freeShipRow=document.getElementById("freeShippingRow");
+  if(freeShipRow){
+    if(sub>=freeShippingThreshold){
+      freeShipRow.style.display="flex";
+      freeShipRow.innerHTML=`<span class="vl-free-ship-success">🎉 ${LANG==="en"?"Free shipping unlocked":"طلبك مؤهل للشحن المجاني"}</span>`;
+    }else if(sub>0){
+      freeShipRow.style.display="block";
+      freeShipRow.innerHTML=`
+        <div class="vl-free-ship-copy">${LANG==="en"?`Add <strong>${money(remaining)}</strong> for free shipping`:`أضف <strong>${money(remaining)}</strong> للحصول على شحن مجاني`}</div>
+        <div class="vl-free-ship-bar"><span style="width:${progressPercent}%"></span></div>
+      `;
+    }else{
+      freeShipRow.style.display="none";
+    }
+  }
+
+  const footerTotal=document.getElementById("vlCartFooterTotal");
+  if(footerTotal) footerTotal.textContent=money(total);
+  const footerItems=document.getElementById("vlCartFooterItems");
+  if(footerItems) footerItems.textContent=LANG==="en"?`${c.length} item${c.length===1?"":"s"}`:`${c.length} منتج`;
+
+  const hiddenSummary=document.getElementById("vlCartFinalDiscount");
+  if(hiddenSummary) hiddenSummary.textContent=money(finalDiscount);
 }
 
-function getSavedUser(){
+
+ function getSavedUser(){
   try{return JSON.parse(localStorage.getItem("vl_user")||"{}");}
   catch(e){return {};}
 }
@@ -1761,16 +2607,22 @@ function saveUserFromCart(name,phone,email,city,addr,notes=""){
   if(document.getElementById("accAddr"))document.getElementById("accAddr").value=addr;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ [إضافة جديدة] تسجيل/تحديث العميل في مجموعة users
+   ═══════════════════════════════════════════════════════════ */
 async function saveOrUpdateCustomer(orderData){
   if(!window.FB || typeof window.FB.list !== "function") return null;
   try {
     let users = [];
     try { users = await window.FB.list("users") || []; } catch(e) { users = []; }
+
     const phone = String(orderData.phone || "").trim();
     const email = String(orderData.email || "").trim();
+
     let existing = null;
     if (phone) existing = users.find(u => String(u.phone || "").trim() === phone);
     if (!existing && email) existing = users.find(u => String(u.email || "").trim() === email);
+
     if (existing) {
       const newOrdersCount = (Number(existing.ordersCount) || 0) + 1;
       const newTotalSpent = (Number(existing.totalSpent) || 0) + Number(orderData.total || 0);
@@ -1805,7 +2657,7 @@ async function saveOrUpdateCustomer(orderData){
       return userId;
     }
   } catch(err) {
-    console.error(" saveOrUpdateCustomer failed:", err);
+    console.error("❌ saveOrUpdateCustomer failed:", err);
     return null;
   }
 }
@@ -1821,7 +2673,7 @@ function saveCartCustomer(){
   try {
     localStorage.setItem("vl_user",JSON.stringify({...old,name,phone,email,city,addr,notes,orders:old.orders||0}));
   } catch(e) {
-    console.warn("️ Failed to save cart customer:", e);
+    console.warn("⚠️ Failed to save cart customer:", e);
   }
 }
 
@@ -1832,6 +2684,11 @@ function genOrderId(){
   return "VL-"+s;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ ADVANCED MATCHING — تحسين دقة تتبع فيسبوك
+   ═══════════════════════════════════════════════════════════ */
+
+// دالة تشفير SHA-256
 async function hashSHA256(str){
   if(!str) return null;
   try{
@@ -1847,13 +2704,19 @@ async function hashSHA256(str){
   }
 }
 
+// دالة تجهيز بيانات Advanced Matching
 async function buildAdvancedMatching(userData){
   if(!userData) return {};
+  
   const result = {};
+  
+  // الإيميل
   if(userData.email){
     const em = await hashSHA256(userData.email);
     if(em) result.em = em;
   }
+  
+  // الموبايل (بدون 20 أو +، بأرقام إنجليزية)
   if(userData.phone){
     let phone = String(userData.phone).replace(/\D/g, "");
     if(phone.startsWith("20")) phone = phone.slice(2);
@@ -1861,6 +2724,8 @@ async function buildAdvancedMatching(userData){
     const ph = await hashSHA256(phone);
     if(ph) result.ph = ph;
   }
+  
+  // الاسم الأول والأخير
   if(userData.name){
     const parts = String(userData.name).trim().split(/\s+/);
     if(parts[0]){
@@ -1872,38 +2737,55 @@ async function buildAdvancedMatching(userData){
       if(ln) result.ln = ln;
     }
   }
+  
+  // المدينة
   if(userData.city){
     const ct = await hashSHA256(userData.city);
     if(ct) result.ct = ct;
   }
+  
+  // البلد (ثابت لمصر)
   result.country = "eg";
+  
+  // Facebook Browser ID (من كوكيز _fbp)
   const fbp = getCookie("_fbp");
   if(fbp) result.fbp = fbp;
+  
+  // Facebook Click ID (من URL أو localStorage)
   const fbc = localStorage.getItem("vl_fbclid");
   if(fbc) result.fbc = `fb.1.${Date.now()}.${fbc}`;
+  
   return result;
 }
 
+// دالة قراءة الكوكيز
 function getCookie(name){
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if(parts.length === 2) return parts.pop().split(";").shift();
   return null;
 }
-
+ 
+// ═══════════════════════════════════════════════════════════
+//   التعديلات الجديدة على دالة checkout (منع الطلبات الوهمية)
+// ═══════════════════════════════════════════════════════════
 async function checkout(){
   const c=getCart();
+
   if(!c.length){toast(t("t_empty"));return;}
+
   const missingScent=c.some(it=>!it.scent||!String(it.scent).trim());
   if(missingScent){toast(t("t_scentwarn"));return;}
+
   const name=document.getElementById("coName")?.value.trim()||"";
   const phone=document.getElementById("coPhone")?.value.trim()||"";
   const email=document.getElementById("coEmail")?.value.trim()||"";
   const city=document.getElementById("coCity")?.value||"";
   const addr=document.getElementById("coAddr")?.value.trim()||"";
   const notes=document.getElementById("coNotes")?.value.trim()||"";
+
   if(!name){
-    toast(LANG==="en"?"⚠️ Please enter your full name.":"️ من فضلك اكتب الاسم بالكامل.");
+    toast(LANG==="en"?"⚠️ Please enter your full name.":"⚠️ من فضلك اكتب الاسم بالكامل.");
     document.getElementById("coName")?.focus();return;
   }
   if(!phone){
@@ -1914,10 +2796,16 @@ async function checkout(){
     toast(LANG==="en"?"⚠️ Please enter the detailed address.":"⚠️ من فضلك اكتب العنوان بالتفصيل.");
     document.getElementById("coAddr")?.focus();return;
   }
+
+  // ✅ هام جداً: افتح نافذة فارغة فوراً عند الضغط قبل أي await
   const waWindow = window.open("", "_blank");
+
   saveUserFromCart(name,phone,email,city,addr,notes);
+
   const orderId=genOrderId();
   const subTotal=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
+  
+  // حساب الخصمين واختيار الأعلى
   let qtyDiscount = 0;
   c.forEach(it => {
     if (Number(it.qty) >= 3) {
@@ -1925,7 +2813,9 @@ async function checkout(){
     }
   });
   qtyDiscount = Math.round(qtyDiscount * 100) / 100;
+  
   const couponDiscount = (typeof calcCouponDiscount==="function") ? calcCouponDiscount(subTotal) : 0;
+
   let finalDiscount = 0;
   let appliedType = "none";
   if (qtyDiscount > 0 && couponDiscount > 0) {
@@ -1943,7 +2833,9 @@ async function checkout(){
     finalDiscount = couponDiscount;
     appliedType = "coupon";
   }
+
   const total = Math.max(0, subTotal - finalDiscount);
+  
   if (typeof fbq === "function") {
     fbq("track", "InitiateCheckout", {
       value: total,
@@ -1951,19 +2843,23 @@ async function checkout(){
       num_items: c.length
     });
   }
+  
   let userId = null;
   let userEmail = null;
   if(window.FB && window.FB.auth && window.FB.auth.currentUser){
     userId = window.FB.auth.currentUser.uid;
     userEmail = window.FB.auth.currentUser.email;
   }
-  const advancedMatching = await buildAdvancedMatching({name, phone, email, city});
-  if(typeof fbq === "function" && Object.keys(advancedMatching).length > 0){
-    fbq("init", "1377896053806991", advancedMatching);
-  }
+
+ /* ✨ ADVANCED MATCHING — تحسين دقة التتبع */
+const advancedMatching = await buildAdvancedMatching({name, phone, email, city});
+if(typeof fbq === "function" && Object.keys(advancedMatching).length > 0){
+  fbq("init", "1377896053806991", advancedMatching);
+}
   let msg=`${t("wa_head")}\n`;
   msg+=`${t("wa_order")} ${orderId}\n`;
   msg+=`━━━━━━━━━━━━━━━━━━━━\n\n`;
+
   c.forEach(it=>{
     const qty=Number(it.qty||1);
     const unitPrice=Number(it.price||0);
@@ -1974,7 +2870,10 @@ async function checkout(){
     msg+=`${LANG==="en"?"Unit price:":"سعر الوحدة:"} ${money(unitPrice)}\n`;
     msg+=`${LANG==="en"?"Item total:":"إجمالي الصنف:"} ${money(itemTotal)}\n\n`;
   });
+
   msg+=`━━━━━━━━━━━━━━━━━━━━\n`;
+  
+  // عرض الخصم المطبق فقط
   if (finalDiscount > 0) {
     if (appliedType === "qty") {
       msg+=`🎁 خصم الكمية (مطبق): -${money(finalDiscount)}\n`;
@@ -1983,14 +2882,17 @@ async function checkout(){
     }
   }
   if (qtyDiscount > 0 && appliedType !== "qty") {
-    msg+=` خصم الكمية (غير مطبق - تم اختيار الخصم الأعلى)\n`;
+    msg+=`💡 خصم الكمية (غير مطبق - تم اختيار الخصم الأعلى)\n`;
   }
   if (couponDiscount > 0 && appliedType !== "coupon") {
     msg+=`💡 خصم الكوبون (غير مطبق - تم اختيار الخصم الأعلى)\n`;
   }
-  msg+=` هدية ليك: كود THANKS10 لخصم 10% على طلبك الجاي\n`;
+
+  msg+=`🎁 هدية ليك: كود THANKS10 لخصم 10% على طلبك الجاي\n`;
+  
   msg+=`${waTotalLabel()} ${money(total)}\n`;
-  msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.\n`;
+msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.\n`;
+  
   msg+=`${t("ship_note")}\n\n`;
   msg+=`${t("wa_name")} ${name}\n`;
   msg+=`${t("wa_phone")} ${phone}\n`;
@@ -1998,6 +2900,7 @@ async function checkout(){
   if(city){msg+=`${t("wa_city")} ${city}\n`;}
   msg+=`${t("wa_addr")} ${addr}\n`;
   if(notes){msg+=`${t("wa_notes")} ${notes}\n`;}
+
   const trackingData = {
     utm_source: localStorage.getItem('vl_utm_source') || '',
     utm_medium: localStorage.getItem('vl_utm_medium') || '',
@@ -2007,6 +2910,8 @@ async function checkout(){
     gclid: localStorage.getItem('vl_gclid') || '',
     ttclid: localStorage.getItem('vl_ttclid') || ''
   };
+
+  // ⭐ إضافة statusHistory عند إنشاء الطلب
   const orderData={
     orderId,
     userId,
@@ -2040,6 +2945,7 @@ async function checkout(){
     updatedAt:Date.now(),
     orderDate:new Date().toISOString()
   };
+
   let savedToFirebase = false;
   let retries = 3;
   while (retries > 0 && !savedToFirebase) {
@@ -2052,34 +2958,41 @@ async function checkout(){
       if (retries > 0) await new Promise(r => setTimeout(r, 1000));
     }
   }
+  
   if (!savedToFirebase) {
-    console.error(" Failed to save order to Firebase after retries");
+    console.error("❌ Failed to save order to Firebase after retries");
   }
+
+  /* ✨ تسجيل/تحديث العميل في مجموعة users */
   try {
     await saveOrUpdateCustomer(orderData);
   } catch(e) {
     console.warn("⚠️ Customer registration failed:", e);
   }
+  
   try {
     await decrementStock(c);
   } catch(e) {
     console.warn("⚠️ Stock decrement failed:", e);
   }
+  
   try {
     if (typeof consumeCoupon === "function") consumeCoupon();
   } catch(e) {
-    console.warn("️ Coupon consume failed:", e);
+    console.warn("⚠️ Coupon consume failed:", e);
   }
+  
   const u=getSavedUser();
   u.orders=(u.orders||0)+1;
   u.name=name;u.phone=phone;u.email=email;u.city=city;u.addr=addr;u.notes=notes;
   try {
     localStorage.setItem("vl_user",JSON.stringify(u));
   } catch(e) {
-    console.warn("️ Failed to save user:", e);
+    console.warn("⚠️ Failed to save user:", e);
   }
   const oc=document.getElementById("ordCount");
   if(oc){oc.textContent=u.orders;}
+
   if(userId && window.FB && window.FB.db){
     try{
       const { doc, updateDoc, increment } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
@@ -2092,16 +3005,21 @@ async function checkout(){
       console.warn("⚠️ Failed to update user order count:", err);
     }
   }
+
   saveCart([]);
   renderCart();
   cartBadge();
+  
   let emailSent = false;
   try {
     emailSent = await sendOrderConfirmationEmail(orderData);
   } catch (err) {
     console.warn("⚠️ Email notification failed:", err);
   }
+
+  /* ✅ هام جداً: افتح واتساب أولاً قبل أي رسالة نجاح */
   const waOpened = openWhatsAppConfirmation(orderData, waWindow);
+
   if (waOpened) {
     if (emailSent) {
       toast(LANG==="en" ? "✅ Order placed! Opening WhatsApp..." : "✅ تم تسجيل الطلب! جاري تحويلك للواتساب...");
@@ -2111,6 +3029,7 @@ async function checkout(){
   } else {
     toast(t("t_order"));
   }
+
   try {
     if (typeof gtag === "function") {
       gtag("event", "purchase", {
@@ -2141,7 +3060,7 @@ async function checkout(){
         country: "eg"
       });
     }
-    ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
+   ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
   } catch (e) {
     console.warn("Tracking event fire failed:", e);
   }
@@ -2160,9 +3079,10 @@ async function sendOrderConfirmationEmail(orderData) {
       const name = item.name || item.title || "منتج";
       const qty = item.qty || 1;
       const price = Number(item.price || 0) * qty;
-      const scent = item.scent ? `(${velaScentTr(item.scent)})` : "";
+      const scent = item.scent ? ` (${velaScentTr(item.scent)})` : "";
       return `• ${name}${scent} × ${qty} = ${price} جنيه`;
     }).join("\n") || "منتجات متعددة";
+    
     let discountText = "";
     if (orderData.discount > 0) {
       if (orderData.appliedType === "qty") {
@@ -2177,6 +3097,7 @@ async function sendOrderConfirmationEmail(orderData) {
     if (orderData.couponDiscount > 0 && orderData.appliedType !== "coupon") {
       discountText += `💡 خصم الكوبون (غير مطبق): -${orderData.couponDiscount} جنيه (تم اختيار الخصم الأعلى)\n`;
     }
+
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Accept": "application/json" },
@@ -2204,12 +3125,12 @@ async function sendOrderConfirmationEmail(orderData) {
 ملاحظات: ${orderData.notes || "لا توجد"}
 
 ═══════════════════════════════════════
-️ المنتجات:
+🛍️ المنتجات:
 ═══════════════════════════════════════
 ${itemsText}
 
 ═══════════════════════════════════════
- الإجمالي: ${orderData.total} جنيه
+💰 الإجمالي: ${orderData.total} جنيه
 ${discountText ? discountText : ""}
 ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
 ═══════════════════════════════════════
@@ -2227,6 +3148,7 @@ ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
         `.trim()
       })
     });
+    
     if (response.ok) {
       console.log("✅ Admin notification sent");
       return true;
@@ -2240,35 +3162,42 @@ ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
   }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ فتح واتساب — يستخدم رقم المتجر + normalizeWhatsApp
+   ═══════════════════════════════════════════════════════════ */
 function openWhatsAppConfirmation(orderData, waWindow) {
   if (!CFG || !CFG.WHATSAPP) return false;
+  
   const whatsappNumber = (typeof normalizeWhatsApp === "function")
     ? normalizeWhatsApp(CFG.WHATSAPP)
     : String(CFG.WHATSAPP).replace(/\D/g, "");
+  
   const itemsSummary = (orderData.items || [])
     .map(i => {
       const name = i.name || i.title || "منتج";
       const qty = i.qty || 1;
-      const scent = i.scent ? `(${velaScentTr(i.scent)})` : "";
+      const scent = i.scent ? ` (${velaScentTr(i.scent)})` : "";
       return `• ${name}${scent} × ${qty}`;
     })
     .join("\n");
+  
   let discountText = "";
   if(orderData.qtyDiscount > 0 && orderData.appliedType === "qty") {
     discountText += `🎁 خصم الكمية: -${orderData.discount} جنيه\n`;
   } else if(orderData.couponDiscount > 0 && orderData.appliedType === "coupon") {
     discountText += `🎟️ كوبون ${orderData.couponCode}: -${orderData.discount} جنيه\n`;
   }
+
   const message = `✨ أهلاً VelaLight!
 
 تم تقديم طلبي بنجاح 🕯️
 
 📋 رقم الطلب: ${orderData.orderId}
- الاسم: ${orderData.name}
+👤 الاسم: ${orderData.name}
 💰 الإجمالي: ${orderData.total} جنيه
 ${discountText}
-${orderData.shippingIncluded ? " الشحن: مجاني\n" : ""}
- العنوان:
+${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
+📍 العنوان:
 ${orderData.city || ""} - ${orderData.address}
 
 🛍️ المنتجات:
@@ -2279,28 +3208,37 @@ ${itemsSummary}
 ⏳ في انتظار إرسال تفاصيل الدفع وتأكيد الطلب 📱
 
 شكراً لكم!`;
+  
   const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
   try {
     if (waWindow && !waWindow.closed) {
       waWindow.location.href = waUrl;
       return true;
     }
+    
     const newWin = window.open(waUrl, "_blank");
     if (newWin) return true;
+    
     window.location.href = waUrl;
     return true;
   } catch(e) {
-    console.warn("️ WhatsApp open failed:", e);
+    console.warn("⚠️ WhatsApp open failed:", e);
     return false;
   }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ اصلاح جذري وبسيط لحساب المستخدم
+   ═══════════════════════════════════════════════════════════ */
 function initAccount() {
   document.getElementById("accBtn")?.addEventListener("click", async () => {
     const isFirebaseLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
+
     const fieldsToToggle = ["accName", "accPhone", "accCity", "accAddr", "saveAccBtn"];
     const accSub = document.querySelector('[data-i18n="acc_sub"]');
     let welcomeMsg = document.getElementById("accWelcomeMsg");
+
     if (!isFirebaseLogged) {
       fieldsToToggle.forEach(id => {
         const el = document.getElementById(id);
@@ -2308,6 +3246,7 @@ function initAccount() {
       });
       if (accSub) accSub.style.display = "";
       if (welcomeMsg) welcomeMsg.style.display = "none";
+      
       if (typeof openAuthModal === "function") {
         openAuthModal();
       } else {
@@ -2315,11 +3254,13 @@ function initAccount() {
       }
       return;
     }
+
     fieldsToToggle.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = "none";
     });
     if (accSub) accSub.style.display = "none";
+
     if (!welcomeMsg) {
       welcomeMsg = document.createElement("div");
       welcomeMsg.id = "accWelcomeMsg";
@@ -2328,11 +3269,13 @@ function initAccount() {
       if (form) form.insertBefore(welcomeMsg, form.firstChild);
     }
     welcomeMsg.style.display = "block";
+
     try {
       let userData = null;
       if (typeof VL_GetCurrentUser === "function") {
         userData = await VL_GetCurrentUser();
       }
+      
       if (!userData) {
         const localUser = getSavedUser();
         const fbUser = window.FB.auth.currentUser;
@@ -2343,6 +3286,7 @@ function initAccount() {
           ordersCount: localUser?.orders || 0
         };
       }
+
       welcomeMsg.innerHTML = `
         <div style="font-weight:700; color:var(--gold2); font-size:1.1rem; margin-bottom:0.3rem;">
           أهلاً بك، ${userData.name || "عميلنا العزيز"} 👋
@@ -2351,9 +3295,11 @@ function initAccount() {
           ${userData.email || ""}
         </div>
       `;
+
       if (document.getElementById("ordCount")) {
         document.getElementById("ordCount").textContent = userData.ordersCount || 0;
       }
+      
       localStorage.setItem("vl_user", JSON.stringify({
         uid: window.FB.auth.currentUser.uid,
         email: userData.email || "",
@@ -2361,6 +3307,7 @@ function initAccount() {
         phone: userData.phone || "",
         orders: userData.ordersCount || 0
       }));
+
     } catch (error) {
       console.warn("⚠️ Error loading user data:", error);
       const fbUser = window.FB.auth.currentUser;
@@ -2373,24 +3320,30 @@ function initAccount() {
         </div>
       `;
     }
+    
     openDrawer("accOv");
   });
+
   document.getElementById("closeAcc")?.addEventListener("click", () => closeModal("accOv"));
   document.getElementById("accOv")?.addEventListener("click", e => {
     if (e.target.id === "accOv") { closeModal("accOv"); }
   });
+
   document.getElementById("saveAccBtn")?.addEventListener("click", async () => {
     const name = document.getElementById("accName")?.value.trim();
     const phone = document.getElementById("accPhone")?.value.trim();
-    if (!name || !phone) { toast("️ اكتب الاسم ورقم الموبايل."); return; }
+    if (!name || !phone) { toast("⚠️ اكتب الاسم ورقم الموبايل."); return; }
+    
     const old = getSavedUser();
     try {
       localStorage.setItem("vl_user", JSON.stringify({ ...old, name, phone, orders: old.orders || 0 }));
     } catch (e) { console.warn("⚠️ Failed to save account:", e); }
+    
     if (typeof fillCartForm === "function") fillCartForm();
     toast("✅ تم حفظ البيانات بنجاح");
     closeModal("accOv");
   });
+
   document.getElementById("guestLoginBtn")?.addEventListener("click", () => {
     if (typeof openAuthModal === "function") {
       closeModal("accOv");
@@ -2399,6 +3352,7 @@ function initAccount() {
       toast("⚠️ يرجى تسجيل الدخول من الصفحة الرئيسية");
     }
   });
+
   document.getElementById("logoutBtn")?.addEventListener("click", async () => {
     if (window.FB && window.FB.auth && typeof VL_Logout === "function") {
       await VL_Logout();
@@ -2413,7 +3367,7 @@ function initAccount() {
     setTimeout(() => window.location.reload(), 500); 
   });
 }
-
+   
 async function loadUserData(isLoggedIn) {
   if (isLoggedIn && typeof VL_GetCurrentUser === "function") {
     const userData = await VL_GetCurrentUser();
@@ -2446,7 +3400,9 @@ function initSearch(){
   document.getElementById("searchOv")?.addEventListener("click",e=>{
     if(e.target.id==="searchOv"){closeModal("searchOv");}
   });
+  
   const debouncedSearch = debounce((q) => performSearch(q), 200);
+  
   document.getElementById("searchInput")?.addEventListener("input",e=>{
     const q=e.target.value.trim().toLowerCase();
     debouncedSearch(q);
@@ -2457,18 +3413,21 @@ function performSearch(q){
   const w=document.getElementById("searchResults");
   if(!w)return;
   if(!q){w.innerHTML="";return;}
+  
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   const res=products.filter(p=>{
     if(!p) return false;
     const hay=(p.name+" "+(p.nameEn||"")+" "+(p.desc||"")+" "+(p.descEn||"")+" "+cat(p.cat)).toLowerCase();
     return hay.includes(q);
   }).slice(0,8);
+  
   w.innerHTML=res.map(p=>`
     <div class="sr-item" data-id="${p.id}">
       <img src="${imgOf(p)}" alt="" loading="lazy" width="50" height="50" onerror="window.handleImageError(this, '${p.id}')">
       <div><b>${pname(p)}</b><br><small>${money(p.price)}</small></div>
     </div>
   `).join("");
+  
   w.querySelectorAll(".sr-item").forEach(it=>{
     it.addEventListener("click",()=>{location.href="product.html?p="+it.dataset.id;});
   });
@@ -2522,23 +3481,29 @@ function initNav(){
     a.addEventListener("click",()=>{
       document.getElementById("mnav")?.classList.remove("open");
       document.getElementById("ovl")?.classList.remove("open");
+      // ✨ [إضافة] إرجاع السكرول — حل مشكلة القفل بعد اختيار تصنيف
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
     });
   });  
+  /* ✨ روابط التصنيفات — تنقل مع ?cat= على أي صفحة */
   document.querySelectorAll("[data-cat]").forEach(a=>{
     if(a.closest(".mnav")||a.closest(".mainnav")||a.closest("footer")){
       a.addEventListener("click",(e)=>{
         const cat = a.dataset.cat;
         if(!cat) return;
+        
         const isProductsPage = window.location.pathname.includes('products.html');
+        
         if(isProductsPage){
+          // في نفس الصفحة → اضغط الشيب مباشرة
           e.preventDefault();
           setTimeout(()=>{
             const chip=document.querySelector(`#chips .chip[data-cat="${cat}"]`);
             if(chip){chip.click();}
           },50);
         } else {
+          // في صفحة تانية → انتقل مع تمرير التصنيف في الرابط
           e.preventDefault();
           window.location.href = "products.html?cat=" + encodeURIComponent(cat);
         }
@@ -2552,12 +3517,10 @@ function openDrawer(id,ovlId){
   if(ovlId){document.getElementById(ovlId)?.classList.add("open");}
   document.body.style.overflow = 'hidden';
 }
-
 function closeDrawers(){
   document.querySelectorAll(".drawer,.ovl").forEach(el=>el.classList.remove("open"));
   document.body.style.overflow = '';
 }
-
 function closeModal(id){
   document.getElementById(id)?.classList.remove("open");
   const stillOpen = document.querySelector('.drawer.open, .ovl.open');
@@ -2568,47 +3531,79 @@ function closeModal(id){
 
 function stockBadge(p){
   if(!p) return "";
+
   if(p.stock === undefined || p.stock === null || p.stock === "") return "";
+
   const s = Number(p.stock);
   if(isNaN(s)) return "";
-  const baseStyle = `position:absolute; top:12px; inset-inline-end:12px; inset-inline-start:auto; color:#fff; font-size:.7rem; font-weight:800; padding:.3rem .75rem; border-radius:99px; z-index:4; pointer-events:none; white-space:nowrap;`;
+
+  const baseStyle = `
+    position:absolute;
+    top:12px;
+    inset-inline-end:12px;
+    inset-inline-start:auto;
+    color:#fff;
+    font-size:.7rem;
+    font-weight:800;
+    padding:.3rem .75rem;
+    border-radius:99px;
+    z-index:4;
+    pointer-events:none;
+    white-space:nowrap;
+  `;
+
   if(s === 0){
     return `<span class="stock-badge" style="${baseStyle}background:#e74c3c;">نفدت الكمية</span>`;
   }
+
   if(s <= 5){
     return `<span class="stock-badge" style="${baseStyle}background:#e67e22;">باقي ${s} فقط</span>`;
   }
+
   return `<span class="stock-badge" style="${baseStyle}background:#27ae60;">متوفر</span>`;
 }
 
 async function decrementStock(items){
   if(!window.FB || !window.FB.db) return;
+  
   const { runTransaction, doc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
   const db = window.FB.db;
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
+  
   for(const it of items){
     const p = products.find(x => x.id === it.id);
     if(!p) continue;
+    
     if(p.stock === undefined || p.stock === null || p.stock === "" || isNaN(Number(p.stock))) continue;
+    
     const docId = p._fid || p.id;
     const docRef = doc(db, "products", docId);
     const qtyToSubtract = Number(it.qty || 1);
+    
     try {
       await runTransaction(db, async (transaction) => {
         const sfDoc = await transaction.get(docRef);
+        
         if (!sfDoc.exists()) {
           throw new Error("Product document does not exist!");
         }
+        
         const currentStock = Number(sfDoc.data().stock || 0);
         const newStock = Math.max(0, currentStock - qtyToSubtract);
+        
         transaction.update(docRef, { stock: newStock });
       });
+      
       console.log(`✅ Stock updated for ${p.id}: ${qtyToSubtract} subtracted`);
     } catch(e) {
       console.warn("⚠️ stock transaction failed for", p.id, e);
     }
   }
 }
+
+// ================================================================
+// ✨ COUPONS SYSTEM — النسخة الذكية المطورة
+// ================================================================
 
 let appliedCoupon = null;
 
@@ -2626,15 +3621,19 @@ function calcCouponDiscount(sub){
   return Math.min(sub, Math.round(d));
 }
 
+// ═══ applyCoupon ═══
 async function applyCoupon(){
   const code = (document.getElementById("couponInput")?.value || "").trim().toUpperCase();
   if(!code){ toast("⚠️ اكتب كود الكوبون"); return; }
+  
   let list = [];
   try { list = await window.FB.list("coupons") || []; }
   catch(e){ toast("⚠️ تعذر التحقق من الكوبون"); return; }
+  
   const c = list.find(x => (x.code || "").toUpperCase() === code);
   if(!c){ toast("❌ كود الكوبون غير صحيح"); return; }
-  if(c.active === false){ toast(" الكوبون ده متوقف"); return; }
+  if(c.active === false){ toast("❌ الكوبون ده متوقف"); return; }
+  
   const now = Date.now();
   if(c.startDate && now < new Date(c.startDate).getTime()) {
     toast("⏳ هذا الكوبون لم يبدأ بعد.");
@@ -2648,16 +3647,19 @@ async function applyCoupon(){
     toast("⚠️ انتهت استخدامات الكوبون");
     return;
   }
+  
   const cart = getCart();
   const sub = cart.reduce((a,i) => a + (Number(i.price || 0) * Number(i.qty || 1)), 0);
   if(c.minOrder && sub < c.minOrder) {
     toast(`⚠️ الحد الأدنى للطلب هو ${c.minOrder} ج.م`);
     return;
   }
+  
   if(c.firstOrderOnly) {
     const user = getSavedUser();
     const userEmail = user.email || "";
     const userPhone = user.phone || "";
+    
     let allOrders = [];
     try {
       allOrders = await window.FB.list("orders") || [];
@@ -2666,23 +3668,28 @@ async function applyCoupon(){
       toast("⚠️ تعذر التحقق من الطلبات السابقة");
       return;
     }
+    
     const customerOrders = allOrders.filter(order => {
       const orderEmail = order.email || order.customer?.email || "";
       const orderPhone = order.phone || order.customer?.phone || "";
       return (userEmail && orderEmail === userEmail) || (userPhone && orderPhone === userPhone);
     });
+    
     const nonCancelledOrders = customerOrders.filter(order => order.status !== 4);
+    
     if(nonCancelledOrders.length > 0) {
       toast("⚠️ هذا الكوبون مخصص للطلبات الأولى فقط (الطلبات الملغية غير محسوبة).");
       return;
     }
   }
+  
   const user = getSavedUser();
   const identifier = user.email || user.phone;
   if(identifier && c.usedBy && Array.isArray(c.usedBy) && c.usedBy.includes(identifier)) {
     toast("⚠️ لقد استخدمت هذا الكوبون من قبل.");
     return;
   }
+  
   let discount = 0;
   if(c.type === "percent"){
     discount = sub * (Number(c.value || 0) / 100);
@@ -2693,13 +3700,16 @@ async function applyCoupon(){
     discount = c.maxDiscount;
   }
   discount = Math.round(discount);
+  
   appliedCoupon = { ...c, _fid: c.id, discount: discount };
   toast("🎟️ تم تطبيق الكوبون! وفرت " + money(discount));
   renderCart();
 }
 
+// ═══ consumeCoupon ═══
 async function consumeCoupon(){
   if(!appliedCoupon || !appliedCoupon._fid) return;
+  
   const user = getSavedUser();
   const identifier = user.email || user.phone;
   if(identifier) {
@@ -2724,10 +3734,12 @@ async function consumeCoupon(){
       console.warn("⚠️ coupon update failed", e);
     }
   }
+  
   appliedCoupon = null;
   if(document.getElementById("couponInput")) document.getElementById("couponInput").value = "";
 }
 
+/* ═══ REVIEWS COUNT HELPER ═══ */
 window.getReviewsCount = function() {
   if (typeof REVIEWS_IMAGES !== 'undefined' && Array.isArray(REVIEWS_IMAGES)) {
     return REVIEWS_IMAGES.length;
@@ -2759,6 +3771,7 @@ if (typeof window.addToCart === "function") {
     return result;
   };
 }
+
 
 /* ═══ EXPOSE GLOBALLY ═══ */
 window.renderProductsPage = renderProductsPage;
