@@ -111,10 +111,6 @@ let quickAddQty=1;
 let quickAddMaxStock=99;
 let productGridClickBound=false;
 
-/* ═══ CART EVENTS STATE — safe one-time binding ═══ */
-let cartEventsBound=false;
-let cartFormEventsBound=false;
-
 /* ═══ PERFORMANCE OPTIMIZATIONS ═══ */
 const requestIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
 const cancelIdle = window.cancelIdleCallback || clearTimeout;
@@ -1989,16 +1985,11 @@ function initCart(){
   fillCitySelect(document.getElementById("coCity"));
   fillCartForm();
   
-  /* Keep the original drawer/DOM flow intact. Bind once only. */
-  const cartBtn = document.getElementById("cartBtn");
-  if (cartBtn && !cartBtn.dataset.cartBound) {
-    cartBtn.dataset.cartBound = "true";
-    cartBtn.addEventListener("click",()=>{
-      fillCartForm();
-      renderCart();
-      openDrawer("cartDrawer","cartOv");
-    });
-  }
+  document.getElementById("cartBtn")?.addEventListener("click",()=>{
+    fillCartForm();
+    renderCart();
+    openDrawer("cartDrawer","cartOv");
+  });
   document.getElementById("closeCart")?.addEventListener("click",closeDrawers);
   document.getElementById("cartOv")?.addEventListener("click",closeDrawers);
   renderCart();
@@ -2018,19 +2009,16 @@ function initCart(){
   document.getElementById("checkoutBtn")?.addEventListener("click",checkout);
   document.getElementById("applyCouponBtn")?.addEventListener("click",applyCoupon);
 
-  if (!cartFormEventsBound) {
-    const saveCustomer = debounce(() => saveCartCustomer(), 500);
-    
-    ["#coName","#coPhone","#coEmail","#coCity","#coAddr","#coNotes"].forEach(selector=>{
-      document.addEventListener("input",e=>{
-        if(e.target.matches(selector)){saveCustomer();}
-      });
-      document.addEventListener("change",e=>{
-        if(e.target.matches(selector)){saveCustomer();}
-      });
+  const saveCustomer = debounce(() => saveCartCustomer(), 500);
+  
+  ["#coName","#coPhone","#coEmail","#coCity","#coAddr","#coNotes"].forEach(selector=>{
+    document.addEventListener("input",e=>{
+      if(e.target.matches(selector)){saveCustomer();}
     });
-    cartFormEventsBound = true;
-  }
+    document.addEventListener("change",e=>{
+      if(e.target.matches(selector)){saveCustomer();}
+    });
+  });
 
   const checkoutBtn = document.getElementById('checkoutBtn');
   if (checkoutBtn && !document.getElementById('trustBadges')) {
@@ -2178,16 +2166,8 @@ function renderCart(){
     }
   }
 
-  /*
-     Safe event delegation: renderCart() can run many times after quantity/scent/coupon
-     changes. Bind the handlers only once so repeated renders never stack duplicate
-     listeners or multiply actions.
-  */
-  if (!cartEventsBound) {
-    w.addEventListener('click', handleCartClick);
-    w.addEventListener('change', handleCartChange);
-    cartEventsBound = true;
-  }
+  w.addEventListener('click', handleCartClick);
+  w.addEventListener('change', handleCartChange);
   
   updateTotals(c);
 }
