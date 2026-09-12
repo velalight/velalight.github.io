@@ -115,7 +115,6 @@
         padding-bottom: env(safe-area-inset-bottom, 0);
         direction: rtl;
         font-family: 'Tajawal', 'El Messiri', sans-serif;
-        contain: layout style paint;
       }
 
       /* يظهر على الموبايل بس */
