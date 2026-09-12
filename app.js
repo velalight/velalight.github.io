@@ -156,7 +156,9 @@ const velaScentTr=name=>{
 };
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ CART UI STYLES — النسخة المضغوطة + Sticky Actions
+   ✨ CART UI STYLES — النسخة النهائية
+   - ضغط كارت المنتج
+   - جعل الأزرار الأصلية Sticky
    ═══════════════════════════════════════════════════════════ */
 function injectCartStyles(){
   if(document.getElementById('vl-cart-luxe-styles')) return;
@@ -237,8 +239,7 @@ function injectCartStyles(){
     }
 
     /* ═══════════════════════════════════════════════════════
-       ✨ COMPACT LUXURY ITEM CARDS — نسخة محسّنة
-       السعر + إجمالي الصنف + الكمية في صف واحد
+       ✨ COMPACT LUXURY ITEM CARDS
        ═══════════════════════════════════════════════════════ */
     .citem{
       display: flex;
@@ -292,7 +293,6 @@ function injectCartStyles(){
       line-height: 1.25;
     }
 
-    /* Scent Pill Selector — صف واحد مع الاسم */
     .cart-scent-picker{
       display: flex;
       align-items: center;
@@ -343,7 +343,7 @@ function injectCartStyles(){
     }
     .cart-scent-select option{ padding: 8px; }
 
-    /* ✨ الصف الموحد: السعر + إجمالي الصنف + الكمية في صف واحد */
+    /* ✨ الصف الموحد */
     .citem-foot{
       display: flex;
       align-items: center;
@@ -386,7 +386,6 @@ function injectCartStyles(){
       background: rgba(212,175,55,.25);
       flex-shrink: 0;
     }
-    /* Qty أصغر وأنيق */
     .qty{
       display: inline-flex;
       align-items: center;
@@ -432,7 +431,7 @@ function injectCartStyles(){
       padding: 0 2px;
     }
 
-    /* Trash Button — مضغوط */
+    /* Trash Button */
     .rm{
       position: absolute;
       top: 8px;
@@ -758,7 +757,7 @@ function injectCartStyles(){
       border-top: 1px solid rgba(212,175,55,.25);
       box-shadow: 0 -4px 14px rgba(139,90,43,.06);
       padding: 8px 12px 10px !important;
-      max-height: 50vh;
+      max-height: 55vh;
       overflow-y: auto;
       position: relative;
       z-index: 5;
@@ -799,15 +798,6 @@ function injectCartStyles(){
       margin-bottom: 1px !important;
       font-weight: 600;
     }
-    /* صف مزدوج للفورم (اسم/تليفون في سطر واحد) */
-    .vl-form-row{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-    @media (max-width: 380px){
-      .vl-form-row{ grid-template-columns: 1fr; }
-    }
 
     /* ═══ Compact Payment Info ═══ */
     #cartDrawer .pay-note,
@@ -835,75 +825,30 @@ function injectCartStyles(){
     }
 
     /* ═══════════════════════════════════════════════════════
-       ✨ Sticky Actions Bar — زر الواتساب + إفراغ السلة ثابتين
+       ✨ STICKY BUTTONS — الأزرار الأصلية تفضل ثابتة تحت
+       (بنستهدف الـ IDs الأصلية من HTML مباشرة)
        ═══════════════════════════════════════════════════════ */
-    .vl-sticky-actions{
+    #cartDrawer .vl-buttons-sticky-wrap{
       position: sticky;
       bottom: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,.85) 0%, #ffffff 22%);
+      z-index: 20;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #ffffff 18%);
       padding: 8px 0 2px;
-      margin-top: 4px;
-      z-index: 10;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      margin-top: 6px;
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
-    .vl-sticky-actions .vl-sticky-row{
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 6px;
-      align-items: stretch;
+    #cartDrawer #checkoutBtn{
+      box-shadow: 0 6px 20px rgba(212,175,55,.35) !important;
+      margin: 0 !important;
     }
-    .vl-empty-btn{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1.5px solid rgba(231,76,60,.35);
-      background: #fff;
-      color: #c0392b;
-      font-family: inherit;
-      font-size: .78rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all .2s ease;
-      white-space: nowrap;
-      -webkit-tap-highlight-color: transparent;
+    #cartDrawer #emptyCartBtn{
+      background: rgba(255,255,255,.96) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      margin: 0 !important;
     }
-    .vl-empty-btn:hover{
-      background: #fef2f0;
-      border-color: #e74c3c;
-    }
-    .vl-empty-btn:active{ transform: scale(.97); }
-
-    .vl-checkout-sticky{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 12px 16px;
-      border-radius: 999px;
-      border: none;
-      background: linear-gradient(135deg,#d4af37,#f9d877);
-      color: #3d2f1f;
-      font-family: inherit;
-      font-size: .9rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all .25s ease;
-      box-shadow: 0 6px 20px rgba(212,175,55,.4);
-      -webkit-tap-highlight-color: transparent;
-      width: 100%;
-    }
-    .vl-checkout-sticky:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 8px 26px rgba(212,175,55,.55);
-    }
-    .vl-checkout-sticky:active{ transform: translateY(0) scale(.98); }
 
     /* ═══ Mobile ═══ */
     @media (max-width: 768px){
@@ -927,7 +872,7 @@ function injectCartStyles(){
       .citem-price .val,
       .citem-price .val-total{ font-size: .84rem; }
       #cartDrawer .dfoot{
-        max-height: 55vh;
+        max-height: 60vh;
       }
     }
 
@@ -969,7 +914,7 @@ function adjustCartDrawerPadding(){
   if(!items) return;
   items.style.paddingBottom = '4px';
 }
-
+ 
 /* ═══════════════════════════════════════════════════════════
    ✨ Confetti Animation
    ═══════════════════════════════════════════════════════════ */
@@ -1568,9 +1513,9 @@ brand_point3_desc: "We help you choose the right scent and details for your tast
   });
 
 })();
- 
-  /* ═══════════════════════════════════════════════════════════
-   ✨ INIT — الحل الجذري النهائي: منع الوميض وتوحيد البيانات
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ INIT
    ═══════════════════════════════════════════════════════════ */
 let isFirstRenderComplete = false;
 let pendingDataRefresh = false;
@@ -2542,9 +2487,9 @@ function renderFAQ(){
     });
   });
 }
-
+ 
 /* ═══════════════════════════════════════════════════════════
-   ✨ initCart — يبني زر الـ Sticky ويضيفه للفوتر
+   ✨ initCart
    ═══════════════════════════════════════════════════════════ */
 function initCart(){
   cartBadge();
@@ -2608,7 +2553,9 @@ function initCart(){
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ renderCart — النسخة النهائية: صف موحد (سعر + إجمالي + كمية)
+   ✨ renderCart — النسخة النهائية
+   - صف موحد للكارت
+   - الأزرار الأصلية (واتساب + إفراغ) في wrapper Sticky
    ═══════════════════════════════════════════════════════════ */
 function renderCart(){
   const c=getCart();
@@ -2644,7 +2591,7 @@ function renderCart(){
     return;
   }
 
-  /* ═══ ITEMS — الصف الموحد الجديد ═══ */
+  /* ═══ ITEMS — الصف الموحد ═══ */
   const frag = document.createDocumentFragment();
   
   c.forEach((it, i) => {
@@ -2794,43 +2741,40 @@ function renderCart(){
   }
 
   /* ═══════════════════════════════════════════════════════
-     ✨ STICKY ACTIONS — زر الواتساب + إفراغ السلة ثابتين
+     ✨ STICKY WRAP — بيلف الأزرار الأصلية من HTML
+     (الواتساب + إفراغ السلة) في wrapper Sticky واحد
      ═══════════════════════════════════════════════════════ */
   const footer = document.querySelector("#cartDrawer .dfoot");
   if (footer) {
-    // شيل أي sticky actions قديمة
-    footer.querySelectorAll('.vl-sticky-actions').forEach(el => el.remove());
+    // شيل أي wrapper قديم
+    const oldWrap = footer.querySelector('.vl-buttons-sticky-wrap');
+    if (oldWrap) {
+      // رجّع الأزرار لمكانها الأصلي جوه الفوتر (قبل ما نعمل wrapper جديد)
+      const checkout = document.getElementById('checkoutBtn');
+      const empty = document.getElementById('emptyCartBtn');
+      const trust = document.getElementById('trustBadges');
+      if (trust && oldWrap.contains(trust)) footer.appendChild(trust);
+      if (checkout && oldWrap.contains(checkout)) footer.appendChild(checkout);
+      if (empty && oldWrap.contains(empty)) footer.appendChild(empty);
+      oldWrap.remove();
+    }
 
-    // أنشئ الشريط الجديد
-    const stickyBar = document.createElement('div');
-    stickyBar.className = 'vl-sticky-actions';
-    stickyBar.innerHTML = `
-      <div class="vl-sticky-row">
-        <button type="button" class="vl-checkout-sticky" id="vlStickyCheckout">
-          ${t("cart_luxe_checkout") || "تأكيد الطلب عبر الواتساب 💬"}
-        </button>
-        <button type="button" class="vl-empty-btn" id="vlStickyEmpty" title="${t("cart_luxe_clear") || "إفراغ السلة"}">
-          🗑️
-        </button>
-      </div>
-    `;
-    footer.appendChild(stickyBar);
+    const checkoutEl = document.getElementById('checkoutBtn');
+    const emptyEl = document.getElementById('emptyCartBtn');
+    const trustEl = document.getElementById('trustBadges');
 
-    // اربط الأحداث
-    setTimeout(() => {
-      document.getElementById('vlStickyCheckout')?.addEventListener('click', () => {
-        // نادِ على checkout الأصلي
-        if (typeof checkout === "function") checkout();
-      });
+    // لو الأزرار موجودة فعلاً، لفهم في wrapper Sticky
+    if (checkoutEl && emptyEl) {
+      const wrap = document.createElement('div');
+      wrap.className = 'vl-buttons-sticky-wrap';
 
-      document.getElementById('vlStickyEmpty')?.addEventListener('click', () => {
-        if(!confirm(t("t_confirm_empty") || "هل تريد إفراغ السلة؟")) return;
-        saveCart([]);
-        freeShipCelebrated = false;
-        renderCart();
-        cartBadge();
-      });
-    }, 0);
+      // الترتيب: trust ← checkout ← empty
+      if (trustEl) wrap.appendChild(trustEl);
+      wrap.appendChild(checkoutEl);
+      wrap.appendChild(emptyEl);
+
+      footer.appendChild(wrap);
+    }
   }
 
   w.addEventListener('click', handleCartClick);
