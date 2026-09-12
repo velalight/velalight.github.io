@@ -904,9 +904,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // 4. السماح بالتحديثات اللاحقة
     isFirstRenderComplete = true;
 
-      // 5. الرسم حسب الصفحة
+    // 5. الرسم حسب الصفحة
     if (isProductsPage) {
-      // ✅ شغّل renderChips دايماً عشان نضمن الشيبس شغالة
+      // ✅ renderChips بتقرأ التصنيف من URL تلقائياً
       renderChips();
       
       if (typeof renderProductsPage === "function") {
@@ -914,15 +914,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         renderProducts();
       }
-      
-      // ✨ اقرأ التصنيف من الرابط (لو جاي من منيو)
-      const urlCat = new URLSearchParams(window.location.search).get('cat');
-      if(urlCat){
-        setTimeout(()=>{
-          const chip = document.querySelector(`#chips .chip[data-cat="${urlCat}"]`);
-          if(chip) chip.click();
-        }, 250);
-      }
+      // ← شيلنا الـ setTimeout auto-click — مفيش فلاش للمنتجات المثبتة
     } else if (isReviewsPage) {
      
       if (typeof renderReviewsPage === "function") {
@@ -1200,26 +1192,47 @@ function initReveal(){
   });
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ [مُعدّلة] renderChips — بتقرأ التصنيف من URL مباشرة
+   بتحدد الشيب النشط من الأول — مفيش فلاش للمنتجات
+   ═══════════════════════════════════════════════════════════ */
 function renderChips(){
   const w=document.getElementById("chips");
   if(!w)return;
   const isProductsPage = window.location.pathname.includes('products.html');
+  
   if (!isProductsPage) {
     w.style.display="none";
     w.setAttribute("aria-hidden","true");
+  } else {
+    w.style.display="";
+    w.removeAttribute("aria-hidden");
   }
+  
+  // ✅ اقرأ التصنيف من URL مباشرة (بدون auto-click بعد كده)
+  const urlCat = new URLSearchParams(window.location.search).get('cat');
+  const activeValue = (urlCat && urlCat.trim()) ? urlCat.trim() : "all";
+  
   const keys=["all","wood","glass","crystal","metal","massage","gift","bride"];
  
   const frag = document.createDocumentFragment();
   keys.forEach(k => {
     const btn = document.createElement('button');
-    btn.className = 'chip' + (k==="all" ? " on" : "");
+    btn.className = 'chip' + (k===activeValue ? " on" : "");
     btn.dataset.cat = k;
     btn.textContent = cat(k);
     btn.addEventListener("click",()=>{
       w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
       btn.classList.add("on");
-      const isProductsPage = window.location.pathname.includes('products.html');
+      
+      // ✅ حدّث الرابط عشان يفضل على نفس التصنيف لو عمل refresh
+      try {
+        const url = new URL(window.location);
+        if(k === "all") url.searchParams.delete('cat');
+        else url.searchParams.set('cat', k);
+        history.replaceState(null, '', url);
+      } catch(e) {}
+      
       if (isProductsPage && typeof renderProductsPage === "function") {
         renderProductsPage();
       } else {
@@ -1259,12 +1272,14 @@ function renderProducts(){
     return true;
   });
 
-  // ✨ منطق الترتيب الجديد: المنتجات المثبتة تأتي أولاً دائماً
+  // ✨ منطق الترتيب: التثبيت بيشتغل بس في "all"
   list.sort((a, b) => {
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    if (a.pinned && b.pinned) {
-      return (b.pinnedAt || 0) - (a.pinnedAt || 0);
+    if (catF === "all") {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      if (a.pinned && b.pinned) {
+        return (b.pinnedAt || 0) - (a.pinnedAt || 0);
+      }
     }
     
     switch(sort){
@@ -1431,7 +1446,6 @@ function renderProductsPage() {
 
   // ⚠️ ترتيب المنتجات — التثبيت بيشتغل بس في "all"
   list.sort((a, b) => {
-    // 1. المنتجات المثبتة تأتي أولاً بس لما نعرض كل المنتجات
     if (catF === "all") {
       if (a.pinned && !b.pinned) return -1;
       if (!a.pinned && b.pinned) return 1;
@@ -1440,19 +1454,18 @@ function renderProductsPage() {
       }
     }
     
-    // 2. الترتيب حسب الاختيار
     switch(sort) {
-      case "asc": // السعر: من الأقل إلى الأعلى
+      case "asc":
         return (a.price || 0) - (b.price || 0);
-      case "desc": // السعر: من الأعلى إلى الأقل
+      case "desc":
         return (b.price || 0) - (a.price || 0);
-      case "rating": // التقييم (النجوم)
+      case "rating":
         return ((typeof ratingOf === "function" ? ratingOf(b.id)?.avg : 0) || 0) - ((typeof ratingOf === "function" ? ratingOf(a.id)?.avg : 0) || 0);
-      case "best": // الأكثر مبيعاً
+      case "best":
         return (b.sold || 0) - (a.sold || 0);
-      case "disc": // أكبر خصم
+      case "disc":
         return ((b.old - b.price) / Math.max(b.old, 1)) - ((a.old - a.price) / Math.max(a.old, 1));
-      case "new": // الأحدث (افتراضي)
+      case "new":
       default:
         return (b.createdAt || 0) - (a.createdAt || 0);
     }
@@ -1692,7 +1705,7 @@ function handleProductGridClick(e){
   }
 }
 
-/* ═══ QUICK ADD MODAL (النسخة المصححة نهائياً - بدون تعطيل الزر + Event Delegation) ═══ */
+/* ═══ QUICK ADD MODAL ═══ */
 function initQuickAdd() {
   const closeBtn = document.getElementById("closeScent");
   const overlay = document.getElementById("scentOv");
@@ -1703,8 +1716,6 @@ function initQuickAdd() {
     if (e.target.id === "scentOv") closeModal("scentOv");
   });
 
-  // 🔥 الحل الجذري: Event Delegation - نربط الأحداث بالأب مرة واحدة فقط
-  // هذا يمنع العد المزدوج (1,3,5) ويضمن أن الأزرار تعمل حتى بعد إعادة رسم HTML
   overlay?.addEventListener("click", (e) => {
     if (e.target.id === "smQMinus") {
       if (quickAddQty > 1) {
@@ -1727,7 +1738,6 @@ function initQuickAdd() {
     }
   });
 
-  // 1. زر الإضافة للسلة - بدون تعطيل، يتحقق دائماً ويظهر الرسالة
   addBtn?.addEventListener("click", () => {
     if (!quickAddProduct) return;
 
@@ -1735,7 +1745,6 @@ function initQuickAdd() {
     const currentScent = modalSelect ? modalSelect.value : quickAddScent;
     const currentQty = parseInt(document.getElementById("smQVal")?.textContent || "1", 10) || 1;
 
-    // ⚠️ التحقق الصارم من العطر وإظهار الرسالة (مثل صفحة المنتج تماماً)
     if (!currentScent) {
       toast("⚠️ من فضلك اختر العطر أولاً");
       if (modalSelect) modalSelect.focus();
@@ -1797,7 +1806,6 @@ function openQuickAdd(p) {
 
   const addBtn = document.getElementById("scentModalAdd");
   if (addBtn) {
-    // ✅ هام جداً: الزر يبقى مفعّل دائماً عشان يستقبل الضغط ويظهر رسالة التحذير
     addBtn.disabled = false;
     addBtn.textContent = t("quick_add_add") || "️ أضف للسلة";
   }
@@ -1814,7 +1822,6 @@ function openQuickAdd(p) {
   const safeName = pname(p);
   const priceText = money(p.price);
 
-  // حقن الكود النظيف (حقل الكمية مرة واحدة فقط)
   w.innerHTML = `
     <div class="vl-quick-preview" style="display:flex;align-items:center;gap:.9rem;margin-bottom:1rem;padding:.65rem;border:1px solid var(--line);border-radius:14px;background:var(--bg);">
       <img src="${imgSrc}" alt="${safeName}" width="72" height="72" loading="eager" decoding="async" style="width:72px;height:72px;object-fit:cover;border-radius:11px;flex:0 0 72px;" onerror="this.style.display='none'">
@@ -2366,8 +2373,6 @@ function saveUserFromCart(name,phone,email,city,addr,notes=""){
 
 /* ═══════════════════════════════════════════════════════════
    ✨ [إضافة جديدة] تسجيل/تحديث العميل في مجموعة users
-   يضمن ظهور أي عميل في تبويب "العملاء" بلوحة التحكم تلقائياً
-   حتى لو لم يكن مسجلاً بحساب في Firebase Auth
    ═══════════════════════════════════════════════════════════ */
 async function saveOrUpdateCustomer(orderData){
   if(!window.FB || typeof window.FB.list !== "function") return null;
@@ -2557,7 +2562,6 @@ async function checkout(){
   }
 
   // ✅ هام جداً: افتح نافذة فارغة فوراً عند الضغط قبل أي await
-  // هذا يمنع المتصفح من حظر النافذة المنبثقة
   const waWindow = window.open("", "_blank");
 
   saveUserFromCart(name,phone,email,city,addr,notes);
@@ -2696,7 +2700,7 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
     paymentStatus:"pending",
     shippingPayment:"Cash to courier",
     shippingIncluded: subTotal >= 3000,
-    status: 0, // قيد المراجعة
+    status: 0,
     statusHistory: [
       { status: 0, changedAt: Date.now(), changedBy: "customer" }
     ],
@@ -2723,7 +2727,7 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
     console.error("❌ Failed to save order to Firebase after retries");
   }
 
-  /* ✨ [إضافة جديدة] تسجيل/تحديث العميل في مجموعة users */
+  /* ✨ تسجيل/تحديث العميل في مجموعة users */
   try {
     await saveOrUpdateCustomer(orderData);
   } catch(e) {
@@ -2923,13 +2927,11 @@ ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ [مُعدّلة] فتح واتساب — يستخدم رقم المتجر + normalizeWhatsApp
-   ترجع true لو اتفتح، false لو فشل
+   ✨ فتح واتساب — يستخدم رقم المتجر + normalizeWhatsApp
    ═══════════════════════════════════════════════════════════ */
 function openWhatsAppConfirmation(orderData, waWindow) {
   if (!CFG || !CFG.WHATSAPP) return false;
   
-  // ✅ استخدم normalizeWhatsApp لو متاحة، وإلا fallback
   const whatsappNumber = (typeof normalizeWhatsApp === "function")
     ? normalizeWhatsApp(CFG.WHATSAPP)
     : String(CFG.WHATSAPP).replace(/\D/g, "");
@@ -2974,17 +2976,14 @@ ${itemsSummary}
   const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
   try {
-    // ✅ الأولوية الأولى: نافذة مفتوحة مسبقاً قبل أي await
     if (waWindow && !waWindow.closed) {
       waWindow.location.href = waUrl;
       return true;
     }
     
-    // ✅ المحاولة الثانية: افتح نافذة جديدة
     const newWin = window.open(waUrl, "_blank");
     if (newWin) return true;
     
-    // ✅ الخطة الاحتياطية: انتقل في نفس الصفحة لو النوافذ محظورة
     window.location.href = waUrl;
     return true;
   } catch(e) {
@@ -2994,7 +2993,7 @@ ${itemsSummary}
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ اصلاح جذري وبسيط لحساب المستخدم (بدون تعديل HTML)
+   ✨ اصلاح جذري وبسيط لحساب المستخدم
    ═══════════════════════════════════════════════════════════ */
 function initAccount() {
   document.getElementById("accBtn")?.addEventListener("click", async () => {
@@ -3247,7 +3246,10 @@ function initNav(){
       document.getElementById("mnav")?.classList.remove("open");
       document.getElementById("ovl")?.classList.remove("open");
     });
-  });  document.querySelectorAll("[data-cat]").forEach(a=>{
+  });
+  
+  /* ✨ روابط التصنيفات — تنقل مع ?cat= على أي صفحة */
+  document.querySelectorAll("[data-cat]").forEach(a=>{
     if(a.closest(".mnav")||a.closest(".mainnav")||a.closest("footer")){
       a.addEventListener("click",(e)=>{
         const cat = a.dataset.cat;
@@ -3362,7 +3364,7 @@ async function decrementStock(items){
 }
 
 // ================================================================
-// ✨ COUPONS SYSTEM — النسخة الذكية المطورة (مع كل الشروط)
+// ✨ COUPONS SYSTEM — النسخة الذكية المطورة
 // ================================================================
 
 let appliedCoupon = null;
@@ -3381,7 +3383,7 @@ function calcCouponDiscount(sub){
   return Math.min(sub, Math.round(d));
 }
 
-// ═══ التعديل الجديد على applyCoupon (يدعم usedBy وكل الشروط) ═══
+// ═══ applyCoupon ═══
 async function applyCoupon(){
   const code = (document.getElementById("couponInput")?.value || "").trim().toUpperCase();
   if(!code){ toast("⚠️ اكتب كود الكوبون"); return; }
@@ -3415,7 +3417,6 @@ async function applyCoupon(){
     return;
   }
   
-  // التحقق من "أول عميل فقط" – مع استثناء الطلبات الملغية (status = 4)
   if(c.firstOrderOnly) {
     const user = getSavedUser();
     const userEmail = user.email || "";
@@ -3436,7 +3437,6 @@ async function applyCoupon(){
       return (userEmail && orderEmail === userEmail) || (userPhone && orderPhone === userPhone);
     });
     
-    // استثناء الطلبات الملغية (status = 4)
     const nonCancelledOrders = customerOrders.filter(order => order.status !== 4);
     
     if(nonCancelledOrders.length > 0) {
@@ -3445,7 +3445,6 @@ async function applyCoupon(){
     }
   }
   
-  // منع التكرار (usedBy)
   const user = getSavedUser();
   const identifier = user.email || user.phone;
   if(identifier && c.usedBy && Array.isArray(c.usedBy) && c.usedBy.includes(identifier)) {
@@ -3469,7 +3468,7 @@ async function applyCoupon(){
   renderCart();
 }
 
-// ═══ التعديل الجديد على consumeCoupon (يسجل المستخدم في usedBy) ═══
+// ═══ consumeCoupon ═══
 async function consumeCoupon(){
   if(!appliedCoupon || !appliedCoupon._fid) return;
   
