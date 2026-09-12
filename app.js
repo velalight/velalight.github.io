@@ -904,15 +904,27 @@ document.addEventListener("DOMContentLoaded", () => {
     // 4. السماح بالتحديثات اللاحقة
     isFirstRenderComplete = true;
 
-    // 5. الرسم حسب الصفحة
+      // 5. الرسم حسب الصفحة
     if (isProductsPage) {
+      // ✅ شغّل renderChips دايماً عشان نضمن الشيبس شغالة
+      renderChips();
+      
       if (typeof renderProductsPage === "function") {
         renderProductsPage();
       } else {
-        renderChips();
         renderProducts();
       }
+      
+      // ✨ اقرأ التصنيف من الرابط (لو جاي من منيو)
+      const urlCat = new URLSearchParams(window.location.search).get('cat');
+      if(urlCat){
+        setTimeout(()=>{
+          const chip = document.querySelector(`#chips .chip[data-cat="${urlCat}"]`);
+          if(chip) chip.click();
+        }, 250);
+      }
     } else if (isReviewsPage) {
+     
       if (typeof renderReviewsPage === "function") {
         renderReviewsPage();
       }
@@ -1191,9 +1203,13 @@ function initReveal(){
 function renderChips(){
   const w=document.getElementById("chips");
   if(!w)return;
-  w.style.display="none";
-  w.setAttribute("aria-hidden","true");
+  const isProductsPage = window.location.pathname.includes('products.html');
+  if (!isProductsPage) {
+    w.style.display="none";
+    w.setAttribute("aria-hidden","true");
+  }
   const keys=["all","wood","glass","crystal","metal","massage","gift","bride"];
+ 
   const frag = document.createDocumentFragment();
   keys.forEach(k => {
     const btn = document.createElement('button');
@@ -1413,13 +1429,15 @@ function renderProductsPage() {
     return true;
   });
 
-  // ⚠️ ترتيب المنتجات (تم إصلاح المنطق ليعمل مع جميع خيارات الترتيب)
+  // ⚠️ ترتيب المنتجات — التثبيت بيشتغل بس في "all"
   list.sort((a, b) => {
-    // 1. المنتجات المثبتة (Pinned) تأتي أولاً
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    if (a.pinned && b.pinned) {
-      return (b.pinnedAt || 0) - (a.pinnedAt || 0);
+    // 1. المنتجات المثبتة تأتي أولاً بس لما نعرض كل المنتجات
+    if (catF === "all") {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      if (a.pinned && b.pinned) {
+        return (b.pinnedAt || 0) - (a.pinnedAt || 0);
+      }
     }
     
     // 2. الترتيب حسب الاختيار
@@ -3229,14 +3247,26 @@ function initNav(){
       document.getElementById("mnav")?.classList.remove("open");
       document.getElementById("ovl")?.classList.remove("open");
     });
-  });
-  document.querySelectorAll("[data-cat]").forEach(a=>{
+  });  document.querySelectorAll("[data-cat]").forEach(a=>{
     if(a.closest(".mnav")||a.closest(".mainnav")||a.closest("footer")){
-      a.addEventListener("click",()=>{
-        setTimeout(()=>{
-          const chip=document.querySelector(`#chips .chip[data-cat="${a.dataset.cat}"]`);
-          if(chip){chip.click();}
-        },100);
+      a.addEventListener("click",(e)=>{
+        const cat = a.dataset.cat;
+        if(!cat) return;
+        
+        const isProductsPage = window.location.pathname.includes('products.html');
+        
+        if(isProductsPage){
+          // في نفس الصفحة → اضغط الشيب مباشرة
+          e.preventDefault();
+          setTimeout(()=>{
+            const chip=document.querySelector(`#chips .chip[data-cat="${cat}"]`);
+            if(chip){chip.click();}
+          },50);
+        } else {
+          // في صفحة تانية → انتقل مع تمرير التصنيف في الرابط
+          e.preventDefault();
+          window.location.href = "products.html?cat=" + encodeURIComponent(cat);
+        }
       });
     }
   });
