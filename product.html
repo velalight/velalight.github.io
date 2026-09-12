@@ -213,9 +213,9 @@
 }
 
 /* ═══════════════════════════════════════════════
-   ✨ INFO PANEL — تم تقليل الفراغات
+   ✨ INFO PANEL — مضغوط ومحسّن
    ═══════════════════════════════════════════════ */
-.pd-info{display:flex;flex-direction:column;gap:.65rem}
+.pd-info{display:flex;flex-direction:column;gap:.5rem}
 .pd-info h1{
   font-family:var(--fd);
   font-size:clamp(1.6rem,3vw,2.2rem);
@@ -224,12 +224,30 @@
   line-height:1.25;
 }
 
+/* ═══ Status Row: Badge + Stock في سطر واحد ═══ */
+.pd-status-row{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  flex-wrap:wrap;
+  margin:0;
+}
+.pd-status-row > div:empty{display:none}
+.pd-status-row .p-badge{
+  margin:0 !important;
+  position:static !important;
+  display:inline-block !important;
+}
+.pd-status-row .stock-badge{
+  margin:0 !important;
+}
+
 /* ═══ Price ═══ */
 .pd-price{
   display:flex;
   align-items:baseline;
   gap:.7rem;
-  margin:.35rem 0;
+  margin:.1rem 0;
   flex-wrap:wrap;
 }
 .pd-price .price-main{
@@ -262,6 +280,7 @@
   font-size:.88rem;
   color:var(--mut);
   flex-wrap:wrap;
+  order:-1;
 }
 .pd-rating .stars{color:var(--gold);letter-spacing:2px}
 .pd-rating b{color:var(--gold2);font-family:var(--fd);font-size:1rem}
@@ -301,7 +320,7 @@
   border-radius:99px;
   font-size:.75rem;
   font-weight:600;
-  margin:.15rem 0;
+  margin:0;
 }
 .stock-badge.ok{background:#d4edda;color:#155724}
 .stock-badge.low{background:#fff4e6;color:#d97706}
@@ -312,22 +331,22 @@
   color:var(--mut);
   line-height:1.85;
   font-size:.9rem;
-  margin:.5rem 0 .4rem;
+  margin:.35rem 0 .25rem;
   padding:.85rem 1rem;
   background:var(--panel2);
   border-radius:12px;
   border-inline-start:3px solid var(--gold);
 }
 
-/* ═══ Scent Picker (مُحسَّن الحجم) ═══ */
+/* ═══ Scent Picker ═══ */
 .opt-title{
   display:flex;
   align-items:center;
   gap:.5rem;
   font-weight:700;
   font-size:.92rem;
-  margin-top:.65rem;
-  margin-bottom:.4rem;
+  margin-top:.5rem;
+  margin-bottom:.35rem;
   color:var(--dark);
 }
 .opt-title .req-tag{
@@ -341,7 +360,7 @@
   border:1px solid rgba(217,171,95,.4);
 }
 
-.scents-pick{position:relative;max-width:440px}
+.scents-pick{position:relative;max-width:440px;margin-bottom:.15rem}
 .scents-pick select{
   width:100% !important;
   padding:.75rem .95rem !important;
@@ -381,8 +400,27 @@
   font-size:.9rem;
 }
 
-/* ═══ Quantity ═══ */
-.qty-wrap{display:flex;gap:1rem;align-items:center;margin:.35rem 0}
+/* ═══ Buy Row: Qty + Actions في سطر واحد ═══ */
+.pd-buy-row{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  margin-top:.5rem;
+  flex-wrap:nowrap;
+}
+
+.qty-wrap{
+  display:flex;
+  align-items:center;
+  gap:.4rem;
+  flex-shrink:0;
+}
+.qty-label{
+  font-weight:700;
+  font-size:.88rem;
+  color:var(--dark);
+  white-space:nowrap;
+}
 .qty{
   display:inline-flex;
   align-items:center;
@@ -394,11 +432,11 @@
 .qty button{
   background:none;
   border:none;
-  width:36px;
-  height:36px;
-  border-radius:10px;
+  width:32px;
+  height:32px;
+  border-radius:9px;
   cursor:pointer;
-  font-size:1.2rem;
+  font-size:1.1rem;
   color:var(--dark);
   transition:.2s;
   display:grid;
@@ -406,26 +444,31 @@
 }
 .qty button:hover{background:var(--panel2);color:var(--gold2)}
 .qty b{
-  min-width:42px;
+  min-width:34px;
   text-align:center;
   font-family:var(--fd);
-  font-size:1.1rem;
+  font-size:1.05rem;
   color:var(--dark);
 }
 
-/* ═══ Actions ═══ */
 .pd-actions{
-  display:grid;
-  grid-template-columns:1fr auto auto;
-  gap:.55rem;
-  margin-top:.85rem;
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  flex:1;
+  min-width:0;
 }
 .pd-actions .btn{
-  padding:.9rem 1.2rem;
-  font-size:.92rem;
+  padding:.85rem 1rem;
+  font-size:.9rem;
   border-radius:12px;
   font-weight:700;
   transition:all .3s ease;
+  flex:1;
+  min-width:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 .pd-actions .btn:hover{
   transform:translateY(-2px);
@@ -437,31 +480,40 @@
 .pd-actions .btn.wa:hover{
   box-shadow:0 8px 25px rgba(46,139,69,.4);
 }
+
+/* ═══ Wishlist Button (مع نص) ═══ */
 .wish-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:.35rem;
   background:var(--panel);
   border:1.5px solid var(--line);
   color:var(--dark);
-  padding:.85rem 1rem;
+  padding:.85rem .9rem;
   border-radius:12px;
   cursor:pointer;
-  font-size:1.15rem;
+  font-size:.82rem;
+  font-weight:700;
   transition:.25s;
-  min-width:54px;
-  display:grid;
-  place-items:center;
+  flex-shrink:0;
+  white-space:nowrap;
+  font-family:inherit;
+}
+.wish-btn .wish-icon{
+  font-size:1.1rem;
+  line-height:1;
 }
 .wish-btn:hover{border-color:var(--gold);transform:translateY(-2px)}
 .wish-btn.on{background:#ffe8e8;color:#e74c3c;border-color:#e74c3c}
 
-/* ═══════════════════════════════════════════════
-   ✨ TRUST BADGES — انتقلت تحت الوصف
-   ═══════════════════════════════════════════════ */
+/* ═══ Trust Badges ═══ */
 .trust-badges{
   display:flex;
   justify-content:space-around;
   align-items:center;
   gap:.5rem;
-  margin:.6rem 0 0;
+  margin:.3rem 0 0;
   padding:.55rem .35rem;
   background:var(--panel);
   border-radius:12px;
@@ -483,7 +535,7 @@
   border:1px solid var(--line);
   border-radius:14px;
   padding:1rem;
-  margin-top:.5rem;
+  margin-top:.35rem;
 }
 .pay-info .pay-row{
   display:flex;
@@ -507,7 +559,7 @@
   padding:.8rem 1rem;
   font-size:.85rem;
   color:var(--mut);
-  margin-top:.5rem;
+  margin-top:.35rem;
 }
 .handmade-note .hm-icon{font-size:1.2rem;flex-shrink:0}
 
@@ -516,7 +568,7 @@
   display:flex;
   align-items:center;
   gap:.45rem;
-  margin-top:.5rem;
+  margin-top:.35rem;
   padding-top:.7rem;
   border-top:1px dashed var(--line);
   flex-wrap:wrap;
@@ -780,13 +832,12 @@
   border-radius: 0 0 22px 22px;
 }
 
+/* ═══ Responsive ═══ */
 @media(max-width:960px){
   .pd-grid{grid-template-columns:1fr;gap:2rem}
   .pd-gallery{position:static}
 }
 @media(max-width:768px){
-  .pd-actions{grid-template-columns:1fr;gap:.55rem}
-  .pd-actions .btn,.wish-btn{width:100%}
   .rel-grid{grid-template-columns:repeat(2,1fr)}
   .zoom-modal{padding:1rem}
   .zoom-modal img{max-width:95vw;max-height:85vh}
@@ -798,6 +849,36 @@
   .trust-badges{gap:.3rem}
   .trust-badges span{font-size:.62rem}
 }
+
+/* ═══ Mobile Buy Row Optimization ═══ */
+@media(max-width:600px){
+  .pd-buy-row{gap:.35rem}
+  .qty-label{font-size:.78rem;font-weight:600}
+  .qty button{width:28px;height:28px;font-size:.95rem;border-radius:8px}
+  .qty b{min-width:28px;font-size:.95rem}
+  .qty{padding:2px}
+  .pd-actions{gap:.35rem}
+  .pd-actions .btn{
+    font-size:.78rem;
+    padding:.7rem .5rem;
+    border-radius:10px;
+  }
+  .wish-btn{
+    font-size:.72rem;
+    padding:.7rem .5rem;
+    gap:.2rem;
+    border-radius:10px;
+  }
+  .wish-btn .wish-icon{font-size:.95rem}
+}
+
+@media(max-width:400px){
+  .qty-label{font-size:.72rem}
+  .pd-actions .btn{font-size:.72rem;padding:.65rem .35rem}
+  .wish-btn{font-size:.68rem;padding:.65rem .4rem}
+  .wish-btn .wish-icon{font-size:.9rem}
+}
+
 @media(max-width:480px){
   .pd-info h1{font-size:1.45rem}
   .pd-price .price-main{font-size:1.6rem}
@@ -915,17 +996,19 @@
         </div>
 
         <!-- ═══════════════════════════════════════════════════════
-             ✨ INFO PANEL — الترتيب الجديد المُحسَّن
+             ✨ INFO PANEL — ترتيب مضغوط محسّن
              ═══════════════════════════════════════════════════════ -->
         <div class="pd-info">
-
-          <div id="pdBadge"></div>
 
           <h1 id="pdName" class="fd"></h1>
 
           <div class="pd-rating" id="pdRatingSummary"></div>
 
-          <div id="pdStockInfo"></div>
+          <!-- ═══ Status Row: Badge + Stock في سطر واحد ═══ -->
+          <div class="pd-status-row">
+            <div id="pdBadge"></div>
+            <div id="pdStockInfo"></div>
+          </div>
 
           <!-- ═══ Price ═══ -->
           <div class="pd-price">
@@ -941,29 +1024,30 @@
           </div>
           <div class="scents-pick" id="pdScents"></div>
 
-          <!-- ═══ Quantity ═══ -->
-          <div class="opt-title" data-i18n="pd_qty_t">الكمية:</div>
-          <div class="qty-wrap">
-            <div class="qty">
-              <button id="pdQMinus" type="button" aria-label="تقليل الكمية" data-i18n-title="pd_decrease" title="تقليل الكمية">−</button>
-              <b id="pdQVal">1</b>
-              <button id="pdQPlus" type="button" aria-label="زيادة الكمية" data-i18n-title="pd_increase" title="زيادة الكمية">+</button>
+          <!-- ═══ Buy Row: Qty + Actions في سطر واحد ═══ -->
+          <div class="pd-buy-row">
+            <div class="qty-wrap">
+              <span class="qty-label" data-i18n="pd_qty_t">الكمية:</span>
+              <div class="qty">
+                <button id="pdQMinus" type="button" aria-label="تقليل الكمية" data-i18n-title="pd_decrease" title="تقليل الكمية">−</button>
+                <b id="pdQVal">1</b>
+                <button id="pdQPlus" type="button" aria-label="زيادة الكمية" data-i18n-title="pd_increase" title="زيادة الكمية">+</button>
+              </div>
             </div>
-          </div>
-
-          <!-- ═══ Actions ═══ -->
-          <div class="pd-actions">
-            <button class="btn" id="pdAddBtn" type="button" data-i18n="pd_add" style="background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(217,171,95,.4);">🛍️ أضف للسلة</button>
-            
-            <button class="btn wa" id="pdBuyBtn" type="button" data-i18n="pd_buy" style="font-weight:700; display: none;">💬 اطلب عبر واتساب</button>
-            
-            <button class="wish-btn" id="pdWishBtn" type="button" aria-label="إضافة إلى المفضلة" data-i18n-title="pd_wishlist" title="إضافة إلى المفضلة">🤍</button>
+            <div class="pd-actions">
+              <button class="btn" id="pdAddBtn" type="button" data-i18n="pd_add" style="background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(217,171,95,.4);">🛍️ أضف للسلة</button>
+              <button class="btn wa" id="pdBuyBtn" type="button" data-i18n="pd_buy" style="font-weight:700; display: none;">💬 اطلب عبر واتساب</button>
+              <button class="wish-btn" id="pdWishBtn" type="button" aria-label="إضافة إلى المفضلة" data-i18n-title="pd_wishlist" title="إضافة إلى المفضلة">
+                <span class="wish-icon">🤍</span>
+                <span class="wish-label">المفضلة</span>
+              </button>
+            </div>
           </div>
 
           <!-- ═══ Description ═══ -->
           <p class="pd-desc" id="pdDesc"></p>
 
-          <!-- ═══ Trust Badges (انتقلت هنا) ═══ -->
+          <!-- ═══ Trust Badges ═══ -->
           <div class="trust-badges">
             <span data-i18n="pd_feat_1">🕯️ صناعة يدوية</span>
             <span data-i18n="pd_feat_2">🚚 توصيل سريع</span>
@@ -1117,8 +1201,8 @@
       <div>
         <h4 data-i18n="foot_pay_h">الدفع والشحن</h4>
         <div class="paybox">
-          <b data-i18n="pay_title">InstaPay — تحويل مقدم</b>
-          <p style="margin-top:.5rem" data-i18n="foot_pay_note">ملحوظة هامة: قيمة المنتجات بتتحول مقدمًا عبر InstaPay، أما تكلفة الشحن فتُدفع كاش لمندوب شركة الشحن وقت استلام الأوردر مباشرة.</p>
+          <b data-i18n="pay_title">InstaPay / فودافون كاش / أورنج كاش</b>
+          <p style="margin-top:.5rem" data-i18n="foot_pay_note">ملحوظة هامة: قيمة المنتجات بتتحول مقدمًا عبر InstaPay أو فودافون كاش أو أورنج كاش، أما تكلفة الشحن فتُدفع كاش لمندوب شركة الشحن وقت استلام الأوردر مباشرة.</p>
         </div>
       </div>
     </div>
@@ -1194,9 +1278,6 @@ function catName(c){
   return (map[LANG]||map.ar)[c]||c||"";
 }
 
-/* ═══════════════════════════════════════════════════════
-   ✨ Switch to reviews tab + scroll to form
-   ═══════════════════════════════════════════════════════ */
 function switchToReviewsTab(scrollToForm){
   const tabs = $$("#tabsNav button");
   tabs.forEach(b=>{
@@ -1206,7 +1287,6 @@ function switchToReviewsTab(scrollToForm){
   $$(".tab-pane").forEach(p=>p.classList.remove("on"));
   $("#tab-reviews")?.classList.add("on");
 
-  // Scroll to tabs section
   setTimeout(()=>{
     if(scrollToForm){
       const form = document.getElementById("rvForm");
@@ -1280,7 +1360,6 @@ function initLangWatcher(){
       if(P) render();
       if(typeof window.applyProductTranslations==="function") window.applyProductTranslations();
       if(typeof renderReviews==="function") renderReviews();
-      if(P && typeof updateProductRating==="function") updateProductRating();
     }
   },150);
 }
@@ -1301,9 +1380,6 @@ async function loadAllReviews(){
   }catch(e){ console.warn("Reviews load failed", e); }
 }
 
-/* ═══════════════════════════════════════════════════════
-   ✨ Rating Summary — مع زر تفاعلي لما مفيش مراجعات
-   ═══════════════════════════════════════════════════════ */
 function renderRatingSummary(reviewSummary){
   const ratingBox=$("#pdRatingSummary");
   if(!ratingBox) return;
@@ -1329,9 +1405,6 @@ function renderRatingSummary(reviewSummary){
   }
 }
 
-/* ═══════════════════════════════════════════════════════
-   ✨ Delegation: handles "اقرأ الكل" + "أضف مراجعتك"
-   ═══════════════════════════════════════════════════════ */
 document.addEventListener("click", (e) => {
   const goReviews = e.target.closest("[data-goto-reviews]");
   if(goReviews){
@@ -1428,7 +1501,7 @@ function render(){
   if(typeof renderStock === "function") renderStock();
 
   const badge=(typeof pbadge === "function") ? pbadge(P) : "";
-  $("#pdBadge").innerHTML=badge ? `<span class="p-badge" style="position:static;display:inline-block;margin-bottom:.4rem">${badge}</span>` : "";
+  $("#pdBadge").innerHTML=badge ? `<span class="p-badge" style="position:static;display:inline-block;margin:0">${badge}</span>` : "";
 
   $("#pdPrice").textContent=(typeof money === "function") ? money(P.price) : (P.price + " ج.م");
   if(P.old&&P.old>P.price){
@@ -1608,8 +1681,30 @@ function bindEvents(){
   });
 }
 
-function initWishButton(){ $("#pdWishBtn")?.addEventListener("click",()=>{ if(!P) return; toggleWishlist(P.id); updateWishButton(); }); }
-function updateWishButton(){ const btn=$("#pdWishBtn"); if(!btn||!P) return; if(isInWishlist(P.id)){ btn.textContent="❤️"; btn.classList.add("on"); btn.setAttribute("aria-label","إزالة من المفضلة"); }else{ btn.textContent="🤍"; btn.classList.remove("on"); btn.setAttribute("aria-label","أضف للمفضلة"); } }
+function initWishButton(){ 
+  $("#pdWishBtn")?.addEventListener("click",()=>{ 
+    if(!P) return; 
+    toggleWishlist(P.id); 
+    updateWishButton(); 
+  }); 
+}
+
+function updateWishButton(){ 
+  const btn=$("#pdWishBtn"); 
+  if(!btn||!P) return;
+  const icon = btn.querySelector(".wish-icon");
+  if(!icon) return;
+  
+  if(isInWishlist(P.id)){ 
+    icon.textContent="❤️"; 
+    btn.classList.add("on"); 
+    btn.setAttribute("aria-label","إزالة من المفضلة"); 
+  }else{ 
+    icon.textContent="🤍"; 
+    btn.classList.remove("on"); 
+    btn.setAttribute("aria-label","أضف للمفضلة"); 
+  } 
+}
 
 function buildStars(){ const pick=$("#starPick"); if(!pick) return; pick.querySelectorAll("button").forEach(b=>{ b.addEventListener("click",()=>{ selRating=+b.dataset.v; pick.querySelectorAll("button").forEach((x,i)=>{ x.classList.toggle("lit",i<selRating); }); }); }); }
 
