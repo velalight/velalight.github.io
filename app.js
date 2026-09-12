@@ -1988,9 +1988,10 @@ function initCart(){
   document.getElementById("cartBtn")?.addEventListener("click",()=>{
     fillCartForm();
     renderCart();
+    showCartStage(1); // ✨ [جديد] ارجع دايماً لمرحلة السلة
     openDrawer("cartDrawer","cartOv");
   });
-  document.getElementById("closeCart")?.addEventListener("click",closeDrawers);
+ document.getElementById("closeCart")?.addEventListener("click",closeDrawers);
   document.getElementById("cartOv")?.addEventListener("click",closeDrawers);
   renderCart();
 
@@ -2020,9 +2021,12 @@ function initCart(){
     });
   });
 
+  /* ✨ [جديد] تهيئة مرحلتي السلة */
+  setupCartStages();
+  
   const checkoutBtn = document.getElementById('checkoutBtn');
   if (checkoutBtn && !document.getElementById('trustBadges')) {
-    const badges = document.createElement('div');
+   const badges = document.createElement('div');
     badges.id = 'trustBadges';
     badges.style.cssText = 'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
     badges.innerHTML = `
@@ -2141,17 +2145,19 @@ function renderCart(){
     }, 0);
   }
 
-  const dfoot = document.querySelector("#cartDrawer .dfoot");
-  if (dfoot) {
+  // ✨ [مُحدَّث] نضيف السطور الديناميكية لـ stage-1 (مش dfoot مباشرة)
+  const stage1 = document.querySelector("#cartDrawer .cart-stage-1") 
+              || document.querySelector("#cartDrawer .dfoot");
+  if (stage1) {
     if (!document.getElementById('qtyDiscountRow')) {
       const qtyRow = document.createElement('div');
       qtyRow.id = 'qtyDiscountRow';
       qtyRow.className = 'trow';
       qtyRow.style.cssText = 'display:none; margin-top:0.5rem; color:var(--ok);';
       qtyRow.innerHTML = `<span>🎁 خصم الكمية (3+ قطع من نفس المنتج):</span><b id="qtyDiscountVal">-0</b>`;
-      const subRow = dfoot.querySelector('.trow'); 
-      if (subRow) dfoot.insertBefore(qtyRow, subRow);
-      else dfoot.appendChild(qtyRow);
+      const subRow = stage1.querySelector('.trow'); 
+      if (subRow) stage1.insertBefore(qtyRow, subRow);
+      else stage1.appendChild(qtyRow);
     }
 
     if (!document.getElementById('freeShippingRow')) {
@@ -2160,12 +2166,18 @@ function renderCart(){
       shipRow.className = 'trow';
       shipRow.style.cssText = 'display:none; margin-top:0.5rem; color:#27ae60; font-weight:700; background:#eafaf1; padding:0.5rem; border-radius:8px; text-align:center;';
       shipRow.innerHTML = `<span>🚚 مبروك! طلبك مؤهل لشحن مجاني</span>`;
-      const totalRow = dfoot.querySelector('.trow.total');
+      const totalRow = stage1.querySelector('.trow.total');
       if (totalRow) totalRow.parentNode.insertBefore(shipRow, totalRow.nextSibling);
-      else dfoot.appendChild(shipRow);
+      else stage1.appendChild(shipRow);
     }
   }
 
+  // ✨ [جديد] فعّل/عطّل زر "متابعة للدفع" حسب السلة
+  const continueBtn = document.getElementById("continueToCheckoutBtn");
+  if (continueBtn) {
+    continueBtn.disabled = c.length === 0;
+  }
+ 
   w.addEventListener('click', handleCartClick);
   w.addEventListener('change', handleCartChange);
   
@@ -2828,8 +2840,12 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
   } catch (e) {
     console.warn("Tracking event fire failed:", e);
   }
-}
 
+  // ✨ [جديد] رجّع السلة لمرحلة 1 بعد نجاح الطلب
+  try {
+    if (typeof showCartStage === "function") showCartStage(1);
+  } catch (e) {}
+}
 function waTotalLabel(){
   if(I18N&&I18N[LANG]&&I18N[LANG].wa_total){return I18N[LANG].wa_total;}
   return LANG==="en"?"💰 Products Total:":"💰 إجمالي المنتجات:";
@@ -3546,5 +3562,217 @@ window.isInWishlist = isInWishlist;
 window.WISHLIST_KEY = WISHLIST_KEY;
 window.updateReviewsCount = updateReviewsCount;
 window.getReviewsCount = getReviewsCount;
+/* ═══════════════════════════════════════════════════════════
+   ✨ CART STAGES — تقسيم السلة لمرحلتين (Cart → Checkout)
+   ═══════════════════════════════════════════════════════════ */
+function setupCartStages() {
+  const dfoot = document.querySelector("#cartDrawer .dfoot");
+  if (!dfoot || dfoot.dataset.stagesReady === "1") return;
+  dfoot.dataset.stagesReady = "1";
 
+  // ═══ CSS مخصص للـ Stages ═══
+  if (!document.getElementById("cart-stages-css")) {
+    const style = document.createElement("style");
+    style.id = "cart-stages-css";
+    style.textContent = `
+      .cart-stage {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        animation: cartStageFadeIn 0.35s ease;
+      }
+      .cart-stage-1 { display: flex; }
+      .cart-stage-2 { display: none; }
+      @keyframes cartStageFadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      /* ═══ Progress Bar ═══ */
+      .cart-progress {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.55rem 0;
+        margin-bottom: 0.7rem;
+        border-bottom: 1px dashed var(--line);
+      }
+      .cart-progress-step {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--dim);
+        padding: 0.28rem 0.75rem;
+        border-radius: 99px;
+        background: var(--panel2);
+        transition: all 0.3s ease;
+        white-space: nowrap;
+      }
+      .cart-progress-step.active {
+        background: linear-gradient(135deg, var(--gold), #b8863f);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(217,171,95,0.35);
+      }
+      .cart-progress-arrow {
+        color: var(--dim);
+        font-size: 0.85rem;
+        opacity: 0.5;
+      }
+      
+      /* ═══ الأزرار الرئيسية ═══ */
+      #continueToCheckoutBtn,
+      #backToCartBtn {
+        transition: all 0.3s ease;
+        font-family: inherit;
+      }
+      #continueToCheckoutBtn:hover:not(:disabled),
+      #backToCartBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(217,171,95,0.35);
+      }
+      #continueToCheckoutBtn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // ═══ تحديد عناصر كل مرحلة ═══
+  const children = Array.from(dfoot.children);
+  const deliveryIds = ["coName", "coPhone", "coEmail", "coCity", "coAddr", "coNotes"];
+  const stage1Items = [];
+  const stage2Items = [];
+
+  children.forEach(child => {
+    const isField = child.id && deliveryIds.includes(child.id);
+    const isCoForm = child.classList && child.classList.contains("co-form");
+    const isDeliveryHeader = child.dataset && child.dataset.i18n === "delivery_h";
+    const isCheckoutBtn = child.id === "checkoutBtn";
+    const isBackBtn = child.id === "backToCartBtn";
+
+    if (isField || isCoForm || isDeliveryHeader || isCheckoutBtn || isBackBtn) {
+      stage2Items.push(child);
+    } else {
+      stage1Items.push(child);
+    }
+  });
+
+  // ═══ إنشاء الـ Stage Containers ═══
+  const stage1 = document.createElement("div");
+  stage1.className = "cart-stage cart-stage-1";
+
+  const stage2 = document.createElement("div");
+  stage2.className = "cart-stage cart-stage-2";
+
+  // ═══ توزيع العناصر ═══
+  stage1Items.forEach(el => stage1.appendChild(el));
+  stage2Items.forEach(el => stage2.appendChild(el));
+
+  // ═══ زر "متابعة للدفع" (مرحلة 1) ═══
+  const continueBtn = document.createElement("button");
+  continueBtn.className = "btn wa";
+  continueBtn.id = "continueToCheckoutBtn";
+  continueBtn.type = "button";
+  continueBtn.style.cssText = "width:100%; margin-top:.35rem; font-weight:700;";
+  const lang = (typeof LANG !== "undefined") ? LANG : "ar";
+  continueBtn.textContent = lang === "en" ? "📝 Continue to Checkout →" : "📝 ← متابعة للدفع";
+  stage1.appendChild(continueBtn);
+
+  // ═══ زر "الرجوع للسلة" (مرحلة 2 — فوق زر واتساب) ═══
+  const backBtn = document.createElement("button");
+  backBtn.className = "btn ghost";
+  backBtn.id = "backToCartBtn";
+  backBtn.type = "button";
+  backBtn.style.cssText = "width:100%; margin-bottom:.5rem; font-weight:700;";
+  backBtn.textContent = lang === "en" ? "← Back to Cart" : "→ الرجوع للسلة";
+  stage2.insertBefore(backBtn, stage2.firstChild);
+
+  // ═══ Progress Bar (فوق الـ stages) ═══
+  const progress = document.createElement("div");
+  progress.className = "cart-progress";
+  progress.id = "cartProgress";
+  progress.innerHTML = `
+    <span class="cart-progress-step active" data-step="1">🛒 ${lang === "en" ? "Cart" : "السلة"}</span>
+    <span class="cart-progress-arrow">←</span>
+    <span class="cart-progress-step" data-step="2">📝 ${lang === "en" ? "Details" : "البيانات"}</span>
+  `;
+
+  // ═══ إعادة بناء dfoot بالترتيب الصحيح ═══
+  dfoot.innerHTML = "";
+  dfoot.appendChild(progress);
+  dfoot.appendChild(stage1);
+  dfoot.appendChild(stage2);
+
+  // ═══ ربط الأزرار ═══
+  continueBtn.addEventListener("click", () => {
+    const cart = (typeof getCart === "function") ? getCart() : [];
+    if (!cart.length) {
+      if (typeof toast === "function") toast("⚠️ السلة فاضية — أضف منتجاتك أولاً");
+      return;
+    }
+    showCartStage(2);
+  });
+
+  backBtn.addEventListener("click", () => showCartStage(1));
+
+  // ═══ دعم ESC للرجوع من مرحلة 2 ═══
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    const s2 = document.querySelector(".cart-stage-2");
+    if (s2 && s2.style.display === "flex") {
+      e.preventDefault();
+      e.stopPropagation();
+      showCartStage(1);
+    }
+  }, true);
+
+  console.log("✅ Cart Stages initialized (2-stage cart)");
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ التبديل بين المرحلتين
+   ═══════════════════════════════════════════════════════════ */
+function showCartStage(num) {
+  const stage1 = document.querySelector("#cartDrawer .cart-stage-1");
+  const stage2 = document.querySelector("#cartDrawer .cart-stage-2");
+  const progress = document.getElementById("cartProgress");
+  if (!stage1 || !stage2) return;
+
+  const drawer = document.getElementById("cartDrawer");
+  const dbody = drawer ? drawer.querySelector(".dbody") : null;
+
+  if (num === 2) {
+    // ✅ عبّئ الفورم من البيانات المحفوظة
+    if (typeof fillCartForm === "function") fillCartForm();
+
+    stage1.style.display = "none";
+    stage2.style.display = "flex";
+
+    // ✅ Scroll لأعلى الـ drawer
+    if (dbody) dbody.scrollTop = 0;
+    if (drawer) drawer.scrollTop = 0;
+
+    // ✅ Focus على أول حقل بعد الانتقال
+    setTimeout(() => {
+      const firstInput = document.getElementById("coName");
+      if (firstInput) firstInput.focus({ preventScroll: true });
+    }, 200);
+  } else {
+    stage1.style.display = "flex";
+    stage2.style.display = "none";
+
+    if (dbody) dbody.scrollTop = 0;
+    if (drawer) drawer.scrollTop = 0;
+  }
+
+  // ✅ حدّث الـ Progress Bar
+  if (progress) {
+    progress.querySelectorAll(".cart-progress-step").forEach(step => {
+      step.classList.toggle("active", Number(step.dataset.step) === num);
+    });
+  }
+}
 })();
