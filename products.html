@@ -9,7 +9,6 @@
 <link rel="canonical" href="https://velalight.github.io/products.html">
 
 <!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
-<!-- 1. Google Analytics 4 (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -18,7 +17,6 @@
   gtag('config', 'G-BWBD8ZZD23'); 
 </script>
 
-<!-- 2. Meta Pixel (Facebook Pixel) -->
 <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -56,6 +54,9 @@
   
   .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
   .products-count { text-align: center; color: var(--dim); margin-bottom: 1rem; }
+
+  /* ✨ Skeleton محسّن — يمنع الفلاش */
+  .products-skeleton { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
   
   @media (max-width: 600px) {
     .filter-bar { gap: 0.5rem; }
@@ -176,8 +177,8 @@
     <div class="products-count" id="productsCount"></div>
 
     <div class="products-grid" id="productsGrid">
-      <!-- سيتم تحميل المنتجات عبر JavaScript من app.js -->
-      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.5rem; padding:1rem 0;">
+      <!-- ✨ Skeleton محسّن — يختفي بمجرد تحميل البيانات من Firebase -->
+      <div class="products-skeleton">
         <div class="skel" style="height:380px;border-radius:18px;"></div>
         <div class="skel" style="height:380px;border-radius:18px;"></div>
         <div class="skel" style="height:380px;border-radius:18px;"></div>
@@ -230,16 +231,14 @@
   </div>
 </aside>
 
-<!-- ═══ FOOTER ═══ (تم تعديله: إزالة أيقونة يوتيوب فقط) -->
+<!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="wrap">
     <div class="fgrid">
-      <!-- العمود الأول: الشعار والسوشيال ميديا -->
       <div>
         <a class="logo" href="index.html"><span class="flame"></span><div><b>VelaLight</b><small>Luxury Candle Studio</small></div></a>
         <p style="margin-top:1rem;color:var(--mut);font-size:.88rem" data-i18n="foot_tag1">شموع يدوية فاخرة - عطور مميزة - هدايا حسب الطلب</p>
         <p style="color:var(--dim);font-size:.8rem" data-i18n="foot_tag2">Luxury handmade candles - Signature scents - Custom gifts</p>
-        <!-- أيقونات السوشيال ميديا (يوتيوب مش موجود) -->
         <div style="display:flex; gap:1rem; margin-top:1.2rem;">
           <a href="https://www.instagram.com/velaa_lighttt" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="color:var(--mut); transition:.3s;">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -256,7 +255,6 @@
         </div>
       </div>
 
-      <!-- العمود الثاني: روابط سريعة -->
       <div>
         <h4 data-i18n="foot_quick">روابط سريعة</h4>
         <a href="index.html" data-i18n="nav_home">الرئيسية</a>
@@ -269,7 +267,6 @@
         <a href="reviews.html" data-i18n="mn_rev">آراء العملاء</a>
       </div>
 
-      <!-- العمود الثالث: تصنيفات الشموع -->
       <div>
         <h4 data-i18n="mn_cats">تصنيفات الشموع</h4>
         <a href="products.html" data-cat="wood" data-i18n="cat_wood">شموع خشبية</a>
@@ -281,7 +278,6 @@
         <a href="products.html" data-cat="gift" data-i18n="cat_gift">الهدايا</a>
       </div>
 
-      <!-- العمود الرابع: الدفع والشحن -->
       <div>
         <h4 data-i18n="foot_pay_h">الدفع والشحن</h4>
         <div class="paybox">
@@ -291,14 +287,12 @@
       </div>
     </div>
 
-    <!-- السطر الأول من الفوتر (الحقوق والروابط) -->
     <div class="fbot">
       <span data-i18n="foot_rights">© 2026 VelaLight — جميع الحقوق محفوظة</span>
       <div><a href="privacy.html" data-i18n="foot_privacy">سياسة الخصوصية</a> <a href="terms.html" data-i18n="foot_terms">شروط الاستخدام</a></div>
     </div>
   </div>
 
-  <!-- السطر الثاني: توقيع المطورين -->
   <div class="fbot" style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:10px;">
     <span data-i18n="foot_rights" style="font-size:0.85rem;color:var(--dim);">© 2026 VelaLight — جميع الحقوق محفوظة</span>
     <div style="font-size:0.8rem;color:var(--mut);display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;">
@@ -319,116 +313,16 @@
 <!-- ═══ SCRIPTS ═══ -->
 <script src="data.js"></script>
 <script type="module" src="firebase.js"></script>
-<script src="app.js"></script>
+<script src="app.js" defer></script>
+<script src="bottom-nav.js" defer></script>
 
-<!-- ═══ تسريع ظهور الصور من الكاش المحلي ═══ -->
-<script>
-(function() {
-  "use strict";
-  
-  // دالة لعرض المنتجات من الكاش المحلي فوراً (قبل Firebase)
-  function renderFromCache() {
-    const grid = document.getElementById('productsGrid');
-    if (!grid) return;
-    
-    try {
-      const cached = JSON.parse(localStorage.getItem('vl_products_v3') || '[]');
-      if (!cached.length) return;
-      
-      // تصفية المنتجات النشطة
-      const products = cached.filter(p => p.active !== false);
-      if (!products.length) return;
-      
-      // تطبيق الفلتر والترتيب الحالي (نفس منطق app.js)
-      const activeChip = document.querySelector('#chips .chip.on');
-      const cat = activeChip ? activeChip.dataset.cat : 'all';
-      const sort = document.getElementById('sortSelect')?.value || 'new';
-      
-      let list = products.filter(p => {
-        if (cat !== 'all' && p.cat !== cat) return false;
-        return true;
-      });
-      
-      // ترتيب بسيط (نفس منطق app.js)
-      list.sort((a, b) => {
-        if (a.pinned && !b.pinned) return -1;
-        if (!a.pinned && b.pinned) return 1;
-        if (a.pinned && b.pinned) {
-          return (b.pinnedAt || 0) - (a.pinnedAt || 0);
-        }
-        switch(sort) {
-          case 'asc': return (a.price || 0) - (b.price || 0);
-          case 'desc': return (b.price || 0) - (a.price || 0);
-          default: return (b.createdAt || 0) - (a.createdAt || 0);
-        }
-      });
-      
-      // عرض أول 8 منتجات فقط في البداية (لتسريع الظهور)
-      const displayList = list.slice(0, 8);
-      
-      let html = '';
-      const placeholderSvg = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><rect fill='%23f5efe5' width='400' height='400'/><text x='200' y='200' text-anchor='middle' dominant-baseline='middle' font-family='serif' font-size='24' fill='%23d9ab5f'>✦</text></svg>`;
-      
-      displayList.forEach((p, index) => {
-        const imgSrc = p.img ? (typeof CDN === 'function' ? CDN(p.img) : p.img) : placeholderSvg;
-        const isFirstBatch = index < 4;
-        const loadingAttr = isFirstBatch ? 'eager' : 'lazy';
-        const fetchPriority = isFirstBatch ? 'high' : 'auto';
-        
-        html += `
-          <article class="p-card" data-id="${p.id}">
-            <a class="p-media" href="product.html?p=${p.id}" aria-label="${p.name || ''}">
-              <img src="${imgSrc}" alt="${p.name || ''}" loading="${loadingAttr}" fetchpriority="${fetchPriority}" width="400" height="400" onerror="window.handleImageError(this, '${p.id}')">
-              <span class="p-quick">${(typeof t === 'function' ? t('view_details') : 'عرض التفاصيل')}</span>
-            </a>
-            <div class="p-body">
-              <span class="p-cat">${(typeof cat === 'function' ? cat(p.cat) : p.cat) || ''}</span>
-              <h3><a href="product.html?p=${p.id}">${p.name || ''}</a></h3>
-              <div class="p-foot">
-                <div class="p-price">
-                  <span class="current-price">${(typeof money === 'function' ? money(p.price) : p.price + ' ج.م')}</span>
-                  ${p.old > p.price ? `<del>${(typeof money === 'function' ? money(p.old) : p.old + ' ج.م')}</del>` : ''}
-                </div>
-                <button class="p-add" data-id="${p.id}">${(typeof t === 'function' ? t('add_cart') : 'أضف للسلة')}</button>
-              </div>
-            </div>
-          </article>
-        `;
-      });
-      
-      // نضيف باقي المنتجات بعد تحميل الصفحة
-      grid.innerHTML = html;
-      
-      // ربط أحداث الأزرار
-      grid.querySelectorAll('.p-add').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          const id = this.dataset.id;
-          const product = products.find(p => p.id === id);
-          if (product && typeof openQuickAdd === 'function') {
-            openQuickAdd(product);
-          }
-        });
-      });
-      
-      // إخفاء الـ skeleton مؤقتاً (تم استبداله بالصور)
-      // بعد تحميل البيانات من Firebase، سيتم تحديث الشبكة بواسطة renderProductsPage
-      
-    } catch(e) {
-      console.warn('Cache render failed:', e);
-    }
-  }
-  
-  // تنفيذ عند تحميل الصفحة
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderFromCache);
-  } else {
-    renderFromCache();
-  }
-  
-})();
-</script>
-<script src="bottom-nav.js"></script>
+<!--
+  ✨ [تم الحذف] سكريبت الكاش القديم (renderFromCache)
+  السبب:
+  - كان بيعمل رندر مرتين (كاش قديم → Firebase جديد)
+  - كل صورة بتتحمّل مرتين = بطء + استهلاك داتا + فلاش
+  - app.js عنده بالفعل fallback للكاش لو Firebase فشل
+-->
+
 </body>
 </html>
