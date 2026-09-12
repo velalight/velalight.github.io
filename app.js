@@ -3245,9 +3245,11 @@ function initNav(){
     a.addEventListener("click",()=>{
       document.getElementById("mnav")?.classList.remove("open");
       document.getElementById("ovl")?.classList.remove("open");
+      // ✨ [إضافة] إرجاع السكرول — حل مشكلة القفل بعد اختيار تصنيف
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     });
-  });
-  
+  });  
   /* ✨ روابط التصنيفات — تنقل مع ?cat= على أي صفحة */
   document.querySelectorAll("[data-cat]").forEach(a=>{
     if(a.closest(".mnav")||a.closest(".mainnav")||a.closest("footer")){
