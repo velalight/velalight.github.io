@@ -2,6 +2,7 @@
    ✨ VelaLight — Bottom Navigation Bar (زي أمازون)
    ملف مستقل تماماً — مش بيعتمد على app.js
    يعرض شريط تنقل ثابت في أسفل الشاشة للموبايل فقط
+   ✨ نسخة محدّثة: دعم الترجمة AR/EN
    ═══════════════════════════════════════════════════════════ */
 
 (function () {
@@ -10,6 +11,61 @@
   // منع التشغيل مرتين
   if (window.__vlBottomNavLoaded) return;
   window.__vlBottomNavLoaded = true;
+
+  /* ═══ الترجمة ═══ */
+  const TRANSLATIONS = {
+    ar: {
+      home: "الرئيسية",
+      account: "حسابي",
+      cart: "العربة",
+      menu: "القائمة"
+    },
+    en: {
+      home: "Home",
+      account: "Account",
+      cart: "Cart",
+      menu: "Menu"
+    }
+  };
+
+  /* ═══ قراءة اللغة الحالية ═══ */
+  function getCurrentLang() {
+    try {
+      const stored = localStorage.getItem("vl_lang");
+      if (stored === "en" || stored === "ar") return stored;
+    } catch (e) {}
+    const htmlLang = (document.documentElement.lang || "ar").toLowerCase();
+    return htmlLang.startsWith("en") ? "en" : "ar";
+  }
+
+  /* ═══ تحديث نصوص الأيقونات ═══ */
+  function updateLabels() {
+    const lang = getCurrentLang();
+    const t = TRANSLATIONS[lang] || TRANSLATIONS.ar;
+    const nav = document.getElementById("vlBottomNav");
+    if (!nav) return;
+
+    const homeEl = nav.querySelector('[data-nav="home"] .vl-nav-label');
+    const accountEl = nav.querySelector('[data-nav="account"] .vl-nav-label');
+    const cartEl = nav.querySelector('[data-nav="cart"] .vl-nav-label');
+    const menuEl = nav.querySelector('[data-nav="menu"] .vl-nav-label');
+
+    if (homeEl) homeEl.textContent = t.home;
+    if (accountEl) accountEl.textContent = t.account;
+    if (cartEl) cartEl.textContent = t.cart;
+    if (menuEl) menuEl.textContent = t.menu;
+
+    // تحديث aria-labels
+    const homeBtn = nav.querySelector('[data-nav="home"]');
+    const accountBtn = nav.querySelector('[data-nav="account"]');
+    const cartBtn = nav.querySelector('[data-nav="cart"]');
+    const menuBtn = nav.querySelector('[data-nav="menu"]');
+
+    if (homeBtn) homeBtn.setAttribute("aria-label", t.home);
+    if (accountBtn) accountBtn.setAttribute("aria-label", t.account);
+    if (cartBtn) cartBtn.setAttribute("aria-label", t.cart);
+    if (menuBtn) menuBtn.setAttribute("aria-label", t.menu);
+  }
 
   /* ═══ 1. حقن الـ CSS ═══ */
   function injectStyles() {
@@ -37,24 +93,20 @@
         font-family: 'Tajawal', 'El Messiri', sans-serif;
       }
 
-      /* يظهر على الموبايل بس */
       @media (max-width: 768px) {
         .vl-bottom-nav {
           display: flex;
         }
 
-        /* إضافة مساحة أسفل الصفحة عشان الشريط ميغطي المحتوى */
         body {
           padding-bottom: 72px !important;
         }
 
-        /* تحريك زر الواتساب فوق الشريط */
         .whatsapp-float {
           bottom: 80px !important;
         }
       }
 
-      /* ═══ كل زر ═══ */
       .vl-bottom-nav-item {
         flex: 1;
         display: flex;
@@ -108,7 +160,6 @@
         letter-spacing: 0.2px;
       }
 
-      /* ═══ Badge على أيقونة السلة ═══ */
       .vl-nav-badge {
         position: absolute;
         top: -4px;
@@ -134,7 +185,6 @@
         transform: scale(1);
       }
 
-      /* ═══ مؤشر الصفحة النشطة ═══ */
       .vl-bottom-nav-item.vl-active::before {
         content: "";
         position: absolute;
@@ -147,12 +197,10 @@
         border-radius: 0 0 4px 4px;
       }
 
-      /* ═══ تنسيقات خاصة عند وجود RTL ═══ */
       html[dir="ltr"] .vl-bottom-nav {
         direction: ltr;
       }
 
-      /* ═══ إخفاء إذا كان الشريط مخفي بـ JS ═══ */
       .vl-bottom-nav.vl-hidden {
         display: none !important;
       }
@@ -172,13 +220,13 @@
     nav.id = "vlBottomNav";
     nav.className = "vl-bottom-nav";
     nav.setAttribute("role", "navigation");
-    nav.setAttribute("aria-label", "شريط التنقل السفلي");
+    nav.setAttribute("aria-label", "Bottom navigation");
 
     const currentPath = window.location.pathname.split("/").pop() || "index.html";
     const isHome = currentPath === "index.html" || currentPath === "" || currentPath === "/";
 
     nav.innerHTML = `
-      <a href="index.html" class="vl-bottom-nav-item ${isHome ? "vl-active" : ""}" data-nav="home" aria-label="الرئيسية">
+      <a href="index.html" class="vl-bottom-nav-item ${isHome ? "vl-active" : ""}" data-nav="home" aria-label="Home">
         <span class="vl-nav-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -188,7 +236,7 @@
         <span class="vl-nav-label">الرئيسية</span>
       </a>
 
-      <button type="button" class="vl-bottom-nav-item" data-nav="account" aria-label="حسابي">
+      <button type="button" class="vl-bottom-nav-item" data-nav="account" aria-label="Account">
         <span class="vl-nav-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -198,7 +246,7 @@
         <span class="vl-nav-label">حسابي</span>
       </button>
 
-      <button type="button" class="vl-bottom-nav-item" data-nav="cart" aria-label="سلة الشراء">
+      <button type="button" class="vl-bottom-nav-item" data-nav="cart" aria-label="Cart">
         <span class="vl-nav-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1"/>
@@ -210,7 +258,7 @@
         <span class="vl-nav-label">العربة</span>
       </button>
 
-      <button type="button" class="vl-bottom-nav-item" data-nav="menu" aria-label="القائمة">
+      <button type="button" class="vl-bottom-nav-item" data-nav="menu" aria-label="Menu">
         <span class="vl-nav-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="3" y1="6" x2="21" y2="6"/>
@@ -249,70 +297,80 @@
     }
   }
 
-  /* ═══ 4. مراقبة تغييرات السلة (Realtime) ═══ */
+  /* ═══ 4. مراقبة تغييرات السلة ═══ */
   function watchCartChanges() {
-    // مراقبة الحدث المخصص لو موجود
     window.addEventListener("vl-cart-updated", updateCartBadge);
-
-    // مراقبة تغييرات localStorage من تبويبات تانية
     window.addEventListener("storage", function (e) {
       if (e.key === "vl_cart") updateCartBadge();
     });
-
-    // Polling كل ثانية كخطة احتياطية (خفيف جداً)
     setInterval(updateCartBadge, 1000);
   }
 
-  /* ═══ 5. معالجة النقر على الأزرار ═══ */
+  /* ═══ 5. مراقبة تغييرات اللغة ═══ */
+  function watchLangChanges() {
+    // مراقبة تغيير الـ lang attribute على html
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.attributeName === "lang") {
+          updateLabels();
+        }
+      });
+    });
+    observer.observe(document.documentElement, { attributes: true });
+
+    // مراقبة تغيير vl_lang في localStorage من تبويبات تانية
+    window.addEventListener("storage", function (e) {
+      if (e.key === "vl_lang") updateLabels();
+    });
+
+    // polling خفيف كل ثانية كخطة احتياطية
+    let lastLang = getCurrentLang();
+    setInterval(function () {
+      const currentLang = getCurrentLang();
+      if (currentLang !== lastLang) {
+        lastLang = currentLang;
+        updateLabels();
+      }
+    }, 1000);
+  }
+
+  /* ═══ 6. معالجة النقر ═══ */
   function handleNavClick(e) {
     const btn = e.target.closest("[data-nav]");
     if (!btn) return;
 
     const action = btn.dataset.nav;
 
-    // ═══ Home ═══
     if (action === "home") {
-      // لو إحنا في الصفحة الرئيسية بالفعل → نعمل scroll لفوق
       const currentPath = window.location.pathname.split("/").pop() || "index.html";
       if (currentPath === "index.html" || currentPath === "" || currentPath === "/") {
         e.preventDefault();
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
-      // لو في صفحة تانية → الرابط شغال طبيعي
       return;
     }
 
     e.preventDefault();
 
-    // ═══ Account ═══
     if (action === "account") {
-      // إغلاق أي حاجة مفتوحة
       closeAllOverlays();
-
-      // نبحث عن الزر الأصلي "accBtn" ونضغط عليه
       const accBtn = document.getElementById("accBtn");
       if (accBtn) {
         accBtn.click();
       } else if (typeof window.openAuthModal === "function") {
         window.openAuthModal();
       } else {
-        // fallback: لو مفيش modal، نروح لصفحة الحساب
         window.location.href = "my-orders.html";
       }
       return;
     }
 
-    // ═══ Cart ═══
     if (action === "cart") {
-      // إغلاق أي overlay مفتوح
       closeAllOverlays();
-
-      // نبحث عن زر السلة الأصلي
       const cartBtn = document.getElementById("cartBtn");
       if (cartBtn) {
         cartBtn.click();
       } else {
-        // fallback: نفتح السلة يدوياً
         const drawer = document.getElementById("cartDrawer");
         const ovl = document.getElementById("cartOv");
         if (drawer) {
@@ -324,11 +382,8 @@
       return;
     }
 
-    // ═══ Menu ═══
     if (action === "menu") {
-      // إغلاق أي overlay مفتوح
       closeAllOverlays();
-
       const mnav = document.getElementById("mnav");
       const ovl = document.getElementById("ovl");
       if (mnav) {
@@ -336,14 +391,13 @@
         if (ovl) ovl.classList.add("open");
         document.body.style.overflow = "hidden";
       } else {
-        // fallback: نروح لصفحة المنتجات
         window.location.href = "products.html";
       }
       return;
     }
   }
 
-  /* ═══ 6. إغلاق جميع الـ Overlays المفتوحة ═══ */
+  /* ═══ 7. إغلاق الـ Overlays ═══ */
   function closeAllOverlays() {
     const toClose = ["cartDrawer", "cartOv", "mnav", "ovl", "accOv", "scentOv", "searchOv", "chatOv"];
     toClose.forEach(function (id) {
@@ -352,11 +406,10 @@
         el.classList.remove("open");
       }
     });
-    // إعادة overflow للـ body
     document.body.style.overflow = "";
   }
 
-  /* ═══ 7. تحديث حالة الزر النشط حسب الصفحة ═══ */
+  /* ═══ 8. تحديث الزر النشط ═══ */
   function updateActiveState() {
     const currentPath = window.location.pathname.split("/").pop() || "index.html";
     const nav = document.getElementById("vlBottomNav");
@@ -377,27 +430,26 @@
     }
   }
 
-  /* ═══ 8. التهيئة ═══ */
+  /* ═══ 9. التهيئة ═══ */
   function init() {
     injectStyles();
     buildNav();
     updateCartBadge();
     watchCartChanges();
     updateActiveState();
+    updateLabels(); // ← الترجمة الأولية
+    watchLangChanges(); // ← مراقبة تغيير اللغة
 
-    // ربط الأحداث (Event Delegation)
     const nav = document.getElementById("vlBottomNav");
     if (nav) {
       nav.addEventListener("click", handleNavClick);
     }
 
-    // مراقبة تغييرات الـ URL (لو SPA)
     window.addEventListener("popstate", updateActiveState);
 
-    console.log("✅ Bottom Nav loaded");
+    console.log("✅ Bottom Nav loaded (with i18n)");
   }
 
-  /* ═══ تشغيل عند جاهزية الـ DOM ═══ */
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else {
