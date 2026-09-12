@@ -155,15 +155,619 @@ const velaScentTr=name=>{
   return f?(LANG==="en"?f[1]:f[0]):(name||"");
 };
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ NEW: CART UI STYLES — الحقن الديناميكي للأنماط الجديدة
+   ═══════════════════════════════════════════════════════════ */
+function injectCartStyles(){
+  if(document.getElementById('vl-cart-luxe-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'vl-cart-luxe-styles';
+  style.textContent = `
+    /* ═══ Free Shipping Progress Bar ═══ */
+    .vl-ship-bar{
+      background: linear-gradient(135deg,#fdf5ed 0%,#faf0e6 100%);
+      border: 1px solid rgba(212,175,55,.35);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin: 0 0 14px;
+      box-shadow: 0 2px 12px rgba(212,175,55,.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .vl-ship-bar.vl-ship-success{
+      background: linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%);
+      border-color: rgba(39,174,96,.4);
+      animation: vlShipPulse 2s ease-in-out infinite;
+    }
+    @keyframes vlShipPulse{
+      0%,100%{ box-shadow: 0 2px 12px rgba(39,174,96,.12); }
+      50%{ box-shadow: 0 4px 22px rgba(39,174,96,.28); }
+    }
+    .vl-ship-bar .vl-ship-txt{
+      text-align: center;
+      font-size: .88rem;
+      color: var(--dark,#3d2f1f);
+      margin-bottom: 9px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    .vl-ship-bar .vl-ship-txt strong{ color: #b8860b; font-weight: 800; }
+    .vl-ship-bar.vl-ship-success .vl-ship-txt strong{ color: #1e8449; }
+    .vl-ship-track{
+      background: #e8dcc9;
+      height: 10px;
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,.08);
+    }
+    .vl-ship-fill{
+      background: linear-gradient(90deg,#d4af37 0%,#f9d877 50%,#d4af37 100%);
+      background-size: 200% 100%;
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      transition: width .8s cubic-bezier(.22,1,.36,1);
+      animation: vlShimmer 3s linear infinite;
+      box-shadow: 0 0 10px rgba(212,175,55,.5);
+    }
+    .vl-ship-bar.vl-ship-success .vl-ship-fill{
+      background: linear-gradient(90deg,#27ae60 0%,#2ecc71 50%,#27ae60 100%);
+      background-size: 200% 100%;
+      box-shadow: 0 0 12px rgba(39,174,96,.6);
+    }
+    @keyframes vlShimmer{
+      0%{ background-position: 200% 0; }
+      100%{ background-position: -200% 0; }
+    }
+    .vl-ship-emoji{
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      opacity: .55;
+      pointer-events: none;
+    }
+
+    /* ═══ Confetti ═══ */
+    .vl-confetti-piece{
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      z-index: 99999;
+      pointer-events: none;
+      opacity: 1;
+      animation: vlConfettiFall linear forwards;
+    }
+    @keyframes vlConfettiFall{
+      0%{ transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+      100%{ transform: translateY(100vh) rotate(720deg) scale(.4); opacity: 0; }
+    }
+
+    /* ═══ Luxury Item Cards ═══ */
+    .citem{
+      display: flex;
+      gap: 14px;
+      padding: 14px;
+      background: linear-gradient(135deg,#fffbf5 0%,#fdf8f0 100%);
+      border: 1px solid rgba(212,175,55,.18);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      position: relative;
+      transition: all .25s ease;
+      align-items: flex-start;
+      box-shadow: 0 1px 6px rgba(139,90,43,.05);
+    }
+    .citem:hover{
+      border-color: rgba(212,175,55,.4);
+      box-shadow: 0 4px 18px rgba(139,90,43,.1);
+      transform: translateY(-1px);
+    }
+    .citem-media{
+      flex: 0 0 82px;
+      width: 82px;
+      height: 82px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f5efe5;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(212,175,55,.15);
+      box-shadow: 0 2px 8px rgba(139,90,43,.08);
+    }
+    .citem-media img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .citem-info{
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .citem-info h5{
+      font-family: var(--fd,serif);
+      font-size: 1rem;
+      margin: 0;
+      font-weight: 700;
+      color: var(--dark,#3d2f1f);
+      line-height: 1.3;
+    }
+
+    /* Scent Pill Selector */
+    .cart-scent-picker{
+      display: block;
+      margin: 2px 0;
+    }
+    .cart-scent-label{
+      font-size: .72rem;
+      color: var(--mut,#9a8874);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 3px;
+      font-weight: 600;
+    }
+    .cart-scent-select{
+      width: 100%;
+      padding: 7px 30px 7px 12px;
+      border-radius: 999px;
+      border: 1.5px solid rgba(212,175,55,.3);
+      background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='3' stroke-linecap='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 12px center;
+      background-size: 12px;
+      font-family: inherit;
+      font-size: .82rem;
+      color: var(--dark,#3d2f1f);
+      cursor: pointer;
+      outline: none;
+      transition: all .2s ease;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      font-weight: 500;
+      box-shadow: 0 1px 4px rgba(212,175,55,.08);
+    }
+    html[dir="rtl"] .cart-scent-select{
+      background-position: left 12px center;
+      padding: 7px 12px 7px 30px;
+    }
+    .cart-scent-select:hover{
+      border-color: rgba(212,175,55,.6);
+      background-color: #fffdf9;
+    }
+    .cart-scent-select:focus{
+      border-color: #d4af37;
+      box-shadow: 0 0 0 3px rgba(212,175,55,.15);
+    }
+    .cart-scent-select option{ padding: 8px; }
+
+    /* Price + Line Total */
+    .cs{
+      font-size: .78rem;
+      color: var(--mut,#9a8874);
+      display: flex;
+      gap: 5px;
+      align-items: baseline;
+    }
+    .cs strong{
+      color: #b8860b;
+      font-weight: 700;
+      font-size: .88rem;
+    }
+    .cart-line-total{
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: .8rem;
+      color: var(--mut,#9a8874);
+      padding-top: 4px;
+      border-top: 1px dashed rgba(212,175,55,.2);
+    }
+    .cart-line-total strong{
+      color: var(--dark,#3d2f1f);
+      font-size: .95rem;
+      font-weight: 800;
+    }
+
+    /* Touch-friendly Qty */
+    .qty{
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      border: 1.5px solid rgba(212,175,55,.3);
+      border-radius: 999px;
+      padding: 2px;
+      background: #fff;
+      margin-top: 4px;
+      width: fit-content;
+      box-shadow: 0 1px 4px rgba(212,175,55,.08);
+    }
+    .qty button{
+      width: 38px;
+      height: 38px;
+      border: none;
+      background: transparent;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #b8860b;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all .18s ease;
+      line-height: 1;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .qty button:hover{
+      background: rgba(212,175,55,.12);
+      transform: scale(1.06);
+    }
+    .qty button:active{
+      background: rgba(212,175,55,.25);
+      transform: scale(.94);
+    }
+    .qty b{
+      min-width: 34px;
+      text-align: center;
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--dark,#3d2f1f);
+      padding: 0 4px;
+    }
+
+    /* Trash Button */
+    .rm{
+      position: absolute;
+      top: 10px;
+      inset-inline-end: 10px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(231,76,60,.08);
+      color: #e74c3c;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: all .22s ease;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .rm svg{
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .rm:hover{
+      background: #e74c3c;
+      color: #fff;
+      transform: rotate(8deg) scale(1.08);
+      box-shadow: 0 4px 12px rgba(231,76,60,.35);
+    }
+    .rm:active{
+      transform: rotate(8deg) scale(.94);
+    }
+
+    /* ═══ Cross-Sell Luxe ═══ */
+    .cross-sell-box{
+      background: linear-gradient(135deg,#fdf5ed 0%,#faf0e6 100%);
+      border: 1px dashed rgba(212,175,55,.45);
+      border-radius: 16px;
+      padding: 14px;
+      margin-top: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cross-sell-box::before{
+      content: "";
+      position: absolute;
+      top: -40px;
+      inset-inline-end: -40px;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle,rgba(212,175,55,.14),transparent 70%);
+      pointer-events: none;
+    }
+    .vl-cross-head{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-weight: 800;
+      font-size: .9rem;
+      color: #b8860b;
+      position: relative;
+      z-index: 1;
+    }
+    .vl-cross-head span.emoji{
+      font-size: 1.15rem;
+      animation: vlSparkle 2.4s ease-in-out infinite;
+    }
+    @keyframes vlSparkle{
+      0%,100%{ transform: scale(1) rotate(0); }
+      50%{ transform: scale(1.12) rotate(8deg); }
+    }
+    .vl-cross-row{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    .vl-cross-img{
+      flex: 0 0 66px;
+      width: 66px;
+      height: 66px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f5efe5;
+      border: 1px solid rgba(212,175,55,.2);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 2px 8px rgba(139,90,43,.08);
+    }
+    .vl-cross-img img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .vl-cross-meta{
+      flex: 1;
+      min-width: 0;
+    }
+    .vl-cross-meta .nm{
+      font-weight: 700;
+      font-size: .88rem;
+      color: var(--dark,#3d2f1f);
+      line-height: 1.35;
+      margin-bottom: 3px;
+    }
+    .vl-cross-meta .pr{
+      font-size: .82rem;
+      color: #b8860b;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .vl-quick-add{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg,#d4af37,#f9d877);
+      color: #3d2f1f;
+      font-family: inherit;
+      font-size: .82rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all .22s ease;
+      box-shadow: 0 3px 10px rgba(212,175,55,.3);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .vl-quick-add:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 5px 16px rgba(212,175,55,.45);
+    }
+    .vl-quick-add:active{ transform: translateY(0) scale(.98); }
+    .vl-quick-add.vl-added{
+      background: linear-gradient(135deg,#27ae60,#2ecc71);
+      color: #fff;
+    }
+    .vl-quick-add.vl-added svg{ animation: vlCheckPop .4s ease; }
+    @keyframes vlCheckPop{
+      0%{ transform: scale(0); }
+      60%{ transform: scale(1.25); }
+      100%{ transform: scale(1); }
+    }
+
+    /* ═══ Discount Badges ═══ */
+    .vl-disc-row{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin: 6px 0;
+      font-size: .85rem;
+      transition: all .3s ease;
+    }
+    .vl-disc-row.vl-disc-active{
+      background: linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%);
+      border: 1px solid rgba(39,174,96,.35);
+      color: #1e8449;
+      font-weight: 700;
+    }
+    .vl-disc-row.vl-disc-active .vl-disc-val{
+      color: #1e8449;
+      font-weight: 800;
+      font-size: .95rem;
+    }
+    .vl-disc-row.vl-disc-cancelled{
+      background: #f5f5f5;
+      border: 1px dashed rgba(0,0,0,.08);
+      color: #aaa;
+      text-decoration: line-through;
+      opacity: .75;
+    }
+    .vl-disc-row.vl-disc-cancelled .vl-disc-val{
+      color: #aaa;
+      text-decoration: line-through;
+    }
+    .vl-disc-label{
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .vl-disc-hint{
+      display: block;
+      font-size: .68rem;
+      font-weight: 500;
+      color: #7f8c8d;
+      margin-top: 2px;
+      text-decoration: none;
+    }
+    .vl-disc-row.vl-disc-cancelled .vl-disc-hint{
+      color: #999;
+      font-style: italic;
+    }
+
+    /* ═══ Checkout Button Pulse ═══ */
+    .vl-checkout-pulse{
+      position: relative;
+      animation: vlCheckoutPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes vlCheckoutPulse{
+      0%,100%{
+        box-shadow: 0 4px 14px rgba(212,175,55,.35), 0 0 0 0 rgba(212,175,55,.4);
+      }
+      50%{
+        box-shadow: 0 6px 24px rgba(212,175,55,.55), 0 0 0 10px rgba(212,175,55,0);
+      }
+    }
+
+    /* ═══ Trust Badges ═══ */
+    .vl-trust-wrap{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin: 12px 0 8px;
+      flex-wrap: wrap;
+      padding: 10px 8px;
+      background: linear-gradient(135deg,rgba(253,245,237,.6),rgba(250,240,230,.6));
+      border-radius: 14px;
+      border: 1px solid rgba(212,175,55,.15);
+    }
+    .vl-trust-item{
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .72rem;
+      color: #8b6f47;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.7);
+      transition: all .2s ease;
+    }
+    .vl-trust-item:hover{
+      background: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(212,175,55,.15);
+    }
+    .vl-trust-item .ic{
+      font-size: .95rem;
+      filter: drop-shadow(0 1px 2px rgba(212,175,55,.25));
+    }
+
+    /* ═══ Empty State ═══ */
+    .vl-empty-cart{
+      padding: 2.4rem 1.2rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .vl-empty-candle{
+      font-size: 3.4rem;
+      opacity: .55;
+      animation: vlCandleFloat 3.2s ease-in-out infinite;
+      filter: drop-shadow(0 6px 14px rgba(212,175,55,.28));
+    }
+    @keyframes vlCandleFloat{
+      0%,100%{ transform: translateY(0) rotate(-2deg); }
+      50%{ transform: translateY(-9px) rotate(2deg); }
+    }
+    .vl-empty-title{
+      font-family: var(--fd,serif);
+      font-size: 1.12rem;
+      color: #b8860b;
+      font-weight: 800;
+      line-height: 1.5;
+      max-width: 260px;
+    }
+    .vl-empty-sub{
+      font-size: .84rem;
+      color: #9a8874;
+      line-height: 1.6;
+      max-width: 260px;
+    }
+    .vl-empty-cta{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 26px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg,#d4af37,#f9d877);
+      color: #3d2f1f;
+      font-family: inherit;
+      font-size: .92rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: all .25s ease;
+      box-shadow: 0 5px 18px rgba(212,175,55,.35);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .vl-empty-cta:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212,175,55,.5);
+    }
+    .vl-empty-cta:active{ transform: translateY(0) scale(.97); }
+  `;
+  document.head.appendChild(style);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ Confetti Animation
+   ═══════════════════════════════════════════════════════════ */
+function triggerConfetti(count){
+  count = count || 55;
+  const colors = ['#d4af37','#f9d877','#27ae60','#e74c3c','#3498db','#e67e22','#9b59b6','#f1c40f'];
+  const frag = document.createDocumentFragment();
+  for(let i = 0; i < count; i++){
+    const p = document.createElement('div');
+    p.className = 'vl-confetti-piece';
+    const size = 6 + Math.random() * 8;
+    p.style.width = size + 'px';
+    p.style.height = size * (0.6 + Math.random() * 0.9) + 'px';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.top = '-20px';
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    const dur = 2.4 + Math.random() * 2;
+    p.style.animationDuration = dur + 's';
+    p.style.animationDelay = (Math.random() * 0.6) + 's';
+    frag.appendChild(p);
+    setTimeout(() => p.remove(), (dur + 0.8) * 1000);
+  }
+  document.body.appendChild(frag);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ FREE SHIPPING — تتبع حالة الشريط لمنع تكرار الكونفيتي
+   ═══════════════════════════════════════════════════════════ */
+const FREE_SHIP_THRESHOLD = 3000;
+let freeShipCelebrated = false;
+
 /* ═══ FILL MISSING TRANSLATIONS ═══ */
 (function fillMissingI18n(){
   if(typeof I18N==="undefined") return;
 
   const add = {
 
-    /* ═══════════════════════════════════════
-       🇪🇬 ARABIC
-       ═══════════════════════════════════════ */
     ar: {
 /* ═══ Reviews Page (reviews.html) ═══ */
 reviews_back: "← الرجوع للرئيسية",
@@ -176,7 +780,7 @@ reviews_cta_btn: "تسوق الآن 🛍️",
 foot_wishlist: "❤️ المفضلة",
 foot_orders: "📦 طلباتي",
       
-          /* Shipping & Payment */
+      /* Shipping & Payment */
       ship_note:
         "🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
 
@@ -208,14 +812,12 @@ foot_orders: "📦 طلباتي",
       scent_req:
         "مطلوب",
 
-
       /* Handmade */
       handmade_note:
         "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
 
       pd_handmade_note:
         "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
-
 
       /* Product tabs */
       pd_desc_tab:
@@ -227,14 +829,12 @@ foot_orders: "📦 طلباتي",
       pd_reviews_tab:
         "⭐ المراجعات",
 
-
       /* Product gallery */
       pd_zoom:
         "🔍 تكبير",
 
       pd_gallery_count:
         "الصور",
-
 
       /* Product options */
       pd_scent_t:
@@ -255,14 +855,12 @@ foot_orders: "📦 طلباتي",
       pd_wishlist:
         "إضافة إلى المفضلة",
 
-
       /* Product actions */
       pd_add:
         "🛍️ أضف للسلة",
 
       pd_buy:
         "💬 اطلب عبر واتساب",
-
 
       /* Product information */
       pd_hours:
@@ -277,7 +875,6 @@ foot_orders: "📦 طلباتي",
       pd_ship_v:
         "3–7 أيام",
 
-
       /* Reviews */
       pd_review_word:
         "مراجعة",
@@ -288,11 +885,9 @@ foot_orders: "📦 طلباتي",
       pd_first_review:
         "كن أول من يشارك رأيه",
 
-
       /* Related Products */
       pd_rel_h2:
         "✨ منتجات هتعجبك",
-
 
       /* Share */
       pd_share:
@@ -300,7 +895,6 @@ foot_orders: "📦 طلباتي",
 
       pd_copy_link:
         "📋 نسخ الرابط",
-
 
       /* Product Not Found */
       pd_product:
@@ -314,7 +908,6 @@ foot_orders: "📦 طلباتي",
 
       pd_browse_products:
         "تصفح المنتجات",
-
 
       /* ═══ Homepage Reviews ═══ */
       reviews_kicker:
@@ -497,12 +1090,27 @@ brand_point3_desc:
       ed_p: "كل شمعة من VelaLight ليست مجرد إضاءة… هي لحظة كاملة. لحظة هدوء، لحظة رومانسية، لحظة فرح. اصنع ذكرياتك الخاصة مع عطورنا الفاخرة.",
       ed_cta: "ابدأ رحلتك ✨",
 
+      /* ═══ Cart Luxe New ═══ */
+      cart_luxe_empty_title: "سلتك تنتظر بعض الدفء والروائح الفاخرة...",
+      cart_luxe_empty_sub: "اختار شمعتك المفضلة وابدأ لحظتك الخاصة",
+      cart_luxe_empty_cta: "تصفح تشكيلتنا الآن ✨",
+      cart_luxe_cross_title: "أكمل مجموعتك",
+      cart_luxe_cross_sub: "أضيف لمسة ساحرة لطلبك",
+      cart_luxe_cross_add: "أضف بضغطة واحدة",
+      cart_luxe_cross_added: "تمت الإضافة",
+      cart_luxe_ship_add: "أضف",
+      cart_luxe_ship_to_go: "للحصول على شحن مجاني! 🚚",
+      cart_luxe_ship_success: "مبروك! فتحت خيار الشحن المجاني 🥳",
+      cart_luxe_disc_applied: "تم تطبيق الخصم الأكبر لك!",
+      cart_luxe_disc_qty: "خصم الكمية",
+      cart_luxe_disc_coupon: "كوبون",
+      cart_luxe_disc_not_applied: "غير مطبق — تم تطبيق الخصم الأكبر",
+      cart_luxe_checkout: "تأكيد الطلب عبر الواتساب 💬",
+      cart_luxe_trust1: "دفع آمن",
+      cart_luxe_trust2: "صناعة يدوية 100%",
+      cart_luxe_trust3: "ضمان التوصيل",
     },
 
-
-    /* ═══════════════════════════════════════
-       🇬🇧 ENGLISH
-       ═══════════════════════════════════════ */
     en: {
 /* ═══ Reviews Page (reviews.html) ═══ */
 reviews_back: "← Back to Home",
@@ -515,19 +1123,18 @@ reviews_cta_btn: "Shop Now 🛍️",
 foot_wishlist: "❤️ Wishlist",
 foot_orders: "📦 My Orders",
       
-            /* Shipping & Payment */
+      /* Shipping & Payment */
       ship_note:
         "🚚 Shipping: paid cash to the courier on delivery.",
 
       pay_products_note:
-        " Payment details (InstaPay / Vodafone Cash / Orange Cash / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
+        "Payment details (InstaPay / Vodafone Cash / Orange Cash / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
 
       pay_title:
         "InstaPay / Vodafone Cash / Orange Cash",
 
       paymethod_d:
         "Upfront transfer (InstaPay / Vodafone Cash / Orange Cash), shipping cash on delivery.",
-
 
       /* Scent */
       t_scentwarn:
@@ -548,7 +1155,6 @@ foot_orders: "📦 My Orders",
       scent_req:
         "Required",
 
-
       /* Handmade */
       handmade_note:
         "Handmade piece prepared with care upon order — every candle is unique and special",
@@ -556,121 +1162,57 @@ foot_orders: "📦 My Orders",
       pd_handmade_note:
         "Handmade piece prepared with care upon order — every candle is unique and special",
 
-
       /* Product tabs */
-      pd_desc_tab:
-        "📝 Description",
-
-      pd_specs_tab:
-        "📋 Specifications",
-
-      pd_reviews_tab:
-        "⭐ Reviews",
-
+      pd_desc_tab: "📝 Description",
+      pd_specs_tab: "📋 Specifications",
+      pd_reviews_tab: "⭐ Reviews",
 
       /* Product gallery */
-      pd_zoom:
-        "🔍 Zoom",
-
-      pd_gallery_count:
-        "Images",
-
+      pd_zoom: "🔍 Zoom",
+      pd_gallery_count: "Images",
 
       /* Product options */
-      pd_scent_t:
-        "🌸 Scent:",
-
-      pd_qty_t:
-        "Quantity:",
-
-      pd_required:
-        "Required",
-
-      pd_decrease:
-        "Decrease quantity",
-
-      pd_increase:
-        "Increase quantity",
-
-      pd_wishlist:
-        "Add to favorites",
-
+      pd_scent_t: "🌸 Scent:",
+      pd_qty_t: "Quantity:",
+      pd_required: "Required",
+      pd_decrease: "Decrease quantity",
+      pd_increase: "Increase quantity",
+      pd_wishlist: "Add to favorites",
 
       /* Product actions */
-      pd_add:
-        "🛍️ Add to Cart",
-
-      pd_buy:
-        "💬 Order via WhatsApp",
-
+      pd_add: "🛍️ Add to Cart",
+      pd_buy: "💬 Order via WhatsApp",
 
       /* Product information */
-      pd_hours:
-        "Burn time:",
-
-      pd_materials:
-        "Materials:",
-
-      pd_ship:
-        "Delivery:",
-
-      pd_ship_v:
-        "3–7 days",
-
+      pd_hours: "Burn time:",
+      pd_materials: "Materials:",
+      pd_ship: "Delivery:",
+      pd_ship_v: "3–7 days",
 
       /* Reviews */
-      pd_review_word:
-        "reviews",
-
-      pd_read_all:
-        "Read all",
-
-      pd_first_review:
-        "Be the first to review",
-
+      pd_review_word: "reviews",
+      pd_read_all: "Read all",
+      pd_first_review: "Be the first to review",
 
       /* Related Products */
-      pd_rel_h2:
-        "✨ You May Also Like",
-
+      pd_rel_h2: "✨ You May Also Like",
 
       /* Share */
-      pd_share:
-        "Share:",
-
-      pd_copy_link:
-        "📋 Copy Link",
-
+      pd_share: "Share:",
+      pd_copy_link: "📋 Copy Link",
 
       /* Product Not Found */
-      pd_product:
-        "Product",
-
-      pd_not_found_title:
-        "😕 Product Not Available",
-
-      pd_not_found_desc:
-        "Sorry, we couldn't find this product",
-
-      pd_browse_products:
-        "Browse Products",
-
+      pd_product: "Product",
+      pd_not_found_title: "😕 Product Not Available",
+      pd_not_found_desc: "Sorry, we couldn't find this product",
+      pd_browse_products: "Browse Products",
 
       /* ═══ Homepage Reviews ═══ */
-      reviews_kicker:
-        "💛 Your Words Mean the Most",
-
-      reviews_title:
-        "Our Customers' Reviews",
-
-      reviews_desc:
-        "We don't just write claims — we show the real experience. These are genuine screenshots from our customers after receiving their orders.",
-
-      reviews_cta:
-        "✨ Tried our candles?",
-
-      reviews_cta_link:
-        "Send us your review on WhatsApp",
+      reviews_kicker: "💛 Your Words Mean the Most",
+      reviews_title: "Our Customers' Reviews",
+      reviews_desc: "We don't just write claims — we show the real experience. These are genuine screenshots from our customers after receiving their orders.",
+      reviews_cta: "✨ Tried our candles?",
+      reviews_cta_link: "Send us your review on WhatsApp",
 
 /* ═══ Brand Promise ═══ */
 brand_promise_title:
@@ -679,95 +1221,48 @@ brand_promise_title:
 brand_promise_desc:
   "Handcrafted candles, carefully selected scents, and thoughtful gifts made for every special moment.",
 
-brand_point1_title:
-  "Handcrafted",
-
-brand_point1_desc:
-  "Every piece is made and prepared with care.",
-
-brand_point2_title:
-  "A Gift for Every Occasion",
-
-brand_point2_desc:
-  "Thoughtful choices for every moment and celebration.",
-
-brand_point3_title:
-  "Made for You",
-
-brand_point3_desc:
-  "We help you choose the right scent and details for your taste.",
+brand_point1_title: "Handcrafted",
+brand_point1_desc: "Every piece is made and prepared with care.",
+brand_point2_title: "A Gift for Every Occasion",
+brand_point2_desc: "Thoughtful choices for every moment and celebration.",
+brand_point3_title: "Made for You",
+brand_point3_desc: "We help you choose the right scent and details for your taste.",
 
       /* ═══ FAQ ═══ */
       faq1q:
         "How can I place an order and what payment methods are available?",
-
       faq1a:
         "You can add your selected products to the cart and complete your order easily. Product payment is made upfront via InstaPay, Vodafone Cash, or bank transfer, while the shipping fee is paid in cash to the courier upon delivery.",
 
-      faq2q:
-        "Do you ship to all governorates in Egypt?",
+      faq2q: "Do you ship to all governorates in Egypt?",
+      faq2a: "Yes, we deliver safely and reliably to all governorates across Egypt.",
 
-      faq2a:
-        "Yes, we deliver safely and reliably to all governorates across Egypt.",
+      faq3q: "How long does it take to prepare and ship my order?",
+      faq3a: "Because VelaLight products are carefully handmade, preparation usually takes 3 to 7 business days, in addition to the shipping time depending on your governorate.",
 
-      faq3q:
-        "How long does it take to prepare and ship my order?",
+      faq4q: "Are VelaLight candles made from soy wax?",
+      faq4a: "Yes, we use 100% natural soy wax. It burns more slowly and cleanly and helps the fragrance diffuse effectively.",
 
-      faq3a:
-        "Because VelaLight products are carefully handmade, preparation usually takes 3 to 7 business days, in addition to the shipping time depending on your governorate.",
+      faq5q: "How long does a candle burn, and how can I get the best performance?",
+      faq5a: "Burn time varies depending on the candle's weight and size, as detailed in each product description. For the best results, during the first use, allow the wax to melt completely across the surface and reach the edges to prevent tunneling and ensure an even burn.",
 
-      faq4q:
-        "Are VelaLight candles made from soy wax?",
+      faq6q: "How can I choose the right scent?",
+      faq6a: "We offer a variety of luxurious fragrances. If you're unsure which one to choose, contact us via WhatsApp and we'll be happy to help you select the perfect scent based on your taste, occasion, and desired atmosphere.",
 
-      faq4a:
-        "Yes, we use 100% natural soy wax. It burns more slowly and cleanly and helps the fragrance diffuse effectively.",
+      faq7q: "Do you offer gift wrapping?",
+      faq7a: "Yes. All VelaLight products come in elegant, luxurious packaging that is ready for gifting.",
 
-      faq5q:
-        "How long does a candle burn, and how can I get the best performance?",
-
-      faq5a:
-        "Burn time varies depending on the candle's weight and size, as detailed in each product description. For the best results, during the first use, allow the wax to melt completely across the surface and reach the edges to prevent tunneling and ensure an even burn.",
-
-      faq6q:
-        "How can I choose the right scent?",
-
-      faq6a:
-        "We offer a variety of luxurious fragrances. If you're unsure which one to choose, contact us via WhatsApp and we'll be happy to help you select the perfect scent based on your taste, occasion, and desired atmosphere.",
-
-      faq7q:
-        "Do you offer gift wrapping?",
-
-      faq7a:
-        "Yes. All VelaLight products come in elegant, luxurious packaging that is ready for gifting.",
-
-      faq8q:
-        "What is your return and exchange policy?",
-
-      faq8a:
-        "Due to the nature of our handmade products, returns or exchanges are not accepted after the product has been opened or used, or due to a change of mind after the order has been confirmed. If your order arrives with a manufacturing defect or shipping damage, please contact us within 24 hours of delivery and we will be happy to resolve the issue.",
+      faq8q: "What is your return and exchange policy?",
+      faq8a: "Due to the nature of our handmade products, returns or exchanges are not accepted after the product has been opened or used, or due to a change of mind after the order has been confirmed. If your order arrives with a manufacturing defect or shipping damage, please contact us within 24 hours of delivery and we will be happy to resolve the issue.",
 
       /* ═══ Top Marquee ═══ */
-      
-      mq_delivery:
-        "🚚 Fast delivery across Egypt",
-
-      mq_discounts:
-        "🏷️ Exclusive discounts on selected collections",
-
-      mq_gift:
-        "🎁 Free gift wrapping with every order",
-
-      mq_handmade:
-        "🤲 100% handmade with natural materials",
-
-      mq_scents:
-        "🕯️ More than 23 luxury scents available",
-
-      mq_shipping:
-        "📦 Safe shipping from our workshop to your door",
-
-      mq_support:
-        "💬 Daily customer support",
+      mq_delivery: "🚚 Fast delivery across Egypt",
+      mq_discounts: "🏷️ Exclusive discounts on selected collections",
+      mq_gift: "🎁 Free gift wrapping with every order",
+      mq_handmade: "🤲 100% handmade with natural materials",
+      mq_scents: "🕯️ More than 23 luxury scents available",
+      mq_shipping: "📦 Safe shipping from our workshop to your door",
+      mq_support: "💬 Daily customer support",
 
       /* ═══ Products Page ═══ */
       products_title: "All Products",
@@ -839,20 +1334,34 @@ brand_point3_desc:
       ed_p: "Every VelaLight candle is more than just a light… it's a complete moment. A moment of calm, a moment of romance, a moment of joy. Create your own memories with our luxury scents.",
       ed_cta: "Start Your Journey ✨",
 
+      /* ═══ Cart Luxe New ═══ */
+      cart_luxe_empty_title: "Your cart is waiting for some warmth and luxury scents...",
+      cart_luxe_empty_sub: "Choose your favorite candle and start your own moment",
+      cart_luxe_empty_cta: "Browse Our Collection Now ✨",
+      cart_luxe_cross_title: "Complete Your Set",
+      cart_luxe_cross_sub: "Add a magical touch to your order",
+      cart_luxe_cross_add: "Quick Add",
+      cart_luxe_cross_added: "Added",
+      cart_luxe_ship_add: "Add",
+      cart_luxe_ship_to_go: "to unlock FREE shipping! 🚚",
+      cart_luxe_ship_success: "Congrats! You unlocked FREE shipping 🥳",
+      cart_luxe_disc_applied: "The biggest discount was applied for you!",
+      cart_luxe_disc_qty: "Quantity Discount",
+      cart_luxe_disc_coupon: "Coupon",
+      cart_luxe_disc_not_applied: "Not applied — bigger discount was used",
+      cart_luxe_checkout: "Confirm Order via WhatsApp 💬",
+      cart_luxe_trust1: "Secure Payment",
+      cart_luxe_trust2: "100% Handmade",
+      cart_luxe_trust3: "Delivery Guarantee",
     }
 
   };
 
-
-  /* ═══ Add only missing keys — never overwrite existing translations ═══ */
   Object.keys(add).forEach(L => {
-
     if(!I18N[L]) {
       I18N[L] = {};
     }
-
     Object.keys(add[L]).forEach(k => {
-
       if(
         I18N[L][k] === undefined ||
         I18N[L][k] === null ||
@@ -860,12 +1369,11 @@ brand_point3_desc:
       ){
         I18N[L][k] = add[L][k];
       }
-
     });
-
   });
 
 })();
+
   /* ═══════════════════════════════════════════════════════════
    ✨ INIT — الحل الجذري النهائي: منع الوميض وتوحيد البيانات
    ═══════════════════════════════════════════════════════════ */
@@ -873,17 +1381,18 @@ let isFirstRenderComplete = false;
 let pendingDataRefresh = false;
 
 document.addEventListener("DOMContentLoaded", () => {
+  // ✨ NEW: حقن أنماط السلة اللوكس
+  injectCartStyles();
+
   initLang();
   initMarquee();
   initEmbers();
   initReveal();
 
-  // تحقق إذا كنا في صفحة المنتجات أو الآراء
   const isProductsPage = window.location.pathname.includes('products.html');
   const isReviewsPage = window.location.pathname.includes('reviews.html');
   const isProductPage = window.location.pathname.includes('product.html');
 
-  // 1. اعرض هيكل التحميل فوراً لمنع ظهور أي بيانات قديمة
   const grid = document.getElementById("pgrid");
   if (grid && !isProductPage) {
     grid.innerHTML = `
@@ -893,35 +1402,26 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
-  // 2. اطلب البيانات الجديدة من Firebase مباشرة
   loadAll().then(() => {
-    // 3. حفظ البيانات الجديدة في الكاش الآن
     try {
       localStorage.setItem("vl_products_v3", JSON.stringify(ALL_PRODUCTS.slice(0, 200)));
       localStorage.setItem("vl_products_v3_time", String(Date.now()));
     } catch(e) {}
 
-    // 4. السماح بالتحديثات اللاحقة
     isFirstRenderComplete = true;
 
-    // 5. الرسم حسب الصفحة
     if (isProductsPage) {
-      // ✅ renderChips بتقرأ التصنيف من URL تلقائياً
       renderChips();
-      
       if (typeof renderProductsPage === "function") {
         renderProductsPage();
       } else {
         renderProducts();
       }
-      // ← شيلنا الـ setTimeout auto-click — مفيش فلاش للمنتجات المثبتة
     } else if (isReviewsPage) {
-     
       if (typeof renderReviewsPage === "function") {
         renderReviewsPage();
       }
     } else if (!isProductPage) {
-      // الصفحة الرئيسية
       renderChips();
       renderProducts();
     }
@@ -933,7 +1433,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
   }).catch(err => {
     console.warn("⚠️ loadAll failed, falling back to cache:", err);
-    // في حالة فشل Firebase فقط، نستخدم الكاش كملاذ أخير
     const hasCache = (typeof loadFromCache === "function") && loadFromCache();
     if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
       isFirstRenderComplete = true;
@@ -958,16 +1457,14 @@ document.addEventListener("DOMContentLoaded", () => {
   initQuickAdd();
   initHeroIntro();
   
-  // تحديث عدد التجارب في قسم الآراء
   if (typeof window.updateReviewsCount === 'function') {
     window.updateReviewsCount();
   }
 });
 
-// التعامل مع تحديثات Firebase اللاحقة (Realtime)
 window.addEventListener("data-refresh", () => {
   if (!isFirstRenderComplete) {
-    pendingDataRefresh = true; // انتظر حتى ينتهي التحميل الأولي
+    pendingDataRefresh = true;
     return;
   }
   const isProductsPage = window.location.pathname.includes('products.html');
@@ -1062,6 +1559,7 @@ function initLang(){
     fillCitySelect(document.getElementById("accCity"));
     fillCitySelect(document.getElementById("coCity"));
     fillCartForm();
+    renderCart();
     initChatWelcome();
     toast(t(LANG==="ar"?"t_lang_ar":"t_lang_en"));
   });
@@ -1096,45 +1594,27 @@ function updateLangBtn(){
 function applyI18n(){
   document.title=t("docTitle");
 
-  /* ═══ Normal translations ═══ */
   document.querySelectorAll("[data-i18n]").forEach(el=>{
     const k=el.dataset.i18n;
     const v=t(k);
-    if(v&&v!==k){
-      el.textContent=v;
-    }
+    if(v&&v!==k){ el.textContent=v; }
   });
 
-  /* ═══ Placeholder translations ═══ */
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
     const k=el.dataset.i18nPh;
     const v=t(k);
-    if(v&&v!==k){
-      el.placeholder=v;
-    }
+    if(v&&v!==k){ el.placeholder=v; }
   });
 
-  /* ═══ Title attributes ═══ */
   document.querySelectorAll("[data-i18n-title]").forEach(el=>{
     const k=el.dataset.i18nTitle;
     const v=t(k);
-    if(v&&v!==k){
-      el.title=v;
-    }
+    if(v&&v!==k){ el.title=v; }
   });
 
-  /* ═══ Top Marquee ═══ */
   const mq=document.getElementById("mqTrack");
   if(mq){
-    const marqueeKeys=[
-      "mq_delivery",
-      "mq_discounts",
-      "mq_gift",
-      "mq_handmade",
-      "mq_scents",
-      "mq_shipping",
-      "mq_support"
-    ];
+    const marqueeKeys=["mq_delivery","mq_discounts","mq_gift","mq_handmade","mq_scents","mq_shipping","mq_support"];
     mq.innerHTML="";
     for(let i=0;i<2;i++){
       marqueeKeys.forEach(key=>{
@@ -1145,7 +1625,6 @@ function applyI18n(){
     }
   }
 
-  /* ═══ FAQ ═══ */
   const faqWrap=document.getElementById("faqWrap");
   if(faqWrap&&typeof renderFAQ==="function"){
     renderFAQ();
@@ -1192,10 +1671,6 @@ function initReveal(){
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ [مُعدّلة] renderChips — بتقرأ التصنيف من URL مباشرة
-   بتحدد الشيب النشط من الأول — مفيش فلاش للمنتجات
-   ═══════════════════════════════════════════════════════════ */
 function renderChips(){
   const w=document.getElementById("chips");
   if(!w)return;
@@ -1209,7 +1684,6 @@ function renderChips(){
     w.removeAttribute("aria-hidden");
   }
   
-  // ✅ اقرأ التصنيف من URL مباشرة (بدون auto-click بعد كده)
   const urlCat = new URLSearchParams(window.location.search).get('cat');
   const activeValue = (urlCat && urlCat.trim()) ? urlCat.trim() : "all";
   
@@ -1225,7 +1699,6 @@ function renderChips(){
       w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
       btn.classList.add("on");
       
-      // ✅ حدّث الرابط عشان يفضل على نفس التصنيف لو عمل refresh
       try {
         const url = new URL(window.location);
         if(k === "all") url.searchParams.delete('cat');
@@ -1272,7 +1745,6 @@ function renderProducts(){
     return true;
   });
 
-  // ✨ منطق الترتيب: التثبيت بيشتغل بس في "all"
   list.sort((a, b) => {
     if (catF === "all") {
       if (a.pinned && !b.pinned) return -1;
@@ -1341,74 +1813,42 @@ function renderProducts(){
       article.dataset.id = p.id;
       
       const isBrideBox = String(p.id) === "pmt2u7xq749e";
+      const brideVideoUrl = "https://velalight.github.io/box.mp4?v=v5";
 
-const brideVideoUrl = "https://velalight.github.io/box.mp4?v=v5";
+      const mediaContent = isBrideBox
+        ? `<video src="${brideVideoUrl}" autoplay muted loop playsinline preload="metadata" poster="${imgSrc}" style="width:100%;height:100%;object-fit:contain;background:#000;display:block;border-radius:inherit;" aria-label="${pname(p)}"></video>`
+        : `<img src="${imgSrc}" alt="${pname(p)}" loading="${loadingAttr}" decoding="async" fetchpriority="${fetchPriority}" width="400" height="400" onload="this.classList.add('loaded')" onerror="window.handleImageError(this, '${p.id}')">`;
 
-const mediaContent = isBrideBox
-  ? `
-    <video
-      src="${brideVideoUrl}"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="metadata"
-      poster="${imgSrc}"
-      style="
-        width:100%;
-        height:100%;
-        object-fit:contain;
-        background:#000;
-        display:block;
-        border-radius:inherit;
-      "
-      aria-label="${pname(p)}"
-    ></video>
-  `
-  : `
-    <img
-      src="${imgSrc}"
-      alt="${pname(p)}"
-      loading="${loadingAttr}"
-      decoding="async"
-      fetchpriority="${fetchPriority}"
-      width="400"
-      height="400"
-      onload="this.classList.add('loaded')"
-      onerror="window.handleImageError(this, '${p.id}')"
-    >
-  `;
-
-   article.innerHTML = `
-     <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
-       ${mediaContent}
-       ${p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : ""}
-       ${badge ? `<span class="p-badge">${badge}</span>` : ""}
-       ${stockBadg}
-       <span class="p-quick">${t("view_details")}</span>
-     </a>
-     <div class="p-body">
-       <span class="p-cat">${cat(p.cat)}</span>
-       <h3><a href="product.html?p=${p.id}">${pname(p)}</a></h3>
-       ${r ? `<span class="stars" aria-label="${Math.round(r.avg)} stars">${"★".repeat(Math.round(r.avg))}</span>` : ""}
-       <p class="p-desc">${productDesc}</p>
-       ${productDesc.length > 30 ? `<a href="product.html?p=${p.id}" class="p-desc-link">${readMoreText}</a>` : ""}
-       <div class="p-foot">
-         <div class="p-price">
-           <span class="current-price">${money(p.price)}</span>
-           ${p.old > p.price ? `<del>${money(p.old)}</del>` : ""}
-         </div>
-         <div style="display:flex; gap:6px; width:100%; margin-top:4px;">
-           <button class="p-add" data-id="${p.id}" ${isOutOfStock ? "disabled" : ""} style="flex:1;">
-             ${isOutOfStock ? (LANG === "en" ? "Out of stock" : "نفدت الكمية") : t("add_cart")}
-           </button>
-           <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist ? '#fee' : 'var(--bg)'}; border:1px solid ${inWishlist ? '#e74c3c' : 'var(--line)'}; border-radius:10px; cursor:pointer; font-size:1.1rem; transition:.2s; color:${inWishlist ? '#e74c3c' : 'inherit'}; display:flex; align-items:center; justify-content:center; width:42px; height:42px; padding:0; flex-shrink:0;">
-             ${inWishlist ? "❤️" : "🤍"}
-           </button>
-         </div>
-       </div>
-     </div>
-   `;      
+      article.innerHTML = `
+        <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
+          ${mediaContent}
+          ${p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : ""}
+          ${badge ? `<span class="p-badge">${badge}</span>` : ""}
+          ${stockBadg}
+          <span class="p-quick">${t("view_details")}</span>
+        </a>
+        <div class="p-body">
+          <span class="p-cat">${cat(p.cat)}</span>
+          <h3><a href="product.html?p=${p.id}">${pname(p)}</a></h3>
+          ${r ? `<span class="stars" aria-label="${Math.round(r.avg)} stars">${"★".repeat(Math.round(r.avg))}</span>` : ""}
+          <p class="p-desc">${productDesc}</p>
+          ${productDesc.length > 30 ? `<a href="product.html?p=${p.id}" class="p-desc-link">${readMoreText}</a>` : ""}
+          <div class="p-foot">
+            <div class="p-price">
+              <span class="current-price">${money(p.price)}</span>
+              ${p.old > p.price ? `<del>${money(p.old)}</del>` : ""}
+            </div>
+            <div style="display:flex; gap:6px; width:100%; margin-top:4px;">
+              <button class="p-add" data-id="${p.id}" ${isOutOfStock ? "disabled" : ""} style="flex:1;">
+                ${isOutOfStock ? (LANG === "en" ? "Out of stock" : "نفدت الكمية") : t("add_cart")}
+              </button>
+              <button class="p-wish" data-wish="${p.id}" type="button" aria-label="أضف للمفضلة" style="background:${inWishlist ? '#fee' : 'var(--bg)'}; border:1px solid ${inWishlist ? '#e74c3c' : 'var(--line)'}; border-radius:10px; cursor:pointer; font-size:1.1rem; transition:.2s; color:${inWishlist ? '#e74c3c' : 'inherit'}; display:flex; align-items:center; justify-content:center; width:42px; height:42px; padding:0; flex-shrink:0;">
+                ${inWishlist ? "❤️" : "🤍"}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;      
       frag.appendChild(article);
     } catch(e) {
       console.warn("⚠️ Failed to render product:", p.id, e);
@@ -1418,14 +1858,12 @@ const mediaContent = isBrideBox
   grid.innerHTML = '';
   grid.appendChild(frag);
 
-  // ✨ Event delegation: اربط مستمع النقر مرة واحدة فقط
   if (!productGridClickBound) {
     grid.addEventListener('click', handleProductGridClick);
     productGridClickBound = true;
   }
 }
 
- /* ═══ PRODUCTS PAGE — عرض كل المنتجات مع فلترة وترتيب ═══ */
 function renderProductsPage() {
   const grid = document.getElementById("productsGrid");
   if (!grid) return;
@@ -1444,30 +1882,21 @@ function renderProductsPage() {
     return true;
   });
 
-  // ⚠️ ترتيب المنتجات — التثبيت بيشتغل بس في "all"
   list.sort((a, b) => {
     if (catF === "all") {
       if (a.pinned && !b.pinned) return -1;
       if (!a.pinned && b.pinned) return 1;
-      if (a.pinned && b.pinned) {
-        return (b.pinnedAt || 0) - (a.pinnedAt || 0);
-      }
+      if (a.pinned && b.pinned) { return (b.pinnedAt || 0) - (a.pinnedAt || 0); }
     }
     
     switch(sort) {
-      case "asc":
-        return (a.price || 0) - (b.price || 0);
-      case "desc":
-        return (b.price || 0) - (a.price || 0);
-      case "rating":
-        return ((typeof ratingOf === "function" ? ratingOf(b.id)?.avg : 0) || 0) - ((typeof ratingOf === "function" ? ratingOf(a.id)?.avg : 0) || 0);
-      case "best":
-        return (b.sold || 0) - (a.sold || 0);
-      case "disc":
-        return ((b.old - b.price) / Math.max(b.old, 1)) - ((a.old - a.price) / Math.max(a.old, 1));
+      case "asc": return (a.price || 0) - (b.price || 0);
+      case "desc": return (b.price || 0) - (a.price || 0);
+      case "rating": return ((typeof ratingOf === "function" ? ratingOf(b.id)?.avg : 0) || 0) - ((typeof ratingOf === "function" ? ratingOf(a.id)?.avg : 0) || 0);
+      case "best": return (b.sold || 0) - (a.sold || 0);
+      case "disc": return ((b.old - b.price) / Math.max(b.old, 1)) - ((a.old - a.price) / Math.max(a.old, 1));
       case "new":
-      default:
-        return (b.createdAt || 0) - (a.createdAt || 0);
+      default: return (b.createdAt || 0) - (a.createdAt || 0);
     }
   });
 
@@ -1497,11 +1926,8 @@ function renderProductsPage() {
       const fetchPriority = isFirstBatch ? 'high' : 'low';
       
       let imgSrc = "";
-      try {
-        imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || "");
-      } catch(e) {
-        imgSrc = placeholderSvg;
-      }
+      try { imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || ""); }
+      catch(e) { imgSrc = placeholderSvg; }
       if (!imgSrc) imgSrc = placeholderSvg;
 
       const inWishlist = isInWishlist(p.id);
@@ -1515,17 +1941,7 @@ function renderProductsPage() {
 
       article.innerHTML = `
         <a class="p-media" href="product.html?p=${p.id}" aria-label="${pname(p)}">
-          <img
-            src="${imgSrc}"
-            alt="${pname(p)}"
-            loading="${loadingAttr}"
-            decoding="async"
-            fetchpriority="${fetchPriority}"
-            width="400"
-            height="400"
-            onload="this.classList.add('loaded')"
-            onerror="window.handleImageError(this, '${p.id}')"
-          >
+          <img src="${imgSrc}" alt="${pname(p)}" loading="${loadingAttr}" decoding="async" fetchpriority="${fetchPriority}" width="400" height="400" onload="this.classList.add('loaded')" onerror="window.handleImageError(this, '${p.id}')">
           ${p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : ""}
           ${badge ? `<span class="p-badge">${badge}</span>` : ""}
           ${stockBadg}
@@ -1561,19 +1977,16 @@ function renderProductsPage() {
   grid.innerHTML = '';
   grid.appendChild(frag);
 
-  // Event delegation
   if (!productGridClickBound) {
     grid.addEventListener('click', handleProductGridClick);
     productGridClickBound = true;
   }
 }
 
-/* ═══ REVIEWS PAGE — عرض كل الآراء ═══ */
 function renderReviewsPage() {
   const grid = document.getElementById("reviewsGrid");
   if (!grid) return;
 
-  // استخدام REVIEWS_IMAGES أو بيانات من Firebase
   let reviews = [];
   
   if (typeof REVIEWS_IMAGES !== "undefined" && Array.isArray(REVIEWS_IMAGES)) {
@@ -1587,7 +2000,6 @@ function renderReviewsPage() {
     }));
   }
 
-  // إذا كانت هناك مراجعات من Firebase، ندمجها
   if (typeof ALL_REVIEWS !== "undefined" && Array.isArray(ALL_REVIEWS) && ALL_REVIEWS.length > 0) {
     const fbReviews = ALL_REVIEWS.map(r => ({
       id: r.id || Date.now() + Math.random(),
@@ -1615,18 +2027,7 @@ function renderReviewsPage() {
   reviews.forEach((r) => {
     const card = document.createElement('article');
     card.className = 'vl-review-card-full';
-    card.style.cssText = `
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:18px;
-      overflow:hidden;
-      padding:1.5rem;
-      display:flex;
-      gap:1.5rem;
-      align-items:center;
-      transition:.3s;
-      margin-bottom:1.2rem;
-    `;
+    card.style.cssText = `background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;padding:1.5rem;display:flex;gap:1.5rem;align-items:center;transition:.3s;margin-bottom:1.2rem;`;
 
     const imgSrc = r.image ? (typeof CDN === "function" ? CDN("testimonials/" + r.image) : "https://velalight.github.io/testimonials/" + r.image) : null;
 
@@ -1656,7 +2057,6 @@ function renderReviewsPage() {
   grid.appendChild(frag);
 }
 
-/* ═══ EVENT HANDLER FOR PRODUCT GRID ═══ */
 function handleProductGridClick(e){
   const shareBtn = e.target.closest('.p-share');
   if (shareBtn) {
@@ -1705,7 +2105,6 @@ function handleProductGridClick(e){
   }
 }
 
-/* ═══ QUICK ADD MODAL ═══ */
 function initQuickAdd() {
   const closeBtn = document.getElementById("closeScent");
   const overlay = document.getElementById("scentOv");
@@ -1718,24 +2117,15 @@ function initQuickAdd() {
 
   overlay?.addEventListener("click", (e) => {
     if (e.target.id === "smQMinus") {
-      if (quickAddQty > 1) {
-        quickAddQty--;
-        updateQuickAddQtyUI();
-      }
+      if (quickAddQty > 1) { quickAddQty--; updateQuickAddQtyUI(); }
     } else if (e.target.id === "smQPlus") {
-      if (quickAddQty < quickAddMaxStock) {
-        quickAddQty++;
-        updateQuickAddQtyUI();
-      } else {
-        toast(LANG === "en" ? `⚠️ Only ${quickAddMaxStock} available` : `⚠️ المتاح ${quickAddMaxStock} قطعة فقط`);
-      }
+      if (quickAddQty < quickAddMaxStock) { quickAddQty++; updateQuickAddQtyUI(); }
+      else { toast(LANG === "en" ? `⚠️ Only ${quickAddMaxStock} available` : `⚠️ المتاح ${quickAddMaxStock} قطعة فقط`); }
     }
   });
 
   overlay?.addEventListener("change", (e) => {
-    if (e.target.id === "modalScentSelect") {
-      quickAddScent = e.target.value;
-    }
+    if (e.target.id === "modalScentSelect") { quickAddScent = e.target.value; }
   });
 
   addBtn?.addEventListener("click", () => {
@@ -1751,10 +2141,7 @@ function initQuickAdd() {
       return;
     }
 
-    const added = addToCart(quickAddProduct, {
-      scent: currentScent,
-      qty: currentQty
-    });
+    const added = addToCart(quickAddProduct, { scent: currentScent, qty: currentQty });
 
     if (added) {
       const originalText = addBtn.textContent;
@@ -1807,7 +2194,7 @@ function openQuickAdd(p) {
   const addBtn = document.getElementById("scentModalAdd");
   if (addBtn) {
     addBtn.disabled = false;
-    addBtn.textContent = t("quick_add_add") || "️ أضف للسلة";
+    addBtn.textContent = t("quick_add_add") || "🛍️ أضف للسلة";
   }
 
   const w = document.getElementById("scentModalScents");
@@ -1917,18 +2304,11 @@ function renderFAQ(){
     item.className = "faq-item";
 
     item.innerHTML = `
-      <button
-        class="faq-q"
-        type="button"
-        aria-expanded="false"
-      >
+      <button class="faq-q" type="button" aria-expanded="false">
         <span>${question}</span>
         <span class="faq-icon" aria-hidden="true">+</span>
       </button>
-
-      <div class="faq-a">
-        <div>${answer}</div>
-      </div>
+      <div class="faq-a"><div>${answer}</div></div>
     `;
 
     frag.appendChild(item);
@@ -1948,21 +2328,13 @@ function renderFAQ(){
 
       w.querySelectorAll(".faq-item").forEach(other => {
         other.classList.remove("open");
-
         const otherAnswer = other.querySelector(".faq-a");
         const otherButton = other.querySelector(".faq-q");
-
-        if(otherAnswer){
-          otherAnswer.style.maxHeight = null;
-        }
-
+        if(otherAnswer){ otherAnswer.style.maxHeight = null; }
         if(otherButton){
           otherButton.setAttribute("aria-expanded", "false");
-
           const otherIcon = otherButton.querySelector(".faq-icon");
-          if(otherIcon){
-            otherIcon.textContent = "+";
-          }
+          if(otherIcon){ otherIcon.textContent = "+"; }
         }
       });
 
@@ -1970,16 +2342,16 @@ function renderFAQ(){
         item.classList.add("open");
         answer.style.maxHeight = answer.scrollHeight + "px";
         button.setAttribute("aria-expanded", "true");
-
         const icon = button.querySelector(".faq-icon");
-        if(icon){
-          icon.textContent = "−";
-        }
+        if(icon){ icon.textContent = "−"; }
       }
     });
   });
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ initCart — محسّن مع أنماط لوكس جديدة
+   ═══════════════════════════════════════════════════════════ */
 function initCart(){
   cartBadge();
   fillCitySelect(document.getElementById("coCity"));
@@ -2003,6 +2375,7 @@ function initCart(){
   document.getElementById("emptyCartBtn")?.addEventListener("click",()=>{
     if(!confirm(t("t_confirm_empty")))return;
     saveCart([]);
+    freeShipCelebrated = false;
     renderCart();
   });
 
@@ -2020,37 +2393,70 @@ function initCart(){
     });
   });
 
+  // ✨ Trust Badges الجديدة بتصميم لوكس
   const checkoutBtn = document.getElementById('checkoutBtn');
-  if (checkoutBtn && !document.getElementById('trustBadges')) {
-    const badges = document.createElement('div');
-    badges.id = 'trustBadges';
-    badges.style.cssText = 'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
-    badges.innerHTML = `
-      <span style="display:flex; align-items:center; gap:4px;"> دفع آمن</span>
-      <span style="display:flex; align-items:center; gap:4px;">🔄 ضمان استرجاع</span>
-      <span style="display:flex; align-items:center; gap:4px;">🚚 توصيل موثوق</span>
-    `;
-    checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
+  if (checkoutBtn) {
+    // ضيف كلاس Pulse على زر الشراء
+    checkoutBtn.classList.add('vl-checkout-pulse');
+    
+    // حدّث نص الزر
+    const updateCheckoutLabel = () => {
+      const currentText = checkoutBtn.textContent.trim();
+      // لو الزر لسه فيه النص الافتراضي، ما نغيرش
+      // ملاحظة: النص الفعلي بيجي من الـ HTML، فنسيبه لو موجود
+    };
+
+    if (!document.getElementById('trustBadges')) {
+      const badges = document.createElement('div');
+      badges.id = 'trustBadges';
+      badges.className = 'vl-trust-wrap';
+      badges.innerHTML = `
+        <span class="vl-trust-item"><span class="ic">🔒</span> ${t("cart_luxe_trust1") || "دفع آمن"}</span>
+        <span class="vl-trust-item"><span class="ic">🤲</span> ${t("cart_luxe_trust2") || "صناعة يدوية 100%"}</span>
+        <span class="vl-trust-item"><span class="ic">🚚</span> ${t("cart_luxe_trust3") || "ضمان التوصيل"}</span>
+      `;
+      checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
+    }
   }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ renderCart — النسخة اللوكس الكاملة
+   ═══════════════════════════════════════════════════════════ */
 function renderCart(){
   const c=getCart();
   const w=document.getElementById("cartItems");
   if(!w)return;
 
+  /* ═══ EMPTY STATE الدافئ ═══ */
   if(!c.length){
+    freeShipCelebrated = false;
     w.innerHTML=`
-      <div class="empty" style="padding:2rem 0">
-        ${t("cart_empty")}
-        <br>
-        <small>${t("cart_empty_sub")}</small>
+      <div class="vl-empty-cart">
+        <div class="vl-empty-candle">🕯️</div>
+        <div class="vl-empty-title">${t("cart_luxe_empty_title") || "سلتك تنتظر بعض الدفء والروائح الفاخرة..."}</div>
+        <div class="vl-empty-sub">${t("cart_luxe_empty_sub") || "اختار شمعتك المفضلة وابدأ لحظتك الخاصة"}</div>
+        <button class="vl-empty-cta" id="vlEmptyShopBtn" type="button">
+          ${t("cart_luxe_empty_cta") || "تصفح تشكيلتنا الآن ✨"}
+        </button>
       </div>
     `;
+    
+    setTimeout(()=>{
+      const shopBtn = document.getElementById("vlEmptyShopBtn");
+      if(shopBtn){
+        shopBtn.addEventListener("click", ()=>{
+          closeDrawers();
+          window.location.href = "products.html";
+        });
+      }
+    }, 0);
+    
     updateTotals(c);
     return;
   }
 
+  /* ═══ ITEMS LUXE ═══ */
   const frag = document.createDocumentFragment();
   
   c.forEach((it, i) => {
@@ -2059,12 +2465,13 @@ function renderCart(){
     item.className = 'citem';
     item.innerHTML = `
       <div class="citem-media">
-        <img src="${it.img||''}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy" width="62" height="62" onerror="window.handleImageError(this, '${it.id}')">
+        <img src="${it.img||''}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy" width="82" height="82" onerror="window.handleImageError(this, '${it.id}')">
       </div>
       <div class="citem-info">
         <h5>${pname({name:it.name,nameEn:it.nameEn})}</h5>
+        
         <label class="cart-scent-picker">
-          <span class="cart-scent-label"> ${t("scent_lbl")}</span>
+          <span class="cart-scent-label">🌸 ${t("scent_lbl")}</span>
           <select class="cart-scent-select" data-i="${i}" aria-label="${t("scent_lbl")}">
             <option value="">${LANG==="en"?"Choose a scent":"اختر العطر"}</option>
             ${VELA_SCENTS.map(scent=>`
@@ -2074,18 +2481,27 @@ function renderCart(){
             `).join("")}
           </select>
         </label>
+        
         <div class="cs">${t("price_lbl")} <strong>${money(it.price)}</strong></div>
         <div class="cart-line-total">
           <span>${LANG==="en"?"Item total:":"إجمالي الصنف:"}</span>
           <strong>${money(lineTotal)}</strong>
         </div>
+        
         <div class="qty">
-          <button class="cq-minus" type="button" data-i="${i}" aria-label="minus">−</button>
+          <button class="cq-minus" type="button" data-i="${i}" aria-label="${LANG==="en"?"Decrease":"تقليل"}">−</button>
           <b>${it.qty}</b>
-          <button class="cq-plus" type="button" data-i="${i}" aria-label="plus">+</button>
+          <button class="cq-plus" type="button" data-i="${i}" aria-label="${LANG==="en"?"Increase":"زيادة"}">+</button>
         </div>
       </div>
-      <button class="rm" type="button" data-i="${i}" aria-label="remove">✕</button>
+      <button class="rm" type="button" data-i="${i}" aria-label="${LANG==="en"?"Remove":"حذف المنتج"}">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          <path d="M10 11v6M14 11v6"/>
+          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+        </svg>
+      </button>
     `;
     frag.appendChild(item);
   });
@@ -2093,6 +2509,7 @@ function renderCart(){
   w.innerHTML = '';
   w.appendChild(frag);
 
+  /* ═══ CROSS-SELL LUXE ═══ */
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   const cartProductIds = c.map(it => it.id);
   
@@ -2117,52 +2534,74 @@ function renderCart(){
   if (suggestedProduct) {
     const suggestDiv = document.createElement('div');
     suggestDiv.className = 'cross-sell-box';
-    suggestDiv.style.cssText = 'background:var(--c-warm); padding:1rem; border-radius:12px; margin-top:1rem; border:1px dashed var(--c-gold);';
+    
+    let suggestImg = "";
+    try { suggestImg = (typeof imgOf === "function") ? imgOf(suggestedProduct) : (suggestedProduct.img || ""); }
+    catch(e){ suggestImg = suggestedProduct.img || ""; }
+    
     suggestDiv.innerHTML = `
-      <div style="display:flex; align-items:center; gap:1rem;">
-        <img src="${suggestedProduct.img || ''}" style="width:60px; height:60px; object-fit:cover; border-radius:8px;" onerror="this.style.display='none'">
-        <div style="flex:1">
-          <div style="font-weight:700; font-size:0.9rem;"> أرشح لك فوحات شمع معطره لدولابك: ${pname(suggestedProduct)}</div>
-          <div style="font-size:0.8rem; color:var(--mut); margin:0.2rem 0;">${money(suggestedProduct.price)} فقط</div>
-          <button class="btn sm" id="addSuggestBtn" style="margin-top:0.3rem; width:100%;">أضف للسلة</button>
+      <div class="vl-cross-head">
+        <span class="emoji">✨</span>
+        <span>${t("cart_luxe_cross_title") || "أكمل مجموعتك"}</span>
+      </div>
+      <div style="font-size:.74rem; color:#8b6f47; margin:-6px 0 10px 30px; position:relative; z-index:1;">${t("cart_luxe_cross_sub") || "أضيف لمسة ساحرة لطلبك"}</div>
+      <div class="vl-cross-row">
+        <div class="vl-cross-img">
+          <img src="${suggestImg}" alt="${pname(suggestedProduct)}" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <div class="vl-cross-meta">
+          <div class="nm">${pname(suggestedProduct)}</div>
+          <div class="pr">${money(suggestedProduct.price)}</div>
+          <button class="vl-quick-add" id="addSuggestBtn" type="button">
+            <span class="ic">+</span>
+            <span class="lbl">${t("cart_luxe_cross_add") || "أضف بضغطة واحدة"}</span>
+          </button>
         </div>
       </div>
     `;
     w.appendChild(suggestDiv);
+    
     setTimeout(() => {
       const btn = document.getElementById('addSuggestBtn');
       if(btn) {
         btn.addEventListener('click', () => {
-          addToCart(suggestedProduct, {scent: suggestedProduct.scent || "بدون عطر", qty: 1});
-          renderCart();
-          cartBadge();
+          const added = addToCart(suggestedProduct, {scent: suggestedProduct.scent || "فانيلا", qty: 1});
+          if(added !== false){
+            btn.classList.add('vl-added');
+            btn.innerHTML = `<span class="ic">✓</span><span class="lbl">${t("cart_luxe_cross_added") || "تمت الإضافة"}</span>`;
+            setTimeout(()=>{
+              renderCart();
+              cartBadge();
+            }, 700);
+          }
         });
       }
     }, 0);
   }
 
+  /* ═══ FOOTER ROWS SETUP ═══ */
   const dfoot = document.querySelector("#cartDrawer .dfoot");
   if (dfoot) {
-    if (!document.getElementById('qtyDiscountRow')) {
-      const qtyRow = document.createElement('div');
-      qtyRow.id = 'qtyDiscountRow';
-      qtyRow.className = 'trow';
-      qtyRow.style.cssText = 'display:none; margin-top:0.5rem; color:var(--ok);';
-      qtyRow.innerHTML = `<span>🎁 خصم الكمية (3+ قطع من نفس المنتج):</span><b id="qtyDiscountVal">-0</b>`;
-      const subRow = dfoot.querySelector('.trow'); 
-      if (subRow) dfoot.insertBefore(qtyRow, subRow);
-      else dfoot.appendChild(qtyRow);
-    }
-
+    // Free shipping row (سيتم التحكم فيه من updateTotals)
     if (!document.getElementById('freeShippingRow')) {
       const shipRow = document.createElement('div');
       shipRow.id = 'freeShippingRow';
-      shipRow.className = 'trow';
-      shipRow.style.cssText = 'display:none; margin-top:0.5rem; color:#27ae60; font-weight:700; background:#eafaf1; padding:0.5rem; border-radius:8px; text-align:center;';
-      shipRow.innerHTML = `<span>🚚 مبروك! طلبك مؤهل لشحن مجاني</span>`;
+      shipRow.style.cssText = 'margin: 8px 0;';
       const totalRow = dfoot.querySelector('.trow.total');
-      if (totalRow) totalRow.parentNode.insertBefore(shipRow, totalRow.nextSibling);
+      if (totalRow) totalRow.parentNode.insertBefore(shipRow, totalRow);
       else dfoot.appendChild(shipRow);
+    }
+
+    // Qty discount row
+    if (!document.getElementById('qtyDiscountRow')) {
+      const qtyRow = document.createElement('div');
+      qtyRow.id = 'qtyDiscountRow';
+      qtyRow.className = 'vl-disc-row';
+      qtyRow.style.display = 'none';
+      qtyRow.innerHTML = `<span class="vl-disc-label">🎁 <span>${t("cart_luxe_disc_qty") || "خصم الكمية"}</span></span><b class="vl-disc-val">-0</b>`;
+      const subRow = dfoot.querySelector('.trow'); 
+      if (subRow) dfoot.insertBefore(qtyRow, subRow);
+      else dfoot.appendChild(qtyRow);
     }
   }
 
@@ -2206,17 +2645,17 @@ function handleCartChange(e){
     if(!c[idx]) return;
     c[idx].scent = select.value;
     saveCart(c);
-    renderCart();
+    // لا تعيد renderCart كامل لتجنب فقدان التركيز
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-//   التعديلات الجديدة على الخصومات (خصم واحد فقط - الأعلى)
-// ═══════════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════════
+   ✨ updateTotals — النسخة الكاملة مع الشريط التفاعلي والكونفيتي
+   ═══════════════════════════════════════════════════════════ */
 function updateTotals(c){
   const sub = c.reduce((a,i) => a + (Number(i.price||0) * Number(i.qty||1)), 0);
   
-  // 1. حساب خصم الكمية
+  /* 1. حساب خصم الكمية */
   let qtyDiscount = 0;
   c.forEach(it => {
     if (Number(it.qty) >= 3) {
@@ -2225,124 +2664,129 @@ function updateTotals(c){
   });
   qtyDiscount = Math.round(qtyDiscount * 100) / 100;
 
-  // 2. حساب خصم الكوبون
+  /* 2. حساب خصم الكوبون */
   const couponDisc = (typeof calcCouponDiscount === "function") ? calcCouponDiscount(sub) : 0;
 
-  // 3. اختيار الخصم الأعلى فقط
+  /* 3. اختيار الخصم الأعلى فقط */
   let finalDiscount = 0;
   let appliedType = "none";
 
   if (qtyDiscount > 0 && couponDisc > 0) {
-    if (qtyDiscount >= couponDisc) {
-      finalDiscount = qtyDiscount;
-      appliedType = "qty";
-    } else {
-      finalDiscount = couponDisc;
-      appliedType = "coupon";
-    }
-  } else if (qtyDiscount > 0) {
-    finalDiscount = qtyDiscount;
-    appliedType = "qty";
-  } else if (couponDisc > 0) {
-    finalDiscount = couponDisc;
-    appliedType = "coupon";
-  }
+    if (qtyDiscount >= couponDisc) { finalDiscount = qtyDiscount; appliedType = "qty"; }
+    else { finalDiscount = couponDisc; appliedType = "coupon"; }
+  } else if (qtyDiscount > 0) { finalDiscount = qtyDiscount; appliedType = "qty"; }
+  else if (couponDisc > 0) { finalDiscount = couponDisc; appliedType = "coupon"; }
 
   const total = Math.max(0, sub - finalDiscount);
 
-  // ===== تحديث واجهة المستخدم =====
+  /* ═══ Subtotal ═══ */
   if(document.getElementById("cartSub")) {
     document.getElementById("cartSub").textContent = money(sub);
   }
 
-  // سطر خصم الكمية
+  /* ═══ Qty Discount Row ═══ */
   const qtyDiscRow = document.getElementById("qtyDiscountRow");
   if (qtyDiscRow) {
+    const qtyValEl = qtyDiscRow.querySelector('.vl-disc-val');
+    const qtyLblEl = qtyDiscRow.querySelector('.vl-disc-label');
+    
     if (appliedType === "qty") {
       qtyDiscRow.style.display = "flex";
-      qtyDiscRow.style.color = "var(--ok)";
-      if(document.getElementById("qtyDiscountVal")) {
-        document.getElementById("qtyDiscountVal").textContent = "-" + money(finalDiscount);
-      }
-      qtyDiscRow.querySelector("span").innerHTML = "🎁 خصم الكمية (مطبق)";
+      qtyDiscRow.className = 'vl-disc-row vl-disc-active';
+      if(qtyValEl) qtyValEl.textContent = "-" + money(finalDiscount);
+      if(qtyLblEl) qtyLblEl.innerHTML = `🎁 <span>${t("cart_luxe_disc_qty") || "خصم الكمية"} <small class="vl-disc-hint">✓ ${t("cart_luxe_disc_applied") || "تم تطبيق الخصم الأكبر لك!"}</small></span>`;
     } else if (appliedType === "coupon" && qtyDiscount > 0) {
       qtyDiscRow.style.display = "flex";
-      qtyDiscRow.style.color = "var(--dim)";
-      qtyDiscRow.style.textDecoration = "line-through";
-      if(document.getElementById("qtyDiscountVal")) {
-        document.getElementById("qtyDiscountVal").textContent = "-" + money(qtyDiscount) + " (غير مطبق)";
-      }
-      qtyDiscRow.querySelector("span").innerHTML = "🎁 خصم الكمية";
+      qtyDiscRow.className = 'vl-disc-row vl-disc-cancelled';
+      if(qtyValEl) qtyValEl.textContent = "-" + money(qtyDiscount);
+      if(qtyLblEl) qtyLblEl.innerHTML = `🎁 <span>${t("cart_luxe_disc_qty") || "خصم الكمية"} <small class="vl-disc-hint">${t("cart_luxe_disc_not_applied") || "غير مطبق — تم تطبيق الخصم الأكبر"}</small></span>`;
     } else {
       qtyDiscRow.style.display = "none";
     }
   }
 
-  // سطر خصم الكوبون
+  /* ═══ Coupon Discount Row ═══ */
   const dRow = document.getElementById("discountRow");
   if (dRow) {
     if (appliedType === "coupon") {
       dRow.style.display = "flex";
-      dRow.style.color = "var(--ok)";
+      dRow.className = 'vl-disc-row vl-disc-active';
+      const valEl = dRow.querySelector('b');
       if(document.getElementById("cartDiscount")) {
         document.getElementById("cartDiscount").textContent = "-" + money(finalDiscount);
       }
       if(document.getElementById("couponCodeLbl") && appliedCoupon) {
-        document.getElementById("couponCodeLbl").textContent = appliedCoupon.code + " (مطبق)";
+        document.getElementById("couponCodeLbl").textContent = appliedCoupon.code + " ✓";
       }
     } else if (appliedType === "qty" && couponDisc > 0) {
       dRow.style.display = "flex";
-      dRow.style.color = "var(--dim)";
-      dRow.style.textDecoration = "line-through";
+      dRow.className = 'vl-disc-row vl-disc-cancelled';
       if(document.getElementById("cartDiscount")) {
-        document.getElementById("cartDiscount").textContent = "-" + money(couponDisc) + " (غير مطبق)";
+        document.getElementById("cartDiscount").textContent = "-" + money(couponDisc);
       }
       if(document.getElementById("couponCodeLbl") && appliedCoupon) {
-        document.getElementById("couponCodeLbl").textContent = appliedCoupon.code + " (غير مطبق)";
+        document.getElementById("couponCodeLbl").textContent = appliedCoupon.code + " ✗";
       }
     } else {
       dRow.style.display = "none";
     }
   }
 
-  // شريط الشحن المجاني (منفصل)
-  const freeShippingThreshold = 3000;
-  const remaining = Math.max(0, freeShippingThreshold - sub);
-  const progressPercent = Math.min(100, (sub / freeShippingThreshold) * 100);
+  /* ═══════════════════════════════════════════════════════
+     ✨ FREE SHIPPING PROGRESS BAR التفاعلي مع Confetti
+     ═══════════════════════════════════════════════════════ */
+  const remaining = Math.max(0, FREE_SHIP_THRESHOLD - sub);
+  const progressPercent = Math.min(100, (sub / FREE_SHIP_THRESHOLD) * 100);
+  const reached = sub >= FREE_SHIP_THRESHOLD;
 
   const freeShipRow = document.getElementById("freeShippingRow");
   const shipNote = document.querySelector('.cart-shipping-note');
   
-  if (freeShipRow && shipNote) {
-    if (sub >= freeShippingThreshold) {
-      freeShipRow.style.display = "flex";
-      freeShipRow.innerHTML = `<span style="color:#27ae60; font-weight:700;">🎉 مبروك! طلبك مؤهل لشحن مجاني</span>`;
-      shipNote.style.display = "none";
-    } else {
-      freeShipRow.style.display = "block";
-      freeShipRow.style.background = "#fdf5ed";
-      freeShipRow.style.padding = "1rem";
-      freeShipRow.style.borderRadius = "12px";
-      freeShipRow.style.border = "1px solid var(--c-gold)";
-      
-      freeShipRow.innerHTML = `
-        <div style="text-align:center; margin-bottom:0.5rem; font-size:0.85rem; color:var(--dark);">
-          أضف <strong style="color:#d4af37;">${money(remaining)}</strong> للحصول على <strong>شحن مجاني! 🚚</strong>
+  if (freeShipRow && c.length > 0) {
+    freeShipRow.style.display = "block";
+    
+    const isSuccess = reached;
+    const barClass = isSuccess ? 'vl-ship-bar vl-ship-success' : 'vl-ship-bar';
+    
+    const txt = isSuccess
+      ? `🎉 <strong>${t("cart_luxe_ship_success") || "مبروك! فتحت خيار الشحن المجاني 🥳"}</strong>`
+      : `${t("cart_luxe_ship_add") || "أضف"} <strong>${money(remaining)}</strong> ${t("cart_luxe_ship_to_go") || "للحصول على شحن مجاني! 🚚"}`;
+    
+    freeShipRow.innerHTML = `
+      <div class="${barClass}">
+        <div class="vl-ship-txt">${txt}</div>
+        <div class="vl-ship-track">
+          <div class="vl-ship-fill" style="width:${progressPercent}%"></div>
         </div>
-        <div style="background:#e0d6c8; height:8px; border-radius:4px; overflow:hidden;">
-          <div style="background:linear-gradient(90deg, #d4af37, #f9d877); height:100%; width:${progressPercent}%; transition:width 0.5s ease-in-out; border-radius:4px;"></div>
-        </div>
-      `;
-      shipNote.style.display = "none";
+      </div>
+    `;
+    
+    /* ✨ Confetti عند الوصول للحد لأول مرة */
+    if (isSuccess && !freeShipCelebrated) {
+      freeShipCelebrated = true;
+      setTimeout(() => {
+        triggerConfetti(65);
+        toast(LANG==="en" ? "🎉 Congrats! Free shipping unlocked 🥳" : "🎉 مبروك! فتحت خيار الشحن المجاني 🥳");
+      }, 250);
     }
+    
+    /* reset عند الرجوع تحت الحد */
+    if (!isSuccess && freeShipCelebrated) {
+      freeShipCelebrated = false;
+    }
+    
+    if (shipNote) shipNote.style.display = "none";
+  } else if (freeShipRow) {
+    freeShipRow.style.display = "none";
   }
   
+  /* ═══ Total ═══ */
   if(document.getElementById("cartTotal")) {
     document.getElementById("cartTotal").textContent = money(total);
   }
 }
 
- function getSavedUser(){
+function getSavedUser(){
   try{return JSON.parse(localStorage.getItem("vl_user")||"{}");}
   catch(e){return {};}
 }
@@ -2371,9 +2815,6 @@ function saveUserFromCart(name,phone,email,city,addr,notes=""){
   if(document.getElementById("accAddr"))document.getElementById("accAddr").value=addr;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ [إضافة جديدة] تسجيل/تحديث العميل في مجموعة users
-   ═══════════════════════════════════════════════════════════ */
 async function saveOrUpdateCustomer(orderData){
   if(!window.FB || typeof window.FB.list !== "function") return null;
   try {
@@ -2448,11 +2889,6 @@ function genOrderId(){
   return "VL-"+s;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ ADVANCED MATCHING — تحسين دقة تتبع فيسبوك
-   ═══════════════════════════════════════════════════════════ */
-
-// دالة تشفير SHA-256
 async function hashSHA256(str){
   if(!str) return null;
   try{
@@ -2468,19 +2904,16 @@ async function hashSHA256(str){
   }
 }
 
-// دالة تجهيز بيانات Advanced Matching
 async function buildAdvancedMatching(userData){
   if(!userData) return {};
   
   const result = {};
   
-  // الإيميل
   if(userData.email){
     const em = await hashSHA256(userData.email);
     if(em) result.em = em;
   }
   
-  // الموبايل (بدون 20 أو +، بأرقام إنجليزية)
   if(userData.phone){
     let phone = String(userData.phone).replace(/\D/g, "");
     if(phone.startsWith("20")) phone = phone.slice(2);
@@ -2489,7 +2922,6 @@ async function buildAdvancedMatching(userData){
     if(ph) result.ph = ph;
   }
   
-  // الاسم الأول والأخير
   if(userData.name){
     const parts = String(userData.name).trim().split(/\s+/);
     if(parts[0]){
@@ -2502,27 +2934,22 @@ async function buildAdvancedMatching(userData){
     }
   }
   
-  // المدينة
   if(userData.city){
     const ct = await hashSHA256(userData.city);
     if(ct) result.ct = ct;
   }
   
-  // البلد (ثابت لمصر)
   result.country = "eg";
   
-  // Facebook Browser ID (من كوكيز _fbp)
   const fbp = getCookie("_fbp");
   if(fbp) result.fbp = fbp;
   
-  // Facebook Click ID (من URL أو localStorage)
   const fbc = localStorage.getItem("vl_fbclid");
   if(fbc) result.fbc = `fb.1.${Date.now()}.${fbc}`;
   
   return result;
 }
 
-// دالة قراءة الكوكيز
 function getCookie(name){
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -2530,9 +2957,6 @@ function getCookie(name){
   return null;
 }
  
-// ═══════════════════════════════════════════════════════════
-//   التعديلات الجديدة على دالة checkout (منع الطلبات الوهمية)
-// ═══════════════════════════════════════════════════════════
 async function checkout(){
   const c=getCart();
 
@@ -2561,7 +2985,6 @@ async function checkout(){
     document.getElementById("coAddr")?.focus();return;
   }
 
-  // ✅ هام جداً: افتح نافذة فارغة فوراً عند الضغط قبل أي await
   const waWindow = window.open("", "_blank");
 
   saveUserFromCart(name,phone,email,city,addr,notes);
@@ -2569,7 +2992,6 @@ async function checkout(){
   const orderId=genOrderId();
   const subTotal=c.reduce((a,i)=>a+(Number(i.price||0)*Number(i.qty||1)),0);
   
-  // حساب الخصمين واختيار الأعلى
   let qtyDiscount = 0;
   c.forEach(it => {
     if (Number(it.qty) >= 3) {
@@ -2583,20 +3005,10 @@ async function checkout(){
   let finalDiscount = 0;
   let appliedType = "none";
   if (qtyDiscount > 0 && couponDiscount > 0) {
-    if (qtyDiscount >= couponDiscount) {
-      finalDiscount = qtyDiscount;
-      appliedType = "qty";
-    } else {
-      finalDiscount = couponDiscount;
-      appliedType = "coupon";
-    }
-  } else if (qtyDiscount > 0) {
-    finalDiscount = qtyDiscount;
-    appliedType = "qty";
-  } else if (couponDiscount > 0) {
-    finalDiscount = couponDiscount;
-    appliedType = "coupon";
-  }
+    if (qtyDiscount >= couponDiscount) { finalDiscount = qtyDiscount; appliedType = "qty"; }
+    else { finalDiscount = couponDiscount; appliedType = "coupon"; }
+  } else if (qtyDiscount > 0) { finalDiscount = qtyDiscount; appliedType = "qty"; }
+  else if (couponDiscount > 0) { finalDiscount = couponDiscount; appliedType = "coupon"; }
 
   const total = Math.max(0, subTotal - finalDiscount);
   
@@ -2615,11 +3027,11 @@ async function checkout(){
     userEmail = window.FB.auth.currentUser.email;
   }
 
- /* ✨ ADVANCED MATCHING — تحسين دقة التتبع */
-const advancedMatching = await buildAdvancedMatching({name, phone, email, city});
-if(typeof fbq === "function" && Object.keys(advancedMatching).length > 0){
-  fbq("init", "1377896053806991", advancedMatching);
-}
+  const advancedMatching = await buildAdvancedMatching({name, phone, email, city});
+  if(typeof fbq === "function" && Object.keys(advancedMatching).length > 0){
+    fbq("init", "1377896053806991", advancedMatching);
+  }
+  
   let msg=`${t("wa_head")}\n`;
   msg+=`${t("wa_order")} ${orderId}\n`;
   msg+=`━━━━━━━━━━━━━━━━━━━━\n\n`;
@@ -2637,25 +3049,17 @@ if(typeof fbq === "function" && Object.keys(advancedMatching).length > 0){
 
   msg+=`━━━━━━━━━━━━━━━━━━━━\n`;
   
-  // عرض الخصم المطبق فقط
   if (finalDiscount > 0) {
-    if (appliedType === "qty") {
-      msg+=`🎁 خصم الكمية (مطبق): -${money(finalDiscount)}\n`;
-    } else if (appliedType === "coupon") {
-      msg+=`🎟️ كوبون ${appliedCoupon ? appliedCoupon.code : ''} (مطبق): -${money(finalDiscount)}\n`;
-    }
+    if (appliedType === "qty") msg+=`🎁 خصم الكمية (مطبق): -${money(finalDiscount)}\n`;
+    else if (appliedType === "coupon") msg+=`🎟️ كوبون ${appliedCoupon ? appliedCoupon.code : ''} (مطبق): -${money(finalDiscount)}\n`;
   }
-  if (qtyDiscount > 0 && appliedType !== "qty") {
-    msg+=`💡 خصم الكمية (غير مطبق - تم اختيار الخصم الأعلى)\n`;
-  }
-  if (couponDiscount > 0 && appliedType !== "coupon") {
-    msg+=`💡 خصم الكوبون (غير مطبق - تم اختيار الخصم الأعلى)\n`;
-  }
+  if (qtyDiscount > 0 && appliedType !== "qty") msg+=`💡 خصم الكمية (غير مطبق - تم اختيار الخصم الأعلى)\n`;
+  if (couponDiscount > 0 && appliedType !== "coupon") msg+=`💡 خصم الكوبون (غير مطبق - تم اختيار الخصم الأعلى)\n`;
 
   msg+=`🎁 هدية ليك: كود THANKS10 لخصم 10% على طلبك الجاي\n`;
   
   msg+=`${waTotalLabel()} ${money(total)}\n`;
-msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.\n`;
+  msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.\n`;
   
   msg+=`${t("ship_note")}\n\n`;
   msg+=`${t("wa_name")} ${name}\n`;
@@ -2675,7 +3079,6 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
     ttclid: localStorage.getItem('vl_ttclid') || ''
   };
 
-  // ⭐ إضافة statusHistory عند إنشاء الطلب
   const orderData={
     orderId,
     userId,
@@ -2699,11 +3102,9 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
     paymentMethod:"WhatsApp Confirmation",
     paymentStatus:"pending",
     shippingPayment:"Cash to courier",
-    shippingIncluded: subTotal >= 3000,
+    shippingIncluded: subTotal >= FREE_SHIP_THRESHOLD,
     status: 0,
-    statusHistory: [
-      { status: 0, changedAt: Date.now(), changedBy: "customer" }
-    ],
+    statusHistory: [{ status: 0, changedAt: Date.now(), changedBy: "customer" }],
     tracking: trackingData,
     createdAt:Date.now(),
     updatedAt:Date.now(),
@@ -2727,33 +3128,14 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
     console.error("❌ Failed to save order to Firebase after retries");
   }
 
-  /* ✨ تسجيل/تحديث العميل في مجموعة users */
-  try {
-    await saveOrUpdateCustomer(orderData);
-  } catch(e) {
-    console.warn("⚠️ Customer registration failed:", e);
-  }
-  
-  try {
-    await decrementStock(c);
-  } catch(e) {
-    console.warn("⚠️ Stock decrement failed:", e);
-  }
-  
-  try {
-    if (typeof consumeCoupon === "function") consumeCoupon();
-  } catch(e) {
-    console.warn("⚠️ Coupon consume failed:", e);
-  }
+  try { await saveOrUpdateCustomer(orderData); } catch(e) { console.warn("⚠️ Customer registration failed:", e); }
+  try { await decrementStock(c); } catch(e) { console.warn("⚠️ Stock decrement failed:", e); }
+  try { if (typeof consumeCoupon === "function") consumeCoupon(); } catch(e) { console.warn("⚠️ Coupon consume failed:", e); }
   
   const u=getSavedUser();
   u.orders=(u.orders||0)+1;
   u.name=name;u.phone=phone;u.email=email;u.city=city;u.addr=addr;u.notes=notes;
-  try {
-    localStorage.setItem("vl_user",JSON.stringify(u));
-  } catch(e) {
-    console.warn("⚠️ Failed to save user:", e);
-  }
+  try { localStorage.setItem("vl_user",JSON.stringify(u)); } catch(e) { console.warn("⚠️ Failed to save user:", e); }
   const oc=document.getElementById("ordCount");
   if(oc){oc.textContent=u.orders;}
 
@@ -2771,17 +3153,13 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
   }
 
   saveCart([]);
+  freeShipCelebrated = false;
   renderCart();
   cartBadge();
   
   let emailSent = false;
-  try {
-    emailSent = await sendOrderConfirmationEmail(orderData);
-  } catch (err) {
-    console.warn("⚠️ Email notification failed:", err);
-  }
+  try { emailSent = await sendOrderConfirmationEmail(orderData); } catch (err) { console.warn("⚠️ Email notification failed:", err); }
 
-  /* ✅ هام جداً: افتح واتساب أولاً قبل أي رسالة نجاح */
   const waOpened = openWhatsAppConfirmation(orderData, waWindow);
 
   if (waOpened) {
@@ -2800,12 +3178,7 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
         transaction_id: orderId,
         value: total,
         currency: "EGP",
-        items: c.map(it => ({
-          item_id: it.id,
-          item_name: it.name,
-          price: it.price,
-          quantity: it.qty
-        }))
+        items: c.map(it => ({ item_id: it.id, item_name: it.name, price: it.price, quantity: it.qty }))
       });
     }
     if (typeof fbq === "function") {
@@ -2824,7 +3197,7 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
         country: "eg"
       });
     }
-   ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
+    ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
   } catch (e) {
     console.warn("Tracking event fire failed:", e);
   }
@@ -2849,18 +3222,11 @@ async function sendOrderConfirmationEmail(orderData) {
     
     let discountText = "";
     if (orderData.discount > 0) {
-      if (orderData.appliedType === "qty") {
-        discountText += `🎁 خصم الكمية (مطبق): -${orderData.discount} جنيه\n`;
-      } else if (orderData.appliedType === "coupon") {
-        discountText += `🎟️ كوبون ${orderData.couponCode || ''} (مطبق): -${orderData.discount} جنيه\n`;
-      }
+      if (orderData.appliedType === "qty") discountText += `🎁 خصم الكمية (مطبق): -${orderData.discount} جنيه\n`;
+      else if (orderData.appliedType === "coupon") discountText += `🎟️ كوبون ${orderData.couponCode || ''} (مطبق): -${orderData.discount} جنيه\n`;
     }
-    if (orderData.qtyDiscount > 0 && orderData.appliedType !== "qty") {
-      discountText += `💡 خصم الكمية (غير مطبق): -${orderData.qtyDiscount} جنيه (تم اختيار الخصم الأعلى)\n`;
-    }
-    if (orderData.couponDiscount > 0 && orderData.appliedType !== "coupon") {
-      discountText += `💡 خصم الكوبون (غير مطبق): -${orderData.couponDiscount} جنيه (تم اختيار الخصم الأعلى)\n`;
-    }
+    if (orderData.qtyDiscount > 0 && orderData.appliedType !== "qty") discountText += `💡 خصم الكمية (غير مطبق): -${orderData.qtyDiscount} جنيه (تم اختيار الخصم الأعلى)\n`;
+    if (orderData.couponDiscount > 0 && orderData.appliedType !== "coupon") discountText += `💡 خصم الكوبون (غير مطبق): -${orderData.couponDiscount} جنيه (تم اختيار الخصم الأعلى)\n`;
 
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
@@ -2913,22 +3279,14 @@ ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
       })
     });
     
-    if (response.ok) {
-      console.log("✅ Admin notification sent");
-      return true;
-    } else {
-      console.error("Email failed:", await response.text());
-      return false;
-    }
+    if (response.ok) { console.log("✅ Admin notification sent"); return true; }
+    else { console.error("Email failed:", await response.text()); return false; }
   } catch (err) {
     console.error("Email error:", err);
     return false;
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ فتح واتساب — يستخدم رقم المتجر + normalizeWhatsApp
-   ═══════════════════════════════════════════════════════════ */
 function openWhatsAppConfirmation(orderData, waWindow) {
   if (!CFG || !CFG.WHATSAPP) return false;
   
@@ -2946,11 +3304,8 @@ function openWhatsAppConfirmation(orderData, waWindow) {
     .join("\n");
   
   let discountText = "";
-  if(orderData.qtyDiscount > 0 && orderData.appliedType === "qty") {
-    discountText += `🎁 خصم الكمية: -${orderData.discount} جنيه\n`;
-  } else if(orderData.couponDiscount > 0 && orderData.appliedType === "coupon") {
-    discountText += `🎟️ كوبون ${orderData.couponCode}: -${orderData.discount} جنيه\n`;
-  }
+  if(orderData.qtyDiscount > 0 && orderData.appliedType === "qty") discountText += `🎁 خصم الكمية: -${orderData.discount} جنيه\n`;
+  else if(orderData.couponDiscount > 0 && orderData.appliedType === "coupon") discountText += `🎟️ كوبون ${orderData.couponCode}: -${orderData.discount} جنيه\n`;
 
   const message = `✨ أهلاً VelaLight!
 
@@ -2976,14 +3331,9 @@ ${itemsSummary}
   const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
   try {
-    if (waWindow && !waWindow.closed) {
-      waWindow.location.href = waUrl;
-      return true;
-    }
-    
+    if (waWindow && !waWindow.closed) { waWindow.location.href = waUrl; return true; }
     const newWin = window.open(waUrl, "_blank");
     if (newWin) return true;
-    
     window.location.href = waUrl;
     return true;
   } catch(e) {
@@ -2992,9 +3342,6 @@ ${itemsSummary}
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ اصلاح جذري وبسيط لحساب المستخدم
-   ═══════════════════════════════════════════════════════════ */
 function initAccount() {
   document.getElementById("accBtn")?.addEventListener("click", async () => {
     const isFirebaseLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
@@ -3011,11 +3358,8 @@ function initAccount() {
       if (accSub) accSub.style.display = "";
       if (welcomeMsg) welcomeMsg.style.display = "none";
       
-      if (typeof openAuthModal === "function") {
-        openAuthModal();
-      } else {
-        toast("⚠️ يرجى تسجيل الدخول أولاً");
-      }
+      if (typeof openAuthModal === "function") openAuthModal();
+      else toast("⚠️ يرجى تسجيل الدخول أولاً");
       return;
     }
 
@@ -3036,9 +3380,7 @@ function initAccount() {
 
     try {
       let userData = null;
-      if (typeof VL_GetCurrentUser === "function") {
-        userData = await VL_GetCurrentUser();
-      }
+      if (typeof VL_GetCurrentUser === "function") userData = await VL_GetCurrentUser();
       
       if (!userData) {
         const localUser = getSavedUser();
@@ -3052,17 +3394,11 @@ function initAccount() {
       }
 
       welcomeMsg.innerHTML = `
-        <div style="font-weight:700; color:var(--gold2); font-size:1.1rem; margin-bottom:0.3rem;">
-          أهلاً بك، ${userData.name || "عميلنا العزيز"} 👋
-        </div>
-        <div style="font-size:0.85rem; color:var(--mut); word-break:break-all;">
-          ${userData.email || ""}
-        </div>
+        <div style="font-weight:700; color:var(--gold2); font-size:1.1rem; margin-bottom:0.3rem;">أهلاً بك، ${userData.name || "عميلنا العزيز"} 👋</div>
+        <div style="font-size:0.85rem; color:var(--mut); word-break:break-all;">${userData.email || ""}</div>
       `;
 
-      if (document.getElementById("ordCount")) {
-        document.getElementById("ordCount").textContent = userData.ordersCount || 0;
-      }
+      if (document.getElementById("ordCount")) document.getElementById("ordCount").textContent = userData.ordersCount || 0;
       
       localStorage.setItem("vl_user", JSON.stringify({
         uid: window.FB.auth.currentUser.uid,
@@ -3076,12 +3412,8 @@ function initAccount() {
       console.warn("⚠️ Error loading user data:", error);
       const fbUser = window.FB.auth.currentUser;
       welcomeMsg.innerHTML = `
-        <div style="font-weight:700; color:var(--gold2); font-size:1.1rem; margin-bottom:0.3rem;">
-          أهلاً بك 👋
-        </div>
-        <div style="font-size:0.85rem; color:var(--mut);">
-          ${fbUser?.email || ""}
-        </div>
+        <div style="font-weight:700; color:var(--gold2); font-size:1.1rem; margin-bottom:0.3rem;">أهلاً بك 👋</div>
+        <div style="font-size:0.85rem; color:var(--mut);">${fbUser?.email || ""}</div>
       `;
     }
     
@@ -3090,7 +3422,7 @@ function initAccount() {
 
   document.getElementById("closeAcc")?.addEventListener("click", () => closeModal("accOv"));
   document.getElementById("accOv")?.addEventListener("click", e => {
-    if (e.target.id === "accOv") { closeModal("accOv"); }
+    if (e.target.id === "accOv") closeModal("accOv");
   });
 
   document.getElementById("saveAccBtn")?.addEventListener("click", async () => {
@@ -3099,9 +3431,8 @@ function initAccount() {
     if (!name || !phone) { toast("⚠️ اكتب الاسم ورقم الموبايل."); return; }
     
     const old = getSavedUser();
-    try {
-      localStorage.setItem("vl_user", JSON.stringify({ ...old, name, phone, orders: old.orders || 0 }));
-    } catch (e) { console.warn("⚠️ Failed to save account:", e); }
+    try { localStorage.setItem("vl_user", JSON.stringify({ ...old, name, phone, orders: old.orders || 0 })); }
+    catch (e) { console.warn("⚠️ Failed to save account:", e); }
     
     if (typeof fillCartForm === "function") fillCartForm();
     toast("✅ تم حفظ البيانات بنجاح");
@@ -3109,23 +3440,13 @@ function initAccount() {
   });
 
   document.getElementById("guestLoginBtn")?.addEventListener("click", () => {
-    if (typeof openAuthModal === "function") {
-      closeModal("accOv");
-      openAuthModal();
-    } else {
-      toast("⚠️ يرجى تسجيل الدخول من الصفحة الرئيسية");
-    }
+    if (typeof openAuthModal === "function") { closeModal("accOv"); openAuthModal(); }
+    else toast("⚠️ يرجى تسجيل الدخول من الصفحة الرئيسية");
   });
 
   document.getElementById("logoutBtn")?.addEventListener("click", async () => {
-    if (window.FB && window.FB.auth && typeof VL_Logout === "function") {
-      await VL_Logout();
-    }
-    try {
-      localStorage.removeItem("vl_user");
-    } catch (e) {
-      console.warn("⚠️ Failed to clear user:", e);
-    }
+    if (window.FB && window.FB.auth && typeof VL_Logout === "function") await VL_Logout();
+    try { localStorage.removeItem("vl_user"); } catch (e) { console.warn("⚠️ Failed to clear user:", e); }
     toast("✅ تم تسجيل الخروج بنجاح");
     closeModal("accOv");
     setTimeout(() => window.location.reload(), 500); 
@@ -3245,12 +3566,10 @@ function initNav(){
     a.addEventListener("click",()=>{
       document.getElementById("mnav")?.classList.remove("open");
       document.getElementById("ovl")?.classList.remove("open");
-      // ✨ [إضافة] إرجاع السكرول — حل مشكلة القفل بعد اختيار تصنيف
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
     });
   });  
-  /* ✨ روابط التصنيفات — تنقل مع ?cat= على أي صفحة */
   document.querySelectorAll("[data-cat]").forEach(a=>{
     if(a.closest(".mnav")||a.closest(".mainnav")||a.closest("footer")){
       a.addEventListener("click",(e)=>{
@@ -3260,14 +3579,12 @@ function initNav(){
         const isProductsPage = window.location.pathname.includes('products.html');
         
         if(isProductsPage){
-          // في نفس الصفحة → اضغط الشيب مباشرة
           e.preventDefault();
           setTimeout(()=>{
             const chip=document.querySelector(`#chips .chip[data-cat="${cat}"]`);
             if(chip){chip.click();}
           },50);
         } else {
-          // في صفحة تانية → انتقل مع تمرير التصنيف في الرابط
           e.preventDefault();
           window.location.href = "products.html?cat=" + encodeURIComponent(cat);
         }
@@ -3288,42 +3605,19 @@ function closeDrawers(){
 function closeModal(id){
   document.getElementById(id)?.classList.remove("open");
   const stillOpen = document.querySelector('.drawer.open, .ovl.open');
-  if(!stillOpen){
-    document.body.style.overflow = '';
-  }
+  if(!stillOpen){ document.body.style.overflow = ''; }
 }
 
 function stockBadge(p){
   if(!p) return "";
-
   if(p.stock === undefined || p.stock === null || p.stock === "") return "";
-
   const s = Number(p.stock);
   if(isNaN(s)) return "";
 
-  const baseStyle = `
-    position:absolute;
-    top:12px;
-    inset-inline-end:12px;
-    inset-inline-start:auto;
-    color:#fff;
-    font-size:.7rem;
-    font-weight:800;
-    padding:.3rem .75rem;
-    border-radius:99px;
-    z-index:4;
-    pointer-events:none;
-    white-space:nowrap;
-  `;
+  const baseStyle = `position:absolute;top:12px;inset-inline-end:12px;inset-inline-start:auto;color:#fff;font-size:.7rem;font-weight:800;padding:.3rem .75rem;border-radius:99px;z-index:4;pointer-events:none;white-space:nowrap;`;
 
-  if(s === 0){
-    return `<span class="stock-badge" style="${baseStyle}background:#e74c3c;">نفدت الكمية</span>`;
-  }
-
-  if(s <= 5){
-    return `<span class="stock-badge" style="${baseStyle}background:#e67e22;">باقي ${s} فقط</span>`;
-  }
-
+  if(s === 0) return `<span class="stock-badge" style="${baseStyle}background:#e74c3c;">نفدت الكمية</span>`;
+  if(s <= 5) return `<span class="stock-badge" style="${baseStyle}background:#e67e22;">باقي ${s} فقط</span>`;
   return `<span class="stock-badge" style="${baseStyle}background:#27ae60;">متوفر</span>`;
 }
 
@@ -3337,7 +3631,6 @@ async function decrementStock(items){
   for(const it of items){
     const p = products.find(x => x.id === it.id);
     if(!p) continue;
-    
     if(p.stock === undefined || p.stock === null || p.stock === "" || isNaN(Number(p.stock))) continue;
     
     const docId = p._fid || p.id;
@@ -3347,17 +3640,11 @@ async function decrementStock(items){
     try {
       await runTransaction(db, async (transaction) => {
         const sfDoc = await transaction.get(docRef);
-        
-        if (!sfDoc.exists()) {
-          throw new Error("Product document does not exist!");
-        }
-        
+        if (!sfDoc.exists()) { throw new Error("Product document does not exist!"); }
         const currentStock = Number(sfDoc.data().stock || 0);
         const newStock = Math.max(0, currentStock - qtyToSubtract);
-        
         transaction.update(docRef, { stock: newStock });
       });
-      
       console.log(`✅ Stock updated for ${p.id}: ${qtyToSubtract} subtracted`);
     } catch(e) {
       console.warn("⚠️ stock transaction failed for", p.id, e);
@@ -3365,27 +3652,17 @@ async function decrementStock(items){
   }
 }
 
-// ================================================================
-// ✨ COUPONS SYSTEM — النسخة الذكية المطورة
-// ================================================================
-
 let appliedCoupon = null;
 
 function calcCouponDiscount(sub){
   if(!appliedCoupon) return 0;
   let d = 0;
-  if(appliedCoupon.type === "percent"){
-    d = sub * (Number(appliedCoupon.value || 0) / 100);
-  } else {
-    d = Number(appliedCoupon.value || 0);
-  }
-  if(appliedCoupon.maxDiscount && d > appliedCoupon.maxDiscount) {
-    d = appliedCoupon.maxDiscount;
-  }
+  if(appliedCoupon.type === "percent"){ d = sub * (Number(appliedCoupon.value || 0) / 100); }
+  else { d = Number(appliedCoupon.value || 0); }
+  if(appliedCoupon.maxDiscount && d > appliedCoupon.maxDiscount) { d = appliedCoupon.maxDiscount; }
   return Math.min(sub, Math.round(d));
 }
 
-// ═══ applyCoupon ═══
 async function applyCoupon(){
   const code = (document.getElementById("couponInput")?.value || "").trim().toUpperCase();
   if(!code){ toast("⚠️ اكتب كود الكوبون"); return; }
@@ -3399,25 +3676,13 @@ async function applyCoupon(){
   if(c.active === false){ toast("❌ الكوبون ده متوقف"); return; }
   
   const now = Date.now();
-  if(c.startDate && now < new Date(c.startDate).getTime()) {
-    toast("⏳ هذا الكوبون لم يبدأ بعد.");
-    return;
-  }
-  if(c.expiresAt && now > Number(c.expiresAt)) {
-    toast("⚠️ الكوبون منتهي الصلاحية");
-    return;
-  }
-  if(c.maxUses && Number(c.usedCount || 0) >= Number(c.maxUses)){
-    toast("⚠️ انتهت استخدامات الكوبون");
-    return;
-  }
+  if(c.startDate && now < new Date(c.startDate).getTime()) { toast("⏳ هذا الكوبون لم يبدأ بعد."); return; }
+  if(c.expiresAt && now > Number(c.expiresAt)) { toast("⚠️ الكوبون منتهي الصلاحية"); return; }
+  if(c.maxUses && Number(c.usedCount || 0) >= Number(c.maxUses)){ toast("⚠️ انتهت استخدامات الكوبون"); return; }
   
   const cart = getCart();
   const sub = cart.reduce((a,i) => a + (Number(i.price || 0) * Number(i.qty || 1)), 0);
-  if(c.minOrder && sub < c.minOrder) {
-    toast(`⚠️ الحد الأدنى للطلب هو ${c.minOrder} ج.م`);
-    return;
-  }
+  if(c.minOrder && sub < c.minOrder) { toast(`⚠️ الحد الأدنى للطلب هو ${c.minOrder} ج.م`); return; }
   
   if(c.firstOrderOnly) {
     const user = getSavedUser();
@@ -3425,13 +3690,8 @@ async function applyCoupon(){
     const userPhone = user.phone || "";
     
     let allOrders = [];
-    try {
-      allOrders = await window.FB.list("orders") || [];
-    } catch(e) {
-      console.warn("⚠️ Could not fetch orders for first-order check", e);
-      toast("⚠️ تعذر التحقق من الطلبات السابقة");
-      return;
-    }
+    try { allOrders = await window.FB.list("orders") || []; }
+    catch(e) { console.warn("⚠️ Could not fetch orders for first-order check", e); toast("⚠️ تعذر التحقق من الطلبات السابقة"); return; }
     
     const customerOrders = allOrders.filter(order => {
       const orderEmail = order.email || order.customer?.email || "";
@@ -3440,29 +3700,17 @@ async function applyCoupon(){
     });
     
     const nonCancelledOrders = customerOrders.filter(order => order.status !== 4);
-    
-    if(nonCancelledOrders.length > 0) {
-      toast("⚠️ هذا الكوبون مخصص للطلبات الأولى فقط (الطلبات الملغية غير محسوبة).");
-      return;
-    }
+    if(nonCancelledOrders.length > 0) { toast("⚠️ هذا الكوبون مخصص للطلبات الأولى فقط (الطلبات الملغية غير محسوبة)."); return; }
   }
   
   const user = getSavedUser();
   const identifier = user.email || user.phone;
-  if(identifier && c.usedBy && Array.isArray(c.usedBy) && c.usedBy.includes(identifier)) {
-    toast("⚠️ لقد استخدمت هذا الكوبون من قبل.");
-    return;
-  }
+  if(identifier && c.usedBy && Array.isArray(c.usedBy) && c.usedBy.includes(identifier)) { toast("⚠️ لقد استخدمت هذا الكوبون من قبل."); return; }
   
   let discount = 0;
-  if(c.type === "percent"){
-    discount = sub * (Number(c.value || 0) / 100);
-  } else {
-    discount = Number(c.value || 0);
-  }
-  if(c.maxDiscount && discount > c.maxDiscount) {
-    discount = c.maxDiscount;
-  }
+  if(c.type === "percent"){ discount = sub * (Number(c.value || 0) / 100); }
+  else { discount = Number(c.value || 0); }
+  if(c.maxDiscount && discount > c.maxDiscount) { discount = c.maxDiscount; }
   discount = Math.round(discount);
   
   appliedCoupon = { ...c, _fid: c.id, discount: discount };
@@ -3470,7 +3718,6 @@ async function applyCoupon(){
   renderCart();
 }
 
-// ═══ consumeCoupon ═══
 async function consumeCoupon(){
   if(!appliedCoupon || !appliedCoupon._fid) return;
   
@@ -3485,25 +3732,20 @@ async function consumeCoupon(){
           usedCount: (Number(appliedCoupon.usedCount || 0) + 1),
           usedBy: usedBy
         });
-      } catch(e) {
-        console.warn("⚠️ coupon update failed", e);
-      }
+      } catch(e) { console.warn("⚠️ coupon update failed", e); }
     }
   } else {
     try {
       await window.FB.update("coupons", appliedCoupon._fid, {
         usedCount: (Number(appliedCoupon.usedCount || 0) + 1)
       });
-    } catch(e) {
-      console.warn("⚠️ coupon update failed", e);
-    }
+    } catch(e) { console.warn("⚠️ coupon update failed", e); }
   }
   
   appliedCoupon = null;
   if(document.getElementById("couponInput")) document.getElementById("couponInput").value = "";
 }
 
-/* ═══ REVIEWS COUNT HELPER ═══ */
 window.getReviewsCount = function() {
   if (typeof REVIEWS_IMAGES !== 'undefined' && Array.isArray(REVIEWS_IMAGES)) {
     return REVIEWS_IMAGES.length;
@@ -3536,7 +3778,6 @@ if (typeof window.addToCart === "function") {
   };
 }
 
-
 /* ═══ EXPOSE GLOBALLY ═══ */
 window.renderProductsPage = renderProductsPage;
 window.renderReviewsPage = renderReviewsPage;
@@ -3546,5 +3787,7 @@ window.isInWishlist = isInWishlist;
 window.WISHLIST_KEY = WISHLIST_KEY;
 window.updateReviewsCount = updateReviewsCount;
 window.getReviewsCount = getReviewsCount;
+window.triggerConfetti = triggerConfetti;
+window.injectCartStyles = injectCartStyles;
 
 })();
