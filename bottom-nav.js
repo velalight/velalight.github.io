@@ -1,16 +1,33 @@
 /* ═══════════════════════════════════════════════════════════
-   ✨ VelaLight — Bottom Navigation Bar (v2 — Performance)
+   ✨ VelaLight — Bottom Navigation Bar (v2 — كامل ومحسّن)
+   ملف مستقل تماماً — مش بيعتمد على app.js
+   يعرض شريط تنقل ثابت في أسفل الشاشة للموبايل فقط
+   ✨ يشمل: i18n + Performance + Scroll Fix
    ═══════════════════════════════════════════════════════════ */
 
 (function () {
   "use strict";
 
+  // منع التشغيل مرتين
   if (window.__vlBottomNavLoaded) return;
   window.__vlBottomNavLoaded = true;
 
+  /* ═══════════════════════════════════════════════════════
+     ✨ الترجمة (i18n)
+     ═══════════════════════════════════════════════════════ */
   const TRANSLATIONS = {
-    ar: { home: "الرئيسية", account: "حسابي", cart: "العربة", menu: "القائمة" },
-    en: { home: "Home", account: "Account", cart: "Cart", menu: "Menu" }
+    ar: {
+      home: "الرئيسية",
+      account: "حسابي",
+      cart: "العربة",
+      menu: "القائمة"
+    },
+    en: {
+      home: "Home",
+      account: "Account",
+      cart: "Cart",
+      menu: "Menu"
+    }
   };
 
   function getCurrentLang() {
@@ -28,36 +45,68 @@
     const nav = document.getElementById("vlBottomNav");
     if (!nav) return;
 
-    const set = (sel, txt) => {
-      const el = nav.querySelector(sel);
-      if (el) el.textContent = txt;
-    };
+    const homeEl = nav.querySelector('[data-nav="home"] .vl-nav-label');
+    const accountEl = nav.querySelector('[data-nav="account"] .vl-nav-label');
+    const cartEl = nav.querySelector('[data-nav="cart"] .vl-nav-label');
+    const menuEl = nav.querySelector('[data-nav="menu"] .vl-nav-label');
 
-    set('[data-nav="home"] .vl-nav-label', t.home);
-    set('[data-nav="account"] .vl-nav-label', t.account);
-    set('[data-nav="cart"] .vl-nav-label', t.cart);
-    set('[data-nav="menu"] .vl-nav-label', t.menu);
+    if (homeEl) homeEl.textContent = t.home;
+    if (accountEl) accountEl.textContent = t.account;
+    if (cartEl) cartEl.textContent = t.cart;
+    if (menuEl) menuEl.textContent = t.menu;
 
     const homeBtn = nav.querySelector('[data-nav="home"]');
-    const accBtn = nav.querySelector('[data-nav="account"]');
+    const accountBtn = nav.querySelector('[data-nav="account"]');
     const cartBtn = nav.querySelector('[data-nav="cart"]');
     const menuBtn = nav.querySelector('[data-nav="menu"]');
+
     if (homeBtn) homeBtn.setAttribute("aria-label", t.home);
-    if (accBtn) accBtn.setAttribute("aria-label", t.account);
+    if (accountBtn) accountBtn.setAttribute("aria-label", t.account);
     if (cartBtn) cartBtn.setAttribute("aria-label", t.cart);
     if (menuBtn) menuBtn.setAttribute("aria-label", t.menu);
   }
 
+  function watchLangChanges() {
+    // مراقبة تغيير الـ lang attribute على html
+    const observer = new MutationObserver(function () {
+      updateLabels();
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+
+    // مراقبة تغيير vl_lang في localStorage من تبويبات تانية
+    window.addEventListener("storage", function (e) {
+      if (e.key === "vl_lang") updateLabels();
+    });
+
+    // Polling خفيف كل 3 ثواني كخطة احتياطية
+    let lastLang = getCurrentLang();
+    setInterval(function () {
+      const currentLang = getCurrentLang();
+      if (currentLang !== lastLang) {
+        lastLang = currentLang;
+        updateLabels();
+      }
+    }, 3000);
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     1. حقن الـ CSS
+     ═══════════════════════════════════════════════════════ */
   function injectStyles() {
     if (document.getElementById("vl-bottom-nav-styles")) return;
+
     const css = `
+      /* ═══ Bottom Navigation Bar ═══ */
       .vl-bottom-nav {
         position: fixed;
-        bottom: 0; left: 0; right: 0;
-        width: 100%; height: 64px;
-        background: #fff;
-        border-top: 1px solid rgba(26,21,18,0.08);
-        box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 64px;
+        background: #ffffff;
+        border-top: 1px solid rgba(26, 21, 18, 0.08);
+        box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
         display: none;
         align-items: center;
         justify-content: space-around;
@@ -68,11 +117,25 @@
         font-family: 'Tajawal', 'El Messiri', sans-serif;
         contain: layout style paint;
       }
+
+      /* يظهر على الموبايل بس */
       @media (max-width: 768px) {
-        .vl-bottom-nav { display: flex; }
-        body { padding-bottom: 72px !important; }
-        .whatsapp-float { bottom: 80px !important; }
+        .vl-bottom-nav {
+          display: flex;
+        }
+
+        /* إضافة مساحة أسفل الصفحة عشان الشريط ميغطي المحتوى */
+        body {
+          padding-bottom: 72px !important;
+        }
+
+        /* تحريك زر الواتساب فوق الشريط */
+        .whatsapp-float {
+          bottom: 80px !important;
+        }
       }
+
+      /* ═══ كل زر ═══ */
       .vl-bottom-nav-item {
         flex: 1;
         display: flex;
@@ -92,66 +155,113 @@
         -webkit-tap-highlight-color: transparent;
         user-select: none;
       }
-      .vl-bottom-nav-item:active { transform: scale(0.92); }
+
+      .vl-bottom-nav-item:active {
+        transform: scale(0.92);
+      }
+
       .vl-bottom-nav-item:hover,
-      .vl-bottom-nav-item.vl-active { color: #b8863f; }
+      .vl-bottom-nav-item.vl-active {
+        color: #b8863f;
+      }
+
       .vl-bottom-nav-item .vl-nav-icon {
-        font-size: 22px; line-height: 1;
-        display: flex; align-items: center; justify-content: center;
-        width: 26px; height: 26px;
+        font-size: 22px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
         position: relative;
         transition: transform 0.2s ease;
       }
-      .vl-bottom-nav-item.vl-active .vl-nav-icon { transform: translateY(-2px); }
-      .vl-bottom-nav-item .vl-nav-label {
-        font-size: 11px; font-weight: 600;
-        line-height: 1; white-space: nowrap; letter-spacing: 0.2px;
+
+      .vl-bottom-nav-item.vl-active .vl-nav-icon {
+        transform: translateY(-2px);
       }
+
+      .vl-bottom-nav-item .vl-nav-label {
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1;
+        white-space: nowrap;
+        letter-spacing: 0.2px;
+      }
+
+      /* ═══ Badge على أيقونة السلة ═══ */
       .vl-nav-badge {
         position: absolute;
-        top: -4px; right: -8px;
-        min-width: 18px; height: 18px;
+        top: -4px;
+        right: -8px;
+        min-width: 18px;
+        height: 18px;
         padding: 0 4px;
-        background: #e74c3c; color: #fff;
-        font-size: 10px; font-weight: 700;
+        background: #e74c3c;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
         border-radius: 99px;
-        display: flex; align-items: center; justify-content: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         line-height: 1;
-        box-shadow: 0 2px 6px rgba(231,76,60,0.4);
+        box-shadow: 0 2px 6px rgba(231, 76, 60, 0.4);
         transform: scale(0);
         transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
-      .vl-nav-badge.vl-show { transform: scale(1); }
+
+      .vl-nav-badge.vl-show {
+        transform: scale(1);
+      }
+
+      /* ═══ مؤشر الصفحة النشطة ═══ */
       .vl-bottom-nav-item.vl-active::before {
         content: "";
         position: absolute;
-        top: 0; left: 50%;
+        top: 0;
+        left: 50%;
         transform: translateX(-50%);
-        width: 30px; height: 3px;
+        width: 30px;
+        height: 3px;
         background: linear-gradient(90deg, #d4af37, #b8863f);
         border-radius: 0 0 4px 4px;
       }
-      html[dir="ltr"] .vl-bottom-nav { direction: ltr; }
+
+      /* ═══ تنسيقات خاصة عند وجود LTR ═══ */
+      html[dir="ltr"] .vl-bottom-nav {
+        direction: ltr;
+      }
+
+      /* ═══ إخفاء إذا كان الشريط مخفي بـ JS ═══ */
+      .vl-bottom-nav.vl-hidden {
+        display: none !important;
+      }
     `;
+
     const style = document.createElement("style");
     style.id = "vl-bottom-nav-styles";
     style.textContent = css;
     document.head.appendChild(style);
   }
 
+  /* ═══════════════════════════════════════════════════════
+     2. بناء HTML للشريط
+     ═══════════════════════════════════════════════════════ */
   function buildNav() {
     if (document.getElementById("vlBottomNav")) return;
+
     const nav = document.createElement("nav");
     nav.id = "vlBottomNav";
     nav.className = "vl-bottom-nav";
     nav.setAttribute("role", "navigation");
-    nav.setAttribute("aria-label", "Bottom navigation");
+    nav.setAttribute("aria-label", "شريط التنقل السفلي");
 
     const currentPath = window.location.pathname.split("/").pop() || "index.html";
     const isHome = currentPath === "index.html" || currentPath === "" || currentPath === "/";
 
     nav.innerHTML = `
-      <a href="index.html" class="vl-bottom-nav-item ${isHome ? "vl-active" : ""}" data-nav="home" aria-label="Home">
+      <a href="index.html" class="vl-bottom-nav-item ${isHome ? "vl-active" : ""}" data-nav="home" aria-label="الرئيسية">
         <span class="vl-nav-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -160,7 +270,8 @@
         </span>
         <span class="vl-nav-label">الرئيسية</span>
       </a>
-      <button type="button" class="vl-bottom-nav-item" data-nav="account" aria-label="Account">
+
+      <button type="button" class="vl-bottom-nav-item" data-nav="account" aria-label="حسابي">
         <span class="vl-nav-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -169,7 +280,8 @@
         </span>
         <span class="vl-nav-label">حسابي</span>
       </button>
-      <button type="button" class="vl-bottom-nav-item" data-nav="cart" aria-label="Cart">
+
+      <button type="button" class="vl-bottom-nav-item" data-nav="cart" aria-label="سلة الشراء">
         <span class="vl-nav-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1"/>
@@ -180,7 +292,8 @@
         </span>
         <span class="vl-nav-label">العربة</span>
       </button>
-      <button type="button" class="vl-bottom-nav-item" data-nav="menu" aria-label="Menu">
+
+      <button type="button" class="vl-bottom-nav-item" data-nav="menu" aria-label="القائمة">
         <span class="vl-nav-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="3" y1="6" x2="21" y2="6"/>
@@ -191,24 +304,32 @@
         <span class="vl-nav-label">القائمة</span>
       </button>
     `;
+
     document.body.appendChild(nav);
+    return nav;
   }
 
-  /* ═══ Badge — بدون Polling ثقيل ═══ */
+  /* ═══════════════════════════════════════════════════════
+     3. تحديث Badge السلة — Performance Optimized
+     ═══════════════════════════════════════════════════════ */
   let badgeRaf = null;
   function updateCartBadge() {
     if (badgeRaf) return;
-    badgeRaf = requestAnimationFrame(() => {
+    badgeRaf = requestAnimationFrame(function () {
       badgeRaf = null;
       const badge = document.getElementById("vlNavCartBadge");
       if (!badge) return;
+
       let count = 0;
       try {
         const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
         if (Array.isArray(cart)) {
           count = cart.reduce((sum, item) => sum + (Number(item.qty) || 0), 0);
         }
-      } catch (e) { count = 0; }
+      } catch (e) {
+        count = 0;
+      }
+
       if (count > 0) {
         badge.textContent = count > 99 ? "99+" : String(count);
         badge.classList.add("vl-show");
@@ -218,38 +339,32 @@
     });
   }
 
+  /* ═══════════════════════════════════════════════════════
+     4. مراقبة تغييرات السلة (Realtime)
+     ═══════════════════════════════════════════════════════ */
   function watchCartChanges() {
-    // الأحداث المخصصة (الأساسية)
+    // مراقبة الحدث المخصص لو موجود
     window.addEventListener("vl-cart-updated", updateCartBadge);
-    window.addEventListener("storage", (e) => {
+
+    // مراقبة تغييرات localStorage من تبويبات تانية
+    window.addEventListener("storage", function (e) {
       if (e.key === "vl_cart") updateCartBadge();
     });
-    // Polling خفيف جداً كل 3 ثواني (بدل 1 ثانية)
+
+    // Polling كل 3 ثواني كخطة احتياطية (بدل 1 ثانية لتحسين الأداء)
     setInterval(updateCartBadge, 3000);
   }
 
-  function watchLangChanges() {
-    const observer = new MutationObserver(() => updateLabels());
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
-    window.addEventListener("storage", (e) => {
-      if (e.key === "vl_lang") updateLabels();
-    });
-    // Polling خفيف كل 3 ثواني
-    let lastLang = getCurrentLang();
-    setInterval(() => {
-      const currentLang = getCurrentLang();
-      if (currentLang !== lastLang) {
-        lastLang = currentLang;
-        updateLabels();
-      }
-    }, 3000);
-  }
-
+  /* ═══════════════════════════════════════════════════════
+     5. معالجة النقر على الأزرار
+     ═══════════════════════════════════════════════════════ */
   function handleNavClick(e) {
     const btn = e.target.closest("[data-nav]");
     if (!btn) return;
+
     const action = btn.dataset.nav;
 
+    // ═══ Home ═══
     if (action === "home") {
       const currentPath = window.location.pathname.split("/").pop() || "index.html";
       if (currentPath === "index.html" || currentPath === "" || currentPath === "/") {
@@ -258,21 +373,32 @@
       }
       return;
     }
+
     e.preventDefault();
 
+    // ═══ Account ═══
     if (action === "account") {
       closeAllOverlays();
+
       const accBtn = document.getElementById("accBtn");
-      if (accBtn) accBtn.click();
-      else if (typeof window.openAuthModal === "function") window.openAuthModal();
-      else window.location.href = "my-orders.html";
+      if (accBtn) {
+        accBtn.click();
+      } else if (typeof window.openAuthModal === "function") {
+        window.openAuthModal();
+      } else {
+        window.location.href = "my-orders.html";
+      }
       return;
     }
+
+    // ═══ Cart ═══
     if (action === "cart") {
       closeAllOverlays();
+
       const cartBtn = document.getElementById("cartBtn");
-      if (cartBtn) cartBtn.click();
-      else {
+      if (cartBtn) {
+        cartBtn.click();
+      } else {
         const drawer = document.getElementById("cartDrawer");
         const ovl = document.getElementById("cartOv");
         if (drawer) {
@@ -283,8 +409,11 @@
       }
       return;
     }
+
+    // ═══ Menu ═══
     if (action === "menu") {
       closeAllOverlays();
+
       const mnav = document.getElementById("mnav");
       const ovl = document.getElementById("ovl");
       if (mnav) {
@@ -298,26 +427,46 @@
     }
   }
 
+  /* ═══════════════════════════════════════════════════════
+     6. إغلاق جميع الـ Overlays المفتوحة
+     ═══════════════════════════════════════════════════════ */
   function closeAllOverlays() {
     const toClose = ["cartDrawer", "cartOv", "mnav", "ovl", "accOv", "scentOv", "searchOv", "chatOv"];
-    toClose.forEach((id) => {
+    toClose.forEach(function (id) {
       const el = document.getElementById(id);
-      if (el && el.classList.contains("open")) el.classList.remove("open");
+      if (el && el.classList.contains("open")) {
+        el.classList.remove("open");
+      }
     });
     document.body.style.overflow = "";
   }
 
+  /* ═══════════════════════════════════════════════════════
+     7. تحديث حالة الزر النشط حسب الصفحة
+     ═══════════════════════════════════════════════════════ */
   function updateActiveState() {
     const currentPath = window.location.pathname.split("/").pop() || "index.html";
     const nav = document.getElementById("vlBottomNav");
     if (!nav) return;
-    nav.querySelectorAll("[data-nav]").forEach((item) => item.classList.remove("vl-active"));
+
+    nav.querySelectorAll("[data-nav]").forEach(function (item) {
+      item.classList.remove("vl-active");
+    });
+
+    let activeAction = null;
     if (currentPath === "index.html" || currentPath === "" || currentPath === "/") {
-      const active = nav.querySelector('[data-nav="home"]');
+      activeAction = "home";
+    }
+
+    if (activeAction) {
+      const active = nav.querySelector(`[data-nav="${activeAction}"]`);
       if (active) active.classList.add("vl-active");
     }
   }
 
+  /* ═══════════════════════════════════════════════════════
+     8. Reset body overflow — حل مشكلة scroll المقفول
+     ═══════════════════════════════════════════════════════ */
   function resetBodyOverflow() {
     const hasOpenOverlay = document.querySelector(
       '.drawer.open, .ovl.open, .modal.open, .mnav.open, #mnav.open, #accOv.open, #scentOv.open'
@@ -326,30 +475,42 @@
       document.body.style.overflow = "";
       document.body.style.overflowX = "";
       document.body.style.overflowY = "";
+      document.documentElement.style.overflow = "";
     }
   }
 
+  /* ═══════════════════════════════════════════════════════
+     9. التهيئة
+     ═══════════════════════════════════════════════════════ */
   function init() {
     injectStyles();
     buildNav();
     updateCartBadge();
     watchCartChanges();
     updateActiveState();
-    updateLabels();
-    watchLangChanges();
+    updateLabels();        // ← الترجمة الأولية
+    watchLangChanges();    // ← مراقبة تغيير اللغة
 
+    // ربط الأحداث (Event Delegation)
     const nav = document.getElementById("vlBottomNav");
-    if (nav) nav.addEventListener("click", handleNavClick);
+    if (nav) {
+      nav.addEventListener("click", handleNavClick);
+    }
 
+    // مراقبة تغييرات الـ URL (لو SPA)
     window.addEventListener("popstate", updateActiveState);
 
+    // حل مشكلة scroll المقفول
     resetBodyOverflow();
     window.addEventListener("pageshow", resetBodyOverflow);
-    window.addEventListener("load", () => setTimeout(resetBodyOverflow, 100));
+    window.addEventListener("load", function () {
+      setTimeout(resetBodyOverflow, 100);
+    });
 
-    console.log("✅ Bottom Nav v2 loaded");
+    console.log("✅ Bottom Nav v2 loaded (i18n + Perf + Scroll Fix)");
   }
 
+  /* ═══ تشغيل عند جاهزية الـ DOM ═══ */
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else {
