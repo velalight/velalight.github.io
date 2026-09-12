@@ -1990,7 +1990,7 @@ function initCart(){
     renderCart();
     openDrawer("cartDrawer","cartOv");
   });
-  document.getElementById("closeCart")?.addEventListener("click",closeDrawers);
+ document.getElementById("closeCart")?.addEventListener("click",closeDrawers);
   document.getElementById("cartOv")?.addEventListener("click",closeDrawers);
   renderCart();
 
@@ -2020,18 +2020,10 @@ function initCart(){
     });
   });
 
-  const checkoutBtn = document.getElementById('checkoutBtn');
-  if (checkoutBtn && !document.getElementById('trustBadges')) {
-    const badges = document.createElement('div');
-    badges.id = 'trustBadges';
-    badges.style.cssText = 'display:flex; justify-content:center; gap:1rem; margin: 0.8rem 0 0.5rem; font-size: 0.75rem; color: var(--mut); flex-wrap: wrap;';
-    badges.innerHTML = `
-      <span style="display:flex; align-items:center; gap:4px;"> دفع آمن</span>
-      <span style="display:flex; align-items:center; gap:4px;">🔄 ضمان استرجاع</span>
-      <span style="display:flex; align-items:center; gap:4px;">🚚 توصيل موثوق</span>
-    `;
-    checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
-  }
+  /* ✨ [جديد] تهيئة السلة الموحدة (sticky footer) */
+  setupUnifiedCart();
+  
+  // (Trust badges اتشالت من هنا — بقت بتتعمل جوا setupUnifiedCart مرة واحدة)
 }
 
 function renderCart(){
@@ -2141,6 +2133,7 @@ function renderCart(){
     }, 0);
   }
 
+  // ✨ [مُحدَّث] نضيف السطور الديناميكية لـ dfoot
   const dfoot = document.querySelector("#cartDrawer .dfoot");
   if (dfoot) {
     if (!document.getElementById('qtyDiscountRow')) {
@@ -2166,6 +2159,12 @@ function renderCart(){
     }
   }
 
+  // ✨ [جديد] فعّل/عطّل زر "متابعة للدفع" حسب السلة
+  const continueBtn = document.getElementById("continueToCheckoutBtn");
+  if (continueBtn) {
+    continueBtn.disabled = c.length === 0;
+  }
+ 
   w.addEventListener('click', handleCartClick);
   w.addEventListener('change', handleCartChange);
   
@@ -2828,8 +2827,8 @@ msg+=`💳 طريقة الدفع: سيتم إرسال تفاصيل الدفع ا
   } catch (e) {
     console.warn("Tracking event fire failed:", e);
   }
-}
 
+}
 function waTotalLabel(){
   if(I18N&&I18N[LANG]&&I18N[LANG].wa_total){return I18N[LANG].wa_total;}
   return LANG==="en"?"💰 Products Total:":"💰 إجمالي المنتجات:";
@@ -3544,7 +3543,277 @@ window.getWishlist = getWishlist;
 window.toggleWishlist = toggleWishlist;
 window.isInWishlist = isInWishlist;
 window.WISHLIST_KEY = WISHLIST_KEY;
-window.updateReviewsCount = updateReviewsCount;
-window.getReviewsCount = getReviewsCount;
+// ✅ ملاحظة: getReviewsCount و updateReviewsCount بيتعرضوا فوق بالفعل عبر window.*
+// (اتشالوا من هنا لأنهم كانوا بيعملوا ReferenceError في strict mode)
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ UNIFIED CART — سلة موحدة احترافية
+   ───────────────────────────────────────────────────────────
+   Layout:
+   ┌─────────────────────────────────────┐
+   │ 🛍️ سلة الشراء              ✕        │ ← dhead (ثابت فوق)
+   ├─────────────────────────────────────┤
+   │  المنتجات + تعديل الكمية            │
+   │  كود الكوبون                        │
+   │  بيانات التوصيل (الاسم/الموبايل...) │ ← dbody (يسكرول)
+   │  طريقة الدفع                        │
+   ├─────────────────────────────────────┤
+   │ الإجمالي                   875 ج.م  │ ← dfoot (ثابت تحت)
+   │ [✅ إتمام الطلب عبر واتساب]        │
+   │ [🗑️ إفراغ السلة]                   │
+   └─────────────────────────────────────┘
+   ═══════════════════════════════════════════════════════════ */
+function setupUnifiedCart() {
+  const drawer = document.getElementById("cartDrawer");
+  if (!drawer) return;
+  if (drawer.dataset.unified === "1") return;
+
+  const dhead = drawer.querySelector(".dhead");
+  const dbody = drawer.querySelector(".dbody");
+  const dfoot = drawer.querySelector(".dfoot");
+
+  if (!dhead || !dbody || !dfoot) {
+    console.warn("⚠️ Cart drawer structure incomplete — skipping. dhead:", !!dhead, "dbody:", !!dbody, "dfoot:", !!dfoot);
+    return;
+  }
+
+  drawer.dataset.unified = "1";
+
+  // ═══════════════════════════════════════════════════
+  // 1) CSS — Layout احترافي لكل الأجهزة
+  // ═══════════════════════════════════════════════════
+  if (!document.getElementById("unified-cart-css")) {
+    const style = document.createElement("style");
+    style.id = "unified-cart-css";
+    style.textContent = `
+      /* ═══ Drawer: عمودي بارتفاع كامل الشاشة ═══ */
+      #cartDrawer {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        overflow: hidden !important;
+        background: var(--panel, #fff);
+      }
+
+      /* ═══ Header: ثابت فوق ═══ */
+      #cartDrawer .dhead {
+        flex: 0 0 auto !important;
+        background: var(--panel, #fff);
+        border-bottom: 1px solid var(--line, #eee);
+        z-index: 10;
+        position: relative;
+      }
+
+      /* ═══ Body: هو اللي بيسكرول ═══ */
+      #cartDrawer .dbody {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding: 1rem !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+        scrollbar-color: var(--gold, #d9ab5f) transparent;
+      }
+      #cartDrawer .dbody::-webkit-scrollbar { width: 6px; }
+      #cartDrawer .dbody::-webkit-scrollbar-track { background: transparent; }
+      #cartDrawer .dbody::-webkit-scrollbar-thumb {
+        background: var(--gold, #d9ab5f);
+        border-radius: 4px;
+      }
+
+      /* ═══ Footer: Sticky Bottom ═══ */
+      #cartDrawer .dfoot {
+        flex: 0 0 auto !important;
+        background: var(--panel, #fff) !important;
+        border-top: 1px solid var(--line, #eee) !important;
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.08) !important;
+        padding: 1rem !important;
+        padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
+        z-index: 10;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      /* ═══ Trust Badges (فوق زر الإتمام) ═══ */
+      #cartDrawer #trustBadges {
+        display: flex !important;
+        justify-content: center;
+        gap: 1rem;
+        margin: 0.65rem 0 0.35rem;
+        font-size: 0.72rem;
+        color: var(--mut, #888);
+        flex-wrap: wrap;
+        line-height: 1.4;
+      }
+      #cartDrawer #trustBadges span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+      }
+
+      /* ═══ Checkout Button ═══ */
+      #cartDrawer #checkoutBtn {
+        width: 100% !important;
+        margin-top: 0.65rem !important;
+        font-size: 1.05rem !important;
+        padding: 1rem 1.2rem !important;
+        border-radius: 14px !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.2px;
+        box-shadow: 0 8px 24px rgba(46, 139, 69, 0.28) !important;
+        transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+      }
+      #cartDrawer #checkoutBtn:active {
+        transform: scale(0.98);
+        box-shadow: 0 4px 12px rgba(46, 139, 69, 0.2) !important;
+      }
+      #cartDrawer #checkoutBtn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        box-shadow: none !important;
+      }
+
+      /* ═══ Empty Cart Button ═══ */
+      #cartDrawer #emptyCartBtn {
+        width: 100% !important;
+        margin-top: 0.45rem !important;
+        font-size: 0.85rem !important;
+        opacity: 0.85;
+        transition: opacity 0.15s ease !important;
+      }
+      #cartDrawer #emptyCartBtn:hover { opacity: 1; }
+
+      /* ═══ Form + Paybox + Note (بيتحركوا جوا الـ body) ═══ */
+      #cartDrawer .co-form { margin-top: 0.75rem !important; }
+      #cartDrawer .paybox { margin-top: 1rem !important; }
+      #cartDrawer .cart-shipping-note { margin-top: 1rem !important; }
+      #cartDrawer [data-i18n="delivery_h"] { margin-top: 1.25rem !important; }
+
+      /* ═══ سطر الإجمالي مميز ═══ */
+      #cartDrawer .dfoot .trow.total {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.05rem;
+        font-weight: 800;
+        padding: 0.5rem 0;
+        border-top: 1px dashed var(--line, #eee);
+        margin-top: 0.35rem;
+      }
+
+      /* ═══ Tablet (769px – 1024px) ═══ */
+      @media (min-width: 769px) and (max-width: 1024px) {
+        #cartDrawer .dbody { padding: 1.15rem !important; }
+        #cartDrawer .dfoot { padding: 1.15rem !important; }
+        #cartDrawer #checkoutBtn { font-size: 1.08rem !important; }
+      }
+
+      /* ═══ Mobile (≤768px) ═══ */
+      @media (max-width: 768px) {
+        #cartDrawer .dbody { padding: 0.85rem !important; }
+        #cartDrawer .dfoot {
+          padding: 0.85rem !important;
+          padding-bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px)) !important;
+        }
+        #cartDrawer #checkoutBtn {
+          font-size: 0.98rem !important;
+          padding: 0.9rem 1rem !important;
+          margin-top: 0.5rem !important;
+        }
+        #cartDrawer #emptyCartBtn { font-size: 0.78rem !important; }
+        #cartDrawer #trustBadges { font-size: 0.68rem; gap: 0.75rem; }
+      }
+
+      /* ═══ Small Mobile (≤380px) ═══ */
+      @media (max-width: 380px) {
+        #cartDrawer #checkoutBtn {
+          font-size: 0.92rem !important;
+          padding: 0.85rem 0.9rem !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // ═══════════════════════════════════════════════════
+  // 2) نقل عناصر (الفورم + الكوبون + الملاحظات + طريقة الدفع)
+  //    من dfoot إلى dbody عشان يسكرولوا مع المنتجات
+  // ═══════════════════════════════════════════════════
+  const elementsToMove = [
+    '[data-i18n="delivery_h"]',   // العنوان "بيانات التوصيل"
+    '.co-form',                    // فورم بيانات العميل
+    '.cart-shipping-note',         // ملاحظة الشحن
+    '.paybox'                      // صندوق طريقة الدفع
+  ];
+
+  elementsToMove.forEach(selector => {
+    const el = dfoot.querySelector(selector);
+    if (el) dbody.appendChild(el);
+  });
+
+  // نقل صف الكوبون
+  const couponInput = document.getElementById("couponInput");
+  if (couponInput) {
+    let couponRow = couponInput.closest(".coupon-row") || couponInput.parentElement;
+    // لو الأب بيحتوي على زر التطبيق بس، نطلع مستوى أعلى
+    if (couponRow && couponRow.parentElement && couponRow.parentElement !== dfoot) {
+      const hasOnlyCoupon = couponRow.parentElement.querySelector('#couponInput, #applyCouponBtn');
+      if (hasOnlyCoupon && couponRow.parentElement !== dbody) {
+        couponRow = couponRow.parentElement;
+      }
+    }
+    if (couponRow && couponRow.parentElement === dfoot) {
+      couponRow.style.marginTop = "1rem";
+      dbody.appendChild(couponRow);
+    }
+  }
+
+  // ═══════════════════════════════════════════════════
+  // 3) Trust Badges فوق زر الإتمام (مرة واحدة)
+  // ═══════════════════════════════════════════════════
+  const checkoutBtn = document.getElementById("checkoutBtn");
+  if (checkoutBtn && !document.getElementById("trustBadges")) {
+    const badges = document.createElement("div");
+    badges.id = "trustBadges";
+    badges.innerHTML = `
+      <span>🔒 دفع آمن</span>
+      <span>🔄 ضمان استرجاع</span>
+      <span>🚚 توصيل موثوق</span>
+    `;
+    checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
+  }
+
+  // ═══════════════════════════════════════════════════
+  // 4) ضمان إن الأزرار في dfoot (احتياطي)
+  // ═══════════════════════════════════════════════════
+  const emptyBtn = document.getElementById("emptyCartBtn");
+  if (checkoutBtn && checkoutBtn.parentElement !== dfoot) {
+    dfoot.appendChild(checkoutBtn);
+  }
+  if (emptyBtn && emptyBtn.parentElement !== dfoot) {
+    dfoot.appendChild(emptyBtn);
+  }
+
+  // ═══════════════════════════════════════════════════
+  // 5) مسح أي أثر للـ 2-stage القديم (احتياطي)
+  // ═══════════════════════════════════════════════════
+  drawer.querySelectorAll(".cart-stage").forEach(el => {
+    while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
+    el.remove();
+  });
+  const oldProgress = document.getElementById("cartProgress");
+  if (oldProgress) oldProgress.remove();
+  const continueBtn = document.getElementById("continueToCheckoutBtn");
+  if (continueBtn) continueBtn.remove();
+  const backBtn = document.getElementById("backToCartBtn");
+  if (backBtn) backBtn.remove();
+
+  console.log("✅ Unified Cart initialized — header / scroll-body / sticky-footer");
+}
 
 })();
