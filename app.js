@@ -2020,7 +2020,7 @@ function initCart(){
     });
   });
 
-  /* ✨ [جديد] تهيئة السلة الموحدة (sticky footer) */
+  /* ✨ تهيئة السلة الموحدة (sticky footer) */
   setupUnifiedCart();
   
   const checkoutBtn = document.getElementById('checkoutBtn');
@@ -2144,19 +2144,18 @@ function renderCart(){
     }, 0);
   }
 
-  // ✨ [مُحدَّث] نضيف السطور الديناميكية لـ stage-1 (مش dfoot مباشرة)
-  const stage1 = document.querySelector("#cartDrawer .cart-stage-1") 
-              || document.querySelector("#cartDrawer .dfoot");
-  if (stage1) {
+  // ✨ نضيف السطور الديناميكية لـ dfoot
+  const dfoot = document.querySelector("#cartDrawer .dfoot");
+  if (dfoot) {
     if (!document.getElementById('qtyDiscountRow')) {
       const qtyRow = document.createElement('div');
       qtyRow.id = 'qtyDiscountRow';
       qtyRow.className = 'trow';
       qtyRow.style.cssText = 'display:none; margin-top:0.5rem; color:var(--ok);';
       qtyRow.innerHTML = `<span>🎁 خصم الكمية (3+ قطع من نفس المنتج):</span><b id="qtyDiscountVal">-0</b>`;
-      const subRow = stage1.querySelector('.trow'); 
-      if (subRow) stage1.insertBefore(qtyRow, subRow);
-      else stage1.appendChild(qtyRow);
+      const subRow = dfoot.querySelector('.trow'); 
+      if (subRow) dfoot.insertBefore(qtyRow, subRow);
+      else dfoot.appendChild(qtyRow);
     }
 
     if (!document.getElementById('freeShippingRow')) {
@@ -2165,13 +2164,12 @@ function renderCart(){
       shipRow.className = 'trow';
       shipRow.style.cssText = 'display:none; margin-top:0.5rem; color:#27ae60; font-weight:700; background:#eafaf1; padding:0.5rem; border-radius:8px; text-align:center;';
       shipRow.innerHTML = `<span>🚚 مبروك! طلبك مؤهل لشحن مجاني</span>`;
-      const totalRow = stage1.querySelector('.trow.total');
+      const totalRow = dfoot.querySelector('.trow.total');
       if (totalRow) totalRow.parentNode.insertBefore(shipRow, totalRow.nextSibling);
-      else stage1.appendChild(shipRow);
+      else dfoot.appendChild(shipRow);
     }
   }
 
-  // ✨ [جديد] فعّل/عطّل زر "متابعة للدفع" حسب السلة
   const continueBtn = document.getElementById("continueToCheckoutBtn");
   if (continueBtn) {
     continueBtn.disabled = c.length === 0;
@@ -3256,7 +3254,7 @@ function initNav(){
     a.addEventListener("click",()=>{
       document.getElementById("mnav")?.classList.remove("open");
       document.getElementById("ovl")?.classList.remove("open");
-      // ✨ [إضافة] إرجاع السكرول — حل مشكلة القفل بعد اختيار تصنيف
+      // ✨ إرجاع السكرول — حل مشكلة القفل بعد اختيار تصنيف
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
     });
@@ -3555,11 +3553,13 @@ window.getWishlist = getWishlist;
 window.toggleWishlist = toggleWishlist;
 window.isInWishlist = isInWishlist;
 window.WISHLIST_KEY = WISHLIST_KEY;
-window.updateReviewsCount = updateReviewsCount;
-window.getReviewsCount = getReviewsCount;
+// NOTE: updateReviewsCount & getReviewsCount already exposed above via window.*
+// (removed the broken self-reference that caused ReferenceError in strict mode)
+
 /* ═══════════════════════════════════════════════════════════
-   ✨ UNIFIED CART — سلة موحدة مع Sticky Footer
-   المنتجات + الفورم في نفس الـ scroll، والإجمالي ثابت في الأسفل
+   ✨ UNIFIED CART — CSS فقط، بدون نقل DOM
+   المنتجات والفورم بيسكرولوا جوا الـ dbody
+   والإجمالي + زر الإتمام ثابتين في dfoot
    ═══════════════════════════════════════════════════════════ */
 function setupUnifiedCart() {
   const drawer = document.getElementById("cartDrawer");
@@ -3567,59 +3567,71 @@ function setupUnifiedCart() {
   if (drawer.dataset.unified === "1") return;
   drawer.dataset.unified = "1";
 
+  // نتأكد إن العناصر الأساسية موجودة قبل ما نطبّق الـ CSS
   const dhead = drawer.querySelector(".dhead");
   const dbody = drawer.querySelector(".dbody");
   const dfoot = drawer.querySelector(".dfoot");
-  if (!dhead || !dbody || !dfoot) return;
 
-  // ═══ 1. CSS مخصص ═══
+  if (!dhead || !dbody || !dfoot) {
+    console.warn("⚠️ Cart drawer structure incomplete — skipping unified styles. dhead:", !!dhead, "dbody:", !!dbody, "dfoot:", !!dfoot);
+    return;
+  }
+
   if (!document.getElementById("unified-cart-css")) {
     const style = document.createElement("style");
     style.id = "unified-cart-css";
     style.textContent = `
+      /* Drawer: عمودي بارتفاع ديناميكي (dvh للموبايل) */
       #cartDrawer {
         display: flex !important;
         flex-direction: column !important;
         height: 100vh !important;
-        max-height: 100vh !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
         overflow: hidden !important;
       }
+
+      /* Header: ثابت في الأعلى */
       #cartDrawer .dhead {
         flex-shrink: 0 !important;
         position: relative;
-        z-index: 2;
-        background: var(--panel);
-        border-bottom: 1px solid var(--line);
+        z-index: 3;
+        background: var(--panel, #fff);
+        border-bottom: 1px solid var(--line, #eee);
       }
+
+      /* Body: هو اللي بيسكرول */
       #cartDrawer .dbody {
         flex: 1 1 auto !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
-        padding: 0.85rem 1rem 1rem !important;
+        padding: 0.85rem 1rem 1.2rem !important;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
         overscroll-behavior: contain;
+        scrollbar-width: thin;
       }
       #cartDrawer .dbody::-webkit-scrollbar { width: 6px; }
       #cartDrawer .dbody::-webkit-scrollbar-thumb {
-        background: var(--gold);
+        background: var(--gold, #d9ab5f);
         border-radius: 4px;
         opacity: 0.5;
       }
+
+      /* Footer: ثابت في الأسفل — مع max-height عشان ما يغطّيش الشاشة */
       #cartDrawer .dfoot {
         flex-shrink: 0 !important;
-        background: var(--panel) !important;
-        border-top: 1px solid var(--line) !important;
+        background: var(--panel, #fff) !important;
+        border-top: 1px solid var(--line, #eee) !important;
         box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.06) !important;
         padding: 0.85rem 1rem calc(0.9rem + env(safe-area-inset-bottom, 0)) !important;
         position: relative;
         z-index: 3;
-        max-height: 42vh;
+        max-height: 55vh;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
-      #cartDrawer .co-form {
-        margin-top: 0.5rem !important;
-      }
+
+      /* زر الإتمام */
       #cartDrawer #checkoutBtn {
         margin-top: 0.65rem !important;
         font-size: 1rem !important;
@@ -3628,14 +3640,41 @@ function setupUnifiedCart() {
         font-weight: 800 !important;
         letter-spacing: 0.2px;
         box-shadow: 0 8px 22px rgba(46, 139, 69, 0.28) !important;
+        width: 100% !important;
       }
+
+      /* زر إفراغ السلة */
       #cartDrawer #emptyCartBtn {
         margin-top: 0.45rem !important;
         font-size: 0.82rem !important;
+        width: 100% !important;
       }
+
+      /* صندوق الدفع */
+      #cartDrawer .paybox {
+        margin-top: 0.75rem !important;
+      }
+
+      /* الفورم */
+      #cartDrawer .co-form {
+        margin-top: 0.5rem !important;
+      }
+
+      /* شارة الثقة */
+      #cartDrawer #trustBadges {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 0.8rem 0 0.5rem;
+        font-size: 0.75rem;
+        color: var(--mut, #888);
+        flex-wrap: wrap;
+      }
+
+      /* الموبايل: نصغّر شوية الارتفاعات عشان كل حاجة تبان */
       @media (max-width: 768px) {
         #cartDrawer .dfoot {
-          max-height: 48vh;
+          max-height: 60vh;
           padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0)) !important;
         }
         #cartDrawer #checkoutBtn {
@@ -3647,292 +3686,20 @@ function setupUnifiedCart() {
     document.head.appendChild(style);
   }
 
-  // ═══ 2. نقل فورم التوصيل + الكوبون + معلومات الدفع للـ dbody ═══
-  const deliveryH = dfoot.querySelector('[data-i18n="delivery_h"]');
-  if (deliveryH) {
-    deliveryH.style.marginTop = "0.85rem";
-    dbody.appendChild(deliveryH);
-  }
-
-  const coForm = dfoot.querySelector(".co-form");
-  if (coForm) dbody.appendChild(coForm);
-
-  const couponInput = document.getElementById("couponInput");
-  if (couponInput) {
-    const couponRow = couponInput.parentElement;
-    if (couponRow && couponRow !== dfoot) {
-      couponRow.style.cssText += ";margin-top:1rem;";
-      dbody.appendChild(couponRow);
-    }
-  }
-
-  const discountRow = document.getElementById("discountRow");
-  if (discountRow) dbody.appendChild(discountRow);
-
-  const shipNote = dfoot.querySelector(".cart-shipping-note");
-  if (shipNote) {
-    shipNote.style.marginTop = "1rem";
-    dbody.appendChild(shipNote);
-  }
-
-  const paybox = dfoot.querySelector(".paybox");
-  if (paybox) {
-    paybox.style.marginTop = "0.75rem";
-    dbody.appendChild(paybox);
-  }
-
-  // ═══ 3. ترتيب الـ dfoot ═══
+  // ✨ نضيف trust badges لو مش موجودة وزر الإتمام موجود
   const checkoutBtn = document.getElementById("checkoutBtn");
-  if (checkoutBtn && checkoutBtn.parentElement !== dfoot) {
-    dfoot.appendChild(checkoutBtn);
-  }
-
-  const emptyBtn = document.getElementById("emptyCartBtn");
-  if (emptyBtn && emptyBtn.parentElement !== dfoot) {
-    dfoot.appendChild(emptyBtn);
-  }
-
-  const freeShip = document.getElementById("freeShippingRow");
-  if (freeShip && checkoutBtn) dfoot.insertBefore(freeShip, checkoutBtn);
-
-  // ═══ 4. ترتيب الإجماليات ═══
-  const cartSub = document.getElementById("cartSub");
-  const cartTotal = document.getElementById("cartTotal");
-  const qtyDiscountRow = document.getElementById("qtyDiscountRow");
-
-  const totalRow = cartTotal ? cartTotal.closest(".trow") : null;
-  const subRow = cartSub ? cartSub.closest(".trow") : null;
-
-  if (qtyDiscountRow && subRow && qtyDiscountRow.nextElementSibling !== subRow) {
-    if (subRow.parentElement === dfoot) {
-      dfoot.insertBefore(qtyDiscountRow, subRow);
-    }
-  }
-
-  if (totalRow && checkoutBtn && totalRow.parentElement === dfoot) {
-    dfoot.appendChild(totalRow);
-    if (freeShip) dfoot.appendChild(freeShip);
-    dfoot.appendChild(checkoutBtn);
-    if (emptyBtn) dfoot.appendChild(emptyBtn);
-  }
-
-  // ═══ 5. مسح أي أثر للـ 2-stage القديم ═══
-  drawer.querySelectorAll(".cart-stage").forEach(el => {
-    while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
-    el.remove();
-  });
-  const oldProgress = document.getElementById("cartProgress");
-  if (oldProgress) oldProgress.remove();
-  const continueBtn = document.getElementById("continueToCheckoutBtn");
-  if (continueBtn) continueBtn.remove();
-  const backBtn = document.getElementById("backToCartBtn");
-  if (backBtn) backBtn.remove();
-
-  console.log("✅ Unified Cart initialized (sticky footer)");
-}
- /* ═══════════════════════════════════════════════════════════
-   ✨ UNIFIED CART — سلة موحدة مع Sticky Footer
-   المنتجات + الفورم في نفس الـ scroll، والإجمالي ثابت في الأسفل
-   ═══════════════════════════════════════════════════════════ */
-function setupUnifiedCart() {
-  const drawer = document.getElementById("cartDrawer");
-  if (!drawer) return;
-  if (drawer.dataset.unified === "1") return;
-  drawer.dataset.unified = "1";
-
-  const dhead = drawer.querySelector(".dhead");
-  const dbody = drawer.querySelector(".dbody");
-  const dfoot = drawer.querySelector(".dfoot");
-  if (!dhead || !dbody || !dfoot) return;
-
-  // ═══ 1. CSS مخصص ═══
-  if (!document.getElementById("unified-cart-css")) {
-    const style = document.createElement("style");
-    style.id = "unified-cart-css";
-    style.textContent = `
-      /* Drawer: عمودي بارتفاع كامل */
-      #cartDrawer {
-        display: flex !important;
-        flex-direction: column !important;
-        height: 100vh !important;
-        max-height: 100vh !important;
-        overflow: hidden !important;
-      }
-
-      /* Header: ثابت */
-      #cartDrawer .dhead {
-        flex-shrink: 0 !important;
-        position: relative;
-        z-index: 2;
-        background: var(--panel);
-        border-bottom: 1px solid var(--line);
-      }
-
-      /* Body: Scrollable */
-      #cartDrawer .dbody {
-        flex: 1 1 auto !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        padding: 0.85rem 1rem 1rem !important;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
-        overscroll-behavior: contain;
-      }
-      #cartDrawer .dbody::-webkit-scrollbar { width: 6px; }
-      #cartDrawer .dbody::-webkit-scrollbar-thumb {
-        background: var(--gold);
-        border-radius: 4px;
-        opacity: 0.5;
-      }
-
-      /* Footer: Sticky في الأسفل */
-      #cartDrawer .dfoot {
-        flex-shrink: 0 !important;
-        background: var(--panel) !important;
-        border-top: 1px solid var(--line) !important;
-        box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.06) !important;
-        padding: 0.85rem 1rem calc(0.9rem + env(safe-area-inset-bottom, 0)) !important;
-        position: relative;
-        z-index: 3;
-        max-height: 42vh;
-        overflow-y: auto;
-      }
-
-      /* كتلة البيانات في الـ body */
-      #cartDrawer .co-form {
-        margin-top: 0.5rem !important;
-      }
-
-      /* زر الإتمام الكبير */
-      #cartDrawer #checkoutBtn {
-        margin-top: 0.65rem !important;
-        font-size: 1rem !important;
-        padding: 1rem 1.2rem !important;
-        border-radius: 14px !important;
-        font-weight: 800 !important;
-        letter-spacing: 0.2px;
-        box-shadow: 0 8px 22px rgba(46, 139, 69, 0.28) !important;
-      }
-
-      /* زر إفراغ السلة أصغر وأوضح */
-      #cartDrawer #emptyCartBtn {
-        margin-top: 0.45rem !important;
-        font-size: 0.82rem !important;
-      }
-
-      /* على الموبايل: تأكد إن زر الإتمام ظاهر */
-      @media (max-width: 768px) {
-        #cartDrawer .dfoot {
-          max-height: 48vh;
-          padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0)) !important;
-        }
-        #cartDrawer #checkoutBtn {
-          font-size: 0.95rem !important;
-          padding: 0.9rem 1rem !important;
-        }
-      }
+  if (checkoutBtn && !document.getElementById("trustBadges")) {
+    const badges = document.createElement("div");
+    badges.id = "trustBadges";
+    badges.innerHTML = `
+      <span style="display:flex; align-items:center; gap:4px;">🔒 دفع آمن</span>
+      <span style="display:flex; align-items:center; gap:4px;">🔄 ضمان استرجاع</span>
+      <span style="display:flex; align-items:center; gap:4px;">🚚 توصيل موثوق</span>
     `;
-    document.head.appendChild(style);
+    checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
   }
 
-  // ═══ 2. ننقل فورم التوصيل + الكوبون + معلومات الدفع للـ dbody ═══
-
-  // نقل العنوان "بيانات التوصيل"
-  const deliveryH = dfoot.querySelector('[data-i18n="delivery_h"]');
-  if (deliveryH) {
-    deliveryH.style.marginTop = "0.85rem";
-    dbody.appendChild(deliveryH);
-  }
-
-  // نقل الفورم (الاسم، الموبايل، الإيميل، المدينة، العنوان، الملاحظات)
-  const coForm = dfoot.querySelector(".co-form");
-  if (coForm) dbody.appendChild(coForm);
-
-  // نقل صف الكوبون
-  const couponInput = document.getElementById("couponInput");
-  if (couponInput) {
-    const couponRow = couponInput.parentElement;
-    if (couponRow && couponRow !== dfoot) {
-      couponRow.style.cssText += ";margin-top:1rem;";
-      dbody.appendChild(couponRow);
-    }
-  }
-
-  // نقل صف الخصم (لو موجود)
-  const discountRow = document.getElementById("discountRow");
-  if (discountRow) dbody.appendChild(discountRow);
-
-  // نقل ملاحظة الشحن
-  const shipNote = dfoot.querySelector(".cart-shipping-note");
-  if (shipNote) {
-    shipNote.style.marginTop = "1rem";
-    dbody.appendChild(shipNote);
-  }
-
-  // نقل صندوق الدفع (InstaPay...)
-  const paybox = dfoot.querySelector(".paybox");
-  if (paybox) {
-    paybox.style.marginTop = "0.75rem";
-    dbody.appendChild(paybox);
-  }
-
-  // ═══ 3. ترتيب الـ dfoot — يبقى فيه: الإجماليات + زر الإتمام + إفراغ السلة ═══
-
-  // ضمان إن الـ checkoutBtn في آخر الـ footer
-  const checkoutBtn = document.getElementById("checkoutBtn");
-  if (checkoutBtn && checkoutBtn.parentElement !== dfoot) {
-    dfoot.appendChild(checkoutBtn);
-  }
-
-  // ضمان إن الـ emptyCartBtn بعد الـ checkoutBtn
-  const emptyBtn = document.getElementById("emptyCartBtn");
-  if (emptyBtn && emptyBtn.parentElement !== dfoot) {
-    dfoot.appendChild(emptyBtn);
-  }
-
-  // نقل freeShippingRow لو موجود لآخر الـ dfoot (فوق الزر)
-  const freeShip = document.getElementById("freeShippingRow");
-  if (freeShip) dfoot.insertBefore(freeShip, checkoutBtn);
-
-  // ═══ 4. رتّب الإجماليات في أعلى الـ footer ═══
-  const cartSub = document.getElementById("cartSub");
-  const cartTotal = document.getElementById("cartTotal");
-  const qtyDiscountRow = document.getElementById("qtyDiscountRow");
-
-  // نأكد إن الـ subtotal و discount و total في ترتيب صح
-  const totalRow = cartTotal ? cartTotal.closest(".trow") : null;
-  const subRow = cartSub ? cartSub.closest(".trow") : null;
-
-  if (qtyDiscountRow && subRow && qtyDiscountRow.nextElementSibling !== subRow) {
-    // خلّي qtyDiscountRow فوق subtotal
-    if (subRow.parentElement === dfoot) {
-      dfoot.insertBefore(qtyDiscountRow, subRow);
-    }
-  }
-
-  if (totalRow && checkoutBtn && totalRow.nextElementSibling !== freeShip && totalRow.nextElementSibling !== checkoutBtn) {
-    // خلّي الإجمالي آخر عنصر قبل الشحن المجاني/الزر
-    if (totalRow.parentElement === dfoot) {
-      dfoot.appendChild(totalRow);
-      if (freeShip) dfoot.appendChild(freeShip);
-      dfoot.appendChild(checkoutBtn);
-      if (emptyBtn) dfoot.appendChild(emptyBtn);
-    }
-  }
-
-  // ═══ 5. مسح أي أثر للـ 2-stage القديم (احتياطي) ═══
-  drawer.querySelectorAll(".cart-stage").forEach(el => {
-    // فك أي container قديم
-    while (el.firstChild) el.parentNode.insertBefore(el.firstChild, el);
-    el.remove();
-  });
-  const oldProgress = document.getElementById("cartProgress");
-  if (oldProgress) oldProgress.remove();
-  const continueBtn = document.getElementById("continueToCheckoutBtn");
-  if (continueBtn) continueBtn.remove();
-  const backBtn = document.getElementById("backToCartBtn");
-  if (backBtn) backBtn.remove();
-
-  console.log("✅ Unified Cart initialized (sticky footer)");
+  console.log("✅ Unified Cart initialized (CSS-only)");
 }
+
 })();
