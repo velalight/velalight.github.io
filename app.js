@@ -726,8 +726,79 @@ function injectCartStyles(){
       box-shadow: 0 8px 24px rgba(212,175,55,.5);
     }
     .vl-empty-cta:active{ transform: translateY(0) scale(.97); }
+
+    /* ═══════════════════════════════════════════════════════
+       ✨ NEW: Mobile Fixes — منع الفوتر الثابت من تغطية المحتوى
+       ═══════════════════════════════════════════════════════ */
+    @media (max-width: 768px){
+      #cartDrawer{ padding-bottom: 0 !important; }
+      #cartItems{
+        padding-bottom: 180px;
+        scroll-behavior: smooth;
+      }
+      .vl-empty-cart{
+        padding: 1.2rem 1rem 2rem;
+        min-height: auto;
+        justify-content: flex-start;
+        gap: 9px;
+      }
+      .vl-empty-candle{
+        font-size: 2.6rem;
+        margin-bottom: 2px;
+      }
+      .vl-empty-title{
+        font-size: .96rem;
+        line-height: 1.5;
+        max-width: 95%;
+      }
+      .vl-empty-sub{
+        font-size: .76rem;
+        max-width: 95%;
+      }
+      .vl-empty-cta{
+        padding: 11px 24px;
+        font-size: .84rem;
+        margin-top: 6px;
+        margin-bottom: 20px;
+      }
+      .cross-sell-box{ margin-bottom: 40px; }
+      .citem:last-child{ margin-bottom: 40px; }
+    }
+
+    @media (max-width: 380px){
+      .vl-empty-candle{ font-size: 2.2rem; }
+      .vl-empty-title{ font-size: .9rem; }
+      .vl-empty-cta{ padding: 10px 20px; font-size: .8rem; }
+    }
   `;
   document.head.appendChild(style);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ NEW: تعديل padding السلة تلقائياً حسب ارتفاع الفوتر
+   ═══════════════════════════════════════════════════════════ */
+function adjustCartDrawerPadding(){
+  const drawer = document.getElementById('cartDrawer');
+  const items = document.getElementById('cartItems');
+  if(!drawer || !items) return;
+  
+  const isMobile = window.innerWidth <= 768;
+  
+  if(!isMobile){
+    items.style.paddingBottom = '';
+    return;
+  }
+  
+  // ابحث عن الفوتر بأي اسم كلاس محتمل
+  const footer = drawer.querySelector('.dfoot, .drawer-footer, .cart-footer');
+  if(!footer){
+    items.style.paddingBottom = '180px';
+    return;
+  }
+  
+  // احسب ارتفاع الفوتر + مساحة إضافية
+  const footerHeight = footer.offsetHeight || 140;
+  items.style.paddingBottom = (footerHeight + 30) + 'px';
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -2398,13 +2469,6 @@ function initCart(){
   if (checkoutBtn) {
     // ضيف كلاس Pulse على زر الشراء
     checkoutBtn.classList.add('vl-checkout-pulse');
-    
-    // حدّث نص الزر
-    const updateCheckoutLabel = () => {
-      const currentText = checkoutBtn.textContent.trim();
-      // لو الزر لسه فيه النص الافتراضي، ما نغيرش
-      // ملاحظة: النص الفعلي بيجي من الـ HTML، فنسيبه لو موجود
-    };
 
     if (!document.getElementById('trustBadges')) {
       const badges = document.createElement('div');
@@ -2418,6 +2482,9 @@ function initCart(){
       checkoutBtn.parentNode.insertBefore(badges, checkoutBtn);
     }
   }
+
+  // ✨ NEW: تعديل padding السلة عند تغيير حجم الشاشة
+  window.addEventListener('resize', debounce(adjustCartDrawerPadding, 200));
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -2453,6 +2520,8 @@ function renderCart(){
     }, 0);
     
     updateTotals(c);
+    // ✨ NEW: عدّل الـ padding بعد الرسم
+    adjustCartDrawerPadding();
     return;
   }
 
@@ -2609,6 +2678,8 @@ function renderCart(){
   w.addEventListener('change', handleCartChange);
   
   updateTotals(c);
+  // ✨ NEW: عدّل الـ padding بعد الرسم
+  adjustCartDrawerPadding();
 }
 
 function handleCartClick(e){
@@ -2651,6 +2722,7 @@ function handleCartChange(e){
 
 /* ═══════════════════════════════════════════════════════════
    ✨ updateTotals — النسخة الكاملة مع الشريط التفاعلي والكونفيتي
+   ⚠️ الشحن المجاني بيتحسب على الإجمالي النهائي بعد الخصم (total)
    ═══════════════════════════════════════════════════════════ */
 function updateTotals(c){
   const sub = c.reduce((a,i) => a + (Number(i.price||0) * Number(i.qty||1)), 0);
@@ -2733,11 +2805,11 @@ function updateTotals(c){
   }
 
   /* ═══════════════════════════════════════════════════════
-     ✨ FREE SHIPPING PROGRESS BAR التفاعلي مع Confetti
+     ✨ FREE SHIPPING PROGRESS BAR — بيتحسب على total بعد الخصم
      ═══════════════════════════════════════════════════════ */
-  const remaining = Math.max(0, FREE_SHIP_THRESHOLD - sub);
-  const progressPercent = Math.min(100, (sub / FREE_SHIP_THRESHOLD) * 100);
-  const reached = sub >= FREE_SHIP_THRESHOLD;
+  const remaining = Math.max(0, FREE_SHIP_THRESHOLD - total);
+  const progressPercent = Math.min(100, (total / FREE_SHIP_THRESHOLD) * 100);
+  const reached = total >= FREE_SHIP_THRESHOLD;
 
   const freeShipRow = document.getElementById("freeShippingRow");
   const shipNote = document.querySelector('.cart-shipping-note');
@@ -3102,7 +3174,7 @@ async function checkout(){
     paymentMethod:"WhatsApp Confirmation",
     paymentStatus:"pending",
     shippingPayment:"Cash to courier",
-    shippingIncluded: subTotal >= FREE_SHIP_THRESHOLD,
+    shippingIncluded: total >= FREE_SHIP_THRESHOLD,
     status: 0,
     statusHistory: [{ status: 0, changedAt: Date.now(), changedBy: "customer" }],
     tracking: trackingData,
@@ -3597,6 +3669,11 @@ function openDrawer(id,ovlId){
   document.getElementById(id)?.classList.add("open");
   if(ovlId){document.getElementById(ovlId)?.classList.add("open");}
   document.body.style.overflow = 'hidden';
+  
+  // ✨ NEW: عدّل padding السلة بعد الفتح
+  if(id === 'cartDrawer'){
+    setTimeout(adjustCartDrawerPadding, 80);
+  }
 }
 function closeDrawers(){
   document.querySelectorAll(".drawer,.ovl").forEach(el=>el.classList.remove("open"));
@@ -3789,5 +3866,6 @@ window.updateReviewsCount = updateReviewsCount;
 window.getReviewsCount = getReviewsCount;
 window.triggerConfetti = triggerConfetti;
 window.injectCartStyles = injectCartStyles;
+window.adjustCartDrawerPadding = adjustCartDrawerPadding;
 
 })();
