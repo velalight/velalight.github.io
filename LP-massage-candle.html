@@ -48,8 +48,9 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-trust-mini .ic{font-size:.85rem}
 @media(max-width:640px){.lp-trust-mini{display:none}}
 
-.lp-cta{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin-inline:auto;background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:900;font-size:1.05rem;padding:1rem 2rem;border-radius:999px;box-shadow:0 8px 24px -8px rgba(217,171,95,.55);transition:.3s;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
-.lp-cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px -8px rgba(217,171,95,.7)}
+/* ✅ زر CTA موحد — أحمر في كل مكان */
+.lp-cta{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin-inline:auto;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-weight:900;font-size:1.05rem;padding:1rem 2rem;border-radius:999px;box-shadow:0 12px 30px -8px rgba(231,76,60,.6);transition:.3s;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.lp-cta:hover{transform:translateY(-2px);box-shadow:0 16px 40px -8px rgba(231,76,60,.75)}
 .lp-cta:active{transform:scale(.97)}
 .lp-cta::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-120%);transition:.7s}
 .lp-cta:hover::after{transform:translateX(120%)}
@@ -58,40 +59,11 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-hero{padding:2rem 0 3rem;position:relative}
 .lp-hero-badge{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,#fff4e0,#ffe9c4);border:1px solid rgba(217,171,95,.35);color:var(--gold2);font-size:.75rem;font-weight:800;padding:.35rem .9rem;border-radius:99px}
 
-/* ═══ صف شارات الـ Hero الجديدة ═══ */
-.lp-hero-badges-row{
-  display:flex;flex-wrap:wrap;gap:.5rem;
-  margin-bottom:1.2rem;
-  align-items:center;
-}
-.lp-hero-badge-red{
-  display:inline-flex;align-items:center;gap:.3rem;
-  background:linear-gradient(135deg,#e74c3c,#c0392b);
-  color:#fff;font-size:.75rem;font-weight:800;
-  padding:.38rem .9rem;border-radius:99px;
-  box-shadow:0 6px 16px rgba(231,76,60,.4);
-  border:1.5px solid rgba(255,255,255,.6);
-  animation:pulseRibbonHero 1.5s ease-in-out infinite;
-}
-@keyframes pulseRibbonHero{
-  0%,100%{transform:scale(1);box-shadow:0 6px 16px rgba(231,76,60,.4)}
-  50%{transform:scale(1.06);box-shadow:0 10px 22px rgba(231,76,60,.6)}
-}
-.lp-hero-badge-discount{
-  display:inline-flex;align-items:center;gap:.3rem;
-  background:linear-gradient(135deg,#e74c3c,#c0392b,#e74c3c);
-  background-size:200% 200%;
-  color:#fff;font-size:.78rem;font-weight:900;
-  padding:.4rem 1rem;border-radius:99px;
-  box-shadow:0 8px 20px rgba(231,76,60,.5);
-  border:1.5px solid #fff;
-  letter-spacing:.02em;
-  animation:pulseDiscountHero 1.2s ease-in-out infinite;
-}
-@keyframes pulseDiscountHero{
-  0%,100%{transform:scale(1);background-position:0% 50%}
-  50%{transform:scale(1.08);background-position:100% 50%}
-}
+.lp-hero-badges-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem;align-items:center}
+.lp-hero-badge-red{display:inline-flex;align-items:center;gap:.3rem;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-size:.75rem;font-weight:800;padding:.38rem .9rem;border-radius:99px;box-shadow:0 6px 16px rgba(231,76,60,.4);border:1.5px solid rgba(255,255,255,.6);animation:pulseRibbonHero 1.5s ease-in-out infinite}
+@keyframes pulseRibbonHero{0%,100%{transform:scale(1);box-shadow:0 6px 16px rgba(231,76,60,.4)}50%{transform:scale(1.06);box-shadow:0 10px 22px rgba(231,76,60,.6)}}
+.lp-hero-badge-discount{display:inline-flex;align-items:center;gap:.3rem;background:linear-gradient(135deg,#e74c3c,#c0392b,#e74c3c);background-size:200% 200%;color:#fff;font-size:.78rem;font-weight:900;padding:.4rem 1rem;border-radius:99px;box-shadow:0 8px 20px rgba(231,76,60,.5);border:1.5px solid #fff;letter-spacing:.02em;animation:pulseDiscountHero 1.2s ease-in-out infinite}
+@keyframes pulseDiscountHero{0%,100%{transform:scale(1);background-position:0% 50%}50%{transform:scale(1.08);background-position:100% 50%}}
 
 .lp-hero h1{font-family:var(--fd);font-size:clamp(1.7rem,5vw,2.8rem);line-height:1.25;margin-bottom:.8rem;color:var(--ink)}
 .lp-hero h1 .hl{color:var(--gold2);position:relative}
@@ -105,135 +77,35 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-hero-grid{display:grid;grid-template-columns:1fr;gap:2rem;align-items:center}
 @media(min-width:768px){.lp-hero-grid{grid-template-columns:1.1fr .9fr;gap:3rem}.lp-hero{padding:3rem 0 4rem}}
 
-/* ═══════ 🔥 OFFER — مبهر وبارز ═══════ */
-.lp-offer{
-  padding:2.5rem 0 3rem;
-  background:
-    radial-gradient(700px 350px at 50% 0%,rgba(231,76,60,.18),transparent 60%),
-    radial-gradient(600px 300px at 50% 100%,rgba(255,157,69,.18),transparent 60%),
-    linear-gradient(180deg,#fff8ec 0%,#ffe8c4 50%,#ffd99a 100%);
-  border-top:3px solid rgba(231,76,60,.5);
-  border-bottom:3px solid rgba(231,76,60,.5);
-  position:relative;
-  overflow:hidden;
-  margin-bottom:1rem;
-}
-.lp-offer::before{
-  content:'🎁';
-  position:absolute;top:-40px;right:20px;
-  font-size:200px;line-height:1;opacity:.06;
-  pointer-events:none;
-  transform:rotate(15deg);
-}
-.lp-offer::after{
-  content:'';
-  position:absolute;inset:0;
-  background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.6),transparent 60%);
-  opacity:0;
-  animation:offerFlash 4s ease-in-out infinite;
-  pointer-events:none;
-}
-@keyframes offerFlash{
-  0%,85%,100%{opacity:0}
-  92%{opacity:1}
-}
-.lp-offer-box{
-  max-width:640px;margin:0 auto;text-align:center;
-  background:#fff;
-  border:3px dashed rgba(231,76,60,.5);
-  border-radius:28px;
-  padding:2.4rem 1.5rem 2rem;
-  box-shadow:
-    0 24px 70px -22px rgba(231,76,60,.4),
-    0 0 0 8px rgba(255,255,255,.7),
-    0 0 0 12px rgba(217,171,95,.15);
-  position:relative;
-  animation:offerGlow 2.2s ease-in-out infinite;
-}
-@keyframes offerGlow{
-  0%,100%{
-    box-shadow:
-      0 24px 70px -22px rgba(231,76,60,.4),
-      0 0 0 8px rgba(255,255,255,.7),
-      0 0 0 12px rgba(217,171,95,.15);
-    transform:scale(1);
-  }
-  50%{
-    box-shadow:
-      0 30px 85px -20px rgba(231,76,60,.55),
-      0 0 0 8px rgba(255,247,224,1),
-      0 0 0 16px rgba(217,171,95,.35);
-    transform:scale(1.008);
-  }
-}
-.lp-offer-box h2{
-  font-family:var(--fd);
-  font-size:clamp(1.4rem,3.8vw,2rem);
-  margin:.4rem 0 .9rem;
-  color:var(--ink);
-}
-.lp-price-row{
-  display:flex;align-items:center;justify-content:center;
-  gap:1.1rem;margin:1rem 0 .5rem;flex-wrap:wrap;
-}
-.lp-price-now{
-  font-family:var(--fd);font-size:3rem;font-weight:900;
-  color:#c0392b;line-height:1;
-  text-shadow:0 3px 12px rgba(231,76,60,.3);
-  animation:pricePulse 2s ease-in-out infinite;
-}
-@keyframes pricePulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.04)}
-}
-.lp-price-old{
-  font-size:1.3rem;color:var(--dim);
-  text-decoration:line-through;font-weight:600;
-}
-.lp-price-save{
-  display:inline-block;
-  background:linear-gradient(135deg,#27ae60,#1e8449);
-  color:#fff;font-size:.88rem;font-weight:900;
-  padding:.4rem 1.1rem;border-radius:99px;
-  margin-bottom:1.4rem;
-  box-shadow:0 8px 20px rgba(39,174,96,.45);
-  animation:savePulse 1.6s ease-in-out infinite;
-}
-@keyframes savePulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.05)}
-}
-.lp-offer-features{
-  list-style:none;text-align:start;
-  max-width:380px;margin:0 auto 1.6rem;
-  display:flex;flex-direction:column;gap:.55rem;
-}
-.lp-offer-features li{
-  display:flex;align-items:center;gap:.55rem;
-  font-size:.88rem;color:var(--ink);font-weight:500;
-}
-.lp-offer-features li .ic{
-  flex-shrink:0;width:22px;height:22px;
-  background:linear-gradient(135deg,#27ae60,#1e8449);
-  color:#fff;border-radius:50%;
-  display:grid;place-items:center;
-  font-size:.7rem;font-weight:900;
-  box-shadow:0 3px 8px rgba(39,174,96,.35);
-}
-.lp-offer-trust{
-  display:flex;justify-content:center;gap:1rem;
-  flex-wrap:wrap;margin-top:1.4rem;
-  padding-top:1.2rem;
-  border-top:1px dashed rgba(217,171,95,.4);
-  font-size:.74rem;color:var(--mut);font-weight:700;
-}
+.lp-offer{padding:2.5rem 0 3rem;background:radial-gradient(700px 350px at 50% 0%,rgba(231,76,60,.18),transparent 60%),radial-gradient(600px 300px at 50% 100%,rgba(255,157,69,.18),transparent 60%),linear-gradient(180deg,#fff8ec 0%,#ffe8c4 50%,#ffd99a 100%);border-top:3px solid rgba(231,76,60,.5);border-bottom:3px solid rgba(231,76,60,.5);position:relative;overflow:hidden;margin-bottom:1rem}
+.lp-offer::before{content:'🎁';position:absolute;top:-40px;right:20px;font-size:200px;line-height:1;opacity:.06;pointer-events:none;transform:rotate(15deg)}
+.lp-offer::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.6),transparent 60%);opacity:0;animation:offerFlash 4s ease-in-out infinite;pointer-events:none}
+@keyframes offerFlash{0%,85%,100%{opacity:0}92%{opacity:1}}
+.lp-offer-box{max-width:640px;margin:0 auto;text-align:center;background:#fff;border:3px dashed rgba(231,76,60,.5);border-radius:28px;padding:2.4rem 1.5rem 2rem;box-shadow:0 24px 70px -22px rgba(231,76,60,.4),0 0 0 8px rgba(255,255,255,.7),0 0 0 12px rgba(217,171,95,.15);position:relative;animation:offerGlow 2.2s ease-in-out infinite}
+@keyframes offerGlow{0%,100%{box-shadow:0 24px 70px -22px rgba(231,76,60,.4),0 0 0 8px rgba(255,255,255,.7),0 0 0 12px rgba(217,171,95,.15);transform:scale(1)}50%{box-shadow:0 30px 85px -20px rgba(231,76,60,.55),0 0 0 8px rgba(255,247,224,1),0 0 0 16px rgba(217,171,95,.35);transform:scale(1.008)}}
+.lp-offer-box h2{font-family:var(--fd);font-size:clamp(1.4rem,3.8vw,2rem);margin:.4rem 0 .9rem;color:var(--ink)}
+
+/* ✅ Countdown Timer */
+.lp-countdown{display:inline-flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,#fff4e0,#ffe9c4);border:2px solid rgba(231,76,60,.35);border-radius:14px;padding:.55rem 1rem;margin:0 0 .9rem;box-shadow:0 6px 18px -6px rgba(231,76,60,.3);animation:countdownPulse 2s ease-in-out infinite}
+@keyframes countdownPulse{0%,100%{box-shadow:0 6px 18px -6px rgba(231,76,60,.3)}50%{box-shadow:0 10px 24px -6px rgba(231,76,60,.5)}}
+.lp-countdown .cd-lbl{font-size:.75rem;font-weight:800;color:#c0392b;white-space:nowrap}
+.lp-countdown .cd-timer{display:flex;gap:.3rem;direction:ltr}
+.lp-countdown .cd-unit{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-family:var(--fd);font-weight:900;font-size:1rem;padding:.25rem .5rem;border-radius:7px;min-width:32px;text-align:center;line-height:1;box-shadow:0 3px 8px rgba(231,76,60,.35)}
+.lp-countdown .cd-sep{color:#c0392b;font-weight:900;font-size:1rem;line-height:1;padding-top:2px}
+
+.lp-price-row{display:flex;align-items:center;justify-content:center;gap:1.1rem;margin:1rem 0 .5rem;flex-wrap:wrap}
+.lp-price-now{font-family:var(--fd);font-size:3rem;font-weight:900;color:#c0392b;line-height:1;text-shadow:0 3px 12px rgba(231,76,60,.3);animation:pricePulse 2s ease-in-out infinite}
+@keyframes pricePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.lp-price-old{font-size:1.3rem;color:var(--dim);text-decoration:line-through;font-weight:600}
+.lp-price-save{display:inline-block;background:linear-gradient(135deg,#27ae60,#1e8449);color:#fff;font-size:.88rem;font-weight:900;padding:.4rem 1.1rem;border-radius:99px;margin-bottom:1.4rem;box-shadow:0 8px 20px rgba(39,174,96,.45);animation:savePulse 1.6s ease-in-out infinite}
+@keyframes savePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.lp-offer-features{list-style:none;text-align:start;max-width:380px;margin:0 auto 1.6rem;display:flex;flex-direction:column;gap:.55rem}
+.lp-offer-features li{display:flex;align-items:center;gap:.55rem;font-size:.88rem;color:var(--ink);font-weight:500}
+.lp-offer-features li .ic{flex-shrink:0;width:22px;height:22px;background:linear-gradient(135deg,#27ae60,#1e8449);color:#fff;border-radius:50%;display:grid;place-items:center;font-size:.7rem;font-weight:900;box-shadow:0 3px 8px rgba(39,174,96,.35)}
+.lp-offer-trust{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:1.4rem;padding-top:1.2rem;border-top:1px dashed rgba(217,171,95,.4);font-size:.74rem;color:var(--mut);font-weight:700}
 .lp-offer-trust span{display:flex;align-items:center;gap:.35rem}
 .lp-offer-trust .ic{font-size:1rem}
-.lp-offer-social-proof{
-  display:flex;align-items:center;justify-content:center;
-  gap:.5rem;margin-top:.9rem;
-  font-size:.78rem;color:var(--mut);font-weight:700;
-}
+.lp-offer-social-proof{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.9rem;font-size:.78rem;color:var(--mut);font-weight:700}
 .lp-offer-social-proof .stars{color:var(--gold);letter-spacing:2px;font-size:1.1rem}
 
 .lp-problem{background:var(--panel2);padding:3.5rem 0}
@@ -247,106 +119,27 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-pain b{display:block;font-size:.95rem;color:var(--ink);margin-bottom:.3rem}
 .lp-pain p{font-size:.82rem;color:var(--mut);line-height:1.7}
 
-/* ═══ SOLUTION — بطاقة موحدة ═══ */
 .lp-solution{padding:3.5rem 0;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)}
-.lp-solution-card{
-  max-width:820px;margin:0 auto;
-  background:#fff;
-  border:1.5px solid rgba(217,171,95,.3);
-  border-radius:26px;
-  padding:2.2rem 1.5rem;
-  box-shadow:0 20px 60px -20px rgba(100,70,30,.18);
-  position:relative;
-  overflow:hidden;
-}
-.lp-solution-card::before{
-  content:'';position:absolute;top:-100px;right:-100px;
-  width:250px;height:250px;
-  background:radial-gradient(circle,rgba(217,171,95,.18),transparent 70%);
-  pointer-events:none;
-}
-.lp-solution-card::after{
-  content:'';position:absolute;bottom:-100px;left:-100px;
-  width:250px;height:250px;
-  background:radial-gradient(circle,rgba(255,157,69,.12),transparent 70%);
-  pointer-events:none;
-}
+.lp-solution-card{max-width:820px;margin:0 auto;background:#fff;border:1.5px solid rgba(217,171,95,.3);border-radius:26px;padding:2.2rem 1.5rem;box-shadow:0 20px 60px -20px rgba(100,70,30,.18);position:relative;overflow:hidden}
+.lp-solution-card::before{content:'';position:absolute;top:-100px;right:-100px;width:250px;height:250px;background:radial-gradient(circle,rgba(217,171,95,.18),transparent 70%);pointer-events:none}
+.lp-solution-card::after{content:'';position:absolute;bottom:-100px;left:-100px;width:250px;height:250px;background:radial-gradient(circle,rgba(255,157,69,.12),transparent 70%);pointer-events:none}
 .lp-solution-card > *{position:relative;z-index:1}
-.lp-solution-card .solution-eyebrow{
-  display:block;text-align:center;
-  font-size:.72rem;font-weight:900;
-  letter-spacing:.15em;color:var(--gold2);
-  text-transform:uppercase;
-  margin-bottom:.5rem;
-}
-.lp-solution-card h2{
-  font-family:var(--fd);
-  font-size:clamp(1.4rem,3.8vw,2rem);
-  color:var(--ink);
-  text-align:center;
-  margin-bottom:.9rem;
-  line-height:1.3;
-}
+.lp-solution-card .solution-eyebrow{display:block;text-align:center;font-size:.72rem;font-weight:900;letter-spacing:.15em;color:var(--gold2);text-transform:uppercase;margin-bottom:.5rem}
+.lp-solution-card h2{font-family:var(--fd);font-size:clamp(1.4rem,3.8vw,2rem);color:var(--ink);text-align:center;margin-bottom:.9rem;line-height:1.3}
 .lp-solution-card h2 .hl{color:var(--gold2);position:relative}
 .lp-solution-card h2 .hl::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:5px;background:rgba(217,171,95,.3);border-radius:3px;z-index:-1}
-.lp-solution-card .solution-lead{
-  text-align:center;color:var(--mut);
-  font-size:.95rem;line-height:1.9;
-  max-width:600px;margin:0 auto 1.8rem;
-}
-.lp-solution-media{
-  border-radius:18px;overflow:hidden;
-  aspect-ratio:16/10;max-width:520px;
-  margin:0 auto 1.8rem;
-  box-shadow:0 12px 36px -12px rgba(100,70,30,.3);
-  border:1px solid rgba(217,171,95,.2);
-}
+.lp-solution-card .solution-lead{text-align:center;color:var(--mut);font-size:.95rem;line-height:1.9;max-width:600px;margin:0 auto 1.8rem}
+.lp-solution-media{border-radius:18px;overflow:hidden;aspect-ratio:16/10;max-width:520px;margin:0 auto 1.8rem;box-shadow:0 12px 36px -12px rgba(100,70,30,.3);border:1px solid rgba(217,171,95,.2)}
 .lp-solution-media img{width:100%;height:100%;object-fit:cover;display:block}
-.lp-solution-divider{
-  display:flex;align-items:center;justify-content:center;
-  gap:.6rem;margin:0 auto 1.5rem;
-  max-width:200px;
-}
-.lp-solution-divider::before,
-.lp-solution-divider::after{
-  content:'';flex:1;height:1.5px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-}
-.lp-solution-divider .dot{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--gold);
-  box-shadow:0 0 8px rgba(217,171,95,.7);
-}
-.lp-solution-card h3{
-  font-family:var(--fd);
-  font-size:clamp(1.15rem,3vw,1.5rem);
-  color:var(--gold2);
-  text-align:center;
-  margin-bottom:.4rem;
-}
-.lp-solution-card .ing-sub{
-  text-align:center;color:var(--mut);
-  font-size:.85rem;margin-bottom:1.5rem;
-}
-.lp-ingredients{
-  list-style:none;
-  display:grid;grid-template-columns:1fr;gap:.55rem;
-}
+.lp-solution-divider{display:flex;align-items:center;justify-content:center;gap:.6rem;margin:0 auto 1.5rem;max-width:200px}
+.lp-solution-divider::before,.lp-solution-divider::after{content:'';flex:1;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.lp-solution-divider .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(217,171,95,.7)}
+.lp-solution-card h3{font-family:var(--fd);font-size:clamp(1.15rem,3vw,1.5rem);color:var(--gold2);text-align:center;margin-bottom:.4rem}
+.lp-solution-card .ing-sub{text-align:center;color:var(--mut);font-size:.85rem;margin-bottom:1.5rem}
+.lp-ingredients{list-style:none;display:grid;grid-template-columns:1fr;gap:.55rem}
 @media(min-width:640px){.lp-ingredients{grid-template-columns:1fr 1fr}}
-.lp-ingredients li{
-  display:flex;align-items:flex-start;gap:.55rem;
-  font-size:.83rem;color:var(--ink);line-height:1.65;
-  background:linear-gradient(135deg,#fffbf5,#fdf8f0);
-  border:1px solid rgba(217,171,95,.18);
-  border-radius:12px;
-  padding:.7rem .85rem;
-  transition:.25s;
-}
-.lp-ingredients li:hover{
-  border-color:rgba(217,171,95,.5);
-  transform:translateX(-4px);
-  box-shadow:0 6px 18px -6px rgba(217,171,95,.3);
-}
+.lp-ingredients li{display:flex;align-items:flex-start;gap:.55rem;font-size:.83rem;color:var(--ink);line-height:1.65;background:linear-gradient(135deg,#fffbf5,#fdf8f0);border:1px solid rgba(217,171,95,.18);border-radius:12px;padding:.7rem .85rem;transition:.25s}
+.lp-ingredients li:hover{border-color:rgba(217,171,95,.5);transform:translateX(-4px);box-shadow:0 6px 18px -6px rgba(217,171,95,.3)}
 .lp-ingredients li .em{font-size:1.1rem;flex-shrink:0;line-height:1.4}
 .lp-ingredients li b{color:var(--gold2)}
 
@@ -360,6 +153,24 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-result .big{font-size:2rem;display:block;margin-bottom:.4rem}
 .lp-result b{display:block;font-size:.95rem;margin-bottom:.3rem}
 .lp-result p{font-size:.8rem;color:var(--mut);line-height:1.6}
+
+/* ✅ Cross-sell جديد */
+.lp-cross{padding:3.5rem 0;background:var(--bg)}
+.lp-cross h2{font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);text-align:center;margin-bottom:.6rem}
+.lp-cross .sub{text-align:center;color:var(--mut);max-width:520px;margin:0 auto 2rem;font-size:.92rem}
+.lp-cross-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+@media(min-width:640px){.lp-cross-grid{grid-template-columns:repeat(3,1fr)}}
+.lp-cross-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.3s;display:flex;flex-direction:column}
+.lp-cross-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px -12px rgba(100,70,30,.25);border-color:rgba(217,171,95,.4)}
+.lp-cross-media{aspect-ratio:1/1;background:var(--bg2);overflow:hidden;position:relative}
+.lp-cross-media img{width:100%;height:100%;object-fit:cover;display:block;transition:.4s}
+.lp-cross-card:hover .lp-cross-media img{transform:scale(1.05)}
+.lp-cross-body{padding:1rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
+.lp-cross-body h3{font-family:var(--fd);font-size:.95rem;color:var(--ink);line-height:1.3;margin-bottom:.2rem;min-height:2.6em;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.lp-cross-body .price{font-family:var(--fd);font-weight:900;color:var(--gold2);font-size:1.05rem;margin-bottom:.5rem}
+.lp-cross-btn{margin-top:auto;width:100%;padding:.7rem;border-radius:99px;border:none;background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:800;font-size:.82rem;cursor:pointer;transition:.25s;font-family:inherit}
+.lp-cross-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px -6px rgba(217,171,95,.5)}
+.lp-cross-btn:active{transform:scale(.96)}
 
 .lp-faq{padding:3.5rem 0}
 .lp-faq h2{font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);text-align:center;margin-bottom:2rem}
@@ -380,9 +191,8 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-social-grid::-webkit-scrollbar{display:none}
 .lp-social-card{flex:0 0 260px;scroll-snap-align:center;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 4px 12px -4px rgba(100,70,30,.06)}
 .lp-social-card img{width:100%;height:auto;display:block;aspect-ratio:1/1;object-fit:cover}
-.lp-social-card .meta{padding:.8rem 1rem}
-.lp-social-card .meta b{display:block;font-size:.85rem;margin-bottom:.2rem}
-.lp-social-card .meta small{font-size:.75rem;color:var(--mut)}
+.lp-social-card .meta{padding:.9rem 1rem;text-align:center}
+.lp-social-card .meta small{font-size:.82rem;color:var(--mut);line-height:1.5;display:block}
 
 .lp-final-cta{padding:3.5rem 0;text-align:center}
 .lp-final-cta h2{font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:.6rem}
@@ -392,9 +202,9 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-sticky-cta.show{transform:translateY(0)}
 .lp-sticky-inner{display:flex;align-items:center;gap:.8rem;max-width:680px;margin:0 auto}
 .lp-sticky-info{flex:1;min-width:0}
-.lp-sticky-info b{display:block;font-size:.85rem;color:var(--ink);line-height:1.3}
+.lp-sticky-info b{display:block;font-size:.85rem;color:var(--ink);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lp-sticky-info small{font-size:.72rem;color:var(--mut)}
-.lp-sticky-btn{flex-shrink:0;background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:900;font-size:.88rem;padding:.7rem 1.4rem;border-radius:99px;box-shadow:0 4px 14px -4px rgba(217,171,95,.5);transition:.25s;white-space:nowrap}
+.lp-sticky-btn{flex-shrink:0;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-weight:900;font-size:.88rem;padding:.7rem 1.4rem;border-radius:99px;box-shadow:0 4px 14px -4px rgba(231,76,60,.5);transition:.25s;white-space:nowrap}
 .lp-sticky-btn:active{transform:scale(.95)}
 
 .lp-reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
@@ -421,14 +231,11 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-modal-preview .info b{display:block;font-size:.92rem;color:var(--ink);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lp-modal-preview .info .pr{font-weight:900;color:var(--gold2);margin-top:.15rem}
 
-/* ✅ تعديل: نجمة حمراء للحقل المطلوب */
 .lp-modal-label{display:block;font-weight:700;font-size:.85rem;margin-bottom:.45rem;color:var(--ink)}
 .lp-modal-label .req{color:#e74c3c;font-weight:900;margin-inline-start:3px;font-size:1rem}
 
 .lp-modal-select{width:100%;padding:.75rem .9rem;border:1.5px solid rgba(217,171,95,.35);border-radius:11px;background:#fff;color:var(--ink);font-family:inherit;font-size:.92rem;cursor:pointer;outline:none;margin-bottom:1rem;transition:.2s}
 .lp-modal-select:focus{border-color:var(--gold2);box-shadow:0 0 0 3px rgba(217,171,95,.15)}
-
-/* ✅ تعديل: تأثير اهتزاز لو حاول يضيف بدون اختيار */
 .lp-modal-select.vl-empty{border-color:#e74c3c;background:#fff8f8;animation:shakeEmpty 0.4s ease}
 @keyframes shakeEmpty{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 
@@ -441,8 +248,6 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-modal-qty b{min-width:26px;text-align:center;font-size:1rem;font-weight:900;color:var(--ink)}
 .lp-modal-add{width:100%;background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:900;font-size:1rem;padding:.95rem;border-radius:999px;box-shadow:0 8px 20px -6px rgba(217,171,95,.5);transition:.25s}
 .lp-modal-add:active{transform:scale(.97)}
-
-/* ✅ تعديل: الزر لما يكون معطل */
 .lp-modal-add:disabled{opacity:.55;cursor:not-allowed;background:linear-gradient(135deg,#b5a48a,#8a7a64);box-shadow:none;animation:none}
 
 .lp-modal-note{text-align:center;font-size:.72rem;color:var(--mut);margin-top:.7rem}
@@ -460,6 +265,9 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   .lp-hero-badges-row{gap:.4rem}
   .lp-hero-badge-red,
   .lp-hero-badge-discount{font-size:.68rem;padding:.32rem .75rem}
+  .lp-countdown{padding:.45rem .75rem;gap:.4rem}
+  .lp-countdown .cd-lbl{font-size:.68rem}
+  .lp-countdown .cd-unit{font-size:.85rem;min-width:26px;padding:.2rem .4rem}
 }
 </style>
 </head>
@@ -523,11 +331,23 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 2. 🔥 OFFER — مبهر وبارز ═══ -->
+<!-- ═══ 2. 🔥 OFFER ═══ -->
 <section class="lp-offer">
   <div class="wrap">
     <div class="lp-offer-box lp-reveal on">
       <h2 id="lpOfferTitle">شمعة المساج المانديلا</h2>
+
+      <!-- ✅ Countdown Timer -->
+      <div class="lp-countdown">
+        <span class="cd-lbl">⏳ العرض ينتهي خلال</span>
+        <div class="cd-timer">
+          <span class="cd-unit" id="cdHours">23</span>
+          <span class="cd-sep">:</span>
+          <span class="cd-unit" id="cdMins">59</span>
+          <span class="cd-sep">:</span>
+          <span class="cd-unit" id="cdSecs">59</span>
+        </div>
+      </div>
 
       <div class="lp-price-row">
         <span class="lp-price-now" id="lpOfferPrice">375 ج</span>
@@ -544,7 +364,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
         <li><span class="ic">✓</span> دفع آمن 100%</li>
       </ul>
 
-      <button class="lp-cta" onclick="lpOpenModal()" style="font-size:1.15rem;padding:1.15rem 2rem;background:linear-gradient(135deg,#e74c3c,#c0392b);box-shadow:0 12px 30px -8px rgba(231,76,60,.6)">
+      <button class="lp-cta" onclick="lpOpenModal()" style="font-size:1.15rem;padding:1.15rem 2rem">
         🛍️ اطلب الآن — وفّر 100 ج
       </button>
       <p class="lp-cta-sub" style="color:#c0392b;font-weight:700">⏳ العرض ساري لفترة محدودة</p>
@@ -588,7 +408,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 4. SOLUTION — بطاقة موحدة ═══ -->
+<!-- ═══ 4. SOLUTION ═══ -->
 <section class="lp-solution">
   <div class="wrap">
     <div class="lp-solution-card lp-reveal">
@@ -653,7 +473,16 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 6. FAQ ═══ -->
+<!-- ═══ 6. CROSS-SELL — عملاء اشتروا أيضًا ═══ -->
+<section class="lp-cross">
+  <div class="wrap">
+    <h2 class="lp-reveal">✨ عملاء اشتروا معه أيضًا</h2>
+    <p class="sub lp-reveal">منتجات مختارة تكمل تجربة الاسترخاء</p>
+    <div class="lp-cross-grid" id="lpCrossGrid"></div>
+  </div>
+</section>
+
+<!-- ═══ 7. FAQ ═══ -->
 <section class="lp-faq">
   <div class="wrap">
     <h2 class="lp-reveal">عندك سؤال؟ جاوبناه لك</h2>
@@ -702,7 +531,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 7. SOCIAL PROOF ═══ -->
+<!-- ═══ 8. SOCIAL PROOF ═══ -->
 <section class="lp-social">
   <div class="wrap">
     <h2 class="lp-reveal">عملاؤنا قالوا إيه؟</h2>
@@ -712,7 +541,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 8. FINAL CTA ═══ -->
+<!-- ═══ 9. FINAL CTA ═══ -->
 <section class="lp-final-cta">
   <div class="wrap lp-reveal">
     <h2>جاهز تجرب إحساس السبا في بيتك؟</h2>
@@ -751,7 +580,6 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
         <div class="pr" id="lpModalPrice">375 ج</div>
       </div>
     </div>
-    <!-- ✅ تعديل: نجمة حمراء + خيار افتراضي disabled -->
     <label class="lp-modal-label" for="lpScentSelect">🌸 اختر العطر <span class="req">*</span></label>
     <select class="lp-modal-select" id="lpScentSelect" required aria-required="true">
       <option value="" disabled selected>— اختر العطر —</option>
@@ -765,7 +593,6 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
         <button type="button" id="lpQtyPlus" aria-label="زيادة">+</button>
       </div>
     </div>
-    <!-- ✅ تعديل: الزر disabled افتراضيًا -->
     <button class="lp-modal-add" type="button" id="lpModalAdd" disabled>👆 اختر العطر أولاً</button>
     <p class="lp-modal-note">🔒 بياناتك آمنة — هنتواصل معاك لتأكيد الطلب</p>
   </div>
@@ -787,24 +614,25 @@ var LP_CONFIG = {
   cartImage: "velalight-massage-mandala-spa-spa.webp",
   priceOverride: 375,
   oldPriceOverride: 475,
+  /* ✅ آراء عملاء بدون أسماء ولا محافظات — بس الكلام */
   testimonials: [
-    { img: "testimonials/rev1.jpg",  name: "", quote: "⭐ الشمعة دي غيرت روتيني المسائي تمامًا" },
-    { img: "testimonials/rev2.jpg",  name: "", quote: "⭐ ريحتها تحفة وبترطب بشرتي" },
-    { img: "testimonials/rev3.jpg",  name: "", quote: "⭐ أحسن هدية جبتها لمراتي" },
-    { img: "testimonials/rev4.jpg",  name: "", quote: "⭐ تجربة رائعة، هرجع أطلب تاني" },
-    { img: "testimonials/rev5.jpg",  name: "", quote: "⭐ منتج فاخر ويستاهل كل جنيه" },
-    { img: "testimonials/rev6.jpg",  name: "", quote: "⭐ بشرتي بقت ناعمة جدًا" },
-    { img: "testimonials/rev7.jpg",  name: "", quote: "⭐ استرخاء كامل بعد يوم طويل" },
-    { img: "testimonials/rev8.jpg",  name: "", quote: "⭐ الهدية المثالية لأي مناسبة" },
-    { img: "testimonials/rev9.jpg",  name: "", quote: "⭐ جودة عالية وخدمة ممتازة" },
-    { img: "testimonials/rev10.jpg", name: "", quote: "⭐ ريحة اللافندر تحفة" },
-    { img: "testimonials/rev11.jpg", name: "", quote: "⭐ يستحق كل التقييمات الحلوة" },
-    { img: "testimonials/rev12.jpg", name: "", quote: "⭐ تجربة سبا كاملة في البيت" },
-    { img: "testimonials/rev13.jpg", name: "", quote: "⭐ التغليف فخم جدًا" },
-    { img: "testimonials/rev14.jpg", name: "", quote: "⭐ سرعة توصيل وجودة عالية" },
-    { img: "testimonials/rev15.jpg", name: "", quote: "⭐ هرشحه لكل أصحابي" },
-    { img: "testimonials/rev16.jpg", name: "", quote: "⭐ فاقت توقعاتي بكتير" },
-    { img: "testimonials/rev17.jpg", name: "", quote: "⭐ تجربة شراء ممتازة من الأول للآخر" }
+    { img: "testimonials/rev1.jpg",  quote: "⭐ الشمعة دي غيرت روتيني المسائي تمامًا" },
+    { img: "testimonials/rev2.jpg",  quote: "⭐ ريحتها تحفة وبترطب بشرتي" },
+    { img: "testimonials/rev3.jpg",  quote: "⭐ أحسن هدية جبتها لمراتي" },
+    { img: "testimonials/rev4.jpg",  quote: "⭐ تجربة رائعة، هرجع أطلب تاني" },
+    { img: "testimonials/rev5.jpg",  quote: "⭐ منتج فاخر ويستاهل كل جنيه" },
+    { img: "testimonials/rev6.jpg",  quote: "⭐ بشرتي بقت ناعمة جدًا" },
+    { img: "testimonials/rev7.jpg",  quote: "⭐ استرخاء كامل بعد يوم طويل" },
+    { img: "testimonials/rev8.jpg",  quote: "⭐ الهدية المثالية لأي مناسبة" },
+    { img: "testimonials/rev9.jpg",  quote: "⭐ جودة عالية وخدمة ممتازة" },
+    { img: "testimonials/rev10.jpg", quote: "⭐ ريحة اللافندر تحفة" },
+    { img: "testimonials/rev11.jpg", quote: "⭐ يستحق كل التقييمات الحلوة" },
+    { img: "testimonials/rev12.jpg", quote: "⭐ تجربة سبا كاملة في البيت" },
+    { img: "testimonials/rev13.jpg", quote: "⭐ التغليف فخم جدًا" },
+    { img: "testimonials/rev14.jpg", quote: "⭐ سرعة توصيل وجودة عالية" },
+    { img: "testimonials/rev15.jpg", quote: "⭐ هرشحه لكل أصحابي" },
+    { img: "testimonials/rev16.jpg", quote: "⭐ فاقت توقعاتي بكتير" },
+    { img: "testimonials/rev17.jpg", quote: "⭐ تجربة شراء ممتازة من الأول للآخر" }
   ],
   defaultScent: ""
 };
@@ -864,6 +692,7 @@ var LP_SCENTS = [
     return p;
   }
 
+  /* ✅ آراء العملاء — بس الكلام، بدون اسم أو مدينة */
   function buildTestimonials(){
     var wrap = document.getElementById("lpTestimonials");
     if(!wrap) return;
@@ -873,9 +702,103 @@ var LP_SCENTS = [
       card.className = "lp-social-card";
       card.innerHTML =
         '<img src="' + t.img + '" alt="رأي عميل" loading="lazy" onerror="this.style.opacity=0.15">' +
-        '<div class="meta"><b>' + (t.name || '') + '</b><small>' + t.quote + '</small></div>';
+        '<div class="meta"><small>' + t.quote + '</small></div>';
       wrap.appendChild(card);
     });
+  }
+
+  /* ✅ Cross-sell — 3 منتجات مقترحة */
+  function buildCrossSell(){
+    var wrap = document.getElementById("lpCrossGrid");
+    if(!wrap) return;
+    wrap.innerHTML = "";
+
+    var pool = (typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length) ? ALL_PRODUCTS
+             : (typeof PRODUCTS !== "undefined" && PRODUCTS.length) ? PRODUCTS
+             : [];
+    if(!pool.length){
+      var sec = document.querySelector(".lp-cross");
+      if(sec) sec.style.display = "none";
+      return;
+    }
+
+    var candidates = pool.filter(function(p){
+      return p && p.id && String(p.id) !== String(LP_CONFIG.productId) && p.active !== false;
+    });
+    var picks = candidates.slice(0, 3);
+    if(!picks.length){
+      var sec2 = document.querySelector(".lp-cross");
+      if(sec2) sec2.style.display = "none";
+      return;
+    }
+
+    picks.forEach(function(p){
+      var img = "";
+      try { img = (typeof imgOf === "function") ? imgOf(p) : (p.img || ""); } catch(e){ img = p.img || ""; }
+      if(!img) img = LP_CONFIG.heroPoster;
+
+      var card = document.createElement("div");
+      card.className = "lp-cross-card";
+      card.innerHTML =
+        '<div class="lp-cross-media"><img src="' + img + '" alt="" loading="lazy" onerror="this.src=\'' + LP_CONFIG.heroPoster + '\'"></div>' +
+        '<div class="lp-cross-body">' +
+          '<h3>' + (typeof pname === "function" ? pname(p) : p.name) + '</h3>' +
+          '<div class="price">' + priceFmt(p.price) + '</div>' +
+          '<button class="lp-cross-btn" type="button">🛍️ اطلب الآن</button>' +
+        '</div>';
+      wrap.appendChild(card);
+
+      var btn = card.querySelector(".lp-cross-btn");
+      btn.addEventListener("click", function(){
+        LP_PRODUCT = {
+          id: p.id,
+          name: p.name || "",
+          nameEn: p.nameEn || "",
+          price: Number(p.price) || 0,
+          old: Number(p.old) || 0,
+          img: img,
+          cat: p.cat || "",
+          stock: p.stock
+        };
+        var mi = document.getElementById("lpModalImg"); if(mi) mi.src = img;
+        var mn = document.getElementById("lpModalName"); if(mn) mn.textContent = LP_PRODUCT.name;
+        var mp = document.getElementById("lpModalPrice"); if(mp) mp.textContent = priceFmt(LP_PRODUCT.price);
+        lpOpenModal();
+      });
+    });
+  }
+
+  /* ✅ Countdown Timer — 24 ساعة */
+  function initCountdown(){
+    var KEY = "lp_offer_end_v1";
+    var endTime = 0;
+    try { endTime = Number(localStorage.getItem(KEY)) || 0; } catch(e){}
+    if(!endTime || endTime < Date.now()){
+      endTime = Date.now() + 24 * 60 * 60 * 1000;
+      try { localStorage.setItem(KEY, String(endTime)); } catch(e){}
+    }
+
+    var hEl = document.getElementById("cdHours");
+    var mEl = document.getElementById("cdMins");
+    var sEl = document.getElementById("cdSecs");
+    if(!hEl || !mEl || !sEl) return;
+
+    function tick(){
+      var diff = endTime - Date.now();
+      if(diff <= 0){
+        endTime = Date.now() + 24 * 60 * 60 * 1000;
+        try { localStorage.setItem(KEY, String(endTime)); } catch(e){}
+        diff = 24 * 60 * 60 * 1000;
+      }
+      var h = Math.floor(diff / 3600000);
+      var m = Math.floor((diff % 3600000) / 60000);
+      var s = Math.floor((diff % 60000) / 1000);
+      hEl.textContent = (h < 10 ? "0" : "") + h;
+      mEl.textContent = (m < 10 ? "0" : "") + m;
+      sEl.textContent = (s < 10 ? "0" : "") + s;
+      setTimeout(tick, 1000);
+    }
+    tick();
   }
 
   function applyProduct(){
@@ -925,7 +848,6 @@ var LP_SCENTS = [
     });
   }
 
-  /* ✅ تعديل: تحديث حالة الزر حسب اختيار العطر */
   function updateAddBtnState(){
     var sel = document.getElementById("lpScentSelect");
     var btn = document.getElementById("lpModalAdd");
@@ -946,15 +868,12 @@ var LP_SCENTS = [
     if(!ov) return;
     LP_QTY = 1;
     updateQtyUI();
-
-    /* ✅ تعديل: صفّر الاختيار في كل مرة يفتح المودال */
     var sel = document.getElementById("lpScentSelect");
     if(sel){
       sel.value = "";
       sel.classList.remove("vl-empty");
     }
     updateAddBtnState();
-
     ov.classList.add("show");
     ov.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
@@ -979,7 +898,7 @@ var LP_SCENTS = [
 
   function lpAddToCart(scent, qty){
     if(!LP_PRODUCT) LP_PRODUCT = findProduct();
-    LP_PRODUCT.img = LP_CONFIG.cartImage;
+    LP_PRODUCT.img = LP_PRODUCT.img || LP_CONFIG.cartImage;
 
     var added = false;
     try {
@@ -998,8 +917,8 @@ var LP_SCENTS = [
       var changed = false;
       cartFix.forEach(function(it){
         if(String(it.id) === String(LP_PRODUCT.id)){
-          if(it.img !== LP_CONFIG.cartImage){
-            it.img = LP_CONFIG.cartImage;
+          if(it.img !== LP_PRODUCT.img){
+            it.img = LP_PRODUCT.img;
             changed = true;
           }
         }
@@ -1038,8 +957,9 @@ var LP_SCENTS = [
     applyProduct();
     buildScentOptions();
     buildTestimonials();
+    buildCrossSell();
+    initCountdown();
 
-    /* ✅ تعديل: استنى تغيير اختيار العطر → فعّل/عطّل الزر */
     var sel = document.getElementById("lpScentSelect");
     if(sel){
       sel.addEventListener("change", function(){
@@ -1048,7 +968,6 @@ var LP_SCENTS = [
       });
     }
 
-    /* ✅ تعديل: الحالة الابتدائية للزر */
     updateAddBtnState();
 
     var minus = document.getElementById("lpQtyMinus");
@@ -1066,7 +985,6 @@ var LP_SCENTS = [
       var sel = document.getElementById("lpScentSelect");
       var scent = sel ? sel.value : "";
 
-      /* ✅ تعديل: حماية إضافية لو لسه مفيش عطر */
       if(!scent){
         if(sel) sel.classList.add("vl-empty");
         if(typeof toast === "function") toast("⚠️ اختر العطر أولاً");
