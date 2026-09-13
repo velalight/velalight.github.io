@@ -56,7 +56,43 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-cta-sub{text-align:center;font-size:.78rem;color:var(--mut);margin-top:.6rem}
 
 .lp-hero{padding:2rem 0 3rem;position:relative}
-.lp-hero-badge{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,#fff4e0,#ffe9c4);border:1px solid rgba(217,171,95,.35);color:var(--gold2);font-size:.75rem;font-weight:800;padding:.35rem .9rem;border-radius:99px;margin-bottom:1rem}
+.lp-hero-badge{display:inline-flex;align-items:center;gap:.4rem;background:linear-gradient(135deg,#fff4e0,#ffe9c4);border:1px solid rgba(217,171,95,.35);color:var(--gold2);font-size:.75rem;font-weight:800;padding:.35rem .9rem;border-radius:99px}
+
+/* ═══ صف شارات الـ Hero الجديدة ═══ */
+.lp-hero-badges-row{
+  display:flex;flex-wrap:wrap;gap:.5rem;
+  margin-bottom:1.2rem;
+  align-items:center;
+}
+.lp-hero-badge-red{
+  display:inline-flex;align-items:center;gap:.3rem;
+  background:linear-gradient(135deg,#e74c3c,#c0392b);
+  color:#fff;font-size:.75rem;font-weight:800;
+  padding:.38rem .9rem;border-radius:99px;
+  box-shadow:0 6px 16px rgba(231,76,60,.4);
+  border:1.5px solid rgba(255,255,255,.6);
+  animation:pulseRibbonHero 1.5s ease-in-out infinite;
+}
+@keyframes pulseRibbonHero{
+  0%,100%{transform:scale(1);box-shadow:0 6px 16px rgba(231,76,60,.4)}
+  50%{transform:scale(1.06);box-shadow:0 10px 22px rgba(231,76,60,.6)}
+}
+.lp-hero-badge-discount{
+  display:inline-flex;align-items:center;gap:.3rem;
+  background:linear-gradient(135deg,#e74c3c,#c0392b,#e74c3c);
+  background-size:200% 200%;
+  color:#fff;font-size:.78rem;font-weight:900;
+  padding:.4rem 1rem;border-radius:99px;
+  box-shadow:0 8px 20px rgba(231,76,60,.5);
+  border:1.5px solid #fff;
+  letter-spacing:.02em;
+  animation:pulseDiscountHero 1.2s ease-in-out infinite;
+}
+@keyframes pulseDiscountHero{
+  0%,100%{transform:scale(1);background-position:0% 50%}
+  50%{transform:scale(1.08);background-position:100% 50%}
+}
+
 .lp-hero h1{font-family:var(--fd);font-size:clamp(1.7rem,5vw,2.8rem);line-height:1.25;margin-bottom:.8rem;color:var(--ink)}
 .lp-hero h1 .hl{color:var(--gold2);position:relative}
 .lp-hero h1 .hl::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:6px;background:rgba(217,171,95,.25);border-radius:3px;z-index:-1}
@@ -69,7 +105,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-hero-grid{display:grid;grid-template-columns:1fr;gap:2rem;align-items:center}
 @media(min-width:768px){.lp-hero-grid{grid-template-columns:1.1fr .9fr;gap:3rem}.lp-hero{padding:3rem 0 4rem}}
 
-/* ═══════ 🔥 OFFER UP TOP — النسخة المبهرة ═══════ */
+/* ═══════ 🔥 OFFER — مبهر وبارز ═══════ */
 .lp-offer{
   padding:2.5rem 0 3rem;
   background:
@@ -130,42 +166,11 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
     transform:scale(1.008);
   }
 }
-.lp-offer-ribbon{
-  position:absolute;top:-18px;left:50%;transform:translateX(-50%);
-  background:linear-gradient(135deg,#e74c3c,#c0392b);
-  color:#fff;font-size:.85rem;font-weight:900;
-  padding:.5rem 1.5rem;border-radius:99px;
-  letter-spacing:.05em;
-  box-shadow:0 10px 28px rgba(231,76,60,.55);
-  animation:pulseRibbon 1.4s ease-in-out infinite;
-  white-space:nowrap;
-  border:2px solid #fff;
-}
-@keyframes pulseRibbon{
-  0%,100%{transform:translateX(-50%) scale(1);box-shadow:0 10px 28px rgba(231,76,60,.55)}
-  50%{transform:translateX(-50%) scale(1.08);box-shadow:0 14px 36px rgba(231,76,60,.75)}
-}
 .lp-offer-box h2{
   font-family:var(--fd);
   font-size:clamp(1.4rem,3.8vw,2rem);
-  margin:1.2rem 0 .9rem;
+  margin:.4rem 0 .9rem;
   color:var(--ink);
-}
-.lp-discount-badge{
-  display:inline-block;
-  background:linear-gradient(135deg,#e74c3c,#c0392b,#e74c3c);
-  background-size:200% 200%;
-  color:#fff;font-size:.95rem;font-weight:900;
-  padding:.55rem 1.4rem;border-radius:99px;
-  margin-bottom:1rem;
-  box-shadow:0 10px 26px rgba(231,76,60,.5);
-  animation:pulseDiscount 1.2s ease-in-out infinite;
-  letter-spacing:.03em;
-  border:2px solid #fff;
-}
-@keyframes pulseDiscount{
-  0%,100%{transform:scale(1);background-position:0% 50%}
-  50%{transform:scale(1.07);background-position:100% 50%}
 }
 .lp-price-row{
   display:flex;align-items:center;justify-content:center;
@@ -440,8 +445,9 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   .lp-price-now{font-size:2.4rem}
   .lp-social-card{flex:0 0 220px}
   .lp-solution-card{padding:1.5rem 1rem}
-  .lp-offer-ribbon{font-size:.72rem;padding:.45rem 1.1rem}
-  .lp-discount-badge{font-size:.82rem;padding:.45rem 1.1rem}
+  .lp-hero-badges-row{gap:.4rem}
+  .lp-hero-badge-red,
+  .lp-hero-badge-discount{font-size:.68rem;padding:.32rem .75rem}
 }
 </style>
 </head>
@@ -469,7 +475,11 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 <section class="lp-hero">
   <div class="wrap lp-hero-grid">
     <div class="lp-reveal">
-      <span class="lp-hero-badge">🔥 الأكثر مبيعاً</span>
+      <div class="lp-hero-badges-row">
+        <span class="lp-hero-badge">🔥 الأكثر مبيعاً</span>
+        <span class="lp-hero-badge-red">🎁 عرض خاص لعملاء هذه الصفحة</span>
+        <span class="lp-hero-badge-discount">🔥 خصم 100 ج — ساري لفترة محدودة</span>
+      </div>
       <h1>
         شمعة المساج المانديلا<br>
         <span class="hl">استرخاء وعناية بالبشرة</span><br>
@@ -501,15 +511,11 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 2. 🔥 OFFER — مبهر وبارز وفوق ═══ -->
+<!-- ═══ 2. 🔥 OFFER — مبهر وبارز ═══ -->
 <section class="lp-offer">
   <div class="wrap">
     <div class="lp-offer-box lp-reveal on">
-      <span class="lp-offer-ribbon">🎁 عرض خاص لعملاء هذه الصفحة</span>
-
       <h2 id="lpOfferTitle">شمعة المساج المانديلا</h2>
-
-      <span class="lp-discount-badge">🔥 خصم 100 ج — العرض ساري لفترة محدودة</span>
 
       <div class="lp-price-row">
         <span class="lp-price-now" id="lpOfferPrice">375 ج</span>
@@ -822,7 +828,6 @@ var LP_SCENTS = [
     return String(Math.round(Number(n) || 0)) + " ج";
   }
 
-  /* ═══ البحث عن المنتج — مع صورة ثابتة للسلة ═══ */
   function findProduct(){
     var pool = (typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length) ? ALL_PRODUCTS
              : (typeof PRODUCTS !== "undefined" && PRODUCTS.length) ? PRODUCTS
@@ -839,11 +844,8 @@ var LP_SCENTS = [
         cat: "massage"
       };
     }
-    // ✅ override price
     if(LP_CONFIG.priceOverride != null) p.price = LP_CONFIG.priceOverride;
     if(LP_CONFIG.oldPriceOverride != null) p.old = LP_CONFIG.oldPriceOverride;
-
-    // ✅ الصورة الثابتة للسلة (مفروضة)
     p.img = LP_CONFIG.cartImage;
     return p;
   }
@@ -938,11 +940,9 @@ var LP_SCENTS = [
     if(p) p.disabled = LP_QTY >= LP_MAX_STOCK;
   }
 
-  /* ═══ إضافة للسلة — مع فرض الصورة في الكارت ═══ */
   function lpAddToCart(scent, qty){
     if(!LP_PRODUCT) LP_PRODUCT = findProduct();
 
-    // ✅ فرض الصورة قبل الإضافة
     LP_PRODUCT.img = LP_CONFIG.cartImage;
 
     var added = false;
@@ -954,7 +954,6 @@ var LP_SCENTS = [
       console.warn("⚠️ addToCart failed:", e);
     }
 
-    // ✅ فرض الصورة في السلة بعد الإضافة (belt + suspenders)
     try {
       var cartFix = [];
       if(typeof getCart === "function") cartFix = getCart();
