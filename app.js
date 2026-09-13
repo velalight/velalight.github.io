@@ -2442,26 +2442,44 @@ function initQuickAdd() {
       return;
     }
 
-    const added = addToCart(quickAddProduct, { scent: currentScent, qty: currentQty });
+    // ✅ احفظ مراجع محلية قبل أي حاجة
+    const productToAdd = quickAddProduct;
+    const scentToAdd = currentScent;
+    const qtyToAdd = currentQty;
 
-    if (added) {
-      const originalText = addBtn.textContent;
+    // ✅ استدعي addToCart (بيضيف المنتج + بيعرض التوست)
+    addToCart(productToAdd, { scent: scentToAdd, qty: qtyToAdd });
+
+    // ✅ تحقق مباشر من السلة بدل ما نعتمد على return value
+    // (لأن addToCart بترجع undefined رغم إنها بتنجح)
+    const cartAfter = getCart();
+    const wasAdded = cartAfter.some(it =>
+      it.id === productToAdd.id &&
+      String(it.scent || "") === String(scentToAdd)
+    );
+
+    const originalText = addBtn.textContent;
+
+    if (wasAdded) {
       addBtn.textContent = "✓ تمت الإضافة";
-
-      setTimeout(() => {
-        addBtn.textContent = originalText || "🛍️ أضف للسلة";
-        closeModal("scentOv");
-        quickAddProduct = null;
-        quickAddScent = "";
-        quickAddQty = 1;
-        
-        // ✅ الإصلاح: تحديث السلة فورًا بعد الإضافة
-        // ده بيخلي المنتج الجديد يظهر + الـ cross-sell يختفي
-        // (لأن المنتج بقى في السلة، فمش هيتعرض تاني كمقترح)
-        renderCart();
-        cartBadge();
-      }, 450);
     }
+
+    // ✅ أعِد رسم السلة فورًا (قبل إغلاق المودال)
+    renderCart();
+    cartBadge();
+
+    // ✅ أغلق المودال + إعادة رسم احتياطية بعد الإغلاق
+    setTimeout(() => {
+      addBtn.textContent = originalText || "🛍️ أضف للسلة";
+      closeModal("scentOv");
+      quickAddProduct = null;
+      quickAddScent = "";
+      quickAddQty = 1;
+
+      // إعادة رسم تانية بعد إغلاق المودال (احتياطي)
+      renderCart();
+      cartBadge();
+    }, 450);
   });
 }
 
