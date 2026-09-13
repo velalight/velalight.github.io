@@ -420,9 +420,18 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-modal-preview .info{flex:1;min-width:0}
 .lp-modal-preview .info b{display:block;font-size:.92rem;color:var(--ink);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lp-modal-preview .info .pr{font-weight:900;color:var(--gold2);margin-top:.15rem}
+
+/* ✅ تعديل: نجمة حمراء للحقل المطلوب */
 .lp-modal-label{display:block;font-weight:700;font-size:.85rem;margin-bottom:.45rem;color:var(--ink)}
+.lp-modal-label .req{color:#e74c3c;font-weight:900;margin-inline-start:3px;font-size:1rem}
+
 .lp-modal-select{width:100%;padding:.75rem .9rem;border:1.5px solid rgba(217,171,95,.35);border-radius:11px;background:#fff;color:var(--ink);font-family:inherit;font-size:.92rem;cursor:pointer;outline:none;margin-bottom:1rem;transition:.2s}
 .lp-modal-select:focus{border-color:var(--gold2);box-shadow:0 0 0 3px rgba(217,171,95,.15)}
+
+/* ✅ تعديل: تأثير اهتزاز لو حاول يضيف بدون اختيار */
+.lp-modal-select.vl-empty{border-color:#e74c3c;background:#fff8f8;animation:shakeEmpty 0.4s ease}
+@keyframes shakeEmpty{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
 .lp-modal-qty{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.2rem;padding:.5rem .8rem;border:1.5px solid rgba(217,171,95,.35);border-radius:11px;background:#fff}
 .lp-modal-qty .lbl{font-weight:700;font-size:.88rem}
 .lp-modal-qty .controls{display:flex;align-items:center;gap:.6rem}
@@ -432,7 +441,10 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-modal-qty b{min-width:26px;text-align:center;font-size:1rem;font-weight:900;color:var(--ink)}
 .lp-modal-add{width:100%;background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:900;font-size:1rem;padding:.95rem;border-radius:999px;box-shadow:0 8px 20px -6px rgba(217,171,95,.5);transition:.25s}
 .lp-modal-add:active{transform:scale(.97)}
-.lp-modal-add:disabled{opacity:.6;cursor:not-allowed}
+
+/* ✅ تعديل: الزر لما يكون معطل */
+.lp-modal-add:disabled{opacity:.55;cursor:not-allowed;background:linear-gradient(135deg,#b5a48a,#8a7a64);box-shadow:none;animation:none}
+
 .lp-modal-note{text-align:center;font-size:.72rem;color:var(--mut);margin-top:.7rem}
 
 @media(max-width:480px){
@@ -739,9 +751,10 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
         <div class="pr" id="lpModalPrice">375 ج</div>
       </div>
     </div>
-    <label class="lp-modal-label" for="lpScentSelect">🌸 اختر العطر</label>
-    <select class="lp-modal-select" id="lpScentSelect">
-      <option value="">اختر العطر...</option>
+    <!-- ✅ تعديل: نجمة حمراء + خيار افتراضي disabled -->
+    <label class="lp-modal-label" for="lpScentSelect">🌸 اختر العطر <span class="req">*</span></label>
+    <select class="lp-modal-select" id="lpScentSelect" required aria-required="true">
+      <option value="" disabled selected>— اختر العطر —</option>
     </select>
     <label class="lp-modal-label">الكمية</label>
     <div class="lp-modal-qty">
@@ -752,7 +765,8 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
         <button type="button" id="lpQtyPlus" aria-label="زيادة">+</button>
       </div>
     </div>
-    <button class="lp-modal-add" type="button" id="lpModalAdd">🛍️ أضف للسلة — دفع آمن 100%</button>
+    <!-- ✅ تعديل: الزر disabled افتراضيًا -->
+    <button class="lp-modal-add" type="button" id="lpModalAdd" disabled>👆 اختر العطر أولاً</button>
     <p class="lp-modal-note">🔒 بياناتك آمنة — هنتواصل معاك لتأكيد الطلب</p>
   </div>
 </div>
@@ -902,7 +916,7 @@ var LP_SCENTS = [
   function buildScentOptions(){
     var sel = document.getElementById("lpScentSelect");
     if(!sel) return;
-    sel.innerHTML = '<option value="">اختر العطر...</option>';
+    sel.innerHTML = '<option value="" disabled selected>— اختر العطر —</option>';
     LP_SCENTS.forEach(function(s){
       var opt = document.createElement("option");
       opt.value = s[0];
@@ -911,13 +925,36 @@ var LP_SCENTS = [
     });
   }
 
+  /* ✅ تعديل: تحديث حالة الزر حسب اختيار العطر */
+  function updateAddBtnState(){
+    var sel = document.getElementById("lpScentSelect");
+    var btn = document.getElementById("lpModalAdd");
+    if(!sel || !btn) return;
+    var hasScent = sel.value && String(sel.value).trim();
+    if(hasScent){
+      btn.disabled = false;
+      btn.textContent = "🛍️ أضف للسلة — دفع آمن 100%";
+      sel.classList.remove("vl-empty");
+    } else {
+      btn.disabled = true;
+      btn.textContent = "👆 اختر العطر أولاً";
+    }
+  }
+
   window.lpOpenModal = function(){
     var ov = document.getElementById("lpModalOv");
     if(!ov) return;
     LP_QTY = 1;
     updateQtyUI();
+
+    /* ✅ تعديل: صفّر الاختيار في كل مرة يفتح المودال */
     var sel = document.getElementById("lpScentSelect");
-    if(sel && LP_CONFIG.defaultScent) sel.value = LP_CONFIG.defaultScent;
+    if(sel){
+      sel.value = "";
+      sel.classList.remove("vl-empty");
+    }
+    updateAddBtnState();
+
     ov.classList.add("show");
     ov.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
@@ -942,7 +979,6 @@ var LP_SCENTS = [
 
   function lpAddToCart(scent, qty){
     if(!LP_PRODUCT) LP_PRODUCT = findProduct();
-
     LP_PRODUCT.img = LP_CONFIG.cartImage;
 
     var added = false;
@@ -1003,6 +1039,18 @@ var LP_SCENTS = [
     buildScentOptions();
     buildTestimonials();
 
+    /* ✅ تعديل: استنى تغيير اختيار العطر → فعّل/عطّل الزر */
+    var sel = document.getElementById("lpScentSelect");
+    if(sel){
+      sel.addEventListener("change", function(){
+        sel.classList.remove("vl-empty");
+        updateAddBtnState();
+      });
+    }
+
+    /* ✅ تعديل: الحالة الابتدائية للزر */
+    updateAddBtnState();
+
     var minus = document.getElementById("lpQtyMinus");
     var plus = document.getElementById("lpQtyPlus");
     if(minus) minus.addEventListener("click", function(){
@@ -1017,7 +1065,10 @@ var LP_SCENTS = [
     if(addBtn) addBtn.addEventListener("click", function(){
       var sel = document.getElementById("lpScentSelect");
       var scent = sel ? sel.value : "";
+
+      /* ✅ تعديل: حماية إضافية لو لسه مفيش عطر */
       if(!scent){
+        if(sel) sel.classList.add("vl-empty");
         if(typeof toast === "function") toast("⚠️ اختر العطر أولاً");
         if(sel) sel.focus();
         return;
@@ -1034,8 +1085,7 @@ var LP_SCENTS = [
         if(typeof toast === "function") toast("✅ تمت الإضافة للسلة");
         setTimeout(function(){
           lpCloseModal();
-          btn.disabled = false;
-          btn.textContent = "🛍️ أضف للسلة — دفع آمن 100%";
+          updateAddBtnState();
           try {
             if(typeof fillCartForm === "function") fillCartForm();
             if(typeof renderCart === "function") renderCart();
@@ -1043,8 +1093,7 @@ var LP_SCENTS = [
           } catch(e){}
         }, 500);
       } else {
-        btn.disabled = false;
-        btn.textContent = "🛍️ أضف للسلة — دفع آمن 100%";
+        updateAddBtnState();
         if(typeof toast === "function") toast("⚠️ حصل خطأ، حاول تاني");
       }
     });
