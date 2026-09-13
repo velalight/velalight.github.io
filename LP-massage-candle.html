@@ -63,9 +63,9 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-hero p.lead{font-size:1rem;color:var(--mut);max-width:520px;margin-bottom:1.5rem;line-height:1.8}
 .lp-hero-stars{display:flex;align-items:center;gap:.4rem;margin-bottom:1rem;font-size:.82rem;color:var(--mut);flex-wrap:wrap}
 .lp-hero-stars .stars{color:var(--gold);letter-spacing:1px;font-size:1rem}
-.lp-hero-media{position:relative;border-radius:22px;overflow:hidden;background:var(--bg2);box-shadow:var(--sh);aspect-ratio:4/5;max-width:440px;margin-inline:auto}
+.lp-hero-media{position:relative;border-radius:22px;overflow:hidden;background:#000;box-shadow:var(--sh);aspect-ratio:4/5;max-width:440px;margin-inline:auto}
 .lp-hero-media img,.lp-hero-media video{width:100%;height:100%;object-fit:cover;display:block}
-.lp-hero-media .floating-badge{position:absolute;top:14px;inset-inline-start:14px;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);padding:.4rem .9rem;border-radius:99px;font-size:.7rem;font-weight:800;color:var(--gold2);box-shadow:0 4px 12px rgba(100,70,30,.15)}
+.lp-hero-media .floating-badge{position:absolute;top:14px;inset-inline-start:14px;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);padding:.4rem .9rem;border-radius:99px;font-size:.7rem;font-weight:800;color:var(--gold2);box-shadow:0 4px 12px rgba(100,70,30,.15);z-index:2}
 .lp-hero-grid{display:grid;grid-template-columns:1fr;gap:2rem;align-items:center}
 @media(min-width:768px){.lp-hero-grid{grid-template-columns:1.1fr .9fr;gap:3rem}.lp-hero{padding:3rem 0 4rem}}
 
@@ -122,18 +122,21 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-social-grid{display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .lp-social-grid::-webkit-scrollbar{display:none}
 .lp-social-card{flex:0 0 260px;scroll-snap-align:center;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 4px 12px -4px rgba(100,70,30,.06)}
-.lp-social-card img{width:100%;height:auto;display:block}
+.lp-social-card img{width:100%;height:auto;display:block;aspect-ratio:1/1;object-fit:cover}
 .lp-social-card .meta{padding:.8rem 1rem}
 .lp-social-card .meta b{display:block;font-size:.85rem;margin-bottom:.2rem}
 .lp-social-card .meta small{font-size:.75rem;color:var(--mut)}
 
 .lp-offer{padding:3.5rem 0;background:linear-gradient(135deg,#fff4e0,#ffe9c4);border-top:1px solid rgba(217,171,95,.3);border-bottom:1px solid rgba(217,171,95,.3)}
 .lp-offer-box{max-width:600px;margin:0 auto;text-align:center;background:var(--panel);border-radius:20px;padding:2rem 1.5rem;box-shadow:0 12px 40px -12px rgba(100,70,30,.2);border:2px dashed rgba(217,171,95,.4)}
-.lp-offer-box .tag{display:inline-block;background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-size:.72rem;font-weight:900;padding:.3rem 1rem;border-radius:99px;margin-bottom:1rem;letter-spacing:.05em}
+.lp-offer-box .tag{display:inline-block;background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-size:.72rem;font-weight:900;padding:.3rem 1rem;border-radius:99px;margin-bottom:.6rem;letter-spacing:.05em}
+.lp-discount-badge{display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-size:.82rem;font-weight:900;padding:.4rem 1.2rem;border-radius:99px;margin-bottom:1rem;box-shadow:0 6px 18px rgba(231,76,60,.35);animation:pulseDiscount 2s ease-in-out infinite;letter-spacing:.02em}
+@keyframes pulseDiscount{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 .lp-offer-box h2{font-family:var(--fd);font-size:clamp(1.3rem,3.5vw,1.8rem);margin-bottom:.5rem}
-.lp-offer-box .price-row{display:flex;align-items:center;justify-content:center;gap:.8rem;margin:1rem 0}
+.lp-offer-box .price-row{display:flex;align-items:center;justify-content:center;gap:.8rem;margin:1rem 0;flex-wrap:wrap}
 .lp-offer-box .price-now{font-family:var(--fd);font-size:2.2rem;font-weight:900;color:var(--gold2)}
 .lp-offer-box .price-old{font-size:1.1rem;color:var(--dim);text-decoration:line-through}
+.lp-offer-box .savings{display:block;width:100%;text-align:center;font-size:.82rem;color:var(--ok);font-weight:800;margin-top:-.3rem;margin-bottom:.6rem}
 .lp-offer-box ul{list-style:none;text-align:start;max-width:340px;margin:0 auto 1.5rem;display:flex;flex-direction:column;gap:.5rem}
 .lp-offer-box ul li{display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--ink)}
 .lp-offer-box ul li .ic{color:var(--ok);font-weight:900}
@@ -192,7 +195,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 @media(max-width:480px){
   .lp-hero{padding:1.5rem 0 2.5rem}
   .lp-hero h1{font-size:1.6rem}
-  .lp-hero-media{aspect-ratio:1/1;max-width:100%}
+  .lp-hero-media{aspect-ratio:4/5;max-width:100%}
   .lp-cta{font-size:.95rem;padding:.9rem 1.5rem}
   .lp-offer-box{padding:1.5rem 1rem}
   .lp-social-card{flex:0 0 220px}
@@ -243,12 +246,14 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
     </div>
     <div class="lp-hero-media lp-reveal">
       <span class="floating-badge">✨ شمع صويا طبيعي</span>
-      <img
-        id="lpHeroImg"
-        src="velalight-crystal-double-wick-luxury-cup-inuse.webp"
-        alt="شمعة المساج المانديلا من VelaLight"
-        loading="eager"
-        width="440" height="550">
+      <video
+        id="lpHeroVideo"
+        autoplay muted loop playsinline
+        preload="metadata"
+        poster="velalight-crystal-double-wick-luxury-cup-inuse.webp"
+        aria-label="شمعة المساج المانديلا من VelaLight">
+        <source src="velaligh-spa-candle.mp4" type="video/mp4">
+      </video>
     </div>
   </div>
 </section>
@@ -400,11 +405,15 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <div class="wrap">
     <div class="lp-offer-box lp-reveal">
       <span class="tag">🎁 عرض خاص لعملاء هذه الصفحة</span>
+      <div>
+        <span class="lp-discount-badge">🔥 خصم 100 ج — العرض ساري لفترة محدودة</span>
+      </div>
       <h2 id="lpOfferTitle">شمعة المساج المانديلا</h2>
       <div class="price-row">
         <span class="price-now" id="lpOfferPrice">375 ج</span>
-        <span class="price-old" id="lpOfferOld"></span>
+        <span class="price-old" id="lpOfferOld">475 ج</span>
       </div>
+      <span class="savings">💰 وفّر 100 ج + تغليف هدايا مجاني</span>
       <ul>
         <li><span class="ic">✓</span> شمع صويا طبيعي 100%</li>
         <li><span class="ic">✓</span> 72 ساعة اشتعال</li>
@@ -412,7 +421,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
         <li><span class="ic">✓</span> تغليف هدايا فاخر مجاناً</li>
         <li><span class="ic">✓</span> دفع آمن 100%</li>
       </ul>
-      <button class="lp-cta" onclick="lpOpenModal()">🛍️ اطلب الآن</button>
+      <button class="lp-cta" onclick="lpOpenModal()">🛍️ اطلب الآن — وفّر 100 ج</button>
       <p class="lp-cta-sub">⏳ العرض ساري لفترة محدودة</p>
     </div>
   </div>
@@ -451,10 +460,10 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       <button class="lp-modal-close" type="button" onclick="lpCloseModal()" aria-label="إغلاق">✕</button>
     </div>
     <div class="lp-modal-preview">
-      <img id="lpModalImg" src="" alt="">
+      <img id="lpModalImg" src="velalight-crystal-double-wick-luxury-cup-inuse.webp" alt="">
       <div class="info">
-        <b id="lpModalName">—</b>
-        <div class="pr" id="lpModalPrice">—</div>
+        <b id="lpModalName">شمعة المساج المانديلا</b>
+        <div class="pr" id="lpModalPrice">375 ج</div>
       </div>
     </div>
     <label class="lp-modal-label" for="lpScentSelect">🌸 اختر العطر</label>
@@ -481,32 +490,75 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 
 <script>
 /* ═══════════════════════════════════════════════════════════
-   LP CONFIG — عدّل من هنا بس
+   LP CONFIG — كل حاجة هنا تعدلها
    ═══════════════════════════════════════════════════════════ */
 var LP_CONFIG = {
-  // ⭐ المنتج — اختار ID من الأدمن (Firebase)
-  // لو عايز تاخد الاسم/السعر/الصورة تلقائي من الأدمن، سيبه زي ما هو
-  // لو عايز تتحكم يدويًا، املأ القيم تحت
-  productId: "12",              // ← معرّف المنتج من ALL_PRODUCTS
+  // ⭐ ID المنتج من Firebase
+  productId: "12",
 
-  // 🖼️ الصور — حط اسم ملف الصورة زي ما انت رفعتها في المستودع
-  heroImage: "velalight-crystal-double-wick-luxury-cup-inuse.webp",
+  // 🎬 الفيديو في قسم البطل
+  heroVideo: "velaligh-spa-candle.mp4",
+  heroPoster: "velalight-crystal-double-wick-luxury-cup-inuse.webp",
+
+  // 🖼️ صورة قسم الحل
   solutionImage: "velalight-glass-golden-soy-gel-luxury-angle.webp",
 
-  // 💰 السعر — سيبه null عشان ياخده من الأدمن، أو حط رقم يدويًا
+  // 💰 السعر
   priceOverride: 375,
-  oldPriceOverride: null,       // لو عايز تعرض سعر قديم مشطوب
+  oldPriceOverride: 475,
 
-  // 📸 صور آراء العملاء — ضيف اسم كل صورة رفعتها في فولدر testimonials
+  // 📸 صور آراء العملاء — rev1.jpg إلى rev17.jpg
   testimonials: [
-    { img: "testimonials/rev1.webp", name: "م. أحمد — القاهرة", quote: "⭐ الشمعة دي غيرت روتيني المسائي تمامًا" },
-    { img: "testimonials/rev2.webp", name: "أ. سارة — الجيزة",   quote: "⭐ ريحتها تحفة وبترطب بشرتي" },
-    { img: "testimonials/rev3.webp", name: "م. محمد — الإسكندرية", quote: "⭐ أحسن هدية جبتها لمراتي" }
+    { img: "testimonials/rev1.jpg",  name: "م. أحمد — القاهرة",     quote: "⭐ الشمعة دي غيرت روتيني المسائي تمامًا" },
+    { img: "testimonials/rev2.jpg",  name: "أ. سارة — الجيزة",       quote: "⭐ ريحتها تحفة وبترطب بشرتي" },
+    { img: "testimonials/rev3.jpg",  name: "م. محمد — الإسكندرية",   quote: "⭐ أحسن هدية جبتها لمراتي" },
+    { img: "testimonials/rev4.jpg",  name: "أ. نهى — القاهرة",       quote: "⭐ تجربة رائعة، هرجع أطلب تاني" },
+    { img: "testimonials/rev5.jpg",  name: "م. كريم — الجيزة",       quote: "⭐ منتج فاخر ويستاهل كل جنيه" },
+    { img: "testimonials/rev6.jpg",  name: "أ. منى — الإسكندرية",    quote: "⭐ بشرتي بقت ناعمة جدًا" },
+    { img: "testimonials/rev7.jpg",  name: "م. عمرو — القاهرة",      quote: "⭐ استرخاء كامل بعد يوم طويل" },
+    { img: "testimonials/rev8.jpg",  name: "أ. هبة — الجيزة",        quote: "⭐ الهدية المثالية لأي مناسبة" },
+    { img: "testimonials/rev9.jpg",  name: "م. يوسف — القاهرة",      quote: "⭐ جودة عالية وخدمة ممتازة" },
+    { img: "testimonials/rev10.jpg", name: "أ. دينا — الإسكندرية",   quote: "⭐ ريحة اللافندر تحفة" },
+    { img: "testimonials/rev11.jpg", name: "م. حسام — الجيزة",       quote: "⭐ يستحق كل التقييمات الحلوة" },
+    { img: "testimonials/rev12.jpg", name: "أ. رنا — القاهرة",       quote: "⭐ تجربة سبا كاملة في البيت" },
+    { img: "testimonials/rev13.jpg", name: "م. مصطفى — الإسكندرية",  quote: "⭐ التغليف فخم جدًا" },
+    { img: "testimonials/rev14.jpg", name: "أ. سلمى — الجيزة",       quote: "⭐ سرعة توصيل وجودة عالية" },
+    { img: "testimonials/rev15.jpg", name: "م. طارق — القاهرة",      quote: "⭐ هرشحه لكل أصحابي" },
+    { img: "testimonials/rev16.jpg", name: "أ. لمياء — الإسكندرية",  quote: "⭐ فاقت توقعاتي بكتير" },
+    { img: "testimonials/rev17.jpg", name: "م. إسلام — الجيزة",      quote: "⭐ تجربة شراء ممتازة من الأول للآخر" }
   ],
 
-  // 🎯 عطر افتراضي — لو حبيت تختار تلقائي
-  defaultScent: "",             // سيبه فاضي — هيطلب من العميل يختار
+  defaultScent: ""
 };
+
+/* ═══════════════════════════════════════════════════════════
+   23 عطر كاملين — مدمجين مباشرة (مش محتاج تعدّل app.js)
+   ═══════════════════════════════════════════════════════════ */
+var LP_SCENTS = [
+  ["فانيلا","Vanilla"],
+  ["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
+  ["لافندر","Lavender"],
+  ["موكا","Mocha"],
+  ["كراميل","Caramel"],
+  ["كاريبيان فروت","Caribbean Fruit"],
+  ["فل","Jasmine Sambac"],
+  ["ياسمين","Jasmine"],
+  ["اناناس","Pineapple"],
+  ["شيكولاتة","Chocolate"],
+  ["كوكونات","Coconut"],
+  ["كاسيليا","Cassilia — Massage"],
+  ["اينتو زانايت","Into Zanaite — Massage"],
+  ["بوكيت روز","Bouquet Rose"],
+  ["ورد بلدى","Egyptian Rose"],
+  ["تيوليب","Tulip"],
+  ["قهوة","Coffee"],
+  ["قهوة فانيلا","Vanilla Coffee"],
+  ["قهوة بندق","Hazelnut Coffee"],
+  ["عود فانيليا","Vanilla Oud"],
+  ["عنبر","Amber"],
+  ["فراولة","Strawberry"],
+  ["عود خشب صندل","Sandalwood Oud"]
+];
 
 /* ═══════════════════════════════════════════════════════════
    LP Logic
@@ -518,13 +570,30 @@ var LP_CONFIG = {
   var LP_QTY = 1;
   var LP_MAX_STOCK = 99;
 
-  /* ═══ find product ═══ */
+  /* ═══ ترجمة العطر ═══ */
+  function scentTr(name){
+    var f = LP_SCENTS.find(function(s){ return s[0] === name || s[1] === name; });
+    if(!f) return name || "";
+    var lang = (typeof LANG !== "undefined") ? LANG : "ar";
+    return lang === "en" ? f[1] : f[0];
+  }
+
+  /* ═══ مبلغ بالعربي ═══ */
+  function priceFmt(n){
+    if(typeof money === "function") return money(n);
+    return String(Math.round(Number(n) || 0)) + " ج";
+  }
+
+  /* ═══ البحث عن المنتج ═══ */
   function findProduct(){
     var pool = (typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length) ? ALL_PRODUCTS
-             : (typeof PRODUCTS !== "undefined") ? PRODUCTS : [];
-    var p = pool.find(function(x){ return String(x.id) === String(LP_CONFIG.productId); });
+             : (typeof PRODUCTS !== "undefined" && PRODUCTS.length) ? PRODUCTS
+             : (window.ALL_PRODUCTS || window.PRODUCTS || []);
+    var p = null;
+    if(pool && pool.length){
+      p = pool.find(function(x){ return String(x.id) === String(LP_CONFIG.productId); });
+    }
     if(p){
-      // override price if set
       if(LP_CONFIG.priceOverride != null) p.price = LP_CONFIG.priceOverride;
       if(LP_CONFIG.oldPriceOverride != null) p.old = LP_CONFIG.oldPriceOverride;
       return p;
@@ -534,67 +603,58 @@ var LP_CONFIG = {
       name: "شمعة المساج المانديلا",
       nameEn: "Mandala Massage Candle",
       price: LP_CONFIG.priceOverride || 375,
-      old: LP_CONFIG.oldPriceOverride || 0,
-      img: LP_CONFIG.heroImage,
+      old: LP_CONFIG.oldPriceOverride || 475,
+      img: LP_CONFIG.heroPoster,
       cat: "massage"
     };
   }
 
-  /* ═══ build testimonials ═══ */
+  /* ═══ بناء صور آراء العملاء ═══ */
   function buildTestimonials(){
     var wrap = document.getElementById("lpTestimonials");
     if(!wrap) return;
     wrap.innerHTML = "";
     (LP_CONFIG.testimonials || []).forEach(function(t){
       var card = document.createElement("div");
-      card.className = "lp-social-card lp-reveal on";
+      card.className = "lp-social-card";
       card.innerHTML =
-        '<img src="' + t.img + '" alt="رأي عميل" loading="lazy" onerror="this.src=\'' + (LP_CONFIG.heroImage) + '\'">' +
+        '<img src="' + t.img + '" alt="رأي عميل — ' + t.name + '" loading="lazy" onerror="this.style.opacity=0.15">' +
         '<div class="meta"><b>' + t.name + '</b><small>' + t.quote + '</small></div>';
       wrap.appendChild(card);
     });
   }
 
-  /* ═══ apply product data to page ═══ */
+  /* ═══ تطبيق بيانات المنتج على الصفحة ═══ */
   function applyProduct(){
     if(!LP_PRODUCT) return;
 
-    // Hero image
-    var heroImg = document.getElementById("lpHeroImg");
-    if(heroImg && LP_CONFIG.heroImage) heroImg.src = LP_CONFIG.heroImage;
-
-    var solImg = document.getElementById("lpSolImg");
-    if(solImg && LP_CONFIG.solutionImage) solImg.src = LP_CONFIG.solutionImage;
-
-    // Price in offer section
+    // أسعار
     var priceNow = document.getElementById("lpOfferPrice");
-    if(priceNow) priceNow.textContent = money(LP_PRODUCT.price) + " ج";
+    if(priceNow) priceNow.textContent = priceFmt(LP_PRODUCT.price);
 
     var priceOld = document.getElementById("lpOfferOld");
     if(priceOld){
       if(LP_PRODUCT.old && LP_PRODUCT.old > LP_PRODUCT.price){
-        priceOld.textContent = money(LP_PRODUCT.old) + " ج";
+        priceOld.textContent = priceFmt(LP_PRODUCT.old);
+        priceOld.style.display = "";
       } else {
         priceOld.style.display = "none";
       }
     }
 
-    // Sticky bar
+    // Sticky
     var stickyName = document.getElementById("lpStickyName");
     if(stickyName) stickyName.textContent = LP_PRODUCT.name;
-
     var stickyPrice = document.getElementById("lpStickyPrice");
-    if(stickyPrice) stickyPrice.textContent = money(LP_PRODUCT.price) + " ج — دفع آمن 100%";
+    if(stickyPrice) stickyPrice.textContent = priceFmt(LP_PRODUCT.price) + " — دفع آمن 100%";
 
     // Modal preview
     var modalImg = document.getElementById("lpModalImg");
-    if(modalImg) modalImg.src = LP_PRODUCT.img || LP_CONFIG.heroImage;
-
+    if(modalImg) modalImg.src = LP_PRODUCT.img || LP_CONFIG.heroPoster;
     var modalName = document.getElementById("lpModalName");
     if(modalName) modalName.textContent = LP_PRODUCT.name;
-
     var modalPrice = document.getElementById("lpModalPrice");
-    if(modalPrice) modalPrice.textContent = money(LP_PRODUCT.price) + " ج";
+    if(modalPrice) modalPrice.textContent = priceFmt(LP_PRODUCT.price);
 
     var offerTitle = document.getElementById("lpOfferTitle");
     if(offerTitle) offerTitle.textContent = LP_PRODUCT.name;
@@ -604,23 +664,20 @@ var LP_CONFIG = {
     LP_MAX_STOCK = (Number.isFinite(stockNum) && stockNum > 0) ? Math.floor(stockNum) : 99;
   }
 
-  /* ═══ build scent select ═══ */
+  /* ═══ بناء قائمة العطور (23) ═══ */
   function buildScentOptions(){
     var sel = document.getElementById("lpScentSelect");
     if(!sel) return;
-    var scents = (typeof VELA_SCENTS !== "undefined") ? VELA_SCENTS : [
-      ["فانيلا","Vanilla"],["لافندر","Lavender"],["ياسمين","Jasmine"],["كوكونات","Coconut"]
-    ];
     sel.innerHTML = '<option value="">اختر العطر...</option>';
-    scents.forEach(function(s){
+    LP_SCENTS.forEach(function(s){
       var opt = document.createElement("option");
       opt.value = s[0];
-      opt.textContent = (typeof velaScentTr === "function") ? velaScentTr(s[0]) : s[0];
+      opt.textContent = scentTr(s[0]);
       sel.appendChild(opt);
     });
   }
 
-  /* ═══ modal ═══ */
+  /* ═══ Modal ═══ */
   window.lpOpenModal = function(){
     var ov = document.getElementById("lpModalOv");
     if(!ov) return;
@@ -650,7 +707,7 @@ var LP_CONFIG = {
     if(p) p.disabled = LP_QTY >= LP_MAX_STOCK;
   }
 
-  /* ═══ add to cart (main) ═══ */
+  /* ═══ إضافة للسلة ═══ */
   function lpAddToCart(scent, qty){
     if(!LP_PRODUCT) LP_PRODUCT = findProduct();
 
@@ -663,7 +720,6 @@ var LP_CONFIG = {
       console.warn("⚠️ addToCart failed:", e);
     }
 
-    // verify
     var cart = [];
     try {
       if(typeof getCart === "function") cart = getCart();
@@ -674,7 +730,6 @@ var LP_CONFIG = {
       return String(it.id) === String(LP_PRODUCT.id) && String(it.scent || "") === String(scent);
     });
 
-    // Meta Pixel
     if(typeof fbq === "function"){
       fbq("track", "AddToCart", {
         content_ids: [LP_PRODUCT.id],
@@ -688,28 +743,27 @@ var LP_CONFIG = {
     return wasAdded || added !== false;
   }
 
-  /* ═══ init ═══ */
+  /* ═══ Init ═══ */
   function init(){
     LP_PRODUCT = findProduct();
     applyProduct();
     buildScentOptions();
     buildTestimonials();
 
-    // Scent select change
-    var sel = document.getElementById("lpScentSelect");
-    if(sel) sel.addEventListener("change", function(){});
-
-    // Qty buttons
-    document.getElementById("lpQtyMinus").addEventListener("click", function(){
+    // Qty
+    var minus = document.getElementById("lpQtyMinus");
+    var plus = document.getElementById("lpQtyPlus");
+    if(minus) minus.addEventListener("click", function(){
       if(LP_QTY > 1){ LP_QTY--; updateQtyUI(); }
     });
-    document.getElementById("lpQtyPlus").addEventListener("click", function(){
+    if(plus) plus.addEventListener("click", function(){
       if(LP_QTY < LP_MAX_STOCK){ LP_QTY++; updateQtyUI(); }
       else if(typeof toast === "function") toast("⚠️ المتاح " + LP_MAX_STOCK + " قطعة فقط");
     });
 
-    // Add to cart from modal
-    document.getElementById("lpModalAdd").addEventListener("click", function(){
+    // Add from modal
+    var addBtn = document.getElementById("lpModalAdd");
+    if(addBtn) addBtn.addEventListener("click", function(){
       var sel = document.getElementById("lpScentSelect");
       var scent = sel ? sel.value : "";
       if(!scent){
@@ -731,7 +785,6 @@ var LP_CONFIG = {
           lpCloseModal();
           btn.disabled = false;
           btn.textContent = "🛍️ أضف للسلة — دفع آمن 100%";
-          // افتح السلة عشان يشوف الإضافة
           try {
             if(typeof fillCartForm === "function") fillCartForm();
             if(typeof renderCart === "function") renderCart();
@@ -745,7 +798,7 @@ var LP_CONFIG = {
       }
     });
 
-    // Close modal on overlay click
+    // Close on overlay
     var ov = document.getElementById("lpModalOv");
     if(ov){
       ov.addEventListener("click", function(e){
@@ -797,13 +850,15 @@ var LP_CONFIG = {
 
     // Sticky CTA
     var sticky = document.getElementById("lpStickyCta");
-    var lastY = 0;
-    window.addEventListener("scroll", function(){
-      var y = window.scrollY;
-      if(y > 500 && y > lastY) sticky.classList.add("show");
-      else if(y < 400 || y < lastY - 30) sticky.classList.remove("show");
-      lastY = y;
-    }, { passive: true });
+    if(sticky){
+      var lastY = 0;
+      window.addEventListener("scroll", function(){
+        var y = window.scrollY;
+        if(y > 500 && y > lastY) sticky.classList.add("show");
+        else if(y < 400 || y < lastY - 30) sticky.classList.remove("show");
+        lastY = y;
+      }, { passive: true });
+    }
 
     // Meta Pixel — ViewContent
     if(typeof fbq === "function"){
@@ -817,7 +872,6 @@ var LP_CONFIG = {
     }
   }
 
-  // Run after DOM + data.js are ready
   if(document.readyState === "loading"){
     document.addEventListener("DOMContentLoaded", init);
   } else {
