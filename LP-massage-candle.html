@@ -48,6 +48,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-trust-mini .ic{font-size:.85rem}
 @media(max-width:640px){.lp-trust-mini{display:none}}
 
+/* ✅ زر CTA موحد — أحمر في كل مكان */
 .lp-cta{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin-inline:auto;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-weight:900;font-size:1.05rem;padding:1rem 2rem;border-radius:999px;box-shadow:0 12px 30px -8px rgba(231,76,60,.6);transition:.3s;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
 .lp-cta:hover{transform:translateY(-2px);box-shadow:0 16px 40px -8px rgba(231,76,60,.75)}
 .lp-cta:active{transform:scale(.97)}
@@ -84,6 +85,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 @keyframes offerGlow{0%,100%{box-shadow:0 24px 70px -22px rgba(231,76,60,.4),0 0 0 8px rgba(255,255,255,.7),0 0 0 12px rgba(217,171,95,.15);transform:scale(1)}50%{box-shadow:0 30px 85px -20px rgba(231,76,60,.55),0 0 0 8px rgba(255,247,224,1),0 0 0 16px rgba(217,171,95,.35);transform:scale(1.008)}}
 .lp-offer-box h2{font-family:var(--fd);font-size:clamp(1.4rem,3.8vw,2rem);margin:.4rem 0 .9rem;color:var(--ink)}
 
+/* ✅ Countdown Timer */
 .lp-countdown{display:inline-flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,#fff4e0,#ffe9c4);border:2px solid rgba(231,76,60,.35);border-radius:14px;padding:.55rem 1rem;margin:0 0 .9rem;box-shadow:0 6px 18px -6px rgba(231,76,60,.3);animation:countdownPulse 2s ease-in-out infinite}
 @keyframes countdownPulse{0%,100%{box-shadow:0 6px 18px -6px rgba(231,76,60,.3)}50%{box-shadow:0 10px 24px -6px rgba(231,76,60,.5)}}
 .lp-countdown .cd-lbl{font-size:.75rem;font-weight:800;color:#c0392b;white-space:nowrap}
@@ -168,6 +170,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-cross-btn{margin-top:auto;width:100%;padding:.7rem;border-radius:99px;border:none;background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:800;font-size:.82rem;cursor:pointer;transition:.25s;font-family:inherit}
 .lp-cross-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px -6px rgba(217,171,95,.5)}
 .lp-cross-btn:active{transform:scale(.96)}
+.lp-cross-loading{grid-column:1/-1;text-align:center;padding:2rem;color:#8a7a64}
 
 .lp-faq{padding:3.5rem 0}
 .lp-faq h2{font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);text-align:center;margin-bottom:2rem}
@@ -610,9 +613,9 @@ var LP_CONFIG = {
   priceOverride: 375,
   oldPriceOverride: 475,
 
-    /* ✅ ═══ Cross-Sell: حدد IDs المنتجات من Firebase Console ═══
+  /* ✅ ═══ Cross-Sell: حدد IDs المنتجات من Firebase Console ═══
      - حط IDs حقيقية من الأدمن (مثال: "1", "5", "9")
-     - لو سيبتها فاضية [] → هيختار 3 منتجات تلقائيًا
+     - لو سيبتها فاضية → هيختار 3 منتجات تلقائيًا
      - أي ID غلط → الكود بتجاهله ويكمل بالباقي
      - ⚠️ متحطش ID المنتج الحالي "12" */
   crossSellIds: [
@@ -620,7 +623,7 @@ var LP_CONFIG = {
     "5",   // ← ID المنتج التاني
     "9"    // ← ID المنتج التالت
   ],
-  
+
   testimonials: [
     { img: "testimonials/rev1.jpg",  quote: "⭐ الشمعة دي غيرت روتيني المسائي تمامًا" },
     { img: "testimonials/rev2.jpg",  quote: "⭐ ريحتها تحفة وبترطب بشرتي" },
@@ -720,19 +723,19 @@ var LP_SCENTS = [
     });
   }
 
-  /* ✅ Cross-sell — بياخد من الأدمن بعد التحميل + بيسمع التحديثات */
+  /* ✅ Cross-sell — نسخة محسّنة: بتستخدم crossSellIds وبتستنى التحميل */
   function buildCrossSell(){
     var wrap = document.getElementById("lpCrossGrid");
     if(!wrap) return;
 
     var pool = getPool();
 
-    /* ⚠️ لو لسه محمّلتش — استنى وأعد المحاولة */
+    /* ⚠️ لو المنتجات لسه محمّلتش — استنى وأعد المحاولة */
     if(!pool.length){
       if(!_crossSellRendered){
-        wrap.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#8a7a64;">⏳ جاري تحميل المنتجات...</div>';
+        wrap.innerHTML = '<div class="lp-cross-loading">⏳ جاري تحميل المنتجات...</div>';
       }
-      setTimeout(buildCrossSell, 700);
+      setTimeout(buildCrossSell, 500);
       return;
     }
 
@@ -761,7 +764,7 @@ var LP_SCENTS = [
       });
     }
 
-    /* 🅱️ الطريقة 2: fallback تلقائي — نفس التصنيف + مفعّل + فيه صورة */
+    /* 🅱️ الطريقة 2: fallback — نفس التصنيف + مفعّل + فيه صورة */
     if(!picks.length){
       picks = pool.filter(function(p){
         if(!p || !p.id) return false;
@@ -819,7 +822,6 @@ var LP_SCENTS = [
 
       var btn = card.querySelector(".lp-cross-btn");
       btn.addEventListener("click", function(){
-        /* ✅ حمّل بيانات المنتج كاملة */
         LP_PRODUCT = {
           id: p.id,
           name: p.name || "",
