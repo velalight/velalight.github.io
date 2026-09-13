@@ -2903,13 +2903,13 @@ function renderCart(){
       </div>
     `;
     w.appendChild(suggestDiv);
-    
-    setTimeout(() => {
+        setTimeout(() => {
       const btn = document.getElementById('addSuggestBtn');
       if(btn) {
-        btn.addEventListener('click', () => {
-          // ✅ لو المنتج عنده scent صريح → ضيف مباشرة
-          // لو لأ → افتح quick-add
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          
           const hasScent = suggestedProduct.scent && String(suggestedProduct.scent).trim();
           if(hasScent){
             const added = addToCart(suggestedProduct, {scent: suggestedProduct.scent, qty: 1});
@@ -2918,10 +2918,53 @@ function renderCart(){
               btn.innerHTML = `<span class="ic">✓</span><span class="lbl">${t("cart_luxe_cross_added") || "تمت الإضافة"}</span>`;
               setTimeout(()=>{ renderCart(); cartBadge(); }, 700);
             }
+            return;
+          }
+          
+          // ✅ تحقق إن مودال العطر موجود فعلًا في الصفحة دي
+          const scentModal = document.getElementById("scentOv");
+          const scentScents = document.getElementById("scentModalScents");
+          
+          if(scentModal && scentScents){
+            // المودال موجود (زي الصفحة الرئيسية) — افتحه عادي
+            openQuickAdd(suggestedProduct);
           } else {
-            // افتح مودال اختيار العطر
-            closeDrawers();
-            setTimeout(() => openQuickAdd(suggestedProduct), 260);
+            // 🚨 المودال مش موجود (زي product.html) — اعرض select inline
+            let currentScent = "";
+            btn.style.display = "none";
+            
+            const picker = document.createElement("div");
+            picker.style.cssText = "display:flex; gap:6px; margin-top:6px;";
+            picker.innerHTML = `
+              <select class="vl-cross-scent-inline" style="flex:1; padding:6px 10px; border-radius:8px; border:1.5px solid rgba(212,175,55,.4); background:#fff; font-size:.76rem; font-family:inherit; color:#3d2f1f; outline:none; cursor:pointer;">
+                <option value="">${LANG==="en"?"Choose a scent":"اختر العطر"}...</option>
+                ${VELA_SCENTS.map(s => `<option value="${s[0]}">${velaScentTr(s[0])}</option>`).join("")}
+              </select>
+              <button type="button" class="vl-cross-scent-confirm" style="padding:6px 14px; border-radius:8px; border:none; background:linear-gradient(135deg,#d4af37,#f9d877); color:#3d2f1f; font-weight:800; font-size:.76rem; cursor:pointer; font-family:inherit;">${LANG==="en"?"Add":"إضافة"}</button>
+            `;
+            btn.parentNode.insertBefore(picker, btn);
+            
+            const selectEl = picker.querySelector(".vl-cross-scent-inline");
+            const confirmEl = picker.querySelector(".vl-cross-scent-confirm");
+            
+            selectEl.addEventListener("change", () => { currentScent = selectEl.value; });
+            
+            confirmEl.addEventListener("click", (e2) => {
+              e2.preventDefault();
+              e2.stopPropagation();
+              if(!currentScent){
+                toast(LANG==="en"?"⚠️ Choose a scent first":"⚠️ اختر العطر أولاً");
+                return;
+              }
+              const added = addToCart(suggestedProduct, {scent: currentScent, qty: 1});
+              if(added !== false){
+                picker.remove();
+                btn.style.display = "";
+                btn.classList.add('vl-added');
+                btn.innerHTML = `<span class="ic">✓</span><span class="lbl">${t("cart_luxe_cross_added") || "تمت الإضافة"}</span>`;
+                setTimeout(()=>{ renderCart(); cartBadge(); }, 700);
+              }
+            });
           }
         });
       }
@@ -4432,22 +4475,46 @@ window.updateReviewsCount = function() {
 if (typeof window.addToCart === "function") {
   const _originalAddToCart = window.addToCart;
   window.addToCart = function(product, options) {
+    if(!product || !product.id){
+      return _originalAddToCart(product, options);
+    }
+    
+    const newQty = Number(options?.qty || 1);
+    const newScent = String(options?.scent || "");
+    
+    // ✅ قبل الإضافة: شيل أي item مطابق (نفس المنتج + نفس العطر)
+    // كده الكمية بتتستبدل بآخر قيمة في العداد، مش بتتراكم
+    try {
+      const currentCart = getCart();
+      const matchingIdx = currentCart.findIndex(it =>
+        it.id === product.id &&
+        String(it.scent || "") === newScent
+      );
+      if(matchingIdx !== -1){
+        currentCart.splice(matchingIdx, 1);
+        saveCart(currentCart);
+      }
+    } catch(e){
+      console.warn("⚠️ Replace-before-add failed:", e);
+    }
+    
     const result = _originalAddToCart(product, options);
+    
     if (result && typeof fbq === "function") {
       fbq("track", "AddToCart", {
         content_ids: [product.id],
         content_name: product.name,
         content_category: product.cat,
-        value: Number(product.price) * Number(options?.qty || 1),
+        value: Number(product.price) * newQty,
         currency: "EGP"
       });
     }
-    // ✅ touch cart timestamp
+    
     touchCartTimestamp();
     return result;
   };
 }
-
+  
 /* ═══ EXPOSE GLOBALLY ═══ */
 window.renderProductsPage = renderProductsPage;
 window.renderReviewsPage = renderReviewsPage;
