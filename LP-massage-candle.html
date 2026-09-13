@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>شمعة المساج المانديلا — استرخاء وعناية بالبشرة | VelaLight</title>
-<meta name="description" content="شمعة المساج المانديلا بشمع الصويا الطبيعي وزيوت الأرجان والجوجوبا. ترطيب عميق واسترخاء فوري. دفع آمن 100%.">
+<title>شمعة المساج المانديلا | تجربة سبا دافئة في بيتك — VelaLight</title>
+<meta name="description" content="شمعة المساج المانديلا من VelaLight: تُشعل كشمعة ثم تتحول إلى زيت مساج دافئ بتركيبة غنية بالزيوت والزبدة. اطلبها الآن بسعر 375 ج بدل 475 ج مع تغليف هدايا مجاني.">
 
 <link rel="stylesheet" href="style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -189,7 +189,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-sticky-btn{flex-shrink:0;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-weight:900;font-size:.88rem;padding:.7rem 1.4rem;border-radius:99px;box-shadow:0 4px 14px -4px rgba(231,76,60,.5);transition:.25s;white-space:nowrap}
 .lp-sticky-btn:active{transform:scale(.95)}
 
-.lp-reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.lp-reveal{opacity:1;transform:none;transition:opacity .7s ease,transform .7s ease}
 .lp-reveal.on{opacity:1;transform:none}
 
 .lp-footer{padding:1.5rem 0;text-align:center;font-size:.75rem;color:var(--dim);border-top:1px solid var(--line)}
@@ -250,7 +250,78 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   .lp-countdown .cd-lbl{font-size:.68rem}
   .lp-countdown .cd-unit{font-size:.85rem;min-width:26px;padding:.2rem .4rem}
 }
+
+/* ═══════ Conversion Upgrade v2 ═══════ */
+.lp-kicker{display:block;text-align:center;font-size:.72rem;font-weight:900;letter-spacing:.08em;color:var(--gold2);margin-bottom:.45rem}
+.lp-micro-proof{display:flex;justify-content:center;align-items:center;gap:.45rem;flex-wrap:wrap;margin:.8rem auto 0;color:var(--mut);font-size:.75rem;font-weight:700}
+.lp-micro-proof .stars{color:var(--gold);letter-spacing:1px}
+.lp-hero .lp-cta{font-size:1.08rem}
+.lp-hero-media::after{content:'شوف التحوّل: من شمعة إلى زيت مساج دافئ';position:absolute;bottom:12px;right:12px;left:12px;background:rgba(20,15,10,.78);color:#fff;padding:.55rem .8rem;border-radius:12px;font-size:.72rem;font-weight:800;text-align:center;backdrop-filter:blur(7px);z-index:3}
+.lp-offer-box{animation:none}
+.lp-offer::after{animation:none}
+.lp-price-now{animation:none}
+.lp-price-save{animation:none}
+.lp-urgency{display:flex;align-items:center;justify-content:center;gap:.45rem;margin:-.15rem auto 1rem;color:#9f2e23;font-size:.78rem;font-weight:900}
+.lp-urgency .dot{width:8px;height:8px;border-radius:50%;background:#e74c3c;box-shadow:0 0 0 5px rgba(231,76,60,.12);animation:urgencyDot 1.5s infinite}
+@keyframes urgencyDot{50%{transform:scale(.72);opacity:.65}}
+.lp-value{padding:3.5rem 0;background:linear-gradient(180deg,#fff 0%,var(--bg) 100%)}
+.lp-section-title{text-align:center;font-family:var(--fd);font-size:clamp(1.45rem,3.8vw,2.05rem);line-height:1.35;margin-bottom:.55rem}
+.lp-section-sub{text-align:center;color:var(--mut);max-width:620px;margin:0 auto 2rem;font-size:.9rem}
+.lp-steps{display:grid;grid-template-columns:1fr;gap:.85rem;max-width:900px;margin:0 auto}
+@media(min-width:700px){.lp-steps{grid-template-columns:repeat(4,1fr)}}
+.lp-step{background:#fff;border:1px solid var(--line);border-radius:18px;padding:1.25rem 1rem;text-align:center;position:relative;box-shadow:0 8px 24px -16px rgba(100,70,30,.28)}
+.lp-step .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;margin:0 auto .7rem;background:var(--ink);color:#fff;font-weight:900;font-size:.85rem}
+.lp-step .step-ic{font-size:1.8rem;display:block;margin-bottom:.35rem}
+.lp-step b{display:block;font-size:.95rem;margin-bottom:.3rem}
+.lp-step p{font-size:.78rem;color:var(--mut);line-height:1.65}
+.lp-step:not(:last-child)::after{content:'←';position:absolute;left:-.6rem;top:50%;transform:translateY(-50%);font-size:1.4rem;color:var(--gold2);font-weight:900}
+@media(max-width:699px){.lp-step:not(:last-child)::after{content:'↓';left:50%;top:auto;bottom:-1.05rem;transform:translateX(-50%);z-index:2}}
+.lp-compare{padding:3.5rem 0;background:var(--panel2)}
+.lp-compare-grid{display:grid;grid-template-columns:1fr;gap:1rem;max-width:820px;margin:0 auto}
+@media(min-width:680px){.lp-compare-grid{grid-template-columns:1fr 1.08fr}}
+.lp-compare-card{border-radius:20px;padding:1.5rem;border:1px solid var(--line);background:#fff}
+.lp-compare-card.featured{border:2px solid rgba(217,171,95,.55);box-shadow:0 18px 45px -20px rgba(184,134,63,.35);background:linear-gradient(145deg,#fffdf8,#fff)}
+.lp-compare-card h3{font-family:var(--fd);font-size:1.15rem;text-align:center;margin-bottom:1rem}
+.lp-compare-list{list-style:none;display:flex;flex-direction:column;gap:.65rem}
+.lp-compare-list li{display:flex;gap:.5rem;align-items:flex-start;font-size:.82rem;color:var(--mut)}
+.lp-compare-card:not(.featured) .check{color:#8d8174}
+.lp-compare-card.featured .check{color:#1e8449;font-weight:900}
+.lp-gift{padding:3.5rem 0;background:linear-gradient(135deg,#fff8ed,#f8ead7)}
+.lp-gift-box{max-width:820px;margin:0 auto;background:#fff;border:1px solid rgba(217,171,95,.35);border-radius:24px;padding:2rem 1.4rem;text-align:center;box-shadow:0 18px 55px -24px rgba(100,70,30,.22)}
+.lp-gift-icon{font-size:2.5rem;display:block;margin-bottom:.4rem}
+.lp-gift-box h2{font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:.55rem}
+.lp-gift-box p{color:var(--mut);max-width:620px;margin:0 auto 1.3rem;font-size:.9rem}
+.lp-gift-occasions{display:flex;justify-content:center;gap:.55rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.lp-gift-occasions span{background:#faf6f0;border:1px solid var(--line);border-radius:99px;padding:.42rem .8rem;font-size:.75rem;font-weight:800;color:var(--mut)}
+.lp-cta-secondary{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(184,134,63,.45);color:var(--gold2);font-weight:900;border-radius:99px;padding:.7rem 1.1rem;font-size:.82rem}
+.lp-proof-strip{padding:1.2rem 0;background:#1a1512;color:#fff}
+.lp-proof-strip-inner{display:flex;justify-content:center;gap:1.3rem;flex-wrap:wrap;font-size:.75rem;font-weight:800}
+.lp-proof-strip span{display:flex;align-items:center;gap:.35rem}
+.lp-proof-strip .stars{color:#ffd477;letter-spacing:1px}
+.lp-modal-benefit{font-size:.74rem;color:var(--mut);background:#fff8ed;border:1px solid rgba(217,171,95,.25);border-radius:11px;padding:.6rem .7rem;margin-bottom:1rem;text-align:center;font-weight:700}
+@media(max-width:480px){
+  .lp-hero-media::after{font-size:.67rem;bottom:9px;right:9px;left:9px}
+  .lp-proof-strip-inner{gap:.75rem;font-size:.68rem}
+  .lp-compare-card{padding:1.2rem}
+}
+
 </style>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Product",
+  "name":"شمعة المساج المانديلا",
+  "brand":{"@type":"Brand","name":"VelaLight"},
+  "description":"شمعة مساج تتحول إلى زيت مساج دافئ بتركيبة غنية بالزيوت والزبدة.",
+  "offers":{
+    "@type":"Offer",
+    "priceCurrency":"EGP",
+    "price":"375",
+    "availability":"https://schema.org/InStock"
+  }
+}
+</script>
 </head>
 <body>
 
@@ -278,25 +349,26 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
     <div class="lp-reveal">
       <div class="lp-hero-badges-row">
         <span class="lp-hero-badge">🔥 الأكثر مبيعاً</span>
-        <span class="lp-hero-badge-red">🎁 عرض خاص لعملاء هذه الصفحة</span>
-        <span class="lp-hero-badge-discount">🔥 خصم 100 ج — ساري لفترة محدودة</span>
+        <span class="lp-hero-badge-red">🎁 عرض خاص لزوار الصفحة</span>
+        <span class="lp-hero-badge-discount">وفر 100 ج + تغليف هدايا مجاني</span>
       </div>
       <h1>
-        شمعة المساج المانديلا<br>
-        <span class="hl">استرخاء وعناية بالبشرة</span><br>
-        في شمعة واحدة
+        تشعلها كشمعة...<br>
+        ثم تتحول إلى <span class="hl">زيت مساج دافئ</span><br>
+        في بيتك.
       </h1>
       <div class="lp-hero-stars">
         <span class="stars">★★★★★</span>
         <span>4.9 من 5 — أكثر من 500 عميل سعيد</span>
       </div>
       <p class="lead">
-        عند تدفئتها، تتحول تركيبتها الغنية بالزيوت الطبيعية والزبدة إلى <b>زيت مساج دافئ وناعم</b>، يمنح البشرة ترطيبًا عميقًا وملمسًا أكثر نعومة، مع عطر فاخر يدوم طويلًا.
+        <b>شمعة المساج المانديلا</b> تجمع بين أجواء الشمعة الفاخرة وتجربة المساج الدافئة. عند ذوبانها تتحول إلى زيت مساج ناعم بتركيبة غنية بالزيوت والزبدة، لتصنع لنفسك أو لمن تحب لحظة استرخاء مختلفة.
       </p>
       <button class="lp-cta" onclick="lpOpenModal()">
-        🛍️ اطلب الآن
+        🛍️ أريد تجربة شمعة المساج — 375 ج
       </button>
-      <p class="lp-cta-sub">✅ دفع آمن 100% — توصيل 3-7 أيام عمل</p>
+      <p class="lp-cta-sub">🔒 دفع آمن — شحن لكل مصر — توصيل 3–7 أيام عمل</p>
+      <div class="lp-micro-proof"><span class="stars">★★★★★</span><span>تجربة مختلفة عن أي شمعة عادية</span></div>
     </div>
     <div class="lp-hero-media lp-reveal">
       <span class="floating-badge">✨ شمع صويا طبيعي</span>
@@ -317,16 +389,6 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   <div class="wrap">
     <div class="lp-offer-box lp-reveal on">
       <h2 id="lpOfferTitle">شمعة المساج المانديلا</h2>
-
-      <div class="lp-countdown">
-        <span class="cd-lbl">⏳ العرض ينتهي خلال</span>
-        <div class="cd-timer">
-          <span class="cd-unit" id="cdHours">23</span>
-          <span class="cd-sep">:</span>
-          <span class="cd-unit" id="cdMins">59</span>
-          <span class="cd-sep">:</span>
-          <span class="cd-unit" id="cdSecs">59</span>
-        </div>
       </div>
 
       <div class="lp-price-row">
@@ -345,9 +407,9 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       </ul>
 
       <button class="lp-cta" onclick="lpOpenModal()" style="font-size:1.15rem;padding:1.15rem 2rem">
-        🛍️ اطلب الآن — وفّر 100 ج
+        🛍️ احجزيها الآن — 375 ج
       </button>
-      <p class="lp-cta-sub" style="color:#c0392b;font-weight:700">⏳ العرض ساري لفترة محدودة</p>
+      <p class="lp-cta-sub" style="color:#9f2e23;font-weight:800">🎁 السعر الخاص + تغليف الهدايا المجاني ضمن عرض الصفحة</p>
 
       <div class="lp-offer-trust">
         <span><span class="ic">🔒</span> دفع آمن 100%</span>
@@ -363,26 +425,64 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 3. PROBLEM ═══ -->
+<!-- ═══ PROOF STRIP ═══ -->
+<section class="lp-proof-strip">
+  <div class="wrap lp-proof-strip-inner">
+    <span><span class="stars">★★★★★</span> 4.9/5</span>
+    <span>👥 أكثر من 500 عميل سعيد</span>
+    <span>🚚 شحن لكل مصر</span>
+    <span>🎁 تغليف هدايا مجاني</span>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="lp-value">
+  <div class="wrap">
+    <span class="lp-kicker">مش مجرد شمعة</span>
+    <h2 class="lp-section-title">من شمعة... إلى جلسة مساج دافئة</h2>
+    <p class="lp-section-sub">الفكرة بسيطة. أشعليها، اتركيها تذوب بالطريقة المناسبة، ثم استمتعي بالزيت الدافئ. شوفي الخطوات:</p>
+    <div class="lp-steps">
+      <div class="lp-step lp-reveal">
+        <div class="num">1</div><span class="step-ic">🕯️</span>
+        <b>أشعليها</b><p>استمتعي أولًا بإضاءة الشمعة ورائحتها الفاخرة.</p>
+      </div>
+      <div class="lp-step lp-reveal">
+        <div class="num">2</div><span class="step-ic">🔥</span>
+        <b>اتركيها تذوب</b><p>يذوب الجزء المناسب من التركيبة لتصبح جاهزة للاستخدام كزيت دافئ.</p>
+      </div>
+      <div class="lp-step lp-reveal">
+        <div class="num">3</div><span class="step-ic">🤲</span>
+        <b>اختبري الحرارة</b><p>اختبري درجة الحرارة على جزء صغير من الجلد قبل الاستخدام.</p>
+      </div>
+      <div class="lp-step lp-reveal">
+        <div class="num">4</div><span class="step-ic">😌</span>
+        <b>دلّلي نفسك</b><p>استخدمي الزيت للمساج واستمتعي بإحساس دافئ وناعم وعطر فاخر.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 4. DESIRE / LIFESTYLE ═══ -->
 <section class="lp-problem">
   <div class="wrap">
-    <h2 class="lp-reveal">لو يومك طويل وشاق، أكيد بتحس بالآتي:</h2>
-    <p class="sub lp-reveal">مش محتاج تتحمل ده كل يوم. فيه حل بسيط وفعّال.</p>
+    <span class="lp-kicker">اللحظة اللي تستحقها</span>
+    <h2 class="lp-reveal">بعد يوم طويل... محتاجة تفصلي شوية؟</h2>
+    <p class="sub lp-reveal">مش لازم تستني إجازة أو تروحي سبا. اصنعي لنفسك طقس صغير في البيت، أو شاركيه مع شخص بتحبيه.</p>
     <div class="lp-pain-grid">
       <div class="lp-pain lp-reveal">
-        <span class="ic">😣</span>
-        <b>عضلات مشدودة</b>
-        <p>بعد يوم كامل واقف أو قاعد، رقبتك وظهرك بيفضلوا مشدودين ومش مرتاحين.</p>
+        <span class="ic">🌙</span>
+        <b>وقت هدوء لنفسك</b>
+        <p>إضاءة هادئة، عطر فاخر وزيت دافئ في تجربة واحدة بعد يوم طويل.</p>
       </div>
       <div class="lp-pain lp-reveal">
-        <span class="ic">🥵</span>
-        <b>جفاف وتشقق</b>
-        <p>البشرة بتبقى جافة ومحتاجة ترطيب عميق، مش كريم عادي على السطح.</p>
+        <span class="ic">🤍</span>
+        <b>لحظة لشخص بتحبيه</b>
+        <p>حوّلي المساج العادي إلى تجربة أدفأ وأكثر خصوصية في البيت.</p>
       </div>
       <div class="lp-pain lp-reveal">
-        <span class="ic">😴</span>
-        <b>صعوبة استرخاء</b>
-        <p>قبل النوم، جسمك مش بيرتاح بسرعة، وبتفضل صاحي متوتر لفترة.</p>
+        <span class="ic">✨</span>
+        <b>شيء مختلف فعلًا</b>
+        <p>مش شمعة تتشاف وتتحط على الرف؛ دي شمعة لها استخدام ثانٍ بعد إشعالها.</p>
       </div>
     </div>
   </div>
@@ -398,7 +498,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
         <span class="hl">هي الحل؟</span>
       </h2>
       <p class="solution-lead">
-        لأنها مش شمعة عادية — دي <b>تجربة مختلفة</b> بتجمع بين الاسترخاء والعناية بالبشرة. عند اشتعالها وتدفئتها، بتتحول لزيت مساج دافئ وناعم، بيوصل للعضلات مباشرة ويرطبها من جوه.
+        لأنها مش شمعة عادية — دي <b>تجربة متعددة الحواس</b>. عند اشتعالها وتدفئتها تتحول تركيبتها إلى زيت مساج دافئ وناعم، مع زيوت وزبدة تمنح البشرة إحساسًا بالنعومة والترطيب.
       </p>
 
       <div class="lp-solution-media">
@@ -428,32 +528,35 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 5. RESULTS ═══ -->
-<section class="lp-results">
+<!-- ═══ 6. VALUE ═══ -->
+<section class="lp-compare">
   <div class="wrap">
-    <h2 class="lp-reveal">النتيجة اللي هتحس بيها</h2>
-    <p class="sub lp-reveal">دلّلي بشرتك، استرخي، واستمتعي بعطر يدوم وملمس ناعم يدوم معه الإحساس الجميل.</p>
-    <div class="lp-result-grid">
-      <div class="lp-result lp-reveal">
-        <span class="big">😌</span>
-        <b>استرخاء فوري</b>
-        <p>خلال 5-10 دقايق، هتحس بفرق واضح في عضلاتك وهدوء في أعصابك.</p>
+    <span class="lp-kicker">ليه دي مختلفة؟</span>
+    <h2 class="lp-section-title">مش مجرد شمعة معطّرة</h2>
+    <p class="lp-section-sub">القيمة هنا في التجربة كلها، مش في شكل المنتج فقط.</p>
+    <div class="lp-compare-grid">
+      <div class="lp-compare-card">
+        <h3>شمعة عادية</h3>
+        <ul class="lp-compare-list">
+          <li><span class="check">•</span><span>رائحة وإضاءة فقط</span></li>
+          <li><span class="check">•</span><span>تنتهي فائدتها عند إطفائها</span></li>
+          <li><span class="check">•</span><span>هدية تقليدية أكثر</span></li>
+        </ul>
       </div>
-      <div class="lp-result lp-reveal">
-        <span class="big">✨</span>
-        <b>بشرة ناعمة</b>
-        <p>بعد أول جلسة، بشرتك هتبقى ناعمة ومرطبة، والنتيجة بتتحسن مع الاستمرار.</p>
-      </div>
-      <div class="lp-result lp-reveal">
-        <span class="big">🌙</span>
-        <b>نوم أعمق</b>
-        <p>مع رايحة اللافندر أو الياسمين، هتنام أسرع وأعمق من الأول.</p>
+      <div class="lp-compare-card featured">
+        <h3>🕯️ VelaLight Massage Candle</h3>
+        <ul class="lp-compare-list">
+          <li><span class="check">✓</span><span><b>شمعة + زيت مساج دافئ</b> في منتج واحد</span></li>
+          <li><span class="check">✓</span><span>تركيبة غنية بالزيوت والزبدة</span></li>
+          <li><span class="check">✓</span><span>تجربة منزلية مختلفة وقابلة للمشاركة</span></li>
+          <li><span class="check">✓</span><span>مناسبة كهدية مع تغليف فاخر</span></li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ 6. FAQ ═══ -->
+<!-- ═══ 7. FAQ ═══ --><!-- ═══ 6. FAQ ═══ -->
 <section class="lp-faq">
   <div class="wrap">
     <h2 class="lp-reveal">عندك سؤال؟ جاوبناه لك</h2>
@@ -487,7 +590,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
           <span>ينفع استخدمها على البشرة مباشرة؟</span><span class="ic">+</span>
         </button>
         <div class="lp-faq-a"><div class="lp-faq-a-inner">
-          أيوه! شمع الصويا الطبيعي بيدوب في درجة حرارة منخفضة، فآمن على البشرة. اسيبها تدوب شوية وبعدين وزّعها على العضلات المتعبة.
+          مخصصة لتُستخدم كزيت مساج دافئ. اتركي الزيت يذوب، ثم اختبري حرارته على جزء صغير من الجلد قبل الاستخدام. لا تستخدمي الزيت إذا كان ساخنًا بشكل غير مريح، وتجنبي ملامسة اللهب مباشرة للجلد.
         </div></div>
       </div>
       <div class="lp-faq-item lp-reveal">
@@ -512,7 +615,22 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 8. FINAL CTA ═══ -->
+<!-- ═══ GIFT ═══ -->
+<section class="lp-gift">
+  <div class="wrap">
+    <div class="lp-gift-box lp-reveal">
+      <span class="lp-gift-icon">🎁</span>
+      <h2>ومين قال إن الهدية لازم تكون تقليدية؟</h2>
+      <p>لو بتدوري على هدية مختلفة، شمعة المساج المانديلا تجمع بين شكل فاخر وتجربة تُستخدم فعلًا. ومع عرض الصفحة، <b>تغليف الهدايا مجاني.</b></p>
+      <div class="lp-gift-occasions">
+        <span>❤️ ذكرى</span><span>🎂 عيد ميلاد</span><span>💍 Anniversary</span><span>🎀 مفاجأة بدون مناسبة</span>
+      </div>
+      <button class="lp-cta" onclick="lpOpenModal()">🎁 أطلبها كهدية — 375 ج</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 9. FINAL CTA ═══ -->
 <section class="lp-final-cta">
   <div class="wrap lp-reveal">
     <h2>جاهز تجرب إحساس السبا في بيتك؟</h2>
@@ -533,7 +651,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
       <b id="lpStickyName">شمعة المساج المانديلا</b>
       <small id="lpStickyPrice">375 ج — دفع آمن 100%</small>
     </div>
-    <button class="lp-sticky-btn" onclick="lpOpenModal()">اطلب الآن</button>
+    <button class="lp-sticky-btn" onclick="lpOpenModal()">اختاري العطر</button>
   </div>
 </div>
 
@@ -551,6 +669,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
         <div class="pr" id="lpModalPrice">375 ج</div>
       </div>
     </div>
+    <div class="lp-modal-benefit">🎁 375 ج بدل 475 ج + تغليف هدايا مجاني — اختاري عطرك والكمية فقط.</div>
     <label class="lp-modal-label" for="lpScentSelect">🌸 اختر العطر <span class="req">*</span></label>
     <select class="lp-modal-select" id="lpScentSelect" required aria-required="true">
       <option value="" disabled selected>— اختر العطر —</option>
@@ -682,38 +801,6 @@ var LP_SCENTS = [
     });
   }
 
-  function initCountdown(){
-    var KEY = "lp_offer_end_v1";
-    var endTime = 0;
-    try { endTime = Number(localStorage.getItem(KEY)) || 0; } catch(e){}
-    if(!endTime || endTime < Date.now()){
-      endTime = Date.now() + 24 * 60 * 60 * 1000;
-      try { localStorage.setItem(KEY, String(endTime)); } catch(e){}
-    }
-
-    var hEl = document.getElementById("cdHours");
-    var mEl = document.getElementById("cdMins");
-    var sEl = document.getElementById("cdSecs");
-    if(!hEl || !mEl || !sEl) return;
-
-    function tick(){
-      var diff = endTime - Date.now();
-      if(diff <= 0){
-        endTime = Date.now() + 24 * 60 * 60 * 1000;
-        try { localStorage.setItem(KEY, String(endTime)); } catch(e){}
-        diff = 24 * 60 * 60 * 1000;
-      }
-      var h = Math.floor(diff / 3600000);
-      var m = Math.floor((diff % 3600000) / 60000);
-      var s = Math.floor((diff % 60000) / 1000);
-      hEl.textContent = (h < 10 ? "0" : "") + h;
-      mEl.textContent = (m < 10 ? "0" : "") + m;
-      sEl.textContent = (s < 10 ? "0" : "") + s;
-      setTimeout(tick, 1000);
-    }
-    tick();
-  }
-
   function applyProduct(){
     if(!LP_PRODUCT) return;
 
@@ -768,7 +855,7 @@ var LP_SCENTS = [
     var hasScent = sel.value && String(sel.value).trim();
     if(hasScent){
       btn.disabled = false;
-      btn.textContent = "🛍️ أضف للسلة — دفع آمن 100%";
+      btn.textContent = "🛍️ أضف للسلة — 375 ج";
       sel.classList.remove("vl-empty");
     } else {
       btn.disabled = true;
@@ -870,7 +957,6 @@ var LP_SCENTS = [
     applyProduct();
     buildScentOptions();
     buildTestimonials();
-    initCountdown();
 
     var sel = document.getElementById("lpScentSelect");
     if(sel){
