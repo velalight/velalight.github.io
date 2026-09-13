@@ -5131,11 +5131,13 @@ var LP_SCENTS = [
         _lpAutoTimer = null;
       }
 
-      window.location.href =
-        "index.html?cart=1";
+      /* ✅ فتح السلة في تاب جديد — الـ LP يفضل مفتوح */
+      window.open(
+        "index.html?cart=1",
+        "_blank"
+      );
 
     };
-
 
   /* ✅ ═══════════════════════════════════════════════════════
      إخفاء بانل النجاح + متابعة التسوق
@@ -5223,7 +5225,7 @@ var LP_SCENTS = [
       },1000);
 
 
-    /* ✅ تحويل تلقائي بعد 5 ثواني */
+    /* ✅ فتح تاب جديد بعد 5 ثواني — مع fallback */
 
     _lpAutoTimer =
       setTimeout(function(){
@@ -5240,13 +5242,43 @@ var LP_SCENTS = [
           p.classList.contains("show")
         ){
 
-          window.location.href =
-            "index.html?cart=1";
+          /* نحاول نفتح تاب جديد */
+
+          var opened =
+            window.open(
+              "index.html?cart=1",
+              "_blank"
+            );
+
+          /* ⚠️ لو الـ popup اتحجب (متصفحات الموبايل)، نعرض رسالة */
+
+          if(!opened){
+
+            var timerEl =
+              document.getElementById(
+                "lpTimerCount"
+              );
+
+            if(
+              timerEl &&
+              timerEl.parentNode
+            ){
+
+              timerEl.parentNode.innerHTML =
+
+                '<span style="color:#c0392b;font-weight:800">' +
+
+                '👆 اضغطي على "إتمام الطلب الآن" للمتابعة' +
+
+                '</span>';
+
+            }
+
+          }
 
         }
 
       },5000);
-
   }
 
 
@@ -5886,7 +5918,7 @@ var LP_SCENTS = [
     );
 
 
-    /* ✅ زر السلة العائم — يوصل لصفحة السلة */
+    /* ✅ زر السلة العائم — يفتح في تاب جديد */
 
     var fab =
       document.getElementById(
@@ -5900,14 +5932,15 @@ var LP_SCENTS = [
         "click",
         function(){
 
-          window.location.href =
-            "index.html?cart=1";
+          window.open(
+            "index.html?cart=1",
+            "_blank"
+          );
 
         }
       );
 
     }
-
 
     /* ✅ زر "متابعة التسوق" في بانل النجاح */
 
