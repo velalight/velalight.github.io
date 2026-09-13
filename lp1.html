@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>شمعة المساج ريلاكس — دفا وترطيب فوري | VelaLight</title>
+<meta name="description" content="شمعة مساج فاخرة بشمع الصويا الطبيعي، بترطب جسمك وتدفي عضلاتك المتعبة. اطلب الآن وادفع عند الاستلام.">
+
+<!-- ✅ نفس CSS الأساسي بتاع الموقع -->
+<link rel="stylesheet" href="style.css">
+
+<!-- ✅ خطوط الموقع -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════ LP1 — Styles الخاصة بصفحة الهبوط ═══════ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#faf6f0;--bg2:#f5efe5;--panel:#fff;--panel2:#faf6ef;
+  --ink:#1a1512;--mut:#5a4a3a;--dim:#8a7a64;
+  --gold:#d9ab5f;--gold2:#b8863f;--amber:#ff9d45;
+  --line:rgba(26,21,18,.10);--ok:#4a8a5c;--bad:#c24a3a;
+  --ff:'Tajawal',sans-serif;--fd:'El Messiri',serif;
+  --sh:0 10px 30px -12px rgba(100,70,30,.12);
+}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:var(--ff);background:var(--bg);color:var(--ink);
+  line-height:1.7;overflow-x:hidden;
+  background-image:radial-gradient(900px 500px at 85% -5%,rgba(217,171,95,.08),transparent 60%),
+                   radial-gradient(700px 500px at 8% 20%,rgba(255,157,69,.04),transparent 60%);
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.wrap{width:min(1080px,92%);margin-inline:auto}
+.fd{font-family:var(--fd)}
+
+/* ═══ LP Header — بسيط ومش مشتت ═══ */
+.lp-header{
+  position:sticky;top:0;z-index:60;
+  background:rgba(250,246,240,.94);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:.5rem 0;
+}
+.lp-header-inner{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+}
+.lp-logo{display:flex;align-items:center;gap:.45rem}
+.lp-logo .flame{
+  width:10px;height:16px;
+  background:radial-gradient(circle at 50% 78%,#ffd98a,var(--amber) 55%,transparent 72%);
+  border-radius:50% 50% 50% 50%/62% 62% 38% 38%;
+  filter:drop-shadow(0 0 6px rgba(255,157,69,.6));
+  animation:flick 1.7s ease-in-out infinite alternate;
+}
+@keyframes flick{0%{transform:scaleY(1) rotate(-2deg)}50%{transform:scaleY(1.12) rotate(2deg)}100%{transform:scaleY(.94) rotate(-1deg)}}
+.lp-logo b{font-family:var(--fd);font-size:1.15rem;color:var(--ink)}
+.lp-logo small{display:block;font-size:.48rem;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;margin-top:-2px;line-height:1}
+.lp-trust-mini{
+  display:flex;align-items:center;gap:.75rem;
+  font-size:.7rem;color:var(--mut);font-weight:600;
+}
+.lp-trust-mini span{display:flex;align-items:center;gap:.25rem}
+.lp-trust-mini .ic{font-size:.85rem}
+
+/* ═══ CTA Button ═══ */
+.lp-cta{
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  width:100%;max-width:420px;margin-inline:auto;
+  background:linear-gradient(135deg,var(--gold),#b8863f);
+  color:#fff;font-weight:900;font-size:1.05rem;
+  padding:1rem 2rem;border-radius:999px;
+  box-shadow:0 8px 24px -8px rgba(217,171,95,.55);
+  transition:.3s;position:relative;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+.lp-cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px -8px rgba(217,171,95,.7)}
+.lp-cta:active{transform:scale(.97)}
+.lp-cta::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);
+  transform:translateX(-120%);transition:.7s;
+}
+.lp-cta:hover::after{transform:translateX(120%)}
+.lp-cta-sub{
+  text-align:center;font-size:.78rem;color:var(--mut);margin-top:.6rem;
+}
+
+/* ═══ 1. Hero ═══ */
+.lp-hero{padding:2rem 0 3rem;position:relative}
+.lp-hero-badge{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:linear-gradient(135deg,#fff4e0,#ffe9c4);
+  border:1px solid rgba(217,171,95,.35);
+  color:var(--gold2);font-size:.75rem;font-weight:800;
+  padding:.35rem .9rem;border-radius:99px;margin-bottom:1rem;
+}
+.lp-hero h1{
+  font-family:var(--fd);
+  font-size:clamp(1.7rem,5vw,2.8rem);
+  line-height:1.25;margin-bottom:.8rem;color:var(--ink);
+}
+.lp-hero h1 .hl{color:var(--gold2);position:relative}
+.lp-hero h1 .hl::after{
+  content:'';position:absolute;bottom:2px;left:0;right:0;
+  height:6px;background:rgba(217,171,95,.25);border-radius:3px;z-index:-1;
+}
+.lp-hero p.lead{
+  font-size:1rem;color:var(--mut);max-width:520px;margin-bottom:1.5rem;line-height:1.8;
+}
+.lp-hero-stars{
+  display:flex;align-items:center;gap:.4rem;margin-bottom:1rem;
+  font-size:.82rem;color:var(--mut);
+}
+.lp-hero-stars .stars{color:var(--gold);letter-spacing:1px;font-size:1rem}
+.lp-hero-media{
+  position:relative;border-radius:22px;overflow:hidden;
+  background:var(--bg2);box-shadow:var(--sh);
+  aspect-ratio:4/5;max-width:440px;margin-inline:auto;
+}
+.lp-hero-media img,.lp-hero-media video{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.lp-hero-media .floating-badge{
+  position:absolute;top:14px;inset-inline-start:14px;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(8px);
+  padding:.4rem .9rem;border-radius:99px;
+  font-size:.7rem;font-weight:800;color:var(--gold2);
+  box-shadow:0 4px 12px rgba(100,70,30,.15);
+}
+.lp-hero-grid{
+  display:grid;grid-template-columns:1fr;gap:2rem;align-items:center;
+}
+@media(min-width:768px){
+  .lp-hero-grid{grid-template-columns:1.1fr .9fr;gap:3rem}
+  .lp-hero{padding:3rem 0 4rem}
+}
+
+/* ═══ 2. Problem ═══ */
+.lp-problem{background:var(--panel2);padding:3.5rem 0}
+.lp-problem h2{
+  font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);
+  text-align:center;margin-bottom:.6rem;color:var(--ink);
+}
+.lp-problem .sub{text-align:center;color:var(--mut);max-width:520px;margin:0 auto 2rem;font-size:.92rem}
+.lp-pain-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+@media(min-width:640px){.lp-pain-grid{grid-template-columns:repeat(3,1fr)}}
+.lp-pain{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:16px;padding:1.4rem;text-align:center;
+  transition:.3s;
+}
+.lp-pain:hover{transform:translateY(-3px);box-shadow:var(--sh)}
+.lp-pain .ic{
+  font-size:2rem;margin-bottom:.6rem;display:block;
+}
+.lp-pain b{display:block;font-size:.95rem;color:var(--ink);margin-bottom:.3rem}
+.lp-pain p{font-size:.82rem;color:var(--mut);line-height:1.7}
+
+/* ═══ 3. Solution ═══ */
+.lp-solution{padding:3.5rem 0}
+.lp-solution-grid{display:grid;grid-template-columns:1fr;gap:2rem;align-items:center}
+@media(min-width:768px){.lp-solution-grid{grid-template-columns:1fr 1fr;gap:3rem}}
+.lp-solution-media{
+  border-radius:20px;overflow:hidden;background:var(--bg2);
+  aspect-ratio:1/1;box-shadow:var(--sh);
+}
+.lp-solution-media img{width:100%;height:100%;object-fit:cover}
+.lp-solution h2{
+  font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);
+  margin-bottom:.8rem;color:var(--ink);
+}
+.lp-solution p{color:var(--mut);font-size:.95rem;line-height:1.8;margin-bottom:1rem}
+.lp-benefits{list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.lp-benefits li{
+  display:flex;align-items:flex-start;gap:.6rem;
+  font-size:.9rem;color:var(--ink);line-height:1.6;
+}
+.lp-benefits li .chk{
+  flex-shrink:0;width:22px;height:22px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#b8863f);
+  color:#fff;display:grid;place-items:center;
+  font-size:.7rem;font-weight:900;margin-top:2px;
+}
+
+/* ═══ 4. Results ═══ */
+.lp-results{background:var(--panel2);padding:3.5rem 0;text-align:center}
+.lp-results h2{
+  font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);
+  margin-bottom:.6rem;
+}
+.lp-results .sub{color:var(--mut);max-width:520px;margin:0 auto 2rem;font-size:.92rem}
+.lp-result-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+@media(min-width:640px){.lp-result-grid{grid-template-columns:repeat(3,1fr)}}
+.lp-result{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:16px;padding:1.5rem 1rem;transition:.3s;
+}
+.lp-result:hover{transform:translateY(-3px);box-shadow:var(--sh)}
+.lp-result .big{font-size:2rem;display:block;margin-bottom:.4rem}
+.lp-result b{display:block;font-size:.95rem;margin-bottom:.3rem}
+.lp-result p{font-size:.8rem;color:var(--mut);line-height:1.6}
+
+/* ═══ 5. Objections (FAQ) ═══ */
+.lp-faq{padding:3.5rem 0}
+.lp-faq h2{
+  font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);
+  text-align:center;margin-bottom:2rem;
+}
+.lp-faq-list{display:flex;flex-direction:column;gap:.7rem;max-width:680px;margin:0 auto}
+.lp-faq-item{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:14px;overflow:hidden;transition:.3s;
+}
+.lp-faq-item:hover{border-color:rgba(217,171,95,.35)}
+.lp-faq-q{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;padding:1rem 1.2rem;font-weight:700;font-size:.92rem;
+  text-align:start;color:var(--ink);transition:.2s;
+}
+.lp-faq-q:hover{color:var(--gold2)}
+.lp-faq-q .ic{
+  flex-shrink:0;width:24px;height:24px;border-radius:50%;
+  background:rgba(217,171,95,.12);display:grid;place-items:center;
+  font-size:.8rem;color:var(--gold2);font-weight:900;
+  transition:.3s;
+}
+.lp-faq-item.open .lp-faq-q .ic{transform:rotate(45deg)}
+.lp-faq-a{
+  max-height:0;overflow:hidden;transition:max-height .35s ease;
+}
+.lp-faq-a-inner{
+  padding:0 1.2rem 1rem;font-size:.85rem;color:var(--mut);line-height:1.8;
+  border-top:1px solid var(--line);padding-top:.8rem;margin-top:0;
+}
+
+/* ═══ 6. Social Proof ═══ */
+.lp-social{background:var(--panel2);padding:3.5rem 0}
+.lp-social h2{
+  font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);
+  text-align:center;margin-bottom:.6rem;
+}
+.lp-social .sub{text-align:center;color:var(--mut);max-width:520px;margin:0 auto 2rem;font-size:.92rem}
+.lp-social-grid{
+  display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem;
+  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+}
+.lp-social-card{
+  flex:0 0 260px;scroll-snap-align:center;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:16px;overflow:hidden;box-shadow:0 4px 12px -4px rgba(100,70,30,.06);
+}
+.lp-social-card img{width:100%;height:auto;display:block}
+.lp-social-card .meta{padding:.8rem 1rem}
+.lp-social-card .meta b{display:block;font-size:.85rem;margin-bottom:.2rem}
+.lp-social-card .meta small{font-size:.75rem;color:var(--mut)}
+
+/* ═══ 7. Offer ═══ */
+.lp-offer{
+  padding:3.5rem 0;
+  background:linear-gradient(135deg,#fff4e0,#ffe9c4);
+  border-top:1px solid rgba(217,171,95,.3);
+  border-bottom:1px solid rgba(217,171,95,.3);
+}
+.lp-offer-box{
+  max-width:600px;margin:0 auto;text-align:center;
+  background:var(--panel);border-radius:20px;
+  padding:2rem 1.5rem;box-shadow:0 12px 40px -12px rgba(100,70,30,.2);
+  border:2px dashed rgba(217,171,95,.4);
+}
+.lp-offer-box .tag{
+  display:inline-block;background:linear-gradient(135deg,var(--gold),#b8863f);
+  color:#fff;font-size:.72rem;font-weight:900;
+  padding:.3rem 1rem;border-radius:99px;margin-bottom:1rem;
+  letter-spacing:.05em;
+}
+.lp-offer-box h2{
+  font-family:var(--fd);font-size:clamp(1.3rem,3.5vw,1.8rem);
+  margin-bottom:.5rem;
+}
+.lp-offer-box .price-row{
+  display:flex;align-items:center;justify-content:center;gap:.8rem;
+  margin:1rem 0;
+}
+.lp-offer-box .price-now{
+  font-family:var(--fd);font-size:2.2rem;font-weight:900;color:var(--gold2);
+}
+.lp-offer-box .price-old{
+  font-size:1.1rem;color:var(--dim);text-decoration:line-through;
+}
+.lp-offer-box .save{
+  display:inline-block;background:rgba(74,138,92,.1);
+  color:var(--ok);font-size:.78rem;font-weight:800;
+  padding:.25rem .8rem;border-radius:99px;margin-bottom:1rem;
+}
+.lp-offer-box ul{
+  list-style:none;text-align:start;max-width:340px;margin:0 auto 1.5rem;
+  display:flex;flex-direction:column;gap:.5rem;
+}
+.lp-offer-box ul li{
+  display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--ink);
+}
+.lp-offer-box ul li .ic{color:var(--ok);font-weight:900}
+
+/* ═══ 8. Final CTA ═══ */
+.lp-final-cta{padding:3.5rem 0;text-align:center}
+.lp-final-cta h2{
+  font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);
+  margin-bottom:.6rem;
+}
+.lp-final-cta p{color:var(--mut);max-width:480px;margin:0 auto 1.5rem;font-size:.92rem}
+
+/* ═══ Sticky CTA Bar ═══ */
+.lp-sticky-cta{
+  position:fixed;bottom:0;left:0;right:0;z-index:70;
+  background:rgba(255,255,255,.97);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);
+  padding:.6rem 1rem;
+  transform:translateY(110%);transition:transform .35s ease;
+  box-shadow:0 -8px 24px -12px rgba(100,70,30,.2);
+}
+.lp-sticky-cta.show{transform:translateY(0)}
+.lp-sticky-inner{
+  display:flex;align-items:center;gap:.8rem;
+  max-width:680px;margin:0 auto;
+}
+.lp-sticky-info{flex:1;min-width:0}
+.lp-sticky-info b{display:block;font-size:.85rem;color:var(--ink);line-height:1.3}
+.lp-sticky-info small{font-size:.72rem;color:var(--mut)}
+.lp-sticky-btn{
+  flex-shrink:0;background:linear-gradient(135deg,var(--gold),#b8863f);
+  color:#fff;font-weight:900;font-size:.88rem;
+  padding:.7rem 1.4rem;border-radius:99px;
+  box-shadow:0 4px 14px -4px rgba(217,171,95,.5);
+  transition:.25s;white-space:nowrap;
+}
+.lp-sticky-btn:active{transform:scale(.95)}
+
+/* ═══ Animations ═══ */
+.lp-reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.lp-reveal.on{opacity:1;transform:none}
+
+/* ═══ Footer mini ═══ */
+.lp-footer{
+  padding:1.5rem 0;text-align:center;
+  font-size:.75rem;color:var(--dim);
+  border-top:1px solid var(--line);
+}
+.lp-footer a{color:var(--gold2);font-weight:700}
+
+/* ═══ Mobile tweaks ═══ */
+@media(max-width:480px){
+  .lp-hero{padding:1.5rem 0 2.5rem}
+  .lp-hero h1{font-size:1.6rem}
+  .lp-hero-media{aspect-ratio:1/1;max-width:100%}
+  .lp-hero-stars{font-size:.78rem}
+  .lp-cta{font-size:.95rem;padding:.9rem 1.5rem}
+  .lp-offer-box{padding:1.5rem 1rem}
+  .lp-social-card{flex:0 0 220px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LP Header ═══ -->
+<header class="lp-header">
+  <div class="wrap lp-header-inner">
+    <a href="index.html" class="lp-logo" aria-label="VelaLight">
+      <span class="flame" aria-hidden="true"></span>
+      <span>
+        <b>VelaLight</b>
+        <small>Handmade Candles</small>
+      </span>
+    </a>
+    <div class="lp-trust-mini">
+      <span><span class="ic">🚚</span> شحن لكل مصر</span>
+      <span><span class="ic">💵</span> دفع عند الاستلام</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ 1. HERO ═══ -->
+<section class="lp-hero">
+  <div class="wrap lp-hero-grid">
+    <div class="lp-reveal">
+      <span class="lp-hero-badge">🔥 الأكثر مبيعاً</span>
+      <h1>
+        شمعة المساج اللي <span class="hl">بتدفي وترطب</span><br>
+        عضلاتك المتعبة في 5 دقايق
+      </h1>
+      <div class="lp-hero-stars">
+        <span class="stars">★★★★★</span>
+        <span>4.9 من 5 — أكثر من 500 عميل سعيد</span>
+      </div>
+      <p class="lead">
+        شمع الصويا الطبيعي 100% بيدوب على بشرتك، بيدفي العضلات المتعبة، وبرطّب الجلد بعمق. مش مجرد شمعة — دي جلسة سبا كاملة في بيتك.
+      </p>
+      <button class="lp-cta" onclick="lpAddToCart()">
+        🛍️ اطلب الآن وادفع عند الاستلام
+      </button>
+      <p class="lp-cta-sub">✅ شحن لكل محافظات مصر — من 2 لـ 5 أيام</p>
+    </div>
+    <div class="lp-hero-media lp-reveal">
+      <span class="floating-badge">✨ شمع صويا طبيعي</span>
+      <img
+        src="velalight-crystal-double-wick-luxury-cup-inuse.webp"
+        alt="شمعة المساج ريلاكس من VelaLight قيد الاستخدام"
+        loading="eager"
+        width="440" height="550"
+        onerror="this.src='velalight-glass-golden-candle-set-main.webp'">
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 2. PROBLEM ═══ -->
+<section class="lp-problem">
+  <div class="wrap">
+    <h2 class="lp-reveal">لو يومك طويل وشاق، أكيد بتحس بالآتي:</h2>
+    <p class="sub lp-reveal">مش محتاج تتحمل ده كل يوم. فيه حل بسيط وفعّال.</p>
+    <div class="lp-pain-grid">
+      <div class="lp-pain lp-reveal">
+        <span class="ic">😣</span>
+        <b>عضلات مشدودة</b>
+        <p>بعد يوم كامل واقف أو قاعد، رقبتك وظهرك بيفضلوا مشدودين ومش مرتاحين.</p>
+      </div>
+      <div class="lp-pain lp-reveal">
+        <span class="ic">🥵</span>
+        <b>جفاف وتشقق</b>
+        <p>البشرة بتبقى جافة ومحتاجة ترطيب عميق، مش كريم عادي على السطح.</p>
+      </div>
+      <div class="lp-pain lp-reveal">
+        <span class="ic">😴</span>
+        <b>صعوبة استرخاء</b>
+        <p>قبل النوم، جسمك مش بيرتاح بسرعة، وبتفضل صاحي متوتر لفترة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 3. SOLUTION ═══ -->
+<section class="lp-solution">
+  <div class="wrap lp-solution-grid">
+    <div class="lp-solution-media lp-reveal">
+      <img
+        src="velalight-glass-golden-soy-gel-luxury-angle.webp"
+        alt="شمعة المساج — شمع الصويا الطبيعي"
+        loading="lazy"
+        width="500" height="500"
+        onerror="this.src='velalight-crystal-double-wick-luxury-cup-detail.webp'">
+    </div>
+    <div class="lp-reveal">
+      <h2>ليه شمعة المساج ريلاكس هي الحل؟</h2>
+      <p>
+        لأنها مش شمعة عادية — دي مزيج من <b>شمع الصويا الطبيعي 100%</b> و<b>زيوت عطرية فاخرة</b> بتدوب على بشرتك بحرارة دافية، فبتوصل للعضلات مباشرة وترطبها من جوه.
+      </p>
+      <ul class="lp-benefits">
+        <li><span class="chk">✓</span> <span><b>ترطيب عميق:</b> شمع الصويا بيدخل البشرة ويرطبها من جوه، مش على السطح.</span></li>
+        <li><span class="chk">✓</span> <span><b>دفا مريح للعضلات:</b> الحرارة الدافية بتساعد على استرخاء العضلات المشدودة.</span></li>
+        <li><span class="chk">✓</span> <span><b>رايحة بتدوم:</b> عطور فاخرة (لافندر، ياسمين، كوكونات) بتفضل معاك لآخر جلسة.</span></li>
+        <li><span class="chk">✓</span> <span><b>72 ساعة اشتعال:</b> علبة واحدة تكفيك أكتر من شهر استخدام.</span></li>
+        <li><span class="chk">✓</span> <span><b>صناعة يدوية:</b> كل شمعة بتتعمل بإيد مصرية بعناية.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 4. RESULTS ═══ -->
+<section class="lp-results">
+  <div class="wrap">
+    <h2 class="lp-reveal">النتيجة اللي هتحس بيها</h2>
+    <p class="sub lp-reveal">مش كلام — دي تجارب عملاء حقيقيين بعد أسبوع من الاستخدام.</p>
+    <div class="lp-result-grid">
+      <div class="lp-result lp-reveal">
+        <span class="big">😌</span>
+        <b>استرخاء فوري</b>
+        <p>خلال 5-10 دقايق، هتحس بفرق واضح في عضلاتك وهدوء في أعصابك.</p>
+      </div>
+      <div class="lp-result lp-reveal">
+        <span class="big">✨</span>
+        <b>بشرة ناعمة</b>
+        <p>بعد أول جلسة، بشرتك هتبقى ناعمة ومرطبة، والنتيجة بتتحسن مع الاستمرار.</p>
+      </div>
+      <div class="lp-result lp-reveal">
+        <span class="big">🌙</span>
+        <b>نوم أعمق</b>
+        <p>مع رايحة اللافندر أو الياسمين، هتنام أسرع وأعمق من الأول.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 5. OBJECTIONS (FAQ) ═══ -->
+<section class="lp-faq">
+  <div class="wrap">
+    <h2 class="lp-reveal">عندك سؤال؟ جاوبناه لك</h2>
+    <div class="lp-faq-list">
+      <div class="lp-faq-item lp-reveal">
+        <button class="lp-faq-q" type="button" aria-expanded="false">
+          <span>هل الدفع عند الاستلام متاح؟</span>
+          <span class="ic">+</span>
+        </button>
+        <div class="lp-faq-a"><div class="lp-faq-a-inner">
+          أيوه! تدفع كاش للمندوب لما يوصلك الطلب. يعني مش هتدفع أي حاجة قبل ما تشوف المنتج بعينك.
+        </div></div>
+      </div>
+      <div class="lp-faq-item lp-reveal">
+        <button class="lp-faq-q" type="button" aria-expanded="false">
+          <span>الشحن بكام وكام يوم؟</span>
+          <span class="ic">+</span>
+        </button>
+        <div class="lp-faq-a"><div class="lp-faq-a-inner">
+          الشحن لكل محافظات مصر. التوصيل بياخد من 2 لـ 5 أيام عمل حسب المحافظة. الشحن مجاني للطلبات فوق حد معين.
+        </div></div>
+      </div>
+      <div class="lp-faq-item lp-reveal">
+        <button class="lp-faq-q" type="button" aria-expanded="false">
+          <span>الشمعة بتدوم قد إيه؟</span>
+          <span class="ic">+</span>
+        </button>
+        <div class="lp-faq-a"><div class="lp-faq-a-inner">
+          شمعة المساج ريلاكس بتدوم لحد <b>72 ساعة اشتعال</b>. يعني لو استخدمتها 20 دقيقة كل يوم، هتكفيك أكتر من شهر.
+        </div></div>
+      </div>
+      <div class="lp-faq-item lp-reveal">
+        <button class="lp-faq-q" type="button" aria-expanded="false">
+          <span>ينفع استخدمها على البشرة مباشرة؟</span>
+          <span class="ic">+</span>
+        </button>
+        <div class="lp-faq-a"><div class="lp-faq-a-inner">
+          أيوه! شمع الصويا الطبيعي 100% بيدوب في درجة حرارة منخفضة، فآمن على البشرة. اسيبها تدوب شوية وبعدين وزّعها على العضلات المتعبة.
+        </div></div>
+      </div>
+      <div class="lp-faq-item lp-reveal">
+        <button class="lp-faq-q" type="button" aria-expanded="false">
+          <span>لو مش عاجبني المنتج؟</span>
+          <span class="ic">+</span>
+        </button>
+        <div class="lp-faq-a"><div class="lp-faq-a-inner">
+          رضا العميل أهم حاجة عندنا. لو فيه أي مشكلة في المنتج، تواصل معنا على واتساب وفريقنا هيساعدك فورًا.
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 6. SOCIAL PROOF ═══ -->
+<section class="lp-social">
+  <div class="wrap">
+    <h2 class="lp-reveal">عملاؤنا قالوا إيه؟</h2>
+    <p class="sub lp-reveal">لقطات حقيقية من محادثات العملاء بعد الاستلام</p>
+    <div class="lp-social-grid">
+      <div class="lp-social-card lp-reveal">
+        <img src="testimonials/rev1.webp" alt="رأي عميل" loading="lazy" onerror="this.src='velalight-gift-box-candle-01.webp'">
+        <div class="meta">
+          <b>م. أحمد — القاهرة</b>
+          <small>⭐ "الشمعة دي غيرت روتيني المسائي تمامًا"</small>
+        </div>
+      </div>
+      <div class="lp-social-card lp-reveal">
+        <img src="testimonials/rev2.webp" alt="رأي عميل" loading="lazy" onerror="this.src='velalight-gift-box-candle-02.webp'">
+        <div class="meta">
+          <b>أ. سارة — الجيزة</b>
+          <small>⭐ "ريحتها تحفة وبترطب بشرتي"</small>
+        </div>
+      </div>
+      <div class="lp-social-card lp-reveal">
+        <img src="testimonials/rev3.webp" alt="رأي عميل" loading="lazy" onerror="this.src='velalight-gift-box-candle-03.webp'">
+        <div class="meta">
+          <b>م. محمد — الإسكندرية</b>
+          <small>⭐ "أحسن هدية جبتها لمراتي"</small>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:.78rem;color:var(--dim);margin-top:.8rem">اسحب لليمين عشان تشوف المزيد ←</p>
+  </div>
+</section>
+
+<!-- ═══ 7. OFFER ═══ -->
+<section class="lp-offer">
+  <div class="wrap">
+    <div class="lp-offer-box lp-reveal">
+      <span class="tag">🎁 عرض خاص لعملاء هذه الصفحة</span>
+      <h2>شمعة المساج ريلاكس</h2>
+      <div class="price-row">
+        <span class="price-now">380 ج</span>
+        <span class="price-old">420 ج</span>
+      </div>
+      <span class="save">وفرت 40 ج + شحن مجاني</span>
+      <ul>
+        <li><span class="ic">✓</span> شمع صويا طبيعي 100%</li>
+        <li><span class="ic">✓</span> 72 ساعة اشتعال</li>
+        <li><span class="ic">✓</span> 3 عطور فاخرة للاختيار</li>
+        <li><span class="ic">✓</span> تغليف هدايا فاخر مجاناً</li>
+        <li><span class="ic">✓</span> دفع عند الاستلام</li>
+      </ul>
+      <button class="lp-cta" onclick="lpAddToCart()">
+        🛍️ اطلب الآن — دفع عند الاستلام
+      </button>
+      <p class="lp-cta-sub">⏳ العرض ساري لفترة محدودة</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 8. FINAL CTA ═══ -->
+<section class="lp-final-cta">
+  <div class="wrap lp-reveal">
+    <h2>جاهز تجرب إحساس السبا في بيتك؟</h2>
+    <p>اطلب شمعة المساج ريلاكس دلوقتي، واستلمها في 2-5 أيام. الدفع عند الاستلام.</p>
+    <button class="lp-cta" onclick="lpAddToCart()">
+      🛍️ اطلب الآن
+    </button>
+    <p class="lp-cta-sub">🔒 بياناتك آمنة 100% — مفيش أي دفع مقدم</p>
+  </div>
+</section>
+
+<!-- ═══ Footer mini ═══ -->
+<footer class="lp-footer">
+  <div class="wrap">
+    © 2026 VelaLight — <a href="index.html">المتجر الرئيسي</a>
+  </div>
+</footer>
+
+<!-- ═══ Sticky CTA Bar ═══ -->
+<div class="lp-sticky-cta" id="lpStickyCta">
+  <div class="lp-sticky-inner">
+    <div class="lp-sticky-info">
+      <b>شمعة المساج ريلاكس</b>
+      <small>380 ج — دفع عند الاستلام</small>
+    </div>
+    <button class="lp-sticky-btn" onclick="lpAddToCart()">اطلب الآن</button>
+  </div>
+</div>
+
+<!-- ═══ Scripts ═══ -->
+<!-- ✅ data.js فيه CFG + Meta Pixel + GA4 -->
+<script src="data.js"></script>
+<!-- ✅ app.js فيه addToCart + openDrawer + toast + pname + money -->
+<script src="app.js"></script>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ═══════ LP1 Config ═══════ */
+  var LP_PRODUCT_ID = "12"; // شمعة مساج ريلاكس
+  var LP_PRODUCT = null;
+
+  /* ═══════ find product ═══════ */
+  function findProduct(){
+    var pool = (typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length) ? ALL_PRODUCTS
+             : (typeof PRODUCTS !== "undefined") ? PRODUCTS : [];
+    return pool.find(function(p){ return String(p.id) === LP_PRODUCT_ID; }) || {
+      id: LP_PRODUCT_ID,
+      name: "شمعة مساج ريلاكس",
+      nameEn: "Relax Massage Candle",
+      price: 380,
+      old: 420,
+      img: "velalight-crystal-double-wick-luxury-cup-inuse.webp",
+      cat: "massage",
+      desc: "شمعة مساج بشمع الصويا الطبيعي، بترطب الجسم وتدفي العضلات."
+    };
+  }
+
+  /* ═══════ LP Add to Cart ═══════ */
+  window.lpAddToCart = function(){
+    if(!LP_PRODUCT) LP_PRODUCT = findProduct();
+
+    // ✅ حدد العطر الافتراضي (لافندر)
+    var defaultScent = "لافندر";
+
+    var added = false;
+    try {
+      if(typeof window.addToCart === "function"){
+        added = window.addToCart(LP_PRODUCT, { scent: defaultScent, qty: 1 });
+      }
+    } catch(e){
+      console.warn("⚠️ addToCart failed:", e);
+    }
+
+    // ✅ تحقق مباشر من السلة
+    var cart = [];
+    try {
+      if(typeof getCart === "function") cart = getCart();
+      else cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
+    } catch(e){ cart = []; }
+
+    var wasAdded = cart.some(function(it){
+      return String(it.id) === String(LP_PRODUCT_ID);
+    });
+
+    // ✅ Meta Pixel — AddToCart
+    if(typeof fbq === "function"){
+      fbq("track", "AddToCart", {
+        content_ids: [LP_PRODUCT.id],
+        content_name: LP_PRODUCT.name,
+        content_type: "product",
+        value: Number(LP_PRODUCT.price) || 0,
+        currency: "EGP"
+      });
+    }
+
+    // ✅ فتح السلة عشان العميل يشوف الإضافة
+    if(wasAdded || added !== false){
+      if(typeof toast === "function"){
+        toast("✅ تمت الإضافة للسلة");
+      }
+      if(typeof openDrawer === "function"){
+        setTimeout(function(){
+          try {
+            if(typeof fillCartForm === "function") fillCartForm();
+            if(typeof renderCart === "function") renderCart();
+            openDrawer("cartDrawer", "cartOv");
+          } catch(e){}
+        }, 200);
+      }
+    } else {
+      if(typeof toast === "function") toast("⚠️ حصل خطأ، حاول تاني");
+    }
+  };
+
+  /* ═══════ Meta Pixel — ViewContent ═══════ */
+  window.addEventListener("load", function(){
+    LP_PRODUCT = findProduct();
+    if(typeof fbq === "function"){
+      fbq("track", "ViewContent", {
+        content_ids: [LP_PRODUCT.id],
+        content_name: LP_PRODUCT.name,
+        content_type: "product",
+        value: Number(LP_PRODUCT.price) || 0,
+        currency: "EGP"
+      });
+    }
+  });
+
+  /* ═══════ FAQ Accordion ═══════ */
+  document.querySelectorAll(".lp-faq-item").forEach(function(item){
+    var btn = item.querySelector(".lp-faq-q");
+    var ans = item.querySelector(".lp-faq-a");
+    if(!btn || !ans) return;
+    btn.addEventListener("click", function(){
+      var isOpen = item.classList.contains("open");
+      // اقفل الكل
+      document.querySelectorAll(".lp-faq-item").forEach(function(other){
+        other.classList.remove("open");
+        var oa = other.querySelector(".lp-faq-a");
+        var ob = other.querySelector(".lp-faq-q");
+        if(oa) oa.style.maxHeight = null;
+        if(ob) ob.setAttribute("aria-expanded", "false");
+      });
+      // افتح الحالي
+      if(!isOpen){
+        item.classList.add("open");
+        ans.style.maxHeight = ans.scrollHeight + "px";
+        btn.setAttribute("aria-expanded", "true");
+      }
+    });
+  });
+
+  /* ═══════ Reveal on scroll ═══════ */
+  if("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          en.target.classList.add("on");
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
+    document.querySelectorAll(".lp-reveal").forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll(".lp-reveal").forEach(function(el){ el.classList.add("on"); });
+  }
+
+  /* ═══════ Sticky CTA on scroll ═══════ */
+  var sticky = document.getElementById("lpStickyCta");
+  var lastY = 0;
+  window.addEventListener("scroll", function(){
+    var y = window.scrollY;
+    if(y > 500 && y > lastY){
+      sticky.classList.add("show");
+    } else if(y < 400 || y < lastY - 30){
+      sticky.classList.remove("show");
+    }
+    lastY = y;
+  }, { passive: true });
+
+})();
+</script>
+
+</body>
+</html>
