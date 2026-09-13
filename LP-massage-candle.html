@@ -2518,6 +2518,300 @@ button{
 
 
 /* ═══════════════════════════════════════════════════════════
+   ✅ FLOATING CART BUTTON — الحل النهائي
+   ═══════════════════════════════════════════════════════════ */
+
+.lp-floating-cart{
+  position:fixed;
+
+  bottom:88px;
+  inset-inline-end:16px;
+
+  z-index:65;
+
+  width:58px;
+  height:58px;
+
+  border-radius:50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #d4af37,
+      #b8863f
+    );
+
+  color:#fff;
+
+  display:none;
+
+  place-items:center;
+
+  border:2.5px solid #fff;
+
+  box-shadow:
+    0 10px 30px rgba(212,175,55,.5);
+
+  cursor:pointer;
+
+  transition:transform .25s ease;
+
+  -webkit-tap-highlight-color:transparent;
+
+  animation:lpCartPulse 2s ease-in-out infinite
+}
+
+.lp-floating-cart.show{
+  display:grid
+}
+
+.lp-floating-cart:hover{
+  transform:scale(1.1)
+}
+
+.lp-floating-cart:active{
+  transform:scale(.94)
+}
+
+@keyframes lpCartPulse{
+  0%,100%{
+    box-shadow:
+      0 10px 30px rgba(212,175,55,.5),
+      0 0 0 0 rgba(212,175,55,.4)
+  }
+
+  50%{
+    box-shadow:
+      0 10px 30px rgba(212,175,55,.5),
+      0 0 0 14px rgba(212,175,55,0)
+  }
+}
+
+.lp-floating-cart .icon{
+  font-size:1.55rem;
+
+  line-height:1
+}
+
+.lp-floating-cart .count{
+  position:absolute;
+
+  top:-4px;
+  inset-inline-end:-4px;
+
+  min-width:24px;
+  height:24px;
+
+  padding:0 6px;
+
+  border-radius:99px;
+
+  background:#e74c3c;
+
+  color:#fff;
+
+  font-size:.72rem;
+
+  font-weight:900;
+
+  display:grid;
+
+  place-items:center;
+
+  border:2px solid #fff;
+
+  box-shadow:
+    0 4px 10px rgba(231,76,60,.5)
+}
+
+@media(max-width:480px){
+  .lp-floating-cart{
+    bottom:78px;
+    inset-inline-end:12px;
+
+    width:54px;
+    height:54px
+  }
+
+  .lp-floating-cart .icon{
+    font-size:1.4rem
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ✅ SUCCESS PANEL — بعد الإضافة
+   ═══════════════════════════════════════════════════════════ */
+
+.lp-success-panel{
+  position:fixed;
+
+  inset:0;
+
+  z-index:9998;
+
+  background:rgba(26,21,18,.55);
+
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+
+  display:none;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:1.2rem;
+
+  opacity:0;
+
+  transition:opacity .28s ease
+}
+
+.lp-success-panel.show{
+  display:flex;
+
+  opacity:1
+}
+
+.lp-success-box{
+  background:#fff;
+
+  border-radius:24px;
+
+  padding:1.8rem 1.4rem 1.4rem;
+
+  max-width:420px;
+
+  width:100%;
+
+  text-align:center;
+
+  box-shadow:
+    0 24px 70px -20px rgba(0,0,0,.35);
+
+  border:2px solid rgba(217,171,95,.4);
+
+  transform:scale(.9);
+
+  transition:
+    transform .3s cubic-bezier(.22,1,.36,1)
+}
+
+.lp-success-panel.show .lp-success-box{
+  transform:scale(1)
+}
+
+.lp-success-icon{
+  font-size:3.2rem;
+
+  display:block;
+
+  margin-bottom:.4rem;
+
+  animation:lpCheckBounce .6s ease
+}
+
+@keyframes lpCheckBounce{
+  0%{
+    transform:scale(0) rotate(-45deg);
+    opacity:0
+  }
+
+  60%{
+    transform:scale(1.15) rotate(5deg);
+    opacity:1
+  }
+
+  100%{
+    transform:scale(1) rotate(0)
+  }
+}
+
+.lp-success-box h3{
+  font-family:var(--fd);
+
+  font-size:1.35rem;
+
+  color:var(--ink);
+
+  margin-bottom:.5rem;
+
+  line-height:1.3
+}
+
+.lp-success-box p{
+  color:var(--mut);
+
+  font-size:.88rem;
+
+  line-height:1.75;
+
+  margin-bottom:1.2rem
+}
+
+.lp-success-box .lp-cta{
+  margin-bottom:.5rem;
+
+  font-size:1rem;
+
+  padding:1rem 1.4rem;
+
+  max-width:100%
+}
+
+.lp-success-continue{
+  display:block;
+
+  width:100%;
+
+  padding:.7rem;
+
+  border:none;
+
+  background:transparent;
+
+  color:var(--mut);
+
+  font-family:inherit;
+
+  font-size:.85rem;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  border-radius:99px;
+
+  transition:.2s
+}
+
+.lp-success-continue:hover{
+  background:rgba(217,171,95,.08);
+
+  color:var(--gold2)
+}
+
+.lp-success-timer{
+  display:block;
+
+  margin-top:.7rem;
+
+  font-size:.7rem;
+
+  color:var(--dim);
+
+  font-weight:600
+}
+
+.lp-success-timer b{
+  color:var(--gold2);
+
+  font-weight:900
+}
+
+
+/* ═══════════════════════════════════════════════════════════
    MOBILE
    ═══════════════════════════════════════════════════════════ */
 
@@ -3869,6 +4163,92 @@ button{
 
 
 <!-- ═══════════════════════════════════════════════════════════
+     ✅ FLOATING CART BUTTON
+     ═══════════════════════════════════════════════════════════ -->
+
+<button
+  class="lp-floating-cart"
+  id="lpFloatingCart"
+  type="button"
+  aria-label="عرض السلة">
+
+  <span class="icon">
+    🛒
+  </span>
+
+  <span
+    class="count"
+    id="lpCartCount">
+
+    0
+
+  </span>
+
+</button>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     ✅ SUCCESS PANEL — بعد الإضافة
+     ═══════════════════════════════════════════════════════════ -->
+
+<div
+  class="lp-success-panel"
+  id="lpSuccessPanel">
+
+  <div class="lp-success-box">
+
+    <span class="lp-success-icon">
+      ✅
+    </span>
+
+    <h3>
+      تمت الإضافة بنجاح!
+    </h3>
+
+    <p>
+
+      شمعة المساج + العطر اللي اخترتيه
+      موجودين في سلتك.
+      جاهز/ة تكمل الطلب؟
+
+    </p>
+
+    <button
+      class="lp-cta"
+      type="button"
+      onclick="lpGoToCheckout()">
+
+      💬 إتمام الطلب الآن
+
+    </button>
+
+    <button
+      class="lp-success-continue"
+      type="button"
+      id="lpContinueBtn">
+
+      متابعة التسوق
+
+    </button>
+
+    <span class="lp-success-timer">
+
+      سيتم تحويلك تلقائيًا خلال
+      <b id="lpTimerCount">
+
+        5
+
+      </b>
+      ثواني...
+
+    </span>
+
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
      STICKY CTA
      ═══════════════════════════════════════════════════════════ -->
 
@@ -4264,6 +4644,8 @@ var LP_SCENTS = [
   var LP_QTY = 1;
 
   var LP_MAX_STOCK = 99;
+
+  var _lpAutoTimer = null;
 
 
   function scentTr(name){
@@ -4673,6 +5055,201 @@ var LP_SCENTS = [
   }
 
 
+  /* ✅ ═══════════════════════════════════════════════════════
+     عدّاد السلة العائم — يتحدّث تلقائيًا
+     ═══════════════════════════════════════════════════════ */
+
+  function lpUpdateCartCount(){
+
+    var cart = [];
+
+
+    try{
+
+      if(typeof getCart === "function"){
+        cart = getCart();
+      }else{
+        cart = JSON.parse(
+          localStorage.getItem("vl_cart") || "[]"
+        );
+      }
+
+    }catch(e){
+      cart = [];
+    }
+
+
+    var totalQty =
+      cart.reduce(function(sum,it){
+
+        return sum + Number(it.qty || 1);
+
+      },0);
+
+
+    var countEl =
+      document.getElementById(
+        "lpCartCount"
+      );
+
+    if(countEl){
+      countEl.textContent = totalQty;
+    }
+
+
+    var fab =
+      document.getElementById(
+        "lpFloatingCart"
+      );
+
+    if(fab){
+
+      if(totalQty > 0){
+
+        fab.classList.add("show");
+
+      }else{
+
+        fab.classList.remove("show");
+
+      }
+
+    }
+
+  }
+
+
+  /* ✅ ═══════════════════════════════════════════════════════
+     الانتقال لصفحة إتمام الطلب
+     ═══════════════════════════════════════════════════════ */
+
+  window.lpGoToCheckout =
+    function(){
+
+      if(_lpAutoTimer){
+        clearTimeout(_lpAutoTimer);
+        _lpAutoTimer = null;
+      }
+
+      window.location.href =
+        "index.html?cart=1";
+
+    };
+
+
+  /* ✅ ═══════════════════════════════════════════════════════
+     إخفاء بانل النجاح + متابعة التسوق
+     ═══════════════════════════════════════════════════════ */
+
+  window.lpContinueShopping =
+    function(){
+
+      if(_lpAutoTimer){
+        clearTimeout(_lpAutoTimer);
+        _lpAutoTimer = null;
+      }
+
+
+      var panel =
+        document.getElementById(
+          "lpSuccessPanel"
+        );
+
+      if(panel){
+        panel.classList.remove("show");
+      }
+
+      document.body.style.overflow = "";
+
+    };
+
+
+  /* ✅ ═══════════════════════════════════════════════════════
+     إظهار بانل النجاح مع عدّاد 5 ثواني
+     ═══════════════════════════════════════════════════════ */
+
+  function lpShowSuccessPanel(){
+
+    var panel =
+      document.getElementById(
+        "lpSuccessPanel"
+      );
+
+    if(!panel){
+      return;
+    }
+
+
+    var timerEl =
+      document.getElementById(
+        "lpTimerCount"
+      );
+
+
+    var countdown = 5;
+
+
+    if(timerEl){
+      timerEl.textContent = countdown;
+    }
+
+
+    panel.classList.add("show");
+
+    document.body.style.overflow = "hidden";
+
+
+    /* ✅ تحديث العدّاد كل ثانية */
+
+    var countdownInterval =
+      setInterval(function(){
+
+        countdown--;
+
+        if(timerEl){
+          timerEl.textContent =
+            countdown > 0
+            ? countdown
+            : 0;
+        }
+
+
+        if(countdown <= 0){
+
+          clearInterval(countdownInterval);
+
+        }
+
+      },1000);
+
+
+    /* ✅ تحويل تلقائي بعد 5 ثواني */
+
+    _lpAutoTimer =
+      setTimeout(function(){
+
+        clearInterval(countdownInterval);
+
+        var p =
+          document.getElementById(
+            "lpSuccessPanel"
+          );
+
+        if(
+          p &&
+          p.classList.contains("show")
+        ){
+
+          window.location.href =
+            "index.html?cart=1";
+
+        }
+
+      },5000);
+
+  }
+
+
   window.lpOpenModal =
     function(){
 
@@ -5033,6 +5610,11 @@ var LP_SCENTS = [
     buildTestimonials();
 
 
+    /* ✅ تحديث عدّاد السلة فورًا */
+
+    lpUpdateCartCount();
+
+
     var sel =
       document.getElementById(
         "lpScentSelect"
@@ -5226,42 +5808,13 @@ var LP_SCENTS = [
 
                 updateAddBtnState();
 
+                /* ✅ تحديث عدّاد السلة العائم */
 
-                try{
+                lpUpdateCartCount();
 
-                  if(
-                    typeof fillCartForm ===
-                    "function"
-                  ){
+                /* ✅ إظهار بانل النجاح + التحويل التلقائي */
 
-                    fillCartForm();
-
-                  }
-
-
-                  if(
-                    typeof renderCart ===
-                    "function"
-                  ){
-
-                    renderCart();
-
-                  }
-
-
-                  if(
-                    typeof openDrawer ===
-                    "function"
-                  ){
-
-                    openDrawer(
-                      "cartDrawer",
-                      "cartOv"
-                    );
-
-                  }
-
-                }catch(e){}
+                lpShowSuccessPanel();
 
               },
               500
@@ -5331,6 +5884,51 @@ var LP_SCENTS = [
 
       }
     );
+
+
+    /* ✅ زر السلة العائم — يوصل لصفحة السلة */
+
+    var fab =
+      document.getElementById(
+        "lpFloatingCart"
+      );
+
+
+    if(fab){
+
+      fab.addEventListener(
+        "click",
+        function(){
+
+          window.location.href =
+            "index.html?cart=1";
+
+        }
+      );
+
+    }
+
+
+    /* ✅ زر "متابعة التسوق" في بانل النجاح */
+
+    var continueBtn =
+      document.getElementById(
+        "lpContinueBtn"
+      );
+
+
+    if(continueBtn){
+
+      continueBtn.addEventListener(
+        "click",
+        function(){
+
+          lpContinueShopping();
+
+        }
+      );
+
+    }
 
 
     document
