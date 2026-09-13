@@ -80,18 +80,108 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-pain b{display:block;font-size:.95rem;color:var(--ink);margin-bottom:.3rem}
 .lp-pain p{font-size:.82rem;color:var(--mut);line-height:1.7}
 
-.lp-solution{padding:3.5rem 0}
-.lp-solution-grid{display:grid;grid-template-columns:1fr;gap:2rem;align-items:center}
-@media(min-width:768px){.lp-solution-grid{grid-template-columns:1fr 1fr;gap:3rem}}
-.lp-solution-media{border-radius:20px;overflow:hidden;background:var(--bg2);aspect-ratio:1/1;box-shadow:var(--sh)}
-.lp-solution-media img{width:100%;height:100%;object-fit:cover}
-.lp-solution h2{font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:.8rem}
-.lp-solution p{color:var(--mut);font-size:.95rem;line-height:1.8;margin-bottom:1rem}
-.lp-ingredients{list-style:none;display:grid;grid-template-columns:1fr;gap:.55rem;margin-top:1.2rem}
+/* ═══════ SOLUTION — بطاقة موحدة جديدة ═══════ */
+.lp-solution{padding:3.5rem 0;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)}
+.lp-solution-card{
+  max-width:820px;margin:0 auto;
+  background:#fff;
+  border:1.5px solid rgba(217,171,95,.3);
+  border-radius:26px;
+  padding:2.2rem 1.5rem;
+  box-shadow:0 20px 60px -20px rgba(100,70,30,.18);
+  position:relative;
+  overflow:hidden;
+}
+.lp-solution-card::before{
+  content:'';position:absolute;top:-100px;right:-100px;
+  width:250px;height:250px;
+  background:radial-gradient(circle,rgba(217,171,95,.18),transparent 70%);
+  pointer-events:none;
+}
+.lp-solution-card::after{
+  content:'';position:absolute;bottom:-100px;left:-100px;
+  width:250px;height:250px;
+  background:radial-gradient(circle,rgba(255,157,69,.12),transparent 70%);
+  pointer-events:none;
+}
+.lp-solution-card > *{position:relative;z-index:1}
+.lp-solution-card .solution-eyebrow{
+  display:block;text-align:center;
+  font-size:.72rem;font-weight:900;
+  letter-spacing:.15em;color:var(--gold2);
+  text-transform:uppercase;
+  margin-bottom:.5rem;
+}
+.lp-solution-card h2{
+  font-family:var(--fd);
+  font-size:clamp(1.4rem,3.8vw,2rem);
+  color:var(--ink);
+  text-align:center;
+  margin-bottom:.9rem;
+  line-height:1.3;
+}
+.lp-solution-card h2 .hl{color:var(--gold2);position:relative}
+.lp-solution-card h2 .hl::after{content:'';position:absolute;bottom:2px;left:0;right:0;height:5px;background:rgba(217,171,95,.3);border-radius:3px;z-index:-1}
+.lp-solution-card .solution-lead{
+  text-align:center;color:var(--mut);
+  font-size:.95rem;line-height:1.9;
+  max-width:600px;margin:0 auto 1.8rem;
+}
+.lp-solution-media{
+  border-radius:18px;overflow:hidden;
+  aspect-ratio:16/10;max-width:520px;
+  margin:0 auto 1.8rem;
+  box-shadow:0 12px 36px -12px rgba(100,70,30,.3);
+  border:1px solid rgba(217,171,95,.2);
+}
+.lp-solution-media img{width:100%;height:100%;object-fit:cover;display:block}
+.lp-solution-divider{
+  display:flex;align-items:center;justify-content:center;
+  gap:.6rem;margin:0 auto 1.5rem;
+  max-width:200px;
+}
+.lp-solution-divider::before,
+.lp-solution-divider::after{
+  content:'';flex:1;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.lp-solution-divider .dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 8px rgba(217,171,95,.7);
+}
+.lp-solution-card h3{
+  font-family:var(--fd);
+  font-size:clamp(1.15rem,3vw,1.5rem);
+  color:var(--gold2);
+  text-align:center;
+  margin-bottom:.4rem;
+}
+.lp-solution-card .ing-sub{
+  text-align:center;color:var(--mut);
+  font-size:.85rem;margin-bottom:1.5rem;
+}
+.lp-ingredients{
+  list-style:none;
+  display:grid;grid-template-columns:1fr;gap:.55rem;
+}
 @media(min-width:640px){.lp-ingredients{grid-template-columns:1fr 1fr}}
-.lp-ingredients li{display:flex;align-items:flex-start;gap:.5rem;font-size:.83rem;color:var(--ink);line-height:1.6;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:.65rem .8rem;transition:.25s}
-.lp-ingredients li:hover{border-color:rgba(217,171,95,.4);transform:translateX(-3px)}
-.lp-ingredients li .em{font-size:1.05rem;flex-shrink:0;line-height:1.4}
+.lp-ingredients li{
+  display:flex;align-items:flex-start;gap:.55rem;
+  font-size:.83rem;color:var(--ink);line-height:1.65;
+  background:linear-gradient(135deg,#fffbf5,#fdf8f0);
+  border:1px solid rgba(217,171,95,.18);
+  border-radius:12px;
+  padding:.7rem .85rem;
+  transition:.25s;
+}
+.lp-ingredients li:hover{
+  border-color:rgba(217,171,95,.5);
+  transform:translateX(-4px);
+  box-shadow:0 6px 18px -6px rgba(217,171,95,.3);
+}
+.lp-ingredients li .em{font-size:1.1rem;flex-shrink:0;line-height:1.4}
+.lp-ingredients li b{color:var(--gold2)}
 
 .lp-results{background:var(--panel2);padding:3.5rem 0;text-align:center}
 .lp-results h2{font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:.6rem}
@@ -127,19 +217,121 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-social-card .meta b{display:block;font-size:.85rem;margin-bottom:.2rem}
 .lp-social-card .meta small{font-size:.75rem;color:var(--mut)}
 
-.lp-offer{padding:3.5rem 0;background:linear-gradient(135deg,#fff4e0,#ffe9c4);border-top:1px solid rgba(217,171,95,.3);border-bottom:1px solid rgba(217,171,95,.3)}
-.lp-offer-box{max-width:600px;margin:0 auto;text-align:center;background:var(--panel);border-radius:20px;padding:2rem 1.5rem;box-shadow:0 12px 40px -12px rgba(100,70,30,.2);border:2px dashed rgba(217,171,95,.4)}
-.lp-offer-box .tag{display:inline-block;background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-size:.72rem;font-weight:900;padding:.3rem 1rem;border-radius:99px;margin-bottom:.6rem;letter-spacing:.05em}
-.lp-discount-badge{display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-size:.82rem;font-weight:900;padding:.4rem 1.2rem;border-radius:99px;margin-bottom:1rem;box-shadow:0 6px 18px rgba(231,76,60,.35);animation:pulseDiscount 2s ease-in-out infinite;letter-spacing:.02em}
+/* ═══════ OFFER — نسخة جديدة مبهرة ═══════ */
+.lp-offer{
+  padding:3.5rem 0;
+  background:
+    radial-gradient(800px 400px at 50% 0%,rgba(255,157,69,.15),transparent 60%),
+    linear-gradient(180deg,#fff8ec 0%,#ffe8c4 50%,#ffd99a 100%);
+  border-top:2px solid rgba(217,171,95,.45);
+  border-bottom:2px solid rgba(217,171,95,.45);
+  position:relative;
+  overflow:hidden;
+}
+.lp-offer::before{
+  content:'';position:absolute;top:-30px;right:20px;
+  font-size:180px;line-height:1;opacity:.04;
+  content:'🎁';
+  pointer-events:none;
+  transform:rotate(15deg);
+}
+.lp-offer-box{
+  max-width:620px;margin:0 auto;text-align:center;
+  background:#fff;
+  border:2px dashed rgba(217,171,95,.55);
+  border-radius:26px;
+  padding:2.2rem 1.5rem;
+  box-shadow:0 24px 70px -22px rgba(184,134,63,.45),0 0 0 6px rgba(255,255,255,.6);
+  position:relative;
+  animation:offerGlow 3s ease-in-out infinite;
+}
+@keyframes offerGlow{
+  0%,100%{box-shadow:0 24px 70px -22px rgba(184,134,63,.45),0 0 0 6px rgba(255,255,255,.6)}
+  50%{box-shadow:0 30px 85px -22px rgba(184,134,63,.6),0 0 0 6px rgba(255,247,224,.9)}
+}
+.lp-offer-ribbon{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,#e74c3c,#c0392b);
+  color:#fff;font-size:.78rem;font-weight:900;
+  padding:.45rem 1.3rem;border-radius:99px;
+  letter-spacing:.05em;
+  box-shadow:0 8px 22px rgba(231,76,60,.45);
+  animation:pulseRibbon 1.8s ease-in-out infinite;
+  white-space:nowrap;
+}
+@keyframes pulseRibbon{
+  0%,100%{transform:translateX(-50%) scale(1)}
+  50%{transform:translateX(-50%) scale(1.06)}
+}
+.lp-discount-badge{
+  display:inline-block;
+  background:linear-gradient(135deg,#e74c3c,#c0392b);
+  color:#fff;font-size:.85rem;font-weight:900;
+  padding:.45rem 1.2rem;border-radius:99px;
+  margin:.7rem 0 1rem;
+  box-shadow:0 8px 22px rgba(231,76,60,.4);
+  animation:pulseDiscount 2s ease-in-out infinite;
+  letter-spacing:.02em;
+}
 @keyframes pulseDiscount{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-.lp-offer-box h2{font-family:var(--fd);font-size:clamp(1.3rem,3.5vw,1.8rem);margin-bottom:.5rem}
-.lp-offer-box .price-row{display:flex;align-items:center;justify-content:center;gap:.8rem;margin:1rem 0;flex-wrap:wrap}
-.lp-offer-box .price-now{font-family:var(--fd);font-size:2.2rem;font-weight:900;color:var(--gold2)}
-.lp-offer-box .price-old{font-size:1.1rem;color:var(--dim);text-decoration:line-through}
-.lp-offer-box .savings{display:block;width:100%;text-align:center;font-size:.82rem;color:var(--ok);font-weight:800;margin-top:-.3rem;margin-bottom:.6rem}
-.lp-offer-box ul{list-style:none;text-align:start;max-width:340px;margin:0 auto 1.5rem;display:flex;flex-direction:column;gap:.5rem}
-.lp-offer-box ul li{display:flex;align-items:center;gap:.5rem;font-size:.85rem;color:var(--ink)}
-.lp-offer-box ul li .ic{color:var(--ok);font-weight:900}
+.lp-offer-box h2{
+  font-family:var(--fd);
+  font-size:clamp(1.35rem,3.6vw,1.9rem);
+  margin-bottom:.5rem;
+  margin-top:.6rem;
+}
+.lp-price-row{
+  display:flex;align-items:center;justify-content:center;
+  gap:1rem;margin:1.2rem 0 .6rem;flex-wrap:wrap;
+}
+.lp-price-now{
+  font-family:var(--fd);font-size:2.6rem;font-weight:900;
+  color:var(--gold2);line-height:1;
+  text-shadow:0 2px 8px rgba(217,171,95,.3);
+}
+.lp-price-old{
+  font-size:1.25rem;color:var(--dim);
+  text-decoration:line-through;font-weight:600;
+}
+.lp-price-save{
+  display:inline-block;
+  background:linear-gradient(135deg,#27ae60,#1e8449);
+  color:#fff;font-size:.82rem;font-weight:900;
+  padding:.35rem .95rem;border-radius:99px;
+  margin-bottom:1.4rem;
+  box-shadow:0 6px 16px rgba(39,174,96,.4);
+}
+.lp-offer-features{
+  list-style:none;text-align:start;
+  max-width:380px;margin:0 auto 1.6rem;
+  display:flex;flex-direction:column;gap:.55rem;
+}
+.lp-offer-features li{
+  display:flex;align-items:center;gap:.55rem;
+  font-size:.87rem;color:var(--ink);font-weight:500;
+}
+.lp-offer-features li .ic{
+  flex-shrink:0;width:20px;height:20px;
+  background:linear-gradient(135deg,#27ae60,#1e8449);
+  color:#fff;border-radius:50%;
+  display:grid;place-items:center;
+  font-size:.65rem;font-weight:900;
+}
+.lp-offer-trust{
+  display:flex;justify-content:center;gap:1rem;
+  flex-wrap:wrap;margin-top:1.2rem;
+  padding-top:1.2rem;
+  border-top:1px dashed rgba(217,171,95,.35);
+  font-size:.72rem;color:var(--mut);font-weight:700;
+}
+.lp-offer-trust span{display:flex;align-items:center;gap:.3rem}
+.lp-offer-trust .ic{font-size:.95rem}
+.lp-offer-social-proof{
+  display:flex;align-items:center;justify-content:center;
+  gap:.4rem;margin-top:.8rem;
+  font-size:.75rem;color:var(--mut);
+}
+.lp-offer-social-proof .stars{color:var(--gold);letter-spacing:1px;font-size:.95rem}
 
 .lp-final-cta{padding:3.5rem 0;text-align:center}
 .lp-final-cta h2{font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);margin-bottom:.6rem}
@@ -173,7 +365,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-modal-close{width:32px;height:32px;border-radius:50%;background:rgba(217,171,95,.12);color:var(--gold2);font-size:1rem;font-weight:900;display:grid;place-items:center;transition:.2s}
 .lp-modal-close:hover{background:rgba(217,171,95,.25)}
 .lp-modal-preview{display:flex;align-items:center;gap:.8rem;padding:.7rem;border:1px solid var(--line);border-radius:14px;background:var(--bg2);margin-bottom:1.1rem}
-.lp-modal-preview img{width:64px;height:64px;border-radius:11px;object-fit:cover;flex-shrink:0}
+.lp-modal-preview img{width:64px;height:64px;border-radius:11px;object-fit:cover;flex-shrink:0;background:var(--bg2)}
 .lp-modal-preview .info{flex:1;min-width:0}
 .lp-modal-preview .info b{display:block;font-size:.92rem;color:var(--ink);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lp-modal-preview .info .pr{font-weight:900;color:var(--gold2);margin-top:.15rem}
@@ -197,8 +389,11 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   .lp-hero h1{font-size:1.6rem}
   .lp-hero-media{aspect-ratio:4/5;max-width:100%}
   .lp-cta{font-size:.95rem;padding:.9rem 1.5rem}
-  .lp-offer-box{padding:1.5rem 1rem}
+  .lp-offer-box{padding:1.8rem 1rem}
+  .lp-price-now{font-size:2.2rem}
   .lp-social-card{flex:0 0 220px}
+  .lp-solution-card{padding:1.5rem 1rem}
+  .lp-offer-ribbon{font-size:.68rem;padding:.4rem 1rem}
 }
 </style>
 </head>
@@ -283,36 +478,43 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 3. SOLUTION + INGREDIENTS ═══ -->
+<!-- ═══ 3. SOLUTION — بطاقة موحدة (السؤال + التركيبة) ═══ -->
 <section class="lp-solution">
-  <div class="wrap lp-solution-grid">
-    <div class="lp-solution-media lp-reveal">
-      <img
-        id="lpSolImg"
-        src="velalight-massage-mandala-spa-spa.webp"
-        alt="شمعة المساج المانديلا — تركيبة VelaLight الغنية"
-        loading="lazy"
-        width="500" height="500">
-    </div>
-    <div class="lp-reveal">
-      <h2>ليه شمعة المساج المانديلا هي الحل؟</h2>
-      <p>
+  <div class="wrap">
+    <div class="lp-solution-card lp-reveal">
+      <span class="solution-eyebrow">✨ الحل اللي هتستناه</span>
+      <h2>
+        ليه شمعة المساج المانديلا<br>
+        <span class="hl">هي الحل؟</span>
+      </h2>
+      <p class="solution-lead">
         لأنها مش شمعة عادية — دي <b>تجربة مختلفة</b> بتجمع بين الاسترخاء والعناية بالبشرة. عند اشتعالها وتدفئتها، بتتحول لزيت مساج دافئ وناعم، بيوصل للعضلات مباشرة ويرطبها من جوه.
       </p>
+
+      <div class="lp-solution-media">
+        <img
+          id="lpSolImg"
+          src="velalight-massage-mandala-spa-spa.webp"
+          alt="شمعة المساج المانديلا — تركيبة VelaLight الغنية"
+          loading="lazy"
+          width="500" height="312">
+      </div>
+
+      <div class="lp-solution-divider"><span class="dot"></span></div>
+
+      <h3>تركيبة VelaLight الغنية</h3>
+      <p class="ing-sub">كل مكوّن مختار بعناية لبشرة أنعم وإحساس أعمق بالاسترخاء</p>
+
+      <ul class="lp-ingredients">
+        <li><span class="em">🍇</span><span><b>زيت بذور العنب:</b> غني بمضادات الأكسدة ويساعد على ترطيب البشرة وتحسين مظهرها.</span></li>
+        <li><span class="em">🌱</span><span><b>زيت الأرجان المغربي:</b> يمنح البشرة نعومة وترطيبًا ويتركها بمظهر أكثر حيوية.</span></li>
+        <li><span class="em">🥑</span><span><b>زيت الجوجوبا والأفوكادو:</b> تغذية وترطيب عميق للبشرة.</span></li>
+        <li><span class="em">🌰</span><span><b>زيت اللوز الحلو:</b> يساعد على تنعيم البشرة والحفاظ على ترطيبها.</span></li>
+        <li><span class="em">🍫</span><span><b>زبدة الكاكاو وزبدة الشيا الخام:</b> تمنح البشرة إحساسًا غنيًا بالترطيب والنعومة.</span></li>
+        <li><span class="em">🥥</span><span><b>زيت جوز الهند:</b> يترك البشرة ناعمة ومرطبة.</span></li>
+        <li><span class="em">🍯</span><span><b>شمع العسل الألماني وشمع الصويا:</b> قاعدة طبيعية مصممة لتذوب بهدوء وتمنح قوامًا مناسبًا للمساج.</span></li>
+      </ul>
     </div>
-  </div>
-  <div class="wrap" style="margin-top:2.5rem">
-    <h2 class="lp-reveal" style="text-align:center;font-family:var(--fd);font-size:clamp(1.3rem,3.2vw,1.7rem);margin-bottom:.5rem">تركيبة VelaLight الغنية</h2>
-    <p class="lp-reveal" style="text-align:center;color:var(--mut);font-size:.9rem;margin-bottom:1.5rem">كل مكوّن مختار بعناية لبشرة أنعم وإحساس أعمق بالاسترخاء</p>
-    <ul class="lp-ingredients">
-      <li class="lp-reveal"><span class="em">🍇</span><span><b>زيت بذور العنب:</b> غني بمضادات الأكسدة ويساعد على ترطيب البشرة وتحسين مظهرها.</span></li>
-      <li class="lp-reveal"><span class="em">🌱</span><span><b>زيت الأرجان المغربي:</b> يمنح البشرة نعومة وترطيبًا ويتركها بمظهر أكثر حيوية.</span></li>
-      <li class="lp-reveal"><span class="em">🥑</span><span><b>زيت الجوجوبا والأفوكادو:</b> تغذية وترطيب عميق للبشرة.</span></li>
-      <li class="lp-reveal"><span class="em">🌰</span><span><b>زيت اللوز الحلو:</b> يساعد على تنعيم البشرة والحفاظ على ترطيبها.</span></li>
-      <li class="lp-reveal"><span class="em">🍫</span><span><b>زبدة الكاكاو وزبدة الشيا الخام:</b> تمنح البشرة إحساسًا غنيًا بالترطيب والنعومة.</span></li>
-      <li class="lp-reveal"><span class="em">🥥</span><span><b>زيت جوز الهند:</b> يترك البشرة ناعمة ومرطبة.</span></li>
-      <li class="lp-reveal"><span class="em">🍯</span><span><b>شمع العسل الألماني وشمع الصويا:</b> قاعدة طبيعية مصممة لتذوب بهدوء وتمنح قوامًا مناسبًا للمساج.</span></li>
-    </ul>
   </div>
 </section>
 
@@ -400,29 +602,46 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 7. OFFER ═══ -->
+<!-- ═══ 7. OFFER — نسخة مبهرة ═══ -->
 <section class="lp-offer">
   <div class="wrap">
     <div class="lp-offer-box lp-reveal">
-      <span class="tag">🎁 عرض خاص لعملاء هذه الصفحة</span>
-      <div>
-        <span class="lp-discount-badge">🔥 خصم 100 ج — العرض ساري لفترة محدودة</span>
-      </div>
+      <span class="lp-offer-ribbon">🎁 عرض خاص لعملاء هذه الصفحة</span>
+
       <h2 id="lpOfferTitle">شمعة المساج المانديلا</h2>
-      <div class="price-row">
-        <span class="price-now" id="lpOfferPrice">375 ج</span>
-        <span class="price-old" id="lpOfferOld">475 ج</span>
+
+      <span class="lp-discount-badge">🔥 خصم 100 ج — العرض ساري لفترة محدودة</span>
+
+      <div class="lp-price-row">
+        <span class="lp-price-now" id="lpOfferPrice">375 ج</span>
+        <span class="lp-price-old" id="lpOfferOld">475 ج</span>
       </div>
-      <span class="savings">💰 وفّر 100 ج + تغليف هدايا مجاني</span>
-      <ul>
+
+      <span class="lp-price-save">💰 وفّر 100 ج + تغليف هدايا مجاني</span>
+
+      <ul class="lp-offer-features">
         <li><span class="ic">✓</span> شمع صويا طبيعي 100%</li>
         <li><span class="ic">✓</span> 72 ساعة اشتعال</li>
         <li><span class="ic">✓</span> زيوت أرجان + جوجوبا + أفوكادو</li>
         <li><span class="ic">✓</span> تغليف هدايا فاخر مجاناً</li>
         <li><span class="ic">✓</span> دفع آمن 100%</li>
       </ul>
-      <button class="lp-cta" onclick="lpOpenModal()">🛍️ اطلب الآن — وفّر 100 ج</button>
+
+      <button class="lp-cta" onclick="lpOpenModal()" style="font-size:1.1rem;padding:1.1rem 2rem">
+        🛍️ اطلب الآن — وفّر 100 ج
+      </button>
       <p class="lp-cta-sub">⏳ العرض ساري لفترة محدودة</p>
+
+      <div class="lp-offer-trust">
+        <span><span class="ic">🔒</span> دفع آمن 100%</span>
+        <span><span class="ic">🚚</span> شحن لكل مصر</span>
+        <span><span class="ic">📦</span> توصيل 3-7 أيام</span>
+      </div>
+
+      <div class="lp-offer-social-proof">
+        <span class="stars">★★★★★</span>
+        <span>أكثر من 500 عميل راضٍ</span>
+      </div>
     </div>
   </div>
 </section>
@@ -493,70 +712,44 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
    LP CONFIG — كل حاجة هنا تعدلها
    ═══════════════════════════════════════════════════════════ */
 var LP_CONFIG = {
-  // ⭐ ID المنتج من Firebase
   productId: "12",
-
-  // 🎬 الفيديو في قسم البطل
   heroVideo: "velaligh-spa-candle.mp4",
   heroPoster: "velalight-massage-mandala-spa-spa.webp",
-
-  // 🖼️ صورة قسم الحل
   solutionImage: "velalight-massage-mandala-spa-spa.webp",
-
-  // 💰 السعر
   priceOverride: 375,
   oldPriceOverride: 475,
-
-  // 📸 صور آراء العملاء — rev1.jpg إلى rev17.jpg
   testimonials: [
-    { img: "testimonials/rev1.jpg",  name: "",     quote: "⭐ الشمعة دي غيرت روتيني المسائي تمامًا" },
-    { img: "testimonials/rev2.jpg",  name: "",       quote: "⭐ ريحتها تحفة وبترطب بشرتي" },
-    { img: "testimonials/rev3.jpg",  name: "",   quote: "⭐ أحسن هدية جبتها لمراتي" },
-    { img: "testimonials/rev4.jpg",  name: "",       quote: "⭐ تجربة رائعة، هرجع أطلب تاني" },
-    { img: "testimonials/rev5.jpg",  name: "",       quote: "⭐ منتج فاخر ويستاهل كل جنيه" },
-    { img: "testimonials/rev6.jpg",  name: "",    quote: "⭐ بشرتي بقت ناعمة جدًا" },
-    { img: "testimonials/rev7.jpg",  name: "",      quote: "⭐ استرخاء كامل بعد يوم طويل" },
-    { img: "testimonials/rev8.jpg",  name: "",        quote: "⭐ الهدية المثالية لأي مناسبة" },
-    { img: "testimonials/rev9.jpg",  name: "",      quote: "⭐ جودة عالية وخدمة ممتازة" },
-    { img: "testimonials/rev10.jpg", name: "",   quote: "⭐ ريحة اللافندر تحفة" },
-    { img: "testimonials/rev11.jpg", name: "",       quote: "⭐ يستحق كل التقييمات الحلوة" },
-    { img: "testimonials/rev12.jpg", name: "",       quote: "⭐ تجربة سبا كاملة في البيت" },
-    { img: "testimonials/rev13.jpg", name: "",  quote: "⭐ التغليف فخم جدًا" },
-    { img: "testimonials/rev14.jpg", name: "",       quote: "⭐ سرعة توصيل وجودة عالية" },
-    { img: "testimonials/rev15.jpg", name: "",      quote: "⭐ هرشحه لكل أصحابي" },
-    { img: "testimonials/rev16.jpg", name: "",  quote: "⭐ فاقت توقعاتي بكتير" },
-    { img: "testimonials/rev17.jpg", name: "",      quote: "⭐ تجربة شراء ممتازة من الأول للآخر" }
+    { img: "testimonials/rev1.jpg",  name: "", quote: "⭐ الشمعة دي غيرت روتيني المسائي تمامًا" },
+    { img: "testimonials/rev2.jpg",  name: "", quote: "⭐ ريحتها تحفة وبترطب بشرتي" },
+    { img: "testimonials/rev3.jpg",  name: "", quote: "⭐ أحسن هدية جبتها لمراتي" },
+    { img: "testimonials/rev4.jpg",  name: "", quote: "⭐ تجربة رائعة، هرجع أطلب تاني" },
+    { img: "testimonials/rev5.jpg",  name: "", quote: "⭐ منتج فاخر ويستاهل كل جنيه" },
+    { img: "testimonials/rev6.jpg",  name: "", quote: "⭐ بشرتي بقت ناعمة جدًا" },
+    { img: "testimonials/rev7.jpg",  name: "", quote: "⭐ استرخاء كامل بعد يوم طويل" },
+    { img: "testimonials/rev8.jpg",  name: "", quote: "⭐ الهدية المثالية لأي مناسبة" },
+    { img: "testimonials/rev9.jpg",  name: "", quote: "⭐ جودة عالية وخدمة ممتازة" },
+    { img: "testimonials/rev10.jpg", name: "", quote: "⭐ ريحة اللافندر تحفة" },
+    { img: "testimonials/rev11.jpg", name: "", quote: "⭐ يستحق كل التقييمات الحلوة" },
+    { img: "testimonials/rev12.jpg", name: "", quote: "⭐ تجربة سبا كاملة في البيت" },
+    { img: "testimonials/rev13.jpg", name: "", quote: "⭐ التغليف فخم جدًا" },
+    { img: "testimonials/rev14.jpg", name: "", quote: "⭐ سرعة توصيل وجودة عالية" },
+    { img: "testimonials/rev15.jpg", name: "", quote: "⭐ هرشحه لكل أصحابي" },
+    { img: "testimonials/rev16.jpg", name: "", quote: "⭐ فاقت توقعاتي بكتير" },
+    { img: "testimonials/rev17.jpg", name: "", quote: "⭐ تجربة شراء ممتازة من الأول للآخر" }
   ],
-
   defaultScent: ""
 };
 
-/* ═══════════════════════════════════════════════════════════
-   23 عطر كاملين — مدمجين مباشرة (مش محتاج تعدّل app.js)
-   ═══════════════════════════════════════════════════════════ */
+/* ═══ 23 عطر كاملين ═══ */
 var LP_SCENTS = [
-  ["فانيلا","Vanilla"],
-  ["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
-  ["لافندر","Lavender"],
-  ["موكا","Mocha"],
-  ["كراميل","Caramel"],
-  ["كاريبيان فروت","Caribbean Fruit"],
-  ["فل","Jasmine Sambac"],
-  ["ياسمين","Jasmine"],
-  ["اناناس","Pineapple"],
-  ["شيكولاتة","Chocolate"],
-  ["كوكونات","Coconut"],
-  ["كاسيليا","Cassilia — Massage"],
-  ["اينتو زانايت","Into Zanaite — Massage"],
-  ["بوكيت روز","Bouquet Rose"],
-  ["ورد بلدى","Egyptian Rose"],
-  ["تيوليب","Tulip"],
-  ["قهوة","Coffee"],
-  ["قهوة فانيلا","Vanilla Coffee"],
-  ["قهوة بندق","Hazelnut Coffee"],
-  ["عود فانيليا","Vanilla Oud"],
-  ["عنبر","Amber"],
-  ["فراولة","Strawberry"],
+  ["فانيلا","Vanilla"],["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
+  ["لافندر","Lavender"],["موكا","Mocha"],["كراميل","Caramel"],
+  ["كاريبيان فروت","Caribbean Fruit"],["فل","Jasmine Sambac"],["ياسمين","Jasmine"],
+  ["اناناس","Pineapple"],["شيكولاتة","Chocolate"],["كوكونات","Coconut"],
+  ["كاسيليا","Cassilia — Massage"],["اينتو زانايت","Into Zanaite — Massage"],
+  ["بوكيت روز","Bouquet Rose"],["ورد بلدى","Egyptian Rose"],["تيوليب","Tulip"],
+  ["قهوة","Coffee"],["قهوة فانيلا","Vanilla Coffee"],["قهوة بندق","Hazelnut Coffee"],
+  ["عود فانيليا","Vanilla Oud"],["عنبر","Amber"],["فراولة","Strawberry"],
   ["عود خشب صندل","Sandalwood Oud"]
 ];
 
@@ -570,7 +763,6 @@ var LP_SCENTS = [
   var LP_QTY = 1;
   var LP_MAX_STOCK = 99;
 
-  /* ═══ ترجمة العطر ═══ */
   function scentTr(name){
     var f = LP_SCENTS.find(function(s){ return s[0] === name || s[1] === name; });
     if(!f) return name || "";
@@ -578,13 +770,12 @@ var LP_SCENTS = [
     return lang === "en" ? f[1] : f[0];
   }
 
-  /* ═══ مبلغ بالعربي ═══ */
   function priceFmt(n){
     if(typeof money === "function") return money(n);
     return String(Math.round(Number(n) || 0)) + " ج";
   }
 
-  /* ═══ البحث عن المنتج ═══ */
+  /* ═══ البحث عن المنتج — مع ضمان وجود صورة ═══ */
   function findProduct(){
     var pool = (typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length) ? ALL_PRODUCTS
              : (typeof PRODUCTS !== "undefined" && PRODUCTS.length) ? PRODUCTS
@@ -596,6 +787,26 @@ var LP_SCENTS = [
     if(p){
       if(LP_CONFIG.priceOverride != null) p.price = LP_CONFIG.priceOverride;
       if(LP_CONFIG.oldPriceOverride != null) p.old = LP_CONFIG.oldPriceOverride;
+
+      // ✅ ضمان وجود صورة — دي أهم نقطة عشان السلة تعرض الصورة
+      var imgCandidates = [
+        p.img,
+        (typeof imgOf === "function") ? imgOf(p) : null,
+        p.imgUrl,
+        p.image,
+        LP_CONFIG.heroPoster,
+        LP_CONFIG.solutionImage,
+        "velalight-massage-mandala-spa-spa.webp"
+      ];
+      var finalImg = "";
+      for(var i = 0; i < imgCandidates.length; i++){
+        var c = imgCandidates[i];
+        if(c && typeof c === "string" && c.trim() && c.indexOf("data:") !== 0){
+          finalImg = c.trim();
+          break;
+        }
+      }
+      if(finalImg) p.img = finalImg;
       return p;
     }
     return {
@@ -609,7 +820,6 @@ var LP_SCENTS = [
     };
   }
 
-  /* ═══ بناء صور آراء العملاء ═══ */
   function buildTestimonials(){
     var wrap = document.getElementById("lpTestimonials");
     if(!wrap) return;
@@ -618,17 +828,15 @@ var LP_SCENTS = [
       var card = document.createElement("div");
       card.className = "lp-social-card";
       card.innerHTML =
-        '<img src="' + t.img + '" alt="رأي عميل — ' + t.name + '" loading="lazy" onerror="this.style.opacity=0.15">' +
-        '<div class="meta"><b>' + t.name + '</b><small>' + t.quote + '</small></div>';
+        '<img src="' + t.img + '" alt="رأي عميل" loading="lazy" onerror="this.style.opacity=0.15">' +
+        '<div class="meta"><b>' + (t.name || '') + '</b><small>' + t.quote + '</small></div>';
       wrap.appendChild(card);
     });
   }
 
-  /* ═══ تطبيق بيانات المنتج على الصفحة ═══ */
   function applyProduct(){
     if(!LP_PRODUCT) return;
 
-    // أسعار
     var priceNow = document.getElementById("lpOfferPrice");
     if(priceNow) priceNow.textContent = priceFmt(LP_PRODUCT.price);
 
@@ -642,13 +850,12 @@ var LP_SCENTS = [
       }
     }
 
-    // Sticky
     var stickyName = document.getElementById("lpStickyName");
     if(stickyName) stickyName.textContent = LP_PRODUCT.name;
     var stickyPrice = document.getElementById("lpStickyPrice");
     if(stickyPrice) stickyPrice.textContent = priceFmt(LP_PRODUCT.price) + " — دفع آمن 100%";
 
-    // Modal preview
+    // ✅ استخدم نفس الصورة المضمونة للمودال
     var modalImg = document.getElementById("lpModalImg");
     if(modalImg) modalImg.src = LP_PRODUCT.img || LP_CONFIG.heroPoster;
     var modalName = document.getElementById("lpModalName");
@@ -659,12 +866,10 @@ var LP_SCENTS = [
     var offerTitle = document.getElementById("lpOfferTitle");
     if(offerTitle) offerTitle.textContent = LP_PRODUCT.name;
 
-    // stock
     var stockNum = Number(LP_PRODUCT.stock);
     LP_MAX_STOCK = (Number.isFinite(stockNum) && stockNum > 0) ? Math.floor(stockNum) : 99;
   }
 
-  /* ═══ بناء قائمة العطور (23) ═══ */
   function buildScentOptions(){
     var sel = document.getElementById("lpScentSelect");
     if(!sel) return;
@@ -677,7 +882,6 @@ var LP_SCENTS = [
     });
   }
 
-  /* ═══ Modal ═══ */
   window.lpOpenModal = function(){
     var ov = document.getElementById("lpModalOv");
     if(!ov) return;
@@ -707,9 +911,13 @@ var LP_SCENTS = [
     if(p) p.disabled = LP_QTY >= LP_MAX_STOCK;
   }
 
-  /* ═══ إضافة للسلة ═══ */
   function lpAddToCart(scent, qty){
     if(!LP_PRODUCT) LP_PRODUCT = findProduct();
+
+    // ✅ تأكد إن الصورة موجودة قبل الإضافة
+    if(!LP_PRODUCT.img || !String(LP_PRODUCT.img).trim()){
+      LP_PRODUCT.img = LP_CONFIG.heroPoster;
+    }
 
     var added = false;
     try {
@@ -743,14 +951,12 @@ var LP_SCENTS = [
     return wasAdded || added !== false;
   }
 
-  /* ═══ Init ═══ */
   function init(){
     LP_PRODUCT = findProduct();
     applyProduct();
     buildScentOptions();
     buildTestimonials();
 
-    // Qty
     var minus = document.getElementById("lpQtyMinus");
     var plus = document.getElementById("lpQtyPlus");
     if(minus) minus.addEventListener("click", function(){
@@ -761,7 +967,6 @@ var LP_SCENTS = [
       else if(typeof toast === "function") toast("⚠️ المتاح " + LP_MAX_STOCK + " قطعة فقط");
     });
 
-    // Add from modal
     var addBtn = document.getElementById("lpModalAdd");
     if(addBtn) addBtn.addEventListener("click", function(){
       var sel = document.getElementById("lpScentSelect");
@@ -798,7 +1003,6 @@ var LP_SCENTS = [
       }
     });
 
-    // Close on overlay
     var ov = document.getElementById("lpModalOv");
     if(ov){
       ov.addEventListener("click", function(e){
@@ -806,12 +1010,10 @@ var LP_SCENTS = [
       });
     }
 
-    // ESC
     document.addEventListener("keydown", function(e){
       if(e.key === "Escape") lpCloseModal();
     });
 
-    // FAQ
     document.querySelectorAll(".lp-faq-item").forEach(function(item){
       var btn = item.querySelector(".lp-faq-q");
       var ans = item.querySelector(".lp-faq-a");
@@ -833,7 +1035,6 @@ var LP_SCENTS = [
       });
     });
 
-    // Reveal
     if("IntersectionObserver" in window){
       var io = new IntersectionObserver(function(entries){
         entries.forEach(function(en){
@@ -848,7 +1049,6 @@ var LP_SCENTS = [
       document.querySelectorAll(".lp-reveal").forEach(function(el){ el.classList.add("on"); });
     }
 
-    // Sticky CTA
     var sticky = document.getElementById("lpStickyCta");
     if(sticky){
       var lastY = 0;
@@ -860,7 +1060,6 @@ var LP_SCENTS = [
       }, { passive: true });
     }
 
-    // Meta Pixel — ViewContent
     if(typeof fbq === "function"){
       fbq("track", "ViewContent", {
         content_ids: [LP_PRODUCT.id],
