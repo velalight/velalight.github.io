@@ -48,7 +48,6 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-trust-mini .ic{font-size:.85rem}
 @media(max-width:640px){.lp-trust-mini{display:none}}
 
-/* ✅ زر CTA موحد — أحمر في كل مكان */
 .lp-cta{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin-inline:auto;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;font-weight:900;font-size:1.05rem;padding:1rem 2rem;border-radius:999px;box-shadow:0 12px 30px -8px rgba(231,76,60,.6);transition:.3s;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
 .lp-cta:hover{transform:translateY(-2px);box-shadow:0 16px 40px -8px rgba(231,76,60,.75)}
 .lp-cta:active{transform:scale(.97)}
@@ -85,7 +84,6 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 @keyframes offerGlow{0%,100%{box-shadow:0 24px 70px -22px rgba(231,76,60,.4),0 0 0 8px rgba(255,255,255,.7),0 0 0 12px rgba(217,171,95,.15);transform:scale(1)}50%{box-shadow:0 30px 85px -20px rgba(231,76,60,.55),0 0 0 8px rgba(255,247,224,1),0 0 0 16px rgba(217,171,95,.35);transform:scale(1.008)}}
 .lp-offer-box h2{font-family:var(--fd);font-size:clamp(1.4rem,3.8vw,2rem);margin:.4rem 0 .9rem;color:var(--ink)}
 
-/* ✅ Countdown Timer */
 .lp-countdown{display:inline-flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,#fff4e0,#ffe9c4);border:2px solid rgba(231,76,60,.35);border-radius:14px;padding:.55rem 1rem;margin:0 0 .9rem;box-shadow:0 6px 18px -6px rgba(231,76,60,.3);animation:countdownPulse 2s ease-in-out infinite}
 @keyframes countdownPulse{0%,100%{box-shadow:0 6px 18px -6px rgba(231,76,60,.3)}50%{box-shadow:0 10px 24px -6px rgba(231,76,60,.5)}}
 .lp-countdown .cd-lbl{font-size:.75rem;font-weight:800;color:#c0392b;white-space:nowrap}
@@ -154,7 +152,6 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-result b{display:block;font-size:.95rem;margin-bottom:.3rem}
 .lp-result p{font-size:.8rem;color:var(--mut);line-height:1.6}
 
-/* ✅ Cross-sell جديد */
 .lp-cross{padding:3.5rem 0;background:var(--bg)}
 .lp-cross h2{font-family:var(--fd);font-size:clamp(1.4rem,3.5vw,2rem);text-align:center;margin-bottom:.6rem}
 .lp-cross .sub{text-align:center;color:var(--mut);max-width:520px;margin:0 auto 2rem;font-size:.92rem}
@@ -213,7 +210,6 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .lp-footer{padding:1.5rem 0;text-align:center;font-size:.75rem;color:var(--dim);border-top:1px solid var(--line)}
 .lp-footer a{color:var(--gold2);font-weight:700}
 
-/* ═══ Scent Modal ═══ */
 .lp-modal-ov{position:fixed;inset:0;background:rgba(26,21,18,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:9999;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .28s ease}
 .lp-modal-ov.show{opacity:1;pointer-events:auto}
 @media(min-width:640px){.lp-modal-ov{align-items:center}}
@@ -331,13 +327,12 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 2. 🔥 OFFER ═══ -->
+<!-- ═══ 2. OFFER ═══ -->
 <section class="lp-offer">
   <div class="wrap">
     <div class="lp-offer-box lp-reveal on">
       <h2 id="lpOfferTitle">شمعة المساج المانديلا</h2>
 
-      <!-- ✅ Countdown Timer -->
       <div class="lp-countdown">
         <span class="cd-lbl">⏳ العرض ينتهي خلال</span>
         <div class="cd-timer">
@@ -473,7 +468,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
   </div>
 </section>
 
-<!-- ═══ 6. CROSS-SELL — عملاء اشتروا أيضًا ═══ -->
+<!-- ═══ 6. CROSS-SELL ═══ -->
 <section class="lp-cross">
   <div class="wrap">
     <h2 class="lp-reveal">✨ عملاء اشتروا معه أيضًا</h2>
@@ -604,7 +599,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 
 <script>
 /* ═══════════════════════════════════════════════════════════
-   LP CONFIG
+   LP CONFIG — عدّل من هنا بس
    ═══════════════════════════════════════════════════════════ */
 var LP_CONFIG = {
   productId: "12",
@@ -614,7 +609,17 @@ var LP_CONFIG = {
   cartImage: "velalight-massage-mandala-spa-spa.webp",
   priceOverride: 375,
   oldPriceOverride: 475,
-  /* ✅ آراء عملاء بدون أسماء ولا محافظات — بس الكلام */
+
+  /* ✅ ═══ Cross-Sell: حدد IDs المنتجات من Firebase Console ═══
+     - حط IDs حقيقية من الأدمن (مثال: "15", "18", "23")
+     - لو سيبتها فاضية [] → هيختار 3 منتجات تلقائيًا من نفس التصنيف
+     - أي ID غلط → الكود بتجاهله ويكمل بالباقي */
+  crossSellIds: [
+    "",  // ← ID المنتج الأول (مثال: "15")
+    "",  // ← ID المنتج التاني (مثال: "18")
+    ""   // ← ID المنتج التالت (مثال: "23")
+  ],
+
   testimonials: [
     { img: "testimonials/rev1.jpg",  quote: "⭐ الشمعة دي غيرت روتيني المسائي تمامًا" },
     { img: "testimonials/rev2.jpg",  quote: "⭐ ريحتها تحفة وبترطب بشرتي" },
@@ -657,6 +662,8 @@ var LP_SCENTS = [
   var LP_PRODUCT = null;
   var LP_QTY = 1;
   var LP_MAX_STOCK = 99;
+  var _crossSellRendered = false;
+  var _crossSellBound = false;
 
   function scentTr(name){
     var f = LP_SCENTS.find(function(s){ return s[0] === name || s[1] === name; });
@@ -670,10 +677,16 @@ var LP_SCENTS = [
     return String(Math.round(Number(n) || 0)) + " ج";
   }
 
+  function getPool(){
+    return (typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length) ? ALL_PRODUCTS
+         : (typeof PRODUCTS !== "undefined" && PRODUCTS.length) ? PRODUCTS
+         : (window.ALL_PRODUCTS && window.ALL_PRODUCTS.length) ? window.ALL_PRODUCTS
+         : (window.PRODUCTS && window.PRODUCTS.length) ? window.PRODUCTS
+         : [];
+  }
+
   function findProduct(){
-    var pool = (typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length) ? ALL_PRODUCTS
-             : (typeof PRODUCTS !== "undefined" && PRODUCTS.length) ? PRODUCTS
-             : (window.ALL_PRODUCTS || window.PRODUCTS || []);
+    var pool = getPool();
     var p = null;
     if(pool && pool.length){
       p = pool.find(function(x){ return String(x.id) === String(LP_CONFIG.productId); });
@@ -692,7 +705,6 @@ var LP_SCENTS = [
     return p;
   }
 
-  /* ✅ آراء العملاء — بس الكلام، بدون اسم أو مدينة */
   function buildTestimonials(){
     var wrap = document.getElementById("lpTestimonials");
     if(!wrap) return;
@@ -707,49 +719,106 @@ var LP_SCENTS = [
     });
   }
 
-  /* ✅ Cross-sell — 3 منتجات مقترحة */
+  /* ✅ Cross-sell — بياخد من الأدمن بعد التحميل + بيسمع التحديثات */
   function buildCrossSell(){
     var wrap = document.getElementById("lpCrossGrid");
     if(!wrap) return;
+
+    var pool = getPool();
+
+    /* ⚠️ لو لسه محمّلتش — استنى وأعد المحاولة */
+    if(!pool.length){
+      if(!_crossSellRendered){
+        wrap.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#8a7a64;">⏳ جاري تحميل المنتجات...</div>';
+      }
+      setTimeout(buildCrossSell, 700);
+      return;
+    }
+
+    /* ✅ لو اترسم خلاص وعندنا نفس عدد المنتجات — متكررهوش */
+    if(_crossSellRendered && wrap.dataset.lastCount === String(pool.length)){
+      return;
+    }
+
+    _crossSellRendered = true;
+    wrap.dataset.lastCount = String(pool.length);
     wrap.innerHTML = "";
 
-    var pool = (typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length) ? ALL_PRODUCTS
-             : (typeof PRODUCTS !== "undefined" && PRODUCTS.length) ? PRODUCTS
-             : [];
-    if(!pool.length){
+    var picks = [];
+
+    /* 🅰️ الطريقة 1: من LP_CONFIG.crossSellIds (تحت سيطرتك) */
+    var manualIds = (LP_CONFIG.crossSellIds || []).filter(function(id){
+      return id && String(id).trim();
+    });
+
+    if(manualIds.length){
+      manualIds.forEach(function(id){
+        var found = pool.find(function(p){ return String(p.id) === String(id); });
+        if(found && found.active !== false && String(found.id) !== String(LP_CONFIG.productId)){
+          picks.push(found);
+        }
+      });
+    }
+
+    /* 🅱️ الطريقة 2: fallback تلقائي — نفس التصنيف + مفعّل + فيه صورة */
+    if(!picks.length){
+      picks = pool.filter(function(p){
+        if(!p || !p.id) return false;
+        if(String(p.id) === String(LP_CONFIG.productId)) return false;
+        if(p.active === false) return false;
+        if(!p.img || !String(p.img).trim()) return false;
+        if(LP_PRODUCT && LP_PRODUCT.cat && p.cat && p.cat === LP_PRODUCT.cat) return true;
+        return false;
+      }).slice(0, 3);
+
+      if(picks.length < 3){
+        var extra = pool.filter(function(p){
+          if(!p || !p.id) return false;
+          if(String(p.id) === String(LP_CONFIG.productId)) return false;
+          if(p.active === false) return false;
+          if(!p.img || !String(p.img).trim()) return false;
+          return !picks.some(function(x){ return String(x.id) === String(p.id); });
+        }).slice(0, 3 - picks.length);
+        picks = picks.concat(extra);
+      }
+    }
+
+    /* لو مش لاقي أي منتج، اخفي القسم */
+    if(!picks.length){
       var sec = document.querySelector(".lp-cross");
       if(sec) sec.style.display = "none";
       return;
-    }
-
-    var candidates = pool.filter(function(p){
-      return p && p.id && String(p.id) !== String(LP_CONFIG.productId) && p.active !== false;
-    });
-    var picks = candidates.slice(0, 3);
-    if(!picks.length){
+    } else {
       var sec2 = document.querySelector(".lp-cross");
-      if(sec2) sec2.style.display = "none";
-      return;
+      if(sec2) sec2.style.display = "";
     }
 
+    /* ✅ ابنِ الكروت */
     picks.forEach(function(p){
       var img = "";
       try { img = (typeof imgOf === "function") ? imgOf(p) : (p.img || ""); } catch(e){ img = p.img || ""; }
       if(!img) img = LP_CONFIG.heroPoster;
 
+      var nm = (typeof pname === "function") ? pname(p) : (p.name || "");
+      var pr = priceFmt(p.price);
+      var oldHTML = (p.old && Number(p.old) > Number(p.price))
+        ? '<del style="font-size:.78rem;color:#8a7a64;margin-inline-start:.4rem;font-weight:600;">' + priceFmt(p.old) + '</del>'
+        : '';
+
       var card = document.createElement("div");
       card.className = "lp-cross-card";
       card.innerHTML =
-        '<div class="lp-cross-media"><img src="' + img + '" alt="" loading="lazy" onerror="this.src=\'' + LP_CONFIG.heroPoster + '\'"></div>' +
+        '<div class="lp-cross-media"><img src="' + img + '" alt="' + nm + '" loading="lazy" onerror="this.src=\'' + LP_CONFIG.heroPoster + '\'"></div>' +
         '<div class="lp-cross-body">' +
-          '<h3>' + (typeof pname === "function" ? pname(p) : p.name) + '</h3>' +
-          '<div class="price">' + priceFmt(p.price) + '</div>' +
+          '<h3>' + nm + '</h3>' +
+          '<div class="price">' + pr + oldHTML + '</div>' +
           '<button class="lp-cross-btn" type="button">🛍️ اطلب الآن</button>' +
         '</div>';
       wrap.appendChild(card);
 
       var btn = card.querySelector(".lp-cross-btn");
       btn.addEventListener("click", function(){
+        /* ✅ حمّل بيانات المنتج كاملة */
         LP_PRODUCT = {
           id: p.id,
           name: p.name || "",
@@ -763,12 +832,23 @@ var LP_SCENTS = [
         var mi = document.getElementById("lpModalImg"); if(mi) mi.src = img;
         var mn = document.getElementById("lpModalName"); if(mn) mn.textContent = LP_PRODUCT.name;
         var mp = document.getElementById("lpModalPrice"); if(mp) mp.textContent = priceFmt(LP_PRODUCT.price);
+        var stk = Number(p.stock);
+        LP_MAX_STOCK = (Number.isFinite(stk) && stk > 0) ? Math.floor(stk) : 99;
+        updateQtyUI();
         lpOpenModal();
       });
     });
+
+    /* ✅ اسمع تحديثات الأدمن مرة واحدة */
+    if(!_crossSellBound){
+      _crossSellBound = true;
+      window.addEventListener("data-refresh", function(){
+        _crossSellRendered = false;
+        buildCrossSell();
+      });
+    }
   }
 
-  /* ✅ Countdown Timer — 24 ساعة */
   function initCountdown(){
     var KEY = "lp_offer_end_v1";
     var endTime = 0;
