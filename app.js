@@ -2431,6 +2431,7 @@ function initQuickAdd() {
 
   addBtn?.addEventListener("click", () => {
     if (!quickAddProduct) return;
+
     const modalSelect = document.getElementById("modalScentSelect");
     const currentScent = modalSelect ? modalSelect.value : quickAddScent;
     const currentQty = parseInt(document.getElementById("smQVal")?.textContent || "1", 10) || 1;
@@ -2446,12 +2447,19 @@ function initQuickAdd() {
     if (added) {
       const originalText = addBtn.textContent;
       addBtn.textContent = "✓ تمت الإضافة";
+
       setTimeout(() => {
         addBtn.textContent = originalText || "🛍️ أضف للسلة";
         closeModal("scentOv");
         quickAddProduct = null;
         quickAddScent = "";
         quickAddQty = 1;
+        
+        // ✅ الإصلاح: تحديث السلة فورًا بعد الإضافة
+        // ده بيخلي المنتج الجديد يظهر + الـ cross-sell يختفي
+        // (لأن المنتج بقى في السلة، فمش هيتعرض تاني كمقترح)
+        renderCart();
+        cartBadge();
       }, 450);
     }
   });
