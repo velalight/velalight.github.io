@@ -1,6 +1,6 @@
 (function(){
 "use strict";
- 
+
 // ☢️ تنظيف ذاتي آمن: إلغاء تسجيل أي Service Worker قديم عالق ومسح الكاش التالف
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(function(registrations) {
@@ -19,7 +19,7 @@ if ('serviceWorker' in navigator) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ FIX: Global Image Error Handler (يمنع اختفاء المنتجات)
+   ✨ FIX: Global Image Error Handler
    ═══════════════════════════════════════════════════════════ */
 window.handleImageError = function(imgElement, productId) {
   if (!imgElement) return;
@@ -39,7 +39,7 @@ window.handleImageError = function(imgElement, productId) {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ TRACKING DATA CAPTURE (UTM & Click IDs)
+   ✨ TRACKING DATA CAPTURE
    ═══════════════════════════════════════════════════════════ */
 function captureTrackingData() {
   const params = new URLSearchParams(window.location.search);
@@ -56,7 +56,7 @@ function captureTrackingData() {
 const sessionTracking = captureTrackingData();
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ WISHLIST — مع Cache للأداء
+   ✨ WISHLIST
    ═══════════════════════════════════════════════════════════ */
 const WISHLIST_KEY = "vl_wishlist";
 let wishlistCache = null;
@@ -74,11 +74,8 @@ function getWishlist() {
 
 function saveWishlist(list) {
   wishlistCache = list;
-  try {
-    localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
-  } catch(e) {
-    console.warn("⚠️ Failed to save wishlist:", e);
-  }
+  try { localStorage.setItem(WISHLIST_KEY, JSON.stringify(list)); }
+  catch(e) { console.warn("⚠️ Failed to save wishlist:", e); }
 }
 
 function toggleWishlist(productId) {
@@ -86,12 +83,10 @@ function toggleWishlist(productId) {
   const idx = list.indexOf(productId);
   let added;
   if (idx === -1) {
-    list.push(productId);
-    added = true;
+    list.push(productId); added = true;
     toast("❤️ تمت الإضافة للمفضلة");
   } else {
-    list.splice(idx, 1);
-    added = false;
+    list.splice(idx, 1); added = false;
     toast("💔 تمت الإزالة من المفضلة");
   }
   saveWishlist(list);
@@ -104,14 +99,107 @@ function isInWishlist(productId) {
   return getWishlist().includes(productId);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ SAVED FOR LATER  (جديد — للتعديل #8/#12)
+   ═══════════════════════════════════════════════════════════ */
+const SAVED_KEY = "vl_saved_for_later";
+let savedCache = null;
+
+function getSavedForLater(){
+  if(savedCache !== null) return savedCache;
+  try {
+    savedCache = JSON.parse(localStorage.getItem(SAVED_KEY) || "[]");
+    if(!Array.isArray(savedCache)) savedCache = [];
+  } catch(e){ savedCache = []; }
+  return savedCache;
+}
+
+function saveSavedForLater(list){
+  savedCache = list;
+  try { localStorage.setItem(SAVED_KEY, JSON.stringify(list)); }
+  catch(e){ console.warn("⚠️ Failed to save 'save for later':", e); }
+}
+
+function addToSavedForLater(item){
+  const list = getSavedForLater();
+  list.push({...item, savedAt: Date.now()});
+  saveSavedForLater(list);
+}
+
+function removeFromSavedForLater(idx){
+  const list = getSavedForLater();
+  const removed = list.splice(idx, 1)[0];
+  saveSavedForLater(list);
+  return removed;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ COUPON PERSISTENCE  (إصلاح #4)
+   ═══════════════════════════════════════════════════════════ */
+const COUPON_KEY = "vl_coupon";
+let appliedCoupon = null;
+
+function setAppliedCoupon(c){
+  appliedCoupon = c;
+  try {
+    if(c){
+      localStorage.setItem(COUPON_KEY, JSON.stringify({...c, _savedAt: Date.now()}));
+    } else {
+      localStorage.removeItem(COUPON_KEY);
+    }
+  } catch(e){ console.warn("⚠️ Coupon persist failed:", e); }
+}
+
+function loadAppliedCoupon(){
+  try {
+    const raw = localStorage.getItem(COUPON_KEY);
+    if(!raw) return null;
+    const c = JSON.parse(raw);
+    // انتهاء تلقائي بعد 24 ساعة من الحفظ
+    if(c._savedAt && Date.now() - c._savedAt > 24 * 60 * 60 * 1000){
+      localStorage.removeItem(COUPON_KEY);
+      return null;
+    }
+    if(c.expiresAt && Date.now() > Number(c.expiresAt)){
+      localStorage.removeItem(COUPON_KEY);
+      return null;
+    }
+    return c;
+  } catch(e){ return null; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ CART EXPIRATION  (إصلاح #13)
+   ═══════════════════════════════════════════════════════════ */
+const CART_EXPIRY_MS = 30 * 24 * 60 * 60 * 1000; // 30 يوم
+
+function checkCartExpiration(){
+  try {
+    const ts = Number(localStorage.getItem("vl_cart_ts") || 0);
+    if(ts && Date.now() - ts > CART_EXPIRY_MS){
+      localStorage.removeItem("vl_cart");
+      localStorage.removeItem("vl_cart_ts");
+      localStorage.removeItem(COUPON_KEY);
+      appliedCoupon = null;
+      return true;
+    }
+  } catch(e){}
+  return false;
+}
+
+function touchCartTimestamp(){
+  try { localStorage.setItem("vl_cart_ts", String(Date.now())); } catch(e){}
+}
+
 /* ═══ QUICK ADD STATE ═══ */
 let quickAddProduct=null;
 let quickAddScent="";
 let quickAddQty=1;
 let quickAddMaxStock=99;
 let productGridClickBound=false;
+let cartListenersBound=false; // 🔴 إصلاح تسريب الـ listeners
 
-/* ═══ PERFORMANCE OPTIMIZATIONS ═══ */
+/* ═══ PERFORMANCE ═══ */
 const requestIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
 const cancelIdle = window.cancelIdleCallback || clearTimeout;
 
@@ -156,9 +244,7 @@ const velaScentTr=name=>{
 };
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ CART UI STYLES — النسخة النهائية
-   - ضغط كارت المنتج
-   - جعل الأزرار الأصلية Sticky
+   ✨ CART STYLES — النسخة المطوّرة
    ═══════════════════════════════════════════════════════════ */
 function injectCartStyles(){
   if(document.getElementById('vl-cart-luxe-styles')) return;
@@ -186,28 +272,19 @@ function injectCartStyles(){
       50%{ box-shadow: 0 4px 22px rgba(39,174,96,.28); }
     }
     .vl-ship-bar .vl-ship-txt{
-      text-align: center;
-      font-size: .82rem;
-      color: var(--dark,#3d2f1f);
-      margin-bottom: 7px;
-      font-weight: 500;
-      line-height: 1.4;
+      text-align: center; font-size: .82rem; color: var(--dark,#3d2f1f);
+      margin-bottom: 7px; font-weight: 500; line-height: 1.4;
     }
     .vl-ship-bar .vl-ship-txt strong{ color: #b8860b; font-weight: 800; }
     .vl-ship-bar.vl-ship-success .vl-ship-txt strong{ color: #1e8449; }
     .vl-ship-track{
-      background: #e8dcc9;
-      height: 8px;
-      border-radius: 999px;
-      overflow: hidden;
-      position: relative;
+      background: #e8dcc9; height: 8px; border-radius: 999px;
+      overflow: hidden; position: relative;
       box-shadow: inset 0 1px 2px rgba(0,0,0,.08);
     }
     .vl-ship-fill{
       background: linear-gradient(90deg,#d4af37 0%,#f9d877 50%,#d4af37 100%);
-      background-size: 200% 100%;
-      height: 100%;
-      width: 0%;
+      background-size: 200% 100%; height: 100%; width: 0%;
       border-radius: 999px;
       transition: width .8s cubic-bezier(.22,1,.36,1);
       animation: vlShimmer 3s linear infinite;
@@ -225,12 +302,8 @@ function injectCartStyles(){
 
     /* ═══ Confetti ═══ */
     .vl-confetti-piece{
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      z-index: 99999;
-      pointer-events: none;
-      opacity: 1;
+      position: fixed; width: 10px; height: 10px; z-index: 99999;
+      pointer-events: none; opacity: 1;
       animation: vlConfettiFall linear forwards;
     }
     @keyframes vlConfettiFall{
@@ -239,92 +312,72 @@ function injectCartStyles(){
     }
 
     /* ═══════════════════════════════════════════════════════
-       ✨ COMPACT LUXURY ITEM CARDS
+       ✨ COMPACT LUXURY ITEM CARDS  + animation
        ═══════════════════════════════════════════════════════ */
     .citem{
-      display: flex;
-      gap: 10px;
-      padding: 10px;
+      display: flex; gap: 10px; padding: 10px;
       background: linear-gradient(135deg,#fffbf5 0%,#fdf8f0 100%);
       border: 1px solid rgba(212,175,55,.18);
-      border-radius: 14px;
-      margin-bottom: 8px;
+      border-radius: 14px; margin-bottom: 8px;
       position: relative;
-      transition: all .25s ease;
+      transition: all .28s ease, opacity .25s, transform .25s, max-height .3s;
       align-items: flex-start;
       box-shadow: 0 1px 6px rgba(139,90,43,.05);
+      overflow: hidden;
     }
     .citem:hover{
       border-color: rgba(212,175,55,.4);
       box-shadow: 0 4px 18px rgba(139,90,43,.1);
     }
+    /* 🔴 animation للحذف (تعديل #10) */
+    .citem.vl-removing{
+      opacity: 0;
+      transform: translateX(30px) scale(.92);
+      max-height: 0 !important;
+      margin: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      pointer-events: none;
+    }
     .citem-media{
-      flex: 0 0 68px;
-      width: 68px;
-      height: 68px;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #f5efe5;
-      display: grid;
-      place-items: center;
+      flex: 0 0 68px; width: 68px; height: 68px;
+      border-radius: 10px; overflow: hidden;
+      background: #f5efe5; display: grid; place-items: center;
       border: 1px solid rgba(212,175,55,.15);
       box-shadow: 0 2px 8px rgba(139,90,43,.08);
     }
     .citem-media img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+      width: 100%; height: 100%; object-fit: cover; display: block;
     }
     .citem-info{
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
+      flex: 1; min-width: 0; display: flex;
+      flex-direction: column; gap: 5px;
       padding-inline-end: 32px;
     }
     .citem-info h5{
-      font-family: var(--fd,serif);
-      font-size: .92rem;
-      margin: 0;
-      font-weight: 700;
-      color: var(--dark,#3d2f1f);
+      font-family: var(--fd,serif); font-size: .92rem;
+      margin: 0; font-weight: 700; color: var(--dark,#3d2f1f);
       line-height: 1.25;
     }
-
     .cart-scent-picker{
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin: 0;
+      display: flex; align-items: center; gap: 5px; margin: 0;
     }
     .cart-scent-label{
-      font-size: .68rem;
-      color: var(--mut,#9a8874);
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      font-weight: 600;
-      flex-shrink: 0;
+      font-size: .68rem; color: var(--mut,#9a8874);
+      display: flex; align-items: center; gap: 3px;
+      font-weight: 600; flex-shrink: 0;
     }
     .cart-scent-select{
-      flex: 1;
-      min-width: 0;
-      padding: 5px 24px 5px 10px;
+      flex: 1; min-width: 0; padding: 5px 24px 5px 10px;
       border-radius: 999px;
       border: 1.5px solid rgba(212,175,55,.3);
       background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='3' stroke-linecap='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 8px center;
       background-size: 10px;
-      font-family: inherit;
-      font-size: .76rem;
+      font-family: inherit; font-size: .76rem;
       color: var(--dark,#3d2f1f);
-      cursor: pointer;
-      outline: none;
-      transition: all .2s ease;
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
+      cursor: pointer; outline: none;
+      transition: all .2s ease; appearance: none;
+      -webkit-appearance: none; -moz-appearance: none;
       font-weight: 500;
       box-shadow: 0 1px 4px rgba(212,175,55,.08);
       text-overflow: ellipsis;
@@ -342,76 +395,47 @@ function injectCartStyles(){
       box-shadow: 0 0 0 3px rgba(212,175,55,.15);
     }
     .cart-scent-select option{ padding: 8px; }
-
-    /* ✨ الصف الموحد */
     .citem-foot{
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: nowrap;
-      padding-top: 5px;
+      display: flex; align-items: center; gap: 8px;
+      flex-wrap: nowrap; padding-top: 5px;
       border-top: 1px dashed rgba(212,175,55,.2);
       margin-top: 2px;
     }
     .citem-price{
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-      min-width: 0;
-      flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 1px;
+      min-width: 0; flex-shrink: 0;
     }
     .citem-price .lbl{
-      font-size: .62rem;
-      color: var(--mut,#9a8874);
-      font-weight: 500;
-      line-height: 1;
+      font-size: .62rem; color: var(--mut,#9a8874);
+      font-weight: 500; line-height: 1;
     }
     .citem-price .val{
-      font-size: .88rem;
-      color: #b8860b;
-      font-weight: 800;
-      line-height: 1.1;
-      white-space: nowrap;
+      font-size: .88rem; color: #b8860b;
+      font-weight: 800; line-height: 1.1; white-space: nowrap;
     }
     .citem-price .val-total{
-      font-size: .88rem;
-      color: var(--dark,#3d2f1f);
-      font-weight: 800;
-      line-height: 1.1;
-      white-space: nowrap;
+      font-size: .88rem; color: var(--dark,#3d2f1f);
+      font-weight: 800; line-height: 1.1; white-space: nowrap;
     }
     .citem-divider{
-      width: 1px;
-      height: 26px;
-      background: rgba(212,175,55,.25);
-      flex-shrink: 0;
+      width: 1px; height: 26px;
+      background: rgba(212,175,55,.25); flex-shrink: 0;
     }
     .qty{
-      display: inline-flex;
-      align-items: center;
-      gap: 0;
+      display: inline-flex; align-items: center; gap: 0;
       border: 1.5px solid rgba(212,175,55,.3);
-      border-radius: 999px;
-      padding: 1px;
-      background: #fff;
-      margin-inline-start: auto;
+      border-radius: 999px; padding: 1px;
+      background: #fff; margin-inline-start: auto;
       box-shadow: 0 1px 4px rgba(212,175,55,.08);
       flex-shrink: 0;
     }
     .qty button{
-      width: 30px;
-      height: 30px;
-      border: none;
-      background: transparent;
-      border-radius: 50%;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #b8860b;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      transition: all .18s ease;
-      line-height: 1;
+      width: 30px; height: 30px; border: none;
+      background: transparent; border-radius: 50%;
+      font-size: 1.1rem; font-weight: 700;
+      color: #b8860b; cursor: pointer;
+      display: grid; place-items: center;
+      transition: all .18s ease; line-height: 1;
       -webkit-tap-highlight-color: transparent;
     }
     .qty button:hover{
@@ -423,81 +447,127 @@ function injectCartStyles(){
       transform: scale(.94);
     }
     .qty b{
-      min-width: 26px;
-      text-align: center;
-      font-size: .88rem;
-      font-weight: 800;
-      color: var(--dark,#3d2f1f);
-      padding: 0 2px;
+      min-width: 26px; text-align: center;
+      font-size: .88rem; font-weight: 800;
+      color: var(--dark,#3d2f1f); padding: 0 2px;
     }
-
-    /* Trash Button */
     .rm{
-      position: absolute;
-      top: 8px;
-      inset-inline-end: 8px;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(231,76,60,.08);
-      color: #e74c3c;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      transition: all .22s ease;
-      padding: 0;
+      position: absolute; top: 8px; inset-inline-end: 8px;
+      width: 28px; height: 28px; border-radius: 50%;
+      border: none; background: rgba(231,76,60,.08);
+      color: #e74c3c; cursor: pointer;
+      display: grid; place-items: center;
+      transition: all .22s ease; padding: 0;
       -webkit-tap-highlight-color: transparent;
     }
     .rm svg{
-      width: 13px;
-      height: 13px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      width: 13px; height: 13px; stroke: currentColor;
+      stroke-width: 2; fill: none;
+      stroke-linecap: round; stroke-linejoin: round;
     }
     .rm:hover{
-      background: #e74c3c;
-      color: #fff;
+      background: #e74c3c; color: #fff;
       transform: rotate(8deg) scale(1.08);
       box-shadow: 0 4px 12px rgba(231,76,60,.35);
     }
-    .rm:active{
-      transform: rotate(8deg) scale(.94);
+    .rm:active{ transform: rotate(8deg) scale(.94); }
+
+    /* ═══ زر "احفظ للاحقًا" ═══ */
+    .vl-save-later{
+      background: transparent; border: none;
+      color: #8b6f47; font-size: .68rem;
+      cursor: pointer; padding: 2px 6px;
+      border-radius: 6px; font-weight: 600;
+      text-decoration: underline;
+      transition: .2s;
+      align-self: flex-start;
+      margin-inline-start: -6px;
     }
+    .vl-save-later:hover{
+      background: rgba(212,175,55,.12);
+      color: #b8860b;
+    }
+
+    /* ═══ Saved For Later Section ═══ */
+    .vl-saved-section{
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #f5f3ef 0%, #faf7f2 100%);
+      border: 1px dashed rgba(212,175,55,.3);
+      border-radius: 14px;
+    }
+    .vl-saved-head{
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: .82rem; font-weight: 800;
+      color: #8b6f47;
+    }
+    .vl-saved-head .toggle{
+      background: transparent; border: none;
+      color: #b8860b; font-size: .72rem;
+      cursor: pointer; font-weight: 700;
+    }
+    .vl-saved-item{
+      display: flex; gap: 8px; align-items: center;
+      padding: 6px; margin-bottom: 6px;
+      background: #fff; border-radius: 10px;
+      border: 1px solid rgba(212,175,55,.15);
+    }
+    .vl-saved-item img{
+      width: 42px; height: 42px; border-radius: 8px;
+      object-fit: cover; flex-shrink: 0;
+    }
+    .vl-saved-item .meta{
+      flex: 1; min-width: 0;
+    }
+    .vl-saved-item .meta b{
+      display: block; font-size: .78rem;
+      color: #3d2f1f; font-weight: 700;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .vl-saved-item .meta small{
+      color: #b8860b; font-weight: 700; font-size: .72rem;
+    }
+    .vl-saved-item .actions{
+      display: flex; gap: 4px; flex-shrink: 0;
+    }
+    .vl-saved-item .actions button{
+      width: 28px; height: 28px; border-radius: 50%;
+      border: none; cursor: pointer;
+      display: grid; place-items: center;
+      font-size: .85rem; font-weight: 700;
+      transition: .2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .vl-saved-item .actions .move{
+      background: linear-gradient(135deg,#d4af37,#f9d877);
+      color: #3d2f1f;
+    }
+    .vl-saved-item .actions .del{
+      background: rgba(231,76,60,.1);
+      color: #e74c3c;
+    }
+    .vl-saved-item .actions button:hover{ transform: scale(1.1); }
 
     /* ═══ Cross-Sell Compact ═══ */
     .cross-sell-box{
       background: linear-gradient(135deg,#fdf5ed 0%,#faf0e6 100%);
       border: 1px dashed rgba(212,175,55,.45);
-      border-radius: 14px;
-      padding: 10px 12px;
-      margin-top: 8px;
-      position: relative;
-      overflow: hidden;
+      border-radius: 14px; padding: 10px 12px;
+      margin-top: 8px; position: relative; overflow: hidden;
     }
     .cross-sell-box::before{
-      content: "";
-      position: absolute;
-      top: -40px;
-      inset-inline-end: -40px;
-      width: 100px;
-      height: 100px;
+      content: ""; position: absolute;
+      top: -40px; inset-inline-end: -40px;
+      width: 100px; height: 100px;
       background: radial-gradient(circle,rgba(212,175,55,.14),transparent 70%);
       pointer-events: none;
     }
     .vl-cross-head{
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 6px;
-      font-weight: 800;
-      font-size: .82rem;
-      color: #b8860b;
-      position: relative;
-      z-index: 1;
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 6px; font-weight: 800;
+      font-size: .82rem; color: #b8860b;
+      position: relative; z-index: 1;
     }
     .vl-cross-head span.emoji{
       font-size: 1rem;
@@ -508,64 +578,36 @@ function injectCartStyles(){
       50%{ transform: scale(1.12) rotate(8deg); }
     }
     .vl-cross-row{
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      position: relative;
-      z-index: 1;
+      display: flex; align-items: center; gap: 8px;
+      position: relative; z-index: 1;
     }
     .vl-cross-img{
-      flex: 0 0 52px;
-      width: 52px;
-      height: 52px;
-      border-radius: 10px;
-      overflow: hidden;
+      flex: 0 0 52px; width: 52px; height: 52px;
+      border-radius: 10px; overflow: hidden;
       background: #f5efe5;
       border: 1px solid rgba(212,175,55,.2);
-      display: grid;
-      place-items: center;
+      display: grid; place-items: center;
     }
-    .vl-cross-img img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .vl-cross-meta{
-      flex: 1;
-      min-width: 0;
-    }
+    .vl-cross-img img{ width: 100%; height: 100%; object-fit: cover; }
+    .vl-cross-meta{ flex: 1; min-width: 0; }
     .vl-cross-meta .nm{
-      font-weight: 700;
-      font-size: .82rem;
-      color: var(--dark,#3d2f1f);
-      line-height: 1.25;
-      margin-bottom: 2px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      font-weight: 700; font-size: .82rem;
+      color: var(--dark,#3d2f1f); line-height: 1.25;
+      margin-bottom: 2px; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
     }
     .vl-cross-meta .pr{
-      font-size: .76rem;
-      color: #b8860b;
-      font-weight: 800;
-      margin-bottom: 4px;
+      font-size: .76rem; color: #b8860b;
+      font-weight: 800; margin-bottom: 4px;
     }
     .vl-quick-add{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      width: 100%;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: none;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 4px; width: 100%; padding: 7px 10px;
+      border-radius: 999px; border: none;
       background: linear-gradient(135deg,#d4af37,#f9d877);
-      color: #3d2f1f;
-      font-family: inherit;
-      font-size: .76rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: all .22s ease;
+      color: #3d2f1f; font-family: inherit;
+      font-size: .76rem; font-weight: 800;
+      cursor: pointer; transition: all .22s ease;
       box-shadow: 0 2px 8px rgba(212,175,55,.3);
       -webkit-tap-highlight-color: transparent;
     }
@@ -581,49 +623,35 @@ function injectCartStyles(){
 
     /* ═══ Discount Badges ═══ */
     .vl-disc-row{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 6px 10px;
-      border-radius: 10px;
-      margin: 4px 0;
-      font-size: .78rem;
-      transition: all .3s ease;
+      display: flex; justify-content: space-between;
+      align-items: center; padding: 6px 10px;
+      border-radius: 10px; margin: 4px 0;
+      font-size: .78rem; transition: all .3s ease;
     }
     .vl-disc-row.vl-disc-active{
       background: linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%);
       border: 1px solid rgba(39,174,96,.35);
-      color: #1e8449;
-      font-weight: 700;
+      color: #1e8449; font-weight: 700;
     }
     .vl-disc-row.vl-disc-active .vl-disc-val{
-      color: #1e8449;
-      font-weight: 800;
-      font-size: .88rem;
+      color: #1e8449; font-weight: 800; font-size: .88rem;
     }
     .vl-disc-row.vl-disc-cancelled{
       background: #f5f5f5;
       border: 1px dashed rgba(0,0,0,.08);
-      color: #aaa;
-      text-decoration: line-through;
+      color: #aaa; text-decoration: line-through;
       opacity: .7;
     }
     .vl-disc-row.vl-disc-cancelled .vl-disc-val{
-      color: #aaa;
-      text-decoration: line-through;
+      color: #aaa; text-decoration: line-through;
     }
     .vl-disc-label{
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      display: flex; align-items: center; gap: 4px;
     }
     .vl-disc-hint{
-      display: block;
-      font-size: .62rem;
-      font-weight: 500;
-      color: #7f8c8d;
-      margin-top: 1px;
-      text-decoration: none;
+      display: block; font-size: .62rem;
+      font-weight: 500; color: #7f8c8d;
+      margin-top: 1px; text-decoration: none;
     }
 
     /* ═══ Checkout Button Pulse ═══ */
@@ -642,25 +670,17 @@ function injectCartStyles(){
 
     /* ═══ Trust Badges ═══ */
     .vl-trust-wrap{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      margin: 6px 0 4px;
-      flex-wrap: wrap;
+      display: flex; justify-content: center; align-items: center;
+      gap: 6px; margin: 6px 0 4px; flex-wrap: wrap;
       padding: 5px 6px;
       background: linear-gradient(135deg,rgba(253,245,237,.6),rgba(250,240,230,.6));
       border-radius: 12px;
       border: 1px solid rgba(212,175,55,.15);
     }
     .vl-trust-item{
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: .62rem;
-      color: #8b6f47;
-      font-weight: 600;
-      padding: 2px 6px;
+      display: flex; align-items: center; gap: 4px;
+      font-size: .62rem; color: #8b6f47;
+      font-weight: 600; padding: 2px 6px;
       border-radius: 999px;
       background: rgba(255,255,255,.7);
     }
@@ -668,16 +688,12 @@ function injectCartStyles(){
 
     /* ═══ Empty State ═══ */
     .vl-empty-cart{
-      padding: 1.5rem 1rem;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
+      padding: 1.5rem 1rem; text-align: center;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
     }
     .vl-empty-candle{
-      font-size: 2.8rem;
-      opacity: .55;
+      font-size: 2.8rem; opacity: .55;
       animation: vlCandleFloat 3.2s ease-in-out infinite;
       filter: drop-shadow(0 6px 14px rgba(212,175,55,.28));
     }
@@ -686,33 +702,22 @@ function injectCartStyles(){
       50%{ transform: translateY(-9px) rotate(2deg); }
     }
     .vl-empty-title{
-      font-family: var(--fd,serif);
-      font-size: 1rem;
-      color: #b8860b;
-      font-weight: 800;
-      line-height: 1.4;
-      max-width: 240px;
+      font-family: var(--fd,serif); font-size: 1rem;
+      color: #b8860b; font-weight: 800;
+      line-height: 1.4; max-width: 240px;
     }
     .vl-empty-sub{
-      font-size: .76rem;
-      color: #9a8874;
-      line-height: 1.5;
-      max-width: 240px;
+      font-size: .76rem; color: #9a8874;
+      line-height: 1.5; max-width: 240px;
     }
     .vl-empty-cta{
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 10px 22px;
-      border-radius: 999px;
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 22px; border-radius: 999px;
       border: none;
       background: linear-gradient(135deg,#d4af37,#f9d877);
-      color: #3d2f1f;
-      font-family: inherit;
-      font-size: .85rem;
-      font-weight: 800;
-      cursor: pointer;
-      margin-top: 4px;
+      color: #3d2f1f; font-family: inherit;
+      font-size: .85rem; font-weight: 800;
+      cursor: pointer; margin-top: 4px;
       transition: all .25s ease;
       box-shadow: 0 5px 18px rgba(212,175,55,.35);
       -webkit-tap-highlight-color: transparent;
@@ -722,8 +727,198 @@ function injectCartStyles(){
       box-shadow: 0 8px 24px rgba(212,175,55,.5);
     }
 
+    /* ═══ Toast with action (Undo) ═══ */
+    .vl-toast-action{
+      position: fixed;
+      bottom: 90px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #3d2f1f;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 14px;
+      display: flex; align-items: center; gap: 14px;
+      z-index: 999999;
+      box-shadow: 0 10px 30px rgba(0,0,0,.3);
+      font-size: .88rem;
+      opacity: 0;
+      transition: all .3s cubic-bezier(.22,1,.36,1);
+      max-width: 90vw;
+    }
+    .vl-toast-action.vl-show{
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .vl-toast-action button{
+      background: linear-gradient(135deg,#d4af37,#f9d877);
+      color: #3d2f1f;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: .78rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .vl-toast-action button:hover{
+      transform: scale(1.05);
+    }
+
+    /* ═══ Custom Confirm Modal ═══ */
+    .vl-confirm-overlay{
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 999998;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s ease;
+    }
+    .vl-confirm-overlay.vl-show{
+      opacity: 1; pointer-events: auto;
+    }
+    .vl-confirm-box{
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 380px; width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+      border: 1px solid rgba(212,175,55,.25);
+      transform: scale(.9);
+      transition: transform .25s cubic-bezier(.22,1,.36,1);
+    }
+    .vl-confirm-overlay.vl-show .vl-confirm-box{
+      transform: scale(1);
+    }
+    .vl-confirm-icon{
+      font-size: 2.5rem;
+      margin-bottom: 8px;
+    }
+    .vl-confirm-title{
+      font-family: var(--fd,serif);
+      font-size: 1.1rem;
+      color: #3d2f1f;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+    .vl-confirm-msg{
+      color: #8b6f47;
+      font-size: .88rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .vl-confirm-actions{
+      display: flex; gap: 10px;
+    }
+    .vl-confirm-actions button{
+      flex: 1; padding: 11px;
+      border-radius: 12px;
+      border: none;
+      font-family: inherit;
+      font-size: .88rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .vl-confirm-actions .no{
+      background: #f0ebe3;
+      color: #8b6f47;
+    }
+    .vl-confirm-actions .no:hover{
+      background: #e5ded2;
+    }
+    .vl-confirm-actions .yes{
+      background: linear-gradient(135deg,#e74c3c,#c0392b);
+      color: #fff;
+    }
+    .vl-confirm-actions .yes:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(231,76,60,.4);
+    }
+
+    /* ═══ Mini-cart preview (desktop) ═══ */
+    .vl-mini-cart{
+      position: absolute;
+      top: calc(100% + 8px);
+      inset-inline-end: 0;
+      width: 320px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 16px 50px rgba(0,0,0,.18);
+      border: 1px solid rgba(212,175,55,.25);
+      padding: 12px;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-6px);
+      transition: all .22s cubic-bezier(.22,1,.36,1);
+    }
+    .vl-mini-cart.vl-show{
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    .vl-mini-cart .vl-mini-title{
+      font-family: var(--fd,serif);
+      font-weight: 800;
+      color: #3d2f1f;
+      margin-bottom: 8px;
+      font-size: .92rem;
+    }
+    .vl-mini-cart .vl-mini-item{
+      display: flex; gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px dashed rgba(212,175,55,.15);
+    }
+    .vl-mini-cart .vl-mini-item:last-child{ border-bottom: none; }
+    .vl-mini-cart .vl-mini-item img{
+      width: 42px; height: 42px;
+      border-radius: 8px; object-fit: cover;
+    }
+    .vl-mini-cart .vl-mini-item .meta{ flex: 1; min-width: 0; }
+    .vl-mini-cart .vl-mini-item .meta b{
+      display: block; font-size: .78rem;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      color: #3d2f1f;
+    }
+    .vl-mini-cart .vl-mini-item .meta small{
+      color: #8b6f47; font-size: .72rem;
+    }
+    .vl-mini-cart .vl-mini-item .price{
+      font-weight: 800; color: #b8860b;
+      font-size: .8rem;
+      white-space: nowrap;
+    }
+    .vl-mini-cart .vl-mini-total{
+      display: flex; justify-content: space-between;
+      padding-top: 10px; margin-top: 8px;
+      border-top: 1px solid rgba(212,175,55,.25);
+      font-weight: 800; font-size: .9rem;
+      color: #3d2f1f;
+    }
+    .vl-mini-cart .vl-mini-total span:last-child{ color: #b8860b; }
+    .vl-mini-cart .vl-mini-cta{
+      margin-top: 10px;
+      width: 100%; padding: 10px;
+      border: none; border-radius: 999px;
+      background: linear-gradient(135deg,#d4af37,#f9d877);
+      color: #3d2f1f; font-weight: 800;
+      font-family: inherit; font-size: .82rem;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .vl-mini-cart .vl-mini-cta:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(212,175,55,.4);
+    }
+    @media (max-width: 1024px){
+      .vl-mini-cart{ display: none !important; }
+    }
+
     /* ═══════════════════════════════════════════════════════
-       ✨ CART LAYOUT — Flex: رأس ثابت + محتوى scroll + فوتر ثابت
+       ✨ CART LAYOUT — Flex
        ═══════════════════════════════════════════════════════ */
     #cartDrawer{
       display: flex !important;
@@ -764,7 +959,6 @@ function injectCartStyles(){
       -webkit-overflow-scrolling: touch;
     }
 
-    /* ═══ Compact Cart Form ═══ */
     #cartDrawer .co-form,
     #cartDrawer form{
       display: flex;
@@ -772,9 +966,7 @@ function injectCartStyles(){
       gap: 5px;
     }
     #cartDrawer .co-form > *,
-    #cartDrawer form > *{
-      margin: 0 !important;
-    }
+    #cartDrawer form > *{ margin: 0 !important; }
     #cartDrawer input[type="text"],
     #cartDrawer input[type="tel"],
     #cartDrawer input[type="email"],
@@ -798,8 +990,6 @@ function injectCartStyles(){
       margin-bottom: 1px !important;
       font-weight: 600;
     }
-
-    /* ═══ Compact Payment Info ═══ */
     #cartDrawer .pay-note,
     #cartDrawer .payment-info,
     #cartDrawer [class*="payment"],
@@ -810,8 +1000,6 @@ function injectCartStyles(){
       margin: 4px 0 !important;
       border-radius: 9px !important;
     }
-
-    /* ═══ Totals Row Compact ═══ */
     #cartDrawer .trow{
       padding: 3px 0 !important;
       font-size: .8rem !important;
@@ -824,10 +1012,6 @@ function injectCartStyles(){
       font-weight: 800 !important;
     }
 
-    /* ═══════════════════════════════════════════════════════
-       ✨ STICKY BUTTONS — الأزرار الأصلية تفضل ثابتة تحت
-       (بنستهدف الـ IDs الأصلية من HTML مباشرة)
-       ═══════════════════════════════════════════════════════ */
     #cartDrawer .vl-buttons-sticky-wrap{
       position: sticky;
       bottom: 0;
@@ -850,7 +1034,6 @@ function injectCartStyles(){
       margin: 0 !important;
     }
 
-    /* ═══ Mobile ═══ */
     @media (max-width: 768px){
       #cartDrawer{
         height: 100vh !important;
@@ -859,41 +1042,28 @@ function injectCartStyles(){
         max-height: 100dvh !important;
       }
       .citem{
-        padding: 9px;
-        gap: 9px;
-        margin-bottom: 7px;
+        padding: 9px; gap: 9px; margin-bottom: 7px;
       }
       .citem-media{
-        flex: 0 0 60px;
-        width: 60px;
-        height: 60px;
+        flex: 0 0 60px; width: 60px; height: 60px;
       }
       .citem-info h5{ font-size: .86rem; }
       .citem-price .val,
       .citem-price .val-total{ font-size: .84rem; }
-      #cartDrawer .dfoot{
-        max-height: 60vh;
-      }
+      #cartDrawer .dfoot{ max-height: 60vh; }
     }
 
     @media (max-width: 380px){
       .citem-media{
-        flex: 0 0 54px;
-        width: 54px;
-        height: 54px;
+        flex: 0 0 54px; width: 54px; height: 54px;
       }
       .citem-info h5{ font-size: .82rem; }
-      .qty button{
-        width: 27px;
-        height: 27px;
-        font-size: .98rem;
-      }
+      .qty button{ width: 27px; height: 27px; font-size: .98rem; }
       .qty b{ font-size: .82rem; min-width: 22px; }
       .citem-price .val,
       .citem-price .val-total{ font-size: .8rem; }
     }
 
-    /* ✨ إخفاء الفوتر الثابت للموقع لما السلة تفتح */
     body.vl-cart-open #bottomNav,
     body.vl-cart-open .bottom-nav,
     body.vl-cart-open .mobile-nav,
@@ -906,17 +1076,14 @@ function injectCartStyles(){
   document.head.appendChild(style);
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ adjustCartDrawerPadding — مع Flex Layout ما بنحتاجش padding
-   ═══════════════════════════════════════════════════════════ */
 function adjustCartDrawerPadding(){
   const items = document.getElementById('cartItems');
   if(!items) return;
   items.style.paddingBottom = '4px';
 }
- 
+
 /* ═══════════════════════════════════════════════════════════
-   ✨ Confetti Animation
+   ✨ Confetti
    ═══════════════════════════════════════════════════════════ */
 function triggerConfetti(count){
   count = count || 55;
@@ -942,7 +1109,81 @@ function triggerConfetti(count){
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ FREE SHIPPING — Threshold
+   ✨ Toast with Undo Action  (إصلاح #8)
+   ═══════════════════════════════════════════════════════════ */
+let activeToastAction = null;
+
+function showToastWithAction(message, actionLabel, onAction, duration){
+  duration = duration || 4500;
+  if(activeToastAction){
+    activeToastAction.el.remove();
+    activeToastAction = null;
+  }
+  const toastEl = document.createElement("div");
+  toastEl.className = "vl-toast-action";
+  toastEl.innerHTML = `
+    <span>${message}</span>
+    <button type="button">${actionLabel}</button>
+  `;
+  document.body.appendChild(toastEl);
+  requestAnimationFrame(() => toastEl.classList.add("vl-show"));
+  
+  const btn = toastEl.querySelector("button");
+  const cleanup = () => {
+    toastEl.classList.remove("vl-show");
+    setTimeout(() => toastEl.remove(), 320);
+    if(activeToastAction && activeToastAction.el === toastEl) activeToastAction = null;
+  };
+  btn.addEventListener("click", () => {
+    if(typeof onAction === "function") onAction();
+    cleanup();
+  });
+  const timeout = setTimeout(cleanup, duration);
+  activeToastAction = { el: toastEl, timeout, cleanup };
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ Custom Confirm Modal  (إصلاح #12)
+   ═══════════════════════════════════════════════════════════ */
+function showConfirm(opts){
+  return new Promise((resolve) => {
+    const icon = opts.icon || "⚠️";
+    const title = opts.title || "تأكيد";
+    const msg = opts.message || "";
+    const yesText = opts.yesText || "تأكيد";
+    const noText = opts.noText || "إلغاء";
+    
+    const overlay = document.createElement("div");
+    overlay.className = "vl-confirm-overlay";
+    overlay.innerHTML = `
+      <div class="vl-confirm-box" role="dialog" aria-modal="true">
+        <div class="vl-confirm-icon">${icon}</div>
+        <div class="vl-confirm-title">${title}</div>
+        <div class="vl-confirm-msg">${msg}</div>
+        <div class="vl-confirm-actions">
+          <button class="no" type="button">${noText}</button>
+          <button class="yes" type="button">${yesText}</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add("vl-show"));
+    
+    const close = (result) => {
+      overlay.classList.remove("vl-show");
+      setTimeout(() => overlay.remove(), 260);
+      resolve(result);
+    };
+    overlay.querySelector(".yes").addEventListener("click", () => close(true));
+    overlay.querySelector(".no").addEventListener("click", () => close(false));
+    overlay.addEventListener("click", (e) => {
+      if(e.target === overlay) close(false);
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ FREE SHIPPING (على subTotal — إصلاح #6)
    ═══════════════════════════════════════════════════════════ */
 const FREE_SHIP_THRESHOLD = 3000;
 let freeShipCelebrated = false;
@@ -952,7 +1193,6 @@ let freeShipCelebrated = false;
   if(typeof I18N==="undefined") return;
 
   const add = {
-
     ar: {
 reviews_back: "← الرجوع للرئيسية",
 reviews_stats_trust: "ثقة تتجدد",
@@ -964,230 +1204,85 @@ reviews_cta_btn: "تسوق الآن 🛍️",
 foot_wishlist: "❤️ المفضلة",
 foot_orders: "📦 طلباتي",
 
-      ship_note:
-        "🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
-
-      pay_products_note:
-        "💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.",
-
-      pay_title:
-        "InstaPay / فودافون كاش / أورنج كاش",
-
-      paymethod_d:
-        "قيمة المنتجات تُدفع مقدماً (تحويل) عند تأكيد الطلب.",
-
-      t_scentwarn:
-        "⚠️ من فضلك اختر العطر أولاً.",
-
-      quick_add_scent:
-        "🌸 اختر العطر",
-
-      quick_add_qty:
-        "الكمية",
-
-      quick_add_add:
-        "🛍️ أضف للسلة",
-
-      quick_add_added:
-        "✓ تمت الإضافة للسلة",
-
-      scent_req:
-        "مطلوب",
-
-      handmade_note:
-        "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
-
-      pd_handmade_note:
-        "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
-
-      pd_desc_tab:
-        "📝 الوصف",
-
-      pd_specs_tab:
-        "📋 المواصفات",
-
-      pd_reviews_tab:
-        "⭐ المراجعات",
-
-      pd_zoom:
-        "🔍 تكبير",
-
-      pd_gallery_count:
-        "الصور",
-
-      pd_scent_t:
-        "🌸 اختر العطر:",
-
-      pd_qty_t:
-        "الكمية:",
-
-      pd_required:
-        "مطلوب",
-
-      pd_decrease:
-        "تقليل الكمية",
-
-      pd_increase:
-        "زيادة الكمية",
-
-      pd_wishlist:
-        "إضافة إلى المفضلة",
-
-      pd_add:
-        "🛍️ أضف للسلة",
-
-      pd_buy:
-        "💬 اطلب عبر واتساب",
-
-      pd_hours:
-        "مدة الاشتعال:",
-
-      pd_materials:
-        "الخامات:",
-
-      pd_ship:
-        "التوصيل:",
-
-      pd_ship_v:
-        "3–7 أيام",
-
-      pd_review_word:
-        "مراجعة",
-
-      pd_read_all:
-        "اقرأ الكل",
-
-      pd_first_review:
-        "كن أول من يشارك رأيه",
-
-      pd_rel_h2:
-        "✨ منتجات هتعجبك",
-
-      pd_share:
-        "مشاركة:",
-
-      pd_copy_link:
-        "📋 نسخ الرابط",
-
-      pd_product:
-        "المنتج",
-
-      pd_not_found_title:
-        "😕 المنتج غير متاح",
-
-      pd_not_found_desc:
-        "عذراً، لم نتمكن من العثور على هذا المنتج",
-
-      pd_browse_products:
-        "تصفح المنتجات",
-
-      reviews_kicker:
-        "💛 كلامكم أحلى هدية",
-
-      reviews_title:
-        "آراء عملائنا",
-
-      reviews_desc:
-        "مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.",
-
-      reviews_cta:
-        "✨ جربت سحرنا؟",
-
-      reviews_cta_link:
-        "ابعتلنا رأيك على الواتساب",
-
-brand_promise_title:
-  "تفاصيل تصنع الفرق",
-
-brand_promise_desc:
-  "شموع يدوية فاخرة، عطور مختارة، وهدايا مصممة لتضيف لمسة خاصة لكل لحظة.",
-
-brand_point1_title:
-  "صناعة يدوية",
-
-brand_point1_desc:
-  "كل قطعة تُصنع وتُجهّز بعناية.",
-
-brand_point2_title:
-  "هدية لكل مناسبة",
-
-brand_point2_desc:
-  "اختيارات تليق بكل لحظة واحتفال.",
-
-brand_point3_title:
-  "اختيار يناسبك",
-
-brand_point3_desc:
-  "نساعدك تختار الرائحة والتفاصيل المناسبة.",
-
-      faq1q:
-        "كيف يمكنني الطلب وما طرق الدفع المتاحة؟",
-
-      faq1a:
-        "يمكنك إضافة المنتجات إلى سلة الشراء وإتمام طلبك بسهولة. يتم دفع قيمة المنتجات مقدمًا عبر InstaPay أو Vodafone Cash أو تحويل بنكي، بينما تُدفع تكلفة الشحن نقدًا لمندوب التوصيل عند الاستلام.",
-
-      faq2q:
-        "هل تقومون بالشحن إلى جميع محافظات مصر؟",
-
-      faq2a:
-        "نعم، نوفر خدمة التوصيل إلى جميع محافظات مصر، مع الحرص على وصول طلبك بأمان.",
-
-      faq3q:
-        "كم تستغرق مدة تجهيز وشحن الطلب؟",
-
-      faq3a:
-        "لأن منتجات VelaLight تُصنع يدويًا بعناية، تستغرق مدة التجهيز عادةً من 3 إلى 7 أيام عمل، بالإضافة إلى مدة الشحن حسب المحافظة.",
-
-      faq4q:
-        "هل شموع VelaLight مصنوعة من شمع الصويا؟",
-
-      faq4a:
-        "نعم، نستخدم شمع الصويا الطبيعي 100%، الذي يتميز باحتراق أبطأ وأنظف ويساعد على انتشار العطر بكفاءة.",
-
-      faq5q:
-        "كم تبلغ مدة احتراق الشمعة وكيف أحافظ على أفضل أداء لها؟",
-
-      faq5a:
-        "تختلف مدة الاحتراق حسب وزن وحجم كل شمعة، وستجد التفاصيل في وصف المنتج. ولأفضل نتيجة، عند الاستخدام الأول اترك الشمعة حتى يذوب سطح الشمع بالكامل ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.",
-
-      faq6q:
-        "كيف أختار العطر المناسب؟",
-
-      faq6a:
-        "لدينا تشكيلة متنوعة من العطور الفاخرة. وإذا كنت محتار، تواصل معنا عبر WhatsApp وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلها.",
-
-      faq7q:
-        "هل تتوفر خدمة تغليف الهدايا؟",
-
-      faq7a:
-        "نعم، جميع منتجات VelaLight تأتي بتغليف أنيق وفاخر وجاهز للإهداء.",
-
-      faq8q:
-        "ما سياسة الاستبدال والاسترجاع؟",
-
-      faq8a:
-        "نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب. وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.",
-
-      mq_delivery:
-        "🚚 توصيل سريع لكل محافظات مصر",
-
-      mq_discounts:
-        "🏷️ خصومات حصرية على مجموعات مختارة",
-
-      mq_gift:
-        "🎁 تغليف هدايا مجاني مع كل طلب",
-
-      mq_handmade:
-        "🤲 صناعة يدوية 100% بخامات طبيعية",
-
-      mq_scents:
-        "🕯️ أكثر من 23 عطر فاخر متاح",
-
-      mq_shipping:
-        "📦 شحن آمن من الورشة لحد باب بيتك",
-
-      mq_support:
-        "💬 دعم فني يومي لخدمتك",
+      ship_note: "🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.",
+      pay_products_note: "💳 سيتم إرسال تفاصيل الدفع المتاحة (InstaPay / فودافون كاش / أورنج كاش / تحويل بنكي) عبر الواتساب فور تأكيد الطلب.",
+      pay_title: "InstaPay / فودافون كاش / أورنج كاش",
+      paymethod_d: "قيمة المنتجات تُدفع مقدماً (تحويل) عند تأكيد الطلب.",
+      t_scentwarn: "⚠️ من فضلك اختر العطر أولاً.",
+      quick_add_scent: "🌸 اختر العطر",
+      quick_add_qty: "الكمية",
+      quick_add_add: "🛍️ أضف للسلة",
+      quick_add_added: "✓ تمت الإضافة للسلة",
+      scent_req: "مطلوب",
+      handmade_note: "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
+      pd_handmade_note: "قطعة يدوية تُجهّز بعناية عند الطلب — كل شمعة فريدة ومميزة",
+      pd_desc_tab: "📝 الوصف",
+      pd_specs_tab: "📋 المواصفات",
+      pd_reviews_tab: "⭐ المراجعات",
+      pd_zoom: "🔍 تكبير",
+      pd_gallery_count: "الصور",
+      pd_scent_t: "🌸 اختر العطر:",
+      pd_qty_t: "الكمية:",
+      pd_required: "مطلوب",
+      pd_decrease: "تقليل الكمية",
+      pd_increase: "زيادة الكمية",
+      pd_wishlist: "إضافة إلى المفضلة",
+      pd_add: "🛍️ أضف للسلة",
+      pd_buy: "💬 اطلب عبر واتساب",
+      pd_hours: "مدة الاشتعال:",
+      pd_materials: "الخامات:",
+      pd_ship: "التوصيل:",
+      pd_ship_v: "3–7 أيام",
+      pd_review_word: "مراجعة",
+      pd_read_all: "اقرأ الكل",
+      pd_first_review: "كن أول من يشارك رأيه",
+      pd_rel_h2: "✨ منتجات هتعجبك",
+      pd_share: "مشاركة:",
+      pd_copy_link: "📋 نسخ الرابط",
+      pd_product: "المنتج",
+      pd_not_found_title: "😕 المنتج غير متاح",
+      pd_not_found_desc: "عذراً، لم نتمكن من العثور على هذا المنتج",
+      pd_browse_products: "تصفح المنتجات",
+
+      reviews_kicker: "💛 كلامكم أحلى هدية",
+      reviews_title: "آراء عملائنا",
+      reviews_desc: "مش بنكتب كلام، بنعرض الحقيقة. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.",
+      reviews_cta: "✨ جربت سحرنا؟",
+      reviews_cta_link: "ابعتلنا رأيك على الواتساب",
+
+      brand_promise_title: "تفاصيل تصنع الفرق",
+      brand_promise_desc: "شموع يدوية فاخرة، عطور مختارة، وهدايا مصممة لتضيف لمسة خاصة لكل لحظة.",
+      brand_point1_title: "صناعة يدوية",
+      brand_point1_desc: "كل قطعة تُصنع وتُجهّز بعناية.",
+      brand_point2_title: "هدية لكل مناسبة",
+      brand_point2_desc: "اختيارات تليق بكل لحظة واحتفال.",
+      brand_point3_title: "اختيار يناسبك",
+      brand_point3_desc: "نساعدك تختار الرائحة والتفاصيل المناسبة.",
+
+      faq1q: "كيف يمكنني الطلب وما طرق الدفع المتاحة؟",
+      faq1a: "يمكنك إضافة المنتجات إلى سلة الشراء وإتمام طلبك بسهولة. يتم دفع قيمة المنتجات مقدمًا عبر InstaPay أو Vodafone Cash أو تحويل بنكي، بينما تُدفع تكلفة الشحن نقدًا لمندوب التوصيل عند الاستلام.",
+      faq2q: "هل تقومون بالشحن إلى جميع محافظات مصر؟",
+      faq2a: "نعم، نوفر خدمة التوصيل إلى جميع محافظات مصر، مع الحرص على وصول طلبك بأمان.",
+      faq3q: "كم تستغرق مدة تجهيز وشحن الطلب؟",
+      faq3a: "لأن منتجات VelaLight تُصنع يدويًا بعناية، تستغرق مدة التجهيز عادةً من 3 إلى 7 أيام عمل، بالإضافة إلى مدة الشحن حسب المحافظة.",
+      faq4q: "هل شموع VelaLight مصنوعة من شمع الصويا؟",
+      faq4a: "نعم، نستخدم شمع الصويا الطبيعي 100%، الذي يتميز باحتراق أبطأ وأنظف ويساعد على انتشار العطر بكفاءة.",
+      faq5q: "كم تبلغ مدة احتراق الشمعة وكيف أحافظ على أفضل أداء لها؟",
+      faq5a: "تختلف مدة الاحتراق حسب وزن وحجم كل شمعة، وستجد التفاصيل في وصف المنتج. ولأفضل نتيجة، عند الاستخدام الأول اترك الشمعة حتى يذوب سطح الشمع بالكامل ويصل إلى الحواف لتجنب تكون الأنفاق والحصول على احتراق متساوٍ.",
+      faq6q: "كيف أختار العطر المناسب؟",
+      faq6a: "لدينا تشكيلة متنوعة من العطور الفاخرة. وإذا كنت محتار، تواصل معنا عبر WhatsApp وسنساعدك في اختيار العطر المناسب حسب ذوقك والمناسبة والأجواء التي تفضلها.",
+      faq7q: "هل تتوفر خدمة تغليف الهدايا؟",
+      faq7a: "نعم، جميع منتجات VelaLight تأتي بتغليف أنيق وفاخر وجاهز للإهداء.",
+      faq8q: "ما سياسة الاستبدال والاسترجاع؟",
+      faq8a: "نظرًا لطبيعة منتجاتنا المصنوعة يدويًا، لا يمكن الاستبدال أو الاسترجاع بعد فتح المنتج أو استخدامه، أو بسبب تغيير الرغبة بعد تأكيد الطلب. وفي حالة وصول المنتج بعيب مصنعي أو تلف بسبب الشحن، يرجى التواصل معنا خلال 24 ساعة من الاستلام وسنعمل على حل المشكلة.",
+
+      mq_delivery: "🚚 توصيل سريع لكل محافظات مصر",
+      mq_discounts: "🏷️ خصومات حصرية على مجموعات مختارة",
+      mq_gift: "🎁 تغليف هدايا مجاني مع كل طلب",
+      mq_handmade: "🤲 صناعة يدوية 100% بخامات طبيعية",
+      mq_scents: "🕯️ أكثر من 23 عطر فاخر متاح",
+      mq_shipping: "📦 شحن آمن من الورشة لحد باب بيتك",
+      mq_support: "💬 دعم فني يومي لخدمتك",
 
       products_title: "كل المنتجات",
       products_sub: "اكتشف تشكيلتنا الكاملة من الشموع الفاخرة",
@@ -1272,6 +1367,24 @@ brand_point3_desc:
       cart_luxe_trust2: "صناعة يدوية 100%",
       cart_luxe_trust3: "ضمان التوصيل",
       cart_luxe_clear: "إفراغ السلة",
+
+      // ✨ جديدة
+      vl_undo_remove: "↩️ تراجع",
+      vl_item_removed: "🗑️ تم حذف العنصر",
+      vl_items_removed: "🗑️ تم حذف العناصر",
+      vl_save_for_later: "احفظ للاحقًا",
+      vl_saved_items: "📦 محفوظات",
+      vl_move_to_cart: "نقل للسلة",
+      vl_confirm_empty_title: "إفراغ السلة",
+      vl_confirm_empty_msg: "متأكد إنك عايز تفرغ السلة بالكامل؟",
+      vl_confirm_yes: "نعم، إفراغ",
+      vl_confirm_no: "إلغاء",
+      vl_confirm_remove_title: "حذف العنصر",
+      vl_stock_limit: "الحد الأقصى المتاح",
+      vl_added_to_cart: "✓ تمت الإضافة للسلة",
+      vl_shop_now: "تسوق الآن",
+      vl_copy_link_fallback: "انسخ الرابط ده يدويًا:",
+      vl_cart_items: "منتجات",
     },
 
     en: {
@@ -1285,73 +1398,41 @@ reviews_cta_btn: "Shop Now 🛍️",
 foot_wishlist: "❤️ Wishlist",
 foot_orders: "📦 My Orders",
 
-      ship_note:
-        "🚚 Shipping: paid cash to the courier on delivery.",
-
-      pay_products_note:
-        "Payment details (InstaPay / Vodafone Cash / Orange Cash / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
-
-      pay_title:
-        "InstaPay / Vodafone Cash / Orange Cash",
-
-      paymethod_d:
-        "Upfront transfer (InstaPay / Vodafone Cash / Orange Cash), shipping cash on delivery.",
-
-      t_scentwarn:
-        "⚠️ Please choose a scent first.",
-
-      quick_add_scent:
-        "🌸 Choose a scent",
-
-      quick_add_qty:
-        "Quantity",
-
-      quick_add_add:
-        "🛍️ Add to Cart",
-
-      quick_add_added:
-        "✓ Added to Cart",
-
-      scent_req:
-        "Required",
-
-      handmade_note:
-        "Handmade piece prepared with care upon order — every candle is unique and special",
-
-      pd_handmade_note:
-        "Handmade piece prepared with care upon order — every candle is unique and special",
-
+      ship_note: "🚚 Shipping: paid cash to the courier on delivery.",
+      pay_products_note: "Payment details (InstaPay / Vodafone Cash / Orange Cash / Bank Transfer) will be sent via WhatsApp upon order confirmation.",
+      pay_title: "InstaPay / Vodafone Cash / Orange Cash",
+      paymethod_d: "Upfront transfer (InstaPay / Vodafone Cash / Orange Cash), shipping cash on delivery.",
+      t_scentwarn: "⚠️ Please choose a scent first.",
+      quick_add_scent: "🌸 Choose a scent",
+      quick_add_qty: "Quantity",
+      quick_add_add: "🛍️ Add to Cart",
+      quick_add_added: "✓ Added to Cart",
+      scent_req: "Required",
+      handmade_note: "Handmade piece prepared with care upon order — every candle is unique and special",
+      pd_handmade_note: "Handmade piece prepared with care upon order — every candle is unique and special",
       pd_desc_tab: "📝 Description",
       pd_specs_tab: "📋 Specifications",
       pd_reviews_tab: "⭐ Reviews",
-
       pd_zoom: "🔍 Zoom",
       pd_gallery_count: "Images",
-
       pd_scent_t: "🌸 Scent:",
       pd_qty_t: "Quantity:",
       pd_required: "Required",
       pd_decrease: "Decrease quantity",
       pd_increase: "Increase quantity",
       pd_wishlist: "Add to favorites",
-
       pd_add: "🛍️ Add to Cart",
       pd_buy: "💬 Order via WhatsApp",
-
       pd_hours: "Burn time:",
       pd_materials: "Materials:",
       pd_ship: "Delivery:",
       pd_ship_v: "3–7 days",
-
       pd_review_word: "reviews",
       pd_read_all: "Read all",
       pd_first_review: "Be the first to review",
-
       pd_rel_h2: "✨ You May Also Like",
-
       pd_share: "Share:",
       pd_copy_link: "📋 Copy Link",
-
       pd_product: "Product",
       pd_not_found_title: "😕 Product Not Available",
       pd_not_found_desc: "Sorry, we couldn't find this product",
@@ -1363,42 +1444,29 @@ foot_orders: "📦 My Orders",
       reviews_cta: "✨ Tried our candles?",
       reviews_cta_link: "Send us your review on WhatsApp",
 
-brand_promise_title:
-  "Details That Make the Difference",
+      brand_promise_title: "Details That Make the Difference",
+      brand_promise_desc: "Handcrafted candles, carefully selected scents, and thoughtful gifts made for every special moment.",
+      brand_point1_title: "Handcrafted",
+      brand_point1_desc: "Every piece is made and prepared with care.",
+      brand_point2_title: "A Gift for Every Occasion",
+      brand_point2_desc: "Thoughtful choices for every moment and celebration.",
+      brand_point3_title: "Made for You",
+      brand_point3_desc: "We help you choose the right scent and details for your taste.",
 
-brand_promise_desc:
-  "Handcrafted candles, carefully selected scents, and thoughtful gifts made for every special moment.",
-
-brand_point1_title: "Handcrafted",
-brand_point1_desc: "Every piece is made and prepared with care.",
-brand_point2_title: "A Gift for Every Occasion",
-brand_point2_desc: "Thoughtful choices for every moment and celebration.",
-brand_point3_title: "Made for You",
-brand_point3_desc: "We help you choose the right scent and details for your taste.",
-
-      faq1q:
-        "How can I place an order and what payment methods are available?",
-      faq1a:
-        "You can add your selected products to the cart and complete your order easily. Product payment is made upfront via InstaPay, Vodafone Cash, or bank transfer, while the shipping fee is paid in cash to the courier upon delivery.",
-
+      faq1q: "How can I place an order and what payment methods are available?",
+      faq1a: "You can add your selected products to the cart and complete your order easily. Product payment is made upfront via InstaPay, Vodafone Cash, or bank transfer, while the shipping fee is paid in cash to the courier upon delivery.",
       faq2q: "Do you ship to all governorates in Egypt?",
       faq2a: "Yes, we deliver safely and reliably to all governorates across Egypt.",
-
       faq3q: "How long does it take to prepare and ship my order?",
       faq3a: "Because VelaLight products are carefully handmade, preparation usually takes 3 to 7 business days, in addition to the shipping time depending on your governorate.",
-
       faq4q: "Are VelaLight candles made from soy wax?",
       faq4a: "Yes, we use 100% natural soy wax. It burns more slowly and cleanly and helps the fragrance diffuse effectively.",
-
       faq5q: "How long does a candle burn, and how can I get the best performance?",
       faq5a: "Burn time varies depending on the candle's weight and size, as detailed in each product description. For the best results, during the first use, allow the wax to melt completely across the surface and reach the edges to prevent tunneling and ensure an even burn.",
-
       faq6q: "How can I choose the right scent?",
       faq6a: "We offer a variety of luxurious fragrances. If you're unsure which one to choose, contact us via WhatsApp and we'll be happy to help you select the perfect scent based on your taste, occasion, and desired atmosphere.",
-
       faq7q: "Do you offer gift wrapping?",
       faq7a: "Yes. All VelaLight products come in elegant, luxurious packaging that is ready for gifting.",
-
       faq8q: "What is your return and exchange policy?",
       faq8a: "Due to the nature of our handmade products, returns or exchanges are not accepted after the product has been opened or used, or due to a change of mind after the order has been confirmed. If your order arrives with a manufacturing defect or shipping damage, please contact us within 24 hours of delivery and we will be happy to resolve the issue.",
 
@@ -1493,25 +1561,34 @@ brand_point3_desc: "We help you choose the right scent and details for your tast
       cart_luxe_trust2: "100% Handmade",
       cart_luxe_trust3: "Delivery Guarantee",
       cart_luxe_clear: "Empty Cart",
-    }
 
+      vl_undo_remove: "↩️ Undo",
+      vl_item_removed: "🗑️ Item removed",
+      vl_items_removed: "🗑️ Items removed",
+      vl_save_for_later: "Save for later",
+      vl_saved_items: "📦 Saved",
+      vl_move_to_cart: "Move to cart",
+      vl_confirm_empty_title: "Empty Cart",
+      vl_confirm_empty_msg: "Are you sure you want to empty the entire cart?",
+      vl_confirm_yes: "Yes, empty",
+      vl_confirm_no: "Cancel",
+      vl_confirm_remove_title: "Remove Item",
+      vl_stock_limit: "Maximum available",
+      vl_added_to_cart: "✓ Added to Cart",
+      vl_shop_now: "Shop Now",
+      vl_copy_link_fallback: "Copy this link manually:",
+      vl_cart_items: "items",
+    }
   };
 
   Object.keys(add).forEach(L => {
-    if(!I18N[L]) {
-      I18N[L] = {};
-    }
+    if(!I18N[L]) { I18N[L] = {}; }
     Object.keys(add[L]).forEach(k => {
-      if(
-        I18N[L][k] === undefined ||
-        I18N[L][k] === null ||
-        I18N[L][k] === ""
-      ){
+      if(I18N[L][k] === undefined || I18N[L][k] === null || I18N[L][k] === ""){
         I18N[L][k] = add[L][k];
       }
     });
   });
-
 })();
 
 /* ═══════════════════════════════════════════════════════════
@@ -1519,9 +1596,16 @@ brand_point3_desc: "We help you choose the right scent and details for your tast
    ═══════════════════════════════════════════════════════════ */
 let isFirstRenderComplete = false;
 let pendingDataRefresh = false;
+let checkoutCompletedFlag = false; // 🔴 لتتبع abandonment
 
 document.addEventListener("DOMContentLoaded", () => {
   injectCartStyles();
+
+  // ✅ cart expiration
+  checkCartExpiration();
+
+  // ✅ load persisted coupon
+  appliedCoupon = loadAppliedCoupon();
 
   initLang();
   initMarquee();
@@ -1551,15 +1635,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (isProductsPage) {
       renderChips();
-      if (typeof renderProductsPage === "function") {
-        renderProductsPage();
-      } else {
-        renderProducts();
-      }
+      if (typeof renderProductsPage === "function") renderProductsPage();
+      else renderProducts();
     } else if (isReviewsPage) {
-      if (typeof renderReviewsPage === "function") {
-        renderReviewsPage();
-      }
+      if (typeof renderReviewsPage === "function") renderReviewsPage();
     } else if (!isProductPage) {
       renderChips();
       renderProducts();
@@ -1575,12 +1654,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const hasCache = (typeof loadFromCache === "function") && loadFromCache();
     if (hasCache && typeof ALL_PRODUCTS !== "undefined" && ALL_PRODUCTS.length > 0) {
       isFirstRenderComplete = true;
-      if (isProductsPage && typeof renderProductsPage === "function") {
-        renderProductsPage();
-      } else if (!isProductPage) {
-        renderChips();
-        renderProducts();
-      }
+      if (isProductsPage && typeof renderProductsPage === "function") renderProductsPage();
+      else if (!isProductPage) { renderChips(); renderProducts(); }
       renderScents();
       renderFAQ();
     } else {
@@ -1595,6 +1670,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
   initQuickAdd();
   initHeroIntro();
+  initMiniCart(); // ✅ جديد
+  initCartAbandonmentTracking(); // ✅ جديد
   
   if (typeof window.updateReviewsCount === 'function') {
     window.updateReviewsCount();
@@ -1602,19 +1679,129 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("data-refresh", () => {
-  if (!isFirstRenderComplete) {
-    pendingDataRefresh = true;
-    return;
-  }
+  if (!isFirstRenderComplete) { pendingDataRefresh = true; return; }
   const isProductsPage = window.location.pathname.includes('products.html');
   const isProductPage = window.location.pathname.includes('product.html');
   
-  if (isProductsPage && typeof renderProductsPage === "function") {
-    renderProductsPage();
-  } else if (!isProductPage) {
-    renderProducts();
+  if (isProductsPage && typeof renderProductsPage === "function") renderProductsPage();
+  else if (!isProductPage) renderProducts();
+});
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ Storage event — sync بين التابات  (إصلاح #10)
+   ═══════════════════════════════════════════════════════════ */
+window.addEventListener("storage", (e) => {
+  if(!e.key) return;
+  if(e.key === "vl_wishlist"){
+    wishlistCache = null;
+    if(!window.location.pathname.includes('product.html')) renderProducts();
+  }
+  if(e.key === WISHLIST_KEY || e.key === "vl_cart" || e.key === COUPON_KEY || e.key === SAVED_KEY){
+    if(e.key === COUPON_KEY){ appliedCoupon = loadAppliedCoupon(); }
+    if(e.key === SAVED_KEY){ savedCache = null; }
+    if(isFirstRenderComplete){
+      renderCart();
+      cartBadge();
+    }
   }
 });
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ Cart Abandonment Tracking  (إصلاح #21)
+   ═══════════════════════════════════════════════════════════ */
+function initCartAbandonmentTracking(){
+  window.addEventListener("beforeunload", () => {
+    if(checkoutCompletedFlag) return;
+    try {
+      const cart = getCart();
+      if(!cart.length) return;
+      const total = cart.reduce((s,i) => s + Number(i.price||0) * Number(i.qty||1), 0);
+      const payload = JSON.stringify({
+        items: cart.length,
+        total,
+        at: Date.now(),
+        page: window.location.pathname
+      });
+      if(navigator.sendBeacon){
+        navigator.sendBeacon("/track-abandon", payload);
+      }
+      // fallback: save locally for analytics
+      localStorage.setItem("vl_last_abandoned", payload);
+    } catch(e){}
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ Mini-Cart Preview  (إصلاح #14)
+   ═══════════════════════════════════════════════════════════ */
+function initMiniCart(){
+  const cartBtn = document.getElementById("cartBtn");
+  if(!cartBtn) return;
+  if(window.innerWidth <= 1024) return;
+  
+  const parent = cartBtn.parentNode;
+  if(!parent) return;
+  if(getComputedStyle(parent).position === 'static'){
+    parent.style.position = 'relative';
+  }
+  
+  const mini = document.createElement("div");
+  mini.className = "vl-mini-cart";
+  mini.id = "vlMiniCart";
+  parent.appendChild(mini);
+  
+  let hoverTimer = null;
+  let leaveTimer = null;
+  
+  const buildMini = () => {
+    const c = getCart();
+    if(!c.length){
+      mini.innerHTML = `<div class="vl-mini-title">🕯️ ${t("cart_empty") || "السلة فارغة"}</div>`;
+      return;
+    }
+    const total = c.reduce((s,i) => s + Number(i.price||0)*Number(i.qty||1), 0);
+    const preview = c.slice(0, 3).map(it => `
+      <div class="vl-mini-item">
+        <img src="${it.img || ''}" alt="" loading="lazy" onerror="this.style.display='none'">
+        <div class="meta">
+          <b>${pname({name:it.name, nameEn:it.nameEn})}</b>
+          <small>× ${it.qty}</small>
+        </div>
+        <div class="price">${money(Number(it.price||0) * Number(it.qty||1))}</div>
+      </div>
+    `).join("");
+    const more = c.length > 3 ? `<div style="font-size:.72rem; color:#9a8874; text-align:center; padding:4px;">+${c.length - 3} ${t("vl_cart_items") || "منتجات"}</div>` : "";
+    mini.innerHTML = `
+      <div class="vl-mini-title">🛍️ ${t("cart_luxe_checkout") ? "" : ""}${c.length} ${t("vl_cart_items") || "منتجات"}</div>
+      ${preview}
+      ${more}
+      <div class="vl-mini-total">
+        <span>${t("wa_total") || "الإجمالي"}:</span>
+        <span>${money(total)}</span>
+      </div>
+      <button class="vl-mini-cta" type="button">${t("cart_luxe_checkout") || "تأكيد الطلب 💬"}</button>
+    `;
+    const cta = mini.querySelector(".vl-mini-cta");
+    if(cta) cta.addEventListener("click", () => {
+      cartBtn.click();
+      mini.classList.remove("vl-show");
+    });
+  };
+  
+  cartBtn.addEventListener("mouseenter", () => {
+    clearTimeout(leaveTimer);
+    hoverTimer = setTimeout(() => {
+      buildMini();
+      mini.classList.add("vl-show");
+    }, 220);
+  });
+  cartBtn.addEventListener("mouseleave", () => {
+    clearTimeout(hoverTimer);
+    leaveTimer = setTimeout(() => mini.classList.remove("vl-show"), 200);
+  });
+  mini.addEventListener("mouseenter", () => clearTimeout(leaveTimer));
+  mini.addEventListener("mouseleave", () => mini.classList.remove("vl-show"));
+}
 
 function prefetchProductPages(){
   if(!('requestIdleCallback' in window)) return;
@@ -1685,14 +1872,9 @@ function initLang(){
     const isProductsPage = window.location.pathname.includes('products.html');
     const isReviewsPage = window.location.pathname.includes('reviews.html');
     
-    if (isProductsPage && typeof renderProductsPage === "function") {
-      renderProductsPage();
-    } else if (isReviewsPage && typeof renderReviewsPage === "function") {
-      renderReviewsPage();
-    } else {
-      renderChips();
-      renderProducts();
-    }
+    if (isProductsPage && typeof renderProductsPage === "function") renderProductsPage();
+    else if (isReviewsPage && typeof renderReviewsPage === "function") renderReviewsPage();
+    else { renderChips(); renderProducts(); }
     renderScents();
     renderFAQ();
     fillCitySelect(document.getElementById("accCity"));
@@ -1732,25 +1914,21 @@ function updateLangBtn(){
 
 function applyI18n(){
   document.title=t("docTitle");
-
   document.querySelectorAll("[data-i18n]").forEach(el=>{
     const k=el.dataset.i18n;
     const v=t(k);
     if(v&&v!==k){ el.textContent=v; }
   });
-
   document.querySelectorAll("[data-i18n-ph]").forEach(el=>{
     const k=el.dataset.i18nPh;
     const v=t(k);
     if(v&&v!==k){ el.placeholder=v; }
   });
-
   document.querySelectorAll("[data-i18n-title]").forEach(el=>{
     const k=el.dataset.i18nTitle;
     const v=t(k);
     if(v&&v!==k){ el.title=v; }
   });
-
   const mq=document.getElementById("mqTrack");
   if(mq){
     const marqueeKeys=["mq_delivery","mq_discounts","mq_gift","mq_handmade","mq_scents","mq_shipping","mq_support"];
@@ -1763,11 +1941,8 @@ function applyI18n(){
       });
     }
   }
-
   const faqWrap=document.getElementById("faqWrap");
-  if(faqWrap&&typeof renderFAQ==="function"){
-    renderFAQ();
-  }
+  if(faqWrap&&typeof renderFAQ==="function"){ renderFAQ(); }
 }
 
 function initMarquee(){}
@@ -1802,11 +1977,8 @@ function initReveal(){
   },{threshold:.05, rootMargin:"0px 0px 100px 0px"});
   
   document.querySelectorAll(".rv").forEach(el=>{
-    if (el.getBoundingClientRect().top < window.innerHeight + 100) {
-      el.classList.add("on");
-    } else {
-      io.observe(el);
-    }
+    if (el.getBoundingClientRect().top < window.innerHeight + 100) el.classList.add("on");
+    else io.observe(el);
   });
 }
 
@@ -1837,19 +2009,14 @@ function renderChips(){
     btn.addEventListener("click",()=>{
       w.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
       btn.classList.add("on");
-      
       try {
         const url = new URL(window.location);
         if(k === "all") url.searchParams.delete('cat');
         else url.searchParams.set('cat', k);
         history.replaceState(null, '', url);
       } catch(e) {}
-      
-      if (isProductsPage && typeof renderProductsPage === "function") {
-        renderProductsPage();
-      } else {
-        renderProducts();
-      }
+      if (isProductsPage && typeof renderProductsPage === "function") renderProductsPage();
+      else renderProducts();
     });
     frag.appendChild(btn);
   });
@@ -1888,11 +2055,8 @@ function renderProducts(){
     if (catF === "all") {
       if (a.pinned && !b.pinned) return -1;
       if (!a.pinned && b.pinned) return 1;
-      if (a.pinned && b.pinned) {
-        return (b.pinnedAt || 0) - (a.pinnedAt || 0);
-      }
+      if (a.pinned && b.pinned) return (b.pinnedAt || 0) - (a.pinnedAt || 0);
     }
-    
     switch(sort){
       case "asc": return (a.price||0) - (b.price||0);
       case "desc": return (b.price||0) - (a.price||0);
@@ -1922,24 +2086,16 @@ function renderProducts(){
   list.forEach((p, index) => {
     try {
       const r=(typeof ratingOf==="function")?ratingOf(p.id):null;
-      
-      const pinBadge = p.pinned ? `<span class="p-pin-badge">📌 مميز</span>` : "";
       const badge = (typeof pbadge === "function") ? pbadge(p) : "";
-      
       const rawDesc=LANG==="en"?(p.descEn||p.desc||""):(p.desc||p.descEn||"");
       const productDesc=String(rawDesc).trim();
-      
       const isFirstBatch = index < eagerCount;
       const loadingAttr = isFirstBatch ? 'eager' : 'lazy';
       const fetchPriority = isFirstBatch ? 'high' : 'low';
       
       let imgSrc = "";
-      try {
-        imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || "");
-      } catch(e) {
-        imgSrc = placeholderSvg;
-      }
-      
+      try { imgSrc = (typeof imgOf === "function") ? imgOf(p) : (p.img || ""); }
+      catch(e) { imgSrc = placeholderSvg; }
       if (!imgSrc) imgSrc = placeholderSvg;
       
       const inWishlist = isInWishlist(p.id);
@@ -2025,9 +2181,8 @@ function renderProductsPage() {
     if (catF === "all") {
       if (a.pinned && !b.pinned) return -1;
       if (!a.pinned && b.pinned) return 1;
-      if (a.pinned && b.pinned) { return (b.pinnedAt || 0) - (a.pinnedAt || 0); }
+      if (a.pinned && b.pinned) return (b.pinnedAt || 0) - (a.pinnedAt || 0);
     }
-    
     switch(sort) {
       case "asc": return (a.price || 0) - (b.price || 0);
       case "desc": return (b.price || 0) - (a.price || 0);
@@ -2269,7 +2424,6 @@ function initQuickAdd() {
 
   addBtn?.addEventListener("click", () => {
     if (!quickAddProduct) return;
-
     const modalSelect = document.getElementById("modalScentSelect");
     const currentScent = modalSelect ? modalSelect.value : quickAddScent;
     const currentQty = parseInt(document.getElementById("smQVal")?.textContent || "1", 10) || 1;
@@ -2285,7 +2439,6 @@ function initQuickAdd() {
     if (added) {
       const originalText = addBtn.textContent;
       addBtn.textContent = "✓ تمت الإضافة";
-
       setTimeout(() => {
         addBtn.textContent = originalText || "🛍️ أضف للسلة";
         closeModal("scentOv");
@@ -2300,10 +2453,8 @@ function initQuickAdd() {
 function updateQuickAddQtyUI() {
   const qv = document.getElementById("smQVal");
   if (qv) qv.textContent = quickAddQty;
-
   const minus = document.getElementById("smQMinus");
   const plus = document.getElementById("smQPlus");
-
   if (minus) {
     minus.style.opacity = quickAddQty <= 1 ? "0.4" : "1";
     minus.style.pointerEvents = quickAddQty <= 1 ? "none" : "auto";
@@ -2357,13 +2508,11 @@ function openQuickAdd(p) {
         ${quickAddMaxStock < 99 ? `<small style="display:block;margin-top:.2rem;color:var(--mut);">${LANG === "en" ? `${quickAddMaxStock} available` : `متاح ${quickAddMaxStock} فقط`}</small>` : ""}
       </div>
     </div>
-
     <label for="modalScentSelect" style="display:block;font-weight:700;margin-bottom:.45rem;">${t("quick_add_scent")}</label>
     <select id="modalScentSelect" aria-required="true" style="width:100%;padding:.85rem;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--dark);font-family:inherit;font-size:1rem;cursor:pointer;outline:none;">
       <option value="">${LANG === "en" ? "Choose a scent..." : "اختر العطر..."}</option>
       ${VELA_SCENTS.map(s => `<option value="${s[0]}">${velaScentTr(s[0])}</option>`).join('')}
     </select>
-
     <div style="display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin-top:1rem;">
       <span style="font-weight:700;">${t("quick_add_qty")}</span>
       <div style="display:flex;align-items:center;gap:.65rem;border:1px solid var(--line);border-radius:11px;padding:.25rem;background:var(--bg);">
@@ -2388,11 +2537,8 @@ const debouncedRenderProducts = debounce(renderProducts, 250);
 document.addEventListener("change",e=>{
   if(e.target.id==="priceMin"||e.target.id==="priceMax"||e.target.id==="sortSel"){
     const isProductsPage = window.location.pathname.includes('products.html');
-    if (isProductsPage && typeof renderProductsPage === "function") {
-      renderProductsPage();
-    } else {
-      renderProducts();
-    }
+    if (isProductsPage && typeof renderProductsPage === "function") renderProductsPage();
+    else renderProducts();
   }
 });
 document.addEventListener("input",e=>{
@@ -2437,11 +2583,9 @@ function renderFAQ(){
   ];
 
   const frag = document.createDocumentFragment();
-
   items.forEach(([question, answer]) => {
     const item = document.createElement("div");
     item.className = "faq-item";
-
     item.innerHTML = `
       <button class="faq-q" type="button" aria-expanded="false">
         <span>${question}</span>
@@ -2449,7 +2593,6 @@ function renderFAQ(){
       </button>
       <div class="faq-a"><div>${answer}</div></div>
     `;
-
     frag.appendChild(item);
   });
 
@@ -2459,12 +2602,9 @@ function renderFAQ(){
   w.querySelectorAll(".faq-item").forEach(item => {
     const button = item.querySelector(".faq-q");
     const answer = item.querySelector(".faq-a");
-
     if(!button || !answer) return;
-
     button.addEventListener("click", () => {
       const wasOpen = item.classList.contains("open");
-
       w.querySelectorAll(".faq-item").forEach(other => {
         other.classList.remove("open");
         const otherAnswer = other.querySelector(".faq-a");
@@ -2476,7 +2616,6 @@ function renderFAQ(){
           if(otherIcon){ otherIcon.textContent = "+"; }
         }
       });
-
       if(!wasOpen){
         item.classList.add("open");
         answer.style.maxHeight = answer.scrollHeight + "px";
@@ -2489,7 +2628,7 @@ function renderFAQ(){
 }
  
 /* ═══════════════════════════════════════════════════════════
-   ✨ initCart
+   ✨ initCart (محدّث — مع إصلاحات)
    ═══════════════════════════════════════════════════════════ */
 function initCart(){
   cartBadge();
@@ -2500,6 +2639,21 @@ function initCart(){
     fillCartForm();
     renderCart();
     openDrawer("cartDrawer","cartOv");
+    // ✅ fbq ViewCart
+    if(typeof fbq === "function"){
+      try {
+        const c = getCart();
+        if(c.length){
+          const val = c.reduce((s,i) => s + Number(i.price||0)*Number(i.qty||1), 0);
+          fbq("track", "ViewCart", {
+            value: val,
+            currency: "EGP",
+            content_ids: c.map(it => it.id),
+            num_items: c.length
+          });
+        }
+      } catch(e){}
+    }
   });
   document.getElementById("closeCart")?.addEventListener("click",closeDrawers);
   document.getElementById("cartOv")?.addEventListener("click",closeDrawers);
@@ -2511,17 +2665,26 @@ function initCart(){
     openDrawer("cartDrawer","cartOv");
   }
 
-  document.getElementById("emptyCartBtn")?.addEventListener("click",()=>{
-    if(!confirm(t("t_confirm_empty")))return;
+  // ✅ Custom confirm بدل native confirm  (إصلاح #12)
+  document.getElementById("emptyCartBtn")?.addEventListener("click", async () => {
+    const ok = await showConfirm({
+      icon: "🗑️",
+      title: t("vl_confirm_empty_title") || "إفراغ السلة",
+      message: t("vl_confirm_empty_msg") || "متأكد إنك عايز تفرغ السلة بالكامل؟",
+      yesText: t("vl_confirm_yes") || "نعم، إفراغ",
+      noText: t("vl_confirm_no") || "إلغاء"
+    });
+    if(!ok) return;
     saveCart([]);
     freeShipCelebrated = false;
+    setAppliedCoupon(null);
     renderCart();
   });
 
   document.getElementById("checkoutBtn")?.addEventListener("click",checkout);
   document.getElementById("applyCouponBtn")?.addEventListener("click",applyCoupon);
 
-  const saveCustomer = debounce(() => saveCartCustomer(), 500);
+  const saveCustomer = debounce(() => saveCartCustomer(), 900);
   
   ["#coName","#coPhone","#coEmail","#coCity","#coAddr","#coNotes"].forEach(selector=>{
     document.addEventListener("input",e=>{
@@ -2535,7 +2698,6 @@ function initCart(){
   const checkoutBtn = document.getElementById('checkoutBtn');
   if (checkoutBtn) {
     checkoutBtn.classList.add('vl-checkout-pulse');
-
     if (!document.getElementById('trustBadges')) {
       const badges = document.createElement('div');
       badges.id = 'trustBadges';
@@ -2550,21 +2712,42 @@ function initCart(){
   }
 
   window.addEventListener('resize', debounce(adjustCartDrawerPadding, 200));
+  
+  // ✅ bind listeners مرة واحدة فقط (إصلاح تسريب الـ listeners)
+  bindCartListeners();
+  
+  // ✅ عرض الكوبون المحفوظ إن وُجد
+  if(appliedCoupon && document.getElementById("couponInput")){
+    document.getElementById("couponInput").value = appliedCoupon.code || "";
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ renderCart — النسخة النهائية
-   - صف موحد للكارت
-   - الأزرار الأصلية (واتساب + إفراغ) في wrapper Sticky
+   ✨ bindCartListeners (جديد — إصلاح #1)
+   ═══════════════════════════════════════════════════════════ */
+function bindCartListeners(){
+  if(cartListenersBound) return;
+  const w = document.getElementById("cartItems");
+  if(!w) return;
+  w.addEventListener('click', handleCartClick);
+  w.addEventListener('change', handleCartChange);
+  cartListenersBound = true;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ renderCart — النسخة المطوّرة
    ═══════════════════════════════════════════════════════════ */
 function renderCart(){
   const c=getCart();
   const w=document.getElementById("cartItems");
   if(!w)return;
+  
+  const footer = document.querySelector("#cartDrawer .dfoot");
 
   /* ═══ EMPTY STATE ═══ */
   if(!c.length){
     freeShipCelebrated = false;
+    if(footer) footer.style.display = 'none';
     w.innerHTML=`
       <div class="vl-empty-cart">
         <div class="vl-empty-candle">🕯️</div>
@@ -2574,6 +2757,7 @@ function renderCart(){
           ${t("cart_luxe_empty_cta") || "تصفح تشكيلتنا الآن ✨"}
         </button>
       </div>
+      ${renderSavedSectionHTML()}
     `;
     
     setTimeout(()=>{
@@ -2584,21 +2768,33 @@ function renderCart(){
           window.location.href = "products.html";
         });
       }
+      bindSavedSection();
     }, 0);
     
     updateTotals(c);
     adjustCartDrawerPadding();
     return;
   }
+  
+  // ✅ إظهار footer لو السلة فيها items
+  if(footer) footer.style.display = '';
 
-  /* ═══ ITEMS — الصف الموحد ═══ */
+  /* ═══ ITEMS ═══ */
   const frag = document.createDocumentFragment();
   
   c.forEach((it, i) => {
     const unitPrice = Number(it.price||0);
     const lineTotal = unitPrice * Number(it.qty||1);
+    
+    // ✅ احترام stock
+    const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
+    const prod = products.find(x => x.id === it.id);
+    const stockNum = Number(prod?.stock);
+    const atMaxStock = Number.isFinite(stockNum) && stockNum > 0 && Number(it.qty) >= stockNum;
+    
     const item = document.createElement('div');
     item.className = 'citem';
+    item.dataset.cartIdx = i;
     item.innerHTML = `
       <div class="citem-media">
         <img src="${it.img||''}" alt="${pname({name:it.name,nameEn:it.nameEn})}" loading="lazy" width="68" height="68" onerror="window.handleImageError(this, '${it.id}')">
@@ -2618,6 +2814,10 @@ function renderCart(){
           </select>
         </label>
         
+        <button class="vl-save-later" type="button" data-save-later="${i}">
+          ${t("vl_save_for_later") || "احفظ للاحقًا"}
+        </button>
+        
         <div class="citem-foot">
           <div class="citem-price">
             <span class="lbl">${LANG==="en"?"Unit:":"السعر:"}</span>
@@ -2631,7 +2831,7 @@ function renderCart(){
           <div class="qty">
             <button class="cq-minus" type="button" data-i="${i}" aria-label="${LANG==="en"?"Decrease":"تقليل"}">−</button>
             <b>${it.qty}</b>
-            <button class="cq-plus" type="button" data-i="${i}" aria-label="${LANG==="en"?"Increase":"زيادة"}">+</button>
+            <button class="cq-plus" type="button" data-i="${i}" aria-label="${LANG==="en"?"Increase":"زيادة"}" ${atMaxStock ? 'style="opacity:.4;pointer-events:none;"' : ''}>+</button>
           </div>
         </div>
       </div>
@@ -2650,22 +2850,16 @@ function renderCart(){
   w.innerHTML = '';
   w.appendChild(frag);
 
-  /* ═══ CROSS-SELL ═══ */
+  /* ═══ CROSS-SELL (إصلاح #5) ═══ */
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   const cartProductIds = c.map(it => it.id);
   
   const suggestedProduct = products.find(p => {
     if (!p || cartProductIds.includes(p.id)) return false;
     if (p.active === false) return false;
-    
-    const searchText = [
-      p.name || "", p.nameEn || "", p.desc || "", p.descEn || "", p.cat || ""
-    ].join(" ").toLowerCase();
-    
-    return searchText.includes("فواحة") || 
-           searchText.includes("دولاب") || 
-           searchText.includes("freshener") ||
-           searchText.includes("closet");
+    if (Number(p.stock) === 0) return false;
+    const searchText = [p.name || "", p.nameEn || "", p.desc || "", p.descEn || "", p.cat || ""].join(" ").toLowerCase();
+    return searchText.includes("فواحة") || searchText.includes("دولاب") || searchText.includes("freshener") || searchText.includes("closet");
   });
   
   if (suggestedProduct) {
@@ -2702,18 +2896,33 @@ function renderCart(){
       const btn = document.getElementById('addSuggestBtn');
       if(btn) {
         btn.addEventListener('click', () => {
-          const added = addToCart(suggestedProduct, {scent: suggestedProduct.scent || "فانيلا", qty: 1});
-          if(added !== false){
-            btn.classList.add('vl-added');
-            btn.innerHTML = `<span class="ic">✓</span><span class="lbl">${t("cart_luxe_cross_added") || "تمت الإضافة"}</span>`;
-            setTimeout(()=>{
-              renderCart();
-              cartBadge();
-            }, 700);
+          // ✅ لو المنتج عنده scent صريح → ضيف مباشرة
+          // لو لأ → افتح quick-add
+          const hasScent = suggestedProduct.scent && String(suggestedProduct.scent).trim();
+          if(hasScent){
+            const added = addToCart(suggestedProduct, {scent: suggestedProduct.scent, qty: 1});
+            if(added !== false){
+              btn.classList.add('vl-added');
+              btn.innerHTML = `<span class="ic">✓</span><span class="lbl">${t("cart_luxe_cross_added") || "تمت الإضافة"}</span>`;
+              setTimeout(()=>{ renderCart(); cartBadge(); }, 700);
+            }
+          } else {
+            // افتح مودال اختيار العطر
+            closeDrawers();
+            setTimeout(() => openQuickAdd(suggestedProduct), 260);
           }
         });
       }
     }, 0);
+  }
+  
+  /* ═══ SAVED FOR LATER SECTION ═══ */
+  const savedHTML = renderSavedSectionHTML();
+  if(savedHTML){
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = savedHTML;
+    w.appendChild(tempDiv.firstElementChild);
+    setTimeout(bindSavedSection, 0);
   }
 
   /* ═══ FOOTER ROWS SETUP ═══ */
@@ -2740,22 +2949,17 @@ function renderCart(){
     }
   }
 
-  /* ═══════════════════════════════════════════════════════
-     ✨ STICKY WRAP — بيلف الأزرار الأصلية من HTML
-     (الواتساب + إفراغ السلة) في wrapper Sticky واحد
-     ═══════════════════════════════════════════════════════ */
-  const footer = document.querySelector("#cartDrawer .dfoot");
-  if (footer) {
-    // شيل أي wrapper قديم
-    const oldWrap = footer.querySelector('.vl-buttons-sticky-wrap');
+  /* ═══ STICKY WRAP ═══ */
+  const footerEl = document.querySelector("#cartDrawer .dfoot");
+  if (footerEl) {
+    const oldWrap = footerEl.querySelector('.vl-buttons-sticky-wrap');
     if (oldWrap) {
-      // رجّع الأزرار لمكانها الأصلي جوه الفوتر (قبل ما نعمل wrapper جديد)
       const checkout = document.getElementById('checkoutBtn');
       const empty = document.getElementById('emptyCartBtn');
       const trust = document.getElementById('trustBadges');
-      if (trust && oldWrap.contains(trust)) footer.appendChild(trust);
-      if (checkout && oldWrap.contains(checkout)) footer.appendChild(checkout);
-      if (empty && oldWrap.contains(empty)) footer.appendChild(empty);
+      if (trust && oldWrap.contains(trust)) footerEl.appendChild(trust);
+      if (checkout && oldWrap.contains(checkout)) footerEl.appendChild(checkout);
+      if (empty && oldWrap.contains(empty)) footerEl.appendChild(empty);
       oldWrap.remove();
     }
 
@@ -2763,50 +2967,269 @@ function renderCart(){
     const emptyEl = document.getElementById('emptyCartBtn');
     const trustEl = document.getElementById('trustBadges');
 
-    // لو الأزرار موجودة فعلاً، لفهم في wrapper Sticky
     if (checkoutEl && emptyEl) {
       const wrap = document.createElement('div');
       wrap.className = 'vl-buttons-sticky-wrap';
-
-      // الترتيب: trust ← checkout ← empty
       if (trustEl) wrap.appendChild(trustEl);
       wrap.appendChild(checkoutEl);
       wrap.appendChild(emptyEl);
-
-      footer.appendChild(wrap);
+      footerEl.appendChild(wrap);
     }
   }
 
-  w.addEventListener('click', handleCartClick);
-  w.addEventListener('change', handleCartChange);
-  
+  // ⚠️ الـ listeners اتبندت مرة واحدة بس في initCart
+  // مش بنضيفهم تاني هنا (بيمنع تسريب الـ listeners)
+
   updateTotals(c);
   adjustCartDrawerPadding();
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ Saved For Later — HTML + Binding
+   ═══════════════════════════════════════════════════════════ */
+function renderSavedSectionHTML(){
+  const saved = getSavedForLater();
+  if(!saved.length) return "";
+  return `
+    <div class="vl-saved-section" id="vlSavedSection">
+      <div class="vl-saved-head">
+        <span>${t("vl_saved_items") || "📦 محفوظات"} (${saved.length})</span>
+      </div>
+      <div class="vl-saved-list">
+        ${saved.map((it, idx) => `
+          <div class="vl-saved-item">
+            <img src="${it.img||''}" alt="" loading="lazy" onerror="this.style.display='none'">
+            <div class="meta">
+              <b>${pname({name:it.name, nameEn:it.nameEn})}</b>
+              <small>${money(it.price)}</small>
+            </div>
+            <div class="actions">
+              <button class="move" type="button" data-move-saved="${idx}" title="${t("vl_move_to_cart") || "نقل للسلة"}">↗</button>
+              <button class="del" type="button" data-del-saved="${idx}" title="حذف">×</button>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function bindSavedSection(){
+  const section = document.getElementById("vlSavedSection");
+  if(!section) return;
+  section.querySelectorAll("[data-move-saved]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = +btn.dataset.moveSaved;
+      const item = removeFromSavedForLater(idx);
+      if(item){
+        const {savedAt, ...clean} = item;
+        addToCart({id: clean.id, name: clean.name, nameEn: clean.nameEn, price: clean.price, img: clean.img}, {
+          scent: clean.scent || "فانيلا",
+          qty: clean.qty || 1
+        });
+        toast(t("vl_added_to_cart") || "✓ تمت الإضافة للسلة");
+        renderCart();
+      }
+    });
+  });
+  section.querySelectorAll("[data-del-saved]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const idx = +btn.dataset.delSaved;
+      removeFromSavedForLater(idx);
+      renderCart();
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ handleCartClick — مع stock check و undo و targeted updates
+   ═══════════════════════════════════════════════════════════ */
 function handleCartClick(e){
+  // ✅ Save for later
+  const saveLaterBtn = e.target.closest('[data-save-later]');
+  if(saveLaterBtn){
+    e.preventDefault();
+    const idx = +saveLaterBtn.dataset.saveLater;
+    const c = getCart();
+    if(!c[idx]) return;
+    const item = c[idx];
+    addToSavedForLater(item);
+    c.splice(idx, 1);
+    saveCart(c);
+    if(typeof fbq === "function"){
+      fbq("track", "RemoveFromCart", { content_ids: [item.id], value: Number(item.price)*Number(item.qty) });
+    }
+    renderCart();
+    cartBadge();
+    toast("📦 " + (t("vl_saved_items") || "محفوظات"));
+    return;
+  }
+  
   const rmBtn = e.target.closest('.rm');
   const plusBtn = e.target.closest('.cq-plus');
   const minusBtn = e.target.closest('.cq-minus');
   
   const c = getCart();
   
+  // ✅ حذف مع Undo  (إصلاح #8 + #9)
   if(rmBtn){
-    c.splice(+rmBtn.dataset.i, 1);
-    saveCart(c);
-    renderCart();
-    cartBadge();
-  } else if(plusBtn){
+    e.preventDefault();
+    const idx = +rmBtn.dataset.i;
+    const removed = c[idx];
+    if(!removed) return;
+    
+    const row = rmBtn.closest('.citem');
+    if(row){
+      row.classList.add('vl-removing');
+      setTimeout(() => {
+        c.splice(idx, 1);
+        saveCart(c);
+        renderCart();
+        cartBadge();
+        
+        if(typeof fbq === "function"){
+          fbq("track", "RemoveFromCart", {
+            content_ids: [removed.id],
+            value: Number(removed.price) * Number(removed.qty)
+          });
+        }
+      }, 240);
+    } else {
+      c.splice(idx, 1);
+      saveCart(c);
+      renderCart();
+      cartBadge();
+    }
+    
+    // Undo toast
+    showToastWithAction(
+      t("vl_item_removed") || "🗑️ تم حذف العنصر",
+      t("vl_undo_remove") || "↩️ تراجع",
+      () => {
+        const c2 = getCart();
+        c2.splice(idx, 0, removed);
+        saveCart(c2);
+        renderCart();
+        cartBadge();
+      }
+    );
+    return;
+  }
+  
+  if(plusBtn){
+    e.preventDefault();
     const idx = +plusBtn.dataset.i;
-    c[idx].qty = Number(c[idx].qty || 1) + 1;
+    if(!c[idx]) return;
+    
+    // ✅ Stock check  (إصلاح #2)
+    const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
+    const p = products.find(x => x.id === c[idx].id);
+    const stock = Number(p?.stock);
+    const currentQty = Number(c[idx].qty || 1);
+    
+    if(Number.isFinite(stock) && stock > 0 && currentQty >= stock){
+      toast(LANG === "en" ? `⚠️ Only ${stock} available` : `⚠️ المتاح ${stock} قطعة فقط`);
+      return;
+    }
+    
+    c[idx].qty = currentQty + 1;
     saveCart(c);
-    renderCart();
-  } else if(minusBtn){
+    
+    // ✅ Targeted update  (إصلاح #9)
+    const row = plusBtn.closest('.citem');
+    if(row){
+      updateCartItemRow(row, c[idx]);
+      updateTotals(c);
+      touchCartTimestamp();
+    } else {
+      renderCart();
+    }
+    return;
+  }
+  
+  if(minusBtn){
+    e.preventDefault();
     const idx = +minusBtn.dataset.i;
-    c[idx].qty = Number(c[idx].qty || 1) - 1;
-    if(c[idx].qty <= 0){ c.splice(idx, 1); }
+    if(!c[idx]) return;
+    
+    const newQty = Number(c[idx].qty || 1) - 1;
+    
+    if(newQty <= 0){
+      const removed = c[idx];
+      const row = minusBtn.closest('.citem');
+      if(row) row.classList.add('vl-removing');
+      setTimeout(() => {
+        c.splice(idx, 1);
+        saveCart(c);
+        renderCart();
+        cartBadge();
+        if(typeof fbq === "function"){
+          fbq("track", "RemoveFromCart", { content_ids: [removed.id] });
+        }
+      }, 240);
+      
+      showToastWithAction(
+        t("vl_item_removed") || "🗑️ تم حذف العنصر",
+        t("vl_undo_remove") || "↩️ تراجع",
+        () => {
+          const c2 = getCart();
+          c2.splice(idx, 0, removed);
+          saveCart(c2);
+          renderCart();
+          cartBadge();
+        }
+      );
+      return;
+    }
+    
+    c[idx].qty = newQty;
     saveCart(c);
-    renderCart();
+    
+    const row = minusBtn.closest('.citem');
+    if(row){
+      updateCartItemRow(row, c[idx]);
+      updateTotals(c);
+      touchCartTimestamp();
+    } else {
+      renderCart();
+    }
+    return;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ Targeted Update للصف  (إصلاح #9)
+   ═══════════════════════════════════════════════════════════ */
+function updateCartItemRow(row, item){
+  if(!row || !item) return;
+  
+  const qtyEl = row.querySelector('.qty b');
+  if(qtyEl) qtyEl.textContent = item.qty;
+  
+  const lineTotal = Number(item.price||0) * Number(item.qty||1);
+  const totalEl = row.querySelector('.val-total');
+  if(totalEl) totalEl.textContent = money(lineTotal);
+  
+  // Plus button state
+  const plusBtn = row.querySelector('.cq-plus');
+  if(plusBtn){
+    const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
+    const p = products.find(x => x.id === item.id);
+    const stock = Number(p?.stock);
+    if(Number.isFinite(stock) && stock > 0 && Number(item.qty) >= stock){
+      plusBtn.style.opacity = '0.4';
+      plusBtn.style.pointerEvents = 'none';
+    } else {
+      plusBtn.style.opacity = '';
+      plusBtn.style.pointerEvents = '';
+    }
+  }
+  
+  const minusBtn = row.querySelector('.cq-minus');
+  if(minusBtn){
+    // مش هنعطل الـ minus عشان الـ undo logic
+    minusBtn.style.opacity = '';
+    minusBtn.style.pointerEvents = '';
   }
 }
 
@@ -2822,7 +3245,7 @@ function handleCartChange(e){
 }
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ updateTotals — الشحن المجاني بعد الخصم
+   ✨ updateTotals — الشحن المجاني على subTotal  (إصلاح #6)
    ═══════════════════════════════════════════════════════════ */
 function updateTotals(c){
   const sub = c.reduce((a,i) => a + (Number(i.price||0) * Number(i.qty||1)), 0);
@@ -2837,6 +3260,7 @@ function updateTotals(c){
 
   const couponDisc = (typeof calcCouponDiscount === "function") ? calcCouponDiscount(sub) : 0;
 
+  // ✅ الخصم الأعلى فقط (زي ما طلبت)
   let finalDiscount = 0;
   let appliedType = "none";
 
@@ -2897,10 +3321,10 @@ function updateTotals(c){
     }
   }
 
-  /* ═══ FREE SHIPPING — على total بعد الخصم ═══ */
-  const remaining = Math.max(0, FREE_SHIP_THRESHOLD - total);
-  const progressPercent = Math.min(100, (total / FREE_SHIP_THRESHOLD) * 100);
-  const reached = total >= FREE_SHIP_THRESHOLD;
+  /* ═══ FREE SHIPPING — على sub (قبل الخصم) — إصلاح #6 ═══ */
+  const remaining = Math.max(0, FREE_SHIP_THRESHOLD - sub);
+  const progressPercent = Math.min(100, (sub / FREE_SHIP_THRESHOLD) * 100);
+  const reached = sub >= FREE_SHIP_THRESHOLD;
 
   const freeShipRow = document.getElementById("freeShippingRow");
   const shipNote = document.querySelector('.cart-shipping-note');
@@ -2964,51 +3388,69 @@ function fillCartForm(){
 function saveUserFromCart(name,phone,email,city,addr,notes=""){
   const old=getSavedUser();
   const u={...old,name,phone,email,city,addr,notes,orders:old.orders||0};
-  try {
-    localStorage.setItem("vl_user",JSON.stringify(u));
-  } catch(e) {
-    console.warn("⚠️ Failed to save user:", e);
-  }
+  try { localStorage.setItem("vl_user",JSON.stringify(u)); }
+  catch(e) { console.warn("⚠️ Failed to save user:", e); }
   if(document.getElementById("accName"))document.getElementById("accName").value=name;
   if(document.getElementById("accPhone"))document.getElementById("accPhone").value=phone;
   if(document.getElementById("accCity"))document.getElementById("accCity").value=city;
   if(document.getElementById("accAddr"))document.getElementById("accAddr").value=addr;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ saveOrUpdateCustomer — بـ Firestore query  (إصلاح #7)
+   ═══════════════════════════════════════════════════════════ */
 async function saveOrUpdateCustomer(orderData){
-  if(!window.FB || typeof window.FB.list !== "function") return null;
+  if(!window.FB || !window.FB.db) return null;
   try {
-    let users = [];
-    try { users = await window.FB.list("users") || []; } catch(e) { users = []; }
-
+    const {
+      collection, query, where, getDocs, limit,
+      doc, setDoc, updateDoc, increment
+    } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+    const db = window.FB.db;
+    const usersRef = collection(db, "users");
+    
     const phone = String(orderData.phone || "").trim();
     const email = String(orderData.email || "").trim();
-
+    
     let existing = null;
-    if (phone) existing = users.find(u => String(u.phone || "").trim() === phone);
-    if (!existing && email) existing = users.find(u => String(u.email || "").trim() === email);
-
-    if (existing) {
-      const newOrdersCount = (Number(existing.ordersCount) || 0) + 1;
-      const newTotalSpent = (Number(existing.totalSpent) || 0) + Number(orderData.total || 0);
-      await window.FB.update("users", existing.id, {
-        ordersCount: newOrdersCount,
-        totalSpent: newTotalSpent,
-        lastOrder: Date.now(),
-        name: existing.name || orderData.name || "",
-        phone: existing.phone || phone,
-        email: existing.email || email,
-        city: existing.city || orderData.city || "",
-        address: existing.address || orderData.address || ""
+    
+    if(phone){
+      try {
+        const q1 = query(usersRef, where("phone", "==", phone), limit(1));
+        const snap1 = await getDocs(q1);
+        if(!snap1.empty){
+          const d = snap1.docs[0];
+          existing = { id: d.id, ...d.data() };
+        }
+      } catch(e){ console.warn("⚠️ phone query failed:", e); }
+    }
+    
+    if(!existing && email){
+      try {
+        const q2 = query(usersRef, where("email", "==", email), limit(1));
+        const snap2 = await getDocs(q2);
+        if(!snap2.empty){
+          const d = snap2.docs[0];
+          existing = { id: d.id, ...d.data() };
+        }
+      } catch(e){ console.warn("⚠️ email query failed:", e); }
+    }
+    
+    if(existing){
+      const userRef = doc(db, "users", existing.id);
+      await updateDoc(userRef, {
+        ordersCount: increment(1),
+        totalSpent: increment(Number(orderData.total || 0)),
+        lastOrder: Date.now()
       });
       console.log("✅ Customer updated:", existing.id);
       return existing.id;
     } else {
       const userId = "u" + Date.now().toString(36) + Math.random().toString(16).slice(2, 6);
-      const newUser = {
+      const userRef = doc(db, "users", userId);
+      await setDoc(userRef, {
         name: orderData.name || "",
-        phone: phone,
-        email: email,
+        phone, email,
         city: orderData.city || "",
         address: orderData.address || "",
         ordersCount: 1,
@@ -3016,8 +3458,7 @@ async function saveOrUpdateCustomer(orderData){
         createdAt: Date.now(),
         lastOrder: Date.now(),
         provider: "guest-checkout"
-      };
-      await window.FB.set("users", userId, newUser);
+      });
       console.log("✅ Customer created:", userId);
       return userId;
     }
@@ -3066,14 +3507,11 @@ async function hashSHA256(str){
 
 async function buildAdvancedMatching(userData){
   if(!userData) return {};
-  
   const result = {};
-  
   if(userData.email){
     const em = await hashSHA256(userData.email);
     if(em) result.em = em;
   }
-  
   if(userData.phone){
     let phone = String(userData.phone).replace(/\D/g, "");
     if(phone.startsWith("20")) phone = phone.slice(2);
@@ -3081,7 +3519,6 @@ async function buildAdvancedMatching(userData){
     const ph = await hashSHA256(phone);
     if(ph) result.ph = ph;
   }
-  
   if(userData.name){
     const parts = String(userData.name).trim().split(/\s+/);
     if(parts[0]){
@@ -3093,20 +3530,15 @@ async function buildAdvancedMatching(userData){
       if(ln) result.ln = ln;
     }
   }
-  
   if(userData.city){
     const ct = await hashSHA256(userData.city);
     if(ct) result.ct = ct;
   }
-  
   result.country = "eg";
-  
   const fbp = getCookie("_fbp");
   if(fbp) result.fbp = fbp;
-  
   const fbc = localStorage.getItem("vl_fbclid");
   if(fbc) result.fbc = `fb.1.${Date.now()}.${fbc}`;
-  
   return result;
 }
 
@@ -3240,9 +3672,7 @@ async function checkout(){
   };
 
   const orderData={
-    orderId,
-    userId,
-    userEmail,
+    orderId, userId, userEmail,
     customer:{name,phone,email,city,address:addr},
     name,phone,email,city,address:addr,notes,
     products:c.map(it=>({
@@ -3252,17 +3682,14 @@ async function checkout(){
       total:Number(it.price||0)*Number(it.qty||1),img:it.img||""
     })),
     items:c,
-    total,
-    productsTotal:subTotal,
-    discount: finalDiscount,
-    qtyDiscount: qtyDiscount,
-    couponDiscount: couponDiscount,
+    total, productsTotal:subTotal,
+    discount: finalDiscount, qtyDiscount, couponDiscount,
     couponCode: appliedCoupon ? appliedCoupon.code : "",
-    appliedType: appliedType,
+    appliedType,
     paymentMethod:"WhatsApp Confirmation",
     paymentStatus:"pending",
     shippingPayment:"Cash to courier",
-    shippingIncluded: total >= FREE_SHIP_THRESHOLD,
+    shippingIncluded: subTotal >= FREE_SHIP_THRESHOLD,
     status: 0,
     statusHistory: [{ status: 0, changedAt: Date.now(), changedBy: "customer" }],
     tracking: trackingData,
@@ -3312,6 +3739,13 @@ async function checkout(){
     }
   }
 
+  // ✅ منع الـ abandonment tracking بعد إتمام الطلب
+  checkoutCompletedFlag = true;
+  
+  // ✅ نظّف الكوبون المحفوظ + الـ timestamp
+  setAppliedCoupon(null);
+  try { localStorage.removeItem("vl_cart_ts"); } catch(e){}
+
   saveCart([]);
   freeShipCelebrated = false;
   renderCart();
@@ -3320,6 +3754,7 @@ async function checkout(){
   let emailSent = false;
   try { emailSent = await sendOrderConfirmationEmail(orderData); } catch (err) { console.warn("⚠️ Email notification failed:", err); }
 
+  // ✅ WhatsApp مع fallback  (إصلاح #23)
   const waOpened = openWhatsAppConfirmation(orderData, waWindow);
 
   if (waOpened) {
@@ -3335,26 +3770,20 @@ async function checkout(){
   try {
     if (typeof gtag === "function") {
       gtag("event", "purchase", {
-        transaction_id: orderId,
-        value: total,
-        currency: "EGP",
+        transaction_id: orderId, value: total, currency: "EGP",
         items: c.map(it => ({ item_id: it.id, item_name: it.name, price: it.price, quantity: it.qty }))
       });
     }
     if (typeof fbq === "function") {
       fbq("track", "Purchase", {
-        value: total,
-        currency: "EGP",
+        value: total, currency: "EGP",
         content_ids: c.map(it => it.id),
         num_items: c.length,
         content_type: "product",
         order_id: orderId,
-        em: advancedMatching.em,
-        ph: advancedMatching.ph,
-        fn: advancedMatching.fn,
-        ln: advancedMatching.ln,
-        ct: advancedMatching.ct,
-        country: "eg"
+        em: advancedMatching.em, ph: advancedMatching.ph,
+        fn: advancedMatching.fn, ln: advancedMatching.ln,
+        ct: advancedMatching.ct, country: "eg"
       });
     }
     ['vl_utm_source','vl_utm_medium','vl_utm_campaign','vl_utm_content','vl_fbclid','vl_gclid','vl_ttclid'].forEach(k => localStorage.removeItem(k));
@@ -3368,6 +3797,11 @@ function waTotalLabel(){
   return LANG==="en"?"💰 Products Total:":"💰 إجمالي المنتجات:";
 }
 
+/* ⚠️ ملاحظة أمنية:
+   الـ WEB3FORMS_KEY المفروض يكون في Cloudflare Worker أو backend proxy.
+   لأنه client-side هنا، أي حد يقدر يشوفه. لو حابب تأمّنه، اعمل:
+   POST https://your-worker.your-subdomain.workers.dev/send-email
+   والـ worker بيضيف الـ access_key من env var. */
 const WEB3FORMS_KEY = "a23e1d50-37ee-4aec-a465-aeeb819c02a1";
 
 async function sendOrderConfirmationEmail(orderData) {
@@ -3447,6 +3881,9 @@ ${orderData.shippingIncluded ? "🚚 الشحن: مجاني\n" : ""}
   }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ WhatsApp Confirmation — مع fallback نسخ الرابط (إصلاح #23)
+   ═══════════════════════════════════════════════════════════ */
 function openWhatsAppConfirmation(orderData, waWindow) {
   if (!CFG || !CFG.WHATSAPP) return false;
   
@@ -3491,21 +3928,68 @@ ${itemsSummary}
   const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
   try {
-    if (waWindow && !waWindow.closed) { waWindow.location.href = waUrl; return true; }
+    if (waWindow && !waWindow.closed) {
+      waWindow.location.href = waUrl;
+      return true;
+    }
     const newWin = window.open(waUrl, "_blank");
     if (newWin) return true;
-    window.location.href = waUrl;
-    return true;
+    
+    // ✅ Fallback — اعرض الرابط في modal قابل للنسخ
+    showWhatsAppFallback(waUrl);
+    return false;
   } catch(e) {
     console.warn("⚠️ WhatsApp open failed:", e);
+    showWhatsAppFallback(waUrl);
     return false;
   }
+}
+
+function showWhatsAppFallback(waUrl){
+  const overlay = document.createElement("div");
+  overlay.className = "vl-confirm-overlay";
+  overlay.innerHTML = `
+    <div class="vl-confirm-box" style="max-width: 480px;">
+      <div class="vl-confirm-icon">📱</div>
+      <div class="vl-confirm-title">${LANG === "en" ? "Open WhatsApp manually" : "افتح الواتساب يدويًا"}</div>
+      <div class="vl-confirm-msg">${LANG === "en" ? "Your browser blocked the popup. Click the button below to open WhatsApp, or copy the link." : "المتصفح منع فتح الواتساب. اضغط الزر تحت لفتحه، أو انسخ الرابط."}</div>
+      <div style="display:flex; gap:8px; flex-direction:column;">
+        <a href="${waUrl}" target="_blank" rel="noopener" style="display:block; padding:12px; border-radius:12px; background:linear-gradient(135deg,#25D366,#128C7E); color:#fff; text-decoration:none; font-weight:800; text-align:center;">
+          📱 ${LANG === "en" ? "Open WhatsApp" : "فتح الواتساب"}
+        </a>
+        <button class="vl-copy-wa" type="button" style="padding:12px; border-radius:12px; border:1px solid rgba(212,175,55,.35); background:#fdf5ed; color:#8b6f47; font-weight:800; cursor:pointer; font-family:inherit;">
+          📋 ${LANG === "en" ? "Copy link" : "نسخ الرابط"}
+        </button>
+        <button class="vl-close-wa" type="button" style="padding:10px; border-radius:12px; border:none; background:transparent; color:#8b6f47; cursor:pointer; font-family:inherit;">
+          ${LANG === "en" ? "Close" : "إغلاق"}
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add("vl-show"));
+  
+  const close = () => {
+    overlay.classList.remove("vl-show");
+    setTimeout(() => overlay.remove(), 260);
+  };
+  overlay.querySelector(".vl-close-wa").addEventListener("click", close);
+  overlay.querySelector(".vl-copy-wa").addEventListener("click", () => {
+    navigator.clipboard.writeText(waUrl).then(() => {
+      toast(LANG === "en" ? "✅ Link copied!" : "✅ تم نسخ الرابط!");
+      close();
+    }).catch(() => {
+      prompt(LANG === "en" ? "Copy this link:" : "انسخ الرابط:", waUrl);
+    });
+  });
+  overlay.addEventListener("click", (e) => {
+    if(e.target === overlay) close();
+  });
 }
 
 function initAccount() {
   document.getElementById("accBtn")?.addEventListener("click", async () => {
     const isFirebaseLogged = window.FB && window.FB.auth && window.FB.auth.currentUser;
-
     const fieldsToToggle = ["accName", "accPhone", "accCity", "accAddr", "saveAccBtn"];
     const accSub = document.querySelector('[data-i18n="acc_sub"]');
     let welcomeMsg = document.getElementById("accWelcomeMsg");
@@ -3517,7 +4001,6 @@ function initAccount() {
       });
       if (accSub) accSub.style.display = "";
       if (welcomeMsg) welcomeMsg.style.display = "none";
-      
       if (typeof openAuthModal === "function") openAuthModal();
       else toast("⚠️ يرجى تسجيل الدخول أولاً");
       return;
@@ -3541,7 +4024,6 @@ function initAccount() {
     try {
       let userData = null;
       if (typeof VL_GetCurrentUser === "function") userData = await VL_GetCurrentUser();
-      
       if (!userData) {
         const localUser = getSavedUser();
         const fbUser = window.FB.auth.currentUser;
@@ -3552,14 +4034,11 @@ function initAccount() {
           ordersCount: localUser?.orders || 0
         };
       }
-
       welcomeMsg.innerHTML = `
         <div style="font-weight:700; color:var(--gold2); font-size:1.1rem; margin-bottom:0.3rem;">أهلاً بك، ${userData.name || "عميلنا العزيز"} 👋</div>
         <div style="font-size:0.85rem; color:var(--mut); word-break:break-all;">${userData.email || ""}</div>
       `;
-
       if (document.getElementById("ordCount")) document.getElementById("ordCount").textContent = userData.ordersCount || 0;
-      
       localStorage.setItem("vl_user", JSON.stringify({
         uid: window.FB.auth.currentUser.uid,
         email: userData.email || "",
@@ -3567,7 +4046,6 @@ function initAccount() {
         phone: userData.phone || "",
         orders: userData.ordersCount || 0
       }));
-
     } catch (error) {
       console.warn("⚠️ Error loading user data:", error);
       const fbUser = window.FB.auth.currentUser;
@@ -3589,11 +4067,9 @@ function initAccount() {
     const name = document.getElementById("accName")?.value.trim();
     const phone = document.getElementById("accPhone")?.value.trim();
     if (!name || !phone) { toast("⚠️ اكتب الاسم ورقم الموبايل."); return; }
-    
     const old = getSavedUser();
     try { localStorage.setItem("vl_user", JSON.stringify({ ...old, name, phone, orders: old.orders || 0 })); }
     catch (e) { console.warn("⚠️ Failed to save account:", e); }
-    
     if (typeof fillCartForm === "function") fillCartForm();
     toast("✅ تم حفظ البيانات بنجاح");
     closeModal("accOv");
@@ -3645,9 +4121,7 @@ function initSearch(){
   document.getElementById("searchOv")?.addEventListener("click",e=>{
     if(e.target.id==="searchOv"){closeModal("searchOv");}
   });
-  
   const debouncedSearch = debounce((q) => performSearch(q), 200);
-  
   document.getElementById("searchInput")?.addEventListener("input",e=>{
     const q=e.target.value.trim().toLowerCase();
     debouncedSearch(q);
@@ -3658,21 +4132,18 @@ function performSearch(q){
   const w=document.getElementById("searchResults");
   if(!w)return;
   if(!q){w.innerHTML="";return;}
-  
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
   const res=products.filter(p=>{
     if(!p) return false;
     const hay=(p.name+" "+(p.nameEn||"")+" "+(p.desc||"")+" "+(p.descEn||"")+" "+cat(p.cat)).toLowerCase();
     return hay.includes(q);
   }).slice(0,8);
-  
   w.innerHTML=res.map(p=>`
     <div class="sr-item" data-id="${p.id}">
       <img src="${imgOf(p)}" alt="" loading="lazy" width="50" height="50" onerror="window.handleImageError(this, '${p.id}')">
       <div><b>${pname(p)}</b><br><small>${money(p.price)}</small></div>
     </div>
   `).join("");
-  
   w.querySelectorAll(".sr-item").forEach(it=>{
     it.addEventListener("click",()=>{location.href="product.html?p="+it.dataset.id;});
   });
@@ -3735,9 +4206,7 @@ function initNav(){
       a.addEventListener("click",(e)=>{
         const cat = a.dataset.cat;
         if(!cat) return;
-        
         const isProductsPage = window.location.pathname.includes('products.html');
-        
         if(isProductsPage){
           e.preventDefault();
           setTimeout(()=>{
@@ -3753,14 +4222,10 @@ function initNav(){
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ openDrawer — يضيف كلاس vl-cart-open لإخفاء الفوتر الثابت
-   ═══════════════════════════════════════════════════════════ */
 function openDrawer(id,ovlId){
   document.getElementById(id)?.classList.add("open");
   if(ovlId){document.getElementById(ovlId)?.classList.add("open");}
   document.body.style.overflow = 'hidden';
-  
   if(id === 'cartDrawer'){
     document.body.classList.add('vl-cart-open');
     setTimeout(adjustCartDrawerPadding, 80);
@@ -3777,6 +4242,9 @@ function closeModal(id){
   if(!stillOpen){ document.body.style.overflow = ''; }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ stockBadge — إخفاء "متوفر" لما المخزون > 10  (إصلاح #17)
+   ═══════════════════════════════════════════════════════════ */
 function stockBadge(p){
   if(!p) return "";
   if(p.stock === undefined || p.stock === null || p.stock === "") return "";
@@ -3785,27 +4253,24 @@ function stockBadge(p){
 
   const baseStyle = `position:absolute;top:12px;inset-inline-end:12px;inset-inline-start:auto;color:#fff;font-size:.7rem;font-weight:800;padding:.3rem .75rem;border-radius:99px;z-index:4;pointer-events:none;white-space:nowrap;`;
 
-  if(s === 0) return `<span class="stock-badge" style="${baseStyle}background:#e74c3c;">نفدت الكمية</span>`;
-  if(s <= 5) return `<span class="stock-badge" style="${baseStyle}background:#e67e22;">باقي ${s} فقط</span>`;
-  return `<span class="stock-badge" style="${baseStyle}background:#27ae60;">متوفر</span>`;
+  if(s === 0) return `<span class="stock-badge" style="${baseStyle}background:#e74c3c;">${LANG === "en" ? "Out of stock" : "نفدت الكمية"}</span>`;
+  if(s <= 5) return `<span class="stock-badge" style="${baseStyle}background:#e67e22;">${LANG === "en" ? `Only ${s} left` : `باقي ${s} فقط`}</span>`;
+  // ✅ مفيش "متوفر" لما المخزون > 5
+  return "";
 }
 
 async function decrementStock(items){
   if(!window.FB || !window.FB.db) return;
-  
   const { runTransaction, doc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
   const db = window.FB.db;
   const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
-  
   for(const it of items){
     const p = products.find(x => x.id === it.id);
     if(!p) continue;
     if(p.stock === undefined || p.stock === null || p.stock === "" || isNaN(Number(p.stock))) continue;
-    
     const docId = p._fid || p.id;
     const docRef = doc(db, "products", docId);
     const qtyToSubtract = Number(it.qty || 1);
-    
     try {
       await runTransaction(db, async (transaction) => {
         const sfDoc = await transaction.get(docRef);
@@ -3821,8 +4286,9 @@ async function decrementStock(items){
   }
 }
 
-let appliedCoupon = null;
-
+/* ═══════════════════════════════════════════════════════════
+   ✨ calcCouponDiscount — (الخصم الأعلى)
+   ═══════════════════════════════════════════════════════════ */
 function calcCouponDiscount(sub){
   if(!appliedCoupon) return 0;
   let d = 0;
@@ -3857,7 +4323,6 @@ async function applyCoupon(){
     const user = getSavedUser();
     const userEmail = user.email || "";
     const userPhone = user.phone || "";
-    
     let allOrders = [];
     try { allOrders = await window.FB.list("orders") || []; }
     catch(e) { console.warn("⚠️ Could not fetch orders for first-order check", e); toast("⚠️ تعذر التحقق من الطلبات السابقة"); return; }
@@ -3867,7 +4332,6 @@ async function applyCoupon(){
       const orderPhone = order.phone || order.customer?.phone || "";
       return (userEmail && orderEmail === userEmail) || (userPhone && orderPhone === userPhone);
     });
-    
     const nonCancelledOrders = customerOrders.filter(order => order.status !== 4);
     if(nonCancelledOrders.length > 0) { toast("⚠️ هذا الكوبون مخصص للطلبات الأولى فقط (الطلبات الملغية غير محسوبة)."); return; }
   }
@@ -3882,14 +4346,15 @@ async function applyCoupon(){
   if(c.maxDiscount && discount > c.maxDiscount) { discount = c.maxDiscount; }
   discount = Math.round(discount);
   
-  appliedCoupon = { ...c, _fid: c.id, discount: discount };
+  // ✅ احفظ الكوبون في localStorage (إصلاح #4)
+  setAppliedCoupon({ ...c, _fid: c.id, discount: discount });
+  
   toast("🎟️ تم تطبيق الكوبون! وفرت " + money(discount));
   renderCart();
 }
 
 async function consumeCoupon(){
   if(!appliedCoupon || !appliedCoupon._fid) return;
-  
   const user = getSavedUser();
   const identifier = user.email || user.phone;
   if(identifier) {
@@ -3910,8 +4375,7 @@ async function consumeCoupon(){
       });
     } catch(e) { console.warn("⚠️ coupon update failed", e); }
   }
-  
-  appliedCoupon = null;
+  setAppliedCoupon(null);
   if(document.getElementById("couponInput")) document.getElementById("couponInput").value = "";
 }
 
@@ -3930,6 +4394,9 @@ window.updateReviewsCount = function() {
   }
 };
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ Wrap addToCart — مع fbq AddToCart
+   ═══════════════════════════════════════════════════════════ */
 if (typeof window.addToCart === "function") {
   const _originalAddToCart = window.addToCart;
   window.addToCart = function(product, options) {
@@ -3943,6 +4410,8 @@ if (typeof window.addToCart === "function") {
         currency: "EGP"
       });
     }
+    // ✅ touch cart timestamp
+    touchCartTimestamp();
     return result;
   };
 }
@@ -3959,5 +4428,8 @@ window.getReviewsCount = getReviewsCount;
 window.triggerConfetti = triggerConfetti;
 window.injectCartStyles = injectCartStyles;
 window.adjustCartDrawerPadding = adjustCartDrawerPadding;
+window.showConfirm = showConfirm;
+window.showToastWithAction = showToastWithAction;
+window.getSavedForLater = getSavedForLater;
 
 })();
