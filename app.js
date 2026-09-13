@@ -1710,6 +1710,10 @@ window.addEventListener("storage", (e) => {
    ✨ Cart Abandonment Tracking  (إصلاح #21)
    ═══════════════════════════════════════════════════════════ */
 function initCartAbandonmentTracking(){
+  // ⚠️ ملاحظة: تم تعطيل sendBeacon مؤقتًا لأن الـ endpoint /track-abandon غير موجود
+  // لو عندك Cloudflare Worker أو backend endpoint جاهز، فعّل sendBeacon من جديد
+  // حاليًا بنحفظ محليًا فقط بدون أي requests فاشلة
+  
   window.addEventListener("beforeunload", () => {
     if(checkoutCompletedFlag) return;
     try {
@@ -1722,15 +1726,18 @@ function initCartAbandonmentTracking(){
         at: Date.now(),
         page: window.location.pathname
       });
-      if(navigator.sendBeacon){
-        navigator.sendBeacon("/track-abandon", payload);
-      }
-      // fallback: save locally for analytics
+      
+      // ✅ حفظ محلي فقط — بدون request خارجي
       localStorage.setItem("vl_last_abandoned", payload);
+      
+      // 🔽 لو عندك endpoint جاهز مستقبلًا، فعّل السطرين دول:
+      // if(navigator.sendBeacon){
+      //   navigator.sendBeacon("https://your-worker.workers.dev/track-abandon", payload);
+      // }
     } catch(e){}
   });
 }
-
+  
 /* ═══════════════════════════════════════════════════════════
    ✨ Mini-Cart Preview  (إصلاح #14)
    ═══════════════════════════════════════════════════════════ */
@@ -2626,7 +2633,7 @@ function renderFAQ(){
     });
   });
 }
- 
+ let lastViewCartAt = 0;
 /* ═══════════════════════════════════════════════════════════
    ✨ initCart (محدّث — مع إصلاحات)
    ═══════════════════════════════════════════════════════════ */
@@ -2639,18 +2646,23 @@ function initCart(){
     fillCartForm();
     renderCart();
     openDrawer("cartDrawer","cartOv");
-    // ✅ fbq ViewCart
+
+    // ✅ fbq ViewCart — مع debounce 30 ثانية لمنع تضخّم الأحداث
     if(typeof fbq === "function"){
       try {
-        const c = getCart();
-        if(c.length){
-          const val = c.reduce((s,i) => s + Number(i.price||0)*Number(i.qty||1), 0);
-          fbq("track", "ViewCart", {
-            value: val,
-            currency: "EGP",
-            content_ids: c.map(it => it.id),
-            num_items: c.length
-          });
+        const now = Date.now();
+        if(now - lastViewCartAt > 30000){
+          lastViewCartAt = now;
+          const c = getCart();
+          if(c.length){
+            const val = c.reduce((s,i) => s + Number(i.price||0)*Number(i.qty||1), 0);
+            fbq("track", "ViewCart", {
+              value: val,
+              currency: "EGP",
+              content_ids: c.map(it => it.id),
+              num_items: c.length
+            });
+          }
         }
       } catch(e){}
     }
@@ -3111,6 +3123,16 @@ function handleCartClick(e){
         saveCart(c2);
         renderCart();
         cartBadge();
+        
+        // ✅ إطلاق AddToCart ليعادل RemoveFromCart اللي اتطلق فوق
+        if(typeof fbq === "function"){
+          fbq("track", "AddToCart", {
+            content_ids: [removed.id],
+            content_name: removed.name || "",
+            value: Number(removed.price||0) * Number(removed.qty||1),
+            currency: "EGP"
+          });
+        }
       }
     );
     return;
@@ -3177,6 +3199,16 @@ function handleCartClick(e){
           saveCart(c2);
           renderCart();
           cartBadge();
+          
+          // ✅ إطلاق AddToCart ليعادل RemoveFromCart اللي اتطلق فوق
+          if(typeof fbq === "function"){
+            fbq("track", "AddToCart", {
+              content_ids: [removed.id],
+              content_name: removed.name || "",
+              value: Number(removed.price||0) * Number(removed.qty||1),
+              currency: "EGP"
+            });
+          }
         }
       );
       return;
