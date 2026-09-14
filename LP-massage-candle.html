@@ -3,66 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
 <title>شمعة المساج المانديلا | سبا دافئ في بيتك — VelaLight</title>
-
 <meta name="description" content="شمعة المساج المانديلا من VelaLight: تشعل كشمعة ثم تتحول إلى زيت مساج دافئ بتركيبة غنية بالزيوت والزبدة. 375 ج بدل 475 ج مع تغليف هدايا مجاني.">
-
 <link rel="stylesheet" href="style.css">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
-
 /* ═══════════════════════════════════════════════════════════
    VelaLight Massage Candle Landing Page — V4
    ═══════════════════════════════════════════════════════════ */
-
 *{
   margin:0;
   padding:0;
   box-sizing:border-box
 }
-
 :root{
   --bg:#faf6f0;
   --bg2:#f5efe5;
   --panel:#fff;
   --panel2:#faf6ef;
-
   --ink:#1a1512;
   --mut:#5a4a3a;
   --dim:#8a7a64;
-
   --gold:#d9ab5f;
   --gold2:#b8863f;
   --amber:#ff9d45;
-
   --line:rgba(26,21,18,.10);
-
   --ok:#4a8a5c;
   --bad:#c24a3a;
-
   --ff:'Tajawal',sans-serif;
   --fd:'El Messiri',serif;
-
   --sh:0 10px 30px -12px rgba(100,70,30,.12);
 }
-
 html{
   scroll-behavior:smooth;
   -webkit-tap-highlight-color:transparent
 }
-
 body{
   font-family:var(--ff);
   background:var(--bg);
   color:var(--ink);
   line-height:1.7;
   overflow-x:hidden;
-
   background-image:
     radial-gradient(
       900px 500px at 85% -5%,
@@ -74,20 +57,16 @@ body{
       rgba(255,157,69,.04),
       transparent 60%
     );
-
   -webkit-font-smoothing:antialiased;
 }
-
 img{
   max-width:100%;
   display:block
 }
-
 a{
   color:inherit;
   text-decoration:none
 }
-
 button{
   font-family:inherit;
   cursor:pointer;
@@ -95,51 +74,39 @@ button{
   background:none;
   color:inherit
 }
-
 .wrap{
   width:min(1080px,92%);
   margin-inline:auto
 }
-
 .fd{
   font-family:var(--fd)
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    HEADER
    ═══════════════════════════════════════════════════════════ */
-
 .lp-header{
   position:sticky;
   top:0;
   z-index:60;
-
   background:rgba(250,246,240,.94);
   backdrop-filter:blur(14px);
-
   border-bottom:1px solid var(--line);
-
   padding:.5rem 0
 }
-
 .lp-header-inner{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:1rem
 }
-
 .lp-logo{
   display:flex;
   align-items:center;
   gap:.45rem
 }
-
 .lp-logo .flame{
   width:10px;
   height:16px;
-
   background:
     radial-gradient(
       circle at 50% 78%,
@@ -147,26 +114,20 @@ button{
       var(--amber) 55%,
       transparent 72%
     );
-
   border-radius:50% 50% 50% 50%/62% 62% 38% 38%;
-
   filter:drop-shadow(0 0 6px rgba(255,157,69,.6));
-
   animation:flick 1.7s ease-in-out infinite alternate
 }
-
 @keyframes flick{
   0%{transform:scaleY(1) rotate(-2deg)}
   50%{transform:scaleY(1.12) rotate(2deg)}
   100%{transform:scaleY(.94) rotate(-1deg)}
 }
-
 .lp-logo b{
   font-family:var(--fd);
   font-size:1.15rem;
   color:var(--ink)
 }
-
 .lp-logo small{
   display:block;
   font-size:.48rem;
@@ -176,7 +137,6 @@ button{
   margin-top:-2px;
   line-height:1
 }
-
 .lp-trust-mini{
   display:flex;
   align-items:center;
@@ -186,82 +146,59 @@ button{
   font-weight:600;
   flex-wrap:wrap
 }
-
 .lp-trust-mini span{
   display:flex;
   align-items:center;
   gap:.25rem
 }
-
 .lp-trust-mini .ic{
   font-size:.85rem
 }
-
 @media(max-width:640px){
   .lp-trust-mini{
     display:none
   }
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    CTA
    ═══════════════════════════════════════════════════════════ */
-
 .lp-cta{
   display:flex;
   align-items:center;
   justify-content:center;
   gap:.5rem;
-
   width:100%;
   max-width:420px;
-
   margin-inline:auto;
-
   background:linear-gradient(
     135deg,
     #e74c3c,
     #c0392b
   );
-
   color:#fff;
-
   font-weight:900;
   font-size:1.05rem;
-
   padding:1rem 2rem;
-
   border-radius:999px;
-
   box-shadow:
     0 12px 30px -8px rgba(231,76,60,.6);
-
   transition:.3s;
-
   position:relative;
   overflow:hidden;
-
   -webkit-tap-highlight-color:transparent
 }
-
 .lp-cta:hover{
   transform:translateY(-2px);
-
   box-shadow:
     0 16px 40px -8px rgba(231,76,60,.75)
 }
-
 .lp-cta:active{
   transform:scale(.97)
 }
-
 .lp-cta::after{
   content:'';
-
   position:absolute;
   inset:0;
-
   background:
     linear-gradient(
       110deg,
@@ -269,32 +206,25 @@ button{
       rgba(255,255,255,.35) 50%,
       transparent 70%
     );
-
   transform:translateX(-120%);
   transition:.7s
 }
-
 .lp-cta:hover::after{
   transform:translateX(120%)
 }
-
 .lp-cta-sub{
   text-align:center;
   font-size:.78rem;
   color:var(--mut);
   margin-top:.6rem
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    HERO
    ═══════════════════════════════════════════════════════════ */
-
 .lp-hero{
   padding:2rem 0 3rem;
   position:relative
 }
-
 .lp-hero-badges-row{
   display:flex;
   flex-wrap:wrap;
@@ -302,62 +232,46 @@ button{
   margin-bottom:1.15rem;
   align-items:center
 }
-
 .lp-hero-badge{
   display:inline-flex;
   align-items:center;
   gap:.4rem;
-
   background:
     linear-gradient(
       135deg,
       #fff4e0,
       #ffe9c4
     );
-
   border:1px solid rgba(217,171,95,.35);
-
   color:var(--gold2);
-
   font-size:.75rem;
   font-weight:800;
-
   padding:.35rem .9rem;
   border-radius:99px
 }
-
 .lp-hero-badge-red{
   display:inline-flex;
   align-items:center;
   gap:.3rem;
-
   background:
     linear-gradient(
       135deg,
       #e74c3c,
       #c0392b
     );
-
   color:#fff;
-
   font-size:.75rem;
   font-weight:800;
-
   padding:.38rem .9rem;
-
   border-radius:99px;
-
   box-shadow:
     0 6px 16px rgba(231,76,60,.4);
-
   border:1.5px solid rgba(255,255,255,.6)
 }
-
 .lp-hero-badge-discount{
   display:inline-flex;
   align-items:center;
   gap:.3rem;
-
   background:
     linear-gradient(
       135deg,
@@ -365,225 +279,149 @@ button{
       #c0392b,
       #e74c3c
     );
-
   background-size:200% 200%;
-
   color:#fff;
-
   font-size:.78rem;
   font-weight:900;
-
   padding:.4rem 1rem;
-
   border-radius:99px;
-
   box-shadow:
     0 8px 20px rgba(231,76,60,.5);
-
   border:1.5px solid #fff;
-
   letter-spacing:.02em
 }
-
 .lp-hero h1{
   font-family:var(--fd);
-
   font-size:
     clamp(
       1.75rem,
       5vw,
       2.85rem
     );
-
   line-height:1.35;
-
   margin-bottom:.8rem;
-
   color:var(--ink)
 }
-
 .lp-hero h1 .hl{
   color:var(--gold2);
   position:relative
 }
-
 .lp-hero h1 .hl::after{
   content:'';
-
   position:absolute;
-
   bottom:2px;
   left:0;
   right:0;
-
   height:6px;
-
   background:
     rgba(217,171,95,.25);
-
   border-radius:3px;
-
   z-index:-1
 }
-
 .lp-hero .hero-problem{
   display:block;
-
   font-size:
     clamp(
       1rem,
       2.5vw,
       1.25rem
     );
-
   color:#9f2e23;
-
   font-weight:800;
-
   margin-bottom:.25rem
 }
-
 .lp-hero p.lead{
   font-size:1rem;
   color:var(--mut);
-
   max-width:560px;
-
   margin-bottom:1.5rem;
-
   line-height:1.9
 }
-
 .lp-hero p.lead b{
   color:var(--ink)
 }
-
 .lp-hero-stars{
   display:flex;
   align-items:center;
   gap:.4rem;
-
   margin-bottom:1rem;
-
   font-size:.82rem;
-
   color:var(--mut);
-
   flex-wrap:wrap
 }
-
 .lp-hero-stars .stars{
   color:var(--gold);
   letter-spacing:1px;
   font-size:1rem
 }
-
 .lp-hero-media{
   position:relative;
-
   border-radius:22px;
-
   overflow:hidden;
-
   background:#000;
-
   box-shadow:var(--sh);
-
   aspect-ratio:4/5;
-
   max-width:440px;
-
   margin-inline:auto
 }
-
 .lp-hero-media img,
 .lp-hero-media video{
   width:100%;
   height:100%;
-
   object-fit:cover;
-
   display:block
 }
-
 .lp-hero-media .floating-badge{
   position:absolute;
-
   top:14px;
   inset-inline-start:14px;
-
   background:rgba(255,255,255,.95);
-
   backdrop-filter:blur(8px);
-
   padding:.4rem .9rem;
-
   border-radius:99px;
-
   font-size:.7rem;
   font-weight:800;
-
   color:var(--gold2);
-
   box-shadow:
     0 4px 12px rgba(100,70,30,.15);
-
   z-index:2
 }
-
 .lp-hero-media::after{
   content:'من شمعة... إلى زيت مساج دافئ ✨';
-
   position:absolute;
-
   bottom:12px;
   right:12px;
   left:12px;
-
   background:rgba(20,15,10,.78);
-
   color:#fff;
-
   padding:.55rem .8rem;
-
   border-radius:12px;
-
   font-size:.72rem;
   font-weight:800;
-
   text-align:center;
-
   backdrop-filter:blur(7px);
-
   z-index:3
 }
-
 .lp-hero-grid{
   display:grid;
   grid-template-columns:1fr;
   gap:2rem;
   align-items:center
 }
-
 @media(min-width:768px){
   .lp-hero-grid{
     grid-template-columns:1.1fr .9fr;
     gap:3rem
   }
-
   .lp-hero{
     padding:3rem 0 4rem
   }
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    OFFER
    ═══════════════════════════════════════════════════════════ */
-
 .lp-offer{
   padding:2.5rem 0 3rem;
-
   background:
     radial-gradient(
       700px 350px at 50% 0%,
@@ -601,316 +439,196 @@ button{
       #ffe8c4 50%,
       #ffd99a 100%
     );
-
   border-top:3px solid rgba(231,76,60,.5);
   border-bottom:3px solid rgba(231,76,60,.5);
-
   position:relative;
   overflow:hidden;
-
   margin-bottom:1rem
 }
-
 .lp-offer::before{
   content:'🎁';
-
   position:absolute;
-
   top:-40px;
   right:20px;
-
   font-size:200px;
-
   line-height:1;
-
   opacity:.06;
-
   pointer-events:none;
-
   transform:rotate(15deg)
 }
-
 .lp-offer-box{
   max-width:640px;
-
   margin:0 auto;
-
   text-align:center;
-
   background:#fff;
-
   border:3px dashed rgba(231,76,60,.5);
-
   border-radius:28px;
-
   padding:2.4rem 1.5rem 2rem;
-
   box-shadow:
     0 24px 70px -22px rgba(231,76,60,.4),
     0 0 0 8px rgba(255,255,255,.7),
     0 0 0 12px rgba(217,171,95,.15);
-
   position:relative
 }
-
 .lp-offer-box h2{
   font-family:var(--fd);
-
   font-size:
     clamp(
       1.4rem,
       3.8vw,
       2rem
     );
-
   margin:.4rem 0 .9rem;
-
   color:var(--ink)
 }
-
 .lp-offer-hook{
   color:var(--mut);
-
   max-width:480px;
-
   margin:0 auto 1rem;
-
   font-size:.9rem;
-
   line-height:1.8
 }
-
 .lp-price-row{
   display:flex;
-
   align-items:center;
   justify-content:center;
-
   gap:1.1rem;
-
   margin:1rem 0 .5rem;
-
   flex-wrap:wrap
 }
-
 .lp-price-now{
   font-family:var(--fd);
-
   font-size:3rem;
-
   font-weight:900;
-
   color:#c0392b;
-
   line-height:1;
-
   text-shadow:
     0 3px 12px rgba(231,76,60,.3)
 }
-
 .lp-price-old{
   font-size:1.3rem;
-
   color:var(--dim);
-
   text-decoration:line-through;
-
   font-weight:600
 }
-
 .lp-price-save{
   display:inline-block;
-
   background:
     linear-gradient(
       135deg,
       #27ae60,
       #1e8449
     );
-
   color:#fff;
-
   font-size:.88rem;
-
   font-weight:900;
-
   padding:.4rem 1.1rem;
-
   border-radius:99px;
-
   margin-bottom:1.4rem;
-
   box-shadow:
     0 8px 20px rgba(39,174,96,.45)
 }
-
 .lp-offer-features{
   list-style:none;
-
   text-align:start;
-
   max-width:380px;
-
   margin:0 auto 1.6rem;
-
   display:flex;
-
   flex-direction:column;
-
   gap:.55rem
 }
-
 .lp-offer-features li{
   display:flex;
-
   align-items:center;
-
   gap:.55rem;
-
   font-size:.88rem;
-
   color:var(--ink);
-
   font-weight:500
 }
-
 .lp-offer-features li .ic{
   flex-shrink:0;
-
   width:22px;
   height:22px;
-
   background:
     linear-gradient(
       135deg,
       #27ae60,
       #1e8449
     );
-
   color:#fff;
-
   border-radius:50%;
-
   display:grid;
-
   place-items:center;
-
   font-size:.7rem;
-
   font-weight:900;
-
   box-shadow:
     0 3px 8px rgba(39,174,96,.35)
 }
-
 .lp-offer-trust{
   display:flex;
-
   justify-content:center;
-
   gap:1rem;
-
   flex-wrap:wrap;
-
   margin-top:1.4rem;
-
   padding-top:1.2rem;
-
   border-top:1px dashed rgba(217,171,95,.4);
-
   font-size:.74rem;
-
   color:var(--mut);
-
   font-weight:700
 }
-
 .lp-offer-trust span{
   display:flex;
-
   align-items:center;
-
   gap:.35rem
 }
-
 .lp-offer-trust .ic{
   font-size:1rem
 }
-
 .lp-offer-social-proof{
   display:flex;
-
   align-items:center;
   justify-content:center;
-
   gap:.5rem;
-
   margin-top:.9rem;
-
   font-size:.78rem;
-
   color:var(--mut);
-
   font-weight:700
 }
-
 .lp-offer-social-proof .stars{
   color:var(--gold);
-
   letter-spacing:2px;
-
   font-size:1.1rem
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    PROOF STRIP
    ═══════════════════════════════════════════════════════════ */
-
 .lp-proof-strip{
   padding:1.2rem 0;
-
   background:#1a1512;
-
   color:#fff
 }
-
 .lp-proof-strip-inner{
   display:flex;
-
   justify-content:center;
-
   gap:1.3rem;
-
   flex-wrap:wrap;
-
   font-size:.75rem;
-
   font-weight:800
 }
-
 .lp-proof-strip span{
   display:flex;
-
   align-items:center;
-
   gap:.35rem
 }
-
 .lp-proof-strip .stars{
   color:#ffd477;
-
   letter-spacing:1px
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    HOW IT WORKS
    ═══════════════════════════════════════════════════════════ */
-
 .lp-value{
   padding:3.5rem 0;
-
   background:
     linear-gradient(
       180deg,
@@ -918,269 +636,171 @@ button{
       var(--bg) 100%
     )
 }
-
 .lp-kicker{
   display:block;
-
   text-align:center;
-
   font-size:.72rem;
-
   font-weight:900;
-
   letter-spacing:.08em;
-
   color:var(--gold2);
-
   margin-bottom:.45rem
 }
-
 .lp-section-title{
   text-align:center;
-
   font-family:var(--fd);
-
   font-size:
     clamp(
       1.45rem,
       3.8vw,
       2.05rem
     );
-
   line-height:1.35;
-
   margin-bottom:.55rem
 }
-
 .lp-section-sub{
   text-align:center;
-
   color:var(--mut);
-
   max-width:620px;
-
   margin:0 auto 2rem;
-
   font-size:.9rem
 }
-
 .lp-steps{
   display:grid;
-
   grid-template-columns:1fr;
-
   gap:.85rem;
-
   max-width:900px;
-
   margin:0 auto
 }
-
 @media(min-width:700px){
   .lp-steps{
     grid-template-columns:repeat(4,1fr)
   }
 }
-
 .lp-step{
   background:#fff;
-
   border:1px solid var(--line);
-
   border-radius:18px;
-
   padding:1.25rem 1rem;
-
   text-align:center;
-
   position:relative;
-
   box-shadow:
     0 8px 24px -16px rgba(100,70,30,.28)
 }
-
 .lp-step .num{
   width:34px;
   height:34px;
-
   border-radius:50%;
-
   display:grid;
-
   place-items:center;
-
   margin:0 auto .7rem;
-
   background:var(--ink);
-
   color:#fff;
-
   font-weight:900;
-
   font-size:.85rem
 }
-
 .lp-step .step-ic{
   font-size:1.8rem;
-
   display:block;
-
   margin-bottom:.35rem
 }
-
 .lp-step b{
   display:block;
-
   font-size:.95rem;
-
   margin-bottom:.3rem
 }
-
 .lp-step p{
   font-size:.78rem;
-
   color:var(--mut);
-
   line-height:1.65
 }
-
 .lp-step:not(:last-child)::after{
   content:'←';
-
   position:absolute;
-
   left:-.6rem;
   top:50%;
-
   transform:translateY(-50%);
-
   font-size:1.4rem;
-
   color:var(--gold2);
-
   font-weight:900
 }
-
 @media(max-width:699px){
   .lp-step:not(:last-child)::after{
     content:'↓';
-
     left:50%;
     top:auto;
     bottom:-1.05rem;
-
     transform:translateX(-50%);
-
     z-index:2
   }
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    PROBLEM / DESIRE
    ═══════════════════════════════════════════════════════════ */
-
 .lp-problem{
   background:var(--panel2);
-
   padding:3.5rem 0
 }
-
 .lp-problem h2{
   font-family:var(--fd);
-
   font-size:
     clamp(
       1.4rem,
       3.5vw,
       2rem
     );
-
   text-align:center;
-
   margin-bottom:.6rem
 }
-
 .lp-problem .sub{
   text-align:center;
-
   color:var(--mut);
-
   max-width:560px;
-
   margin:0 auto 2rem;
-
   font-size:.92rem
 }
-
 .lp-pain-grid{
   display:grid;
-
   grid-template-columns:1fr;
-
   gap:1rem
 }
-
 @media(min-width:640px){
   .lp-pain-grid{
     grid-template-columns:repeat(3,1fr)
   }
 }
-
 .lp-pain{
   background:var(--panel);
-
   border:1px solid var(--line);
-
   border-radius:16px;
-
   padding:1.4rem;
-
   text-align:center;
-
   transition:.3s
 }
-
 .lp-pain:hover{
   transform:translateY(-3px);
-
   box-shadow:var(--sh)
 }
-
 .lp-pain .ic{
   font-size:2rem;
-
   margin-bottom:.6rem;
-
   display:block
 }
-
 .lp-pain b{
   display:block;
-
   font-size:.95rem;
-
   color:var(--ink);
-
   margin-bottom:.3rem
 }
-
 .lp-pain p{
   font-size:.82rem;
-
   color:var(--mut);
-
   line-height:1.7
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    SOLUTION / INGREDIENTS
    ═══════════════════════════════════════════════════════════ */
-
 .lp-solution{
   padding:3.5rem 0;
-
   background:
     linear-gradient(
       180deg,
@@ -1188,200 +808,128 @@ button{
       var(--bg2) 100%
     )
 }
-
 .lp-solution-card{
   max-width:820px;
-
   margin:0 auto;
-
   background:#fff;
-
   border:1.5px solid rgba(217,171,95,.3);
-
   border-radius:26px;
-
   padding:2.2rem 1.5rem;
-
   box-shadow:
     0 20px 60px -20px rgba(100,70,30,.18);
-
   position:relative;
-
   overflow:hidden
 }
-
 .lp-solution-card::before{
   content:'';
-
   position:absolute;
-
   top:-100px;
   right:-100px;
-
   width:250px;
   height:250px;
-
   background:
     radial-gradient(
       circle,
       rgba(217,171,95,.18),
       transparent 70%
     );
-
   pointer-events:none
 }
-
 .lp-solution-card::after{
   content:'';
-
   position:absolute;
-
   bottom:-100px;
   left:-100px;
-
   width:250px;
   height:250px;
-
   background:
     radial-gradient(
       circle,
       rgba(255,157,69,.12),
       transparent 70%
     );
-
   pointer-events:none
 }
-
 .lp-solution-card > *{
   position:relative;
   z-index:1
 }
-
 .lp-solution-card .solution-eyebrow{
   display:block;
-
   text-align:center;
-
   font-size:.72rem;
-
   font-weight:900;
-
   letter-spacing:.15em;
-
   color:var(--gold2);
-
   text-transform:uppercase;
-
   margin-bottom:.5rem
 }
-
 .lp-solution-card h2{
   font-family:var(--fd);
-
   font-size:
     clamp(
       1.4rem,
       3.8vw,
       2rem
     );
-
   color:var(--ink);
-
   text-align:center;
-
   margin-bottom:.9rem;
-
   line-height:1.4
 }
-
 .lp-solution-card h2 .hl{
   color:var(--gold2);
-
   position:relative
 }
-
 .lp-solution-card h2 .hl::after{
   content:'';
-
   position:absolute;
-
   bottom:2px;
-
   left:0;
   right:0;
-
   height:5px;
-
   background:
     rgba(217,171,95,.3);
-
   border-radius:3px;
-
   z-index:-1
 }
-
 .lp-solution-card .solution-lead{
   text-align:center;
-
   color:var(--mut);
-
   font-size:.95rem;
-
   line-height:1.9;
-
   max-width:600px;
-
   margin:0 auto 1.8rem
 }
-
 .lp-solution-media{
   border-radius:18px;
-
   overflow:hidden;
-
   aspect-ratio:16/10;
-
   max-width:520px;
-
   margin:0 auto 1.8rem;
-
   box-shadow:
     0 12px 36px -12px rgba(100,70,30,.3);
-
   border:1px solid rgba(217,171,95,.2)
 }
-
 .lp-solution-media img{
   width:100%;
   height:100%;
-
   object-fit:cover;
-
   display:block
 }
-
 .lp-solution-divider{
   display:flex;
-
   align-items:center;
-
   justify-content:center;
-
   gap:.6rem;
-
   margin:0 auto 1.5rem;
-
   max-width:200px
 }
-
 .lp-solution-divider::before,
 .lp-solution-divider::after{
   content:'';
-
   flex:1;
-
   height:1.5px;
-
   background:
     linear-gradient(
       90deg,
@@ -1390,157 +938,104 @@ button{
       transparent
     )
 }
-
 .lp-solution-divider .dot{
   width:7px;
   height:7px;
-
   border-radius:50%;
-
   background:var(--gold);
-
   box-shadow:
     0 0 8px rgba(217,171,95,.7)
 }
-
 .lp-solution-card h3{
   font-family:var(--fd);
-
   font-size:
     clamp(
       1.15rem,
       3vw,
       1.5rem
     );
-
   color:var(--gold2);
-
   text-align:center;
-
   margin-bottom:.4rem
 }
-
 .lp-solution-card .ing-sub{
   text-align:center;
-
   color:var(--mut);
-
   font-size:.85rem;
-
   margin-bottom:1.5rem
 }
-
 .lp-ingredients{
   list-style:none;
-
   display:grid;
-
   grid-template-columns:1fr;
-
   gap:.55rem
 }
-
 @media(min-width:640px){
   .lp-ingredients{
     grid-template-columns:1fr 1fr
   }
 }
-
 .lp-ingredients li{
   display:flex;
-
   align-items:flex-start;
-
   gap:.55rem;
-
   font-size:.83rem;
-
   color:var(--ink);
-
   line-height:1.65;
-
   background:
     linear-gradient(
       135deg,
       #fffbf5,
       #fdf8f0
     );
-
   border:1px solid rgba(217,171,95,.18);
-
   border-radius:12px;
-
   padding:.7rem .85rem;
-
   transition:.25s
 }
-
 .lp-ingredients li:hover{
   border-color:rgba(217,171,95,.5);
-
   transform:translateX(-4px);
-
   box-shadow:
     0 6px 18px -6px rgba(217,171,95,.3)
 }
-
 .lp-ingredients li .em{
   font-size:1.1rem;
-
   flex-shrink:0;
-
   line-height:1.4
 }
-
 .lp-ingredients li b{
   color:var(--gold2)
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    VALUE / DIFFERENCE
    ═══════════════════════════════════════════════════════════ */
-
 .lp-compare{
   padding:3.5rem 0;
-
   background:var(--panel2)
 }
-
 .lp-compare-grid{
   display:grid;
-
   grid-template-columns:1fr;
-
   gap:1rem;
-
   max-width:820px;
-
   margin:0 auto
 }
-
 @media(min-width:680px){
   .lp-compare-grid{
     grid-template-columns:1fr 1.08fr
   }
 }
-
 .lp-compare-card{
   border-radius:20px;
-
   padding:1.5rem;
-
   border:1px solid var(--line);
-
   background:#fff
 }
-
 .lp-compare-card.featured{
   border:2px solid rgba(217,171,95,.55);
-
   box-shadow:
     0 18px 45px -20px rgba(184,134,63,.35);
-
   background:
     linear-gradient(
       145deg,
@@ -1548,287 +1043,180 @@ button{
       #fff
     )
 }
-
 .lp-compare-card h3{
   font-family:var(--fd);
-
   font-size:1.15rem;
-
   text-align:center;
-
   margin-bottom:1rem
 }
-
 .lp-compare-list{
   list-style:none;
-
   display:flex;
-
   flex-direction:column;
-
   gap:.65rem
 }
-
 .lp-compare-list li{
   display:flex;
-
   gap:.5rem;
-
   align-items:flex-start;
-
   font-size:.82rem;
-
   color:var(--mut)
 }
-
 .lp-compare-card:not(.featured) .check{
   color:#8d8174
 }
-
 .lp-compare-card.featured .check{
   color:#1e8449;
-
   font-weight:900
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    FAQ
    ═══════════════════════════════════════════════════════════ */
-
 .lp-faq{
   padding:3.5rem 0
 }
-
 .lp-faq h2{
   font-family:var(--fd);
-
   font-size:
     clamp(
       1.4rem,
       3.5vw,
       2rem
     );
-
   text-align:center;
-
   margin-bottom:2rem
 }
-
 .lp-faq-list{
   display:flex;
-
   flex-direction:column;
-
   gap:.7rem;
-
   max-width:680px;
-
   margin:0 auto
 }
-
 .lp-faq-item{
   background:var(--panel);
-
   border:1px solid var(--line);
-
   border-radius:14px;
-
   overflow:hidden;
-
   transition:.3s
 }
-
 .lp-faq-item:hover{
   border-color:rgba(217,171,95,.35)
 }
-
 .lp-faq-q{
   width:100%;
-
   display:flex;
-
   align-items:center;
-
   justify-content:space-between;
-
   gap:1rem;
-
   padding:1rem 1.2rem;
-
   font-weight:700;
-
   font-size:.92rem;
-
   text-align:start;
-
   color:var(--ink);
-
   transition:.2s
 }
-
 .lp-faq-q:hover{
   color:var(--gold2)
 }
-
 .lp-faq-q .ic{
   flex-shrink:0;
-
   width:24px;
   height:24px;
-
   border-radius:50%;
-
   background:
     rgba(217,171,95,.12);
-
   display:grid;
-
   place-items:center;
-
   font-size:.8rem;
-
   color:var(--gold2);
-
   font-weight:900;
-
   transition:.3s
 }
-
 .lp-faq-item.open .lp-faq-q .ic{
   transform:rotate(45deg)
 }
-
 .lp-faq-a{
   max-height:0;
-
   overflow:hidden;
-
   transition:max-height .35s ease
 }
-
 .lp-faq-a-inner{
   padding:.8rem 1.2rem 1rem;
-
   font-size:.85rem;
-
   color:var(--mut);
-
   line-height:1.8;
-
   border-top:1px solid var(--line)
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    SOCIAL PROOF
    ═══════════════════════════════════════════════════════════ */
-
 .lp-social{
   background:var(--panel2);
-
   padding:3.5rem 0
 }
-
 .lp-social h2{
   font-family:var(--fd);
-
   font-size:
     clamp(
       1.4rem,
       3.5vw,
       2rem
     );
-
   text-align:center;
-
   margin-bottom:.6rem
 }
-
 .lp-social .sub{
   text-align:center;
-
   color:var(--mut);
-
   max-width:520px;
-
   margin:0 auto 2rem;
-
   font-size:.92rem
 }
-
 .lp-social-grid{
   display:flex;
-
   gap:1rem;
-
   overflow-x:auto;
-
   padding-bottom:1rem;
-
   scroll-snap-type:x mandatory;
-
   -webkit-overflow-scrolling:touch;
-
   scrollbar-width:none
 }
-
 .lp-social-grid::-webkit-scrollbar{
   display:none
 }
-
 .lp-social-card{
   flex:0 0 260px;
-
   scroll-snap-align:center;
-
   background:var(--panel);
-
   border:1px solid var(--line);
-
   border-radius:16px;
-
   overflow:hidden;
-
   box-shadow:
     0 4px 12px -4px rgba(100,70,30,.06)
 }
-
 .lp-social-card img{
   width:100%;
   height:auto;
-
   display:block;
-
   aspect-ratio:1/1;
-
   object-fit:cover
 }
-
 .lp-social-card .meta{
   padding:.9rem 1rem;
-
   text-align:center
 }
-
 .lp-social-card .meta small{
   font-size:.82rem;
-
   color:var(--mut);
-
   line-height:1.5;
-
   display:block
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    GIFT
    ═══════════════════════════════════════════════════════════ */
-
 .lp-gift{
   padding:3.5rem 0;
-
   background:
     linear-gradient(
       135deg,
@@ -1836,1067 +1224,687 @@ button{
       #f8ead7
     )
 }
-
 .lp-gift-box{
   max-width:820px;
-
   margin:0 auto;
-
   background:#fff;
-
   border:1px solid rgba(217,171,95,.35);
-
   border-radius:24px;
-
   padding:2rem 1.4rem;
-
   text-align:center;
-
+  position:relative;
   box-shadow:
     0 18px 55px -24px rgba(100,70,30,.22)
 }
-
 .lp-gift-icon{
   font-size:2.5rem;
-
   display:block;
-
   margin-bottom:.4rem
 }
-
 .lp-gift-box h2{
   font-family:var(--fd);
-
   font-size:
     clamp(
       1.4rem,
       3.5vw,
       2rem
     );
-
   margin-bottom:.55rem
 }
-
 .lp-gift-box p{
   color:var(--mut);
-
   max-width:620px;
-
   margin:0 auto 1.3rem;
-
   font-size:.9rem
 }
-
 .lp-gift-occasions{
   display:flex;
-
   justify-content:center;
-
   gap:.55rem;
-
   flex-wrap:wrap;
-
   margin-bottom:1.25rem
 }
-
 .lp-gift-occasions span{
   background:#faf6f0;
-
   border:1px solid var(--line);
-
   border-radius:99px;
-
   padding:.42rem .8rem;
-
   font-size:.75rem;
-
   font-weight:800;
-
   color:var(--mut)
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    FINAL CTA
    ═══════════════════════════════════════════════════════════ */
-
 .lp-final-cta{
   padding:3.5rem 0;
-
   text-align:center
 }
-
 .lp-final-cta h2{
   font-family:var(--fd);
-
   font-size:
     clamp(
       1.4rem,
       3.5vw,
       2rem
     );
-
   margin-bottom:.6rem
 }
-
 .lp-final-cta p{
   color:var(--mut);
-
   max-width:480px;
-
   margin:0 auto 1.5rem;
-
   font-size:.92rem
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    STICKY CTA
    ═══════════════════════════════════════════════════════════ */
-
 .lp-sticky-cta{
   position:fixed;
-
   bottom:0;
   left:0;
   right:0;
-
   z-index:70;
-
   background:
     rgba(255,255,255,.97);
-
   backdrop-filter:blur(14px);
-
   border-top:1px solid var(--line);
-
   padding:.6rem 1rem;
-
   transform:translateY(110%);
-
   transition:transform .35s ease;
-
   box-shadow:
     0 -8px 24px -12px rgba(100,70,30,.2)
 }
-
 .lp-sticky-cta.show{
   transform:translateY(0)
 }
-
 .lp-sticky-inner{
   display:flex;
-
   align-items:center;
-
   gap:.8rem;
-
   max-width:680px;
-
   margin:0 auto
 }
-
 .lp-sticky-info{
   flex:1;
-
   min-width:0
 }
-
 .lp-sticky-info b{
   display:block;
-
   font-size:.85rem;
-
   color:var(--ink);
-
   line-height:1.3;
-
   overflow:hidden;
-
   text-overflow:ellipsis;
-
   white-space:nowrap
 }
-
 .lp-sticky-info small{
   font-size:.72rem;
-
   color:var(--mut)
 }
-
 .lp-sticky-btn{
   flex-shrink:0;
-
   background:
     linear-gradient(
       135deg,
       #e74c3c,
       #c0392b
     );
-
   color:#fff;
-
   font-weight:900;
-
   font-size:.88rem;
-
   padding:.7rem 1.4rem;
-
   border-radius:99px;
-
   box-shadow:
     0 4px 14px -4px rgba(231,76,60,.5);
-
   transition:.25s;
-
   white-space:nowrap
 }
-
 .lp-sticky-btn:active{
   transform:scale(.95)
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    REVEAL
    ═══════════════════════════════════════════════════════════ */
-
 .lp-reveal{
   opacity:1;
   transform:none;
-
   transition:
     opacity .7s ease,
     transform .7s ease
 }
-
 .lp-reveal.on{
   opacity:1;
   transform:none
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    FOOTER
    ═══════════════════════════════════════════════════════════ */
-
 .lp-footer{
   padding:1.5rem 0;
-
   text-align:center;
-
   font-size:.75rem;
-
   color:var(--dim);
-
   border-top:1px solid var(--line)
 }
-
 .lp-footer a{
   color:var(--gold2);
-
   font-weight:700
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    MODAL
    ═══════════════════════════════════════════════════════════ */
-
 .lp-modal-ov{
   position:fixed;
-
   inset:0;
-
   background:
     rgba(26,21,18,.55);
-
   backdrop-filter:blur(6px);
   -webkit-backdrop-filter:blur(6px);
-
   z-index:9999;
-
   display:flex;
-
   align-items:flex-end;
-
   justify-content:center;
-
   opacity:0;
-
   pointer-events:none;
-
   transition:opacity .28s ease
 }
-
 .lp-modal-ov.show{
   opacity:1;
-
   pointer-events:auto
 }
-
 @media(min-width:640px){
   .lp-modal-ov{
     align-items:center
   }
 }
-
 .lp-modal{
   background:#fff;
-
   width:100%;
-
   max-width:460px;
-
   border-radius:22px 22px 0 0;
-
   padding:1.4rem 1.2rem 1.6rem;
-
   box-shadow:
     0 -20px 60px rgba(0,0,0,.25);
-
   transform:translateY(30px);
-
   transition:
     transform .3s cubic-bezier(.22,1,.36,1);
-
   max-height:92vh;
-
   overflow-y:auto
 }
-
 @media(min-width:640px){
   .lp-modal{
     border-radius:22px;
-
     transform:scale(.92)
   }
 }
-
 .lp-modal-ov.show .lp-modal{
   transform:translateY(0)
 }
-
 @media(min-width:640px){
   .lp-modal-ov.show .lp-modal{
     transform:scale(1)
   }
 }
-
 .lp-modal-head{
   display:flex;
-
   align-items:center;
-
   justify-content:space-between;
-
   gap:1rem;
-
   margin-bottom:1rem
 }
-
 .lp-modal-head h3{
   font-family:var(--fd);
-
   font-size:1.1rem;
-
   color:var(--ink);
-
   line-height:1.3
 }
-
 .lp-modal-close{
   width:32px;
   height:32px;
-
   border-radius:50%;
-
   background:
     rgba(217,171,95,.12);
-
   color:var(--gold2);
-
   font-size:1rem;
-
   font-weight:900;
-
   display:grid;
-
   place-items:center;
-
   transition:.2s
 }
-
 .lp-modal-close:hover{
   background:
     rgba(217,171,95,.25)
 }
-
 .lp-modal-preview{
   display:flex;
-
   align-items:center;
-
   gap:.8rem;
-
   padding:.7rem;
-
   border:1px solid var(--line);
-
   border-radius:14px;
-
   background:var(--bg2);
-
   margin-bottom:1.1rem
 }
-
 .lp-modal-preview img{
   width:64px;
   height:64px;
-
   border-radius:11px;
-
   object-fit:cover;
-
   flex-shrink:0;
-
   background:var(--bg2)
 }
-
 .lp-modal-preview .info{
   flex:1;
-
   min-width:0
 }
-
 .lp-modal-preview .info b{
   display:block;
-
   font-size:.92rem;
-
   color:var(--ink);
-
   line-height:1.3;
-
   overflow:hidden;
-
   text-overflow:ellipsis;
-
   white-space:nowrap
 }
-
 .lp-modal-preview .info .pr{
   font-weight:900;
-
   color:var(--gold2);
-
   margin-top:.15rem
 }
-
 .lp-modal-benefit{
   font-size:.74rem;
-
   color:var(--mut);
-
   background:#fff8ed;
-
   border:1px solid rgba(217,171,95,.25);
-
   border-radius:11px;
-
   padding:.6rem .7rem;
-
   margin-bottom:1rem;
-
   text-align:center;
-
   font-weight:700
 }
-
 .lp-modal-label{
   display:block;
-
   font-weight:700;
-
   font-size:.85rem;
-
   margin-bottom:.45rem;
-
   color:var(--ink)
 }
-
 .lp-modal-label .req{
   color:#e74c3c;
-
   font-weight:900;
-
   margin-inline-start:3px;
-
   font-size:1rem
 }
-
 .lp-modal-select{
   width:100%;
-
   padding:.75rem .9rem;
-
   border:1.5px solid rgba(217,171,95,.35);
-
   border-radius:11px;
-
   background:#fff;
-
   color:var(--ink);
-
   font-family:inherit;
-
   font-size:.92rem;
-
   cursor:pointer;
-
   outline:none;
-
   margin-bottom:1rem;
-
   transition:.2s
 }
-
 .lp-modal-select:focus{
   border-color:var(--gold2);
-
   box-shadow:
     0 0 0 3px rgba(217,171,95,.15)
 }
-
 .lp-modal-select.vl-empty{
   border-color:#e74c3c;
-
   background:#fff8f8;
-
   animation:shakeEmpty .4s ease
 }
-
 @keyframes shakeEmpty{
   0%,100%{transform:translateX(0)}
   25%{transform:translateX(-5px)}
   75%{transform:translateX(5px)}
 }
-
 .lp-modal-qty{
   display:flex;
-
   align-items:center;
-
   justify-content:space-between;
-
   gap:1rem;
-
   margin-bottom:1.2rem;
-
   padding:.5rem .8rem;
-
   border:1.5px solid rgba(217,171,95,.35);
-
   border-radius:11px;
-
   background:#fff
 }
-
 .lp-modal-qty .lbl{
   font-weight:700;
-
   font-size:.88rem
 }
-
 .lp-modal-qty .controls{
   display:flex;
-
   align-items:center;
-
   gap:.6rem
 }
-
 .lp-modal-qty button{
   width:34px;
   height:34px;
-
   border-radius:50%;
-
   background:
     rgba(217,171,95,.12);
-
   color:var(--gold2);
-
   font-size:1.15rem;
-
   font-weight:900;
-
   display:grid;
-
   place-items:center;
-
   transition:.2s
 }
-
 .lp-modal-qty button:hover{
   background:
     rgba(217,171,95,.25)
 }
-
 .lp-modal-qty button:disabled{
   opacity:.35;
-
   cursor:not-allowed
 }
-
 .lp-modal-qty b{
   min-width:26px;
-
   text-align:center;
-
   font-size:1rem;
-
   font-weight:900;
-
   color:var(--ink)
 }
-
 .lp-modal-add{
   width:100%;
-
   background:
     linear-gradient(
       135deg,
       var(--gold),
       #b8863f
     );
-
   color:#fff;
-
   font-weight:900;
-
   font-size:1rem;
-
   padding:.95rem;
-
   border-radius:999px;
-
   box-shadow:
     0 8px 20px -6px rgba(217,171,95,.5);
-
   transition:.25s
 }
-
 .lp-modal-add:active{
   transform:scale(.97)
 }
-
 .lp-modal-add:disabled{
   opacity:.55;
-
   cursor:not-allowed;
-
   background:
     linear-gradient(
       135deg,
       #b5a48a,
       #8a7a64
     );
-
   box-shadow:none
 }
-
 .lp-modal-note{
   text-align:center;
-
   font-size:.72rem;
-
   color:var(--mut);
-
   margin-top:.7rem
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    ✅ FLOATING CART BUTTON — الحل النهائي
    ═══════════════════════════════════════════════════════════ */
-
 .lp-floating-cart{
   position:fixed;
-
   bottom:88px;
   inset-inline-end:16px;
-
-  z-index:65;
-
+  z-index:10001;
   width:58px;
   height:58px;
-
   border-radius:50%;
-
   background:
     linear-gradient(
       135deg,
       #d4af37,
       #b8863f
     );
-
   color:#fff;
-
   display:none;
-
   place-items:center;
-
   border:2.5px solid #fff;
-
   box-shadow:
     0 10px 30px rgba(212,175,55,.5);
-
   cursor:pointer;
-
   transition:transform .25s ease;
-
   -webkit-tap-highlight-color:transparent;
-
   animation:lpCartPulse 2s ease-in-out infinite
 }
-
 .lp-floating-cart.show{
   display:grid
 }
-
 .lp-floating-cart:hover{
   transform:scale(1.1)
 }
-
 .lp-floating-cart:active{
   transform:scale(.94)
 }
-
 @keyframes lpCartPulse{
   0%,100%{
     box-shadow:
       0 10px 30px rgba(212,175,55,.5),
       0 0 0 0 rgba(212,175,55,.4)
   }
-
   50%{
     box-shadow:
       0 10px 30px rgba(212,175,55,.5),
       0 0 0 14px rgba(212,175,55,0)
   }
 }
-
 .lp-floating-cart .icon{
   font-size:1.55rem;
-
   line-height:1
 }
-
 .lp-floating-cart .count{
   position:absolute;
-
   top:-4px;
   inset-inline-end:-4px;
-
   min-width:24px;
   height:24px;
-
   padding:0 6px;
-
   border-radius:99px;
-
   background:#e74c3c;
-
   color:#fff;
-
   font-size:.72rem;
-
   font-weight:900;
-
   display:grid;
-
   place-items:center;
-
   border:2px solid #fff;
-
   box-shadow:
     0 4px 10px rgba(231,76,60,.5)
 }
-
 @media(max-width:480px){
   .lp-floating-cart{
     bottom:78px;
     inset-inline-end:12px;
-
     width:54px;
     height:54px
   }
-
   .lp-floating-cart .icon{
     font-size:1.4rem
   }
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    ✅ SUCCESS PANEL — بعد الإضافة
    ═══════════════════════════════════════════════════════════ */
-
 .lp-success-panel{
   position:fixed;
-
   inset:0;
-
   z-index:9998;
-
   background:rgba(26,21,18,.55);
-
   backdrop-filter:blur(6px);
   -webkit-backdrop-filter:blur(6px);
-
   display:none;
-
   align-items:center;
-
   justify-content:center;
-
   padding:1.2rem;
-
   opacity:0;
-
   transition:opacity .28s ease
 }
-
 .lp-success-panel.show{
   display:flex;
-
   opacity:1
 }
-
 .lp-success-box{
   background:#fff;
-
   border-radius:24px;
-
   padding:1.8rem 1.4rem 1.4rem;
-
   max-width:420px;
-
   width:100%;
-
   text-align:center;
-
   box-shadow:
     0 24px 70px -20px rgba(0,0,0,.35);
-
   border:2px solid rgba(217,171,95,.4);
-
   transform:scale(.9);
-
   transition:
     transform .3s cubic-bezier(.22,1,.36,1)
 }
-
 .lp-success-panel.show .lp-success-box{
   transform:scale(1)
 }
-
 .lp-success-icon{
   font-size:3.2rem;
-
   display:block;
-
   margin-bottom:.4rem;
-
   animation:lpCheckBounce .6s ease
 }
-
 @keyframes lpCheckBounce{
   0%{
     transform:scale(0) rotate(-45deg);
     opacity:0
   }
-
   60%{
     transform:scale(1.15) rotate(5deg);
     opacity:1
   }
-
   100%{
     transform:scale(1) rotate(0)
   }
 }
-
 .lp-success-box h3{
   font-family:var(--fd);
-
   font-size:1.35rem;
-
   color:var(--ink);
-
   margin-bottom:.5rem;
-
   line-height:1.3
 }
-
 .lp-success-box p{
   color:var(--mut);
-
   font-size:.88rem;
-
   line-height:1.75;
-
   margin-bottom:1.2rem
 }
-
 .lp-success-box .lp-cta{
   margin-bottom:.5rem;
-
   font-size:1rem;
-
   padding:1rem 1.4rem;
-
   max-width:100%
 }
-
 .lp-success-continue{
   display:block;
-
   width:100%;
-
   padding:.7rem;
-
   border:none;
-
   background:transparent;
-
   color:var(--mut);
-
   font-family:inherit;
-
   font-size:.85rem;
-
   font-weight:700;
-
   cursor:pointer;
-
   border-radius:99px;
-
   transition:.2s
 }
-
 .lp-success-continue:hover{
   background:rgba(217,171,95,.08);
-
   color:var(--gold2)
 }
-
-.lp-success-timer{
-  display:block;
-
-  margin-top:.7rem;
-
-  font-size:.7rem;
-
-  color:var(--dim);
-
-  font-weight:600
+.lp-success-close{
+  position:absolute;
+  top:.65rem;
+  inset-inline-end:.7rem;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:var(--mut);
+  font-size:1.2rem;
+  font-weight:900;
+  line-height:1;
+  transition:.2s;
 }
-
-.lp-success-timer b{
-  color:var(--gold2);
-
-  font-weight:900
+.lp-success-close:hover{
+  background:rgba(217,171,95,.12);
+  color:var(--gold2)
 }
-
-
 /* ═══════════════════════════════════════════════════════════
    MOBILE
    ═══════════════════════════════════════════════════════════ */
-
 @media(max-width:480px){
-
   .lp-hero{
     padding:1.5rem 0 2.5rem
   }
-
   .lp-hero h1{
     font-size:1.62rem
   }
-
   .lp-hero-media{
     aspect-ratio:4/5;
-
     max-width:100%
   }
-
   .lp-cta{
     font-size:.95rem;
-
     padding:.9rem 1.5rem
   }
-
   .lp-offer{
     padding:2rem 0 2.4rem
   }
-
   .lp-offer-box{
     padding:2rem 1rem 1.6rem
   }
-
   .lp-price-now{
     font-size:2.4rem
   }
-
   .lp-social-card{
     flex:0 0 220px
   }
-
   .lp-solution-card{
     padding:1.5rem 1rem
   }
-
   .lp-hero-badges-row{
     gap:.4rem
   }
-
   .lp-hero-badge,
   .lp-hero-badge-red,
   .lp-hero-badge-discount{
     font-size:.68rem;
-
     padding:.32rem .75rem
   }
-
   .lp-proof-strip-inner{
     gap:.75rem;
-
     font-size:.68rem
   }
-
   .lp-compare-card{
     padding:1.2rem
   }
-
   .lp-hero-media::after{
     font-size:.67rem;
-
     bottom:9px;
-
     right:9px;
-
     left:9px
   }
 }
-
 </style>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      STRUCTURED DATA
      ═══════════════════════════════════════════════════════════ -->
-
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -2915,170 +1923,106 @@ button{
   }
 }
 </script>
-
 </head>
-
 <body>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      HEADER
      ═══════════════════════════════════════════════════════════ -->
-
 <header class="lp-header">
-
   <div class="wrap lp-header-inner">
-
     <a href="index.html" class="lp-logo" aria-label="VelaLight">
-
       <span class="flame" aria-hidden="true"></span>
-
       <span>
         <b>VelaLight</b>
         <small>Handmade Candles</small>
       </span>
-
     </a>
-
     <div class="lp-trust-mini">
-
       <span>
         <span class="ic">🚚</span>
         شحن لكل مصر
       </span>
-
       <span>
         <span class="ic">🔒</span>
         دفع آمن
       </span>
-
       <span>
         <span class="ic">📦</span>
         توصيل 3-7 أيام
       </span>
-
     </div>
-
   </div>
-
 </header>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      1. HERO
      ═══════════════════════════════════════════════════════════ -->
-
 <section class="lp-hero">
-
   <div class="wrap lp-hero-grid">
-
     <div class="lp-reveal">
-
       <div class="lp-hero-badges-row">
-
         <span class="lp-hero-badge">
           🔥 الأكثر مبيعاً
         </span>
-
         <span class="lp-hero-badge-red">
           🎁 عرض خاص لزوار الصفحة
         </span>
-
         <span class="lp-hero-badge-discount">
           وفر 100 ج + تغليف هدايا مجاني
         </span>
-
       </div>
-
-
       <span class="hero-problem">
         ❄️ الشتا داخل... وانتي لسه معندكيش مرطب ينقذ جلدك من الجفاف؟
       </span>
-
-
       <h1>
-
         شمعة المساج...
-
         <br>
-
         بتتحول بالحرارة ل 
         <span class="hl">
            زيت مساج دافئ بعطر مميز
         </span>
-
         <br>
-
          سبا في بيتك. ✨
-
       </h1>
-
-
       <div class="lp-hero-stars">
-
         <span class="stars">
           ★★★★★
         </span>
-
         <span>
           4.9 من 5 — أكثر من 500 عميل سعيد
         </span>
-
       </div>
-
-
       <p class="lead">
-
         <b>شمعة المساج المانديلا من VelaLight</b>
         مش مجرد شمعة برائحة فاخرة؛
         دي تجربة تجمع بين الإضاءة الهادئة،
         والزيت الدافئ، والمساج،
         ولحظة استرخاء تستحقيها.
-
         <br><br>
-
         <b>
           دلع… ترطيب… وريلاكس في شمعة واحدة. 🤍
         </b>
-
       </p>
-
-
       <button
         class="lp-cta"
         onclick="lpOpenModal()">
-
         🛍️ أضيفيها للسلة — 375 ج
-
       </button>
-
-
       <p class="lp-cta-sub">
         🔒 دفع آمن — شحن لكل مصر — توصيل 3–7 أيام عمل
       </p>
-
-
       <div class="lp-micro-proof">
-
         <span class="stars">
           ★★★★★
         </span>
-
         <span>
           تجربة مختلفة عن أي شمعة عادية
         </span>
-
       </div>
-
     </div>
-
-
     <div class="lp-hero-media lp-reveal">
-
       <span class="floating-badge">
         ✨ شمع وزيوت مختارة بعناية
       </span>
-
       <video
         id="lpHeroVideo"
         autoplay
@@ -3088,432 +2032,266 @@ button{
         preload="metadata"
         poster="velalight-massage-mandala-spa-spa.webp"
         aria-label="شمعة المساج المانديلا من VelaLight">
-
         <source
           src="velaligh-spa-candle.mp4"
           type="video/mp4">
-
       </video>
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      2. OFFER
      ═══════════════════════════════════════════════════════════ -->
-
 <section class="lp-offer">
-
   <div class="wrap">
-
     <div class="lp-offer-box lp-reveal on">
-
       <h2 id="lpOfferTitle">
         شمعة المساج المانديلا
       </h2>
-
-
       <p class="lp-offer-hook">
-
         لحظة سبا دافئة في بيتك،
         تبدأ بشمعة وتنتهي بزيت مساج ناعم.
-
       </p>
-
-
       <div class="lp-price-row">
-
         <span
           class="lp-price-now"
           id="lpOfferPrice">
-
           375 ج
-
         </span>
-
         <span
           class="lp-price-old"
           id="lpOfferOld">
-
           475 ج
-
         </span>
-
       </div>
-
-
       <span class="lp-price-save">
         💰 وفّر 100 ج + تغليف هدايا مجاني
       </span>
-
-
       <ul class="lp-offer-features">
-
         <li>
           <span class="ic">✓</span>
           تركيبة من شمع الصويا وشمع العسل
         </li>
-
         <li>
           <span class="ic">✓</span>
           حتى 72 ساعة اشتعال
         </li>
-
         <li>
           <span class="ic">✓</span>
           زيوت وزبدة مختارة بعناية
         </li>
-
         <li>
           <span class="ic">✓</span>
           تتحول إلى زيت مساج دافئ
         </li>
-
         <li>
           <span class="ic">✓</span>
           تغليف هدايا فاخر مجاناً
         </li>
-
       </ul>
-
-
       <button
         class="lp-cta"
         onclick="lpOpenModal()"
         style="font-size:1.15rem;padding:1.15rem 2rem">
-
         🛍️ أضيفيها للسلة — 375 ج
-
       </button>
-
-
       <p
         class="lp-cta-sub"
         style="color:#9f2e23;font-weight:800">
-
         🎁 السعر الخاص + تغليف الهدايا المجاني ضمن عرض الصفحة
-
       </p>
-
-
       <div class="lp-offer-trust">
-
         <span>
           <span class="ic">🔒</span>
           دفع آمن
         </span>
-
         <span>
           <span class="ic">🚚</span>
           شحن لكل مصر
         </span>
-
         <span>
           <span class="ic">📦</span>
           توصيل 3-7 أيام
         </span>
-
       </div>
-
-
       <div class="lp-offer-social-proof">
-
         <span class="stars">
           ★★★★★
         </span>
-
         <span>
           أكثر من 500 عميل راضٍ
         </span>
-
       </div>
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      PROOF STRIP
      ═══════════════════════════════════════════════════════════ -->
-
 <section class="lp-proof-strip">
-
   <div class="wrap lp-proof-strip-inner">
-
     <span>
       <span class="stars">★★★★★</span>
       4.9/5
     </span>
-
     <span>
       👥 أكثر من 500 عميل سعيد
     </span>
-
     <span>
       🚚 شحن لكل مصر
     </span>
-
     <span>
       🎁 تغليف هدايا مجاني
     </span>
-
   </div>
-
 </section>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      3. HOW IT WORKS
      ═══════════════════════════════════════════════════════════ -->
-
 <section class="lp-value">
-
   <div class="wrap">
-
     <span class="lp-kicker">
       مش مجرد شمعة
     </span>
-
-
     <h2 class="lp-section-title">
       من شمعة... إلى جلسة مساج دافئة
     </h2>
-
-
     <p class="lp-section-sub">
-
       الفكرة بسيطة:
       أشعليها، اتركي الجزء المناسب منها يذوب،
       اختبري الحرارة،
       ثم استمتعي بالزيت الدافئ.
-
     </p>
-
-
     <div class="lp-steps">
-
-
       <div class="lp-step lp-reveal">
-
         <div class="num">1</div>
-
         <span class="step-ic">
           🕯️
         </span>
-
         <b>
           أشعليها
         </b>
-
         <p>
           استمتعي أولًا بإضاءة الشمعة ورائحتها الفاخرة.
         </p>
-
       </div>
-
-
       <div class="lp-step lp-reveal">
-
         <div class="num">2</div>
-
         <span class="step-ic">
           🔥
         </span>
-
         <b>
           اتركيها تذوب
         </b>
-
         <p>
           يذوب الجزء المناسب من التركيبة لتصبح جاهزة للاستخدام كزيت دافئ.
         </p>
-
       </div>
-
-
       <div class="lp-step lp-reveal">
-
         <div class="num">3</div>
-
         <span class="step-ic">
           🤲
         </span>
-
         <b>
           اختبري الحرارة
         </b>
-
         <p>
           اختبري درجة الحرارة على جزء صغير من الجلد قبل الاستخدام.
         </p>
-
       </div>
-
-
       <div class="lp-step lp-reveal">
-
         <div class="num">4</div>
-
         <span class="step-ic">
           😌
         </span>
-
         <b>
           دلّلي نفسك
         </b>
-
         <p>
           استخدمي الزيت للمساج واستمتعي بإحساس دافئ وناعم وعطر فاخر.
         </p>
-
       </div>
-
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      4. PROBLEM / DESIRE
      ═══════════════════════════════════════════════════════════ -->
-
 <section class="lp-problem">
-
   <div class="wrap">
-
     <span class="lp-kicker">
       الجفاف والتعب مش لازم يكونوا جزء من يومك
     </span>
-
-
     <h2 class="lp-reveal">
       محتاجة لحظة هدوء بعد يوم طويل؟ 🤍
     </h2>
-
-
     <p class="sub lp-reveal">
-
       مش لازم تستني إجازة أو تروحي سبا.
       اصنعي لنفسك طقس صغير في البيت:
       إضاءة هادئة → زيت دافئ → مساج → لحظة استرخاء.
-
     </p>
-
-
     <div class="lp-pain-grid">
-
-
       <div class="lp-pain lp-reveal">
-
         <span class="ic">
           🌙
         </span>
-
         <b>
           وقت هدوء لنفسك
         </b>
-
         <p>
           إضاءة هادئة، عطر فاخر وزيت دافئ في تجربة واحدة بعد يوم طويل.
         </p>
-
       </div>
-
-
       <div class="lp-pain lp-reveal">
-
         <span class="ic">
           🤍
         </span>
-
         <b>
           دلع ونعومة
         </b>
-
         <p>
           امنحي بشرتك إحساسًا بالنعومة والترطيب أثناء لحظة المساج.
         </p>
-
       </div>
-
-
       <div class="lp-pain lp-reveal">
-
         <span class="ic">
           ✨
         </span>
-
         <b>
           تجربة مختلفة فعلًا
         </b>
-
         <p>
           مش شمعة تتشاف وتتحط على الرف؛
           دي شمعة لها تجربة ثانية بعد إشعالها.
         </p>
-
       </div>
-
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      5. SOLUTION
      ═══════════════════════════════════════════════════════════ -->
-
 <section class="lp-solution">
-
   <div class="wrap">
-
     <div class="lp-solution-card lp-reveal">
-
       <span class="solution-eyebrow">
         ✨ دلع… ترطيب… وريلاكس
       </span>
-
-
       <h2>
-
         كل ده...
-
         <br>
-
         <span class="hl">
           في شمعة واحدة.
         </span>
-
       </h2>
-
-
       <p class="solution-lead">
-
         لأنها مش شمعة عادية —
         دي <b>تجربة متعددة الحواس</b>.
-
         عند اشتعالها وتدفئتها،
         تتحول تركيبتها إلى زيت مساج دافئ وناعم،
         مع زيوت وزبدة تمنح البشرة إحساسًا بالنعومة والترطيب.
-
       </p>
-
-
       <div class="lp-solution-media">
-
         <img
           id="lpSolImg"
           src="velalight-massage-mandala-spa-spa.webp"
@@ -3521,243 +2299,144 @@ button{
           loading="lazy"
           width="500"
           height="312">
-
       </div>
-
-
       <div class="lp-solution-divider">
         <span class="dot"></span>
       </div>
-
-
       <h3>
         تركيبة VelaLight الغنية
       </h3>
-
-
       <p class="ing-sub">
-
         مجموعة من الزيوت والزبدة المختارة لتجربة مساج دافئة وناعمة.
-
       </p>
-
-
       <ul class="lp-ingredients">
-
-
         <li>
-
           <span class="em">
             🍇
           </span>
-
           <span>
-
             <b>
               زيت بذور العنب:
             </b>
-
             يحفز الكولاجين ويشد الترهلات ويقلل مظهر علامات التمدد.
-
           </span>
-
         </li>
-
-
         <li>
-
           <span class="em">
             🌱
           </span>
-
           <span>
-
             <b>
               زيت الأرجان المغربي:
             </b>
-
             يرمم الخلايا محارب للشيخوخه نعومه خياليه.
-
           </span>
-
         </li>
-
-
         <li>
-
           <span class="em">
             🥑
           </span>
-
           <span>
-
             <b>
               زيت الجوجوبا والأفوكادو:
             </b>
-
             تغذيه عميقة تجديد للخلايا التالفه بشره صحيه وبتلمع.
-
           </span>
-
         </li>
-
-
         <li>
-
           <span class="em">
             🌰
           </span>
-
           <span>
-
             <b>
               زيت اللوز الحلو:
             </b>
-
             تفتيح الهالات السودا وتوحيد لون الجسم مع استمرار الاستخدام.
-
           </span>
-
         </li>
-
-
         <li>
-
           <span class="em">
             🍫
           </span>
-
           <span>
-
             <b>
               زبدة الكاكاو وزبدة الشيا:
             </b>
-
             تعمل كطبقة حمايه للجلد.
-
           </span>
-
         </li>
-
-
         <li>
-
           <span class="em">
             🥥
           </span>
-
           <span>
-
             <b>
               زيت جوز الهند:
             </b>
-
             تعزيز النعومه والحيويه للبشره.
-
           </span>
-
         </li>
-
-
         <li>
-
           <span class="em">
             🍯
           </span>
-
           <span>
-
             <b>
               شمع العسل وشمع الصويا:
             </b>
-
             قاعدة مصممة لتذوب بهدوء وتناسب تجربة المساج.
-
           </span>
-
         </li>
-
-
       </ul>
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      6. DIFFERENCE
      ═══════════════════════════════════════════════════════════ -->
-
 <section class="lp-compare">
-
   <div class="wrap">
-
     <span class="lp-kicker">
       ليه دي مختلفة؟
     </span>
-
-
     <h2 class="lp-section-title">
       مش مجرد شمعة معطّرة
     </h2>
-
-
     <p class="lp-section-sub">
-
       القيمة هنا في التجربة كلها،
       مش في شكل المنتج فقط.
-
     </p>
-
-
     <div class="lp-compare-grid">
-
-
       <div class="lp-compare-card">
-
         <h3>
           لو عندك شمعة بدون ميزه هتبقى عادية
         </h3>
-
         <ul class="lp-compare-list">
-
           <li>
             <span class="check">•</span>
             <span>
               رائحة وإضاءة فقط
             </span>
           </li>
-
           <li>
             <span class="check">•</span>
             <span>
               تنتهي فائدتها عند إطفائها
             </span>
           </li>
-
           <li>
             <span class="check">•</span>
             <span>
               تجربة هدية تقليدية أكثر
             </span>
           </li>
-
         </ul>
-
       </div>
-
-
       <div class="lp-compare-card featured">
-
         <h3>
           🕯️ VelaLight Massage Candle
         </h3>
-
         <ul class="lp-compare-list">
-
           <li>
             <span class="check">✓</span>
             <span>
@@ -3767,256 +2446,158 @@ button{
               في منتج واحد
             </span>
           </li>
-
           <li>
             <span class="check">✓</span>
             <span>
               تركيبة غنية بالزيوت والزبدة
             </span>
           </li>
-
           <li>
             <span class="check">✓</span>
             <span>
               تجربة منزلية مختلفة وقابلة للمشاركة
             </span>
           </li>
-
           <li>
             <span class="check">✓</span>
             <span>
               مناسبة كهدية مع تغليف فاخر
             </span>
           </li>
-
         </ul>
-
       </div>
-
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      7. FAQ
      ═══════════════════════════════════════════════════════════ -->
-
 <section class="lp-faq">
-
   <div class="wrap">
-
     <h2 class="lp-reveal">
       عندك سؤال؟ جاوبناه لك
     </h2>
-
-
     <div class="lp-faq-list">
-
-
       <div class="lp-faq-item lp-reveal">
-
         <button
           class="lp-faq-q"
           type="button"
           aria-expanded="false">
-
           <span>
             هل الدفع آمن؟
           </span>
-
           <span class="ic">
             +
           </span>
-
         </button>
-
-
         <div class="lp-faq-a">
-
           <div class="lp-faq-a-inner">
-
             بنوفر طرق دفع متعددة مثل
             InstaPay وفودافون كاش وأورنج كاش والتحويل البنكي.
             بعد تأكيد الطلب بنرسل لك تفاصيل الدفع المناسبة.
-
           </div>
-
         </div>
-
       </div>
-
-
       <div class="lp-faq-item lp-reveal">
-
         <button
           class="lp-faq-q"
           type="button"
           aria-expanded="false">
-
           <span>
             الشحن بياخد قد إيه؟
           </span>
-
           <span class="ic">
             +
           </span>
-
         </button>
-
-
         <div class="lp-faq-a">
-
           <div class="lp-faq-a-inner">
-
             التوصيل بياخد من
             <b>3 لـ 7 أيام عمل</b>
             حسب المحافظة.
             بنشحن لكل محافظات مصر.
-
           </div>
-
         </div>
-
       </div>
-
-
       <div class="lp-faq-item lp-reveal">
-
         <button
           class="lp-faq-q"
           type="button"
           aria-expanded="false">
-
           <span>
             الشمعة بتدوم قد إيه؟
           </span>
-
           <span class="ic">
             +
           </span>
-
         </button>
-
-
         <div class="lp-faq-a">
-
           <div class="lp-faq-a-inner">
-
             شمعة المساج المانديلا بتدوم لحد
             <b>72 ساعة اشتعال</b>.
-
             ومدة الاستخدام الفعلية بتختلف حسب طريقة ومدة إشعالها في كل مرة.
-
           </div>
-
         </div>
-
       </div>
-
-
       <div class="lp-faq-item lp-reveal">
-
         <button
           class="lp-faq-q"
           type="button"
           aria-expanded="false">
-
           <span>
             ينفع أستخدمها على البشرة مباشرة؟
           </span>
-
           <span class="ic">
             +
           </span>
-
         </button>
-
-
         <div class="lp-faq-a">
-
           <div class="lp-faq-a-inner">
-
             مخصصة لتُستخدم كزيت مساج دافئ.
             اتركي الزيت يذوب بالطريقة المناسبة،
             ثم اختبري حرارته على جزء صغير من الجلد قبل الاستخدام.
-
             لا تستخدمي الزيت إذا كان ساخنًا بشكل غير مريح،
             وتجنبي ملامسة اللهب مباشرة للجلد.
-
           </div>
-
         </div>
-
       </div>
-
-
       <div class="lp-faq-item lp-reveal">
-
         <button
           class="lp-faq-q"
           type="button"
           aria-expanded="false">
-
           <span>
             لو حصلت مشكلة في المنتج؟
           </span>
-
           <span class="ic">
             +
           </span>
-
         </button>
-
-
         <div class="lp-faq-a">
-
           <div class="lp-faq-a-inner">
-
             لو فيه أي مشكلة في المنتج،
             تواصل معنا على واتساب وفريق VelaLight هيساعدك في أقرب وقت.
-
           </div>
-
         </div>
-
       </div>
-
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      8. SOCIAL PROOF
      ═══════════════════════════════════════════════════════════ -->
-
 <section class="lp-social">
-
   <div class="wrap">
-
     <h2 class="lp-reveal">
       عملاؤنا قالوا إيه؟
     </h2>
-
-
     <p class="sub lp-reveal">
       لقطات حقيقية من محادثات العملاء بعد الاستلام
     </p>
-
-
     <div
       class="lp-social-grid"
       id="lpTestimonials">
     </div>
-
-
     <p
       style="
         text-align:center;
@@ -4024,1048 +2605,634 @@ button{
         color:var(--dim);
         margin-top:.8rem
       ">
-
       اسحب لليمين عشان تشوف المزيد ←
-
     </p>
-
   </div>
-
 </section>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      9. GIFT
      ═══════════════════════════════════════════════════════════ -->
-
 <section class="lp-gift">
-
   <div class="wrap">
-
     <div class="lp-gift-box lp-reveal">
-
       <span class="lp-gift-icon">
         🎁
       </span>
-
-
       <h2>
         ومين قال إن الهدية لازم تكون تقليدية؟
       </h2>
-
-
       <p>
-
         لو بتدوري على هدية مختلفة،
         شمعة المساج المانديلا تجمع بين شكل فاخر
         وتجربة تُستخدم فعلًا.
-
         ومع عرض الصفحة،
         <b>
           تغليف الهدايا مجاني.
         </b>
-
       </p>
-
-
       <div class="lp-gift-occasions">
-
         <span>
           ❤️ ذكرى
         </span>
-
         <span>
           🎂 عيد ميلاد
         </span>
-
         <span>
           💍 Anniversary
         </span>
-
         <span>
           🎀 مفاجأة بدون مناسبة
         </span>
-
       </div>
-
-
       <button
         class="lp-cta"
         onclick="lpOpenModal()">
-
         🎁 أطلبيها كهدية — 375 ج
-
       </button>
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      10. FINAL CTA
      ═══════════════════════════════════════════════════════════ -->
-
 <section class="lp-final-cta">
-
   <div class="wrap lp-reveal">
-
     <h2>
       جاهزة تعيشي إحساس السبا في بيتك؟
     </h2>
-
-
     <p>
-
       اختاري عطرك،
       أضيفي شمعة المساج للسلة،
       واستقبليها خلال 3–7 أيام عمل.
-
     </p>
-
-
     <button
       class="lp-cta"
       onclick="lpOpenModal()">
-
       🛍️ أضيفيها للسلة — 375 ج
-
     </button>
-
-
     <p class="lp-cta-sub">
       🔒 دفع آمن — شحن لكل مصر
     </p>
-
   </div>
-
 </section>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      FOOTER
      ═══════════════════════════════════════════════════════════ -->
-
 <footer class="lp-footer">
-
   <div class="wrap">
-
     © 2026 VelaLight —
     <a href="index.html">
       المتجر الرئيسي
     </a>
-
   </div>
-
 </footer>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      ✅ FLOATING CART BUTTON
      ═══════════════════════════════════════════════════════════ -->
-
 <button
   class="lp-floating-cart"
   id="lpFloatingCart"
   type="button"
   aria-label="عرض السلة">
-
   <span class="icon">
     🛒
   </span>
-
   <span
     class="count"
     id="lpCartCount">
-
     0
-
   </span>
-
 </button>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      ✅ SUCCESS PANEL — بعد الإضافة
      ═══════════════════════════════════════════════════════════ -->
-
 <div
   class="lp-success-panel"
   id="lpSuccessPanel">
-
   <div class="lp-success-box">
-
+    <button
+      class="lp-success-close"
+      type="button"
+      onclick="lpContinueShopping()"
+      aria-label="إغلاق">
+      ✕
+    </button>
     <span class="lp-success-icon">
       ✅
     </span>
-
     <h3>
       تمت الإضافة بنجاح!
     </h3>
-
     <p>
-
       شمعة المساج + العطر اللي اخترتيه
       موجودين في سلتك.
       جاهز/ة تكمل الطلب؟
-
     </p>
-
     <button
       class="lp-cta"
       type="button"
       onclick="lpGoToCheckout()">
-
       💬 إتمام الطلب الآن
-
     </button>
-
     <button
       class="lp-success-continue"
       type="button"
       id="lpContinueBtn">
-
       متابعة التسوق
-
     </button>
-
-    <span class="lp-success-timer">
-
-      سيتم تحويلك تلقائيًا خلال
-      <b id="lpTimerCount">
-
-        5
-
-      </b>
-      ثواني...
-
-    </span>
-
   </div>
-
 </div>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      STICKY CTA
      ═══════════════════════════════════════════════════════════ -->
-
 <div
   class="lp-sticky-cta"
   id="lpStickyCta">
-
   <div class="lp-sticky-inner">
-
     <div class="lp-sticky-info">
-
       <b id="lpStickyName">
         شمعة المساج المانديلا
       </b>
-
       <small id="lpStickyPrice">
         375 ج — دفع آمن
       </small>
-
     </div>
-
-
     <button
       class="lp-sticky-btn"
       onclick="lpOpenModal()">
-
       اختاري العطر
-
     </button>
-
   </div>
-
 </div>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      SCENT + QUANTITY MODAL
      ═══════════════════════════════════════════════════════════ -->
-
 <div
   class="lp-modal-ov"
   id="lpModalOv"
   aria-hidden="true">
-
   <div
     class="lp-modal"
     role="dialog"
     aria-modal="true"
     aria-labelledby="lpModalTitle">
-
-
     <div class="lp-modal-head">
-
       <h3 id="lpModalTitle">
         اختاري عطرك
       </h3>
-
       <button
         class="lp-modal-close"
         type="button"
         onclick="lpCloseModal()"
         aria-label="إغلاق">
-
         ✕
-
       </button>
-
     </div>
-
-
     <div class="lp-modal-preview">
-
       <img
         id="lpModalImg"
         src="velalight-massage-mandala-spa-spa.webp"
         alt="">
-
       <div class="info">
-
         <b id="lpModalName">
           شمعة المساج المانديلا
         </b>
-
         <div
           class="pr"
           id="lpModalPrice">
-
           375 ج
-
         </div>
-
       </div>
-
     </div>
-
-
     <div class="lp-modal-benefit">
-
       🎁
       375 ج بدل 475 ج
       + تغليف هدايا مجاني
       — اختاري عطرك والكمية فقط.
-
     </div>
-
-
     <label
       class="lp-modal-label"
       for="lpScentSelect">
-
       🌸 اختاري العطر
       <span class="req">*</span>
-
     </label>
-
-
     <select
       class="lp-modal-select"
       id="lpScentSelect"
       required
       aria-required="true">
-
       <option
         value=""
         disabled
         selected>
-
         — اختاري العطر —
-
       </option>
-
     </select>
-
-
     <label class="lp-modal-label">
       الكمية
     </label>
-
-
     <div class="lp-modal-qty">
-
       <span class="lbl">
         عدد الشمعات
       </span>
-
-
       <div class="controls">
-
         <button
           type="button"
           id="lpQtyMinus"
           aria-label="تقليل">
-
           −
-
         </button>
-
-
         <b id="lpQtyVal">
           1
         </b>
-
-
         <button
           type="button"
           id="lpQtyPlus"
           aria-label="زيادة">
-
           +
-
         </button>
-
       </div>
-
     </div>
-
-
     <button
       class="lp-modal-add"
       type="button"
       id="lpModalAdd"
       disabled>
-
       👆 اختاري العطر أولاً
-
     </button>
-
-
     <p class="lp-modal-note">
-
       🔒 بياناتك آمنة — هنتواصل معاك لتأكيد الطلب
-
     </p>
-
   </div>
-
 </div>
-
-
 <!-- ═══════════════════════════════════════════════════════════
      SCRIPTS
      ═══════════════════════════════════════════════════════════ -->
-
 <script src="data.js"></script>
 <script src="app.js"></script>
-
-
 <script>
-
 /* ═══════════════════════════════════════════════════════════
    LP CONFIG
    ═══════════════════════════════════════════════════════════ */
-
 var LP_CONFIG = {
-
   productId: "12",
-
   heroVideo: "velaligh-spa-candle.mp4",
-
   heroPoster:
     "velalight-massage-mandala-spa-spa.webp",
-
   solutionImage:
     "velalight-massage-mandala-spa-spa.webp",
-
   cartImage:
     "velalight-massage-mandala-spa-spa.webp",
-
   priceOverride: 375,
-
   oldPriceOverride: 475,
-
   testimonials: [
-
     {
       img:"testimonials/rev1.jpg",
       quote:"⭐ الشمعة دي غيرت روتيني المسائي تمامًا"
     },
-
     {
       img:"testimonials/rev2.jpg",
       quote:"⭐ ريحتها تحفة وبترطب بشرتي"
     },
-
     {
       img:"testimonials/rev3.jpg",
       quote:"⭐ أحسن هدية جبتها لمراتي"
     },
-
     {
       img:"testimonials/rev4.jpg",
       quote:"⭐ تجربة رائعة، هرجع أطلب تاني"
     },
-
     {
       img:"testimonials/rev5.jpg",
       quote:"⭐ منتج فاخر ويستاهل كل جنيه"
     },
-
     {
       img:"testimonials/rev6.jpg",
       quote:"⭐ بشرتي بقت ناعمة جدًا"
     },
-
     {
       img:"testimonials/rev7.jpg",
       quote:"⭐ استرخاء كامل بعد يوم طويل"
     },
-
     {
       img:"testimonials/rev8.jpg",
       quote:"⭐ الهدية المثالية لأي مناسبة"
     },
-
     {
       img:"testimonials/rev9.jpg",
       quote:"⭐ جودة عالية وخدمة ممتازة"
     },
-
     {
       img:"testimonials/rev10.jpg",
       quote:"⭐ ريحة اللافندر تحفة"
     },
-
     {
       img:"testimonials/rev11.jpg",
       quote:"⭐ يستحق كل التقييمات الحلوة"
     },
-
     {
       img:"testimonials/rev12.jpg",
       quote:"⭐ تجربة سبا كاملة في البيت"
     },
-
     {
       img:"testimonials/rev13.jpg",
       quote:"⭐ التغليف فخم جدًا"
     },
-
     {
       img:"testimonials/rev14.jpg",
       quote:"⭐ سرعة توصيل وجودة عالية"
     },
-
     {
       img:"testimonials/rev15.jpg",
       quote:"⭐ هرشحه لكل أصحابي"
     },
-
     {
       img:"testimonials/rev16.jpg",
       quote:"⭐ فاقت توقعاتي بكتير"
     },
-
     {
       img:"testimonials/rev17.jpg",
       quote:"⭐ تجربة شراء ممتازة من الأول للآخر"
     }
-
   ],
-
   defaultScent:""
-
 };
-
-
 /* ═══════════════════════════════════════════════════════════
    SCENTS
    ═══════════════════════════════════════════════════════════ */
-
 var LP_SCENTS = [
-
   ["فانيلا","Vanilla"],
-
   ["سينامون سبايس فانيلا","Cinnamon Spice Vanilla"],
-
   ["لافندر","Lavender"],
-
   ["موكا","Mocha"],
-
   ["كراميل","Caramel"],
-
   ["كاريبيان فروت","Caribbean Fruit"],
-
   ["فل","Jasmine Sambac"],
-
   ["ياسمين","Jasmine"],
-
   ["اناناس","Pineapple"],
-
   ["شيكولاتة","Chocolate"],
-
   ["كوكونات","Coconut"],
-
   ["كاسيليا","Cassilia — Massage"],
-
   ["اينتو زانايت","Into Zanaite — Massage"],
-
   ["بوكيت روز","Bouquet Rose"],
-
   ["ورد بلدى","Egyptian Rose"],
-
   ["تيوليب","Tulip"],
-
   ["قهوة","Coffee"],
-
   ["قهوة فانيلا","Vanilla Coffee"],
-
   ["قهوة بندق","Hazelnut Coffee"],
-
   ["عود فانيليا","Vanilla Oud"],
-
   ["عنبر","Amber"],
-
   ["فراولة","Strawberry"],
-
   ["عود خشب صندل","Sandalwood Oud"]
-
 ];
-
-
 /* ═══════════════════════════════════════════════════════════
    LP LOGIC
    ═══════════════════════════════════════════════════════════ */
-
 (function(){
-
   "use strict";
-
-
   var LP_PRODUCT = null;
-
   var LP_QTY = 1;
-
   var LP_MAX_STOCK = 99;
-
-  var _lpAutoTimer = null;
-
-
   function scentTr(name){
-
     var f = LP_SCENTS.find(function(s){
-
       return s[0] === name || s[1] === name;
-
     });
-
     if(!f){
       return name || "";
     }
-
     var lang =
       (typeof LANG !== "undefined")
       ? LANG
       : "ar";
-
     return lang === "en"
       ? f[1]
       : f[0];
-
   }
-
-
   function priceFmt(n){
-
     if(typeof money === "function"){
       return money(n);
     }
-
     return String(
       Math.round(Number(n) || 0)
     ) + " ج";
-
   }
-
-
   function getPool(){
-
     return
-
       (typeof ALL_PRODUCTS !== "undefined" &&
        ALL_PRODUCTS.length)
-
       ? ALL_PRODUCTS
-
       :
-
       (typeof PRODUCTS !== "undefined" &&
        PRODUCTS.length)
-
       ? PRODUCTS
-
       :
-
       (window.ALL_PRODUCTS &&
        window.ALL_PRODUCTS.length)
-
       ? window.ALL_PRODUCTS
-
       :
-
       (window.PRODUCTS &&
        window.PRODUCTS.length)
-
       ? window.PRODUCTS
-
       : [];
-
   }
-
-
   function findProduct(){
-
     var pool = getPool();
-
     var p = null;
-
-
     if(pool && pool.length){
-
       p = pool.find(function(x){
-
         return String(x.id) ===
                String(LP_CONFIG.productId);
-
       });
-
     }
-
-
     if(!p){
-
       p = {
-
         id:LP_CONFIG.productId,
-
         name:"شمعة المساج المانديلا",
-
         nameEn:"Mandala Massage Candle",
-
         cat:"massage"
-
       };
-
     }
-
-
     if(LP_CONFIG.priceOverride != null){
-
       p.price =
         LP_CONFIG.priceOverride;
-
     }
-
-
     if(LP_CONFIG.oldPriceOverride != null){
-
       p.old =
         LP_CONFIG.oldPriceOverride;
-
     }
-
-
     p.img =
       LP_CONFIG.cartImage;
-
-
     return p;
-
   }
-
-
   function buildTestimonials(){
-
     var wrap =
       document.getElementById(
         "lpTestimonials"
       );
-
     if(!wrap){
       return;
     }
-
-
     wrap.innerHTML = "";
-
-
     (LP_CONFIG.testimonials || [])
       .forEach(function(t){
-
         var card =
           document.createElement("div");
-
         card.className =
           "lp-social-card";
-
-
         card.innerHTML =
-
           '<img src="' +
           t.img +
           '" alt="رأي عميل" loading="lazy" onerror="this.style.opacity=0.15">' +
-
           '<div class="meta">' +
-
           '<small>' +
           t.quote +
           '</small>' +
-
           '</div>';
-
-
         wrap.appendChild(card);
-
       });
-
   }
-
-
   function applyProduct(){
-
     if(!LP_PRODUCT){
       return;
     }
-
-
     var priceNow =
       document.getElementById(
         "lpOfferPrice"
       );
-
     if(priceNow){
-
       priceNow.textContent =
         priceFmt(LP_PRODUCT.price);
-
     }
-
-
     var priceOld =
       document.getElementById(
         "lpOfferOld"
       );
-
-
     if(priceOld){
-
       if(
         LP_PRODUCT.old &&
         LP_PRODUCT.old > LP_PRODUCT.price
       ){
-
         priceOld.textContent =
           priceFmt(LP_PRODUCT.old);
-
         priceOld.style.display = "";
-
       }else{
-
         priceOld.style.display =
           "none";
-
       }
-
     }
-
-
     var stickyName =
       document.getElementById(
         "lpStickyName"
       );
-
     if(stickyName){
-
       stickyName.textContent =
         LP_PRODUCT.name;
-
     }
-
-
     var stickyPrice =
       document.getElementById(
         "lpStickyPrice"
       );
-
     if(stickyPrice){
-
       stickyPrice.textContent =
         priceFmt(LP_PRODUCT.price) +
         " — دفع آمن";
-
     }
-
-
     var modalImg =
       document.getElementById(
         "lpModalImg"
       );
-
     if(modalImg){
-
       modalImg.src =
         LP_CONFIG.cartImage;
-
     }
-
-
     var modalName =
       document.getElementById(
         "lpModalName"
       );
-
     if(modalName){
-
       modalName.textContent =
         LP_PRODUCT.name;
-
     }
-
-
     var modalPrice =
       document.getElementById(
         "lpModalPrice"
       );
-
     if(modalPrice){
-
       modalPrice.textContent =
         priceFmt(LP_PRODUCT.price);
-
     }
-
-
     var offerTitle =
       document.getElementById(
         "lpOfferTitle"
       );
-
     if(offerTitle){
-
       offerTitle.textContent =
         LP_PRODUCT.name;
-
     }
-
-
     var stockNum =
       Number(LP_PRODUCT.stock);
-
-
     LP_MAX_STOCK =
       (
         Number.isFinite(stockNum) &&
         stockNum > 0
       )
-
       ? Math.floor(stockNum)
-
       : 99;
-
   }
-
-
   function buildScentOptions(){
-
     var sel =
       document.getElementById(
         "lpScentSelect"
       );
-
     if(!sel){
       return;
     }
-
-
     sel.innerHTML =
       '<option value="" disabled selected>— اختاري العطر —</option>';
-
-
     LP_SCENTS.forEach(function(s){
-
       var opt =
         document.createElement("option");
-
-
       opt.value =
         s[0];
-
-
       opt.textContent =
         scentTr(s[0]);
-
-
       sel.appendChild(opt);
-
     });
-
   }
-
-
   function updateAddBtnState(){
-
     var sel =
       document.getElementById(
         "lpScentSelect"
       );
-
     var btn =
       document.getElementById(
         "lpModalAdd"
       );
-
-
     if(!sel || !btn){
       return;
     }
-
-
     var hasScent =
       sel.value &&
       String(sel.value).trim();
-
-
     if(hasScent){
-
       btn.disabled = false;
-
       btn.textContent =
         "🛍️ أضيفي للسلة — 375 ج";
-
       sel.classList.remove(
         "vl-empty"
       );
-
     }else{
-
       btn.disabled = true;
-
       btn.textContent =
         "👆 اختاري العطر أولاً";
-
     }
-
   }
-
-
   /* ✅ ═══════════════════════════════════════════════════════
      عدّاد السلة العائم — يتحدّث تلقائيًا
      ═══════════════════════════════════════════════════════ */
-
   function lpUpdateCartCount(){
-
     var cart = [];
-
-
     try{
-
       if(typeof getCart === "function"){
         cart = getCart();
       }else{
@@ -5073,374 +3240,163 @@ var LP_SCENTS = [
           localStorage.getItem("vl_cart") || "[]"
         );
       }
-
     }catch(e){
       cart = [];
     }
-
-
     var totalQty =
       cart.reduce(function(sum,it){
-
         return sum + Number(it.qty || 1);
-
       },0);
-
-
     var countEl =
       document.getElementById(
         "lpCartCount"
       );
-
     if(countEl){
       countEl.textContent = totalQty;
     }
-
-
     var fab =
       document.getElementById(
         "lpFloatingCart"
       );
-
     if(fab){
-
       if(totalQty > 0){
-
         fab.classList.add("show");
-
       }else{
-
         fab.classList.remove("show");
-
       }
-
     }
-
   }
-
-
   /* ✅ ═══════════════════════════════════════════════════════
      الانتقال لصفحة إتمام الطلب
      ═══════════════════════════════════════════════════════ */
-
   window.lpGoToCheckout =
     function(){
-
-      if(_lpAutoTimer){
-        clearTimeout(_lpAutoTimer);
-        _lpAutoTimer = null;
-      }
-
       /* ✅ فتح السلة في تاب جديد — الـ LP يفضل مفتوح */
       window.open(
         "index.html?cart=1",
         "_blank"
       );
-
     };
-
   /* ✅ ═══════════════════════════════════════════════════════
      إخفاء بانل النجاح + متابعة التسوق
      ═══════════════════════════════════════════════════════ */
-
   window.lpContinueShopping =
     function(){
-
-      if(_lpAutoTimer){
-        clearTimeout(_lpAutoTimer);
-        _lpAutoTimer = null;
-      }
-
-
       var panel =
         document.getElementById(
           "lpSuccessPanel"
         );
-
       if(panel){
         panel.classList.remove("show");
       }
-
       document.body.style.overflow = "";
-
     };
-
-
   /* ✅ ═══════════════════════════════════════════════════════
-     إظهار بانل النجاح مع عدّاد 5 ثواني
+     إظهار بانل النجاح — بدون تحويل تلقائي
      ═══════════════════════════════════════════════════════ */
-
   function lpShowSuccessPanel(){
-
     var panel =
       document.getElementById(
         "lpSuccessPanel"
       );
-
     if(!panel){
       return;
     }
-
-
-    var timerEl =
-      document.getElementById(
-        "lpTimerCount"
-      );
-
-
-    var countdown = 5;
-
-
-    if(timerEl){
-      timerEl.textContent = countdown;
-    }
-
-
     panel.classList.add("show");
-
     document.body.style.overflow = "hidden";
-
-
-    /* ✅ تحديث العدّاد كل ثانية */
-
-    var countdownInterval =
-      setInterval(function(){
-
-        countdown--;
-
-        if(timerEl){
-          timerEl.textContent =
-            countdown > 0
-            ? countdown
-            : 0;
-        }
-
-
-        if(countdown <= 0){
-
-          clearInterval(countdownInterval);
-
-        }
-
-      },1000);
-
-
-    /* ✅ فتح تاب جديد بعد 5 ثواني — مع fallback */
-
-    _lpAutoTimer =
-      setTimeout(function(){
-
-        clearInterval(countdownInterval);
-
-        var p =
-          document.getElementById(
-            "lpSuccessPanel"
-          );
-
-        if(
-          p &&
-          p.classList.contains("show")
-        ){
-
-          /* نحاول نفتح تاب جديد */
-
-          var opened =
-            window.open(
-              "index.html?cart=1",
-              "_blank"
-            );
-
-          /* ⚠️ لو الـ popup اتحجب (متصفحات الموبايل)، نعرض رسالة */
-
-          if(!opened){
-
-            var timerEl =
-              document.getElementById(
-                "lpTimerCount"
-              );
-
-            if(
-              timerEl &&
-              timerEl.parentNode
-            ){
-
-              timerEl.parentNode.innerHTML =
-
-                '<span style="color:#c0392b;font-weight:800">' +
-
-                '👆 اضغطي على "إتمام الطلب الآن" للمتابعة' +
-
-                '</span>';
-
-            }
-
-          }
-
-        }
-
-      },5000);
   }
-
-
   window.lpOpenModal =
     function(){
-
       var ov =
         document.getElementById(
           "lpModalOv"
         );
-
-
       if(!ov){
         return;
       }
-
-
       LP_QTY = 1;
-
-
       updateQtyUI();
-
-
       var sel =
         document.getElementById(
           "lpScentSelect"
         );
-
-
       if(sel){
-
         sel.value = "";
-
         sel.classList.remove(
           "vl-empty"
         );
-
       }
-
-
       updateAddBtnState();
-
-
       ov.classList.add("show");
-
       ov.setAttribute(
         "aria-hidden",
         "false"
       );
-
-
       document.body.style.overflow =
         "hidden";
-
     };
-
-
   window.lpCloseModal =
     function(){
-
       var ov =
         document.getElementById(
           "lpModalOv"
         );
-
-
       if(!ov){
         return;
       }
-
-
       ov.classList.remove(
         "show"
       );
-
-
       ov.setAttribute(
         "aria-hidden",
         "true"
       );
-
-
       document.body.style.overflow =
         "";
-
     };
-
-
   function updateQtyUI(){
-
     var v =
       document.getElementById(
         "lpQtyVal"
       );
-
-
     if(v){
-
       v.textContent =
         LP_QTY;
-
     }
-
-
     var m =
       document.getElementById(
         "lpQtyMinus"
       );
-
-
     var p =
       document.getElementById(
         "lpQtyPlus"
       );
-
-
     if(m){
-
       m.disabled =
         LP_QTY <= 1;
-
     }
-
-
     if(p){
-
       p.disabled =
         LP_QTY >= LP_MAX_STOCK;
-
     }
-
   }
-
-
   function lpAddToCart(
     scent,
     qty
   ){
-
     if(!LP_PRODUCT){
-
       LP_PRODUCT =
         findProduct();
-
     }
-
-
     LP_PRODUCT.img =
       LP_PRODUCT.img ||
       LP_CONFIG.cartImage;
-
-
     var added = false;
-
-
     try{
-
       if(
         typeof window.addToCart ===
         "function"
       ){
-
         added =
           window.addToCart(
             LP_PRODUCT,
@@ -5449,153 +3405,96 @@ var LP_SCENTS = [
               qty:qty
             }
           );
-
       }
-
     }catch(e){
-
       console.warn(
         "⚠️ addToCart failed:",
         e
       );
-
     }
-
-
     try{
-
       var cartFix = [];
-
-
       if(
         typeof getCart ===
         "function"
       ){
-
         cartFix =
           getCart();
-
       }else{
-
         cartFix =
           JSON.parse(
             localStorage.getItem(
               "vl_cart"
             ) || "[]"
           );
-
       }
-
-
       var changed = false;
-
-
       cartFix.forEach(function(it){
-
         if(
           String(it.id) ===
           String(LP_PRODUCT.id)
         ){
-
           if(
             it.img !==
             LP_PRODUCT.img
           ){
-
             it.img =
               LP_PRODUCT.img;
-
             changed = true;
-
           }
-
         }
-
       });
-
-
       if(changed){
-
         if(
           typeof saveCart ===
           "function"
         ){
-
           saveCart(cartFix);
-
         }else{
-
           localStorage.setItem(
             "vl_cart",
             JSON.stringify(cartFix)
           );
-
         }
-
       }
-
     }catch(e){
-
       console.warn(
         "⚠️ cart image fix failed:",
         e
       );
-
     }
-
-
     var cart = [];
-
-
     try{
-
       if(
         typeof getCart ===
         "function"
       ){
-
         cart =
           getCart();
-
       }else{
-
         cart =
           JSON.parse(
             localStorage.getItem(
               "vl_cart"
             ) || "[]"
           );
-
       }
-
     }catch(e){
-
       cart = [];
-
     }
-
-
     var wasAdded =
       cart.some(function(it){
-
         return
-
           String(it.id) ===
           String(LP_PRODUCT.id)
-
           &&
-
           String(it.scent || "") ===
           String(scent);
-
       });
-
-
     if(
       typeof fbq ===
       "function"
     ){
-
       fbq(
         "track",
         "AddToCart",
@@ -5603,600 +3502,378 @@ var LP_SCENTS = [
           content_ids:[
             LP_PRODUCT.id
           ],
-
           content_name:
             LP_PRODUCT.name,
-
           content_type:
             "product",
-
           value:
             Number(LP_PRODUCT.price) *
             qty,
-
           currency:"EGP"
         }
       );
-
     }
-
-
     return (
       wasAdded ||
       added !== false
     );
-
   }
-
-
   function init(){
-
     LP_PRODUCT =
       findProduct();
-
-
     applyProduct();
-
     buildScentOptions();
-
     buildTestimonials();
-
-
     /* ✅ تحديث عدّاد السلة فورًا */
-
     lpUpdateCartCount();
-
-
     var sel =
       document.getElementById(
         "lpScentSelect"
       );
-
-
     if(sel){
-
       sel.addEventListener(
         "change",
         function(){
-
           sel.classList.remove(
             "vl-empty"
           );
-
           updateAddBtnState();
-
         }
       );
-
     }
-
-
     updateAddBtnState();
-
-
     var minus =
       document.getElementById(
         "lpQtyMinus"
       );
-
-
     var plus =
       document.getElementById(
         "lpQtyPlus"
       );
-
-
     if(minus){
-
       minus.addEventListener(
         "click",
         function(){
-
           if(LP_QTY > 1){
-
             LP_QTY--;
-
             updateQtyUI();
-
           }
-
         }
       );
-
     }
-
-
     if(plus){
-
       plus.addEventListener(
         "click",
         function(){
-
           if(
             LP_QTY <
             LP_MAX_STOCK
           ){
-
             LP_QTY++;
-
             updateQtyUI();
-
           }else if(
             typeof toast ===
             "function"
           ){
-
             toast(
               "⚠️ المتاح " +
               LP_MAX_STOCK +
               " قطعة فقط"
             );
-
           }
-
         }
       );
-
     }
-
-
     var addBtn =
       document.getElementById(
         "lpModalAdd"
       );
-
-
     if(addBtn){
-
       addBtn.addEventListener(
         "click",
         function(){
-
           var sel =
             document.getElementById(
               "lpScentSelect"
             );
-
-
           var scent =
             sel
             ? sel.value
             : "";
-
-
           if(!scent){
-
             if(sel){
-
               sel.classList.add(
                 "vl-empty"
               );
-
             }
-
-
             if(
               typeof toast ===
               "function"
             ){
-
               toast(
                 "⚠️ اختاري العطر أولاً"
               );
-
             }
-
-
             if(sel){
-
               sel.focus();
-
             }
-
-
             return;
-
           }
-
-
           var btn = this;
-
-
           btn.disabled = true;
-
           btn.textContent =
             "⏳ جاري الإضافة...";
-
-
           var ok =
             lpAddToCart(
               scent,
               LP_QTY
             );
-
-
           if(ok){
-
             btn.textContent =
               "✓ تمت الإضافة";
-
-
             if(
               typeof toast ===
               "function"
             ){
-
               toast(
                 "✅ تمت الإضافة للسلة"
               );
-
             }
-
-
             setTimeout(
               function(){
-
                 lpCloseModal();
-
                 updateAddBtnState();
-
                 /* ✅ تحديث عدّاد السلة العائم */
-
                 lpUpdateCartCount();
-
-                /* ✅ إظهار بانل النجاح + التحويل التلقائي */
-
+                /* ✅ إظهار بانل النجاح — والعميل يختار الخطوة التالية */
                 lpShowSuccessPanel();
-
               },
               500
             );
-
-
           }else{
-
             updateAddBtnState();
-
-
             if(
               typeof toast ===
               "function"
             ){
-
               toast(
                 "⚠️ حصل خطأ، حاولي تاني"
               );
-
             }
-
           }
-
         }
       );
-
     }
-
-
     var ov =
       document.getElementById(
         "lpModalOv"
       );
-
-
     if(ov){
-
       ov.addEventListener(
         "click",
         function(e){
-
           if(e.target === ov){
-
             lpCloseModal();
-
           }
-
         }
       );
-
     }
-
-
     document.addEventListener(
       "keydown",
       function(e){
-
         if(
           e.key ===
           "Escape"
         ){
-
           lpCloseModal();
-
         }
-
       }
     );
-
-
     /* ✅ زر السلة العائم — يفتح في تاب جديد */
-
     var fab =
       document.getElementById(
         "lpFloatingCart"
       );
-
-
     if(fab){
-
       fab.addEventListener(
         "click",
         function(){
-
           window.open(
             "index.html?cart=1",
             "_blank"
           );
-
         }
       );
-
     }
-
     /* ✅ زر "متابعة التسوق" في بانل النجاح */
-
     var continueBtn =
       document.getElementById(
         "lpContinueBtn"
       );
-
-
     if(continueBtn){
-
       continueBtn.addEventListener(
         "click",
         function(){
-
           lpContinueShopping();
-
         }
       );
-
     }
-
-
     document
       .querySelectorAll(
         ".lp-faq-item"
       )
       .forEach(
         function(item){
-
           var btn =
             item.querySelector(
               ".lp-faq-q"
             );
-
           var ans =
             item.querySelector(
               ".lp-faq-a"
             );
-
-
           if(!btn || !ans){
             return;
           }
-
-
           btn.addEventListener(
             "click",
             function(){
-
               var isOpen =
                 item.classList.contains(
                   "open"
                 );
-
-
               document
                 .querySelectorAll(
                   ".lp-faq-item"
                 )
                 .forEach(
                   function(other){
-
                     other.classList.remove(
                       "open"
                     );
-
-
                     var oa =
                       other.querySelector(
                         ".lp-faq-a"
                       );
-
-
                     var ob =
                       other.querySelector(
                         ".lp-faq-q"
                       );
-
-
                     if(oa){
-
                       oa.style.maxHeight =
                         null;
-
                     }
-
-
                     if(ob){
-
                       ob.setAttribute(
                         "aria-expanded",
                         "false"
                       );
-
                     }
-
                   }
                 );
-
-
               if(!isOpen){
-
                 item.classList.add(
                   "open"
                 );
-
-
                 ans.style.maxHeight =
                   ans.scrollHeight +
                   "px";
-
-
                 btn.setAttribute(
                   "aria-expanded",
                   "true"
                 );
-
               }
-
             }
           );
-
         }
       );
-
-
     if(
       "IntersectionObserver"
       in window
     ){
-
       var io =
         new IntersectionObserver(
           function(entries){
-
             entries.forEach(
               function(en){
-
                 if(
                   en.isIntersecting
                 ){
-
                   en.target.classList.add(
                     "on"
                   );
-
-
                   io.unobserve(
                     en.target
                   );
-
                 }
-
               }
             );
-
           },
           {
             threshold:.08,
-
             rootMargin:
               "0px 0px -40px 0px"
           }
         );
-
-
       document
         .querySelectorAll(
           ".lp-reveal"
         )
         .forEach(
           function(el){
-
             io.observe(el);
-
           }
         );
-
-
     }else{
-
       document
         .querySelectorAll(
           ".lp-reveal"
         )
         .forEach(
           function(el){
-
             el.classList.add(
               "on"
             );
-
           }
         );
-
     }
-
-
     var sticky =
       document.getElementById(
         "lpStickyCta"
       );
-
-
     if(sticky){
-
       var lastY = 0;
-
-
       window.addEventListener(
         "scroll",
         function(){
-
           var y =
             window.scrollY;
-
-
           if(
             y > 500 &&
             y > lastY
           ){
-
             sticky.classList.add(
               "show"
             );
-
-
           }else if(
             y < 400 ||
             y < lastY - 30
           ){
-
             sticky.classList.remove(
               "show"
             );
-
           }
-
-
           lastY = y;
-
         },
         {
           passive:true
         }
       );
-
     }
-
-
     if(
       typeof fbq ===
       "function"
     ){
-
       fbq(
         "track",
         "ViewContent",
@@ -6204,47 +3881,31 @@ var LP_SCENTS = [
           content_ids:[
             LP_PRODUCT.id
           ],
-
           content_name:
             LP_PRODUCT.name,
-
           content_type:
             "product",
-
           value:
             Number(
               LP_PRODUCT.price
             ) || 0,
-
           currency:"EGP"
         }
       );
-
     }
-
   }
-
-
   if(
     document.readyState ===
     "loading"
   ){
-
     document.addEventListener(
       "DOMContentLoaded",
       init
     );
-
   }else{
-
     init();
-
   }
-
 })();
-
 </script>
-
-
 </body>
 </html>
