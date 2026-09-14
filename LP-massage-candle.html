@@ -5,6 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>شمعة المساج المانديلا | سبا دافئ في بيتك — VelaLight</title>
 <meta name="description" content="شمعة المساج المانديلا من VelaLight: تشعل كشمعة ثم تتحول إلى زيت مساج دافئ بتركيبة غنية بالزيوت والزبدة. 375 ج بدل 475 ج مع تغليف هدايا مجاني.">
+
+<!-- Meta Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+
+  fbq('init', '1377896053806991');
+  fbq('track', 'PageView');
+</script>
+
+<noscript>
+  <img
+    height="1"
+    width="1"
+    style="display:none"
+    src="https://www.facebook.com/tr?id=1377896053806991&ev=PageView&noscript=1"
+  />
+</noscript>
+<!-- End Meta Pixel Code -->
 <link rel="stylesheet" href="style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3491,28 +3516,6 @@ var LP_SCENTS = [
           String(it.scent || "") ===
           String(scent);
       });
-    if(
-      typeof fbq ===
-      "function"
-    ){
-      fbq(
-        "track",
-        "AddToCart",
-        {
-          content_ids:[
-            LP_PRODUCT.id
-          ],
-          content_name:
-            LP_PRODUCT.name,
-          content_type:
-            "product",
-          value:
-            Number(LP_PRODUCT.price) *
-            qty,
-          currency:"EGP"
-        }
-      );
-    }
     return (
       wasAdded ||
       added !== false
