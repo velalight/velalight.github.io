@@ -35,6 +35,16 @@
 </noscript>
 <!-- ═══ End Tracking Codes ═══ -->
 
+<!-- ═══ Microsoft Clarity ═══ -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ymqh3iztvs");
+</script>
+<!-- ═══ End Microsoft Clarity ═══ -->
+
 <!-- ═══ Preconnect & Fonts ═══ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -309,6 +319,42 @@
 </footer>
 
 <div id="toasts"></div>
+
+<!-- ═══════════════════════════════════════════════
+     PRODUCT SCHEMA + ITEMLIST + BREADCRUMB
+     يحقن Schema لكل منتج بعد تحميل البيانات
+     ═══════════════════════════════════════════════ -->
+<script>
+(function(){
+  "use strict";
+  var tries = 0, maxTries = 40;
+  var timer = setInterval(function(){
+    tries++;
+    if (typeof window.injectAllProductSchemas === "function" 
+        && typeof ALL_PRODUCTS !== "undefined" 
+        && Array.isArray(ALL_PRODUCTS) 
+        && ALL_PRODUCTS.length > 0) {
+      try {
+        window.injectAllProductSchemas(ALL_PRODUCTS);
+        if (window.injectItemListSchema) {
+          window.injectItemListSchema(ALL_PRODUCTS, "مجموعة VelaLight الكاملة");
+        }
+        if (window.injectBreadcrumbSchema) {
+          window.injectBreadcrumbSchema();
+        }
+        console.log("✅ Product Schemas injected:", ALL_PRODUCTS.length);
+        clearInterval(timer);
+      } catch(e) {
+        console.warn("⚠️ Schema injection failed:", e);
+      }
+    }
+    if (tries >= maxTries) {
+      console.warn("⚠️ Schema injection timeout");
+      clearInterval(timer);
+    }
+  }, 500);
+})();
+</script>
 
 <!-- ═══ SCRIPTS ═══ -->
 <script src="data.js"></script>
