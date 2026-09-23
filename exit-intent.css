@@ -1,0 +1,159 @@
+/* ═══════════════════════════════════════════════
+   EXIT INTENT POPUP — عرض خاص لتقليل الـ Drop-off
+   ═══════════════════════════════════════════════ */
+.vl-exit-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(26,21,18,.75);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  z-index:999999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:1.5rem;
+  opacity:0;
+  transition:opacity .35s ease;
+}
+.vl-exit-overlay.show{
+  display:flex;
+  opacity:1;
+}
+.vl-exit-box{
+  background:linear-gradient(160deg,#fffcf9 0%,#fdf5ed 100%);
+  border-radius:24px;
+  padding:2.2rem 1.8rem;
+  max-width:420px;
+  width:100%;
+  text-align:center;
+  box-shadow:0 25px 70px rgba(0,0,0,.35);
+  border:2px solid rgba(212,175,55,.35);
+  position:relative;
+  transform:scale(.9) translateY(20px);
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+.vl-exit-overlay.show .vl-exit-box{
+  transform:scale(1) translateY(0);
+}
+.vl-exit-close{
+  position:absolute;
+  top:10px;
+  inset-inline-end:10px;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:rgba(0,0,0,.06);
+  border:none;
+  color:#8b6f47;
+  font-size:1.1rem;
+  cursor:pointer;
+  display:grid;
+  place-items:center;
+  transition:.25s;
+}
+.vl-exit-close:hover{
+  background:rgba(0,0,0,.12);
+  transform:rotate(90deg);
+}
+.vl-exit-icon{
+  font-size:3.2rem;
+  margin-bottom:.6rem;
+  animation:vlExitBounce 1.4s ease-in-out infinite;
+  display:inline-block;
+  filter:drop-shadow(0 6px 12px rgba(212,175,55,.35));
+}
+@keyframes vlExitBounce{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-10px) rotate(3deg)}
+}
+.vl-exit-title{
+  font-family:'El Messiri',serif;
+  font-size:1.5rem;
+  color:#1a1512;
+  margin:0 0 .6rem;
+  line-height:1.3;
+}
+.vl-exit-desc{
+  color:#5a4a3a;
+  font-size:.95rem;
+  margin:0 0 1.2rem;
+  line-height:1.6;
+}
+.vl-exit-desc b{
+  color:#b8863f;
+  font-weight:800;
+  font-size:1.05rem;
+}
+.vl-exit-code{
+  background:linear-gradient(135deg,#fffaf0,#fff5e0);
+  border:2px dashed #d4af37;
+  border-radius:12px;
+  padding:.9rem 1.2rem;
+  font-family:monospace;
+  font-size:1.4rem;
+  font-weight:900;
+  color:#b8863f;
+  letter-spacing:2px;
+  margin-bottom:.8rem;
+  user-select:all;
+  cursor:pointer;
+}
+.vl-exit-copy{
+  background:transparent;
+  border:none;
+  color:#8b6f47;
+  font-size:.82rem;
+  font-weight:600;
+  cursor:pointer;
+  margin-bottom:1rem;
+  padding:.4rem;
+  text-decoration:underline;
+  transition:.2s;
+}
+.vl-exit-copy:hover{
+  color:#b8863f;
+}
+.vl-exit-cta{
+  display:block;
+  background:linear-gradient(135deg,#1a1512,#2a1c0b);
+  color:#fff;
+  padding:1rem;
+  border-radius:14px;
+  text-decoration:none;
+  font-weight:800;
+  font-size:1rem;
+  margin-bottom:.7rem;
+  box-shadow:0 10px 24px rgba(26,21,18,.25);
+  transition:transform .25s,box-shadow .25s;
+}
+.vl-exit-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 30px rgba(26,21,18,.35);
+}
+.vl-exit-no{
+  background:transparent;
+  border:none;
+  color:#8a7a64;
+  font-size:.78rem;
+  cursor:pointer;
+  padding:.3rem;
+  transition:.2s;
+}
+.vl-exit-no:hover{
+  color:#5a4a3a;
+}
+
+@media (max-width:480px){
+  .vl-exit-box{padding:1.8rem 1.4rem;border-radius:20px}
+  .vl-exit-icon{font-size:2.6rem}
+  .vl-exit-title{font-size:1.25rem}
+  .vl-exit-desc{font-size:.88rem}
+  .vl-exit-code{font-size:1.2rem;padding:.75rem 1rem}
+  .vl-exit-cta{padding:.85rem;font-size:.92rem}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .vl-exit-icon{animation:none}
+  .vl-exit-box{transition:none}
+  .vl-exit-overlay{transition:none}
+}
