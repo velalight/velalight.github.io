@@ -31,20 +31,61 @@ function normalizeWhatsApp(phone){
   return p;
 }
 
-/* ═══ Analytics (unchanged) ═══ */
+/* ═══ Analytics — idempotent bootstrap ═══
+   يمنع تكرار PageView عندما تضع الصفحة كود التتبع inline
+   وتبقي التتبع فعالًا في الصفحات التي تعتمد على data.js فقط. */
 (function(){
-  if(CFG.GA4_ID.indexOf("G-")===0 && CFG.GA4_ID!=="G-XXXXXXXXXX"){
-    var s=document.createElement("script");s.async=1;s.src="https://www.googletagmanager.com/gtag/js?id="+CFG.GA4_ID;document.head.appendChild(s);
-    window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};
-    gtag("js",new Date());gtag("config",CFG.GA4_ID);
+  if(window.__vlAnalyticsInitialized) return;
+
+  const hasGtag = typeof window.gtag === "function" ||
+    !!document.querySelector('script[src*="googletagmanager.com/gtag/js"]');
+  const hasFbq = typeof window.fbq === "function" && window.fbq.loaded === true;
+  const hasTiktok = !!window.ttq;
+
+  if(!hasGtag && CFG.GA4_ID.indexOf("G-")===0 && CFG.GA4_ID!=="G-XXXXXXXXXX"){
+    const script=document.createElement("script");
+    script.async=true;
+    script.src="https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(CFG.GA4_ID);
+    document.head.appendChild(script);
+    window.dataLayer=window.dataLayer||[];
+    window.gtag=function(){window.dataLayer.push(arguments)};
+    window.gtag("js",new Date());
+    window.gtag("config",CFG.GA4_ID);
   }
-  if(CFG.META_PIXEL_ID.indexOf("YOUR_")!==0){
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
-    fbq("init",CFG.META_PIXEL_ID);fbq("track","PageView");
+
+  if(!hasFbq && CFG.META_PIXEL_ID.indexOf("YOUR_")!==0){
+    !function(f,b,e,v,n,t,s){
+      if(f.fbq)return;
+      n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=true;n.version="2.0";n.queue=[];
+      t=b.createElement(e);t.async=true;t.src=v;
+      s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);
+    }(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+    window.fbq("init",CFG.META_PIXEL_ID);
+    window.fbq("track","PageView");
   }
-  if(CFG.TIKTOK_PIXEL_ID.indexOf("YOUR_")!==0){
-    !function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};ttq.load(CFG.TIKTOK_PIXEL_ID);ttq.page();}(window,document,"ttq");
+
+  if(!hasTiktok && CFG.TIKTOK_PIXEL_ID.indexOf("YOUR_")!==0){
+    !function(w,d,t){
+      w.TiktokAnalyticsObject=t;
+      var ttq=w[t]=w[t]||[];
+      ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];
+      ttq.setAndDefer=function(obj,method){obj[method]=function(){obj.push([method].concat(Array.prototype.slice.call(arguments,0)))}};
+      for(var i=0;i<ttq.methods.length;i++) ttq.setAndDefer(ttq,ttq.methods[i]);
+      ttq.load=function(id,options){
+        var url="https://analytics.tiktok.com/i18n/pixel/events.js";
+        ttq._i=ttq._i||{};ttq._i[id]=[];ttq._i[id]._u=url;
+        ttq._t=ttq._t||{};ttq._t[id]=+new Date;ttq._o=ttq._o||{};ttq._o[id]=options||{};
+        var script=d.createElement("script");script.type="text/javascript";script.async=true;
+        script.src=url+"?sdkid="+encodeURIComponent(id)+"&lib="+t;
+        var first=d.getElementsByTagName("script")[0];first.parentNode.insertBefore(script,first);
+      };
+      ttq.load(CFG.TIKTOK_PIXEL_ID);ttq.page();
+    }(window,document,"ttq");
   }
+
+  window.__vlAnalyticsInitialized=true;
 })();
 
 function track(ev,d={}){
@@ -70,7 +111,7 @@ const CDN = (u, options = {}) => {
     
     // 🔥 التحسين الجذري: استخدام jsDelivr CDN لسرعة تحميل عالمية
     // الصيغة: https://cdn.jsdelivr.net/gh/username/repo@branch/path/to/file
-    return `https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/${u}?v=${IMG_CACHE_VERSION}`;
+    return `https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/${u}${String(u).includes("?") ? "&" : "?"}v=${IMG_CACHE_VERSION}`;
 };
 
 function toast(m){

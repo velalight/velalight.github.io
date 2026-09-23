@@ -1,55 +1,121 @@
-const CACHE_NAME = 'velalight-v5-final'; // هذا الرقم يضمن مسح أي كاش قديم عالق لمرة واحدة وأخيرة
-const ASSETS = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/mobile-luxury-fix.css',
-  '/app.js',
-  '/data.js'
+/*
+ * VelaLight Service Worker
+ * استراتيجية الكاش:
+ * - HTML/CSS/JS: الشبكة أولاً لضمان ظهور التحديثات فورًا.
+ * - الصور: الشبكة أولاً مع fallback للكاش عند انقطاع الاتصال، بدون تخزين صور جديدة.
+ * - Firebase والطلبات الخارجية: لا يتدخل فيها Service Worker.
+ */
+
+const CACHE_NAME = "velalight-v6-stable";
+
+const APP_SHELL = [
+  "/",
+  "/index.html",
+  "/style.css",
+  "/mobile-luxury-fix.css",
+  "/app.js",
+  "/data.js",
+  "/manifest.json"
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
+const isHttpRequest = request => request.url.startsWith("http://") || request.url.startsWith("https://");
+const isSameOrigin = request => new URL(request.url).origin === self.location.origin;
+const isFirebaseRequest = url => /firebase|firestore|firebasestorage/i.test(url);
+const isImageRequest = request => request.destination === "image" || /\.(avif|gif|jpe?g|png|svg|webp)(\?.*)?$/i.test(new URL(request.url).pathname);
+const isStaticAsset = request => /\.(css|js|json|html|webmanifest)(\?.*)?$/i.test(new URL(request.url).pathname);
+
+self.addEventListener("install", event => {
+  event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(c => c.addAll(ASSETS))
+      .then(cache => cache.addAll(APP_SHELL))
       .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(k => k !== CACHE_NAME)
-            .map(k => caches.delete(k)) // مسح كل الكاش القديم نهائياً
-      )
-    ).then(() => self.clients.claim())
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      ))
+      .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', e => {
-  // 1. تجاهل طلبات Firebase تماماً
-  if (e.request.url.includes('firebase') || e.request.url.includes('firestore') || e.request.url.includes('firebasestorage')) {
-    return;
+self.addEventListener("message", event => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
   }
-  
-  // 2. الحل الجذري: منع تخزين أو قراءة أي صورة من الكاش نهائياً
-  if (e.request.destination === 'image' || e.request.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) {
-    e.respondWith(
-      fetch(e.request, { cache: 'no-store' }) // يجبر المتصفح على جلب الصورة الجديدة من السيرفر دائماً
-    );
+});
+
+self.addEventListener("fetch", event => {
+  const request = event.request;
+
+  // لا نتعامل مع POST أو أي طريقة غير GET.
+  if (request.method !== "GET") return;
+  if (!isHttpRequest(request)) return;
+
+  const url = request.url;
+
+  // Firebase وFirestore وStorage يجب أن تظل تحت إدارة خدماتها الأصلية.
+  if (isFirebaseRequest(url)) return;
+
+  // لا نعترض طلبات CDN أو Google Fonts أو أي نطاق خارجي.
+  if (!isSameOrigin(request)) return;
+
+  if (isImageRequest(request)) {
+    event.respondWith(networkImageWithOfflineFallback(request));
     return;
   }
 
-  // 3. تخزين ملفات الموقع الأساسية (HTML, CSS, JS) فقط للسرعة
-  e.respondWith(
-    fetch(e.request, { cache: 'no-cache' })
-      .then(res => {
-        if (!res || res.status !== 200 || res.type !== 'basic') return res;
-        const clone = res.clone();
-        caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-        return res;
-      })
-      .catch(() => caches.match(e.request))
-  );
+  if (request.mode === "navigate") {
+    event.respondWith(networkNavigationWithOfflineFallback(request));
+    return;
+  }
+
+  if (isStaticAsset(request)) {
+    event.respondWith(networkAssetWithOfflineFallback(request));
+  }
 });
+
+async function networkNavigationWithOfflineFallback(request) {
+  try {
+    const response = await fetch(request, { cache: "no-store" });
+    if (isCacheableResponse(response)) {
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    return (await caches.match(request)) || (await caches.match("/index.html"));
+  }
+}
+
+async function networkAssetWithOfflineFallback(request) {
+  try {
+    const response = await fetch(request, { cache: "no-store" });
+    if (isCacheableResponse(response)) {
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    return caches.match(request);
+  }
+}
+
+async function networkImageWithOfflineFallback(request) {
+  try {
+    // لا نحفظ صورًا جديدة داخل Service Worker، حتى لا تبقى الصور القديمة عالقة.
+    return await fetch(request, { cache: "no-store" });
+  } catch (error) {
+    // إذا كانت الصورة موجودة في كاش سابق، نستخدمها فقط كحل للطوارئ.
+    return caches.match(request);
+  }
+}
+
+function isCacheableResponse(response) {
+  return Boolean(response && response.status === 200 && response.type === "basic");
+}

@@ -1591,6 +1591,13 @@ foot_orders: "📦 My Orders",
   });
 })();
 
+/* ═══ Safe text rendering helper ═══ */
+function vlEscapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g, function(char){
+    return {"&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#039;"}[char];
+  });
+}
+
 /* ═══════════════════════════════════════════════════════════
    ✨ INIT
    ═══════════════════════════════════════════════════════════ */
@@ -1645,7 +1652,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     renderScents();
-    renderFAQ();
+    const faqRoot = document.getElementById("faqWrap");
+    if(!faqRoot || !faqRoot.hasAttribute("data-reveal")) renderFAQ();
     initProductRealtimeSync();
     requestIdle(() => prefetchProductPages());
     
@@ -1657,7 +1665,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (isProductsPage && typeof renderProductsPage === "function") renderProductsPage();
       else if (!isProductPage) { renderChips(); renderProducts(); }
       renderScents();
-      renderFAQ();
+      const faqRoot = document.getElementById("faqWrap");
+      if(!faqRoot || !faqRoot.hasAttribute("data-reveal")) renderFAQ();
     } else {
       if (grid && !isProductPage) grid.innerHTML = `<div class="empty">⚠️ تعذر تحميل المنتجات، يرجى التحقق من اتصال الإنترنت</div>`;
     }
@@ -1883,7 +1892,8 @@ function initLang(){
     else if (isReviewsPage && typeof renderReviewsPage === "function") renderReviewsPage();
     else { renderChips(); renderProducts(); }
     renderScents();
-    renderFAQ();
+    const faqRoot = document.getElementById("faqWrap");
+    if(!faqRoot || !faqRoot.hasAttribute("data-reveal")) renderFAQ();
     fillCitySelect(document.getElementById("accCity"));
     fillCitySelect(document.getElementById("coCity"));
     fillCartForm();
@@ -1949,7 +1959,10 @@ function applyI18n(){
     }
   }
   const faqWrap=document.getElementById("faqWrap");
-  if(faqWrap&&typeof renderFAQ==="function"){ renderFAQ(); }
+  // index.html owns the enhanced FAQ when the reveal marker is present.
+  if(faqWrap && !faqWrap.hasAttribute("data-reveal") && typeof renderFAQ==="function"){
+    renderFAQ();
+  }
 }
 
 function initMarquee(){}
@@ -1970,22 +1983,37 @@ function initEmbers(){
 }
 
 function initReveal(){
+  // index.html has its own data-reveal observer. Do not run two observers
+  // against elements that use the new system, otherwise .on and .is-visible
+  // can race and reveal content too early.
+  const legacySelector = ".rv:not([data-reveal]):not([data-reveal-stagger])";
+  const legacyElements = document.querySelectorAll(legacySelector);
+
+  if(window.refreshReveal){
+    try { window.refreshReveal(); } catch(e) {}
+  }
+
+  if(!legacyElements.length) return;
+
   if(!('IntersectionObserver' in window)) {
-    document.querySelectorAll(".rv").forEach(el => el.classList.add("on"));
+    legacyElements.forEach(el => el.classList.add("on"));
     return;
   }
-  const io=new IntersectionObserver(es=>{
-    es.forEach(e=>{
-      if(e.isIntersecting){
-        e.target.classList.add("on");
-        io.unobserve(e.target);
-      }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(!entry.isIntersecting) return;
+      entry.target.classList.add("on");
+      io.unobserve(entry.target);
     });
-  },{threshold:.05, rootMargin:"0px 0px 100px 0px"});
-  
-  document.querySelectorAll(".rv").forEach(el=>{
-    if (el.getBoundingClientRect().top < window.innerHeight + 100) el.classList.add("on");
-    else io.observe(el);
+  }, {threshold:.05, rootMargin:"0px 0px 100px 0px"});
+
+  legacyElements.forEach(el => {
+    if(el.getBoundingClientRect().top < window.innerHeight + 100){
+      el.classList.add("on");
+    } else {
+      io.observe(el);
+    }
   });
 }
 
@@ -2621,10 +2649,10 @@ function renderFAQ(){
     item.className = "faq-item";
     item.innerHTML = `
       <button class="faq-q" type="button" aria-expanded="false">
-        <span>${question}</span>
+        <span>${vlEscapeHTML(question)}</span>
         <span class="faq-icon" aria-hidden="true">+</span>
       </button>
-      <div class="faq-a"><div>${answer}</div></div>
+      <div class="faq-a"><div>${vlEscapeHTML(answer)}</div></div>
     `;
     frag.appendChild(item);
   });
