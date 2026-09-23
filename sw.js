@@ -15,9 +15,13 @@ const APP_SHELL = [
   "/mobile-luxury-fix.css",
   "/app.js",
   "/data.js",
-  "/manifest.json"
+  "/manifest.json",
+  "/pwa.css",
+  "/pwa.js",
+  "/exit-intent.css",
+  "/exit-intent.js",
+  "/ga4-events.js"
 ];
-
 const isHttpRequest = request => request.url.startsWith("http://") || request.url.startsWith("https://");
 const isSameOrigin = request => new URL(request.url).origin === self.location.origin;
 const isFirebaseRequest = url => /firebase|firestore|firebasestorage/i.test(url);
