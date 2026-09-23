@@ -41,6 +41,15 @@
   <img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=1377896053806991&ev=PageView&noscript=1"/>
 </noscript>
+
+<!-- ═══ Microsoft Clarity ═══ -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ymqh3iztvs");
+</script>
   
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -224,7 +233,6 @@
   line-height:1.25;
 }
 
-/* ═══ Status Row: Badge + Stock في سطر واحد ═══ */
 .pd-status-row{
   display:flex;
   align-items:center;
@@ -242,7 +250,6 @@
   margin:0 !important;
 }
 
-/* ═══ Price ═══ */
 .pd-price{
   display:flex;
   align-items:baseline;
@@ -272,7 +279,6 @@
   border:1px solid rgba(21,87,36,.15);
 }
 
-/* ═══ Rating Summary ═══ */
 .pd-rating{
   display:flex;
   align-items:center;
@@ -311,7 +317,6 @@
   box-shadow:0 4px 12px rgba(217,171,95,.35);
 }
 
-/* ═══ Stock Badge ═══ */
 .stock-badge{
   display:inline-flex;
   align-items:center;
@@ -326,7 +331,6 @@
 .stock-badge.low{background:#fff4e6;color:#d97706}
 .stock-badge.out{background:#fee;color:#e74c3c}
 
-/* ═══ Description ═══ */
 .pd-desc{
   color:var(--mut);
   line-height:1.85;
@@ -338,7 +342,6 @@
   border-inline-start:3px solid var(--gold);
 }
 
-/* ═══ Scent Picker ═══ */
 .opt-title{
   display:flex;
   align-items:center;
@@ -400,7 +403,6 @@
   font-size:.9rem;
 }
 
-/* ═══ Buy Row: Qty + Actions في سطر واحد ═══ */
 .pd-buy-row{
   display:flex;
   align-items:center;
@@ -481,7 +483,6 @@
   box-shadow:0 8px 25px rgba(46,139,69,.4);
 }
 
-/* ═══ Wishlist Button (مع نص) ═══ */
 .wish-btn{
   display:flex;
   align-items:center;
@@ -507,7 +508,13 @@
 .wish-btn:hover{border-color:var(--gold);transform:translateY(-2px)}
 .wish-btn.on{background:#ffe8e8;color:#e74c3c;border-color:#e74c3c}
 
-/* ═══ Trust Badges ═══ */
+/* ═══ Social Proof Snippet ═══ */
+.pd-social-proof{
+  position:relative;
+  animation:pdFadeProof .5s ease;
+}
+@keyframes pdFadeProof{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
 .trust-badges{
   display:flex;
   justify-content:space-around;
@@ -529,7 +536,6 @@
   font-weight:600;
 }
 
-/* ═══ Payment Info ═══ */
 .pay-info{
   background:linear-gradient(135deg,var(--panel) 0%,var(--panel2) 100%);
   border:1px solid var(--line);
@@ -548,7 +554,6 @@
 .pay-info .pay-title{font-weight:700;font-size:.85rem;color:var(--dark);margin-bottom:.15rem}
 .pay-info .pay-desc{font-size:.76rem;color:var(--dim);line-height:1.5}
 
-/* ═══ Handmade Note ═══ */
 .handmade-note{
   display:flex;
   align-items:center;
@@ -563,7 +568,6 @@
 }
 .handmade-note .hm-icon{font-size:1.2rem;flex-shrink:0}
 
-/* ═══ Share Row ═══ */
 .share-row{
   display:flex;
   align-items:center;
@@ -593,7 +597,6 @@
   transform:translateY(-1px);
 }
 
-/* ═══ Tabs ═══ */
 .pd-tabs{margin-top:3rem;border-top:1px solid var(--line);padding-top:2rem;scroll-margin-top:80px}
 .tabs-nav{
   display:flex;
@@ -629,7 +632,6 @@
   to{opacity:1;transform:translateY(0)}
 }
 
-/* ═══ Specs Table ═══ */
 .specs-table{
   width:100%;
   border-collapse:collapse;
@@ -651,7 +653,6 @@
 }
 .specs-table td:last-child{color:var(--dark)}
 
-/* ═══ Reviews ═══ */
 .rv-item{
   background:var(--panel);
   border:1px solid var(--line);
@@ -703,7 +704,6 @@
 .starpick button.lit{color:#f1c40f;transform:scale(1.15);text-shadow:0 0 14px rgba(241,196,15,.5)}
 .starpick button:hover{color:var(--gold)}
 
-/* ═══ Related Products ═══ */
 .rel-section{margin-top:3rem}
 .rel-grid{
   display:grid;
@@ -712,7 +712,6 @@
   margin-top:1.5rem;
 }
 
-/* ═══ Skeleton ═══ */
 .skel{
   background:linear-gradient(90deg,var(--panel2) 0%,var(--panel) 50%,var(--panel2) 100%);
   background-size:200% 100%;
@@ -724,7 +723,6 @@
   100%{background-position:-200% 0}
 }
 
-/* ═══ Zoom Modal ═══ */
 .zoom-modal{
   position:fixed;
   inset:0;
@@ -832,6 +830,72 @@
   border-radius: 0 0 22px 22px;
 }
 
+/* ═══ STICKY MOBILE BUY BAR ═══ */
+.pd-sticky-bar{
+  display:none;
+  position:fixed;
+  bottom:0;
+  inset-inline:0;
+  background:rgba(255,255,255,.98);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-top:2px solid var(--gold);
+  padding:.65rem .9rem calc(.65rem + env(safe-area-inset-bottom));
+  z-index:80;
+  box-shadow:0 -8px 24px rgba(100,70,30,.15);
+  align-items:center;
+  gap:.6rem;
+  transform:translateY(110%);
+  transition:transform .35s cubic-bezier(.2,.8,.25,1);
+}
+.pd-sticky-bar.show{transform:translateY(0)}
+.pd-sticky-info{
+  flex:0 0 auto;
+  display:flex;
+  flex-direction:column;
+  line-height:1.15;
+  min-width:70px;
+}
+.pd-sticky-info .pr{
+  font-family:var(--fd);
+  font-size:1.05rem;
+  font-weight:800;
+  color:var(--gold2);
+  letter-spacing:-.3px;
+}
+.pd-sticky-info .old{
+  font-size:.68rem;
+  color:var(--dim);
+  text-decoration:line-through;
+}
+.pd-sticky-btn{
+  flex:1;
+  background:linear-gradient(135deg,var(--gold),#b8863f);
+  color:#fff;
+  border:none;
+  padding:.85rem 1rem;
+  border-radius:12px;
+  font-weight:800;
+  font-size:.92rem;
+  font-family:inherit;
+  box-shadow:0 4px 14px rgba(217,171,95,.45);
+  cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+  -webkit-tap-highlight-color:transparent;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.pd-sticky-btn:active{transform:scale(.97)}
+.pd-sticky-btn:disabled{opacity:.5;cursor:not-allowed;background:#aaa}
+@media(max-width:768px){
+  .pd-sticky-bar{display:flex}
+  body.has-sticky-bar{padding-bottom:80px}
+}
+@media(min-width:769px){
+  .pd-sticky-bar{display:none !important}
+}
+
 /* ═══ Responsive ═══ */
 @media(max-width:960px){
   .pd-grid{grid-template-columns:1fr;gap:2rem}
@@ -848,9 +912,9 @@
   .zoom-counter{bottom:16px;font-size:.8rem;padding:.35rem .8rem}
   .trust-badges{gap:.3rem}
   .trust-badges span{font-size:.62rem}
+  .pd-social-proof{font-size:.78rem;padding:.6rem .85rem !important}
 }
 
-/* ═══ Mobile Buy Row Optimization ═══ */
 @media(max-width:600px){
   .pd-buy-row{gap:.35rem}
   .qty-label{font-size:.78rem;font-weight:600}
@@ -995,36 +1059,40 @@
           <div class="pd-thumbs" id="pdThumbs"></div>
         </div>
 
-        <!-- ═══════════════════════════════════════════════════════
-             ✨ INFO PANEL — ترتيب مضغوط محسّن
-             ═══════════════════════════════════════════════════════ -->
         <div class="pd-info">
 
           <h1 id="pdName" class="fd"></h1>
 
           <div class="pd-rating" id="pdRatingSummary"></div>
 
-          <!-- ═══ Status Row: Badge + Stock في سطر واحد ═══ -->
           <div class="pd-status-row">
             <div id="pdBadge"></div>
             <div id="pdStockInfo"></div>
           </div>
 
-          <!-- ═══ Price ═══ -->
           <div class="pd-price">
             <span class="price-main" id="pdPrice"></span>
             <del id="pdOld" style="display:none"></del>
             <span class="save-badge" id="pdSave" style="display:none"></span>
           </div>
 
-          <!-- ═══ Scent Picker ═══ -->
+          <!-- ═══ Social Proof Snippet ═══ -->
+          <div class="pd-social-proof" id="pdSocialProof" style="display:none;padding:.75rem 1rem;background:linear-gradient(135deg,#fdf5ed,#faf0e6);border:1px solid rgba(217,171,95,.35);border-radius:12px;font-size:.85rem;color:var(--mut);line-height:1.5;">
+            <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem;">
+              <span style="color:var(--gold);letter-spacing:1px;font-size:.95rem;">★★★★★</span>
+              <b id="pdSocialAvg" style="color:var(--gold2);font-family:var(--fd);font-size:1rem;">0.0</b>
+              <span id="pdSocialCount" style="font-size:.75rem;color:var(--dim);"></span>
+            </div>
+            <p id="pdSocialText" style="margin:0;font-style:italic;line-height:1.6;"></p>
+            <small id="pdSocialAuthor" style="display:block;margin-top:.25rem;color:var(--dim);font-weight:600;font-size:.75rem;"></small>
+          </div>
+
           <div class="opt-title">
             <span data-i18n="pd_scent_t">🌸 اختر العطر:</span>
             <span class="req-tag" data-i18n="pd_required">مطلوب</span>
           </div>
           <div class="scents-pick" id="pdScents"></div>
 
-          <!-- ═══ Buy Row: Qty + Actions في سطر واحد ═══ -->
           <div class="pd-buy-row">
             <div class="qty-wrap">
               <span class="qty-label" data-i18n="pd_qty_t">الكمية:</span>
@@ -1036,7 +1104,7 @@
             </div>
             <div class="pd-actions">
               <button class="btn" id="pdAddBtn" type="button" data-i18n="pd_add" style="background:linear-gradient(135deg,var(--gold),#b8863f);color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(217,171,95,.4);">🛍️ أضف للسلة</button>
-              <button class="btn wa" id="pdBuyBtn" type="button" data-i18n="pd_buy" style="font-weight:700; display: none;">💬 اطلب عبر واتساب</button>
+              <button class="btn wa" id="pdBuyBtn" type="button" data-i18n="pd_buy" style="font-weight:700;">💬 اطلب عبر واتساب</button>
               <button class="wish-btn" id="pdWishBtn" type="button" aria-label="إضافة إلى المفضلة" data-i18n-title="pd_wishlist" title="إضافة إلى المفضلة">
                 <span class="wish-icon">🤍</span>
                 <span class="wish-label">المفضلة</span>
@@ -1044,10 +1112,8 @@
             </div>
           </div>
 
-          <!-- ═══ Description ═══ -->
           <p class="pd-desc" id="pdDesc"></p>
 
-          <!-- ═══ Trust Badges ═══ -->
           <div class="trust-badges">
             <span data-i18n="pd_feat_1">🕯️ صناعة يدوية</span>
             <span data-i18n="pd_feat_2">🚚 توصيل سريع</span>
@@ -1055,7 +1121,6 @@
             <span data-i18n="pd_feat_4">💳 دفع آمن</span>
           </div>
           
-          <!-- ═══ Payment Info ═══ -->
           <div class="pay-info">
             <div class="pay-row">
               <span class="pay-icon">💳</span>
@@ -1085,7 +1150,6 @@
       </div>
     </div>
 
-    <!-- ═══ TABS ═══ -->
     <div class="pd-tabs" id="pdTabs">
       <div class="tabs-nav" id="tabsNav">
         <button class="on" data-tab="desc"><span data-i18n="pd_desc_tab">📝 الوصف</span></button>
@@ -1214,6 +1278,15 @@
 </footer>
 
 <div id="toasts"></div>
+
+<!-- ═══ Sticky Mobile Buy Bar ═══ -->
+<div class="pd-sticky-bar" id="pdStickyBar" aria-hidden="true">
+  <div class="pd-sticky-info">
+    <span class="pr" id="pdStickyPrice">—</span>
+    <del class="old" id="pdStickyOld" style="display:none"></del>
+  </div>
+  <button class="pd-sticky-btn" id="pdStickyAdd" type="button">🛍️ أضف للسلة</button>
+</div>
 
 <script src="data.js?v=9"></script>
 <script type="module" src="firebase.js"></script>
@@ -1855,6 +1928,130 @@ function showNotFound(){
   $("#pdNotFound").classList.remove("hidden"); 
 }
 
+/* ═══════════════════════════════════════════════════════════
+   ✨ CONVERSION BOOSTERS
+   - Sticky mobile buy bar
+   - Social proof snippet
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── 1) Sticky Mobile Buy Bar ─── */
+function initStickyBar(){
+  const stickyBar = document.getElementById("pdStickyBar");
+  const stickyPrice = document.getElementById("pdStickyPrice");
+  const stickyOld = document.getElementById("pdStickyOld");
+  const stickyAdd = document.getElementById("pdStickyAdd");
+  const mainAdd = document.getElementById("pdAddBtn");
+  const mainPrice = document.getElementById("pdPrice");
+  const mainOld = document.getElementById("pdOld");
+
+  if(!stickyBar || !mainAdd || !mainPrice) return;
+
+  function syncPrice(){
+    stickyPrice.textContent = mainPrice.textContent || "—";
+    if(mainOld && mainOld.style.display !== "none" && mainOld.textContent){
+      stickyOld.textContent = mainOld.textContent;
+      stickyOld.style.display = "inline";
+    } else {
+      stickyOld.style.display = "none";
+    }
+    if(mainAdd.disabled){
+      stickyAdd.disabled = true;
+      stickyAdd.textContent = "نفدت الكمية";
+    } else {
+      stickyAdd.disabled = false;
+      stickyAdd.textContent = "🛍️ أضف للسلة";
+    }
+  }
+  syncPrice();
+  setInterval(syncPrice, 800);
+
+  if("IntersectionObserver" in window){
+    const obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          stickyBar.classList.remove("show");
+          document.body.classList.remove("has-sticky-bar");
+          stickyBar.setAttribute("aria-hidden","true");
+        } else {
+          stickyBar.classList.add("show");
+          document.body.classList.add("has-sticky-bar");
+          stickyBar.setAttribute("aria-hidden","false");
+        }
+      });
+    }, { threshold: 0, rootMargin: "-120px 0px 0px 0px" });
+    obs.observe(mainAdd);
+  }
+
+  stickyAdd.addEventListener("click", function(){
+    if(mainAdd.disabled) return;
+    mainAdd.click();
+    stickyAdd.textContent = "✓ تمت الإضافة";
+    setTimeout(syncPrice, 700);
+  });
+}
+
+/* ─── 2) Social Proof Snippet ─── */
+function initSocialProof(){
+  const box = document.getElementById("pdSocialProof");
+  const avgEl = document.getElementById("pdSocialAvg");
+  const cntEl = document.getElementById("pdSocialCount");
+  const txtEl = document.getElementById("pdSocialText");
+  const authEl = document.getElementById("pdSocialAuthor");
+  if(!box) return;
+
+  function update(){
+    if(typeof P === "undefined" || !P) return;
+    if(typeof ALL_REVIEWS === "undefined" || !Array.isArray(ALL_REVIEWS)) return;
+
+    const revs = ALL_REVIEWS.filter(function(r){
+      return String(r.productSlug || r.pid || "") === String(P.id) && r.approved !== false;
+    });
+
+    if(!revs.length) return;
+
+    const avg = revs.reduce(function(a,r){ return a + Number(r.rating || 5); }, 0) / revs.length;
+    const lang = (typeof LANG !== "undefined") ? LANG : "ar";
+
+    avgEl.textContent = avg.toFixed(1);
+    cntEl.textContent = lang === "en"
+      ? "(" + revs.length + " reviews)"
+      : "(" + revs.length + " مراجعة)";
+
+    const best = revs.slice().sort(function(a,b){
+      const rA = Number(a.rating||5), rB = Number(b.rating||5);
+      if(rA !== rB) return rB - rA;
+      return (String(b.text||"").length) - (String(a.text||"").length);
+    })[0];
+
+    if(best && best.text){
+      const shortText = String(best.text).trim();
+      const display = shortText.length > 130 ? shortText.slice(0,130) + "…" : shortText;
+      txtEl.textContent = '"' + display + '"';
+      authEl.textContent = "— " + (best.name || (lang === "en" ? "Verified customer" : "عميل موثّق"));
+      box.style.display = "block";
+    }
+  }
+
+  let tries = 0;
+  const timer = setInterval(function(){
+    tries++;
+    update();
+    if(box.style.display === "block") clearInterval(timer);
+    if(tries >= 20) clearInterval(timer);
+  }, 600);
+}
+
+/* ─── Init boosters after main render ─── */
+function initBoosters(){
+  initStickyBar();
+  initSocialProof();
+}
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", function(){ setTimeout(initBoosters, 700); });
+} else {
+  setTimeout(initBoosters, 700);
+}
+
 })();
 </script>
 <script>
@@ -1890,6 +2087,7 @@ function showNotFound(){
   } else { setTimeout(applyProductTranslations, 100); }
 })();
 </script>
-  <script src="bottom-nav.js"></script>
+<script src="bottom-nav.js"></script>
+<script src="ga4-events.js" defer></script>
 </body>
 </html>
