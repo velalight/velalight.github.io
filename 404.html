@@ -3,45 +3,362 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, follow">
 <title>صفحة غير موجودة | VelaLight</title>
+<meta name="description" content="الصفحة اللي بتدور عليها مش موجودة. ارجع للرئيسية أو تصفح تشكيلة الشموع الفاخرة من VelaLight.">
 <meta name="theme-color" content="#faf6f0">
+<link rel="icon" href="velalight-wooden-luxury-set-3candles-detail.webp">
 <link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap">
 <style>
-  .nf-wrap{
-    min-height:80vh;
+  :root{
+    --nf-gold:#d4af37;
+    --nf-gold2:#b68d2e;
+    --nf-dark:#1a1512;
+    --nf-cream:#fffcf9;
+    --nf-mut:#7a6a5c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{overflow-x:hidden}
+  body{
+    font-family:'Tajawal',system-ui,-apple-system,sans-serif;
+    background:linear-gradient(160deg,#fdf9f4 0%,#f7ede0 100%);
+    color:var(--nf-dark);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ═══ Header مصغّر ═══ */
+  .nf-header{
+    padding:1.2rem 1.5rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    max-width:1200px;
+    margin:0 auto;
+    width:100%;
+  }
+  .nf-logo{
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    text-decoration:none;
+    color:var(--nf-dark);
+    font-family:'El Messiri',serif;
+    font-weight:700;
+    font-size:1.2rem;
+  }
+  .nf-logo .flame{
+    display:inline-block;
+    width:14px;height:20px;
+    background:radial-gradient(circle at 50% 30%,#fff5b8,#d4af37 60%,#b68d2e);
+    border-radius:50% 50% 45% 45%/60% 60% 40% 40%;
+    animation:nf-flick 1.5s ease-in-out infinite alternate;
+    box-shadow:0 0 14px rgba(212,175,55,.6);
+  }
+  .nf-home-link{
+    color:var(--nf-gold2);
+    text-decoration:none;
+    font-weight:600;
+    font-size:.9rem;
+    border:1px solid rgba(212,175,55,.4);
+    padding:.4rem .9rem;
+    border-radius:999px;
+    transition:.3s;
+  }
+  .nf-home-link:hover{background:var(--nf-gold);color:#fff;border-color:var(--nf-gold)}
+
+  /* ═══ Main ═══ */
+  .nf-main{
+    flex:1;
     display:grid;
     place-items:center;
     text-align:center;
-    padding:2rem;
+    padding:2rem 1.5rem 3rem;
+    max-width:720px;
+    margin:0 auto;
+    width:100%;
   }
+
   .nf-candle{
-    font-size:5rem;
-    animation:flick 1.7s ease-in-out infinite alternate;
+    font-size:clamp(4rem,12vw,6rem);
+    line-height:1;
+    margin-bottom:1.2rem;
+    display:inline-block;
+    animation:nf-flick 1.7s ease-in-out infinite alternate;
+    filter:drop-shadow(0 8px 20px rgba(212,175,55,.35));
+  }
+  @keyframes nf-flick{
+    0%{transform:scaleY(1) rotate(-2deg);filter:brightness(1)}
+    50%{transform:scaleY(1.12) rotate(2deg);filter:brightness(1.15)}
+    100%{transform:scaleY(.94) rotate(-1deg);filter:brightness(.95)}
+  }
+
+  .nf-badge{
+    display:inline-block;
+    background:rgba(212,175,55,.12);
+    color:var(--nf-gold2);
+    padding:.35rem 1rem;
+    border-radius:999px;
+    font-size:.8rem;
+    font-weight:700;
+    letter-spacing:.05em;
+    border:1px solid rgba(212,175,55,.25);
     margin-bottom:1rem;
   }
+
   .nf-title{
-    font-family:var(--fd);
-    font-size:clamp(2rem,5vw,3.5rem);
-    color:var(--gold2);
-    margin-bottom:.5rem;
+    font-family:'El Messiri',serif;
+    font-size:clamp(1.8rem,5vw,2.8rem);
+    line-height:1.2;
+    margin-bottom:.8rem;
+    color:var(--nf-dark);
   }
-  @keyframes flick{
-    0%{transform:scaleY(1) rotate(-2deg)}
-    50%{transform:scaleY(1.12) rotate(2deg)}
-    100%{transform:scaleY(.94) rotate(-1deg)}
+  .nf-title .nf-gradient{
+    background:linear-gradient(135deg,#b68d2e 0%,#d4af37 40%,#fff8dc 50%,#d4af37 60%,#b68d2e 100%);
+    background-size:200% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:nf-chroma 3s linear infinite;
+  }
+  @keyframes nf-chroma{to{background-position:200% center}}
+
+  .nf-lead{
+    color:var(--nf-mut);
+    font-size:1.05rem;
+    line-height:1.8;
+    margin-bottom:2rem;
+    max-width:520px;
+    margin-inline:auto;
+  }
+
+  /* ═══ Buttons ═══ */
+  .nf-actions{
+    display:flex;
+    gap:.8rem;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:2.5rem;
+  }
+  .nf-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:.4rem;
+    padding:.85rem 1.6rem;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:700;
+    font-size:.95rem;
+    transition:transform .3s ease, box-shadow .3s ease, background .3s ease;
+    border:none;
+    cursor:pointer;
+    min-height:48px;
+  }
+  .nf-btn-primary{
+    background:var(--nf-dark);
+    color:#fff;
+    box-shadow:0 10px 24px rgba(26,21,18,.15);
+  }
+  .nf-btn-primary:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 30px rgba(26,21,18,.25);
+  }
+  .nf-btn-gold{
+    background:linear-gradient(135deg,#d4af37,#b8863f);
+    color:#fff;
+    box-shadow:0 10px 24px rgba(212,175,55,.35);
+  }
+  .nf-btn-gold:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 30px rgba(212,175,55,.5);
+  }
+  .nf-btn-outline{
+    background:transparent;
+    color:var(--nf-dark);
+    border:1.5px solid rgba(26,21,18,.15);
+  }
+  .nf-btn-outline:hover{
+    border-color:var(--nf-gold);
+    color:var(--nf-gold2);
+    transform:translateY(-3px);
+  }
+
+  /* ═══ Quick Links ═══ */
+  .nf-links-title{
+    font-size:.85rem;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--nf-gold2);
+    margin-bottom:1rem;
+  }
+  .nf-links{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:.7rem;
+    max-width:600px;
+    margin:0 auto;
+  }
+  .nf-link-card{
+    background:#fff;
+    border:1px solid rgba(26,21,18,.06);
+    border-radius:14px;
+    padding:1rem .8rem;
+    text-decoration:none;
+    color:var(--nf-dark);
+    font-weight:600;
+    font-size:.9rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.4rem;
+    transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    box-shadow:0 4px 12px rgba(0,0,0,.04);
+  }
+  .nf-link-card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(212,175,55,.5);
+    box-shadow:0 12px 24px rgba(212,175,55,.15);
+  }
+  .nf-link-card .ico{
+    font-size:1.5rem;
+    line-height:1;
+  }
+
+  /* ═══ Footer ═══ */
+  .nf-footer{
+    text-align:center;
+    padding:1.5rem 1rem;
+    color:var(--nf-mut);
+    font-size:.8rem;
+    border-top:1px solid rgba(26,21,18,.06);
+  }
+  .nf-footer a{color:var(--nf-gold2);text-decoration:none;font-weight:600}
+  .nf-footer a:hover{text-decoration:underline}
+
+  /* ═══ WhatsApp Float ═══ */
+  .nf-wa{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    width:56px;height:56px;
+    background:#25d366;
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    box-shadow:0 6px 18px rgba(37,211,102,.4);
+    z-index:99;
+    transition:transform .3s ease, background .3s ease;
+  }
+  .nf-wa:hover{background:#128c7e;transform:scale(1.1)}
+  .nf-wa svg{width:28px;height:28px}
+
+  /* ═══ Mobile ═══ */
+  @media (max-width:600px){
+    .nf-header{padding:1rem}
+    .nf-main{padding:1.5rem 1rem 2.5rem}
+    .nf-lead{font-size:.95rem}
+    .nf-actions{flex-direction:column;align-items:stretch}
+    .nf-btn{width:100%;justify-content:center}
+    .nf-links{grid-template-columns:repeat(2,1fr);gap:.55rem}
+    .nf-link-card{padding:.8rem .5rem;font-size:.82rem}
+    .nf-link-card .ico{font-size:1.3rem}
+    .nf-wa{bottom:16px;left:16px;width:52px;height:52px}
+    .nf-wa svg{width:26px;height:26px}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .nf-candle,.nf-logo .flame,.nf-title .nf-gradient{animation:none}
+    .nf-btn,.nf-link-card,.nf-wa{transition:none}
   }
 </style>
 </head>
 <body>
-<div class="nf-wrap">
+
+<!-- ═══ Header ═══ -->
+<header class="nf-header">
+  <a href="/" class="nf-logo" aria-label="VelaLight - الرئيسية">
+    <span class="flame" aria-hidden="true"></span>
+    <span>VelaLight</span>
+  </a>
+  <a href="/" class="nf-home-link">← الرئيسية</a>
+</header>
+
+<!-- ═══ Main ═══ -->
+<main class="nf-main">
   <div>
-    <div class="nf-candle">🕯️</div>
-    <h1 class="nf-title">أوبس! الشمعة انطفأت</h1>
-    <p style="color:var(--mut);margin-bottom:1.5rem">
-      الصفحة اللي بتدور عليها مش موجودة، بس عندنا شموع تانية هتنورلك يومك
+    <div class="nf-candle" aria-hidden="true">🕯️</div>
+    <div class="nf-badge">خطأ 404</div>
+    <h1 class="nf-title">
+      أوبس! <span class="nf-gradient">الشمعة انطفأت</span>
+    </h1>
+    <p class="nf-lead">
+      الصفحة اللي بتدور عليها مش موجودة أو اتنقلت لمكان تاني.
+      بس متقلقش — عندنا شموع تانية هتنوّرلك يومك ✨
     </p>
-    <a href="/" class="btn">🏠 ارجع للرئيسية</a>
+
+    <!-- ═══ CTA Buttons ═══ -->
+    <div class="nf-actions">
+      <a href="/" class="nf-btn nf-btn-primary">🏠 الرئيسية</a>
+      <a href="/products.html" class="nf-btn nf-btn-gold">🛍️ تصفح الشموع</a>
+      <a href="https://wa.me/201223526105?text=مرحباً،%20أحتاج%20مساعدة%20في%20إيجاد%20صفحة%20على%20موقع%20VelaLight%20🕯️"
+         target="_blank" rel="noopener noreferrer"
+         class="nf-btn nf-btn-outline">💬 تواصل معنا</a>
+    </div>
+
+    <!-- ═══ Quick Links ═══ -->
+    <p class="nf-links-title">اكتشف المزيد</p>
+    <div class="nf-links">
+      <a href="/products.html" class="nf-link-card">
+        <span class="ico">🕯️</span>
+        <span>كل الشموع</span>
+      </a>
+      <a href="/#scents" class="nf-link-card">
+        <span class="ico">🌸</span>
+        <span>العطور</span>
+      </a>
+      <a href="/reviews.html" class="nf-link-card">
+        <span class="ico">💛</span>
+        <span>آراء العملاء</span>
+      </a>
+      <a href="/contact.html" class="nf-link-card">
+        <span class="ico">📞</span>
+        <span>تواصل معنا</span>
+      </a>
+      <a href="/#about-us" class="nf-link-card">
+        <span class="ico">📖</span>
+        <span>من نحن</span>
+      </a>
+      <a href="/#faq-section" class="nf-link-card">
+        <span class="ico">❓</span>
+        <span>الأسئلة الشائعة</span>
+      </a>
+    </div>
   </div>
-</div>
+</main>
+
+<!-- ═══ Footer ═══ -->
+<footer class="nf-footer">
+  © 2026 <a href="/">VelaLight</a> — جميع الحقوق محفوظة
+</footer>
+
+<!-- ═══ WhatsApp Float ═══ -->
+<a href="https://wa.me/201223526105?text=مرحباً،%20أرغب%20في%20الاستفسار%20عن%20منتجات%20VelaLight%20🕯️"
+   class="nf-wa"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="تواصل معنا عبر واتساب">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" aria-hidden="true">
+    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+  </svg>
+</a>
+
 </body>
 </html>
