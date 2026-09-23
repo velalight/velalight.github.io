@@ -70,6 +70,9 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="mobile-luxury-fix.css">
 
+<!-- ═══ AOS — Scroll Reveal (تأثيرات الظهور مع التمرير) ═══ -->
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
 <!-- ═══ Lightbox2 (لتكبير الصور) ═══ -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
@@ -92,6 +95,15 @@
 </noscript>
 
 <link rel="manifest" href="manifest.json">
+
+<!-- ═══ AOS Safety: احترام تفضيل تقليل الحركة ═══ -->
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    [data-aos] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  }
+  /* تجنب الوميض قبل ما تحمّل AOS */
+  html.aos-loading [data-aos]:not(.aos-animate) { opacity: 0; }
+</style>
 
 <!-- ═══ Structured Data ═══ -->
 <script type="application/ld+json">
@@ -251,7 +263,7 @@
   </div>
   <div class="vl-chroma-container">
     <div class="vl-chroma-grid">
-      <div class="vl-chroma-content">
+      <div class="vl-chroma-content" data-aos="fade-left" data-aos-duration="1000">
         <div class="vl-badge-premium" data-i18n="hero_eyebrow">✦ شموع يدوية فاخرة</div>
         <h1 class="vl-chroma-title">
           <span data-i18n="hero_t1">ضوءٌ</span>
@@ -264,7 +276,7 @@
           
         </div>
       </div>
-      <div class="vl-chroma-visual">
+      <div class="vl-chroma-visual" data-aos="zoom-in" data-aos-duration="1100" data-aos-delay="150">
         <div class="visual-wrapper">
           <div class="visual-glow"></div>
 <img src="velalight-wooden-luxury-set-3candles-detail.webp" alt="مجموعة الشموع الخشبية الفاخرة من فيلا لايت" class="hero-img-main" width="900" height="900" fetchpriority="high" decoding="async" loading="eager">
@@ -344,14 +356,14 @@
      ═══════════════════════════════════════════════ -->
 <section id="products" class="sec products-clean">
   <div class="wrap">
-    <div class="sec-head rv">
+    <div class="sec-head rv" data-aos="fade-up">
       <div class="kick" data-i18n="prod_kick">Our Collection</div>
       <h2 data-i18n="prod_h2">اختر شمعتك المفضلة</h2>
       <p style="color:var(--mut);margin-top:.5rem;font-size:.95rem;" data-i18n="prod_sub">اكتشف أحدث تشكيلتنا من الشموع الفاخرة</p>
     </div>
     <div class="chips" id="chips" aria-hidden="true" style="display:none"></div>
-    <div class="pgrid rv" id="pgrid"></div>
-    <div style="text-align:center;margin-top:2.5rem;">
+    <div class="pgrid rv" id="pgrid" data-aos="fade-up" data-aos-delay="100"></div>
+    <div style="text-align:center;margin-top:2.5rem;" data-aos="fade-up" data-aos-delay="200">
       <a href="products.html" class="btn-primary-lux" style="display:inline-block;padding:14px 40px;font-size:1.05rem;" data-i18n="prod_see_all">🕯️ استعرض كل المنتجات</a>
     </div>
   </div>
@@ -362,7 +374,7 @@
      ═══════════════════════════════════════════════ -->
 <section class="sec vl-craftsmanship" style="background:var(--bg2); padding:4rem 0;">
   <div class="wrap">
-    <div class="sec-head rv" style="text-align:center;">
+    <div class="sec-head rv" style="text-align:center;" data-aos="fade-up">
       <div class="kick" data-i18n="craft_kick">Behind the Scenes</div>
       <h2 style="font-family:var(--fd); font-size:clamp(1.7rem,3.6vw,2.6rem);" data-i18n="craft_title">إيد مصرية.. تفاصيل ملهاش حدود</h2>
       <p style="color:var(--mut); max-width:560px; margin:0.5rem auto 0;" data-i18n="craft_desc">شوف ازاي بنصنع كل قطعة بحب ودقة عشان توصلك بالشكل اللي يليق بيك</p>
@@ -385,21 +397,21 @@ async function loadCraftsmanship() {
     items = items.filter(item => item.active !== false).sort((a, b) => (a.order || 0) - (b.order || 0));
     if (!items.length) {
       grid.innerHTML = `
-        <div class="vl-craft-item" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">
+        <div class="vl-craft-item" data-aos="zoom-in" data-aos-delay="0" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">
           <img src="https://images.unsplash.com/photo-1602351447937-745cb720612f?w=600&h=400&fit=crop&auto=format" alt="تصنيع يدوي" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">
           <div style="padding:1.2rem; text-align:center;">
             <h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:.3rem;" data-i18n="craft_fallback1_title">نخلط الزيوت بعناية</h3>
             <p style="color:var(--mut); font-size:.9rem;" data-i18n="craft_fallback1_desc">نستخدم أفضل الزيوت الطبيعية لضمان رائحة تدوم طويلاً</p>
           </div>
         </div>
-        <div class="vl-craft-item" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">
+        <div class="vl-craft-item" data-aos="zoom-in" data-aos-delay="100" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">
           <img src="https://images.unsplash.com/photo-1602782034323-6c7b3ba0b6c0?w=600&h=400&fit=crop&auto=format" alt="تغليف هدايا" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">
           <div style="padding:1.2rem; text-align:center;">
             <h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:.3rem;" data-i18n="craft_fallback2_title">تغليف فاخر جاهز للإهداء</h3>
             <p style="color:var(--mut); font-size:.9rem;" data-i18n="craft_fallback2_desc">كل قطعة بتتغلف بإيدينا عشان تكون مميزة</p>
           </div>
         </div>
-        <div class="vl-craft-item" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">
+        <div class="vl-craft-item" data-aos="zoom-in" data-aos-delay="200" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">
           <img src="https://images.unsplash.com/photo-1602351447937-745cb720612f?w=600&h=400&fit=crop&auto=format" alt="فحص الجودة" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">
           <div style="padding:1.2rem; text-align:center;">
             <h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:.3rem;" data-i18n="craft_fallback3_title">فحص دقيق لكل قطعة</h3>
@@ -407,11 +419,12 @@ async function loadCraftsmanship() {
           </div>
         </div>
       `;
+      if (window.AOS && AOS.refresh) AOS.refresh();
       return;
     }
     const currentLang = (typeof LANG !== 'undefined') ? LANG : 'ar';
     const isEnglish = currentLang === 'en';
-    grid.innerHTML = items.map(item => {
+    grid.innerHTML = items.map((item, idx) => {
       const title = isEnglish && item.titleEn ? item.titleEn : (item.title || '');
       const description = isEnglish && item.descriptionEn ? item.descriptionEn : (item.description || '');
       const baseUrl = 'https://velalight.github.io/';
@@ -425,8 +438,10 @@ async function loadCraftsmanship() {
       } else {
         mediaHtml = `<div style="width:100%; height:250px; background:var(--bg2); display:flex; align-items:center; justify-content:center; color:var(--dim);">🕯️ ${isEnglish ? 'No media' : 'لا توجد وسائط'}</div>`;
       }
-      return `<div class="vl-craft-item" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">${mediaHtml}<div style="padding:1.2rem; text-align:center;"><h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:.3rem;">${title}</h3><p style="color:var(--mut); font-size:.9rem;">${description}</p></div></div>`;
+      const delay = Math.min(idx * 100, 400);
+      return `<div class="vl-craft-item" data-aos="zoom-in" data-aos-delay="${delay}" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">${mediaHtml}<div style="padding:1.2rem; text-align:center;"><h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:.3rem;">${title}</h3><p style="color:var(--mut); font-size:.9rem;">${description}</p></div></div>`;
     }).join('');
+    if (window.AOS && AOS.refresh) AOS.refresh();
   } catch(e) {
     console.warn('⚠️ Failed to load craftsmanship:', e);
     grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--dim);">⚠️ ${(typeof LANG !== 'undefined' && LANG === 'en') ? 'Failed to load content' : 'تعذر تحميل المحتوى'}</div>`;
@@ -442,7 +457,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
      ═══════════════════════════════════════════════ -->
 <section id="about-us" class="sec about">
   <div class="wrap">
-    <div class="rv">
+    <div class="rv" data-aos="fade-left" data-aos-duration="900">
       <div class="kick" data-i18n="about_kick">Our Story</div>
       <h2 data-i18n="about_h2">من نحن</h2>
       <p data-i18n="about_p1">في VelaLight لا نصنع الشموع فقط، بل نصنع لحظات تستحق أن تُعاش. بدأت رحلتنا بشغف تجاه التفاصيل الصغيرة التي تجعل المكان أكثر دفئًا، والبيت أكثر راحة، واللحظات العادية أكثر جمالًا.</p>
@@ -451,7 +466,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
         <div class="stat"><b>100%</b><span data-i18n="stat_hand">صناعة مصرية</span></div>
       </div>
     </div>
-    <div class="rv">
+    <div class="rv" data-aos="fade-right" data-aos-duration="900" data-aos-delay="150">
       <div style="border-radius:26px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh);transform:rotate(-1.5deg)">
         
         <!-- 🔥 هنا تم وضع اسم الصورة المطلوب مباشرة -->
@@ -474,7 +489,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 <section id="reviews" class="sec" style="padding: 3rem 0; background: linear-gradient(160deg, #fcf7f0 0%, #f5ede2 100%);">
   <div class="wrap">
     <!-- الهيدر -->
-    <div style="text-align:center; max-width:760px; margin:0 auto 2rem;">
+    <div style="text-align:center; max-width:760px; margin:0 auto 2rem;" data-aos="fade-up">
       <span style="display:inline-block; background:rgba(212,175,55,0.12); color:#b68d2e; padding:0.3rem 1.2rem; border-radius:50px; font-size:0.85rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; border:1px solid rgba(212,175,55,0.2);">💛 ثقتكم هي تاجنا</span>
       <h2 style="font-family:var(--fd); font-size:clamp(2rem, 4vw, 2.8rem); margin:0.5rem 0 0.3rem; color:var(--ink);">❤️ جدار الحب</h2>
       <p style="color:var(--mut); font-size:1.05rem; max-width:560px; margin:0 auto;">كلامكم أحلى هدية.. دي لقطات حقيقية من محادثات عملائنا بعد ما استلموا طلباتهم.</p>
@@ -486,7 +501,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
     </div>
 
     <!-- ═══ زر "شوف كل التجارب" ═══ -->
-    <div style="text-align:center; margin-top:2.5rem;">
+    <div style="text-align:center; margin-top:2.5rem;" data-aos="fade-up">
       <a href="reviews.html" class="btn-primary-lux" style="display:inline-block; padding:16px 48px; font-size:1.1rem;">📸 شوف كل التجارب</a>
     </div>
   </div>
@@ -513,17 +528,19 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
     // خد أول 6 صور
     const firstSix = images.slice(0, 6);
     let html = '';
-    firstSix.forEach(function(imgName) {
+    firstSix.forEach(function(imgName, idx) {
       const imgUrl = typeof CDN === 'function' 
         ? CDN('testimonials/' + imgName) 
         : 'https://velalight.github.io/testimonials/' + encodeURIComponent(imgName);
+      const delay = Math.min(idx * 100, 400);
       html += `
-        <a href="${imgUrl}" data-lightbox="reviews-home" data-title="💛 تجربة عميل من VelaLight" style="display:block; border-radius:16px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.06); transition:transform .3s ease, box-shadow .3s ease; background:var(--panel);">
+        <a href="${imgUrl}" data-aos="zoom-in" data-aos-delay="${delay}" data-lightbox="reviews-home" data-title="💛 تجربة عميل من VelaLight" style="display:block; border-radius:16px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.06); transition:transform .3s ease, box-shadow .3s ease; background:var(--panel);">
           <img src="${imgUrl}" alt="تجربة عميل VelaLight" loading="lazy" style="width:100%; height:240px; object-fit:cover; display:block; transition:transform .3s ease;">
         </a>
       `;
     });
     grid.innerHTML = html;
+    if (window.AOS && AOS.refresh) AOS.refresh();
 
     grid.querySelectorAll('a').forEach(function(a) {
       a.addEventListener('mouseenter', function() {
@@ -554,12 +571,12 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
      ═══════════════════════════════════════════════ -->
 <section id="scents" class="sec vl-scents" style="padding: 2rem 0;">
   <div class="wrap">
-    <div class="scents-head" style="text-align:center; margin-bottom:1.5rem;">
+    <div class="scents-head" style="text-align:center; margin-bottom:1.5rem;" data-aos="fade-up">
       <div class="kick" style="font-size:0.9rem;" data-i18n="scents_kick">Signature Scents</div>
       <h2 data-i18n="scents_h2" style="font-size:1.8rem; margin:0.5rem 0;">العطور الفاخرة</h2>
       <p data-i18n="scents_sub" style="color:var(--mut); font-size:0.9rem;">كل العطور متاحة في أي منتج</p>
     </div>
-    <div class="scent-grid" id="scentGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:8px;"></div>
+    <div class="scent-grid" id="scentGrid" data-aos="fade-up" data-aos-delay="100" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:8px;"></div>
   </div>
 </section>
 
@@ -569,15 +586,15 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 <section id="brand-promise" class="sec vl-brand-promise">
   <div class="wrap">
     <div class="brand-promise-inner">
-      <div class="brand-promise-title">
+      <div class="brand-promise-title" data-aos="fade-left">
         <div class="kick" data-i18n="brand_kick">The VelaLight Touch</div>
         <h2 data-i18n="brand_promise_title">تفاصيل تصنع الفرق</h2>
         <p data-i18n="brand_promise_desc">شموع يدوية فاخرة، عطور مختارة، وهدايا مصممة لتضيف لمسة خاصة لكل لحظة.</p>
       </div>
       <div class="brand-promise-points">
-        <div class="brand-point"><strong data-i18n="brand_point1_title">صناعة يدوية</strong><span data-i18n="brand_point1_desc">كل قطعة تُصنع وتُجهّز بعناية.</span></div>
-        <div class="brand-point"><strong data-i18n="brand_point2_title">هدية لكل مناسبة</strong><span data-i18n="brand_point2_desc">اختيارات تليق بكل لحظة واحتفال.</span></div>
-        <div class="brand-point"><strong data-i18n="brand_point3_title">اختيار يناسبك</strong><span data-i18n="brand_point3_desc">نساعدك تختار الرائحة والتفاصيل المناسبة.</span></div>
+        <div class="brand-point" data-aos="fade-up" data-aos-delay="0"><strong data-i18n="brand_point1_title">صناعة يدوية</strong><span data-i18n="brand_point1_desc">كل قطعة تُصنع وتُجهّز بعناية.</span></div>
+        <div class="brand-point" data-aos="fade-up" data-aos-delay="100"><strong data-i18n="brand_point2_title">هدية لكل مناسبة</strong><span data-i18n="brand_point2_desc">اختيارات تليق بكل لحظة واحتفال.</span></div>
+        <div class="brand-point" data-aos="fade-up" data-aos-delay="200"><strong data-i18n="brand_point3_title">اختيار يناسبك</strong><span data-i18n="brand_point3_desc">نساعدك تختار الرائحة والتفاصيل المناسبة.</span></div>
       </div>
     </div>
   </div>
@@ -588,10 +605,10 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
      ═══════════════════════════════════════════════ -->
 <section class="vl-editorial">
   <div class="vl-editorial-inner">
-    <div class="vl-editorial-visual">
+    <div class="vl-editorial-visual" data-aos="zoom-in" data-aos-duration="1000">
       <img src="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2Fvelalight-metal-mandala-bestseller-main.webp&w=1000&q=80&output=webp" alt="Luxury Moment" loading="lazy">
     </div>
-    <div class="vl-editorial-content">
+    <div class="vl-editorial-content" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="150">
       <div class="kick" data-i18n="ed_kick">A Moment of Luxury</div>
       <h2 data-i18n="ed_h2">لحظاتٌ تُحفر في الذاكرة</h2>
       <p data-i18n="ed_p">كل شمعة من VelaLight ليست مجرد إضاءة… هي لحظة كاملة. لحظة هدوء، لحظة رومانسية، لحظة فرح. اصنع ذكرياتك الخاصة مع عطورنا الفاخرة.</p>
@@ -623,12 +640,12 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 <section id="faq-section" class="sec vl-faq">
   <div class="wrap">
     <div class="faq-inner">
-      <div class="faq-heading">
+      <div class="faq-heading" data-aos="fade-up">
         <div class="kick" data-i18n="faq_kick">FAQ</div>
         <h2 data-i18n="faq_h2">الأسئلة الشائعة</h2>
         <p class="faq-subtitle" data-i18n="faq_sub">كل ما تحتاج معرفته عن الطلب، الشحن، الشموع والعطور.</p>
       </div>
-      <div class="faq-list" id="faqWrap" aria-live="polite"></div>
+      <div class="faq-list" id="faqWrap" aria-live="polite" data-aos="fade-up" data-aos-delay="100"></div>
     </div>
   </div>
 </section>
@@ -875,6 +892,28 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
   </svg>
 </a>
+
+<!-- ═══ AOS JS — لازم يكون قبل باقي السكربتات أو بعدهم ═══ -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  // تهيئة AOS بتأثيرات ناعمة زي موقع السافي جروب
+  (function initAOS(){
+    if (typeof AOS === 'undefined') return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return; // اترك العناصر ظاهرة بدون حركة
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out-cubic',
+      once: true,          // الحركة تشتغل مرة واحدة فقط
+      offset: 80,          // يبدأ الظهور قبل 80 بكسل من دخول العنصر
+      delay: 0,
+      mirror: false,
+      anchorPlacement: 'top-bottom'
+    });
+    // تحديث بعد تحميل الصور (لتقليل مشكلة العناصر اللي تحتاج مساحة أكبر بعد تحميلها)
+    window.addEventListener('load', function(){ if (window.AOS) AOS.refresh(); });
+  })();
+</script>
 
 <!-- ═══ SCRIPTS ═══ -->
 <script src="data.js?v=9"></script>
