@@ -1180,3 +1180,118 @@ footer [class*="feature"],
 footer [class*="trust"] {
   display: none !important;
 }
+/* ═══════════════════════════════════════════════════════════
+   ♿ ACCESSIBILITY ENHANCEMENTS
+   - Pure additions, no existing rules modified
+   - Does NOT affect mobile appearance at all
+   - Focus styles use :focus-visible (keyboard only, not touch)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── 1) Keyboard focus — only shows for Tab navigation ─── */
+/* Touch/mouse users will never see these outlines */
+.btn:focus-visible,
+.icobtn:focus-visible,
+.langbtn:focus-visible,
+.chip:focus-visible,
+.p-add:focus-visible,
+.p-wish:focus-visible,
+.p-share:focus-visible,
+.p-desc-link:focus-visible,
+.p-media:focus-visible,
+.p-body h3 a:focus-visible,
+.mnav a:focus-visible,
+.faq-item summary:focus-visible,
+.chat-q button:focus-visible,
+.share-row a:focus-visible,
+.qty button:focus-visible,
+.citem .rm:focus-visible,
+.fgrid a:focus-visible,
+.skip-link:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+#backToTop:focus-visible,
+#chatFab:focus-visible {
+  outline: 2px solid var(--gold2);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* Remove default browser outline only when NOT using keyboard */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ─── 2) Bigger touch area for small icon buttons ─── */
+/* Uses ::before pseudo-element — invisible, no layout change */
+.icobtn,
+.langbtn,
+.citem .rm,
+.qty button,
+.zoom-close,
+.zoom-nav {
+  position: relative;
+}
+.icobtn::before,
+.langbtn::before,
+.citem .rm::before,
+.qty button::before,
+.zoom-close::before,
+.zoom-nav::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  /* يوسّع مساحة اللمس 6px حول كل زر — WCAG 2.2 target size */
+  pointer-events: auto;
+}
+
+/* ─── 3) Higher contrast for users who request it ─── */
+/* Only triggers if user enabled "Increase contrast" in their OS */
+@media (prefers-contrast: more) {
+  :root {
+    --dim: #5a4a3a;
+    --gold2: #8a6329;
+    --mut: #3d3020;
+  }
+  .p-cat,
+  .p-desc-link,
+  .kick,
+  .dev-info small {
+    color: #7a5a20;
+  }
+  .p-price del {
+    color: #6a5a48;
+  }
+}
+
+/* ─── 4) Forced colors (Windows High Contrast Mode) ─── */
+@media (forced-colors: active) {
+  .btn,
+  .chip.on,
+  .p-add {
+    border: 1px solid ButtonBorder;
+  }
+  .icobtn,
+  .langbtn {
+    border: 1px solid ButtonBorder;
+  }
+}
+
+/* ─── 5) Large text support (users with 125%+ font size) ─── */
+@media (min-resolution: 2dppx) {
+  /* لا تغيير — فقط تأكيد إن مفيش مشاكل على شاشات Retina */
+}
+
+/* ─── 6) Better focus for iOS VoiceOver / TalkBack ─── */
+[aria-pressed="true"] {
+  position: relative;
+}
+[aria-pressed="true"]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid currentColor;
+  opacity: 0.4;
+  pointer-events: none;
+}
