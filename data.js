@@ -3,24 +3,20 @@ const CFG = {
   INSTAPAY: "",
   REPO: "velalight/velalight.github.io@main",
   FIREBASE: {
-    apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o", // ⚠️ ملاحظة أمان في الأسفل
+    apiKey: "AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",
     authDomain: "velalight.firebaseapp.com",
     projectId: "velalight",
     storageBucket: "velalight.firebasestorage.app",
     messagingSenderId: "1095485535268",
     appId: "1:1095485535268:web:4d17ee9de6f5acdacbd4b1"
   },
-  GA4_ID: "G-BWBD8ZZD23", // ✅ هذا ممتاز
-  
-  // 🔥 هنا التعديل المطلوب: استبدل النص برقم البيكسل الحقيقي الخاص بك
-  META_PIXEL_ID: "1377896053806991", // <-- ضع رقم البيكسل الحقيقي هنا
-  
-  TIKTOK_PIXEL_ID: "YOUR_TIKTOK_PIXEL_ID" // اتركه هكذا إذا لم تكن تستخدم تيك توك
+  GA4_ID: "G-BWBD8ZZD23",
+  META_PIXEL_ID: "1377896053806991",
+  TIKTOK_PIXEL_ID: "YOUR_TIKTOK_PIXEL_ID"
 };
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ [إضافة جديدة] تطبيع رقم واتساب للصيغة الدولية الصحيحة
-   يستخدم لضمان فتح واتساب دائماً بالشكل الصحيح
+   ✨ تطبيع رقم واتساب للصيغة الدولية الصحيحة
    ═══════════════════════════════════════════════════════════ */
 function normalizeWhatsApp(phone){
   if(!phone) return "";
@@ -31,9 +27,7 @@ function normalizeWhatsApp(phone){
   return p;
 }
 
-/* ═══ Analytics — idempotent bootstrap ═══
-   يمنع تكرار PageView عندما تضع الصفحة كود التتبع inline
-   وتبقي التتبع فعالًا في الصفحات التي تعتمد على data.js فقط. */
+/* ═══ Analytics — idempotent bootstrap ═══ */
 (function(){
   if(window.__vlAnalyticsInitialized) return;
 
@@ -100,17 +94,12 @@ const money=n=>Number(n||0).toLocaleString("en-US")+" "+(LANG==="en"?"EGP":"ج.�
 
 /* ═══════════════════════════════════════════════════════════
    ✨ CDN — النسخة فائقة السرعة (jsDelivr Global CDN)
-   السبب: توزيع الصور على سيرفرات حول العالم لتقليل زمن الاستجابة (TTFB)
    ═══════════════════════════════════════════════════════════ */
-const IMG_CACHE_VERSION = "v9"; // ترقية الإصدار لكسر أي كاش قديم وتطبيق الـ CDN الجديد
+const IMG_CACHE_VERSION = "v9";
 
 const CDN = (u, options = {}) => {
     if (!u) return "";
-    // لو الرابط بيانات أو رابط خارجي، اتركه كما هو
     if (u.startsWith("data:") || u.startsWith("http")) return u;
-    
-    // 🔥 التحسين الجذري: استخدام jsDelivr CDN لسرعة تحميل عالمية
-    // الصيغة: https://cdn.jsdelivr.net/gh/username/repo@branch/path/to/file
     return `https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/${u}${String(u).includes("?") ? "&" : "?"}v=${IMG_CACHE_VERSION}`;
 };
 
@@ -152,7 +141,6 @@ const PRODUCTS=[
   {id:"11",name:"فانيليا (جلاس)",nameEn:"Vanilla (Glass)",cat:"glass",price:400,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["فانيليا","كراميل","موكا"],img:"candle11.jpg",imgs:["candle11.jpg"],sold:0,createdAt:NOW-11*D,desc:"شمعة زجاجية بعطر الفانيلا الكلاسيكي.",descEn:"A glass candle with classic vanilla scent."},
   {id:"12",name:"شمعة مساج ريلاكس",nameEn:"Relax Massage Candle",cat:"massage",price:380,old:0,badge:"",badgeEn:"",hours:"72 ساعة اشتعال",hoursEn:"72h burn time",scents:["لافندر","فل","مسك أبيض"],img:"candle19.jpg",imgs:["candle19.jpg"],sold:0,createdAt:NOW-12*D,desc:"شمعة مساج بعطر اللافندر المهدئ.",descEn:"A massage candle with calming lavender scent."},
   {id:"13",name:"بوكس هدية فاخر",nameEn:"Luxury Gift Box",cat:"gift",price:850,old:0,badge:"",badgeEn:"",hours:"شمعة + إكسسوارات",hoursEn:"Candle + accessories",scents:["عود","عنبر","ورد"],img:"gifta.jpg",imgs:["gifta.jpg"],sold:0,createdAt:NOW-13*D,desc:"بوكس هدايا فاخر بتغليف ملكي.",descEn:"A luxury gift box with royal wrapping."},
-  // ✨ تم إضافة video, pinned, pinnedAt كنموذج محلي (Fallback) لبوكس العروسة
   {id:"14",name:"بوكس العروسة",nameEn:"Bride Box",cat:"bride",price:1500,old:0,badge:"الأكثر طلبًا",badgeEn:"Most Requested",hours:"بوكس متكامل",hoursEn:"Complete box",scents:["ورد","ياسمين","مسك أبيض","فانيليا"],img:"box1.jpg",imgs:["box1.jpg"],video:"box.mp4", pinned:true, pinnedAt:Date.now(), sold:0,createdAt:NOW-14*D,desc:"أفخم بوكس عروسة.",descEn:"The most luxurious bride box."}
 ];
 
@@ -181,7 +169,6 @@ const imgsOf=p=>{
   return [];
 };
 
-// 🔥 دالة imgOf المحسّنة: تراعي حجم الشاشة
 const imgOf = (p, options = {}) => {
   const a = imgsOf(p);
   if (!a.length) return ph(p);
@@ -196,13 +183,8 @@ const pdesc=p=>LANG==="en"?(p.descEn||p.desc||""):(p.desc||"");
 const phours=p=>LANG==="en"?(p.hoursEn||p.hours||"72h"):(p.hours||"72 ساعة");
 const pbadge = (p) => {
   if (!p || !p.badge) return "";
-  
-  // نستخدم المتغير العام LANG الموجود في أعلى الملف مباشرة
   if (LANG === "en") {
-    // 1. جرب badgeEn أولاً
     if (p.badgeEn) return p.badgeEn;
-    
-    // 2. خريطة احتياطية لو badgeEn مش موجودة في الداتابيز
     const fallbackMap = {
       "خصم": "Sale", 
       "الأكثر مبيعًا": "Best Seller", 
@@ -211,10 +193,8 @@ const pbadge = (p) => {
       "جديد": "New", 
       "نفدت الكمية": "Sold Out"
     };
-    
     return fallbackMap[p.badge] || p.badge;
   }
-  
   return p.badge;
 };
 
@@ -253,7 +233,6 @@ async function loadAll(){
     if(p&&p.id) map.set(p.id,{...p});
   });
   
-  // ✨ الدمج الكامل يضمن مرور حقول video, pinned, pinnedAt من Firebase بسلاسة
   dbProductsCache.forEach(d=>{
     const slug=d.id_||d.slug||d.pid||d.id;
     if(!slug) return;
@@ -271,6 +250,16 @@ async function loadAll(){
   let dr=[];
   try{dr=await DB.list("reviews")}catch(e){}
   ALL_REVIEWS=[...(typeof SEED_REVIEWS!=="undefined"?SEED_REVIEWS:[]),...dr];
+  
+  // ✨ حقن Product Schema لكل المنتجات بعد التحميل
+  setTimeout(function(){
+    if (typeof injectAllProductSchemas === "function") {
+      injectAllProductSchemas(ALL_PRODUCTS);
+    }
+    if (typeof injectBreadcrumbSchema === "function") {
+      injectBreadcrumbSchema();
+    }
+  }, 100);
 }
 
 function loadFromCache(){
@@ -284,12 +273,9 @@ function loadFromCache(){
         if(!c||!c.id) return;
         const existing=map.get(c.id);
         if(!existing) return;
-        // تحديث الحقول الديناميكية فقط للحفاظ على بيانات GitHub الطازجة
         if(c.sold!==undefined) existing.sold=c.sold;
         if(c.stock!==undefined) existing.stock=c.stock;
         if(c.active!==undefined) existing.active=c.active;
-        
-        // ✨ إضافة دعم حقول التثبيت والفيديو من الكاش المحلي
         if(c.pinned!==undefined) existing.pinned=c.pinned;
         if(c.pinnedAt!==undefined) existing.pinnedAt=c.pinnedAt;
         if(c.video!==undefined) existing.video=c.video;
@@ -1066,3 +1052,144 @@ const REVIEWS_IMAGES = [
   "rev11.jpg", "rev12.jpg", "rev13.jpg", "rev14.jpg", "rev15.jpg",
   "rev16.jpg", "rev17.jpg", "rev18.jpg", "rev19.jpg", "rev20.jpg"
 ];
+
+/* ═══════════════════════════════════════════════════════════
+   ✨ Product Schema — Structured Data for Google Rich Results
+   يولّد Schema ديناميكي لكل منتج مع التقييمات الحقيقية
+   ═══════════════════════════════════════════════════════════ */
+const SCHEMA_INJECTED = new Set();
+
+function buildProductSchema(p) {
+  if (!p || !p.id) return null;
+  
+  const reviews = prodReviews(p.id);
+  const rating = ratingOf(p.id);
+  const images = imgsOf(p).slice(0, 5).map(img => CDN(img));
+  if (images.length === 0) {
+    images.push("https://velalight.github.io/velalight-wooden-luxury-set-3candles-detail.webp");
+  }
+  
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": LANG === "en" ? (p.nameEn || p.name) : p.name,
+    "image": images,
+    "description": (LANG === "en" ? (p.descEn || p.desc || "") : (p.desc || "")).slice(0, 500),
+    "sku": String(p.id),
+    "mpn": "VL-" + p.id,
+    "brand": { "@type": "Brand", "name": "VelaLight" },
+    "category": cat(p.cat),
+    "offers": {
+      "@type": "Offer",
+      "url": "https://velalight.github.io/products.html?id=" + encodeURIComponent(p.id),
+      "priceCurrency": "EGP",
+      "price": String(p.price || 0),
+      "priceValidUntil": new Date(Date.now() + 365*864e5).toISOString().split("T")[0],
+      "availability": (p.stock !== undefined && p.stock <= 0)
+        ? "https://schema.org/OutOfStock"
+        : "https://schema.org/InStock",
+      "itemCondition": "https://schema.org/NewCondition",
+      "seller": { "@type": "Organization", "name": "VelaLight" }
+    }
+  };
+  
+  // ⭐ التقييمات الحقيقية
+  if (rating && rating.count > 0) {
+    schema.aggregateRating = {
+      "@type": "AggregateRating",
+      "ratingValue": String(rating.avg),
+      "reviewCount": String(rating.count),
+      "bestRating": "5",
+      "worstRating": "1"
+    };
+    
+    const top = reviews.slice(0, 3).map(r => ({
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": String(r.rating || 5),
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "author": { "@type": "Person", "name": r.name || "عميل VelaLight" },
+      "reviewBody": (r.text || r.review || "").slice(0, 300),
+      "datePublished": r.createdAt
+        ? new Date(r.createdAt).toISOString().split("T")[0]
+        : new Date().toISOString().split("T")[0]
+    })).filter(r => r.reviewBody);
+    
+    if (top.length > 0) schema.review = top;
+  }
+  
+  return schema;
+}
+
+function injectProductSchema(p) {
+  if (!p || !p.id) return;
+  const key = "product-" + p.id;
+  if (SCHEMA_INJECTED.has(key)) return;
+  const schema = buildProductSchema(p);
+  if (!schema) return;
+  const s = document.createElement("script");
+  s.type = "application/ld+json";
+  s.setAttribute("data-schema", key);
+  s.textContent = JSON.stringify(schema);
+  document.head.appendChild(s);
+  SCHEMA_INJECTED.add(key);
+}
+
+function injectAllProductSchemas(products) {
+  if (!Array.isArray(products)) return;
+  products.forEach(injectProductSchema);
+}
+
+function injectItemListSchema(products, name) {
+  if (!Array.isArray(products) || !products.length) return;
+  if (SCHEMA_INJECTED.has("itemlist")) return;
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": name || "VelaLight Collection",
+    "itemListElement": products.slice(0, 30).map((p, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "url": "https://velalight.github.io/products.html?id=" + encodeURIComponent(p.id)
+    }))
+  };
+  const s = document.createElement("script");
+  s.type = "application/ld+json";
+  s.setAttribute("data-schema", "itemlist");
+  s.textContent = JSON.stringify(schema);
+  document.head.appendChild(s);
+  SCHEMA_INJECTED.add("itemlist");
+}
+
+function injectBreadcrumbSchema() {
+  if (SCHEMA_INJECTED.has("breadcrumb")) return;
+  const path = window.location.pathname;
+  const isProducts = path.includes("products");
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "الرئيسية", "item": "https://velalight.github.io/" }
+    ]
+  };
+  if (isProducts) {
+    schema.itemListElement.push({
+      "@type": "ListItem", "position": 2, "name": "تسوق", "item": "https://velalight.github.io/products.html"
+    });
+  }
+  const s = document.createElement("script");
+  s.type = "application/ld+json";
+  s.setAttribute("data-schema", "breadcrumb");
+  s.textContent = JSON.stringify(schema);
+  document.head.appendChild(s);
+  SCHEMA_INJECTED.add("breadcrumb");
+}
+
+window.buildProductSchema = buildProductSchema;
+window.injectProductSchema = injectProductSchema;
+window.injectAllProductSchemas = injectAllProductSchemas;
+window.injectItemListSchema = injectItemListSchema;
+window.injectBreadcrumbSchema = injectBreadcrumbSchema;
