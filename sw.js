@@ -6,7 +6,7 @@
  * - Firebase والطلبات الخارجية: لا يتدخل فيها Service Worker.
  */
 
-const CACHE_NAME = "velalight-v6-stable";
+const CACHE_NAME = "velalight-v7-pwa";
 
 const APP_SHELL = [
   "/",
