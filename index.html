@@ -68,8 +68,9 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="mobile-luxury-fix.css">
 
-<!-- ═══ Lightbox2 (لتكبير الصور) ═══ -->
+<!-- ═══ Lightbox2 CSS (الصورة تظهر في modal) ═══ -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -536,6 +537,7 @@ async function loadCraftsmanship() {
         </div>
       `;
       if (window.refreshReveal) window.refreshReveal();
+      if (window.refreshLazyVideos) window.refreshLazyVideos();
       return;
     }
     const currentLang = (typeof LANG !== 'undefined') ? LANG : 'ar';
@@ -547,7 +549,8 @@ async function loadCraftsmanship() {
       const isVideo = item.mediaType === 'video' || (item.mediaUrl && /\.(mp4|webm|ogg)$/i.test(item.mediaUrl));
       let mediaHtml = '';
       if (isVideo && mediaSrc) {
-        mediaHtml = `<video src="${escapeHTML(mediaSrc)}" autoplay muted loop playsinline controls style="width:100%; height:250px; object-fit:cover; display:block; background:#000;" preload="metadata"></video>`;
+        /* ✅ Lazy video: مفيش autoplay في HTML — الـ JS بيشغّله لما يدخل الشاشة */
+        mediaHtml = `<video src="${escapeHTML(mediaSrc)}" muted loop playsinline controls preload="none" data-lazy-video poster="velalight-wooden-luxury-set-3candles-detail.webp" style="width:100%; height:250px; object-fit:cover; display:block; background:#000;"></video>`;
       } else if (mediaSrc) {
         mediaHtml = `<img src="${escapeHTML(mediaSrc)}" alt="${escapeHTML(title)}" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">`;
       } else {
@@ -557,6 +560,7 @@ async function loadCraftsmanship() {
       return `<div class="vl-craft-item" data-reveal="zoom" data-reveal-delay="${delay}" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">${mediaHtml}<div style="padding:1.2rem; text-align:center;"><h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:.3rem;">${escapeHTML(title)}</h3><p style="color:var(--mut); font-size:.9rem;">${escapeHTML(description)}</p></div></div>`;
     }).join('');
     if (window.refreshReveal) window.refreshReveal();
+    if (window.refreshLazyVideos) window.refreshLazyVideos();
   } catch(e) {
     console.warn('⚠️ Failed to load craftsmanship:', e);
     grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem; color:var(--dim);">⚠️ ${(typeof LANG !== 'undefined' && LANG === 'en') ? 'Failed to load content' : 'تعذر تحميل المحتوى'}</div>`;
@@ -643,7 +647,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
         ? CDN('testimonials/' + imgName) 
         : 'https://velalight.github.io/testimonials/' + encodeURIComponent(imgName);
       html += `
-        <a href="${imgUrl}" data-lightbox="reviews-home" data-title="💛 تجربة عميل من VelaLight" style="display:block; border-radius:16px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.06); transition:transform .3s ease, box-shadow .3s ease; background:var(--panel);">
+        <a href="${escapeHTML(imgUrl)}" data-lightbox="reviews-home" data-title="💛 تجربة عميل من VelaLight" style="display:block; border-radius:16px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.06); transition:transform .3s ease, box-shadow .3s ease; background:var(--panel);">
           <img src="${escapeHTML(imgUrl)}" alt="تجربة عميل VelaLight" loading="lazy" style="width:100%; height:240px; object-fit:cover; display:block; transition:transform .3s ease;">
         </a>
       `;
@@ -1050,6 +1054,70 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
   mo.observe(document.body, { childList: true, subtree: true });
 
   window.addEventListener("load", function () { observeAll(document); });
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     LAZY VIDEO — JS (تحميل وتشغيل الفيديو عند الدخول للشاشة)
+     ═══════════════════════════════════════════════ -->
+<script>
+(function () {
+  "use strict";
+
+  // لو المتصفح مش بيدعم IntersectionObserver — شغّل كل الفيديوهات
+  if (!("IntersectionObserver" in window)) {
+    document.querySelectorAll("video[data-lazy-video]").forEach(function (v) {
+      v.preload = "metadata";
+      v.play().catch(function () {});
+    });
+    return;
+  }
+
+  var videoObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      var v = entry.target;
+      if (entry.isIntersecting) {
+        // الفيديو دخل الشاشة — فعّل التحميل وشغّله
+        if (v.preload === "none") {
+          v.preload = "metadata";
+          // load() بتعيد تحميل الفيديو بالـ preload الجديد
+          try { v.load(); } catch (e) {}
+        }
+        v.play().catch(function () {
+          // المتصفح منع التشغيل التلقائي — مش مشكلة، فيه أزرار controls
+        });
+      } else {
+        // الفيديو خرج من الشاشة — وقّفه لتوفير الموارد
+        if (!v.paused) v.pause();
+      }
+    });
+  }, { threshold: 0.25 });
+
+  function observeVideos(root) {
+    (root || document).querySelectorAll("video[data-lazy-video]").forEach(function (v) {
+      videoObserver.observe(v);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () { observeVideos(document); });
+  } else {
+    observeVideos(document);
+  }
+
+  window.refreshLazyVideos = function () { observeVideos(document); };
+
+  // راقب الفيديوهات الجديدة اللي بتتضاف للصفحة (من Firebase مثلاً)
+  var mo = new MutationObserver(function (mutations) {
+    mutations.forEach(function (m) {
+      m.addedNodes.forEach(function (node) {
+        if (node.nodeType === 1) observeVideos(node);
+      });
+    });
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+
+  window.addEventListener("load", function () { observeVideos(document); });
 })();
 </script>
 
