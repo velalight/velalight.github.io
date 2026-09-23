@@ -954,6 +954,19 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 </div>
 
 <!-- ═══ TOASTS ═══ -->
+  <!-- ═══ Exit Intent Popup ═══ -->
+<div class="vl-exit-overlay" id="vlExitOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="vl-exit-box">
+    <button class="vl-exit-close" id="vlExitClose" aria-label="إغلاق">✕</button>
+    <div class="vl-exit-icon">🎁</div>
+    <h3 class="vl-exit-title">استنى! عندنا هدية ليك 🎁</h3>
+    <p class="vl-exit-desc">خد <b>خصم 10%</b> على أول طلب ليك من VelaLight</p>
+    <div class="vl-exit-code" id="vlExitCode">WELCOME10</div>
+    <button class="vl-exit-copy" id="vlExitCopy" type="button">📋 انسخ الكود</button>
+    <a href="products.html" class="vl-exit-cta">🕯️ تسوق الآن</a>
+    <button class="vl-exit-no" id="vlExitNo" type="button">لا شكرًا</button>
+  </div>
+</div>
 <div id="toasts"></div>
 
 <!-- ═══ BACK TO TOP ═══ -->
