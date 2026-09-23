@@ -4,62 +4,39 @@
   <url>
     <loc>https://velalight.github.io/</loc>
     <lastmod>2026-09-23</lastmod>
-    <priority>1.0</priority>
   </url>
 
   <url>
     <loc>https://velalight.github.io/products.html</loc>
     <lastmod>2026-09-23</lastmod>
-    <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://velalight.github.io/reviews.html</loc>
     <lastmod>2026-09-23</lastmod>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://velalight.github.io/contact.html</loc>
     <lastmod>2026-09-23</lastmod>
-    <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://velalight.github.io/privacy.html</loc>
     <lastmod>2026-09-23</lastmod>
-    <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://velalight.github.io/terms.html</loc>
     <lastmod>2026-09-23</lastmod>
-    <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://velalight.github.io/exchange-policy.html</loc>
     <lastmod>2026-09-23</lastmod>
-    <priority>0.4</priority>
   </url>
 
-  <!-- مثال على صفحات المنتجات الفعلية -->
-  <url>
-    <loc>https://velalight.github.io/product.html?p=1</loc>
-    <lastmod>2026-09-23</lastmod>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://velalight.github.io/product.html?p=2</loc>
-    <lastmod>2026-09-23</lastmod>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://velalight.github.io/product.html?p=3</loc>
-    <lastmod>2026-09-23</lastmod>
-    <priority>0.8</priority>
-  </url>
+  <!-- ملاحظة: تم حذف روابط المنتجات ذات معاملات الاستعلام مؤقتًا -->
+  <!-- يفضل تحويلها إلى مسارات ثابتة مثل: /product/1.html -->
 
 </urlset>
