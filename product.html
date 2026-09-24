@@ -1384,16 +1384,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   productPid=new URLSearchParams(location.search).get("p")||"";
   if(!productPid){showNotFound();return}
 
-  // ✅ نعرض المنتج من PRODUCTS فوراً (بدون انتظار Firebase)
-  try {
-    const local = (typeof PRODUCTS !== "undefined") 
-      ? PRODUCTS.find(x => String(x.id) === String(productPid)) 
-      : null;
-    if(local){
-      P = { ...local };
-      render();
-    }
-  } catch(e){}
 
   const sync = async () => {
     try {
