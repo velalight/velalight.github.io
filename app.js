@@ -488,33 +488,6 @@ function injectCartStyles(){
       color: #b8860b;
     }
 
-   /* ═══ Loyalty Hint ═══ */
-try {
-  const loyalty = JSON.parse(localStorage.getItem("vl_loyalty_unlocked") || "null");
-  if(loyalty && loyalty.code && Date.now() < Number(loyalty.expiresAt || 0)){
-    const hint = document.createElement("div");
-    hint.className = "vl-loyalty-hint";
-    hint.style.cssText = "background:linear-gradient(135deg,#fdf5ed,#faf0e6);border:1px dashed rgba(212,175,55,.5);border-radius:14px;padding:12px 14px;margin:10px 0;display:flex;align-items:center;gap:10px;";
-    hint.innerHTML = `
-      <span style="font-size:1.5rem">🎁</span>
-      <div style="flex:1;min-width:0">
-        <div style="font-weight:800;color:#b8863f;font-size:.85rem;margin-bottom:.2rem">عندك كود خصم 15%!</div>
-        <div style="font-size:.75rem;color:#8b6f47">استخدمه في السلة: <b style="font-family:monospace;color:#b8863f">${loyalty.code}</b></div>
-      </div>
-      <button type="button" class="vl-loyalty-use" style="background:linear-gradient(135deg,#d4af37,#b8863f);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-weight:800;font-size:.75rem;cursor:pointer;font-family:inherit;">تطبيق</button>
-    `;
-    w.appendChild(hint);
-    hint.querySelector(".vl-loyalty-use").addEventListener("click", () => {
-      const input = document.getElementById("couponInput");
-      if(input){
-        input.value = loyalty.code;
-        input.scrollIntoView({behavior:"smooth", block:"center"});
-        const applyBtn = document.getElementById("applyCouponBtn");
-        if(applyBtn) setTimeout(() => applyBtn.click(), 400);
-      }
-    });
-  }
-} catch(e){}
 
     /* ═══ Saved For Later Section ═══ */
     .vl-saved-section{
@@ -3052,7 +3025,35 @@ function renderCart(){
       }
     }, 0);
   }
-  
+
+    /* ═══ Loyalty Hint ═══ */
+  try {
+    const loyalty = JSON.parse(localStorage.getItem("vl_loyalty_unlocked") || "null");
+    if(loyalty && loyalty.code && Date.now() < Number(loyalty.expiresAt || 0)){
+      const hint = document.createElement("div");
+      hint.className = "vl-loyalty-hint";
+      hint.style.cssText = "background:linear-gradient(135deg,#fdf5ed,#faf0e6);border:1px dashed rgba(212,175,55,.5);border-radius:14px;padding:12px 14px;margin:10px 0;display:flex;align-items:center;gap:10px;";
+      hint.innerHTML = `
+        <span style="font-size:1.5rem">🎁</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:800;color:#b8863f;font-size:.85rem;margin-bottom:.2rem">عندك كود خصم 15%!</div>
+          <div style="font-size:.75rem;color:#8b6f47">استخدمه في السلة: <b style="font-family:monospace;color:#b8863f">${loyalty.code}</b></div>
+        </div>
+        <button type="button" class="vl-loyalty-use" style="background:linear-gradient(135deg,#d4af37,#b8863f);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-weight:800;font-size:.75rem;cursor:pointer;font-family:inherit;">تطبيق</button>
+      `;
+      w.appendChild(hint);
+      hint.querySelector(".vl-loyalty-use").addEventListener("click", () => {
+        const input = document.getElementById("couponInput");
+        if(input){
+          input.value = loyalty.code;
+          input.scrollIntoView({behavior:"smooth", block:"center"});
+          const applyBtn = document.getElementById("applyCouponBtn");
+          if(applyBtn) setTimeout(() => applyBtn.click(), 400);
+        }
+      });
+    }
+  } catch(e){}
+
   /* ═══ SAVED FOR LATER SECTION ═══ */
   const savedHTML = renderSavedSectionHTML();
   if(savedHTML){
