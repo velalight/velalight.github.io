@@ -41,6 +41,41 @@
 .btn.outline.sm:hover{border-color:var(--gold);color:var(--gold)}
 .toast-msg{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1512;color:#fff;padding:.8rem 1.8rem;border-radius:99px;font-size:.85rem;z-index:9999;opacity:0;transition:opacity .4s ease;box-shadow:0 8px 25px rgba(0,0,0,0.2)}
 .toast-msg.show{opacity:1}
+  .toast-msg.show{opacity:1}
+
+/* ═══ Loyalty Banner ═══ */
+.vl-loyalty-banner{
+  background:linear-gradient(135deg,#fdf5ed 0%,#faf0e6 50%,#fdf5ed 100%);
+  border:2px dashed rgba(212,175,55,.6);
+  border-radius:18px;padding:1.2rem 1.4rem;margin-bottom:1.2rem;
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+  box-shadow:0 8px 24px rgba(212,175,55,.15);
+  animation:vlLoyaltyGlow 3s ease-in-out infinite;
+  position:relative;overflow:hidden;
+}
+@keyframes vlLoyaltyGlow{
+  0%,100%{box-shadow:0 8px 24px rgba(212,175,55,.15)}
+  50%{box-shadow:0 12px 32px rgba(212,175,55,.3)}
+}
+.vl-loyalty-banner .ico{font-size:2.4rem;flex-shrink:0;filter:drop-shadow(0 4px 10px rgba(212,175,55,.4))}
+.vl-loyalty-banner .info{flex:1;min-width:180px}
+.vl-loyalty-banner .info h3{font-family:var(--fd,'El Messiri',serif);color:#b8863f;font-size:1.1rem;margin:0 0 .3rem;font-weight:700}
+.vl-loyalty-banner .info p{color:#5a4a3a;font-size:.82rem;margin:0 0 .5rem;line-height:1.5}
+.vl-loyalty-banner .code-display{background:#fff;border:1.5px solid #d4af37;border-radius:10px;padding:.45rem .9rem;font-family:monospace;font-size:1.1rem;font-weight:900;color:#b8863f;letter-spacing:2px;display:inline-block}
+.vl-loyalty-banner .actions{display:flex;gap:.5rem;flex-wrap:wrap;flex-shrink:0}
+.vl-loyalty-banner .actions button{padding:.55rem 1rem;border-radius:10px;font-family:inherit;font-weight:700;font-size:.78rem;cursor:pointer;border:none;transition:.25s;-webkit-tap-highlight-color:transparent}
+.vl-loyalty-banner .actions .copy{background:linear-gradient(135deg,#d4af37,#b8863f);color:#fff;box-shadow:0 4px 12px rgba(212,175,55,.35)}
+.vl-loyalty-banner .actions .wa{background:linear-gradient(135deg,#5fbe6f,#2e8b45);color:#fff;box-shadow:0 4px 12px rgba(46,139,69,.35);text-decoration:none;display:inline-flex;align-items:center;gap:.3rem}
+.vl-loyalty-banner .actions button:hover,.vl-loyalty-banner .actions .wa:hover{transform:translateY(-2px)}
+@media (max-width:600px){
+  .vl-loyalty-banner{padding:1rem;gap:.7rem}
+  .vl-loyalty-banner .ico{font-size:1.9rem}
+  .vl-loyalty-banner .info h3{font-size:1rem}
+  .vl-loyalty-banner .code-display{font-size:.95rem;padding:.35rem .7rem}
+  .vl-loyalty-banner .actions{width:100%}
+  .vl-loyalty-banner .actions button{flex:1}
+}
+</style>
 </style>
   <!-- ═══ PWA Support ═══ -->
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -253,8 +288,64 @@ function orderCard(o, user){
 // ═══ تصدير دوال للنطاق العام ═══
 window.loadOrders = loadOrders;
 
+/* ═══ Loyalty Banner ═══ */
+function renderLoyaltyBanner(){
+  try {
+    const loyalty = JSON.parse(localStorage.getItem("vl_loyalty_unlocked") || "null");
+    if(!loyalty || !loyalty.code) return;
+    if(Date.now() > Number(loyalty.expiresAt || 0)) return;
+
+    const box = document.getElementById("ordersContainer");
+    if(!box || document.getElementById("vlLoyaltyBanner")) return;
+
+    const expiresDate = new Date(loyalty.expiresAt).toLocaleDateString("ar-EG", { year:"numeric", month:"long", day:"numeric" });
+    const waText = encodeURIComponent(`🎁 كود خصم VelaLight\n\nكودي: ${loyalty.code}\nخصم 15% صالح حتى ${expiresDate}\n\nاستخدمه على: https://velalight.github.io/products.html`);
+
+    const banner = document.createElement("div");
+    banner.className = "vl-loyalty-banner";
+    banner.id = "vlLoyaltyBanner";
+    banner.innerHTML = `
+      <div class="ico">🎁</div>
+      <div class="info">
+        <h3>مبروك! عندك كود خصم 15%</h3>
+        <p>شكراً لولائك ❤️ استخدمه في طلبك الجاي قبل ${expiresDate}</p>
+        <span class="code-display" id="vlLoyaltyCodeMyOrders">${loyalty.code}</span>
+      </div>
+      <div class="actions">
+        <button class="copy" type="button" id="vlLoyaltyCopyMyOrders">📋 نسخ</button>
+        <a class="wa" href="https://wa.me/?text=${waText}" target="_blank" rel="noopener">💬 واتساب</a>
+      </div>
+    `;
+
+    box.parentNode.insertBefore(banner, box);
+
+    banner.querySelector("#vlLoyaltyCopyMyOrders").addEventListener("click", () => {
+      const btn = banner.querySelector("#vlLoyaltyCopyMyOrders");
+      const done = () => {
+        btn.textContent = "✅ تم النسخ";
+        setTimeout(() => { btn.textContent = "📋 نسخ"; }, 2000);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(loyalty.code).then(done).catch(done);
+      } else {
+        const tmp = document.createElement("textarea");
+        tmp.value = loyalty.code; document.body.appendChild(tmp); tmp.select();
+        try { document.execCommand("copy"); done(); } catch(e){ done(); }
+        document.body.removeChild(tmp);
+      }
+    });
+  } catch(e){}
+}
+
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", () => setTimeout(renderLoyaltyBanner, 800));
+} else {
+  setTimeout(renderLoyaltyBanner, 800);
+}
+
 })();
 </script>
+
   <script src="bottom-nav.js"></script>
   <script src="pwa.js" defer></script>
   <script src="search.js" defer></script>
