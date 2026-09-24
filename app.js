@@ -488,6 +488,34 @@ function injectCartStyles(){
       color: #b8860b;
     }
 
+   /* ═══ Loyalty Hint ═══ */
+try {
+  const loyalty = JSON.parse(localStorage.getItem("vl_loyalty_unlocked") || "null");
+  if(loyalty && loyalty.code && Date.now() < Number(loyalty.expiresAt || 0)){
+    const hint = document.createElement("div");
+    hint.className = "vl-loyalty-hint";
+    hint.style.cssText = "background:linear-gradient(135deg,#fdf5ed,#faf0e6);border:1px dashed rgba(212,175,55,.5);border-radius:14px;padding:12px 14px;margin:10px 0;display:flex;align-items:center;gap:10px;";
+    hint.innerHTML = `
+      <span style="font-size:1.5rem">🎁</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:800;color:#b8863f;font-size:.85rem;margin-bottom:.2rem">عندك كود خصم 15%!</div>
+        <div style="font-size:.75rem;color:#8b6f47">استخدمه في السلة: <b style="font-family:monospace;color:#b8863f">${loyalty.code}</b></div>
+      </div>
+      <button type="button" class="vl-loyalty-use" style="background:linear-gradient(135deg,#d4af37,#b8863f);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-weight:800;font-size:.75rem;cursor:pointer;font-family:inherit;">تطبيق</button>
+    `;
+    w.appendChild(hint);
+    hint.querySelector(".vl-loyalty-use").addEventListener("click", () => {
+      const input = document.getElementById("couponInput");
+      if(input){
+        input.value = loyalty.code;
+        input.scrollIntoView({behavior:"smooth", block:"center"});
+        const applyBtn = document.getElementById("applyCouponBtn");
+        if(applyBtn) setTimeout(() => applyBtn.click(), 400);
+      }
+    });
+  }
+} catch(e){}
+
     /* ═══ Saved For Later Section ═══ */
     .vl-saved-section{
       margin-top: 10px;
@@ -3677,7 +3705,205 @@ function getCookie(name){
   if(parts.length === 2) return parts.pop().split(";").shift();
   return null;
 }
- 
+ /* ═══════════════════════════════════════════════════════════
+   ✨ LOYALTY PROGRAM — برنامج الولاء
+   - بعد 3 طلبات → كود LOYAL15 (خصم 15%)
+   - مرة واحدة فقط لكل عميل
+   - صالح 60 يوم
+   ═══════════════════════════════════════════════════════════ */
+const LOYALTY_CODE = "LOYAL15";
+const LOYALTY_DISCOUNT = 15;
+const LOYALTY_THRESHOLD = 3;
+const LOYALTY_VALIDITY_DAYS = 60;
+
+async function checkAndUnlockLoyalty(currentUser){
+  try {
+    if(!window.FB || typeof window.FB.list !== "function") return null;
+
+    const allOrders = await window.FB.list("orders") || [];
+    const uid = currentUser?.uid || null;
+    const savedUser = (typeof getSavedUser === "function") ? getSavedUser() : {};
+    const email = (currentUser?.email || savedUser?.email || "").toLowerCase();
+    const phone = String(savedUser?.phone || "").replace(/\D/g, "");
+
+    // فلترة الطلبات بتاعت العميل
+    const myOrders = allOrders.filter(o => {
+      if(!o) return false;
+      if(Number(o.status) === 4) return false;
+      const oEmail = String(o.email || o.customer?.email || "").toLowerCase();
+      const oPhone = String(o.phone || o.customer?.phone || "").replace(/\D/g, "");
+      const oUid = o.userId || "";
+      if(uid && oUid === uid) return true;
+      if(email && oEmail === email) return true;
+      if(phone && oPhone === phone) return true;
+      return false;
+    });
+
+    if(myOrders.length < LOYALTY_THRESHOLD){
+      return { count: myOrders.length, unlocked: false };
+    }
+
+    // نشوف هل استلم الكود قبل كده
+    let existing = null;
+    try { existing = JSON.parse(localStorage.getItem("vl_loyalty_unlocked") || "null"); } catch(e){}
+
+    if(existing && existing.code){
+      const expiresAt = Number(existing.expiresAt || 0);
+      if(Date.now() < expiresAt){
+        return {
+          count: myOrders.length,
+          unlocked: true,
+          code: existing.code,
+          unlockedAt: existing.unlockedAt,
+          expiresAt: existing.expiresAt
+        };
+      }
+    }
+
+    // ✅ نفعّل الكود لأول مرة
+    const unlockedAt = Date.now();
+    const expiresAt = unlockedAt + (LOYALTY_VALIDITY_DAYS * 24 * 60 * 60 * 1000);
+    const data = { code: LOYALTY_CODE, unlockedAt, expiresAt, discount: LOYALTY_DISCOUNT };
+
+    try { localStorage.setItem("vl_loyalty_unlocked", JSON.stringify(data)); } catch(e){}
+
+    // إيميل للعميل
+    if(email){
+      sendLoyaltyEmail(email, savedUser?.name || "", LOYALTY_CODE, expiresAt).catch(()=>{});
+    }
+
+    // تسجيل في Firebase
+    if(uid){
+      try {
+        const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+        await setDoc(doc(window.FB.db, "users", uid), {
+          loyaltyUnlocked: true,
+          loyaltyCode: LOYALTY_CODE,
+          loyaltyUnlockedAt: unlockedAt,
+          loyaltyExpiresAt: expiresAt
+        }, { merge: true });
+      } catch(e){}
+    }
+
+    return { count: myOrders.length, unlocked: true, justUnlocked: true, code: LOYALTY_CODE, unlockedAt, expiresAt };
+  } catch(err){
+    console.warn("⚠️ Loyalty check failed:", err);
+    return null;
+  }
+}
+
+async function sendLoyaltyEmail(toEmail, name, code, expiresAt){
+  try {
+    const expiresDate = new Date(expiresAt).toLocaleDateString("ar-EG", { year:"numeric", month:"long", day:"numeric" });
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: "🎉 مبروك! كود خصم 15% من VelaLight",
+        from_name: "VelaLight Loyalty",
+        reply_to: toEmail,
+        email: toEmail,
+        message: `
+🎉 مبروك ${name || "عميلنا العزيز"}!
+
+شكراً لثقتك في VelaLight ❤️
+بعد 3 طلبات، استحققت كود خصم حصري:
+
+━━━━━━━━━━━━━━━━━━━━
+   ${code}
+━━━━━━━━━━━━━━━━━━━━
+
+💰 الخصم: 15%
+📅 صالح حتى: ${expiresDate}
+🛍️ استخدمه عند إتمام طلبك الجاي
+
+كيف تستخدمه؟
+1. ضيف المنتجات للسلة
+2. أدخل الكود ${code} في خانة الكوبون
+3. هيتم تطبيق الخصم فوراً
+
+شكراً لكونك جزء من عائلة VelaLight 🕯️
+        `.trim()
+      })
+    });
+    return res.ok;
+  } catch(e){ return false; }
+}
+
+/* ═══ نافذة "مبروك" ═══ */
+function showLoyaltyModal(data){
+  if(!data || !data.code) return;
+  if(document.getElementById("vlLoyaltyOverlay")) return;
+
+  const expiresDate = new Date(data.expiresAt).toLocaleDateString("ar-EG", { year:"numeric", month:"long", day:"numeric" });
+
+  const overlay = document.createElement("div");
+  overlay.className = "vl-loyalty-overlay";
+  overlay.id = "vlLoyaltyOverlay";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.innerHTML = `
+    <div class="vl-loyalty-box">
+      <button class="vl-loyalty-close" type="button" aria-label="إغلاق">✕</button>
+      <div class="vl-loyalty-emoji">🎉</div>
+      <h3 class="vl-loyalty-title">مبروك! كسبت كود خصم</h3>
+      <p class="vl-loyalty-sub">شكراً لثقتك في VelaLight — استحققت هدية خاصة</p>
+      <div class="vl-loyalty-code" id="vlLoyaltyCode">${data.code}</div>
+      <div class="vl-loyalty-info">💰 خصم 15% · 📅 صالح حتى ${expiresDate}</div>
+      <button class="vl-loyalty-copy" id="vlLoyaltyCopy" type="button">📋 انسخ الكود</button>
+      <a class="vl-loyalty-cta" href="products.html">🛍️ تسوق الآن واستخدمه</a>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add("show"));
+
+  const close = () => {
+    overlay.classList.remove("show");
+    setTimeout(() => overlay.remove(), 300);
+  };
+
+  overlay.querySelector(".vl-loyalty-close").addEventListener("click", close);
+  overlay.addEventListener("click", e => { if(e.target === overlay) close(); });
+
+  overlay.querySelector("#vlLoyaltyCopy").addEventListener("click", () => {
+    const btn = overlay.querySelector("#vlLoyaltyCopy");
+    const done = () => {
+      btn.textContent = "✅ تم النسخ!";
+      setTimeout(() => { btn.textContent = "📋 انسخ الكود"; }, 2000);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(data.code).then(done).catch(done);
+    } else {
+      const tmp = document.createElement("textarea");
+      tmp.value = data.code; document.body.appendChild(tmp); tmp.select();
+      try { document.execCommand("copy"); done(); } catch(e){ done(); }
+      document.body.removeChild(tmp);
+    }
+  });
+
+  // Google Analytics
+  if(typeof window.gtag === "function"){
+    try { window.gtag("event", "loyalty_unlocked", { coupon_code: data.code }); } catch(e){}
+  }
+}
+
+/* ═══ عرض النافذة على أي صفحة لو فيه علامة ═══ */
+(function initLoyaltyPopup(){
+  function tryShow(){
+    if(localStorage.getItem("vl_loyalty_show_popup") !== "1") return;
+    let data = null;
+    try { data = JSON.parse(localStorage.getItem("vl_loyalty_unlocked") || "null"); } catch(e){}
+    if(!data || !data.code) return;
+    localStorage.removeItem("vl_loyalty_show_popup");
+    showLoyaltyModal(data);
+  }
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", () => setTimeout(tryShow, 1500));
+  } else {
+    setTimeout(tryShow, 1500);
+  }
+})();
 async function checkout(){
   const c=getCart();
 
@@ -3879,6 +4105,20 @@ async function checkout(){
   freeShipCelebrated = false;
   renderCart();
   cartBadge();
+  
+// ✨ فحص برنامج الولاء بعد الطلب
+setTimeout(async () => {
+  try {
+    const currentUser = window.FB?.auth?.currentUser || null;
+    const lr = await checkAndUnlockLoyalty(currentUser);
+    if(lr && lr.justUnlocked){
+      try { localStorage.setItem("vl_loyalty_show_popup", "1"); } catch(e){}
+      setTimeout(() => {
+        if(typeof showLoyaltyModal === "function") showLoyaltyModal(lr);
+      }, 800);
+    }
+  } catch(e){ console.warn("Loyalty post-checkout failed", e); }
+}, 1200);
   
   let emailSent = false;
   try { emailSent = await sendOrderConfirmationEmail(orderData); } catch (err) { console.warn("⚠️ Email notification failed:", err); }
