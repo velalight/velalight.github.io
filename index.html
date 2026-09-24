@@ -1112,6 +1112,80 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 </script>
 
 <!-- ═══ SCRIPTS ═══ -->
+  <script>
+/* ═══ FAQ Schema Injection — يعمل مع تغيير اللغة تلقائي ═══ */
+(function(){
+  "use strict";
+  
+  function buildAndInjectFAQ(){
+    // نتأكد إن مفيش schema موجود مسبقاً
+    var old = document.getElementById("faqSchema");
+    if(old) old.remove();
+    
+    // نحتاج الدالة t من app.js
+    if(typeof window.t !== "function") return;
+    if(typeof I18N === "undefined") return;
+    
+    var lang = (typeof LANG !== "undefined") ? LANG : "ar";
+    var i18n = I18N[lang] || I18N.ar;
+    if(!i18n) return;
+    
+    var faqs = [];
+    for(var i = 1; i <= 8; i++){
+      var q = i18n["faq" + i + "q"];
+      var a = i18n["faq" + i + "a"];
+      if(q && a){
+        faqs.push({
+          "@type": "Question",
+          "name": String(q).replace(/<[^>]*>/g, "").trim(),
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": String(a).replace(/<[^>]*>/g, "").trim()
+          }
+        });
+      }
+    }
+    
+    if(!faqs.length) return;
+    
+    var schema = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs
+    };
+    
+    var script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "faqSchema";
+    script.textContent = JSON.stringify(schema);
+    document.head.appendChild(script);
+    console.log("✅ FAQ Schema injected:", faqs.length, "questions");
+  }
+  
+  // نحاول كل 500ms لحد ما app.js يحمّل
+  var tries = 0;
+  var timer = setInterval(function(){
+    tries++;
+    if(typeof window.t === "function" && typeof I18N !== "undefined"){
+      buildAndInjectFAQ();
+      clearInterval(timer);
+    }
+    if(tries >= 20) clearInterval(timer);
+  }, 500);
+  
+  // نراقب تغيير اللغة
+  var lastLang = (typeof LANG !== "undefined") ? LANG : "ar";
+  setInterval(function(){
+    var currentLang = (typeof LANG !== "undefined") ? LANG : "ar";
+    if(currentLang !== lastLang){
+      lastLang = currentLang;
+      buildAndInjectFAQ();
+    }
+  }, 500);
+})();
+</script>
+
+<script src="data.js?v=9"></script>
 <script src="data.js?v=9"></script>
 <script type="module" src="firebase.js"></script>
 <script src="app.js"></script>
