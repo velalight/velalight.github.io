@@ -4678,6 +4678,18 @@ async function applyCoupon(){
   
   const c = list.find(x => (x.code || "").toUpperCase() === code);
   if(!c){ toast("❌ كود الكوبون غير صحيح"); return; }
+    // ✨ حماية كود الولاء — لا يعمل إلا للعميل اللي استحقه
+  if(String(c.code || "").toUpperCase() === "LOYAL15"){
+    let loyalty = null;
+    try { loyalty = JSON.parse(localStorage.getItem("vl_loyalty_unlocked") || "null"); } catch(e){}
+    const isValid = loyalty
+      && String(loyalty.code || "").toUpperCase() === "LOYAL15"
+      && Date.now() < Number(loyalty.expiresAt || 0);
+    if(!isValid){
+      toast("🎁 الكود ده للعملاء الأوفياء — اطلب 3 مرات وهيوصلك تلقائي");
+      return;
+    }
+  }
   if(c.active === false){ toast("❌ الكوبون ده متوقف"); return; }
   
   const now = Date.now();
