@@ -29,7 +29,8 @@
 <meta name="theme-color" content="#faf6f0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="apple-touch-icon" href="velalight-wooden-luxury-set-3candles-detail.webp">
+<meta name="apple-mobile-web-app-title" content="VelaLight">
+<link rel="apple-touch-icon" href="https://images.weserv.nl/?url=https://velalight.github.io/heart2.jpg&w=180&h=180&fit=cover&output=png">
 
 <!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
@@ -57,7 +58,8 @@
   src="https://www.facebook.com/tr?id=1377896053806991&ev=PageView&noscript=1"/>
 </noscript>
 <!-- ═══ End Tracking Codes ═══ -->
-  <!-- ═══ Microsoft Clarity ═══ -->
+
+<!-- ═══ Microsoft Clarity ═══ -->
 <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -71,15 +73,20 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
 <link rel="dns-prefetch" href="https://www.googletagmanager.com">
-
 <link rel="preconnect" href="https://images.weserv.nl">
 <link rel="preload" as="image" href="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2Fvelalight-wooden-luxury-set-3candles-detail.webp&w=1000&q=75&output=webp" fetchpriority="high">
-https://velalight.github.io/style.min.css
-  <link rel="stylesheet" href="mobile-luxury-fix.css">
 
-<!-- ═══ Lightbox2 CSS (الصورة تظهر في modal) ═══ -->
+<!-- ═══ Stylesheets ═══ -->
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="mobile-luxury-fix.css">
+<link rel="stylesheet" href="pwa.css">
+<link rel="stylesheet" href="search.css">
+<link rel="stylesheet" href="exit-intent.css">
+
+<!-- ═══ Lightbox2 CSS ═══ -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
 
+<!-- ═══ Fonts ═══ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -96,13 +103,7 @@ https://velalight.github.io/style.min.css
     href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=El+Messiri:wght@400;500;600;700&display=swap"
   >
 </noscript>
-<!-- iOS PWA Support -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="VelaLight">
-<link rel="apple-touch-icon" href="https://images.weserv.nl/?url=https://velalight.github.io/heart2.jpg&w=180&h=180&fit=cover&output=png">
-<link rel="stylesheet" href="pwa.css">
-  <link rel="stylesheet" href="search.css">
+
 <link rel="manifest" href="manifest.json">
 
 <!-- ═══════════════════════════════════════════════
@@ -182,7 +183,7 @@ https://velalight.github.io/style.min.css
     }
   }
 
-  /* ═══ Stagger — العناصر تظهر ورا بعض ═══ */
+  /* ═══ Stagger ═══ */
   .js [data-reveal-stagger] > * {
     opacity: 0;
     transform: translate3d(0, 35px, 0) scale(0.98);
@@ -205,7 +206,7 @@ https://velalight.github.io/style.min.css
   .js [data-reveal-stagger].is-visible > *:nth-child(7) { transition-delay: 720ms; }
   .js [data-reveal-stagger].is-visible > *:nth-child(8) { transition-delay: 840ms; }
 
-  /* توافق مع نظام .rv القديم ومنع اختفاء المحتوى عند تعطل JavaScript */
+  /* توافق مع نظام .rv القديم */
   .js .rv.is-visible,
   .js .rv.on { opacity: 1; transform: none; filter: none; }
   html:not(.js) .rv { opacity: 1 !important; transform: none !important; filter: none !important; }
@@ -238,14 +239,6 @@ https://velalight.github.io/style.min.css
   }
 }
 </script>
-  <link rel="stylesheet" href="exit-intent.css">
-  <!-- ═══ PWA Support ═══ -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="VelaLight">
-<link rel="apple-touch-icon" href="https://images.weserv.nl/?url=https://velalight.github.io/heart2.jpg&w=180&h=180&fit=cover&output=png">
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="pwa.css">
 </head>
 
 <body>
@@ -321,38 +314,6 @@ https://velalight.github.io/style.min.css
   </div>
 </header>
 
- 
-<style>
-.trust-bar-compact {
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(6px);
-  border-bottom: 1px solid rgba(26,21,18,0.05);
-  padding: 0.3rem 0;
-}
-.trust-wrap-compact {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-.trust-item {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.68rem;
-  color: var(--mut);
-  font-weight: 500;
-}
-.trust-icon {
-  font-size: 0.85rem;
-}
-@media (max-width: 600px) {
-  .trust-wrap-compact { gap: 0.8rem; }
-  .trust-item { font-size: 0.6rem; }
-  .trust-icon { font-size: 0.7rem; }
-}
-</style>
-
 <!-- ═══ MOBILE NAV ═══ -->
 <nav class="mnav" id="mnav" aria-label="قائمة الموبايل">
   <h5 data-i18n="mn_cats">تصنيفات الشموع</h5>
@@ -370,8 +331,8 @@ https://velalight.github.io/style.min.css
   <a href="#faq-section" data-i18n="nav_faq">الأسئلة الشائعة</a>
   <a href="reviews.html" data-i18n="mn_rev">آراء عملائنا</a>
   <a href="wishlist.html" style="color:var(--gold2)" data-i18n="foot_wishlist">❤️ المفضلة</a>
-<a href="my-orders.html" data-i18n="foot_orders">📦 طلباتي</a>
-    <h5 data-i18n="mn_contact">تواصل</h5>
+  <a href="my-orders.html" data-i18n="foot_orders">📦 طلباتي</a>
+  <h5 data-i18n="mn_contact">تواصل</h5>
   <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
   <a href="privacy.html" data-i18n="foot_privacy">سياسة الخصوصية</a>
 </nav>
@@ -485,7 +446,7 @@ https://velalight.github.io/style.min.css
       <p style="color:var(--mut);margin-top:.5rem;font-size:.95rem;" data-i18n="prod_sub">اكتشف أحدث تشكيلتنا من الشموع الفاخرة</p>
     </div>
     <div class="chips" id="chips" aria-hidden="true" style="display:none"></div>
-<div class="pgrid rv" id="pgrid"></div>
+    <div class="pgrid rv" id="pgrid"></div>
     <div style="text-align:center;margin-top:2.5rem;" data-reveal data-reveal-delay="200">
       <a href="products.html" class="btn-primary-lux" style="display:inline-block;padding:14px 40px;font-size:1.05rem;" data-i18n="prod_see_all">🕯️ استعرض كل المنتجات</a>
     </div>
@@ -572,7 +533,6 @@ async function loadCraftsmanship() {
       const isVideo = item.mediaType === 'video' || (item.mediaUrl && /\.(mp4|webm|ogg)$/i.test(item.mediaUrl));
       let mediaHtml = '';
       if (isVideo && mediaSrc) {
-        /* ✅ Lazy video: مفيش autoplay في HTML — الـ JS بيشغّله لما يدخل الشاشة */
         mediaHtml = `<video src="${escapeHTML(mediaSrc)}" muted loop playsinline controls preload="none" data-lazy-video poster="velalight-wooden-luxury-set-3candles-detail.webp" style="width:100%; height:250px; object-fit:cover; display:block; background:#000;"></video>`;
       } else if (mediaSrc) {
         mediaHtml = `<img src="${escapeHTML(mediaSrc)}" alt="${escapeHTML(title)}" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">`;
@@ -967,8 +927,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
   <div class="chat-q" id="chatQuick"></div>
 </div>
 
-<!-- ═══ TOASTS ═══ -->
-  <!-- ═══ Exit Intent Popup ═══ -->
+<!-- ═══ Exit Intent Popup ═══ -->
 <div class="vl-exit-overlay" id="vlExitOverlay" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="vl-exit-box">
     <button class="vl-exit-close" id="vlExitClose" aria-label="إغلاق">✕</button>
@@ -981,6 +940,8 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
     <button class="vl-exit-no" id="vlExitNo" type="button">لا شكرًا</button>
   </div>
 </div>
+
+<!-- ═══ TOASTS ═══ -->
 <div id="toasts"></div>
 
 <!-- ═══ BACK TO TOP ═══ -->
@@ -1030,7 +991,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 </a>
 
 <!-- ═══════════════════════════════════════════════
-     SCROLL REVEAL — JS (Native IntersectionObserver)
+     SCROLL REVEAL — JS
      ═══════════════════════════════════════════════ -->
 <script>
 (function () {
@@ -1094,13 +1055,12 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 </script>
 
 <!-- ═══════════════════════════════════════════════
-     LAZY VIDEO — JS (تحميل وتشغيل الفيديو عند الدخول للشاشة)
+     LAZY VIDEO — JS
      ═══════════════════════════════════════════════ -->
 <script>
 (function () {
   "use strict";
 
-  // لو المتصفح مش بيدعم IntersectionObserver — شغّل كل الفيديوهات
   if (!("IntersectionObserver" in window)) {
     document.querySelectorAll("video[data-lazy-video]").forEach(function (v) {
       v.preload = "metadata";
@@ -1113,17 +1073,12 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
     entries.forEach(function (entry) {
       var v = entry.target;
       if (entry.isIntersecting) {
-        // الفيديو دخل الشاشة — فعّل التحميل وشغّله
         if (v.preload === "none") {
           v.preload = "metadata";
-          // load() بتعيد تحميل الفيديو بالـ preload الجديد
           try { v.load(); } catch (e) {}
         }
-        v.play().catch(function () {
-          // المتصفح منع التشغيل التلقائي — مش مشكلة، فيه أزرار controls
-        });
+        v.play().catch(function () {});
       } else {
-        // الفيديو خرج من الشاشة — وقّفه لتوفير الموارد
         if (!v.paused) v.pause();
       }
     });
@@ -1143,7 +1098,6 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 
   window.refreshLazyVideos = function () { observeVideos(document); };
 
-  // راقب الفيديوهات الجديدة اللي بتتضاف للصفحة (من Firebase مثلاً)
   var mo = new MutationObserver(function (mutations) {
     mutations.forEach(function (m) {
       m.addedNodes.forEach(function (node) {
@@ -1160,7 +1114,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 <!-- ═══ SCRIPTS ═══ -->
 <script src="data.js?v=9"></script>
 <script type="module" src="firebase.js"></script>
-<script src="app.min.js"></script>
+<script src="app.js"></script>
 <script>
 (function(){
   "use strict";
@@ -1256,11 +1210,10 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-
 <!-- ═══ LIGHTBOX SCRIPT (deferred) ═══ -->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox-plus-jquery.min.js"></script>
 <script src="ga4-events.js" defer></script>
 <script src="pwa.js" defer></script>
-  <script src="search.js" defer></script>
+<script src="search.js" defer></script>
 </body>
 </html>
