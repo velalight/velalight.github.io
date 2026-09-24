@@ -1295,3 +1295,72 @@ textarea:focus-visible,
   opacity: 0.4;
   pointer-events: none;
 }
+/* ═══ LOYALTY MODAL ═══ */
+.vl-loyalty-overlay{
+  position:fixed;inset:0;background:rgba(26,21,18,.75);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  z-index:999998;display:flex;align-items:center;justify-content:center;
+  padding:1.5rem;opacity:0;transition:opacity .35s ease;
+}
+.vl-loyalty-overlay.show{opacity:1}
+.vl-loyalty-box{
+  background:linear-gradient(160deg,#fffcf9 0%,#fdf5ed 100%);
+  border-radius:24px;padding:2.2rem 1.8rem;max-width:420px;width:100%;
+  text-align:center;box-shadow:0 25px 70px rgba(0,0,0,.35);
+  border:2px solid rgba(212,175,55,.4);position:relative;
+  transform:scale(.9) translateY(20px);
+  transition:transform .4s cubic-bezier(.22,1,.36,1);
+}
+.vl-loyalty-overlay.show .vl-loyalty-box{transform:scale(1) translateY(0)}
+.vl-loyalty-close{
+  position:absolute;top:10px;inset-inline-end:10px;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(0,0,0,.06);border:none;color:#8b6f47;
+  font-size:1.1rem;cursor:pointer;display:grid;place-items:center;transition:.25s;
+}
+.vl-loyalty-close:hover{background:rgba(0,0,0,.12);transform:rotate(90deg)}
+.vl-loyalty-emoji{
+  font-size:3.5rem;margin-bottom:.6rem;
+  animation:vlLoyaltyBounce 1.4s ease-in-out infinite;display:inline-block;
+  filter:drop-shadow(0 8px 16px rgba(212,175,55,.4));
+}
+@keyframes vlLoyaltyBounce{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-10px) rotate(3deg)}
+}
+.vl-loyalty-title{
+  font-family:'El Messiri',serif;font-size:1.5rem;color:#1a1512;
+  margin:0 0 .5rem;line-height:1.3;
+}
+.vl-loyalty-sub{color:#5a4a3a;font-size:.92rem;margin:0 0 1.2rem;line-height:1.6}
+.vl-loyalty-code{
+  background:linear-gradient(135deg,#fffaf0,#fff5e0);
+  border:2px dashed #d4af37;border-radius:12px;
+  padding:1rem 1.2rem;font-family:monospace;font-size:1.6rem;
+  font-weight:900;color:#b8863f;letter-spacing:3px;
+  margin-bottom:.8rem;user-select:all;cursor:pointer;
+}
+.vl-loyalty-info{font-size:.82rem;color:#8b6f47;margin-bottom:1rem;font-weight:600}
+.vl-loyalty-copy{
+  background:transparent;border:none;color:#8b6f47;font-size:.85rem;
+  font-weight:700;cursor:pointer;margin-bottom:1rem;padding:.5rem;
+  text-decoration:underline;font-family:inherit;transition:.2s;
+}
+.vl-loyalty-copy:hover{color:#b8863f}
+.vl-loyalty-cta{
+  display:block;background:linear-gradient(135deg,#1a1512,#2a1c0b);
+  color:#fff;padding:1rem;border-radius:14px;text-decoration:none;
+  font-weight:800;font-size:1rem;box-shadow:0 10px 24px rgba(26,21,18,.25);
+  transition:transform .25s,box-shadow .25s;
+}
+.vl-loyalty-cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(26,21,18,.35)}
+@media (max-width:480px){
+  .vl-loyalty-box{padding:1.8rem 1.4rem;border-radius:20px}
+  .vl-loyalty-emoji{font-size:2.8rem}
+  .vl-loyalty-title{font-size:1.25rem}
+  .vl-loyalty-code{font-size:1.3rem;padding:.8rem 1rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .vl-loyalty-emoji{animation:none}
+  .vl-loyalty-box,.vl-loyalty-overlay{transition:none}
+}
