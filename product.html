@@ -42,7 +42,6 @@
   src="https://www.facebook.com/tr?id=1377896053806991&ev=PageView&noscript=1"/>
 </noscript>
 
-<!-- ═══ Microsoft Clarity ═══ -->
 <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -221,9 +220,6 @@
   #pdThumbs img{width:64px !important;height:64px !important;min-width:64px !important;min-height:64px !important;max-width:64px !important;max-height:64px !important}
 }
 
-/* ═══════════════════════════════════════════════
-   ✨ INFO PANEL — مضغوط ومحسّن
-   ═══════════════════════════════════════════════ */
 .pd-info{display:flex;flex-direction:column;gap:.5rem}
 .pd-info h1{
   font-family:var(--fd);
@@ -508,7 +504,6 @@
 .wish-btn:hover{border-color:var(--gold);transform:translateY(-2px)}
 .wish-btn.on{background:#ffe8e8;color:#e74c3c;border-color:#e74c3c}
 
-/* ═══ Social Proof Snippet ═══ */
 .pd-social-proof{
   position:relative;
   animation:pdFadeProof .5s ease;
@@ -830,7 +825,6 @@
   border-radius: 0 0 22px 22px;
 }
 
-/* ═══ STICKY MOBILE BUY BAR ═══ */
 .pd-sticky-bar{
   display:none;
   position:fixed;
@@ -896,7 +890,6 @@
   .pd-sticky-bar{display:none !important}
 }
 
-/* ═══ Responsive ═══ */
 @media(max-width:960px){
   .pd-grid{grid-template-columns:1fr;gap:2rem}
   .pd-gallery{position:static}
@@ -1083,7 +1076,6 @@
             <span class="save-badge" id="pdSave" style="display:none"></span>
           </div>
 
-          <!-- ═══ Social Proof Snippet ═══ -->
           <div class="pd-social-proof" id="pdSocialProof" style="display:none;padding:.75rem 1rem;background:linear-gradient(135deg,#fdf5ed,#faf0e6);border:1px solid rgba(217,171,95,.35);border-radius:12px;font-size:.85rem;color:var(--mut);line-height:1.5;">
             <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem;">
               <span style="color:var(--gold);letter-spacing:1px;font-size:.95rem;">★★★★★</span>
@@ -1286,7 +1278,6 @@
 
 <div id="toasts"></div>
 
-<!-- ═══ Sticky Mobile Buy Bar ═══ -->
 <div class="pd-sticky-bar" id="pdStickyBar" aria-hidden="true">
   <div class="pd-sticky-info">
     <span class="pr" id="pdStickyPrice">—</span>
@@ -1393,6 +1384,17 @@ document.addEventListener("DOMContentLoaded",()=>{
   productPid=new URLSearchParams(location.search).get("p")||"";
   if(!productPid){showNotFound();return}
 
+  // ✅ نعرض المنتج من PRODUCTS فوراً (بدون انتظار Firebase)
+  try {
+    const local = (typeof PRODUCTS !== "undefined") 
+      ? PRODUCTS.find(x => String(x.id) === String(productPid)) 
+      : null;
+    if(local){
+      P = { ...local };
+      render();
+    }
+  } catch(e){}
+
   const sync = async () => {
     try {
       if(typeof loadCloudCatalog === "function") await loadCloudCatalog(productPid);
@@ -1405,7 +1407,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   } else {
     window.addEventListener("fb-ready", sync, { once: true });
     setTimeout(() => {
-      if (!P && window.FB && typeof window.FB.list === "function") sync();
+      if (!P && window.FB && window.FB.list === "function") sync();
     }, 1000);
   }
 
@@ -1503,29 +1505,86 @@ document.addEventListener("click", (e) => {
 async function loadCloudCatalog(pid){
   try{
     if(typeof DB !== "undefined" && typeof DB.list === "function") {
-      const cloud=await DB.list("products");
-      cloudCatalog=cloud||[];
-      const found=cloud.find(x=> String(x.id)===String(pid)||String(x.id_)===String(pid)||String(x.slug)===String(pid));
-      if(found&&found.active!==false){
+      const cloud = await DB.list("products");
+      cloudCatalog = cloud || [];
+      
+      const found = cloud.find(x => 
+        x && (
+          String(x.id) === String(pid) ||
+          String(x.id_) === String(pid) ||
+          String(x.slug) === String(pid) ||
+          String(x.pid) === String(pid) ||
+          String(x._fid) === String(pid)
+        )
+      );
+      
+      if(found && found.active !== false){
         try{
-          const cacheKey="vl_products_cache_v2";
-          let cache=[];
-          try{cache=JSON.parse(localStorage.getItem(cacheKey)||"[]")}catch(e){}
-          if(!Array.isArray(cache)) cache=[];
-          const idx=cache.findIndex(x=> String(x.id)===String(pid)||String(x.id_)===String(pid));
-          if(idx>=0) cache[idx]={...found,id:pid};
-          else cache.push({...found,id:pid});
-          localStorage.setItem(cacheKey,JSON.stringify(cache.slice(-100)));
-        }catch(e){console.warn("Cache update failed",e)}
-        P={...found};
+          const cacheKey = "vl_products_cache_v2";
+          let cache = [];
+          try{ cache = JSON.parse(localStorage.getItem(cacheKey) || "[]"); }catch(e){}
+          if(!Array.isArray(cache)) cache = [];
+          const idx = cache.findIndex(x => String(x.id) === String(pid));
+          if(idx >= 0) cache[idx] = { ...found, id: pid };
+          else cache.push({ ...found, id: pid });
+          localStorage.setItem(cacheKey, JSON.stringify(cache.slice(-100)));
+        }catch(e){}
+        
+        P = { ...found, id: pid };
         render();
-      }else if(found&&found.active===false){ showNotFound(); }
-      else{
-        const local=(typeof PRODUCTS!=="undefined")?PRODUCTS.find(x=>String(x.id)===String(pid)):null;
-        if(local){ P={...local}; render(); } else { showNotFound(); }
+        return;
+      }
+      
+      if(found && found.active === false){ 
+        showNotFound(); 
+        return; 
+      }
+      
+      const local = (typeof PRODUCTS !== "undefined") 
+        ? PRODUCTS.find(x => String(x.id) === String(pid)) 
+        : null;
+      if(local){ 
+        P = { ...local }; 
+        render(); 
+        return; 
+      }
+      
+      try {
+        const cached = JSON.parse(localStorage.getItem("vl_products_v3") || "[]");
+        const fromCache = cached.find(x => String(x.id) === String(pid));
+        if(fromCache){ 
+          P = { ...fromCache }; 
+          render(); 
+          return; 
+        }
+      } catch(e){}
+      
+      if(!P) showNotFound();
+    } else {
+      const local = (typeof PRODUCTS !== "undefined") 
+        ? PRODUCTS.find(x => String(x.id) === String(pid)) 
+        : null;
+      if(local){ 
+        P = { ...local }; 
+        render(); 
+      } else if(!P) { 
+        showNotFound(); 
       }
     }
-  }catch(e){ console.warn("Cloud load failed",e); }
+  }catch(e){ 
+    console.warn("Cloud load failed", e);
+    if(!P){
+      const local = (typeof PRODUCTS !== "undefined") 
+        ? PRODUCTS.find(x => String(x.id) === String(pid)) 
+        : null;
+      if(local){ 
+        P = { ...local }; 
+        render(); 
+      } else { 
+        showNotFound(); 
+      }
+    }
+  }
 }
 
 function render(){
@@ -1935,13 +1994,6 @@ function showNotFound(){
   $("#pdNotFound").classList.remove("hidden"); 
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ CONVERSION BOOSTERS
-   - Sticky mobile buy bar
-   - Social proof snippet
-   ═══════════════════════════════════════════════════════════ */
-
-/* ─── 1) Sticky Mobile Buy Bar ─── */
 function initStickyBar(){
   const stickyBar = document.getElementById("pdStickyBar");
   const stickyPrice = document.getElementById("pdStickyPrice");
@@ -1997,7 +2049,6 @@ function initStickyBar(){
   });
 }
 
-/* ─── 2) Social Proof Snippet ─── */
 function initSocialProof(){
   const box = document.getElementById("pdSocialProof");
   const avgEl = document.getElementById("pdSocialAvg");
@@ -2048,7 +2099,6 @@ function initSocialProof(){
   }, 600);
 }
 
-/* ─── Init boosters after main render ─── */
 function initBoosters(){
   initStickyBar();
   initSocialProof();
@@ -2096,7 +2146,7 @@ if(document.readyState === "loading"){
 </script>
 <script src="bottom-nav.js"></script>
 <script src="ga4-events.js" defer></script>
-  <script src="pwa.js" defer></script>
-  <script src="search.js" defer></script>
+<script src="pwa.js" defer></script>
+<script src="search.js" defer></script>
 </body>
 </html>
