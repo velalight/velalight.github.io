@@ -10,14 +10,19 @@ import {
   updateDoc,
   deleteDoc,
   doc,
-  setDoc
+  setDoc,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
   getAuth,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  signOut
+  signOut,
+  setPersistence,
+  browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 /* ═══════════════════════════════════════════════════════════
@@ -51,7 +56,8 @@ const firebaseConfig = {
 let app;
 let db;
 let auth;
-let appCheck; // ✨ إضافة متغير App Check
+let appCheck;
+
 
 try {
 
@@ -59,15 +65,48 @@ try {
 
   /* ═══════════════════════════════════════════════════════════
      ✨ تهيئة App Check مع reCAPTCHA Enterprise
+     ✅ [تعديل 1] — في try/catch منفصل: لو فشلت، الموقع يشتغل عادي
      ═══════════════════════════════════════════════════════════ */
-  appCheck = initializeAppCheck(app, {
-    provider: new ReCaptchaEnterpriseProvider("6LcDZ48tAAAAAMnCK3u6Z9iepwN5iJPjUdIXkY2I"),
-    isTokenAutoRefreshEnabled: true
-  });
+  try {
+    appCheck = initializeAppCheck(app, {
+      provider: new ReCaptchaEnterpriseProvider("6LcDZ48tAAAAAMnCK3u6Z9iepwN5iJPjUdIXkY2I"),
+      isTokenAutoRefreshEnabled: true
+    });
+    console.log("🛡️ App Check initialized with reCAPTCHA Enterprise");
+  } catch (appCheckError) {
+    console.warn("⚠️ App Check failed (continuing without it):", appCheckError);
+    appCheck = null;
+  }
 
-  db = getFirestore(app);
+  /* ═══════════════════════════════════════════════════════════
+     ✅ [تعديل 2] — Firestore مع offline persistence
+     الميزة: الموقع يشتغل حتى لو النت قطع مؤقتاً
+     ═══════════════════════════════════════════════════════════ */
+  try {
+    db = initializeFirestore(app, {
+      localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager()
+      })
+    });
+    console.log("💾 Firestore offline persistence enabled");
+  } catch (cacheError) {
+    console.warn("⚠️ Persistent cache unavailable, falling back to default:", cacheError);
+    db = getFirestore(app);
+  }
 
+  /* ═══════════════════════════════════════════════════════════
+     ✅ [تعديل 3] — Auth مع persistent login
+     الميزة: المستخدم يفضل مسجل دخول حتى بعد إغلاق المتصفح
+     ═══════════════════════════════════════════════════════════ */
   auth = getAuth(app);
+
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      console.log("🔐 Auth persistence enabled");
+    })
+    .catch((persistError) => {
+      console.warn("⚠️ Auth persistence failed:", persistError);
+    });
 
 
   /* =======================================================
@@ -80,7 +119,7 @@ try {
 
     auth,
 
-    appCheck, // ✨ إضافة appCheck للواجهة
+    appCheck,
 
 
     /* =========================
@@ -111,7 +150,7 @@ try {
         doc(db, collectionName, String(id))
       );
 
-      if(!snapshot.exists()) return null;
+      if (!snapshot.exists()) return null;
 
       return {
         id: snapshot.id,
@@ -300,10 +339,6 @@ try {
   console.log(
     "✅ Firebase connected successfully"
   );
-
-  console.log(
-    "🛡️ App Check initialized with reCAPTCHA Enterprise"
-  ); // ✨ رسالة تأكيد تشغيل الحماية
 
   window.dispatchEvent(
     new Event("fb-ready")
