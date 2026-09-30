@@ -1,11 +1,13 @@
 /* ═══════════════════════════════════════════════════════════
-   SEARCH — البحث داخل الموقع
+   SEARCH — البحث داخل الموقع (v2 - متزامن مع Firebase)
    
    - بيضيف زر البحث في الهيدر أوتوماتيك
    - بيدور بالاسم/النوع/الوصف
    - ترتيب: الأكثر صلة، الأرخص، الأغلى، الأكثر مبيعًا، أكبر خصم
    - مش بيتأثر بالمنتجات المثبتة (بحث طبيعي)
    - شغال على الموبايل والكمبيوتر
+   - ✅ بيستمع لـ data-refresh لما المنتجات تتحدّث من Firebase
+   - ✅ بيقرأ من window.ALL_PRODUCTS دايمًا (مش snapshot)
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
@@ -28,14 +30,32 @@
     });
   }
 
+  /* ✅ [تعديل] — يقرأ دايمًا أحدث نسخة من المنتجات */
   function getProducts(){
-    if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS) && ALL_PRODUCTS.length){
-      return ALL_PRODUCTS.filter(function(p){ return p && p.id && p.active !== false; });
-    }
-    if(typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)){
-      return PRODUCTS.filter(function(p){ return p && p.id && p.active !== false; });
-    }
-    return [];
+    var sources = [];
+    try {
+      if (window.ALL_PRODUCTS && Array.isArray(window.ALL_PRODUCTS) && window.ALL_PRODUCTS.length) {
+        sources.push(window.ALL_PRODUCTS);
+      }
+    } catch(e){}
+    try {
+      if (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS) && ALL_PRODUCTS.length) {
+        if (!sources.length || sources[0] !== ALL_PRODUCTS) sources.push(ALL_PRODUCTS);
+      }
+    } catch(e){}
+    try {
+      if (window.PRODUCTS && Array.isArray(window.PRODUCTS) && window.PRODUCTS.length) {
+        sources.push(window.PRODUCTS);
+      }
+    } catch(e){}
+    try {
+      if (typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS) && PRODUCTS.length) {
+        if (!sources.length || sources[0] !== PRODUCTS) sources.push(PRODUCTS);
+      }
+    } catch(e){}
+
+    var list = sources[0] || [];
+    return list.filter(function(p){ return p && p.id && p.active !== false; });
   }
 
   function getCat(p){
@@ -156,7 +176,6 @@
 
     if(!q){
       /* مفيش كلمة بحث — نعرض المنتجات حسب الترتيب المختار فقط */
-      /* بدون أي منطق للتثبيت */
       list = sortList(products, currentSort).slice(0, 15);
     } else {
       var filtered = products.filter(function(p){ return matches(p, q); });
@@ -252,7 +271,6 @@
     btn.setAttribute("aria-label", "بحث");
     btn.innerHTML = '<span aria-hidden="true">🔍</span>';
 
-    /* نحطه قبل أول أيقونة في المجموعة (جنب حسابي/السلة) */
     var first = hact.firstElementChild;
     if(first && first.nextSibling){
       hact.insertBefore(btn, first.nextSibling);
@@ -322,6 +340,18 @@
     /* رسالة البداية */
     resultsBox.innerHTML = '<div class="vl-search-empty"><p>✨ اكتب اسم المنتج أو نوعه</p></div>';
   }
+
+  /* ✅ [جديد] — يستمع لتحديثات المنتجات من Firebase */
+  window.addEventListener("data-refresh", function(){
+    if(modal && modal.classList.contains("open")) perform();
+  });
+
+  /* ✅ [جديد] — يستمع لتحديثات التبويبات التانية */
+  window.addEventListener("storage", function(e){
+    if(e.key === "vl_products_v3" && modal && modal.classList.contains("open")){
+      perform();
+    }
+  });
 
   /* ═══ بدء ═══ */
   function init(){
