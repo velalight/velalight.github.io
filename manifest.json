@@ -1,15 +1,22 @@
 {
+  "id": "/?source=pwa",
   "name": "VelaLight - شموع يدوية فاخرة",
   "short_name": "VelaLight",
   "description": "شموع يدوية فاخرة بعطور مميزة - هدايا حسب الطلب - Luxury handmade candles",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
   "orientation": "portrait",
   "background_color": "#F6EDE0",
   "theme_color": "#4A2E1E",
   "lang": "ar",
   "dir": "rtl",
+  "categories": ["shopping", "lifestyle", "food"],
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
   "icons": [
     {
       "src": "https://images.weserv.nl/?url=https://velalight.github.io/heart2.jpg&w=192&h=192&fit=cover&output=png",
@@ -22,6 +29,47 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "تصفح المنتجات",
+      "short_name": "المنتجات",
+      "description": "استعرض جميع الشموع الفاخرة",
+      "url": "/products.html",
+      "icons": [
+        {
+          "src": "https://images.weserv.nl/?url=https://velalight.github.io/heart2.jpg&w=96&h=96&fit=cover&output=png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "طلباتي",
+      "short_name": "طلباتي",
+      "description": "تابع طلباتك الحالية",
+      "url": "/my-orders.html",
+      "icons": [
+        {
+          "src": "https://images.weserv.nl/?url=https://velalight.github.io/heart2.jpg&w=96&h=96&fit=cover&output=png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "تواصل معنا",
+      "short_name": "تواصل",
+      "description": "تواصل مباشر عبر واتساب أو نموذج الاتصال",
+      "url": "/contact.html",
+      "icons": [
+        {
+          "src": "https://images.weserv.nl/?url=https://velalight.github.io/heart2.jpg&w=96&h=96&fit=cover&output=png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
     }
   ],
   "screenshots": [
