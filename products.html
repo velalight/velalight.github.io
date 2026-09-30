@@ -81,7 +81,7 @@
 <link rel="apple-touch-icon" href="https://images.weserv.nl/?url=https://velalight.github.io/heart2.jpg&w=180&h=180&fit=cover&output=png">
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="pwa.css">  
-  <link rel="stylesheet" href="search.css">
+<link rel="stylesheet" href="search.css">
 </head>
 
 <body>
@@ -305,23 +305,19 @@
       </div>
     </div>
 
-    <div class="fbot">
-      <span data-i18n="foot_rights">© 2026 VelaLight — جميع الحقوق محفوظة</span>
-      <div><a href="privacy.html" data-i18n="foot_privacy">سياسة الخصوصية</a> <a href="terms.html" data-i18n="foot_terms">شروط الاستخدام</a></div>
-    </div>
-  </div>
-
-  <div class="fbot" style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:10px;">
-    <span data-i18n="foot_rights" style="font-size:0.85rem;color:var(--dim);">© 2026 VelaLight — جميع الحقوق محفوظة</span>
-    <div style="font-size:0.8rem;color:var(--mut);display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;">
-      <span data-i18n="foot_designer_label">تصميم وتطوير بواسطة</span>
-      <a href="https://wa.me/201226690050" target="_blank" style="color:var(--gold2);text-decoration:none;font-weight:600;">Wagdy</a>
-      <span>&</span>
-      <a href="https://wa.me/201277741748" target="_blank" style="color:var(--gold2);text-decoration:none;font-weight:600;">Philopater</a>
-    </div>
-    <div style="display:flex;gap:15px;font-size:0.8rem;">
-      <a href="privacy.html" data-i18n="foot_privacy" style="color:var(--dim);text-decoration:none;">سياسة الخصوصية</a>
-      <a href="terms.html" data-i18n="foot_terms" style="color:var(--dim);text-decoration:none;">شروط الاستخدام</a>
+    <!-- ✅ [تعديل] — فوتر واحد مدمج (بدل ما كان مكرر مرتين) -->
+    <div class="fbot" style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <span data-i18n="foot_rights" style="font-size:0.85rem;color:var(--dim);">© 2026 VelaLight — جميع الحقوق محفوظة</span>
+      <div style="font-size:0.8rem;color:var(--mut);display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;">
+        <span data-i18n="foot_designer_label">تصميم وتطوير بواسطة</span>
+        <a href="https://wa.me/201226690050" target="_blank" style="color:var(--gold2);text-decoration:none;font-weight:600;">Wagdy</a>
+        <span>&</span>
+        <a href="https://wa.me/201277741748" target="_blank" style="color:var(--gold2);text-decoration:none;font-weight:600;">Philopater</a>
+      </div>
+      <div style="display:flex;gap:15px;font-size:0.8rem;">
+        <a href="privacy.html" data-i18n="foot_privacy" style="color:var(--dim);text-decoration:none;">سياسة الخصوصية</a>
+        <a href="terms.html" data-i18n="foot_terms" style="color:var(--dim);text-decoration:none;">شروط الاستخدام</a>
+      </div>
     </div>
   </div>
 </footer>
@@ -330,35 +326,70 @@
 
 <!-- ═══════════════════════════════════════════════
      PRODUCT SCHEMA + ITEMLIST + BREADCRUMB
-     يحقن Schema لكل منتج بعد تحميل البيانات
+     ✅ [تعديل] — يستمع لـ data-refresh + يتوقف فوراً بعد الحقن
      ═══════════════════════════════════════════════ -->
 <script>
 (function(){
   "use strict";
-  var tries = 0, maxTries = 40;
-  var timer = setInterval(function(){
-    tries++;
-    if (typeof window.injectAllProductSchemas === "function" 
-        && typeof ALL_PRODUCTS !== "undefined" 
-        && Array.isArray(ALL_PRODUCTS) 
-        && ALL_PRODUCTS.length > 0) {
-      try {
-        window.injectAllProductSchemas(ALL_PRODUCTS);
-        if (window.injectItemListSchema) {
-          window.injectItemListSchema(ALL_PRODUCTS, "مجموعة VelaLight الكاملة");
-        }
-        if (window.injectBreadcrumbSchema) {
-          window.injectBreadcrumbSchema();
-        }
-        console.log("✅ Product Schemas injected:", ALL_PRODUCTS.length);
-        clearInterval(timer);
-      } catch(e) {
-        console.warn("⚠️ Schema injection failed:", e);
+
+  var injected = false;
+  var timer = null;
+
+  function injectSchemas(){
+    if (injected) return true;
+
+    if (typeof window.injectAllProductSchemas !== "function") return false;
+
+    var products = null;
+    try {
+      if (Array.isArray(window.ALL_PRODUCTS) && window.ALL_PRODUCTS.length) {
+        products = window.ALL_PRODUCTS;
+      } else if (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS) && ALL_PRODUCTS.length) {
+        products = ALL_PRODUCTS;
       }
+    } catch(e){}
+
+    if (!products) return false;
+
+    try {
+      window.injectAllProductSchemas(products);
+      if (typeof window.injectItemListSchema === "function") {
+        window.injectItemListSchema(products, "مجموعة VelaLight الكاملة");
+      }
+      if (typeof window.injectBreadcrumbSchema === "function") {
+        window.injectBreadcrumbSchema();
+      }
+      console.log("✅ Product Schemas injected:", products.length);
+      injected = true;
+      if (timer) { clearInterval(timer); timer = null; }
+      return true;
+    } catch(e) {
+      console.warn("⚠️ Schema injection failed:", e);
+      // نوقف المحاولات لمنع الحلقة اللانهائية
+      injected = true;
+      if (timer) { clearInterval(timer); timer = null; }
+      return true;
     }
-    if (tries >= maxTries) {
-      console.warn("⚠️ Schema injection timeout");
-      clearInterval(timer);
+  }
+
+  /* 1) محاولة فورية */
+  if (injectSchemas()) return;
+
+  /* 2) استماع لحدث data-refresh (أسرع بكتير من polling) */
+  window.addEventListener("data-refresh", function(){
+    injectSchemas();
+  });
+
+  /* 3) polling مع توقف تلقائي — بحد أقصى 10 ثواني */
+  var tries = 0;
+  var MAX_TRIES = 20;
+  timer = setInterval(function(){
+    tries++;
+    if (injectSchemas() || tries >= MAX_TRIES) {
+      if (timer) { clearInterval(timer); timer = null; }
+      if (tries >= MAX_TRIES && !injected) {
+        console.warn("⚠️ Schema injection timeout");
+      }
     }
   }, 500);
 })();
@@ -374,11 +405,11 @@
   ✨ [تم الحذف] سكريبت الكاش القديم (renderFromCache)
   السبب:
   - كان بيعمل رندر مرتين (كاش قديم → Firebase جديد)
-  - كل صورة بتتحمّل مرتين = بطء + استهلاك داتا + فلاش
+  - كل صورة بتتحمل مرتين = بطء + استهلاك داتا + فلاش
   - app.js عنده بالفعل fallback للكاش لو Firebase فشل
 -->
 <script src="ga4-events.js" defer></script>
 <script src="pwa.js" defer></script>
-  <script src="search.js" defer></script>
+<script src="search.js" defer></script>
 </body>
 </html>
