@@ -82,6 +82,50 @@
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="pwa.css">  
 <link rel="stylesheet" href="search.css">
+
+<!-- ═══ ✨ BreadcrumbList Schema — جديد ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "الرئيسية",
+      "item": "https://velalight.github.io/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "تسوق",
+      "item": "https://velalight.github.io/products.html"
+    }
+  ]
+}
+</script>
+
+<!-- ═══ ✨ CollectionPage Schema — جديد ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "كل المنتجات | VelaLight",
+  "description": "استعرض جميع منتجات VelaLight من الشموع والعطور الفاخرة — صناعة يدوية 100%.",
+  "url": "https://velalight.github.io/products.html",
+  "inLanguage": "ar-EG",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "VelaLight",
+    "url": "https://velalight.github.io/"
+  },
+  "about": {
+    "@type": "Store",
+    "name": "VelaLight",
+    "url": "https://velalight.github.io/"
+  }
+}
+</script>
 </head>
 
 <body>
