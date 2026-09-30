@@ -446,7 +446,15 @@
       <p style="color:var(--mut);margin-top:.5rem;font-size:.95rem;" data-i18n="prod_sub">اكتشف أحدث تشكيلتنا من الشموع الفاخرة</p>
     </div>
     <div class="chips" id="chips" aria-hidden="true" style="display:none"></div>
-    <div class="pgrid rv" id="pgrid"></div>
+    <!-- ✅ [CLS Fix] skeleton ثابت في HTML بدل ما يضيفه app.js بعدين -->
+    <div class="pgrid rv" id="pgrid">
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.4rem; padding:1rem;">
+        <div class="skel" style="height:380px;border-radius:18px;"></div>
+        <div class="skel" style="height:380px;border-radius:18px;"></div>
+        <div class="skel" style="height:380px;border-radius:18px;"></div>
+        <div class="skel" style="height:380px;border-radius:18px;"></div>
+      </div>
+    </div>
     <div style="text-align:center;margin-top:2.5rem;" data-reveal data-reveal-delay="200">
       <a href="products.html" class="btn-primary-lux" style="display:inline-block;padding:14px 40px;font-size:1.05rem;" data-i18n="prod_see_all">🕯️ استعرض كل المنتجات</a>
     </div>
@@ -497,23 +505,24 @@ async function loadCraftsmanship() {
     }
     items = items.filter(item => item.active !== false).sort((a, b) => (a.order || 0) - (b.order || 0));
     if (!items.length) {
+      /* ✅ [CLS Fix] إضافة width/height للصور */
       grid.innerHTML = `
         <div class="vl-craft-item" data-reveal="zoom" data-reveal-delay="0" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">
-          <img src="https://images.unsplash.com/photo-1602351447937-745cb720612f?w=600&h=400&fit=crop&auto=format" alt="تصنيع يدوي" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">
+          <img src="https://images.unsplash.com/photo-1602351447937-745cb720612f?w=600&h=400&fit=crop&auto=format" alt="تصنيع يدوي" width="600" height="250" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">
           <div style="padding:1.2rem; text-align:center;">
             <h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:.3rem;" data-i18n="craft_fallback1_title">نخلط الزيوت بعناية</h3>
             <p style="color:var(--mut); font-size:.9rem;" data-i18n="craft_fallback1_desc">نستخدم أفضل الزيوت الطبيعية لضمان رائحة تدوم طويلاً</p>
           </div>
         </div>
         <div class="vl-craft-item" data-reveal="zoom" data-reveal-delay="100" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">
-          <img src="https://images.unsplash.com/photo-1602782034323-6c7b3ba0b6c0?w=600&h=400&fit=crop&auto=format" alt="تغليف هدايا" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">
+          <img src="https://images.unsplash.com/photo-1602782034323-6c7b3ba0b6c0?w=600&h=400&fit=crop&auto=format" alt="تغليف هدايا" width="600" height="250" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">
           <div style="padding:1.2rem; text-align:center;">
             <h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:.3rem;" data-i18n="craft_fallback2_title">تغليف فاخر جاهز للإهداء</h3>
             <p style="color:var(--mut); font-size:.9rem;" data-i18n="craft_fallback2_desc">كل قطعة بتتغلف بإيدينا عشان تكون مميزة</p>
           </div>
         </div>
         <div class="vl-craft-item" data-reveal="zoom" data-reveal-delay="200" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">
-          <img src="https://images.unsplash.com/photo-1602351447937-745cb720612f?w=600&h=400&fit=crop&auto=format" alt="فحص الجودة" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">
+          <img src="https://images.unsplash.com/photo-1602351447937-745cb720612f?w=600&h=400&fit=crop&auto=format" alt="فحص الجودة" width="600" height="250" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">
           <div style="padding:1.2rem; text-align:center;">
             <h3 style="font-family:var(--fd); color:var(--gold2); margin-bottom:.3rem;" data-i18n="craft_fallback3_title">فحص دقيق لكل قطعة</h3>
             <p style="color:var(--mut); font-size:.9rem;" data-i18n="craft_fallback3_desc">نتأكد من الجودة قبل ما توصل لباب بيتك</p>
@@ -533,9 +542,9 @@ async function loadCraftsmanship() {
       const isVideo = item.mediaType === 'video' || (item.mediaUrl && /\.(mp4|webm|ogg)$/i.test(item.mediaUrl));
       let mediaHtml = '';
       if (isVideo && mediaSrc) {
-        mediaHtml = `<video src="${escapeHTML(mediaSrc)}" muted loop playsinline controls preload="none" data-lazy-video poster="velalight-wooden-luxury-set-3candles-detail.webp" style="width:100%; height:250px; object-fit:cover; display:block; background:#000;"></video>`;
+        mediaHtml = `<video src="${escapeHTML(mediaSrc)}" width="600" height="250" muted loop playsinline controls preload="none" data-lazy-video poster="velalight-wooden-luxury-set-3candles-detail.webp" style="width:100%; height:250px; object-fit:cover; display:block; background:#000;"></video>`;
       } else if (mediaSrc) {
-        mediaHtml = `<img src="${escapeHTML(mediaSrc)}" alt="${escapeHTML(title)}" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">`;
+        mediaHtml = `<img src="${escapeHTML(mediaSrc)}" alt="${escapeHTML(title)}" width="600" height="250" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">`;
       } else {
         mediaHtml = `<div style="width:100%; height:250px; background:var(--bg2); display:flex; align-items:center; justify-content:center; color:var(--dim);">🕯️ ${isEnglish ? 'No media' : 'لا توجد وسائط'}</div>`;
       }
@@ -573,11 +582,14 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
       </div>
     </div>
     <div class="rv" data-reveal="left" data-reveal-delay="150">
-      <div style="border-radius:26px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh);transform:rotate(-1.5deg)">
+      <!-- ✅ [CLS Fix] إضافة aspect-ratio + width/height + object-fit -->
+      <div style="border-radius:26px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh);transform:rotate(-1.5deg);aspect-ratio:1/1;">
         <img 
           src="velalight-wooden-luxury-set-3candles-detail.webp" 
           alt="VelaLight - شموع خشبية فاخرة" 
-          style="width:100%; height:auto; display:block;" 
+          width="900" 
+          height="900"
+          style="width:100%; height:100%; display:block; object-fit:cover;" 
           loading="lazy" 
           onerror="this.src='https://velalight.github.io/velalight-wooden-luxury-set-3candles-detail.webp'"
         >
@@ -629,9 +641,10 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
       const imgUrl = typeof CDN === 'function' 
         ? CDN('testimonials/' + imgName) 
         : 'https://velalight.github.io/testimonials/' + encodeURIComponent(imgName);
+      /* ✅ [CLS Fix] إضافة width/height */
       html += `
         <a href="${escapeHTML(imgUrl)}" data-lightbox="reviews-home" data-title="💛 تجربة عميل من VelaLight" style="display:block; border-radius:16px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.06); transition:transform .3s ease, box-shadow .3s ease; background:var(--panel);">
-          <img src="${escapeHTML(imgUrl)}" alt="تجربة عميل VelaLight" loading="lazy" style="width:100%; height:240px; object-fit:cover; display:block; transition:transform .3s ease;">
+          <img src="${escapeHTML(imgUrl)}" alt="تجربة عميل VelaLight" width="400" height="240" loading="lazy" style="width:100%; height:240px; object-fit:cover; display:block; transition:transform .3s ease;">
         </a>
       `;
     });
@@ -706,7 +719,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 <section class="vl-editorial">
   <div class="vl-editorial-inner">
     <div class="vl-editorial-visual" data-reveal="zoom">
-      <img src="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2Fvelalight-metal-mandala-bestseller-main.webp&w=1000&q=80&output=webp" alt="Luxury Moment" loading="lazy">
+      <img src="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2Fvelalight-metal-mandala-bestseller-main.webp&w=1000&q=80&output=webp" alt="Luxury Moment" width="800" height="1000" loading="lazy">
     </div>
     <div class="vl-editorial-content" data-reveal="left" data-reveal-delay="150">
       <div class="kick" data-i18n="ed_kick">A Moment of Luxury</div>
@@ -721,7 +734,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 .vl-editorial { padding:4rem 0; background:linear-gradient(135deg,#1a1512 0%,#2a1c0b 100%); overflow:hidden; }
 .vl-editorial-inner { width:min(1200px,92%); margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
 .vl-editorial-visual { position:relative; border-radius:24px; overflow:hidden; aspect-ratio:4/5; box-shadow:0 30px 60px rgba(0,0,0,0.4); }
-.vl-editorial-visual img { width:100%; height:100%; object-fit:cover; transition:transform 0.6s ease; }
+.vl-editorial-visual img { width:100%; height:100%; object-fit:cover; transition:transform 0.6s ease; display:block; }
 .vl-editorial-visual:hover img { transform:scale(1.05); }
 .vl-editorial-visual::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 60%,rgba(26,21,18,0.4) 100%); pointer-events:none; }
 .vl-editorial-content { color:#fff; text-align:start; }
@@ -1118,11 +1131,9 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
   "use strict";
   
   function buildAndInjectFAQ(){
-    // نتأكد إن مفيش schema موجود مسبقاً
     var old = document.getElementById("faqSchema");
     if(old) old.remove();
     
-    // نحتاج الدالة t من app.js
     if(typeof window.t !== "function") return;
     if(typeof I18N === "undefined") return;
     
@@ -1162,7 +1173,6 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
     console.log("✅ FAQ Schema injected:", faqs.length, "questions");
   }
   
-  // نحاول كل 500ms لحد ما app.js يحمّل
   var tries = 0;
   var timer = setInterval(function(){
     tries++;
@@ -1173,7 +1183,6 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
     if(tries >= 20) clearInterval(timer);
   }, 500);
   
-  // نراقب تغيير اللغة
   var lastLang = (typeof LANG !== "undefined") ? LANG : "ar";
   setInterval(function(){
     var currentLang = (typeof LANG !== "undefined") ? LANG : "ar";
@@ -1185,7 +1194,6 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 })();
 </script>
 
-<!-- ✅ FIX: كان محمّل مرتين — اتشال السطر المكرر -->
 <script src="data.js?v=9"></script>
 <script type="module" src="firebase.js"></script>
 <script src="app.js"></script>
