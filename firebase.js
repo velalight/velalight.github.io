@@ -33,6 +33,8 @@ import {
   ReCaptchaEnterpriseProvider
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check.js";
 
+/* ─── Production: silence console.log (keep warn/error) ─── */
+if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostname)){console.log=function(){};console.info=function(){}}
 
 /* =========================================================
    VelaLight Firebase Configuration
