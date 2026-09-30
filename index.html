@@ -505,7 +505,6 @@ async function loadCraftsmanship() {
     }
     items = items.filter(item => item.active !== false).sort((a, b) => (a.order || 0) - (b.order || 0));
     if (!items.length) {
-      /* ✅ [CLS Fix] إضافة width/height للصور */
       grid.innerHTML = `
         <div class="vl-craft-item" data-reveal="zoom" data-reveal-delay="0" style="background:var(--panel); border-radius:18px; overflow:hidden; border:1px solid var(--line); transition:.3s;">
           <img src="https://images.unsplash.com/photo-1602351447937-745cb720612f?w=600&h=400&fit=crop&auto=format" alt="تصنيع يدوي" width="600" height="250" loading="lazy" style="width:100%; height:250px; object-fit:cover; display:block;">
@@ -582,14 +581,14 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
       </div>
     </div>
     <div class="rv" data-reveal="left" data-reveal-delay="150">
-      <!-- ✅ [CLS Fix] إضافة aspect-ratio + width/height + object-fit -->
-      <div style="border-radius:26px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh);transform:rotate(-1.5deg);aspect-ratio:1/1;">
+      <!-- ✅ [CLS Fix] width/height فقط بدون aspect-ratio — يحافظ على أبعاد الموبايل 100% -->
+      <div style="border-radius:26px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh);transform:rotate(-1.5deg)">
         <img 
           src="velalight-wooden-luxury-set-3candles-detail.webp" 
           alt="VelaLight - شموع خشبية فاخرة" 
           width="900" 
           height="900"
-          style="width:100%; height:100%; display:block; object-fit:cover;" 
+          style="width:100%; height:auto; display:block;" 
           loading="lazy" 
           onerror="this.src='https://velalight.github.io/velalight-wooden-luxury-set-3candles-detail.webp'"
         >
@@ -641,7 +640,6 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
       const imgUrl = typeof CDN === 'function' 
         ? CDN('testimonials/' + imgName) 
         : 'https://velalight.github.io/testimonials/' + encodeURIComponent(imgName);
-      /* ✅ [CLS Fix] إضافة width/height */
       html += `
         <a href="${escapeHTML(imgUrl)}" data-lightbox="reviews-home" data-title="💛 تجربة عميل من VelaLight" style="display:block; border-radius:16px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.06); transition:transform .3s ease, box-shadow .3s ease; background:var(--panel);">
           <img src="${escapeHTML(imgUrl)}" alt="تجربة عميل VelaLight" width="400" height="240" loading="lazy" style="width:100%; height:240px; object-fit:cover; display:block; transition:transform .3s ease;">
