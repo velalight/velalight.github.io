@@ -1,6 +1,13 @@
-/* VelaLight — SEO Pack
+/* VelaLight — SEO Pack (v2 - محسّن)
    Safe, additive SEO layer.
    Does not change products, cart, Firebase, prices, or checkout.
+
+   التعديلات:
+   - إصلاح CSS.escape لمشكلة التوافق
+   - إصلاح مفتاح الكاش (vl_products_v3 بدل vl_products_cache_v1)
+   - الاستماع لحدث data-refresh عشان SEO يتحدث أوتوماتيك
+   - إيقاف الـ interval بمجرد ما المنتج يتحمّل (توفير موارد)
+   - قراءة مباشرة من window.ALL_PRODUCTS دايمًا
 */
 (function () {
   "use strict";
@@ -8,9 +15,16 @@
   const SITE = "https://velalight.github.io/";
   const BRAND = "VelaLight";
 
+  /* ✅ [تعديل 1] — بديل آمن لـ CSS.escape */
+  function escapeAttr(s) {
+    return String(s || "").replace(/(["\\])/g, "\\$1");
+  }
+
   function ensureMeta(attr, key, content) {
     if (!content) return;
-    let el = document.head.querySelector(`meta[${attr}="${CSS.escape(key)}"]`);
+    const selector = `meta[${attr}="${escapeAttr(key)}"]`;
+    let el = null;
+    try { el = document.head.querySelector(selector); } catch (_) {}
     if (!el) {
       el = document.createElement("meta");
       el.setAttribute(attr, key);
@@ -20,7 +34,7 @@
   }
 
   function ensureLink(rel, href) {
-    let el = document.head.querySelector(`link[rel="${rel}"]`);
+    let el = document.head.querySelector(`link[rel="${escapeAttr(rel)}"]`);
     if (!el) {
       el = document.createElement("link");
       el.rel = rel;
@@ -46,6 +60,7 @@
     catch (_) { return SITE; }
   }
 
+  /* ✅ [تعديل 2] — قراءة المنتجات من كل المصادر المتاحة (بما فيها v3) */
   function productFromSources() {
     const pid = new URLSearchParams(location.search).get("p");
     if (!pid) return null;
@@ -54,12 +69,19 @@
 
     try {
       if (Array.isArray(window.ALL_PRODUCTS)) sources.push(...window.ALL_PRODUCTS);
+    } catch (_) {}
+    try {
       if (Array.isArray(window.PRODUCTS)) sources.push(...window.PRODUCTS);
     } catch (_) {}
-
     try {
-      const cached = JSON.parse(localStorage.getItem("vl_products_cache_v1") || "[]");
+      // ✅ المفتاح الصح دلوقتي
+      const cached = JSON.parse(localStorage.getItem("vl_products_v3") || "[]");
       if (Array.isArray(cached)) sources.push(...cached);
+    } catch (_) {}
+    try {
+      // للتوافق مع الإصدارات القديمة لو موجود
+      const oldCached = JSON.parse(localStorage.getItem("vl_products_cache_v1") || "[]");
+      if (Array.isArray(oldCached)) sources.push(...oldCached);
     } catch (_) {}
 
     return sources.find(p =>
@@ -102,9 +124,19 @@
     return absolute(src);
   }
 
+  let lastAppliedSignature = "";
+
   function applySiteSEO() {
     const isProduct = location.pathname.toLowerCase().includes("product.html");
     const p = isProduct ? productFromSources() : null;
+
+    /* ✅ [تعديل 3] — تخطي التطبيق لو نفس المنتج اتطبق قبله (توفير موارد) */
+    const sig = isProduct
+      ? (p ? `p:${p.id}:${p.price}` : "p:loading")
+      : "site";
+
+    if (sig === lastAppliedSignature) return isProduct ? !!p : true;
+    lastAppliedSignature = sig;
 
     if (p) {
       const name = getName(p);
@@ -151,6 +183,8 @@
           }
         } : {})
       });
+
+      return true;
     } else {
       const url = SITE;
       ensureMeta(
@@ -185,17 +219,52 @@
         "url": SITE,
         "logo": absolute("heart2.jpg")
       });
+
+      return true;
     }
   }
 
   function boot() {
-    applySiteSEO();
+    const isProduct = location.pathname.toLowerCase().includes("product.html");
+
+    /* تطبيق أولي فوري */
+    const done = applySiteSEO();
+
+    /* ✅ [تعديل 4] — لو إحنا في صفحة منتج والمنتج اتحمّل، خلاص مش محتاجين polling */
+    if (isProduct && done) return;
+
+    /* polling مؤقت — بيتوقف بمجرد ما المنتج يتحمّل */
     let tries = 0;
+    const MAX_TRIES = 40; // 20 ثانية كحد أقصى
     const timer = setInterval(() => {
-      applySiteSEO();
+      const applied = applySiteSEO();
       tries++;
-      if (tries >= 12) clearInterval(timer);
+
+      // وقف الـ polling لو المنتج اتحمّل (في حالة product.html)
+      if (isProduct && applied) {
+        clearInterval(timer);
+        return;
+      }
+
+      if (tries >= MAX_TRIES) clearInterval(timer);
     }, 500);
+
+    /* ✅ [تعديل 5] — الاستماع لحدث data-refresh */
+    window.addEventListener("data-refresh", function () {
+      // إعادة تعيين الـ signature عشان نسمح بإعادة التطبيق
+      lastAppliedSignature = "";
+      const applied = applySiteSEO();
+      if (isProduct && applied) clearInterval(timer);
+    });
+
+    /* ✅ [تعديل 6] — الاستماع لتحديثات التبويبات التانية */
+    window.addEventListener("storage", function (e) {
+      if (e.key === "vl_products_v3") {
+        lastAppliedSignature = "";
+        const applied = applySiteSEO();
+        if (isProduct && applied) clearInterval(timer);
+      }
+    });
   }
 
   if (document.readyState === "loading") {
