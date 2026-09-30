@@ -1,125 +1,216 @@
 /*
- * VelaLight Service Worker
- * استراتيجية الكاش:
- * - HTML/CSS/JS: الشبكة أولاً لضمان ظهور التحديثات فورًا.
- * - الصور: الشبكة أولاً مع fallback للكاش عند انقطاع الاتصال، بدون تخزين صور جديدة.
- * - Firebase والطلبات الخارجية: لا يتدخل فيها Service Worker.
+ * VelaLight Service Worker (v8 — Performance Optimized)
+ * ═══════════════════════════════════════════════════════════
+ * استراتيجيات الكاش:
+ * - HTML (navigation): Network-First → آخر نسخة دايماً
+ * - CSS/JS/JSON: Stale-While-Revalidate → سريع + يحدّث في الخلفية
+ * - الصور: Cache-First → سريع جداً، يحدّث لو مش موجود
+ * - Google Fonts: Cache-First → ما يحمّل مرتين
+ * - Firebase/External CDN: يمر مباشرة (مايتدخلش)
+ * ═══════════════════════════════════════════════════════════
  */
 
-const CACHE_NAME = "velalight-v7-pwa";
+const CACHE_VERSION = "v8";
+const STATIC_CACHE  = `velalight-static-${CACHE_VERSION}`;
+const HTML_CACHE    = `velalight-html-${CACHE_VERSION}`;
+const IMAGE_CACHE   = `velalight-images-${CACHE_VERSION}`;
+const FONT_CACHE    = `velalight-fonts-${CACHE_VERSION}`;
 
+/* ─── الملفات الأساسية (App Shell) ─── */
 const APP_SHELL = [
   "/",
   "/index.html",
+  "/products.html",
   "/style.css",
   "/mobile-luxury-fix.css",
+  "/pwa.css",
+  "/search.css",
+  "/exit-intent.css",
   "/app.js",
   "/data.js",
-  "/manifest.json",
-  "/pwa.css",
+  "/bottom-nav.js",
+  "/search.js",
+  "/ga4-events.js",
   "/pwa.js",
-  "/exit-intent.css",
-  "/exit-intent.js",
-  "/ga4-events.js"
+  "/seo.js",
+  "/auth.js",
+  "/manifest.json",
+  "/heart2.jpg"
 ];
-const isHttpRequest = request => request.url.startsWith("http://") || request.url.startsWith("https://");
-const isSameOrigin = request => new URL(request.url).origin === self.location.origin;
-const isFirebaseRequest = url => /firebase|firestore|firebasestorage/i.test(url);
-const isImageRequest = request => request.destination === "image" || /\.(avif|gif|jpe?g|png|svg|webp)(\?.*)?$/i.test(new URL(request.url).pathname);
-const isStaticAsset = request => /\.(css|js|json|html|webmanifest)(\?.*)?$/i.test(new URL(request.url).pathname);
 
+/* ═══════════════════════════════════════════════════════════
+   Helpers
+   ═══════════════════════════════════════════════════════════ */
+const isHttpRequest   = req => req.url.startsWith("http://") || req.url.startsWith("https://");
+const isSameOrigin    = req => new URL(req.url).origin === self.location.origin;
+const isFirebaseReq   = url => /firebase|firestore|firebasestorage|googleapis/i.test(url);
+const isGoogleFonts   = url => /fonts\.googleapis\.com|fonts\.gstatic\.com/i.test(url);
+const isImageReq      = req => req.destination === "image" ||
+                              /\.(avif|gif|jpe?g|png|svg|webp|ico)(\?.*)?$/i.test(new URL(req.url).pathname);
+const isStaticAsset   = req => /\.(css|js|json|webmanifest)(\?.*)?$/i.test(new URL(req.url).pathname);
+const isHTMLRequest   = req => req.mode === "navigate" ||
+                              (req.method === "GET" && (req.headers.get("accept") || "").includes("text/html"));
+
+const isCacheableResponse = res => Boolean(res && res.status === 200 && (res.type === "basic" || res.type === "cors" || res.type === "default"));
+
+/* ═══════════════════════════════════════════════════════════
+   Install — تحميل الـ App Shell
+   ═══════════════════════════════════════════════════════════ */
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
+    caches.open(STATIC_CACHE)
+      .then(cache => cache.addAll(APP_SHELL).catch(err => {
+        console.warn("⚠️ App shell partial failure:", err);
+      }))
       .then(() => self.skipWaiting())
   );
 });
 
+/* ═══════════════════════════════════════════════════════════
+   Activate — تنظيف الكاشات القديمة
+   ═══════════════════════════════════════════════════════════ */
 self.addEventListener("activate", event => {
+  const validCaches = [STATIC_CACHE, HTML_CACHE, IMAGE_CACHE, FONT_CACHE];
   event.waitUntil(
     caches.keys()
       .then(keys => Promise.all(
         keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
+          .filter(key => !validCaches.includes(key))
+          .map(key => {
+            console.log("🗑️ Deleting old cache:", key);
+            return caches.delete(key);
+          })
       ))
       .then(() => self.clients.claim())
   );
 });
 
+/* ═══════════════════════════════════════════════════════════
+   Message — للتحديث الفوري
+   ═══════════════════════════════════════════════════════════ */
 self.addEventListener("message", event => {
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
   }
 });
 
+/* ═══════════════════════════════════════════════════════════
+   Fetch — توزيع الطلبات
+   ═══════════════════════════════════════════════════════════ */
 self.addEventListener("fetch", event => {
-  const request = event.request;
+  const req = event.request;
 
-  // لا نتعامل مع POST أو أي طريقة غير GET.
-  if (request.method !== "GET") return;
-  if (!isHttpRequest(request)) return;
+  /* تجاهل غير GET */
+  if (req.method !== "GET") return;
+  if (!isHttpRequest(req)) return;
 
-  const url = request.url;
+  const url = req.url;
 
-  // Firebase وFirestore وStorage يجب أن تظل تحت إدارة خدماتها الأصلية.
-  if (isFirebaseRequest(url)) return;
+  /* Firebase و Google APIs → يمر مباشرة */
+  if (isFirebaseReq(url)) return;
 
-  // لا نعترض طلبات CDN أو Google Fonts أو أي نطاق خارجي.
-  if (!isSameOrigin(request)) return;
-
-  if (isImageRequest(request)) {
-    event.respondWith(networkImageWithOfflineFallback(request));
+  /* Google Fonts → Cache-First */
+  if (isGoogleFonts(url)) {
+    event.respondWith(cacheFirst(req, FONT_CACHE));
     return;
   }
 
-  if (request.mode === "navigate") {
-    event.respondWith(networkNavigationWithOfflineFallback(request));
+  /* نطاقات خارجية (CDN خارجي غير الخطوط) → Stale-While-Revalidate */
+  if (!isSameOrigin(req)) {
+    /* فقط للصور و CSS/JS من CDN */
+    if (isImageReq(req)) {
+      event.respondWith(cacheFirst(req, IMAGE_CACHE));
+    } else if (isStaticAsset(req)) {
+      event.respondWith(staleWhileRevalidate(req, STATIC_CACHE));
+    }
     return;
   }
 
-  if (isStaticAsset(request)) {
-    event.respondWith(networkAssetWithOfflineFallback(request));
+  /* صور → Cache-First */
+  if (isImageReq(req)) {
+    event.respondWith(cacheFirst(req, IMAGE_CACHE));
+    return;
+  }
+
+  /* HTML navigation → Network-First */
+  if (isHTMLRequest(req)) {
+    event.respondWith(networkFirstHTML(req));
+    return;
+  }
+
+  /* CSS/JS/JSON → Stale-While-Revalidate */
+  if (isStaticAsset(req)) {
+    event.respondWith(staleWhileRevalidate(req, STATIC_CACHE));
+    return;
   }
 });
 
-async function networkNavigationWithOfflineFallback(request) {
+/* ═══════════════════════════════════════════════════════════
+   Strategies
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── 1. Network-First (HTML) ─── */
+async function networkFirstHTML(request) {
   try {
     const response = await fetch(request, { cache: "no-store" });
     if (isCacheableResponse(response)) {
-      const cache = await caches.open(CACHE_NAME);
-      await cache.put(request, response.clone());
+      const cache = await caches.open(HTML_CACHE);
+      cache.put(request, response.clone());
     }
     return response;
   } catch (error) {
-    return (await caches.match(request)) || (await caches.match("/index.html"));
+    /* fallback للكاش */
+    const cached = await caches.match(request);
+    if (cached) return cached;
+    /* fallback نهائي لصفحة index */
+    return (await caches.match("/index.html")) || Response.error();
   }
 }
 
-async function networkAssetWithOfflineFallback(request) {
+/* ─── 2. Stale-While-Revalidate (CSS/JS) ─── */
+async function staleWhileRevalidate(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+
+  /* جلب نسخة جديدة في الخلفية */
+  const fetchPromise = fetch(request)
+    .then(response => {
+      if (isCacheableResponse(response)) {
+        cache.put(request, response.clone());
+      }
+      return response;
+    })
+    .catch(() => null);
+
+  /* إرجاع الكاش فوراً، أو انتظار الشبكة لو مفيش كاش */
+  return cached || (await fetchPromise) || Response.error();
+}
+
+/* ─── 3. Cache-First (Images & Fonts) ─── */
+async function cacheFirst(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(request);
+
+  if (cached) return cached;
+
   try {
-    const response = await fetch(request, { cache: "no-store" });
+    const response = await fetch(request);
     if (isCacheableResponse(response)) {
-      const cache = await caches.open(CACHE_NAME);
-      await cache.put(request, response.clone());
+      cache.put(request, response.clone());
     }
     return response;
   } catch (error) {
-    return caches.match(request);
+    /* fallback placeholder للصور */
+    if (request.destination === "image") {
+      return new Response(
+        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+          <rect fill="#f5efe5" width="400" height="400"/>
+          <text x="200" y="200" text-anchor="middle" dominant-baseline="middle"
+                font-family="serif" font-size="32" fill="#d9ab5f">✦</text>
+        </svg>`,
+        { headers: { "Content-Type": "image/svg+xml" } }
+      );
+    }
+    return Response.error();
   }
-}
-
-async function networkImageWithOfflineFallback(request) {
-  try {
-    // لا نحفظ صورًا جديدة داخل Service Worker، حتى لا تبقى الصور القديمة عالقة.
-    return await fetch(request, { cache: "no-store" });
-  } catch (error) {
-    // إذا كانت الصورة موجودة في كاش سابق، نستخدمها فقط كحل للطوارئ.
-    return caches.match(request);
-  }
-}
-
-function isCacheableResponse(response) {
-  return Boolean(response && response.status === 200 && response.type === "basic");
 }
