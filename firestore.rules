@@ -17,32 +17,86 @@ service cloud.firestore {
         );
     }
 
-    // قواعد المنتجات: القراءة للجميع، التعديل للمدير فقط
+    // ✅ [تعديل] قواعد المنتجات: القراءة للجميع، التعديل للمدير فقط
     match /products/{productId} {
       allow read: if true;
       allow create, update, delete: if admin();
     }
 
-    // قواعد الطلبات: (هنا كان الخلل وتم إصلاحه)
+    // ✅ [تعديل] قواعد الطلبات:
+    // - الزوار (غير المسجلين) مسموح لهم بإنشاء طلب (guest checkout)
+    // - مع تحقق بسيط من صحة البيانات لمنع السبام
+    // - المدير يقرأ ويعدل ويحذف كل الطلبات
+    // - العميل المسجل يقرأ طلباته هو فقط
     match /orders/{orderId} {
-      // 1. السماح بإنشاء الطلب فقط للمستخدمين المسجلين (يمنع السبام والطلبات الوهمية)
-      allow create: if signedIn();
-      
-      // 2. السماح للمديرين بالقراءة، التعديل، والحذف لأي طلب
+      // 1. السماح بإنشاء الطلب للجميع (مع تحقق من صحة البيانات)
+      allow create: if
+        request.resource.data.keys().hasAll(['orderId', 'items', 'total', 'phone', 'name'])
+        && request.resource.data.items is list
+        && request.resource.data.items.size() > 0
+        && request.resource.data.total is number
+        && request.resource.data.total >= 0
+        && request.resource.data.total <= 100000
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() >= 10
+        && request.resource.data.phone.size() <= 20;
+
+      // 2. المدير: قراءة، تعديل، حذف أي طلب
       allow read, update, delete: if admin();
-      
-      // 3. السماح للعميل العادي بقراءة طلباته هو فقط (بناءً على حقل userId المخزن داخل الطلب)
-      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+
+      // 3. العميل المسجل: قراءة طلباته هو فقط
+      allow read: if signedIn()
+        && resource.data.userId != null
+        && resource.data.userId == request.auth.uid;
     }
 
-    // قواعد التقييمات: القراءة للجميع، الإنشاء للمسجلين فقط، التعديل للمدير
+    // ✅ [تعديل] قواعد التقييمات:
+    // - الزوار مسموح لهم بإنشاء تقييم (مع تحقق)
+    // - القراءة للجميع
+    // - التعديل والحذف للمدير فقط
     match /reviews/{reviewId} {
-      allow create: if signedIn();
+      allow create: if
+        request.resource.data.keys().hasAll(['name', 'rating'])
+        && request.resource.data.rating is number
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 2
+        && request.resource.data.name.size() <= 50;
+
       allow read: if true;
       allow update, delete: if admin();
     }
 
-    // قاعدة أمان شاملة: منع القراءة أو الكتابة لأي مجموعة بيانات أخرى لم يتم التصريح بها صراحة
+    // ✅ [جديد] قواعد الكوبونات:
+    // - القراءة للجميع (الموقع بيقرأها للتحقق)
+    // - الكتابة للمدير فقط
+    match /coupons/{couponId} {
+      allow read: if true;
+      allow create, update, delete: if admin();
+    }
+
+    // ✅ [جديد] قواعد العملاء (users):
+    // - الإنشاء للجميع (guest checkout)
+    // - التحديث المحدود (فقط الحقول الآمنة) للجميع
+    // - القراءة والحذف الكامل للمدير
+    match /users/{userId} {
+      // إنشاء حساب عميل جديد
+      allow create: if
+        request.resource.data.keys().hasAll(['name', 'phone'])
+        && request.resource.data.phone is string
+        && request.resource.data.phone.size() >= 10;
+
+      // تحديث محدود: فقط الحقول الآمنة (ordersCount, totalSpent, lastOrder)
+      allow update: if admin()
+        || request.resource.data.diff(resource.data).affectedKeys()
+           .hasOnly(['ordersCount', 'totalSpent', 'lastOrder']);
+
+      // القراءة والحذف: للمدير فقط
+      allow read, delete: if admin();
+    }
+
+    // قاعدة أمان شاملة: منع القراءة أو الكتابة لأي مجموعة بيانات أخرى
     match /{document=**} {
       allow read, write: if false;
     }
