@@ -1052,7 +1052,8 @@
 
         <div class="pd-gallery">
           <div class="pd-img" id="pdImgWrap">
-            <img id="pdImg" src="" alt="" loading="eager" decoding="async" fetchpriority="high">
+            <!-- ✅ [CLS Fix] width/height لمنع القفزة -->
+            <img id="pdImg" src="" alt="" width="800" height="800" loading="eager" decoding="async" fetchpriority="high">
             <div class="zoom-hint" id="zoomHint" data-i18n="pd_zoom">🔍 تكبير</div>
             <div class="gallery-counter" id="galleryCounter"></div>
           </div>
@@ -1688,7 +1689,7 @@ function renderThumbs(){
   if(zoomImages.length<=1){ thumbs.innerHTML=""; return; }
   thumbs.innerHTML=zoomImages.map((u,i)=>{
     const src=(typeof CDN === "function") ? CDN(u) : u;
-    return `<img src="${src}" class="${i===0?"on":""}" data-src="${src}" data-idx="${i}" alt="${(typeof pname === "function" ? pname(P) : P.name)} ${i+1}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">`;
+    return `<img src="${src}" class="${i===0?"on":""}" data-src="${src}" data-idx="${i}" alt="${(typeof pname === "function" ? pname(P) : P.name)} ${i+1}" width="72" height="72" loading="lazy" decoding="async" onload="this.classList.add('loaded')">`;
   }).join("");
   thumbs.querySelectorAll("img").forEach(img=>{
     img.addEventListener("click",()=>{
@@ -1720,7 +1721,7 @@ function renderVideo(){
   const videoUrl = `https://velalight.github.io/${BRIDE_BOX_VIDEO}?v=v5`;
   const posterUrl = (typeof CDN === "function" && zoomImages[0]) ? CDN(zoomImages[0]) : (zoomImages[0] || P.img || "");
   imgWrap.innerHTML = `
-    <video id="pdMainVideo" src="${videoUrl}" autoplay muted loop playsinline controls preload="auto" poster="${posterUrl}" style="width:100%;height:100%;object-fit:contain;background:#000;border-radius:22px;display:block;">متصفحك لا يدعم تشغيل الفيديو.</video>
+    <video id="pdMainVideo" src="${videoUrl}" width="800" height="800" autoplay muted loop playsinline controls preload="auto" poster="${posterUrl}" style="width:100%;height:100%;object-fit:contain;background:#000;border-radius:22px;display:block;">متصفحك لا يدعم تشغيل الفيديو.</video>
     <div class="video-caption">▶️ شاهد المنتج</div>
   `;
   const zoomHint = $("#zoomHint");
@@ -1893,10 +1894,11 @@ function renderRelated(){
   let list = all.filter(x => x.cat === P.cat && x.id !== P.id).slice(0, 4);
   if(list.length < 4){ list = [...list, ...all.filter(x => x.cat !== P.cat && x.id !== P.id && !list.find(y => y.id === x.id))].slice(0, 4); }
   if(!list.length){ box.innerHTML = `<p style="color:var(--dim);text-align:center;padding:1.5rem">${(typeof LANG !== "undefined" && LANG==="en")?"No similar products":"لا توجد منتجات مشابهة"}</p>`; return; }
+  /* ✅ [CLS Fix] width/height للصور */
   box.innerHTML = list.map(p => {
     const pImgs = p.images || p.imgs || (p.img ? [p.img] : []);
     const imgSrc = pImgs.length ? ((typeof CDN === "function") ? CDN(pImgs[0]) : pImgs[0]) : ((typeof CDN === "function") ? CDN(P.img || "velalight-wooden-luxury-set-3candles-detail.webp") : (P.img || "velalight-wooden-luxury-set-3candles-detail.webp"));
-    return `<a href="product.html?p=${p.id}" class="p-card" style="text-decoration:none"><div class="p-media"><img src="${imgSrc}" alt="${(typeof pname === "function" ? pname(p) : p.name)}" loading="lazy" decoding="async" onload="this.classList.add('loaded')"></div><div class="p-body"><h3>${(typeof pname === "function" ? pname(p) : p.name)}</h3><div class="p-price">${(typeof money === "function" ? money(p.price) : (p.price + " ج.م"))}</div></div></a>`;
+    return `<a href="product.html?p=${p.id}" class="p-card" style="text-decoration:none"><div class="p-media"><img src="${imgSrc}" alt="${(typeof pname === "function" ? pname(p) : p.name)}" width="400" height="400" loading="lazy" decoding="async" onload="this.classList.add('loaded')"></div><div class="p-body"><h3>${(typeof pname === "function" ? pname(p) : p.name)}</h3><div class="p-price">${(typeof money === "function" ? money(p.price) : (p.price + " ج.م"))}</div></div></a>`;
   }).join("");
 }
 
