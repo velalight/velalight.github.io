@@ -239,6 +239,95 @@
   }
 }
 </script>
+
+<!-- ═══ ✨ WebSite Schema (مع SearchAction) — جديد ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "VelaLight",
+  "alternateName": "فيلا لايت",
+  "url": "https://velalight.github.io/",
+  "inLanguage": "ar-EG",
+  "description": "شموع يدوية فاخرة بعطور مميزة وهدايا فخمة — توصيل لكل مصر",
+  "publisher": {
+    "@type": "Organization",
+    "name": "VelaLight",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://velalight.github.io/heart2.jpg"
+    }
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://velalight.github.io/products.html?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- ═══ ✨ Organization Schema (مع sameAs) — جديد ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "VelaLight",
+  "alternateName": "فيلا لايت",
+  "url": "https://velalight.github.io/",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://velalight.github.io/heart2.jpg",
+    "width": 512,
+    "height": 512
+  },
+  "image": "https://velalight.github.io/velalight-wooden-luxury-set-3candles-detail.webp",
+  "description": "VelaLight — استوديو شموع يدوية فاخرة بعطور مميزة وهدايا حسب الطلب.",
+  "foundingLocation": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "EG"
+    }
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "Egypt"
+  },
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "telephone": "+20-122-352-6105",
+      "availableLanguage": ["Arabic", "English"],
+      "areaServed": "EG"
+    }
+  ],
+  "sameAs": [
+    "https://www.instagram.com/velaa_lighttt",
+    "https://www.facebook.com/velalight",
+    "https://www.tiktok.com/@vela.light0"
+  ]
+}
+</script>
+
+<!-- ═══ ✨ BreadcrumbList Schema — جديد ═══ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "الرئيسية",
+      "item": "https://velalight.github.io/"
+    }
+  ]
+}
+</script>
 </head>
 
 <body>
