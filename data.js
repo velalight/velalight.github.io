@@ -1,3 +1,6 @@
+/* ─── Production: silence console.log (keep warn/error) ─── */
+if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostname)){console.log=function(){};console.info=function(){}}
+
 const CFG={WHATSAPP:"201223526105",INSTAPAY:"",REPO:"velalight/velalight.github.io@main",FIREBASE:{apiKey:"AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o",authDomain:"velalight.firebaseapp.com",projectId:"velalight",storageBucket:"velalight.firebasestorage.app",messagingSenderId:"1095485535268",appId:"1:1095485535268:web:4d17ee9de6f5acdacbd4b1"},GA4_ID:"G-BWBD8ZZD23",META_PIXEL_ID:"1377896053806991",TIKTOK_PIXEL_ID:"YOUR_TIKTOK_PIXEL_ID"};
 
 /* ✅ [تعديل 1] إعلان SEED_REVIEWS فوق قبل أي استخدام */
