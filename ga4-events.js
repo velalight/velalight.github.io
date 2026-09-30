@@ -1,6 +1,12 @@
 /* ═══════════════════════════════════════════════════════════
-   GA4 EVENTS — تتبع أحداث Google Analytics 4
+   GA4 EVENTS — تتبع أحداث Google Analytics 4 (v2 - محسّن)
    ملف مستقل، بيعتمد على gtag() الموجودة في الصفحة
+
+   التعديلات:
+   - إزالة bindSearch (search.js الجديد بيسجل search بنفسه)
+   - إضافة listener لـ data-refresh لتسريع view_item/view_item_list
+   - إضافة retry لـ firePromotions
+   - استخدام window.ALL_PRODUCTS كـ fallback
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
@@ -12,6 +18,26 @@
         window.gtag("event", name, params || {});
       }
     } catch(e){}
+  }
+
+  /* ✅ [تعديل] — قراءة المنتجات من المصدر المتاح دايمًا */
+  function getProducts(){
+    try {
+      if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS) && ALL_PRODUCTS.length){
+        return ALL_PRODUCTS;
+      }
+    } catch(e){}
+    try {
+      if(window.ALL_PRODUCTS && Array.isArray(window.ALL_PRODUCTS) && window.ALL_PRODUCTS.length){
+        return window.ALL_PRODUCTS;
+      }
+    } catch(e){}
+    try {
+      if(typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)){
+        return PRODUCTS;
+      }
+    } catch(e){}
+    return [];
   }
 
   /* ✅ تحويل cart items لصيغة GA4 */
@@ -41,29 +67,26 @@
   /* ═══════════════════════════════════════════════════════════
      1) view_item — على product.html
      ═══════════════════════════════════════════════════════════ */
+  let viewItemFired = false;
   function fireViewItem(){
-    if(!window.location.pathname.includes("product.html")) return;
+    if(viewItemFired) return true;
+    if(!window.location.pathname.includes("product.html")) return true;
     const pid = new URLSearchParams(window.location.search).get("p");
-    if(!pid) return;
+    if(!pid) return true;
 
-    let tries = 0;
-    const timer = setInterval(function(){
-      tries++;
-      const products = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS))
-        ? ALL_PRODUCTS : [];
-      if(products.length){
-        const p = products.find(function(x){ return String(x.id) === String(pid); });
-        if(p){
-          ga4("view_item", {
-            currency: "EGP",
-            value: Number(p.price || 0),
-            items: [productToGa4Item(p)]
-          });
-        }
-        clearInterval(timer);
-      }
-      if(tries >= 20) clearInterval(timer);
-    }, 400);
+    const products = getProducts();
+    if(!products.length) return false;
+
+    const p = products.find(function(x){ return String(x.id) === String(pid); });
+    if(p){
+      ga4("view_item", {
+        currency: "EGP",
+        value: Number(p.price || 0),
+        items: [productToGa4Item(p)]
+      });
+    }
+    viewItemFired = true;
+    return true;
   }
 
   /* ═══════════════════════════════════════════════════════════
@@ -71,25 +94,19 @@
      ═══════════════════════════════════════════════════════════ */
   let itemListFired = false;
   function fireViewItemList(){
-    if(!window.location.pathname.includes("products.html")) return;
-    if(itemListFired) return;
+    if(itemListFired) return true;
+    if(!window.location.pathname.includes("products.html")) return true;
 
-    let tries = 0;
-    const timer = setInterval(function(){
-      tries++;
-      const products = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS))
-        ? ALL_PRODUCTS : [];
-      if(products.length){
-        itemListFired = true;
-        ga4("view_item_list", {
-          item_list_id: "products_page",
-          item_list_name: "All Products",
-          items: products.slice(0, 20).map(productToGa4Item).filter(Boolean)
-        });
-        clearInterval(timer);
-      }
-      if(tries >= 25) clearInterval(timer);
-    }, 400);
+    const products = getProducts();
+    if(!products.length) return false;
+
+    itemListFired = true;
+    ga4("view_item_list", {
+      item_list_id: "products_page",
+      item_list_name: "All Products",
+      items: products.slice(0, 20).map(productToGa4Item).filter(Boolean)
+    });
+    return true;
   }
 
   /* ═══════════════════════════════════════════════════════════
@@ -207,23 +224,8 @@
   }
 
   /* ═══════════════════════════════════════════════════════════
-     7) search — listener على حقل البحث
+     7) [تم الحذف] bindSearch — search.js الجديد بيسجل الحدث بنفسه
      ═══════════════════════════════════════════════════════════ */
-  let searchTimer = null;
-  function bindSearch(){
-    const input = document.getElementById("searchInput");
-    if(!input || input.__ga4Bound) return;
-    input.__ga4Bound = true;
-
-    input.addEventListener("input", function(e){
-      clearTimeout(searchTimer);
-      const q = (e.target.value || "").trim();
-      if(q.length < 2) return;
-      searchTimer = setTimeout(function(){
-        ga4("search", { search_term: q });
-      }, 1200);
-    });
-  }
 
   /* ═══════════════════════════════════════════════════════════
      8) select_item — لما يضغط على كارت منتج
@@ -246,7 +248,7 @@
         if(!pid) return;
 
         try {
-          const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
+          const products = getProducts();
           const p = products.find(function(x){ return String(x.id) === String(pid); });
           if(p){
             ga4("select_item", {
@@ -289,7 +291,7 @@
       const wasAdded = original.apply(this, arguments);
       try {
         if(wasAdded){
-          const products = (typeof ALL_PRODUCTS !== "undefined") ? ALL_PRODUCTS : [];
+          const products = getProducts();
           const p = products.find(function(x){ return String(x.id) === String(productId); });
           if(p){
             ga4("add_to_wishlist", {
@@ -308,41 +310,29 @@
   }
 
   /* ═══════════════════════════════════════════════════════════
-     11) view_promotion — بانر الهيرو
+     11) view_promotion — بانر الهيرو (مع retry)
      ═══════════════════════════════════════════════════════════ */
+  let promotionFired = false;
   function firePromotions(){
-    const hero = document.querySelector(".vl-chroma-hero");
-    if(hero){
-      ga4("view_promotion", {
-        promotion_id: "hero_main",
-        promotion_name: "VelaLight Hero Banner"
-      });
-    }
+    if(promotionFired) return true;
+    const hero = document.querySelector(".vl-chroma-hero, .hero");
+    if(!hero) return false;
+    ga4("view_promotion", {
+      promotion_id: "hero_main",
+      promotion_name: "VelaLight Hero Banner"
+    });
+    promotionFired = true;
+    return true;
   }
 
   /* ═══════════════════════════════════════════════════════════
      INIT
      ═══════════════════════════════════════════════════════════ */
   function init(){
-    fireViewItem();
-    fireViewItemList();
-
-    let tries = 0;
-    const maxTries = 40;
-    const timer = setInterval(function(){
-      tries++;
-      const done1 = wrapAddToCart();
-      const done2 = wrapToggleWishlist();
-      if((done1 && done2) || tries >= maxTries){
-        clearInterval(timer);
-      }
-    }, 500);
-
     function doBind(){
       bindRemoveFromCart();
       bindViewCart();
       bindBeginCheckout();
-      bindSearch();
       bindSelectItem();
       bindWhatsAppClicks();
       firePromotions();
@@ -354,10 +344,39 @@
       doBind();
     }
 
+    /* ✅ [تعديل] — interval واحد بيتابع كل حاجة، وبيتوقف بمجرد ما كله يخلص */
+    let tries = 0;
+    const MAX_TRIES = 40;
+    const timer = setInterval(function(){
+      tries++;
+
+      const doneViewItem    = fireViewItem();
+      const doneViewList    = fireViewItemList();
+      const doneAddWrap     = wrapAddToCart();
+      const doneWishWrap    = wrapToggleWishlist();
+      const donePromotion   = firePromotions();
+
+      if((doneViewItem && doneViewList && doneAddWrap && doneWishWrap && donePromotion) || tries >= MAX_TRIES){
+        clearInterval(timer);
+      }
+    }, 400);
+
+    /* ✅ [تعديل] — تسريع الفحص عند وصول البيانات من Firebase */
+    window.addEventListener("data-refresh", function(){
+      fireViewItem();
+      fireViewItemList();
+      wrapAddToCart();
+      wrapToggleWishlist();
+      firePromotions();
+    });
+
+    /* ✅ [تعديل] — مراقبة DOM عشان نربط الكروت اللي بتظهر متأخر */
     const mo = new MutationObserver(function(){
       bindSelectItem();
     });
-    mo.observe(document.body, { childList: true, subtree: true });
+    try {
+      mo.observe(document.body, { childList: true, subtree: true });
+    } catch(e){}
   }
 
   init();
