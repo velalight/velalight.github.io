@@ -6,6 +6,7 @@
 const crypto = require("node:crypto");
 const { initializeApp, getApps } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
+const { getAuth } = require("firebase-admin/auth");
 const { onDocumentUpdated } = require("firebase-functions/v2/firestore");
 const { onRequest } = require("firebase-functions/v2/https");
 const { defineSecret } = require("firebase-functions/params");
@@ -263,6 +264,105 @@ exports.syncCustomerStats = onDocumentUpdated(
       transaction.set(customerRef, summary, { merge: true });
     });
     logger.info("Customer stats synchronized from completed orders", { orderDocId: event.params.orderId });
+  }
+);
+
+// يتحقق خادميًا من أهلية الولاء؛ لا يعيد عدد الطلبات ولا يسمح للمتصفح بقراءة مجموعة orders.
+exports.getLoyaltyStatus = onRequest(
+  { cors: COUPON_CORS, region: "us-central1", timeoutSeconds: 30, memory: "256MiB", maxInstances: 5 },
+  async (req, res) => {
+    if (req.method !== "POST") return res.status(405).json({ message: "Method not allowed" });
+    const body = req.body || {};
+    const phone = asString(body.phone);
+    const email = asString(body.email);
+    const idToken = asString(body.idToken);
+    let uid = "";
+
+    if (idToken) {
+      try {
+        const decoded = await getAuth().verifyIdToken(idToken);
+        uid = asString(decoded.uid);
+      } catch (error) {
+        logger.warn("Loyalty check received an invalid auth token");
+        return res.status(401).json({ message: "انتهت جلسة تسجيل الدخول؛ حدّث الصفحة وحاول مرة أخرى." });
+      }
+    }
+    if (!uid && !phone && !email) {
+      return res.status(400).json({ message: "لا توجد بيانات كافية للتحقق من أهلية الولاء." });
+    }
+
+    try {
+      const orders = db.collection("orders");
+      const filters = [];
+      if (phone) {
+        filters.push(["phone", phone], ["customer.phone", phone]);
+        const digits = normalizePhone(phone);
+        if (digits && digits !== phone) filters.push(["phone", digits], ["customer.phone", digits]);
+      }
+      if (email) {
+        filters.push(["email", email], ["customer.email", email]);
+        const lowerEmail = normalizeEmail(email);
+        if (lowerEmail && lowerEmail !== email) filters.push(["email", lowerEmail], ["customer.email", lowerEmail]);
+      }
+      if (uid) filters.push(["userId", uid]);
+
+      const snapshots = await Promise.all(filters.map(([field, value]) => orders.where(field, "==", value).get()));
+      const matchingOrders = new Map();
+      for (const snapshot of snapshots) {
+        for (const orderDoc of snapshot.docs) {
+          if (Number(orderDoc.data().status || 0) !== CANCELLED_ORDER_STATUS) {
+            matchingOrders.set(orderDoc.id, orderDoc.data());
+          }
+        }
+      }
+      const eligible = matchingOrders.size >= LOYALTY_REQUIRED_ORDERS;
+      if (!eligible) return res.status(200).json({ eligible: false });
+
+      // للضيف، تبقى صلاحية الكود المؤقت محلية كما كانت. للمستخدم المسجل، تحفظ على الخادم.
+      if (!uid) return res.status(200).json({ eligible: true, serverManaged: false });
+
+      const userRef = db.collection("users").doc(uid);
+      let loyaltyState = null;
+      await db.runTransaction(async (transaction) => {
+        const userSnapshot = await transaction.get(userRef);
+        const current = userSnapshot.exists ? userSnapshot.data() : {};
+        const now = Date.now();
+        const currentExpiry = Number(current.loyaltyExpiresAt || 0);
+        if (current.loyaltyCode === LOYALTY_CODE && currentExpiry > now) {
+          loyaltyState = {
+            eligible: true,
+            serverManaged: true,
+            unlocked: true,
+            justUnlocked: false,
+            code: LOYALTY_CODE,
+            unlockedAt: Number(current.loyaltyUnlockedAt || now),
+            expiresAt: currentExpiry
+          };
+          return;
+        }
+        const expiresAt = now + 24 * 60 * 60 * 1000;
+        transaction.set(userRef, {
+          loyaltyUnlocked: true,
+          loyaltyCode: LOYALTY_CODE,
+          loyaltyUnlockedAt: now,
+          loyaltyExpiresAt: expiresAt,
+          updatedAt: now
+        }, { merge: true });
+        loyaltyState = {
+          eligible: true,
+          serverManaged: true,
+          unlocked: true,
+          justUnlocked: true,
+          code: LOYALTY_CODE,
+          unlockedAt: now,
+          expiresAt
+        };
+      });
+      return res.status(200).json(loyaltyState || { eligible: true, serverManaged: true });
+    } catch (error) {
+      logger.error("Loyalty status check failed", error);
+      return res.status(500).json({ message: "تعذر التحقق من مكافأة الولاء حاليًا." });
+    }
   }
 );
 
