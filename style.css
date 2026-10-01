@@ -2,178 +2,48 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
 
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ IMAGE FIX v5 — Blur Background (Instagram Style)
-   الصورة كاملة + المربع مليان + مفيش تقطيع
-   ✅ يستخدم CSS Variable (--bg-image) اللي بيتحدد من JS
+   IMAGE FIX v6 — Fill Square (Crop from center)
+   ملاحظة: قد يقطع أطراف الصور الطولية/العرضية
    ═══════════════════════════════════════════════════════════ */
 
-/* ─── 1) كروت المنتجات في الصفحة الرئيسية ─── */
 .pgrid .p-media {
   aspect-ratio: 1 / 1 !important;
   overflow: hidden;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg2);
-}
-
-/* طبقة الـ blur — بتقرا الصورة من --bg-image */
-.pgrid .p-media.has-blur-bg::before {
-  content: '';
-  position: absolute;
-  inset: -20px;
-  background-image: var(--bg-image);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(20px) brightness(0.85);
-  opacity: 0.75;
-  z-index: 0;
-  transform: scale(1.15);
 }
 
 .pgrid .p-media img,
 .pgrid .p-media video {
-  position: relative;
-  z-index: 1;
   width: 100% !important;
   height: 100% !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
   object-position: center !important;
   display: block;
 }
 
-/* ─── 2) الصورة الرئيسية في صفحة المنتج ─── */
 #pdImgWrap {
-  width: 100%;
   aspect-ratio: 1 / 1 !important;
   min-height: auto !important;
   max-height: none !important;
-  height: auto !important;
-  border-radius: 22px;
   overflow: hidden;
-  position: relative;
-  background: var(--bg2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#pdImgWrap.has-blur-bg::before {
-  content: '';
-  position: absolute;
-  inset: -20px;
-  background-image: var(--bg-image);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(24px) brightness(0.85);
-  opacity: 0.7;
-  z-index: 0;
-  transform: scale(1.15);
 }
 
 #pdImg {
-  position: relative;
-  z-index: 1;
   width: 100% !important;
   height: 100% !important;
   min-height: auto !important;
-  max-height: none !important;
-  object-fit: contain !important;
-  object-position: center !important;
-  display: block;
-}
-
-#pdImgWrap video,
-#pdMainVideo {
-  position: relative;
-  z-index: 1;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-  background: #000;
-}
-
-/* ─── 3) المنتجات المشابهة + صفحة المنتجات ─── */
-.rel-grid .p-media,
-.products-grid .p-media {
-  aspect-ratio: 1 / 1 !important;
-  overflow: hidden;
-  border-radius: 18px 18px 0 0;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg2);
-}
-
-.rel-grid .p-media.has-blur-bg::before,
-.products-grid .p-media.has-blur-bg::before {
-  content: '';
-  position: absolute;
-  inset: -20px;
-  background-image: var(--bg-image);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(20px) brightness(0.85);
-  opacity: 0.75;
-  z-index: 0;
-  transform: scale(1.15);
-}
-
-.rel-grid .p-media img,
-.products-grid .p-media img,
-.rel-grid .p-media video,
-.products-grid .p-media video {
-  position: relative;
-  z-index: 1;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-  object-position: center !important;
-  display: block;
-}
-
-/* ─── 4) الصور المصغرة (Thumbnails) ─── */
-#pdThumbs img,
-.pd-thumbs img {
   object-fit: cover !important;
   object-position: center !important;
 }
 
-/* ─── 5) على الموبايل ─── */
-@media (max-width: 768px) {
-  .pgrid .p-media {
-    aspect-ratio: 1 / 1 !important;
-  }
-  #pdImgWrap {
-    aspect-ratio: 1 / 1 !important;
-    min-height: auto !important;
-    height: auto !important;
-  }
-  #pdImg {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: auto !important;
-    max-height: none !important;
-    object-fit: contain !important;
-  }
-  .rel-grid .p-media,
-  .products-grid .p-media {
-    aspect-ratio: 1 / 1 !important;
-  }
+.rel-grid .p-media,
+.products-grid .p-media {
+  aspect-ratio: 1 / 1 !important;
+  overflow: hidden;
 }
 
-@media (max-width: 480px) {
-  .pgrid .p-media {
-    aspect-ratio: 1 / 1 !important;
-  }
-  #pdImgWrap {
-    aspect-ratio: 1 / 1 !important;
-    min-height: auto !important;
-    height: auto !important;
-  }
+.rel-grid .p-media img,
+.products-grid .p-media img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
