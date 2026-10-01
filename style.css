@@ -24,3 +24,73 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
 @media (max-width: 480px) {
   .pgrid .p-media { aspect-ratio: 1 / 1 !important; }
 }
+/* ═══════════════════════════════════════════════════════
+   ✨ FIX v2: صور صفحة المنتج + المنتجات المشابهة
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── 1) الصورة الرئيسية في صفحة المنتج ─── */
+#pdImgWrap {
+  width: 100%;
+  aspect-ratio: 1 / 1 !important;
+  min-height: auto !important;
+  max-height: none !important;
+  border-radius: 22px;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg2);
+}
+#pdImg {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: auto !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block;
+}
+#pdImgWrap video,
+#pdMainVideo {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  background: #000;
+}
+
+/* ─── 2) المنتجات المشابهة + صفحة المنتجات ─── */
+.rel-grid .p-media,
+.products-grid .p-media {
+  aspect-ratio: 1 / 1 !important;
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+}
+.rel-grid .p-media img,
+.products-grid .p-media img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block;
+}
+
+/* ─── 3) على الموبايل ─── */
+@media (max-width: 768px) {
+  #pdImgWrap {
+    aspect-ratio: 1 / 1 !important;
+    min-height: auto !important;
+  }
+  #pdImg {
+    height: 100% !important;
+    min-height: auto !important;
+    object-fit: cover !important;
+  }
+  .rel-grid .p-media,
+  .products-grid .p-media {
+    aspect-ratio: 1 / 1 !important;
+  }
+}
+
+/* ─── 4) الصور المصغرة (Thumbnails) في صفحة المنتج ─── */
+#pdThumbs img,
+.pd-thumbs img {
+  object-fit: cover !important;
+}
