@@ -1814,10 +1814,23 @@ function loadCoupons(){
   }).catch(err => { console.error("Coupons error:", err); toast("⚠️ تعذر تحميل الكوبونات"); });
 }
 
+/* ✅ [جديد] — كوبونات النظام اللي مش بتظهر في الأدمن */
+const SYSTEM_COUPON_CODES = ["LOYAL15", "THANKS10"];
+function isSystemCoupon(c) {
+  if (!c || !c.code) return false;
+  const code = String(c.code).toUpperCase().trim();
+  if (SYSTEM_COUPON_CODES.indexOf(code) !== -1) return true;
+  if (c.loyaltyOnly === true) return true;
+  if (c.system === "loyalty") return true;
+  if (c.type === "loyalty") return true;
+  return false;
+}
+
 function renderCoupons(coupons){
   const body = document.getElementById("couponsBody");
   if(!body) return;
-  let list = coupons || [];
+  /* ✅ [جديد] — استثناء كوبونات النظام من العرض */
+  let list = (coupons || []).filter(c => !isSystemCoupon(c));
   list.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
   if(!list.length){
     body.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد كوبونات بعد. أنشئ أول كوبون الآن!</td></tr>`;
@@ -1951,8 +1964,15 @@ function saveCoupon(){
   if(value <= 0){ toast("⚠️ قيمة الخصم لازم أكبر من صفر"); return; }
   if(type === "percent" && value > 100){ toast("⚠️ النسبة المئوية لازم تكون ≤ 100"); return; }
   
-  const existing = ALL_COUPONS.find(c => c.code === code && c.id !== editId);
-  if(existing){ toast("⚠️ الكود ده مستخدم من قبل. اختار كود تاني."); return; }
+  /* ✅ [جديد] — منع استخدام أسماء كوبونات النظام */
+if (SYSTEM_COUPON_CODES.indexOf(code) !== -1) {
+  toast("⚠️ الكود ده محجوز لنظام الولاء. اختار كود تاني.");
+  return;
+}
+
+const existing = ALL_COUPONS.find(c => c.code === code && c.id !== editId);
+if(existing){ toast("⚠️ الكود ده مستخدم من قبل. اختار كود تاني."); return; }
+  
   
   let expiresAt = null;
   if(expiresVal) expiresAt = new Date(expiresVal).setHours(23,59,59,999);
