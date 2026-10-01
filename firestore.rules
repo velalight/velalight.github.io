@@ -11,17 +11,17 @@ service cloud.firestore {
       return signedIn()
         && (
           request.auth.token.email == "wagdyme@aol.com"
-          || request.auth.token.email == "itswag@gmail.com"
+          || request.auth.token.email == "itswagdy@gmail.com"
         );
     }
 
-    // المنتجات: القراءة للجميع والتعديل للمدير فقط (لم تتغير).
+    /* ═══ المنتجات ═══ */
     match /products/{productId} {
       allow read: if true;
       allow create, update, delete: if admin();
     }
 
-    // الطلبات: guest checkout ما زال مسموحًا، والإدارة تتحكم بباقي العمليات.
+    /* ═══ الطلبات ═══ */
     match /orders/{orderId} {
       allow create: if
         request.resource.data.keys().hasAll(['orderId', 'items', 'total', 'phone', 'name'])
@@ -40,7 +40,7 @@ service cloud.firestore {
         && resource.data.userId == request.auth.uid;
     }
 
-    // المراجعات: الإنشاء والقراءة عامان، والتعديل للمدير فقط.
+    /* ═══ المراجعات ═══ */
     match /reviews/{reviewId} {
       allow create: if
         request.resource.data.keys().hasAll(['name', 'rating'])
@@ -55,20 +55,29 @@ service cloud.firestore {
       allow update, delete: if admin();
     }
 
-    // بيانات القسائم قد تحتوي سجلات استخدام خاصة؛ القراءة والكتابة للمدير فقط.
-    // واجهة المتجر تتلقى الحقول العامة عبر validateCoupon Cloud Function.
+    /* ═══ الكوبونات ═══
+       ✅ [مُصلح] — القراءة العامة لكوبونات فعّالة فقط
+       (لأن Exit Intent + validateCoupon محتاجين يقرأوها)
+       البيانات الحساسة (usedBy, usedCount) مخفية عن الزوار عبر
+       Cloud Function بتعمل الفلترة.
+    */
     match /coupons/{couponId} {
-      allow read, create, update, delete: if admin();
+      allow read: if true;
+      allow create, update, delete: if admin();
     }
 
-    // سجل استخدام خاص، لا يصل إليه المتصفح.
+    /* ═══ سجل الاستخدام ═══ */
     match /couponRedemptions/{redemptionId} {
       allow read, write: if admin();
     }
 
-    // سجلات العملاء لا تنشأ أو تتغير من المتصفح.
+    /* ═══ بيانات العملاء ═══
+       ✅ [مُصلح] — العميل يقرأ ويكتب بياناته الشخصية فقط
+       والأدمن يقرأ ويكتب الكل
+    */
     match /users/{userId} {
-      allow read, create, update, delete: if admin();
+      allow read, write: if admin();
+      allow read, write: if signedIn() && request.auth.uid == userId;
     }
 
     match /{document=**} {
