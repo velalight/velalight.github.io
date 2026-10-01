@@ -1602,14 +1602,33 @@ function renderAdminProducts(){
   bindProductActions(PRODUCTS_ADMIN_CACHE);
 }
 
+/* ✅ [تعديل] — عرض المنتجات المحلية فوراً + دمج مع Firebase */
 function loadProducts(){
+  /* ═══ 1) عرض المنتجات المحلية فوراً (تظهر بسرعة) ═══ */
+  try {
+    if (Array.isArray(PRODUCTS) && PRODUCTS.length) {
+      PRODUCTS_ADMIN_CACHE = PRODUCTS
+        .filter(p => p && p.id)
+        .map(p => ({ ...p, _fid: null, active: p.active !== false }));
+      renderAdminProducts();
+      console.log("⚡ [Local] المنتجات المحلية ظهرت فوراً:", PRODUCTS_ADMIN_CACHE.length);
+    }
+  } catch(e) {
+    console.warn("⚠️ Local products preload failed:", e);
+  }
+
+  /* ═══ 2) ثم جلب من Firestore ودمج ═══ */
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("products").then(cloud => {
     const map = new Map();
+
+    /* إضافة المنتجات المحلية (من data.js) */
     (PRODUCTS || []).forEach(product => {
       if(!product || !product.id) return;
       map.set(product.id, { ...product, _fid:null, active:true });
     });
+
+    /* دمج منتجات Firestore (الـ 13 منتج بتوعك) */
     (cloud || []).forEach(data => {
       const slug = data.id_ || data.slug || data.pid || data.id;
       if(!slug) return;
@@ -1631,11 +1650,15 @@ function loadProducts(){
         stock: finalStock
       });
     });
+
     PRODUCTS_ADMIN_CACHE = [...map.values()];
     renderAdminProducts();
-  }).catch(error => { console.error("Products error:", error); toast("⚠️ تعذر تحميل المنتجات"); });
+    console.log("✅ [Merged] إجمالي المنتجات بعد الدمج:", PRODUCTS_ADMIN_CACHE.length);
+  }).catch(error => {
+    console.error("Products error:", error);
+    toast("⚠️ تعذر تحميل المنتجات من السيرفر — يتم عرض المحلي فقط");
+  });
 }
-
 function bindProductActions(list){
   document.querySelectorAll("#productsBody [data-edit]").forEach(button => {
     button.addEventListener("click", () => {
