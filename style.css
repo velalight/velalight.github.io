@@ -2,8 +2,9 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
 
 
 /* ═══════════════════════════════════════════════════════════
-   ✨ IMAGE FIX v4 — Blur Background (Instagram Style)
+   ✨ IMAGE FIX v5 — Blur Background (Instagram Style)
    الصورة كاملة + المربع مليان + مفيش تقطيع
+   ✅ يستخدم CSS Variable (--bg-image) اللي بيتحدد من JS
    ═══════════════════════════════════════════════════════════ */
 
 /* ─── 1) كروت المنتجات في الصفحة الرئيسية ─── */
@@ -17,18 +18,19 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
   background: var(--bg2);
 }
 
-/* طبقة الـ blur اللي بتستخدم نفس الصورة كخلفية */
-.pgrid .p-media::before {
+/* طبقة الـ blur — بتقرا الصورة من --bg-image */
+.pgrid .p-media.has-blur-bg::before {
   content: '';
   position: absolute;
   inset: -20px;
+  background-image: var(--bg-image);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   filter: blur(20px) brightness(0.85);
-  opacity: 0.7;
+  opacity: 0.75;
   z-index: 0;
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 .pgrid .p-media img,
@@ -58,17 +60,18 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
   justify-content: center;
 }
 
-#pdImgWrap::before {
+#pdImgWrap.has-blur-bg::before {
   content: '';
   position: absolute;
   inset: -20px;
+  background-image: var(--bg-image);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   filter: blur(24px) brightness(0.85);
-  opacity: 0.65;
+  opacity: 0.7;
   z-index: 0;
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 #pdImg {
@@ -106,18 +109,19 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
   background: var(--bg2);
 }
 
-.rel-grid .p-media::before,
-.products-grid .p-media::before {
+.rel-grid .p-media.has-blur-bg::before,
+.products-grid .p-media.has-blur-bg::before {
   content: '';
   position: absolute;
   inset: -20px;
+  background-image: var(--bg-image);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   filter: blur(20px) brightness(0.85);
-  opacity: 0.7;
+  opacity: 0.75;
   z-index: 0;
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 .rel-grid .p-media img,
