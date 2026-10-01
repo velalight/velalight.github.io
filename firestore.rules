@@ -3,7 +3,6 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    /* ═══ Helper Functions ═══ */
     function isAdmin() {
       return request.auth != null && (
         request.auth.token.email == 'wagdyme@aol.com' ||
@@ -19,34 +18,30 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    /* ═══ المنتجات ═══ */
     match /products/{productId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    /* ═══ المراجعات ═══ */
     match /reviews/{reviewId} {
       allow read: if true;
 
-      /* ✅ [تحقق] — منع المراجعات الفاضية */
-      allow create: if
-        request.resource.data.keys().hasAll(['name', 'rating'])
+      allow create: if signedIn()
+        && request.resource.data.keys().hasAll(['name', 'rating', 'userId'])
         && request.resource.data.name is string
         && request.resource.data.name.size() >= 2
         && request.resource.data.name.size() <= 50
         && request.resource.data.rating is number
         && request.resource.data.rating >= 1
-        && request.resource.data.rating <= 5;
+        && request.resource.data.rating <= 5
+        && request.resource.data.userId == request.auth.uid;
 
       allow update, delete: if isAdmin();
     }
 
-    /* ═══ الطلبات ═══ */
     match /orders/{orderId} {
       allow read, update, delete: if isAdmin();
 
-      /* ✅ [تحقق] — منع الطلبات الفاضية والـ spam */
       allow create: if
         request.resource.data.keys().hasAll(['orderId', 'items', 'total', 'phone', 'name'])
         && request.resource.data.items is list
@@ -56,38 +51,36 @@ service cloud.firestore {
         && request.resource.data.total <= 100000
         && request.resource.data.phone is string
         && request.resource.data.phone.size() >= 10
-        && request.resource.data.phone.size() <= 20;
+        && request.resource.data.phone.size() <= 20
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 2
+        && request.resource.data.name.size() <= 100;
+        // لو عايز الطلبات تكون للمسجلين فقط أضف: && signedIn()
     }
 
-    /* ═══ العملاء ═══ */
     match /users/{userId} {
-      allow read: if true;
-      allow create: if true;
+      allow read: if isAdmin() || isOwner(userId);
+      allow create: if signedIn() && request.auth.uid == userId;
 
-      /* ✅ [محسّن] — الأدمن أو صاحب الحساب أو تحديث محدود لحقول آمنة */
-      allow update: if isAdmin()
-        || isOwner(userId)
-        || (
-          request.resource.data.diff(resource.data).affectedKeys()
-            .hasOnly(['ordersCount', 'totalSpent', 'lastOrder', 'name', 'phone', 'email', 'city', 'address', 'provider'])
-        );
+      allow update: if isAdmin() || (
+        isOwner(userId)
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['name', 'phone', 'email', 'city', 'address', 'provider'])
+      );
 
       allow delete: if isAdmin();
     }
 
-    /* ═══ الكوبونات ═══ */
     match /coupons/{couponId} {
-      allow read: if true;
+      allow read: if isAdmin(); // لو الكوبونات عامة خليها true
       allow write: if isAdmin();
     }
 
-    /* ═══ Behind the Scenes ═══ */
     match /craftsmanship/{itemId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    /* ═══ حماية ═══ */
     match /{document=**} {
       allow read, write: if false;
     }
