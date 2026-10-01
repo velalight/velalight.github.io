@@ -3,6 +3,8 @@
    
    - بيقرأ الكوبونات الفعّالة فقط
    - بيفلتر المنتهية والمتوقفة
+   - ✅ [v2] بيستثني كوبونات برنامج الولاء (LOYAL15 / loyaltyOnly)
+   - بيفلتر المنتهية والمتوقفة
    - بيختار الأقوى (أعلى قيمة)
    - لو مفيش كوبون متاح، النافذة متظهرش
    ═══════════════════════════════════════════════════════════ */
@@ -14,6 +16,19 @@
   var COUPON_CODE = ""; /* يتحدد ديناميكيًا */
   var COUPON_LABEL = ""; /* "خصم 10%" */
 
+  /* ═══ [جديد] كوبونات ممنوعة على Exit Intent ═══ */
+  var EXCLUDED_CODES = ["LOYAL15", "THANKS10"];
+
+  function isLoyaltyCoupon(c){
+    if(!c) return false;
+    var code = String(c.code || "").toUpperCase().trim();
+    if(EXCLUDED_CODES.indexOf(code) !== -1) return true;
+    if(c.loyaltyOnly === true) return true;
+    if(c.type === "loyalty") return true;
+    if(c.system === "loyalty") return true;
+    return false;
+  }
+
   /* ─── 1) يختار الكوبون الأفضل من القائمة ─── */
   function pickBestCoupon(coupons){
     if(!Array.isArray(coupons) || !coupons.length) return null;
@@ -23,19 +38,26 @@
     var valid = coupons.filter(function(c){
       if(!c || !c.code) return false;
       if(c.active === false) return false;
+
+      /* ✅ [جديد] — استثناء كوبونات برنامج الولاء */
+      if(isLoyaltyCoupon(c)) return false;
+
       /* لازم يكون نوعه percent أو fixed */
       var type = String(c.type || "").toLowerCase();
       if(type !== "percent" && type !== "percentage" && type !== "fixed") return false;
+
       /* مش بدأ بعد */
       if(c.startDate){
         var startTs = c.startDate > 1e12 ? c.startDate : new Date(c.startDate).getTime();
         if(now < startTs) return false;
       }
+
       /* منتهي */
       if(c.expiresAt){
         var endTs = Number(c.expiresAt);
         if(!isNaN(endTs) && now > endTs) return false;
       }
+
       /* استنفد الاستخدامات */
       if(c.maxUses && Number(c.usedCount || 0) >= Number(c.maxUses)) return false;
 
