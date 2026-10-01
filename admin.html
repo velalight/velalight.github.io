@@ -540,7 +540,7 @@ let PRODUCTS_ADMIN_CACHE = [];
 
 // ═══ متغيرات الطلب اليدوي ═══
 let productRowCounter = 0;
-let appliedManualCoupon = null; // { code, discount, type, value } أو null
+let appliedManualCoupon = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   initTabs();
@@ -674,7 +674,7 @@ function initTabs(){
 }
 
 // ═══════════════════════════════════════════════════════════
-// ✅ MANUAL ORDER SYSTEM — مع منتجات متعددة وتتبع Pixel + تسجيل العملاء
+// ✅ MANUAL ORDER SYSTEM
 // ═══════════════════════════════════════════════════════════
 
 function getProductById(id) {
@@ -761,9 +761,6 @@ function createProductRow(productId, scent, qty, price) {
   updateTotal();
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ✨ [مُعدّلة] حساب الإجمالي مع دعم الخصم (كوبون + يدوي)
-   ═══════════════════════════════════════════════════════════ */
 async function updateTotal() {
   const rows = document.querySelectorAll('.product-row');
   let subTotal = 0;
@@ -773,7 +770,6 @@ async function updateTotal() {
     subTotal += qty * price;
   });
 
-  // ✅ حساب خصم الكوبون
   let couponDiscount = 0;
   const couponCode = (document.getElementById('mo_coupon_code')?.value || '').trim().toUpperCase();
   appliedManualCoupon = null;
@@ -808,12 +804,10 @@ async function updateTotal() {
     }
   }
 
-  // ✅ الخصم اليدوي
   const manualDiscount = parseFloat(document.getElementById('mo_manual_discount')?.value) || 0;
   const totalDiscount = couponDiscount + manualDiscount;
   const finalTotal = Math.max(0, subTotal - totalDiscount);
 
-  // ✅ تحديث الواجهة
   const subEl = document.getElementById('mo_subtotal');
   if (subEl) subEl.textContent = subTotal.toFixed(2) + ' ج.م';
 
@@ -848,7 +842,6 @@ async function updateTotal() {
 async function saveCustomer(orderData) {
   if(!window.FB) return;
   try {
-    // محاولة جلب المستخدمين
     let users = [];
     try {
       users = await window.FB.list("users") || [];
@@ -898,7 +891,6 @@ async function saveCustomer(orderData) {
     }
   } catch(err) {
     console.error('❌ فشل حفظ العميل:', err);
-    // محاولة بديلة: إنشاء العميل مباشرة
     try {
       const userId = 'u' + Date.now().toString(36) + Math.random().toString(16).slice(2,5);
       const newUser = {
@@ -967,7 +959,6 @@ function initManualOrder() {
     }
   });
 
-  // ✨ [جديد] أحداث الخصم
   document.getElementById('mo_coupon_code')?.addEventListener('blur', () => { updateTotal(); });
   document.getElementById('mo_coupon_code')?.addEventListener('change', () => { updateTotal(); });
   document.getElementById('mo_manual_discount')?.addEventListener('input', () => { updateTotal(); });
@@ -1016,7 +1007,6 @@ function initManualOrder() {
 
     if (hasError || products.length === 0) return;
 
-    // ✅ احسب الإجمالي والخصم
     const calc = await updateTotal();
     const subTotal = calc.subTotal;
     const couponDiscount = calc.couponDiscount;
@@ -1065,7 +1055,6 @@ function initManualOrder() {
           num_items: products.length,
           order_id: orderId
         });
-        console.log('✅ Pixel Purchase event sent');
       }
 
       if (typeof gtag === 'function') {
@@ -1080,7 +1069,6 @@ function initManualOrder() {
             quantity: p.quantity
           }))
         });
-        console.log('✅ GA4 Purchase event sent');
       }
 
       const discountMsg = totalDiscount > 0 ? ` (خصم: ${totalDiscount} ج.م)` : '';
@@ -1096,7 +1084,6 @@ function initManualOrder() {
   });
 }
 
-// ═══ نافذة عرض وتعديل الطلب (Modal) ═══
 let currentEditingOrderId = null;
 
 function initOrderModal() {
@@ -1117,7 +1104,6 @@ function initOrderModal() {
 }
 
 function openOrderModal(orderIdentifier) {
-  // البحث عن الطلب باستخدام _fid أو orderId أو id
   const order = ALL_ORDERS.find(o => 
     (o._fid && o._fid === orderIdentifier) || 
     (o.orderId && o.orderId === orderIdentifier) || 
@@ -1126,7 +1112,6 @@ function openOrderModal(orderIdentifier) {
   
   if (!order) { 
     toast('⚠️ الطلب غير موجود'); 
-    console.error('Order not found for identifier:', orderIdentifier, 'Available orders:', ALL_ORDERS.map(o => ({_fid: o._fid, orderId: o.orderId, id: o.id})));
     return; 
   }
 
@@ -1164,7 +1149,6 @@ function openOrderModal(orderIdentifier) {
     `<option value="${val}" ${val === (order.paymentStatus || 'pending') ? 'selected' : ''}>${label}</option>`
   ).join('');
 
-  // ✨ [جديد] عرض الخصم إن وُجد
   const subTotal = Number(order.subTotal || order.productsTotal || order.total || 0);
   const discount = Number(order.discount || 0);
   let discountHtml = '';
@@ -1229,7 +1213,6 @@ function openOrderModal(orderIdentifier) {
 
   currentEditingOrderId = order._fid || order.id;
 
-  // ربط الأحداث
   document.getElementById('modalSaveBtn').addEventListener('click', async function() {
     const newStatus = parseInt(document.getElementById('modalStatusSelect').value);
     const newPayment = document.getElementById('modalPaymentSelect').value;
@@ -1398,7 +1381,6 @@ function renderOrders(orders){
       </tr>`;
   }).join("");
   
-  // ربط أحداث تغيير الحالة
   document.querySelectorAll("#ordersBody .status-select").forEach(select => {
     select.addEventListener("change", async function() {
       const oid = this.dataset.oid;
@@ -1431,7 +1413,6 @@ function renderOrders(orders){
     });
   });
 
-  // ربط زر عرض الطلب
   document.querySelectorAll("#ordersBody [data-view]").forEach(btn => {
     btn.addEventListener("click", function() {
       const oid = this.dataset.view;
@@ -1439,7 +1420,6 @@ function renderOrders(orders){
     });
   });
 
-  // ربط زر حذف الطلب
   document.querySelectorAll("#ordersBody .delete-btn").forEach(btn => {
     btn.addEventListener("click", async function() {
       const oid = this.dataset.del;
@@ -1602,14 +1582,31 @@ function renderAdminProducts(){
   bindProductActions(PRODUCTS_ADMIN_CACHE);
 }
 
+/* ✅ [تعديل] — عرض المنتجات المحلية فوراً + ثم الدمج مع Firebase */
 function loadProducts(){
+  /* ═══ 1) عرض المنتجات المحلية فوراً (تظهر بسرعة) ═══ */
+  try {
+    if (Array.isArray(PRODUCTS) && PRODUCTS.length) {
+      PRODUCTS_ADMIN_CACHE = PRODUCTS
+        .filter(p => p && p.id)
+        .map(p => ({ ...p, _fid: null, active: p.active !== false }));
+      renderAdminProducts();
+      console.log("⚡ [Local] المنتجات المحلية ظهرت فوراً:", PRODUCTS_ADMIN_CACHE.length);
+    }
+  } catch(e) {
+    console.warn("⚠️ Local products preload failed:", e);
+  }
+
+  /* ═══ 2) ثم جلب من Firestore ودمج ═══ */
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("products").then(cloud => {
     const map = new Map();
+
     (PRODUCTS || []).forEach(product => {
       if(!product || !product.id) return;
       map.set(product.id, { ...product, _fid:null, active:true });
     });
+
     (cloud || []).forEach(data => {
       const slug = data.id_ || data.slug || data.pid || data.id;
       if(!slug) return;
@@ -1631,9 +1628,14 @@ function loadProducts(){
         stock: finalStock
       });
     });
+
     PRODUCTS_ADMIN_CACHE = [...map.values()];
     renderAdminProducts();
-  }).catch(error => { console.error("Products error:", error); toast("⚠️ تعذر تحميل المنتجات"); });
+    console.log("✅ [Merged] إجمالي المنتجات بعد الدمج:", PRODUCTS_ADMIN_CACHE.length);
+  }).catch(error => {
+    console.error("Products error:", error);
+    toast("⚠️ تعذر تحميل المنتجات من السيرفر — يتم عرض المحلي فقط");
+  });
 }
 
 function bindProductActions(list){
