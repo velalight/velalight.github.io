@@ -3,12 +3,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // دالة للتحقق من أن المستخدم مسجل دخول
     function signedIn() {
       return request.auth != null;
     }
 
-    // دالة للتحقق من أن المستخدم هو المدير (Admin)
     function admin() {
       return signedIn()
         && (
@@ -17,18 +15,14 @@ service cloud.firestore {
         );
     }
 
-    // قواعد المنتجات: القراءة للجميع، والتعديل للمدير فقط
+    // المنتجات: القراءة للجميع والتعديل للمدير فقط (لم تتغير).
     match /products/{productId} {
       allow read: if true;
       allow create, update, delete: if admin();
     }
 
-    // قواعد الطلبات:
-    // - الزوار (غير المسجلين) مسموح لهم بإنشاء طلب (guest checkout)
-    // - المدير يقرأ ويعدل ويحذف كل الطلبات
-    // - العميل المسجل يقرأ طلباته هو فقط
+    // الطلبات: guest checkout ما زال مسموحًا، والإدارة تتحكم بباقي العمليات.
     match /orders/{orderId} {
-      // السماح بإنشاء الطلب للجميع مع تحقق أساسي من البيانات
       allow create: if
         request.resource.data.keys().hasAll(['orderId', 'items', 'total', 'phone', 'name'])
         && request.resource.data.items is list
@@ -40,19 +34,13 @@ service cloud.firestore {
         && request.resource.data.phone.size() >= 10
         && request.resource.data.phone.size() <= 20;
 
-      // المدير: قراءة، تعديل، حذف أي طلب
       allow read, update, delete: if admin();
-
-      // العميل المسجل: قراءة طلباته هو فقط
       allow read: if signedIn()
         && resource.data.userId != null
         && resource.data.userId == request.auth.uid;
     }
 
-    // قواعد التقييمات:
-    // - الزوار مسموح لهم بإنشاء تقييم مع تحقق أساسي
-    // - القراءة للجميع
-    // - التعديل والحذف للمدير فقط
+    // المراجعات: الإنشاء والقراءة عامان، والتعديل للمدير فقط.
     match /reviews/{reviewId} {
       allow create: if
         request.resource.data.keys().hasAll(['name', 'rating'])
@@ -67,21 +55,22 @@ service cloud.firestore {
       allow update, delete: if admin();
     }
 
-    // قواعد الكوبونات:
-    // القراءة عامة لأن الموقع يقرأ القسائم للتحقق منها؛ لا تخزن هنا بيانات شخصية.
-    // الكتابة للمدير فقط.
+    // بيانات القسائم قد تحتوي سجلات استخدام خاصة؛ القراءة والكتابة للمدير فقط.
+    // واجهة المتجر تتلقى الحقول العامة عبر validateCoupon Cloud Function.
     match /coupons/{couponId} {
-      allow read: if true;
-      allow create, update, delete: if admin();
+      allow read, create, update, delete: if admin();
+    }
+
+    // سجل استخدام خاص، لا يصل إليه المتصفح.
+    match /couponRedemptions/{redemptionId} {
+      allow read, write: if admin();
     }
 
     // سجلات العملاء لا تنشأ أو تتغير من المتصفح.
-    // مزامنة الإحصاءات تتم من Cloud Function باستخدام Admin SDK.
     match /users/{userId} {
       allow read, create, update, delete: if admin();
     }
 
-    // قاعدة أمان شاملة: منع القراءة أو الكتابة لأي مجموعة بيانات أخرى
     match /{document=**} {
       allow read, write: if false;
     }
