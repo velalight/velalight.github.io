@@ -1,6 +1,9 @@
 /* ═══════════════════════════════════════════════════════════
-   VelaLight — نظام تسجيل دخول العملاء (النسخة المبسطة والذكية)
+   VelaLight — نظام تسجيل دخول العملاء (v2 — محسّن)
    ✨ لا يطلب عنواناً عند التسجيل | ✨ يحفظ الإيميل لتسهيل الدخول القادم
+   ✅ يدعم الموبايل (redirect) والكمبيوتر (popup) في Google Login
+   ✅ حماية XSS في savedEmail
+   ✅ تصدير closeAuthModal على window
    ═══════════════════════════════════════════════════════════ */
 import {
   createUserWithEmailAndPassword,
@@ -10,7 +13,9 @@ import {
   updateProfile,
   sendPasswordResetEmail,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
@@ -24,12 +29,19 @@ import {
 /* ═══ Google Provider ═══ */
 const googleProvider = new GoogleAuthProvider();
 
+/* ═══════ helper: تنظيف HTML لمنع XSS ═══════ */
+function escapeHtml(str) {
+  return String(str == null ? "" : str).replace(/[&<>"']/g, function(c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c];
+  });
+}
+
 /* ═══════ إنشاء نافذة تسجيل الدخول تلقائياً ═══════ */
 function createAuthModal() {
   if (document.getElementById("authOv")) return;
 
-  // ✨ جلب الإيميل المحفوظ مسبقاً لتسهيل الدخول
-  const savedEmail = localStorage.getItem("vl_saved_email") || "";
+  // ✨ جلب الإيميل المحفوظ مسبقاً (مع تنظيف XSS)
+  const savedEmail = escapeHtml(localStorage.getItem("vl_saved_email") || "");
 
   const modal = document.createElement("div");
   modal.id = "authOv";
@@ -132,16 +144,26 @@ function clearErrors() {
 
 /* ═══════ فتح / إغلاق النافذة ═══════ */
 window.openAuthModal = function() {
-  document.getElementById("vlLoginForm").style.display = "block";
-  document.getElementById("vlRegForm").style.display = "none";
-  document.getElementById("authTitle").textContent = "تسجيل الدخول";
+  const loginForm = document.getElementById("vlLoginForm");
+  const regForm = document.getElementById("vlRegForm");
+  const title = document.getElementById("authTitle");
+  const overlay = document.getElementById("authOv");
+  if (!loginForm || !regForm || !title || !overlay) return;
+  
+  loginForm.style.display = "block";
+  regForm.style.display = "none";
+  title.textContent = "تسجيل الدخول";
   clearErrors();
-  document.getElementById("authOv").classList.add("open");
+  overlay.classList.add("open");
 };
 
 function closeAuthModal() {
-  document.getElementById("authOv").classList.remove("open");
+  const overlay = document.getElementById("authOv");
+  if (overlay) overlay.classList.remove("open");
 }
+
+/* ✅ تصدير الدالة على window */
+window.closeAuthModal = closeAuthModal;
 
 /* ═══════ تسجيل الدخول ═══════ */
 async function handleLogin() {
@@ -211,7 +233,7 @@ async function handleRegister() {
   }
 }
 
-/* ═══════ الدخول بحساب Google ═══════ */
+/* ═══════ الدخول بحساب Google (يدعم الموبايل + الكمبيوتر) ═══════ */
 async function handleGoogleLogin() {
   const btn = document.getElementById("vlGoogleBtn");
   btn.disabled = true;
@@ -221,6 +243,11 @@ async function handleGoogleLogin() {
 
   btn.disabled = false;
   btn.textContent = "🌐 الدخول بحساب Google";
+
+  // ✅ على الموبايل: redirect بيحصل، فمفيش success فوري
+  if (result.pending) {
+    return;
+  }
 
   if (result.success) {
     closeAuthModal();
@@ -283,7 +310,7 @@ async function syncUserData() {
         name: data.name || user.displayName || "",
         phone: data.phone || "",
         city: data.city || "",
-        addr: data.address || "", // نستخدم addr ليتوافق مع كود السلة
+        addr: data.address || "",
         orders: data.ordersCount || 0
       }));
       
@@ -316,12 +343,10 @@ window.VL_Register = async function(email, password, name) {
       window.FB.auth, email, password
     );
 
-    // تحديث الاسم في نظام المصادقة
     if (name) {
       await updateProfile(userCredential.user, { displayName: name });
     }
 
-    // ✨ حفظ بيانات أساسية فقط في Firestore (بدون عنوان أو مدينة إجبارية)
     const userRef = doc(window.FB.db, "users", userCredential.user.uid);
     await setDoc(userRef, {
       uid: userCredential.user.uid,
@@ -338,7 +363,6 @@ window.VL_Register = async function(email, password, name) {
       lastLogin: serverTimestamp()
     });
 
-    // ✨ حفظ الإيميل لتسهيل الدخول في المرة القادمة
     localStorage.setItem("vl_saved_email", email);
 
     return { success: true, user: userCredential.user };
@@ -355,17 +379,14 @@ window.VL_Login = async function(email, password) {
       window.FB.auth, email, password
     );
 
-    // ✨ حفظ الإيميل لتسهيل الدخول في المرة القادمة
     localStorage.setItem("vl_saved_email", email);
 
-    // تحديث وقت آخر دخول فقط بدون مسح البيانات الأخرى
     const userRef = doc(window.FB.db, "users", userCredential.user.uid);
     const userSnap = await getDoc(userRef);
     
     if (userSnap.exists()) {
       await updateDoc(userRef, { lastLogin: serverTimestamp() });
     } else {
-      // حالة نادرة: المستخدم موجود في Auth لكن ليس في Firestore
       await setDoc(userRef, {
         uid: userCredential.user.uid,
         email: email,
@@ -389,9 +410,22 @@ window.VL_Login = async function(email, password) {
   }
 };
 
-/* ═══ الدخول بحساب Google ═══ */
+/* ═══ الدخول بحساب Google (Popup للكمبيوتر + Redirect للموبايل) ═══ */
 window.VL_LoginGoogle = async function() {
   try {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    // ✅ على الموبايل: redirect (لأن popups محظورة)
+    if (isMobile) {
+      try {
+        sessionStorage.setItem("vl_auth_return", window.location.pathname + window.location.search);
+      } catch (e) {}
+      
+      await signInWithRedirect(window.FB.auth, googleProvider);
+      return { success: true, pending: true };
+    }
+    
+    // ✅ على الكمبيوتر: popup
     const result = await signInWithPopup(window.FB.auth, googleProvider);
     
     const userRef = doc(window.FB.db, "users", result.user.uid);
@@ -430,10 +464,8 @@ window.VL_Logout = async function() {
   try {
     await signOut(window.FB.auth);
     
-    // ✨ نمسح بيانات الجلسة الحالية فقط، ونحتفظ بـ vl_saved_email لتسهيل الدخول القادم
     localStorage.removeItem("vl_user");
     
-    // تصفير حقول العرض
     const accName = document.getElementById("accName");
     const accPhone = document.getElementById("accPhone");
     const accCity = document.getElementById("accCity");
@@ -449,7 +481,6 @@ window.VL_Logout = async function() {
     updateAccountUI();
     if (typeof toast === "function") toast("✅ تم تسجيل الخروج");
     
-    // إعادة تحميل الصفحة لضمان تحديث كل الواجهات
     setTimeout(() => window.location.reload(), 500);
     
     return { success: true };
@@ -479,7 +510,7 @@ window.VL_GetCurrentUser = async function() {
   return userSnap.exists() ? { id: userSnap.id, ...userSnap.data() } : null;
 };
 
-/* ═══ تحديث بيانات المستخدم (يُستخدم عند إتمام الطلب لأول مرة) ═══ */
+/* ═══ تحديث بيانات المستخدم ═══ */
 window.VL_UpdateProfile = async function(data) {
   if (!window.FB || !window.FB.auth || !window.FB.auth.currentUser) {
     return { success: false, error: "غير مسجل" };
@@ -489,13 +520,11 @@ window.VL_UpdateProfile = async function(data) {
     const user = window.FB.auth.currentUser;
     const userRef = doc(window.FB.db, "users", user.uid);
     
-    // ✨ merge: true يضمن أننا نضيف العنوان والاسم دون مسح أي بيانات أخرى
     await setDoc(userRef, data, { merge: true });
 
-    // تحديث localStorage ليعكس التغييرات فوراً في السلة
     const old = JSON.parse(localStorage.getItem("vl_user") || "{}");
     const updated = { ...old, ...data };
-    if (data.address) updated.addr = data.address; // توحيد المصطلحات مع كود السلة
+    if (data.address) updated.addr = data.address;
     localStorage.setItem("vl_user", JSON.stringify(updated));
 
     return { success: true };
@@ -517,9 +546,13 @@ function translateError(code) {
     "auth/too-many-requests": "محاولات كتير، استنى شوية وحاول تاني",
     "auth/network-request-failed": "مشكلة في الاتصال بالإنترنت",
     "auth/popup-closed-by-user": "تم إغلاق نافذة تسجيل الدخول",
-    "auth/popup-blocked": "المتصفح منع النافذة المنبثقة، يرجى السماح بها"
+    "auth/popup-blocked": "المتصفح منع النافذة المنبثقة، يرجى السماح بها",
+    "auth/cancelled-popup-request": "تم إلغاء العملية، حاول تاني",
+    "auth/user-disabled": "الحساب ده متوقف، تواصل مع الدعم",
+    "auth/requires-recent-login": "لأمان حسابك، سجّل دخول تاني",
+    "auth/operation-not-allowed": "طريقة التسجيل دي مش مفعّلة، تواصل مع الدعم"
   };
-  return errors[code] || "حدث خطأ غير متوقع";
+  return errors[code] || "حدث خطأ غير متوقع، حاول تاني";
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -538,6 +571,46 @@ function initAuthSystem() {
 }
 
 function setupAuthListener() {
+  // ✅ معالجة نتيجة الـ redirect (للموبايل)
+  getRedirectResult(window.FB.auth).then(async (result) => {
+    if (result && result.user) {
+      const userRef = doc(window.FB.db, "users", result.user.uid);
+      const userSnap = await getDoc(userRef);
+      
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          uid: result.user.uid,
+          email: result.user.email || "",
+          name: result.user.displayName || "",
+          phone: "",
+          city: "",
+          address: "",
+          provider: "google.com",
+          photoURL: result.user.photoURL || "",
+          ordersCount: 0,
+          totalSpent: 0,
+          createdAt: serverTimestamp(),
+          lastLogin: serverTimestamp()
+        });
+      } else {
+        await updateDoc(userRef, { lastLogin: serverTimestamp() });
+      }
+      
+      localStorage.setItem("vl_saved_email", result.user.email || "");
+      if (typeof toast === "function") toast("✅ تم الدخول بنجاح");
+      
+      // رجّع المستخدم للصفحة اللي كان فيها
+      try {
+        const returnPath = sessionStorage.getItem("vl_auth_return");
+        if (returnPath) {
+          sessionStorage.removeItem("vl_auth_return");
+        }
+      } catch (e) {}
+    }
+  }).catch((error) => {
+    console.warn("Redirect result error:", error);
+  });
+
   onAuthStateChanged(window.FB.auth, async (user) => {
     window.dispatchEvent(new CustomEvent("vl-auth-change", {
       detail: { user }
@@ -546,7 +619,6 @@ function setupAuthListener() {
     if (user) {
       await syncUserData();
     } else {
-      // عند تسجيل الخروج، نمسح بيانات الجلسة فقط
       localStorage.removeItem("vl_user");
     }
     updateAccountUI();
