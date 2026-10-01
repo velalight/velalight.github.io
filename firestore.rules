@@ -3,36 +3,50 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    /* ═══════════════════════════════════════════════════════
-       Helper Functions
-       ═══════════════════════════════════════════════════════ */
+    /* ═══ Helper Functions ═══ */
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.token.email == 'wagdyme@aol.com' ||
+        request.auth.token.email == 'itswagdy@gmail.com'
+      );
+    }
+
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
 
     function signedIn() {
       return request.auth != null;
     }
 
-    /* ✅ [مُصلح] — تم تصحيح إيميل الأدمن: itswagdy@gmail.com */
-    function admin() {
-      return signedIn()
-        && (
-          request.auth.token.email == "wagdyme@aol.com"
-          || request.auth.token.email == "itswagdy@gmail.com"
-        );
-    }
-
-    /* ═══════════════════════════════════════════════════════
-       📦 المنتجات — قراءة للجميع، كتابة للمدير
-       ═══════════════════════════════════════════════════════ */
+    /* ═══ المنتجات ═══ */
     match /products/{productId} {
       allow read: if true;
-      allow create, update, delete: if admin();
+      allow write: if isAdmin();
     }
 
-    /* ═══════════════════════════════════════════════════════
-       🛒 الطلبات — guest checkout مسموح مع تحقق
-       ═══════════════════════════════════════════════════════ */
+    /* ═══ المراجعات ═══ */
+    match /reviews/{reviewId} {
+      allow read: if true;
+
+      /* ✅ [تحقق] — منع المراجعات الفاضية */
+      allow create: if
+        request.resource.data.keys().hasAll(['name', 'rating'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 2
+        && request.resource.data.name.size() <= 50
+        && request.resource.data.rating is number
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5;
+
+      allow update, delete: if isAdmin();
+    }
+
+    /* ═══ الطلبات ═══ */
     match /orders/{orderId} {
-      /* إنشاء طلب من أي زائر مع تحقق بسيط */
+      allow read, update, delete: if isAdmin();
+
+      /* ✅ [تحقق] — منع الطلبات الفاضية والـ spam */
       allow create: if
         request.resource.data.keys().hasAll(['orderId', 'items', 'total', 'phone', 'name'])
         && request.resource.data.items is list
@@ -43,67 +57,37 @@ service cloud.firestore {
         && request.resource.data.phone is string
         && request.resource.data.phone.size() >= 10
         && request.resource.data.phone.size() <= 20;
-
-      /* الأدمن يقرأ ويعدل ويحذف كل الطلبات */
-      allow read, update, delete: if admin();
-
-      /* العميل المسجل يقرأ طلباته هو فقط */
-      allow read: if signedIn()
-        && resource.data.userId != null
-        && resource.data.userId == request.auth.uid;
     }
 
-    /* ═══════════════════════════════════════════════════════
-       ⭐ المراجعات — إنشاء للجميع، قراءة للجميع، تعديل للمدير
-       ═══════════════════════════════════════════════════════ */
-    match /reviews/{reviewId} {
-      allow create: if
-        request.resource.data.keys().hasAll(['name', 'rating'])
-        && request.resource.data.rating is number
-        && request.resource.data.rating >= 1
-        && request.resource.data.rating <= 5
-        && request.resource.data.name is string
-        && request.resource.data.name.size() >= 2
-        && request.resource.data.name.size() <= 50;
-
+    /* ═══ العملاء ═══ */
+    match /users/{userId} {
       allow read: if true;
-      allow update, delete: if admin();
+      allow create: if true;
+
+      /* ✅ [محسّن] — الأدمن أو صاحب الحساب أو تحديث محدود لحقول آمنة */
+      allow update: if isAdmin()
+        || isOwner(userId)
+        || (
+          request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['ordersCount', 'totalSpent', 'lastOrder', 'name', 'phone', 'email', 'city', 'address', 'provider'])
+        );
+
+      allow delete: if isAdmin();
     }
 
-    /* ═══════════════════════════════════════════════════════
-       🎟️ الكوبونات
-       ✅ [مُصلح] — القراءة عامة (Exit Intent + validateCoupon محتاجينها)
-       الكتابة للمدير فقط
-       ═══════════════════════════════════════════════════════ */
+    /* ═══ الكوبونات ═══ */
     match /coupons/{couponId} {
       allow read: if true;
-      allow create, update, delete: if admin();
+      allow write: if isAdmin();
     }
 
-    /* ═══════════════════════════════════════════════════════
-       🔐 سجل استخدام الكوبونات — للمدير فقط
-       (العميل ما بيحتاجش يقرأه — validateCoupon بتتعامل معاه من السيرفر)
-       ═══════════════════════════════════════════════════════ */
-    match /couponRedemptions/{redemptionId} {
-      allow read, write: if admin();
+    /* ═══ Behind the Scenes ═══ */
+    match /craftsmanship/{itemId} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
-    /* ═══════════════════════════════════════════════════════
-       👤 بيانات العملاء
-       ✅ [مُصلح] — العميل يقرأ ويكتب بياناته الشخصية فقط
-       والأدمن يقرأ ويكتب الكل
-       ═══════════════════════════════════════════════════════ */
-    match /users/{userId} {
-      /* الأدمن: قراءة + كتابة كاملة */
-      allow read, write: if admin();
-
-      /* العميل: قراءة + كتابة بياناته هو فقط */
-      allow read, write: if signedIn() && request.auth.uid == userId;
-    }
-
-    /* ═══════════════════════════════════════════════════════
-       🚫 منع أي مجموعة تانية
-       ═══════════════════════════════════════════════════════ */
+    /* ═══ حماية ═══ */
     match /{document=**} {
       allow read, write: if false;
     }
