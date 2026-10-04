@@ -52,6 +52,7 @@ service cloud.firestore {
         && request.resource.data.keys().hasAll(['orderId', 'items', 'total', 'phone', 'name', 'userId'])
         && request.resource.data.items is list
         && request.resource.data.items.size() > 0
+        && request.resource.data.items.size() <= 50
         && request.resource.data.total is number
         && request.resource.data.total >= 0
         && request.resource.data.total <= 100000
@@ -65,11 +66,8 @@ service cloud.firestore {
 
     /* ═══ العملاء ═══ */
     match /users/{userId} {
-  allow read: if isAdmin() || isOwner(userId);
-  allow create: if signedIn() && request.auth.uid == userId;
-  allow update: if isAdmin() || (isOwner(userId) && ...);
-  allow delete: if isAdmin();
-}
+      allow read: if isAdmin() || isOwner(userId);
+      allow create: if signedIn() && request.auth.uid == userId;
 
       allow update: if isAdmin() || (
         isOwner(userId)
@@ -82,14 +80,10 @@ service cloud.firestore {
 
     /* ═══ الكوبونات ═══ */
     match /coupons/{couponId} {
-      // الأدمن يقرا الكل
-      // المستخدم يقرا كوبوناته الشخصية (userId == uid)
-      // أي حد يقرا الكوبونات العامة (welcome10 مثلاً: public == true)
       allow read: if isAdmin()
         || (signedIn() && resource.data.userId == request.auth.uid)
         || resource.data.public == true;
 
-      // الكتابة للأدمن أو Cloud Function فقط
       allow write: if isAdmin();
     }
 
