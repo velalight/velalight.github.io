@@ -30,7 +30,7 @@ import {
    ═══════════════════════════════════════════════════════════ */
 import {
   initializeAppCheck,
-  ReCaptchaEnterpriseProvider
+  ReCaptchaV3Provider
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check.js";
 
 /* ─── Production: silence console.log (keep warn/error) ─── */
@@ -66,22 +66,22 @@ try {
   app = initializeApp(firebaseConfig);
 
   /* ═══════════════════════════════════════════════════════════
-     ✨ تهيئة App Check مع reCAPTCHA Enterprise
-     ✅ [تعديل 1] — في try/catch منفصل: لو فشلت، الموقع يشتغل عادي
+     ✨ تهيئة App Check مع reCAPTCHA v3
+     ✅ في try/catch منفصل: لو فشلت، الموقع يشتغل عادي
      ═══════════════════════════════════════════════════════════ */
   try {
     appCheck = initializeAppCheck(app, {
-      provider: new ReCaptchaEnterpriseProvider("6LcDZ48tAAAAAMnCK3u6Z9iepwN5iJPjUdIXkY2I"),
+      provider: new ReCaptchaV3Provider("6LdQet4tAAAAAGfQyNJBhI3v4BTmDG4lAyyj4QnN"),
       isTokenAutoRefreshEnabled: true
     });
-    console.log("🛡️ App Check initialized with reCAPTCHA Enterprise");
+    console.log("🛡️ App Check initialized with reCAPTCHA v3");
   } catch (appCheckError) {
     console.warn("⚠️ App Check failed (continuing without it):", appCheckError);
     appCheck = null;
   }
 
   /* ═══════════════════════════════════════════════════════════
-     ✅ [تعديل 2] — Firestore مع offline persistence
+     ✅ Firestore مع offline persistence
      الميزة: الموقع يشتغل حتى لو النت قطع مؤقتاً
      ═══════════════════════════════════════════════════════════ */
   try {
@@ -97,7 +97,7 @@ try {
   }
 
   /* ═══════════════════════════════════════════════════════════
-     ✅ [تعديل 3] — Auth مع persistent login
+     ✅ Auth مع persistent login
      الميزة: المستخدم يفضل مسجل دخول حتى بعد إغلاق المتصفح
      ═══════════════════════════════════════════════════════════ */
   auth = getAuth(app);
