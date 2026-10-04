@@ -18,8 +18,7 @@ if (getApps().length === 0) initializeApp();
 
 const db = getFirestore();
 const GEMINI_API_KEY = defineSecret("GEMINI_API_KEY");
-const GMAIL_APP_PASSWORD = defineSecret("GMAIL_APP_PASSWORD");
-const COMPLETED_ORDER_STATUS = 5; // "مكتمل" في لوحة الإدارة
+const COMPLETED_ORDER_STATUS = 5;
 const CANCELLED_ORDER_STATUS = 4;
 const LOYALTY_CODE = "LOYAL15";
 const LOYALTY_REQUIRED_ORDERS = 3;
@@ -31,16 +30,15 @@ const COUPON_CORS = [
 
 /* ═══════════════════════════════════════════════════════════
    ✉️  إعدادات إيميل المتجر (Gmail)
-   الباسورد بيتقرأ من Secret اسمه GMAIL_APP_PASSWORD
+   ⚠️ غيّر الباسورد الجديد بعد ما تعمله من Google
    ═══════════════════════════════════════════════════════════ */
-const STORE_EMAIL = "velalight.orders@gmail.com"; // ← إيميل المتجر
+const STORE_EMAIL = "velalight.orders@gmail.com";
+const STORE_APP_PASSWORD = "kthicufvliateqoa"; // ← ⚠️ غيّرها للأمان
 
-function createTransporter(password) {
-  return nodemailer.createTransport({
-    service: "gmail",
-    auth: { user: STORE_EMAIL, pass: password }
-  });
-}
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: { user: STORE_EMAIL, pass: STORE_APP_PASSWORD }
+});
 
 /* ═══════════════════════════════════════════════════════════
    Helper Functions
@@ -227,7 +225,6 @@ async function findCustomerRef(phone, email) {
    🎁 Auto Coupons
    ═══════════════════════════════════════════════════════════ */
 
-// تنشئ الكوبون لو مش موجود، وترجع بياناته (حتى لو موجود بالفعل).
 async function ensureCoupon(code, value, type, description) {
   const existing = await db.collection("coupons").where("code", "==", code).limit(1).get();
   if (!existing.empty) {
@@ -240,7 +237,7 @@ async function ensureCoupon(code, value, type, description) {
   }
   const couponRef = db.collection("coupons").doc();
   const now = Date.now();
-  const expiresAt = now + (90 * 24 * 60 * 60 * 1000); // 90 يوم
+  const expiresAt = now + (90 * 24 * 60 * 60 * 1000);
   await couponRef.set({
     code,
     type,
@@ -261,8 +258,7 @@ async function ensureCoupon(code, value, type, description) {
   return { id: couponRef.id, code, value, type, expiresAt, existed: false };
 }
 
-// تبعت إيميل الكوبون — بتستقبل الباسورد من الـ Secret
-async function sendCouponEmail(toEmail, customerName, couponCode, discountValue, discountType, reason, appPassword) {
+async function sendCouponEmail(toEmail, customerName, couponCode, discountValue, discountType, reason) {
   const discountText = discountType === "percent" ? `${discountValue}%` : `${discountValue} ج.م`;
   const reasonText = reason === "thanks"
     ? "شكراً لأول طلب ليك معانا! 🎉"
@@ -291,7 +287,6 @@ async function sendCouponEmail(toEmail, customerName, couponCode, discountValue,
     </div>
   `;
 
-  const transporter = createTransporter(appPassword);
   await transporter.sendMail({
     from: `"VelaLight" <${STORE_EMAIL}>`,
     to: toEmail,
@@ -300,15 +295,8 @@ async function sendCouponEmail(toEmail, customerName, couponCode, discountValue,
   });
 }
 
-// يشتغل لما الطلب يوصل status = 5 (مكتمل)
 exports.issueAutoCoupons = onDocumentUpdated(
-  {
-    document: "orders/{orderId}",
-    region: "us-central1",
-    timeoutSeconds: 60,
-    memory: "256MiB",
-    secrets: [GMAIL_APP_PASSWORD]
-  },
+  { document: "orders/{orderId}", region: "us-central1", timeoutSeconds: 60, memory: "256MiB" },
   async (event) => {
     const before = event.data?.before?.data();
     const after = event.data?.after?.data();
@@ -358,8 +346,7 @@ exports.issueAutoCoupons = onDocumentUpdated(
 
       if (email) {
         try {
-          const appPassword = GMAIL_APP_PASSWORD.value();
-          await sendCouponEmail(email, name, couponInfo.code, couponInfo.value, couponInfo.type, reason, appPassword);
+          await sendCouponEmail(email, name, couponInfo.code, couponInfo.value, couponInfo.type, reason);
           logger.info("Coupon email sent", { to: email, code: couponInfo.code, reason });
         } catch (emailError) {
           logger.error("Failed to send coupon email", emailError);
