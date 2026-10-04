@@ -1830,7 +1830,7 @@ function renderCoupons(coupons){
   const body = document.getElementById("couponsBody");
   if(!body) return;
   /* ✅ [جديد] — استثناء كوبونات النظام من العرض */
-  let list = (coupons || []).filter(c => !isSystemCoupon(c));
+let list = (coupons || []).slice();
   list.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
   if(!list.length){
     body.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد كوبونات بعد. أنشئ أول كوبون الآن!</td></tr>`;
@@ -1964,11 +1964,6 @@ function saveCoupon(){
   if(value <= 0){ toast("⚠️ قيمة الخصم لازم أكبر من صفر"); return; }
   if(type === "percent" && value > 100){ toast("⚠️ النسبة المئوية لازم تكون ≤ 100"); return; }
   
-  /* ✅ [جديد] — منع استخدام أسماء كوبونات النظام */
-if (SYSTEM_COUPON_CODES.indexOf(code) !== -1) {
-  toast("⚠️ الكود ده محجوز لنظام الولاء. اختار كود تاني.");
-  return;
-}
 
 const existing = ALL_COUPONS.find(c => c.code === code && c.id !== editId);
 if(existing){ toast("⚠️ الكود ده مستخدم من قبل. اختار كود تاني."); return; }
