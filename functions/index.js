@@ -33,7 +33,7 @@ const COUPON_CORS = [
    ⚠️ غيّر الباسورد الجديد بعد ما تعمله من Google
    ═══════════════════════════════════════════════════════════ */
 const STORE_EMAIL = "velalight.orders@gmail.com";
-const STORE_APP_PASSWORD = "kthicufvliateqoa"; // ← ⚠️ غيّرها للأمان
+const STORE_APP_PASSWORD = "czewmyelnrhhwsji"; // ← ⚠️ غيّرها للأمان
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
