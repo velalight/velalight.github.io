@@ -30,7 +30,7 @@ import {
    ═══════════════════════════════════════════════════════════ */
 import {
   initializeAppCheck,
-  ReCaptchaV3Provider
+  ReCaptchaEnterpriseProvider
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check.js";
 
 /* ─── Production: silence console.log (keep warn/error) ─── */
@@ -66,15 +66,15 @@ try {
   app = initializeApp(firebaseConfig);
 
   /* ═══════════════════════════════════════════════════════════
-     ✨ تهيئة App Check مع reCAPTCHA v3
+     ✨ تهيئة App Check مع reCAPTCHA Enterprise
      ✅ في try/catch منفصل: لو فشلت، الموقع يشتغل عادي
      ═══════════════════════════════════════════════════════════ */
   try {
     appCheck = initializeAppCheck(app, {
-      provider: new ReCaptchaV3Provider("6LdQet4tAAAAAGfQyNJBhI3v4BTmDG4lAyyj4QnN"),
+      provider: new ReCaptchaEnterpriseProvider("6LdQet4tAAAAAGfQyNJBhI3v4BTmDG4lAyyj4QnN"),
       isTokenAutoRefreshEnabled: true
     });
-    console.log("🛡️ App Check initialized with reCAPTCHA v3");
+    console.log("🛡️ App Check initialized with reCAPTCHA Enterprise");
   } catch (appCheckError) {
     console.warn("⚠️ App Check failed (continuing without it):", appCheckError);
     appCheck = null;
@@ -124,189 +124,71 @@ try {
     appCheck,
 
 
-    /* =========================
-       FIRESTORE - LIST
-       ========================= */
-
     list: async (collectionName) => {
-
-      const snapshot = await getDocs(
-        collection(db, collectionName)
-      );
-
-      return snapshot.docs.map((d) => ({
-        id: d.id,
-        ...d.data()
-      }));
-
+      const snapshot = await getDocs(collection(db, collectionName));
+      return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
     },
 
-
-    /* =========================
-       FIRESTORE - SINGLE DOCUMENT
-       ========================= */
 
     get: async (collectionName, id) => {
-
-      const snapshot = await getDoc(
-        doc(db, collectionName, String(id))
-      );
-
+      const snapshot = await getDoc(doc(db, collectionName, String(id)));
       if (!snapshot.exists()) return null;
-
-      return {
-        id: snapshot.id,
-        ...snapshot.data()
-      };
-
+      return { id: snapshot.id, ...snapshot.data() };
     },
 
-
-    /* =========================
-       FIRESTORE - REALTIME
-       ========================= */
 
     watch: (collectionName, callback, onError) => {
-
       return onSnapshot(
-
         collection(db, collectionName),
-
         (snapshot) => {
-
-          const data = snapshot.docs.map((d) => ({
-            id: d.id,
-            ...d.data()
-          }));
-
+          const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
           callback(data);
-
         },
-
         (error) => {
-
-          console.error(
-            "Firebase realtime error [" +
-            collectionName +
-            "]:",
-            error
-          );
-
-          if (typeof onError === "function") {
-            onError(error);
-          }
-
+          console.error("Firebase realtime error [" + collectionName + "]:", error);
+          if (typeof onError === "function") onError(error);
         }
-
       );
-
     },
 
-
-    /* =========================
-       FIRESTORE - ADD
-       ========================= */
 
     add: (collectionName, data) => {
-
-      return addDoc(
-        collection(db, collectionName),
-        data
-      );
-
+      return addDoc(collection(db, collectionName), data);
     },
 
-
-    /* =========================
-       FIRESTORE - SET
-       ========================= */
 
     set: (collectionName, id, data) => {
-
-      return setDoc(
-        doc(db, collectionName, id),
-        data,
-        { merge: true }
-      );
-
+      return setDoc(doc(db, collectionName, id), data, { merge: true });
     },
 
-
-    /* =========================
-       FIRESTORE - UPDATE
-       ========================= */
 
     update: (collectionName, id, data) => {
-
-      return updateDoc(
-        doc(db, collectionName, id),
-        data
-      );
-
+      return updateDoc(doc(db, collectionName, id), data);
     },
 
-
-    /* =========================
-       FIRESTORE - DELETE
-       ========================= */
 
     remove: (collectionName, id) => {
-
-      return deleteDoc(
-        doc(db, collectionName, id)
-      );
-
+      return deleteDoc(doc(db, collectionName, id));
     },
 
-
-    /* =========================
-       AUTH - LOGIN
-       ========================= */
 
     admin: (email, password) => {
-
-      return signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
+      return signInWithEmailAndPassword(auth, email, password);
     },
 
-
-    /* =========================
-       AUTH - CURRENT USER
-       ========================= */
 
     authUser: () => {
-
       return auth.currentUser;
-
     },
 
-
-    /* =========================
-       AUTH - STATE
-       ========================= */
 
     onAuthStateChanged: (callback) => {
-
-      return onAuthStateChanged(
-        auth,
-        callback
-      );
-
+      return onAuthStateChanged(auth, callback);
     },
 
 
-    /* =========================
-       AUTH - LOGOUT
-       ========================= */
-
     logout: () => {
-
       return signOut(auth);
-
     }
 
   };
@@ -317,20 +199,12 @@ try {
      ======================================================= */
 
   onAuthStateChanged(auth, (user) => {
-
-    console.log(
-      "Firebase Auth State:",
-      user ? user.email : "No user"
-    );
-
+    console.log("Firebase Auth State:", user ? user.email : "No user");
     window.dispatchEvent(
       new CustomEvent("fb-auth-state", {
-        detail: {
-          user: user || null
-        }
+        detail: { user: user || null }
       })
     );
-
   });
 
 
@@ -338,21 +212,14 @@ try {
      FIREBASE READY
      ======================================================= */
 
-  console.log(
-    "✅ Firebase connected successfully"
-  );
+  console.log("✅ Firebase connected successfully");
 
-  window.dispatchEvent(
-    new Event("fb-ready")
-  );
+  window.dispatchEvent(new Event("fb-ready"));
 
 
 } catch (error) {
 
-  console.error(
-    "❌ Firebase initialization failed:",
-    error
-  );
+  console.error("❌ Firebase initialization failed:", error);
 
   window.dispatchEvent(
     new CustomEvent("fb-error", {
