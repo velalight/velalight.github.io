@@ -1,9 +1,24 @@
 User-agent: *
 Allow: /
-
 Disallow: /admin.html
 Disallow: /wishlist.html
 Disallow: /my-orders.html
 Disallow: /cart
+Disallow: /*?cart=1
+Disallow: /firebase.json
+Disallow: /firestore.rules
+Disallow: /.git/
+
+# حماية الصور والسكريبتات من الفهرسة
+User-agent: Googlebot-Image
+Allow: /
+
+# لا تسمح لأدوات SEO Spam
+User-agent: AhrefsBot
+Disallow: /
+User-agent: SemrushBot
+Disallow: /
+User-agent: MJ12bot
+Disallow: /
 
 Sitemap: https://velalight.github.io/sitemap.xml
