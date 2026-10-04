@@ -18,6 +18,7 @@ if (getApps().length === 0) initializeApp();
 
 const db = getFirestore();
 const GEMINI_API_KEY = defineSecret("GEMINI_API_KEY");
+const GMAIL_APP_PASSWORD = defineSecret("GMAIL_APP_PASSWORD");
 const COMPLETED_ORDER_STATUS = 5; // "مكتمل" في لوحة الإدارة
 const CANCELLED_ORDER_STATUS = 4;
 const LOYALTY_CODE = "LOYAL15";
@@ -30,15 +31,16 @@ const COUPON_CORS = [
 
 /* ═══════════════════════════════════════════════════════════
    ✉️  إعدادات إيميل المتجر (Gmail)
-   غيّر القيمتين دول قبل النشر
+   الباسورد بيتقرأ من Secret اسمه GMAIL_APP_PASSWORD
    ═══════════════════════════════════════════════════════════ */
-const STORE_EMAIL = "velalight.orders@gmail.com";     // ← إيميل المتجر
-const STORE_APP_PASSWORD = "abcdefghijklmnop";        // ← App Password (16 حرف بدون مسافات)
+const STORE_EMAIL = "velalight.orders@gmail.com"; // ← إيميل المتجر
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: { user: STORE_EMAIL, pass: STORE_APP_PASSWORD }
-});
+function createTransporter(password) {
+  return nodemailer.createTransport({
+    service: "gmail",
+    auth: { user: STORE_EMAIL, pass: password }
+  });
+}
 
 /* ═══════════════════════════════════════════════════════════
    Helper Functions
@@ -231,7 +233,6 @@ async function ensureCoupon(code, value, type, description) {
   if (!existing.empty) {
     const doc = existing.docs[0];
     const data = doc.data();
-    // لو موجود بس متوقف، نفعّله تاني
     if (data.active === false) {
       await doc.ref.update({ active: true, updatedAt: Date.now() });
     }
@@ -260,8 +261,8 @@ async function ensureCoupon(code, value, type, description) {
   return { id: couponRef.id, code, value, type, expiresAt, existed: false };
 }
 
-// تبعت إيميل الكوبون
-async function sendCouponEmail(toEmail, customerName, couponCode, discountValue, discountType, reason) {
+// تبعت إيميل الكوبون — بتستقبل الباسورد من الـ Secret
+async function sendCouponEmail(toEmail, customerName, couponCode, discountValue, discountType, reason, appPassword) {
   const discountText = discountType === "percent" ? `${discountValue}%` : `${discountValue} ج.م`;
   const reasonText = reason === "thanks"
     ? "شكراً لأول طلب ليك معانا! 🎉"
@@ -290,6 +291,7 @@ async function sendCouponEmail(toEmail, customerName, couponCode, discountValue,
     </div>
   `;
 
+  const transporter = createTransporter(appPassword);
   await transporter.sendMail({
     from: `"VelaLight" <${STORE_EMAIL}>`,
     to: toEmail,
@@ -300,7 +302,13 @@ async function sendCouponEmail(toEmail, customerName, couponCode, discountValue,
 
 // يشتغل لما الطلب يوصل status = 5 (مكتمل)
 exports.issueAutoCoupons = onDocumentUpdated(
-  { document: "orders/{orderId}", region: "us-central1", timeoutSeconds: 60, memory: "256MiB" },
+  {
+    document: "orders/{orderId}",
+    region: "us-central1",
+    timeoutSeconds: 60,
+    memory: "256MiB",
+    secrets: [GMAIL_APP_PASSWORD]
+  },
   async (event) => {
     const before = event.data?.before?.data();
     const after = event.data?.after?.data();
@@ -308,7 +316,6 @@ exports.issueAutoCoupons = onDocumentUpdated(
 
     const beforeStatus = Number(before.status || 0);
     const afterStatus = Number(after.status || 0);
-    // نشتغل بس عند الانتقال لحالة "مكتمل"
     if (afterStatus !== COMPLETED_ORDER_STATUS || beforeStatus === COMPLETED_ORDER_STATUS) return;
 
     const phone = asString(after.phone || after.customer?.phone);
@@ -321,7 +328,6 @@ exports.issueAutoCoupons = onDocumentUpdated(
     }
 
     try {
-      // 1) عد الطلبات المكتملة للعميل
       const orders = db.collection("orders");
       const filters = [];
       if (phone) filters.push(orders.where("phone", "==", phone).get());
@@ -338,13 +344,11 @@ exports.issueAutoCoupons = onDocumentUpdated(
       let couponInfo = null;
       let reason = "";
 
-      // 2) أول طلب → THANKS10
       if (completedCount === 1) {
         couponInfo = await ensureCoupon("THANKS10", 10, "percent", "كوبون شكر لأول طلب");
         reason = "thanks";
       }
 
-      // 3) 3 طلبات → LOYAL15
       if (completedCount === 3) {
         couponInfo = await ensureCoupon("LOYAL15", 15, "percent", "كوبون ولاء بعد 3 طلبات");
         reason = "loyalty";
@@ -352,10 +356,10 @@ exports.issueAutoCoupons = onDocumentUpdated(
 
       if (!couponInfo) return;
 
-      // 4) ابعت الإيميل
       if (email) {
         try {
-          await sendCouponEmail(email, name, couponInfo.code, couponInfo.value, couponInfo.type, reason);
+          const appPassword = GMAIL_APP_PASSWORD.value();
+          await sendCouponEmail(email, name, couponInfo.code, couponInfo.value, couponInfo.type, reason, appPassword);
           logger.info("Coupon email sent", { to: email, code: couponInfo.code, reason });
         } catch (emailError) {
           logger.error("Failed to send coupon email", emailError);
@@ -373,7 +377,6 @@ exports.issueAutoCoupons = onDocumentUpdated(
    Customer stats
    ═══════════════════════════════════════════════════════════ */
 
-// يحسب إحصاءات العملاء من الطلبات التي أكملها المدير فقط (status = 5).
 exports.syncCustomerStats = onDocumentUpdated(
   { document: "orders/{orderId}", region: "us-central1", timeoutSeconds: 60, memory: "256MiB" },
   async (event) => {
@@ -438,7 +441,7 @@ exports.syncCustomerStats = onDocumentUpdated(
 );
 
 /* ═══════════════════════════════════════════════════════════
-   Loyalty status (يستخدم كوبون LOYAL15 الحقيقي الموجود)
+   Loyalty status
    ═══════════════════════════════════════════════════════════ */
 
 exports.getLoyaltyStatus = onRequest(
@@ -491,13 +494,11 @@ exports.getLoyaltyStatus = onRequest(
       const eligible = matchingOrders.size >= LOYALTY_REQUIRED_ORDERS;
       if (!eligible) return res.status(200).json({ eligible: false });
 
-      // ندوّر على كوبون LOYAL15 الفعلي
       const couponDoc = await findCoupon(LOYALTY_CODE);
       if (!couponDoc) {
         return res.status(200).json({ eligible: true, serverManaged: false });
       }
 
-      // نتحقق إن العميل مسمحش يستخدمه قبل كده
       const hashes = identityHashes(phone, email);
       const alreadyUsed = hashes.length ? await hasActiveRedemption(couponDoc.id, hashes) : false;
 
@@ -520,7 +521,6 @@ exports.getLoyaltyStatus = onRequest(
    Coupon validation & redemption
    ═══════════════════════════════════════════════════════════ */
 
-// يعرض بيانات كوبون آمنة فقط؛ لا يعيد usedBy أو أي بيانات تخص عملاء آخرين.
 exports.validateCoupon = onRequest(
   { cors: COUPON_CORS, region: "us-central1", timeoutSeconds: 30, memory: "256MiB", maxInstances: 5 },
   async (req, res) => {
@@ -547,7 +547,6 @@ exports.validateCoupon = onRequest(
   }
 );
 
-// يثبت استخدام الكوبون بعد إنشاء الطلب؛ سجل الاستخدام ومعرفات العملاء المشتقة مخفية عن الزوار.
 exports.recordCouponUse = onRequest(
   { cors: COUPON_CORS, region: "us-central1", timeoutSeconds: 30, memory: "256MiB", maxInstances: 5 },
   async (req, res) => {
@@ -668,7 +667,6 @@ exports.recordCouponUse = onRequest(
   }
 );
 
-// إعادة إتاحة الكوبون عند إلغاء طلب سبق تسجيل استخدامه.
 exports.releaseCouponOnCancellation = onDocumentUpdated(
   { document: "orders/{orderId}", region: "us-central1", timeoutSeconds: 30, memory: "256MiB" },
   async (event) => {
