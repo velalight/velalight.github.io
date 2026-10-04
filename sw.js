@@ -1,20 +1,24 @@
 /*
- * VelaLight Service Worker (v8 — Performance Optimized)
+ * VelaLight Service Worker (v9 — Performance Optimized)
  * ═══════════════════════════════════════════════════════════
  * استراتيجيات الكاش:
  * - HTML (navigation): Network-First → آخر نسخة دايماً
  * - CSS/JS/JSON: Stale-While-Revalidate → سريع + يحدّث في الخلفية
- * - الصور: Cache-First → سريع جداً، يحدّث لو مش موجود
+ * - الصور: Cache-First → سريع جداً، مع حد أقصى للمساحة
  * - Google Fonts: Cache-First → ما يحمّل مرتين
  * - Firebase/External CDN: يمر مباشرة (مايتدخلش)
  * ═══════════════════════════════════════════════════════════
  */
 
-const CACHE_VERSION = "v8";
+const CACHE_VERSION = "v9";
 const STATIC_CACHE  = `velalight-static-${CACHE_VERSION}`;
 const HTML_CACHE    = `velalight-html-${CACHE_VERSION}`;
 const IMAGE_CACHE   = `velalight-images-${CACHE_VERSION}`;
 const FONT_CACHE    = `velalight-fonts-${CACHE_VERSION}`;
+
+/* ─── حدود الكاش ─── */
+const MAX_IMAGE_ENTRIES = 150;   // حد أقصى لعدد الصور المحفوظة
+const MAX_STATIC_ENTRIES = 60;   // حد أقصى لملفات CSS/JS
 
 /* ─── الملفات الأساسية (App Shell) ─── */
 const APP_SHELL = [
@@ -54,6 +58,24 @@ const isHTMLRequest   = req => req.mode === "navigate" ||
 const isCacheableResponse = res => Boolean(res && res.status === 200 && (res.type === "basic" || res.type === "cors" || res.type === "default"));
 
 /* ═══════════════════════════════════════════════════════════
+   Trim — تحديد حجم الكاش
+   ═══════════════════════════════════════════════════════════ */
+async function trimCache(cacheName, maxEntries) {
+  try {
+    const cache = await caches.open(cacheName);
+    const keys = await cache.keys();
+    if (keys.length <= maxEntries) return;
+    /* احذف أقدم entries */
+    const toDelete = keys.length - maxEntries;
+    for (let i = 0; i < toDelete; i++) {
+      await cache.delete(keys[i]);
+    }
+  } catch (err) {
+    console.warn("⚠️ trimCache failed:", err);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
    Install — تحميل الـ App Shell
    ═══════════════════════════════════════════════════════════ */
 self.addEventListener("install", event => {
@@ -67,7 +89,7 @@ self.addEventListener("install", event => {
 });
 
 /* ═══════════════════════════════════════════════════════════
-   Activate — تنظيف الكاشات القديمة
+   Activate — تنظيف الكاشات القديمة + إشعار العملاء
    ═══════════════════════════════════════════════════════════ */
 self.addEventListener("activate", event => {
   const validCaches = [STATIC_CACHE, HTML_CACHE, IMAGE_CACHE, FONT_CACHE];
@@ -82,6 +104,13 @@ self.addEventListener("activate", event => {
           })
       ))
       .then(() => self.clients.claim())
+      .then(async () => {
+        /* أبلغ كل التابات المفتوحة إن فيه نسخة جديدة */
+        const clients = await self.clients.matchAll({ type: "window" });
+        clients.forEach(client => {
+          client.postMessage({ type: "SW_UPDATED", version: CACHE_VERSION });
+        });
+      })
   );
 });
 
@@ -115,9 +144,8 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  /* نطاقات خارجية (CDN خارجي غير الخطوط) → Stale-While-Revalidate */
+  /* نطاقات خارجية (CDN) */
   if (!isSameOrigin(req)) {
-    /* فقط للصور و CSS/JS من CDN */
     if (isImageReq(req)) {
       event.respondWith(cacheFirst(req, IMAGE_CACHE));
     } else if (isStaticAsset(req)) {
@@ -159,10 +187,8 @@ async function networkFirstHTML(request) {
     }
     return response;
   } catch (error) {
-    /* fallback للكاش */
     const cached = await caches.match(request);
     if (cached) return cached;
-    /* fallback نهائي لصفحة index */
     return (await caches.match("/index.html")) || Response.error();
   }
 }
@@ -172,17 +198,17 @@ async function staleWhileRevalidate(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
 
-  /* جلب نسخة جديدة في الخلفية */
   const fetchPromise = fetch(request)
     .then(response => {
       if (isCacheableResponse(response)) {
         cache.put(request, response.clone());
+        /* حد أقصى للملفات الثابتة */
+        trimCache(cacheName, MAX_STATIC_ENTRIES);
       }
       return response;
     })
     .catch(() => null);
 
-  /* إرجاع الكاش فوراً، أو انتظار الشبكة لو مفيش كاش */
   return cached || (await fetchPromise) || Response.error();
 }
 
@@ -197,6 +223,10 @@ async function cacheFirst(request, cacheName) {
     const response = await fetch(request);
     if (isCacheableResponse(response)) {
       cache.put(request, response.clone());
+      /* حد أقصى للصور */
+      if (cacheName === IMAGE_CACHE) {
+        trimCache(cacheName, MAX_IMAGE_ENTRIES);
+      }
     }
     return response;
   } catch (error) {
