@@ -144,25 +144,28 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
 
 
+
 /* ═══════════════════════════════════════════════════════════
-   🎁 GIFT AUTO-ADD v2 — إضافة مستقلة تمامًا
+   🎁 GIFT AUTO-ADD v3 — IDs جاهزة
+   الفواحة 95ج: pmvj8cij7c34 | الفواحة 125ج: pmvj8qxhca70
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
-  if(window.__vlGiftAutoAddV2) return;
-  window.__vlGiftAutoAddV2 = true;
+  if(window.__vlGiftV3) return;
+  window.__vlGiftV3 = true;
+
+  /* ⚠️ IDs الفواحة — جاهزة */
+  const GIFT_IDS = ["pmvj8cij7c34", "pmvj8qxhca70"];
 
   const MIN = 1000;
-  const GIFT_NAME_AR = "🎁 فواحة سيارة فاخرة — هدية";
-  const GIFT_NAME_EN = "🎁 Luxury Car Diffuser — Free Gift";
-  const GIFT_SCENT = "فانيلا";
+  const GIFT_SCENT = "🎁 هدية";
   let busy = false;
-  let lastWanted = null;
+  let retryCount = 0;
 
   const style = document.createElement("style");
-  style.id = "vlGiftStylesV2";
+  style.id = "vlGiftStylesV3";
   style.textContent = [
-    '#cartItems .citem[data-gift="1"]{background:linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)!important;border-color:rgba(39,174,96,.45)!important;box-shadow:0 2px 12px rgba(39,174,96,.15)!important}',
+    '#cartItems .citem[data-gift="1"]{background:linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)!important;border-color:rgba(39,174,96,.45)!important;box-shadow:0 2px 12px rgba(39,174,96,.15)!important;position:relative}',
     '#cartItems .citem[data-gift="1"]::before{content:"🎁 هدية";position:absolute;top:8px;inset-inline-start:8px;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;font-size:.62rem;font-weight:800;padding:2px 8px;border-radius:99px;z-index:5;box-shadow:0 2px 8px rgba(39,174,96,.4)}',
     '#cartItems .citem[data-gift="1"] .cart-scent-picker,#cartItems .citem[data-gift="1"] .vl-save-later{display:none!important}',
     '#cartItems .citem[data-gift="1"] .val,#cartItems .citem[data-gift="1"] .val-total{color:#1e8449!important}',
@@ -172,9 +175,9 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   document.head.appendChild(style);
 
   function getProducts(){
-    try { if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) return ALL_PRODUCTS; } catch(e){}
-    try { if(window.ALL_PRODUCTS && Array.isArray(window.ALL_PRODUCTS)) return window.ALL_PRODUCTS; } catch(e){}
-    try { if(window.PRODUCTS && Array.isArray(window.PRODUCTS)) return window.PRODUCTS; } catch(e){}
+    try { if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS) && ALL_PRODUCTS.length) return ALL_PRODUCTS; } catch(e){}
+    try { if(window.ALL_PRODUCTS && Array.isArray(window.ALL_PRODUCTS) && window.ALL_PRODUCTS.length) return window.ALL_PRODUCTS; } catch(e){}
+    try { if(window.PRODUCTS && Array.isArray(window.PRODUCTS) && window.PRODUCTS.length) return window.PRODUCTS; } catch(e){}
     try { const c = JSON.parse(localStorage.getItem("vl_products_v3") || "[]"); if(Array.isArray(c) && c.length) return c; } catch(e){}
     return [];
   }
@@ -182,29 +185,18 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   function findGift(){
     const list = getProducts();
     if(!list.length) return null;
-    return list.find(function(p){
-      if(!p || !p.id || p.active === false) return false;
-      if(p.stock !== undefined && p.stock !== null && p.stock !== "" && Number(p.stock) === 0) return false;
-      const t = [p.name, p.nameEn, p.desc, p.descEn, p.cat].filter(Boolean).join(" ").toLowerCase();
-      return t.indexOf("فواحة") > -1 || t.indexOf("فوا حة") > -1 ||
-             t.indexOf("دولاب") > -1 || t.indexOf("معطر") > -1 ||
-             t.indexOf("freshener") > -1 || t.indexOf("diffuser") > -1 || t.indexOf("closet") > -1;
-    }) || null;
+    for(let i = 0; i < GIFT_IDS.length; i++){
+      const id = GIFT_IDS[i];
+      const found = list.find(function(p){ return p && String(p.id) === String(id); });
+      if(found) return found;
+    }
+    return null;
   }
 
-  function getCart(){
-    try { return JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return []; }
-  }
-  function setCart(c){
-    try { localStorage.setItem("vl_cart", JSON.stringify(c)); } catch(e){}
-  }
-  function hasGift(c, id){
-    return c.some(function(i){ return String(i.id) === String(id) && i.isGift === true; });
-  }
-  function parseNum(s){
-    if(!s) return 0;
-    return parseFloat(String(s).replace(/[٠-٩]/g, function(d){ return "٠١٢٣٤٥٦٧٨٩".indexOf(d); }).replace(/[^\d.]/g, "")) || 0;
-  }
+  function getCart(){ try { return JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return []; } }
+  function setCart(c){ try { localStorage.setItem("vl_cart", JSON.stringify(c)); } catch(e){} }
+  function hasGift(c, id){ return c.some(function(i){ return String(i.id) === String(id) && i.isGift === true; }); }
+  function parseNum(s){ if(!s) return 0; return parseFloat(String(s).replace(/[٠-٩]/g, function(d){ return "٠١٢٣٤٥٦٧٨٩".indexOf(d); }).replace(/[^\d.]/g, "")) || 0; }
 
   function forceRedraw(){
     const btn = document.getElementById("cartBtn");
@@ -212,13 +204,17 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     const drawer = document.getElementById("cartDrawer");
     const wasOpen = drawer && drawer.classList.contains("open");
     btn.click();
-    if(!wasOpen) setTimeout(function(){ document.getElementById("closeCart") && document.getElementById("closeCart").click(); }, 100);
+    if(!wasOpen) setTimeout(function(){ const c = document.getElementById("closeCart"); if(c) c.click(); }, 100);
   }
 
   function addGift(){
     if(busy) return;
     const p = findGift();
-    if(!p){ console.warn("🎁 Gift: diffuser product NOT found. Products loaded:", getProducts().length); return; }
+    if(!p){
+      retryCount++;
+      if(retryCount <= 3) console.warn("🎁 Gift: product not found (retry " + retryCount + ")");
+      return;
+    }
     const cart = getCart();
     if(hasGift(cart, p.id)) return;
     busy = true;
@@ -226,17 +222,17 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
       const gift = Object.assign({}, p, {
         price: 0,
         old: Number(p.price || p.old || 0),
-        name: GIFT_NAME_AR,
-        nameEn: GIFT_NAME_EN,
+        name: "🎁 فواحة سيارة فاخرة — هدية",
+        nameEn: "🎁 Luxury Car Diffuser — Free Gift",
         isGift: true
       });
       cart.push(gift);
       setCart(cart);
-      console.log("🎁 Gift added:", p.name || p.id);
+      console.log("🎁 Gift added:", p.name || p.id, "| original price:", p.price);
       setTimeout(forceRedraw, 100);
-      setTimeout(function(){ mark(); busy = false; }, 400);
+      setTimeout(function(){ mark(); busy = false; }, 500);
     } catch(e){
-      console.warn("🎁 Gift add failed:", e);
+      console.warn("🎁 addGift failed:", e);
       busy = false;
     }
   }
@@ -254,10 +250,8 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
       setCart(cart);
       console.log("🎁 Gift removed");
       setTimeout(forceRedraw, 100);
-      setTimeout(function(){ mark(); busy = false; }, 400);
-    } catch(e){
-      busy = false;
-    }
+      setTimeout(function(){ mark(); busy = false; }, 500);
+    } catch(e){ busy = false; }
   }
 
   function mark(){
@@ -272,38 +266,40 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   function check(){
     if(busy) return;
     const sub = parseNum(document.getElementById("cartSub") ? document.getElementById("cartSub").textContent : "");
-    if(sub === 0){ lastWanted = null; return; }
+    if(sub === 0) return;
     const want = sub >= MIN;
-    if(lastWanted === want){
-      const p = findGift();
-      if(p){
-        const cart = getCart();
-        if(want && !hasGift(cart, p.id)){ addGift(); return; }
-        if(!want && hasGift(cart, p.id)){ removeGift(); return; }
-      }
+    const p = findGift();
+    if(!p){
+      if(want && retryCount < 5) setTimeout(check, 2000);
       return;
     }
-    lastWanted = want;
-    if(want) addGift();
-    else removeGift();
+    const cart = getCart();
+    if(want && !hasGift(cart, p.id)){ addGift(); return; }
+    if(!want && hasGift(cart, p.id)){ removeGift(); return; }
   }
 
   function start(){
     const prods = getProducts();
     const found = findGift();
-    console.log("🎁 Gift Auto-Add v2 READY");
+    console.log("═══════════════════════════════════════");
+    console.log("🎁 Gift Auto-Add v3 READY");
     console.log("📦 Products loaded:", prods.length);
-    console.log("🎁 Diffuser found:", found ? (found.name || found.id) : "❌ NOT FOUND");
-    if(prods.length) console.log("🔍 Product names sample:", prods.slice(0, 5).map(function(p){ return p.name || p.id; }));
-    
+    console.log("🎁 Diffuser found:", found ? (found.name || found.id) + " | " + found.price + " EGP" : "❌ NOT FOUND");
+    if(!found && prods.length > 0){
+      console.log("💡 Available:", prods.slice(0, 15).map(function(p){ return (p.name||"") + " [" + p.id + "]"; }));
+    }
+    console.log("═══════════════════════════════════════");
+
     const cs = document.getElementById("cartSub");
     if(cs) new MutationObserver(check).observe(cs, { childList: true, characterData: true, subtree: true });
     const ci = document.getElementById("cartItems");
-    if(ci) new MutationObserver(function(){ mark(); setTimeout(check, 250); }).observe(ci, { childList: true, subtree: true });
-    window.addEventListener("data-refresh", function(){ lastWanted = null; setTimeout(check, 800); });
+    if(ci) new MutationObserver(function(){ mark(); setTimeout(check, 300); }).observe(ci, { childList: true, subtree: true });
+    window.addEventListener("data-refresh", function(){ retryCount = 0; setTimeout(check, 800); });
     const cb = document.getElementById("cartBtn");
-    if(cb) cb.addEventListener("click", function(){ setTimeout(check, 500); });
+    if(cb) cb.addEventListener("click", function(){ setTimeout(check, 600); });
     setTimeout(check, 1500);
+    setTimeout(check, 4000);
+    setTimeout(check, 8000);
   }
 
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(start, 1200); });
