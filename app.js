@@ -1102,3 +1102,151 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     setTimeout(() => clearInterval(retry), 10000);
   }
 })();
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   🎯 FINAL FIXES — الفوتر + الشروط القانونية
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlFinalFixes) return;
+  window.__vlFinalFixes = true;
+
+
+  /* ─────────────────────────────────────────────────────────
+     [1] BOTTOM NAV FIX v3 — الفوتر ميغطيش زر "أضف للسلة"
+     ───────────────────────────────────────────────────────── */
+  (function(){
+    const style = document.createElement("style");
+    style.id = "vlBottomFixStyles";
+    style.textContent = `
+      @media (max-width: 900px) {
+        body {
+          position: relative !important;
+          padding-bottom: 200px !important;
+        }
+        .pgrid {
+          padding-bottom: 200px !important;
+        }
+        .pgrid .p-card:last-child,
+        .pgrid > *:last-child {
+          margin-bottom: 100px !important;
+        }
+        .p-add {
+          position: relative !important;
+          z-index: 100 !important;
+        }
+        #products .btn-primary-lux,
+        .btn-primary-lux {
+          position: relative !important;
+          z-index: 100 !important;
+          margin-bottom: 40px !important;
+        }
+        footer {
+          padding-bottom: 200px !important;
+        }
+        body.vl-cart-open #bottomNav,
+        body.vl-cart-open .bottom-nav,
+        body.vl-cart-open [class*="bottomNav"],
+        body.vl-cart-open [class*="bottom-nav"] {
+          display: none !important;
+        }
+        #backToTop, #chatFab, .whatsapp-float {
+          bottom: 100px !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    /* كشف ارتفاع الفوتر الفعلي وتحسين المساحة */
+    function applyPad(){
+      const sels = ["#bottomNav", ".bottom-nav", "[class*='bottomNav']", "nav[class*='bottom']", "[class*='bottom-nav']"];
+      let h = 0;
+      for(const s of sels){
+        const el = document.querySelector(s);
+        if(el){
+          const cs = getComputedStyle(el);
+          if((cs.position === "fixed" || cs.position === "sticky") && el.offsetHeight > 20 && el.offsetHeight < 250){
+            h = el.offsetHeight;
+            break;
+          }
+        }
+      }
+      if(h > 0){
+        const pad = h + 130;
+        document.body.style.setProperty("padding-bottom", pad + "px", "important");
+        console.log("📱 Nav height:", h + "px | Body padding:", pad + "px");
+      }
+    }
+    setTimeout(applyPad, 500);
+    setTimeout(applyPad, 1500);
+    setTimeout(applyPad, 3000);
+    window.addEventListener("resize", () => setTimeout(applyPad, 200));
+  })();
+
+
+  /* ─────────────────────────────────────────────────────────
+     [2] GIFT TERMS — الشروط القانونية تحت شريط الهدية
+     ───────────────────────────────────────────────────────── */
+  (function(){
+    const T = {
+      ar: "* العرض ساري لحد نفاد الكمية",
+      en: "* Offer valid while stock lasts"
+    };
+
+    const style = document.createElement("style");
+    style.id = "vlGiftTermsStyles";
+    style.textContent = `
+      .gift-promo-terms {
+        display: block;
+        text-align: center;
+        font-size: 0.66rem;
+        font-weight: 500;
+        color: rgba(255, 235, 59, 0.82);
+        padding: 4px 15px 6px;
+        margin: 0 15px;
+        border-top: 1px dashed rgba(255, 235, 59, 0.28);
+        line-height: 1.35;
+        letter-spacing: 0.2px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+        position: relative;
+        z-index: 2;
+      }
+      @media (max-width: 480px) {
+        .gift-promo-terms {
+          font-size: 0.6rem;
+          padding: 3px 10px 5px;
+          margin: 0 10px;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    function lang(){ return document.documentElement.lang === "en" ? "en" : "ar"; }
+
+    function init(){
+      const bar = document.querySelector(".gift-promo-bar");
+      if(!bar) return;
+      if(!bar.querySelector(".gift-promo-terms")){
+        const el = document.createElement("small");
+        el.className = "gift-promo-terms";
+        el.textContent = T[lang()];
+        bar.appendChild(el);
+      }
+      /* ترجمة تلقائية عند تغيير اللغة */
+      new MutationObserver(() => {
+        const el = document.querySelector(".gift-promo-terms");
+        if(el) el.textContent = T[lang()];
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+    }
+
+    if(document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", () => setTimeout(init, 800));
+    } else {
+      setTimeout(init, 800);
+    }
+  })();
+
+  console.log("✅ Final Fixes loaded (Bottom Nav + Gift Terms)");
+})();
