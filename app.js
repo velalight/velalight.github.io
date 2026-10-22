@@ -84,3 +84,60 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     pdImg.addEventListener("load", applyBlurBackgrounds);
   }
 })();
+
+
+/* ═══════════════════════════════════════════════════════════
+   🎁 GIFT PROGRESS BAR — إضافة مستقلة
+   لا تعدل أي كود قديم — تعمل بشكل مستقل بالكامل
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlGiftBarLoaded) return;
+  window.__vlGiftBarLoaded = true;
+  const MIN = 1000;
+  let injected = false;
+  const parseNum = s => parseFloat(String(s||"").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[^\d.]/g, "")) || 0;
+  const fmt = n => { try { return new Intl.NumberFormat("en-EG").format(Math.round(n)); } catch(e) { return String(Math.round(n)); } };
+  function ensureRow(){
+    if(injected) return document.getElementById("giftProgressRow");
+    const dfoot = document.querySelector("#cartDrawer .dfoot");
+    if(!dfoot) return null;
+    const target = document.getElementById("freeShippingRow") || dfoot.querySelector(".trow.total");
+    if(!target) return null;
+    const row = document.createElement("div");
+    row.id = "giftProgressRow";
+    row.style.cssText = "margin:6px 0;display:none";
+    target.parentNode.insertBefore(row, target);
+    injected = true;
+    return row;
+  }
+  function render(){
+    const row = ensureRow();
+    if(!row) return;
+    const dfoot = document.querySelector("#cartDrawer .dfoot");
+    if(!dfoot || dfoot.style.display === "none"){ row.style.display = "none"; return; }
+    const subEl = document.getElementById("cartSub");
+    const sub = subEl ? parseNum(subEl.textContent) : 0;
+    if(sub <= 0){ row.style.display = "none"; return; }
+    const remain = Math.max(0, MIN - sub);
+    const pct = Math.min(100, sub / MIN * 100);
+    const ok = sub >= MIN;
+    row.style.display = "block";
+    row.innerHTML = ok
+      ? '<div class="vl-ship-bar vl-ship-success" style="background:linear-gradient(135deg,#eafaf1,#d5f5e3);border-color:rgba(39,174,96,.4)"><div class="vl-ship-txt">🎁 <strong>مبروك! استحقيت فواحة السيارة هدية 🎉</strong></div><div class="vl-ship-track"><div class="vl-ship-fill" style="width:100%;background:linear-gradient(90deg,#27ae60,#2ecc71,#27ae60)"></div></div></div>'
+      : '<div class="vl-ship-bar" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-color:rgba(230,126,34,.4)"><div class="vl-ship-txt">🎁 باقي <strong>' + fmt(Math.ceil(remain)) + '</strong> جنيه بس وتاخد فواحة سيارة هدية!</div><div class="vl-ship-track"><div class="vl-ship-fill" style="width:' + pct + '%;background:linear-gradient(90deg,#e67e22,#f39c12,#e67e22)"></div></div></div>';
+  }
+  function start(){
+    const cs = document.getElementById("cartSub");
+    if(cs) new MutationObserver(render).observe(cs, { childList: true, characterData: true, subtree: true });
+    const ci = document.getElementById("cartItems");
+    if(ci) new MutationObserver(() => setTimeout(render, 120)).observe(ci, { childList: true, subtree: true });
+    const drawer = document.getElementById("cartDrawer");
+    if(drawer) new MutationObserver(render).observe(drawer, { attributes: true, attributeFilter: ["class"] });
+    const cb = document.getElementById("cartBtn");
+    if(cb) cb.addEventListener("click", () => setTimeout(render, 350));
+    render();
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(start, 600));
+  else setTimeout(start, 600);
+})();
