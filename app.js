@@ -1250,3 +1250,100 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
   console.log("✅ Final Fixes loaded (Bottom Nav + Gift Terms)");
 })();
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   🎯 BOTTOM NAV ULTIMATE FIX — يستهدف #vlBottomNav الفعلي
+   ✅ inline style يتغلب على bottom-nav.js
+   ✅ يكتشف الارتفاع الحقيقي + safe area
+   ✅ يعيد التطبيق كل ثانيتين
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlNavUltimate) return;
+  window.__vlNavUltimate = true;
+
+  /* CSS إضافي بز-index وpadding احتياطي */
+  const css = document.createElement("style");
+  css.id = "vlNavUltimateCss";
+  css.textContent = `
+    @media (max-width: 900px) {
+      .p-add, button.p-add, .p-add.p-add {
+        position: relative !important;
+        z-index: 10000 !important;
+        pointer-events: auto !important;
+      }
+      #products, .products-clean, #products.sec {
+        padding-bottom: 60px !important;
+      }
+      .pgrid {
+        padding-bottom: 60px !important;
+      }
+      footer {
+        padding-bottom: 60px !important;
+      }
+    }
+  `;
+  document.head.appendChild(css);
+
+  function apply(){
+    const nav = document.getElementById("vlBottomNav");
+    const navH = nav ? nav.offsetHeight : 0;
+    const safe = 34; /* safe area */
+    const total = (navH > 0 ? navH : 64) + safe + 100; /* مساحة أمان 100px */
+
+    /* inline style بـ !important — أقوى من أي style tag */
+    document.body.style.setProperty("padding-bottom", total + "px", "important");
+
+    /* padding إضافي على آخر عناصر الصفحة */
+    const pgrid = document.querySelector("#pgrid");
+    if(pgrid) pgrid.style.setProperty("padding-bottom", "100px", "important");
+
+    const lastCard = document.querySelector("#pgrid .p-card:last-child");
+    if(lastCard) lastCard.style.setProperty("margin-bottom", "80px", "important");
+
+    const btnShowAll = document.querySelector("#products .btn-primary-lux");
+    if(btnShowAll) btnShowAll.style.setProperty("margin-bottom", "80px", "important");
+
+    const footer = document.querySelector("footer");
+    if(footer) footer.style.setProperty("padding-bottom", (total + 40) + "px", "important");
+
+    /* الأزرار العائمة */
+    document.querySelectorAll("#backToTop, #chatFab, .whatsapp-float").forEach(el => {
+      el.style.setProperty("bottom", (total - 20) + "px", "important");
+    });
+
+    /* إخفاء الفوتر لما السلة مفتوحة */
+    if(document.body.classList.contains("vl-cart-open")){
+      if(nav) nav.style.setProperty("display", "none", "important");
+    } else if(nav) {
+      nav.style.removeProperty("display");
+    }
+
+    return total;
+  }
+
+  /* تشغيل متكرر لضمان الثبات */
+  setTimeout(apply, 100);
+  setTimeout(apply, 500);
+  setTimeout(apply, 1500);
+  setTimeout(apply, 3000);
+  setTimeout(() => {
+    const total = apply();
+    console.log("🎯 Bottom Nav ULTIMATE applied | padding:", total + "px");
+  }, 4000);
+  setInterval(apply, 2000);
+
+  /* عند تغيير الحجم أو الدوران */
+  window.addEventListener("resize", () => setTimeout(apply, 150));
+  window.addEventListener("orientationchange", () => setTimeout(apply, 400));
+  window.addEventListener("load", () => setTimeout(apply, 200));
+
+  /* مراقبة ظهور/اختفاء الفوتر */
+  if(window.MutationObserver && document.body){
+    new MutationObserver(() => setTimeout(apply, 100)).observe(document.body, {
+      childList: true, subtree: false, attributes: true, attributeFilter: ["class", "style"]
+    });
+  }
+})();
