@@ -442,3 +442,87 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     console.log("═══════════════════════════════════════");
   }, 3000);
 })();
+
+
+/* ═══════════════════════════════════════════════════════════
+   📊 GIFT TRACKING v2 — يعمل على كل الصفحات اللي مفيهاش الشريط
+   (index.html عنده بلوكه الخاص — ده بس للصفحات التانية)
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlGiftTrackingV2) return;
+  window.__vlGiftTrackingV2 = true;
+
+  /* مهم: لو إحنا في index.html، نوقف — لأن البلوك بتاعه شغال */
+  if(document.querySelector(".gift-promo-bar")){
+    console.log("📊 Gift Tracking: skipped (index.html has its own)");
+    return;
+  }
+
+  const UNLOCK_KEY = "vl_gift_unlock_sent";
+  let lastSub = 0;
+
+  function checkUnlock(){
+    try {
+      const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
+      if(!Array.isArray(cart) || !cart.length) return;
+      const gift = cart.find(i => i && i.isGift === true);
+      if(!gift) return;
+      if(sessionStorage.getItem(UNLOCK_KEY)) return;
+
+      const subtotal = cart.reduce((s, i) => s + (Number(i.price || 0) * Number(i.qty || 1)), 0);
+
+      if(typeof gtag === "function"){
+        gtag("event", "gift_unlocked", {
+          event_category: "promotion",
+          event_label: "free_car_diffuser_unlocked",
+          value: subtotal,
+          currency: "EGP",
+          gift_name: gift.name || "car_diffuser",
+          gift_original_price: Number(gift.old || 0),
+          page: window.location.pathname
+        });
+      }
+      if(typeof fbq === "function"){
+        fbq("trackCustom", "GiftUnlocked", {
+          promo: "free_car_diffuser",
+          subtotal: subtotal,
+          currency: "EGP",
+          gift_value: Number(gift.old || 0)
+        });
+      }
+      sessionStorage.setItem(UNLOCK_KEY, "1");
+      console.log("📊 Tracked: gift_unlocked (from non-index page) | subtotal:", subtotal);
+    } catch(e){}
+  }
+
+  function watch(){
+    const cs = document.getElementById("cartSub");
+    if(cs){
+      new MutationObserver(function(){
+        const v = parseFloat(String(cs.textContent || "").replace(/[^\d.]/g, "")) || 0;
+        if(v !== lastSub){ lastSub = v; setTimeout(checkUnlock, 800); }
+      }).observe(cs, { childList: true, characterData: true, subtree: true });
+    }
+    const ci = document.getElementById("cartItems");
+    if(ci) new MutationObserver(function(){ setTimeout(checkUnlock, 800); }).observe(ci, { childList: true, subtree: true });
+    const cb = document.getElementById("cartBtn");
+    if(cb) cb.addEventListener("click", function(){ setTimeout(checkUnlock, 1200); });
+    setInterval(checkUnlock, 3000);
+  }
+
+  function init(){
+    console.log("═══════════════════════════════════════");
+    console.log("📊 Gift Tracking v2 READY (non-index pages)");
+    console.log("   Page:", window.location.pathname);
+    console.log("═══════════════════════════════════════");
+    watch();
+    setTimeout(checkUnlock, 1500);
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){ setTimeout(init, 1200); });
+  } else {
+    setTimeout(init, 1200);
+  }
+})();
