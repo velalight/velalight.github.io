@@ -1347,3 +1347,98 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     });
   }
 })();
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   🎯 BOTTOM NAV FINAL FIX — Spacer Element
+   يضيف عنصر مساحة حقيقي بعد آخر عنصر في الصفحة
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlNavSpacerFix) return;
+  window.__vlNavSpacerFix = true;
+
+  function apply(){
+    const isMobile = window.innerWidth <= 900;
+    const nav = document.getElementById("vlBottomNav");
+    const navH = nav && nav.offsetHeight > 0 ? nav.offsetHeight : 64;
+    const spacerH = navH + 140; /* الفوتر + مساحة أمان كبيرة */
+
+    /* ─── 1) spacer بعد الـ footer ─── */
+    let spacer = document.getElementById("vlNavSpacer");
+    if(!spacer){
+      spacer = document.createElement("div");
+      spacer.id = "vlNavSpacer";
+      spacer.style.cssText = "width:100%;pointer-events:none;display:none;";
+      document.body.appendChild(spacer);
+    }
+    if(isMobile){
+      spacer.style.display = "block";
+      spacer.style.height = spacerH + "px";
+    } else {
+      spacer.style.display = "none";
+    }
+
+    /* ─── 2) spacer جوه آخر #products كمان (لو موجود) ─── */
+    let gridSpacer = document.getElementById("vlGridSpacer");
+    if(!gridSpacer){
+      gridSpacer = document.createElement("div");
+      gridSpacer.id = "vlGridSpacer";
+      gridSpacer.style.cssText = "width:100%;grid-column:1/-1;pointer-events:none;display:none;";
+      const pgrid = document.getElementById("pgrid");
+      if(pgrid) pgrid.appendChild(gridSpacer);
+    }
+    if(isMobile){
+      gridSpacer.style.display = "block";
+      gridSpacer.style.height = spacerH + "px";
+    } else {
+      gridSpacer.style.display = "none";
+    }
+
+    /* ─── 3) margin-bottom على آخر كارت ─── */
+    const lastCard = document.querySelector("#pgrid .p-card:last-child");
+    if(lastCard){
+      if(isMobile){
+        lastCard.style.setProperty("margin-bottom", spacerH + "px", "important");
+      } else {
+        lastCard.style.removeProperty("margin-bottom");
+      }
+    }
+
+    /* ─── 4) الزر الذهبي الكبير ─── */
+    const btnShowAll = document.querySelector("#products .btn-primary-lux");
+    if(btnShowAll){
+      if(isMobile){
+        btnShowAll.style.setProperty("margin-bottom", spacerH + "px", "important");
+        btnShowAll.style.setProperty("position", "relative", "important");
+        btnShowAll.style.setProperty("z-index", "10000", "important");
+      } else {
+        btnShowAll.style.removeProperty("margin-bottom");
+      }
+    }
+
+    /* ─── 5) زر "أضف للسلة" — z-index عالي ─── */
+    document.querySelectorAll(".p-add").forEach(btn => {
+      btn.style.setProperty("position", "relative", "important");
+      btn.style.setProperty("z-index", "10000", "important");
+      btn.style.setProperty("pointer-events", "auto", "important");
+    });
+
+    console.log("🎯 Nav spacer applied | height:", spacerH + "px | mobile:", isMobile);
+  }
+
+  /* تشغيل متكرر */
+  setTimeout(apply, 100);
+  setTimeout(apply, 600);
+  setTimeout(apply, 1500);
+  setTimeout(apply, 3000);
+  setTimeout(apply, 5000);
+  setInterval(apply, 2500);
+
+  window.addEventListener("resize", () => setTimeout(apply, 150));
+  window.addEventListener("orientationchange", () => setTimeout(apply, 400));
+
+  /* لما منتجات جديدة تتحمل */
+  window.addEventListener("data-refresh", () => setTimeout(apply, 500));
+})();
