@@ -1514,3 +1514,61 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   setTimeout(showNav, 200);
   console.log("🎯 Nav Real Fix applied — contain broken + auto-hide on scroll");
 })();
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   ⚖️ GIFT TERMS — الشروط القانونية تحت شريط الهدية
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlGiftTerms) return;
+  window.__vlGiftTerms = true;
+
+  const T = {
+    ar: "* العرض ساري لحد نفاد الكمية",
+    en: "* Offer valid while stock lasts"
+  };
+
+  const style = document.createElement("style");
+  style.textContent = `
+    .gift-promo-terms {
+      display: block;
+      text-align: center;
+      font-size: 0.66rem;
+      font-weight: 500;
+      color: rgba(255, 235, 59, 0.82);
+      padding: 4px 15px 6px;
+      margin: 0 15px;
+      border-top: 1px dashed rgba(255, 235, 59, 0.28);
+      line-height: 1.35;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      position: relative;
+      z-index: 2;
+    }
+    @media (max-width: 480px) {
+      .gift-promo-terms { font-size: 0.6rem; padding: 3px 10px 5px; margin: 0 10px; }
+    }
+  `;
+  document.head.appendChild(style);
+
+  function lang(){ return document.documentElement.lang === "en" ? "en" : "ar"; }
+
+  function init(){
+    const bar = document.querySelector(".gift-promo-bar");
+    if(!bar) return;
+    if(!bar.querySelector(".gift-promo-terms")){
+      const el = document.createElement("small");
+      el.className = "gift-promo-terms";
+      el.textContent = T[lang()];
+      bar.appendChild(el);
+    }
+    new MutationObserver(() => {
+      const el = document.querySelector(".gift-promo-terms");
+      if(el) el.textContent = T[lang()];
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(init, 800));
+  else setTimeout(init, 800);
+})();
