@@ -177,3 +177,178 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
     height: auto !important;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   🎁 GIFT PROMO BAR v1 — شريط عرض الهدية
+   عرض: عند الشراء بـ 1000 جنيه → فواحة سيارة هدية
+   ✅ Non-sticky عشان ميبوّظش التنقل
+   ✅ Red gradient + Yellow text
+   ✅ Shine animation + Icon bounce
+   ✅ Responsive كامل
+   ═══════════════════════════════════════════════════════════ */
+
+.gift-promo-bar {
+  position: relative;
+  background: linear-gradient(90deg, #a81616 0%, #d32f2f 25%, #b71c1c 50%, #d32f2f 75%, #a81616 100%);
+  background-size: 300% 100%;
+  animation: giftPromoFlow 8s linear infinite;
+  border-bottom: 2px solid #ffeb3b;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 12px rgba(183, 28, 28, 0.35);
+  z-index: 55;
+  overflow: hidden;
+  font-family: 'Tajawal', var(--ff, sans-serif);
+}
+
+/* لمعة بتعدي على الشريط من فترة للتانية */
+.gift-promo-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.18) 45%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0.18) 55%,
+    transparent 75%
+  );
+  transform: translateX(-120%);
+  animation: giftPromoShine 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes giftPromoFlow {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+@keyframes giftPromoShine {
+  0%, 60%, 100% { transform: translateX(-120%); }
+  30%           { transform: translateX(120%); }
+}
+
+.gift-promo-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 9px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.gift-promo-icon {
+  font-size: 1.45rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  animation: giftPromoBounce 1.8s ease-in-out infinite;
+  flex-shrink: 0;
+  transform-origin: center bottom;
+}
+
+@keyframes giftPromoBounce {
+  0%, 100% { transform: translateY(0) rotate(-6deg) scale(1); }
+  50%      { transform: translateY(-5px) rotate(6deg) scale(1.12); }
+}
+
+.gift-promo-text {
+  color: #ffeb3b;
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.35),
+    0 2px 6px rgba(0, 0, 0, 0.25);
+  line-height: 1.5;
+  letter-spacing: 0.2px;
+}
+
+.gift-promo-text strong {
+  color: #ffffff;
+  font-weight: 800;
+  margin-inline-end: 4px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.gift-promo-text b {
+  color: #ffffff;
+  font-weight: 900;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 1px 7px;
+  border-radius: 5px;
+  box-shadow: inset 0 0 0 1px rgba(255, 235, 59, 0.4);
+}
+
+.gift-promo-cta {
+  background: #ffeb3b;
+  color: #a81616;
+  padding: 6px 16px;
+  border-radius: 22px;
+  font-weight: 800;
+  font-size: 0.8rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.2px;
+}
+
+.gift-promo-cta:hover {
+  background: #fff9c4;
+  transform: scale(1.06);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.gift-promo-cta:active {
+  transform: scale(0.97);
+}
+
+.gift-promo-cta:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* ═══ Responsive ═══ */
+@media (max-width: 900px) {
+  .gift-promo-text { font-size: 0.85rem; }
+  .gift-promo-icon { font-size: 1.3rem; }
+  .gift-promo-cta  { font-size: 0.76rem; padding: 5px 14px; }
+}
+
+@media (max-width: 700px) {
+  .gift-promo-inner { gap: 8px; padding: 8px 12px; }
+  .gift-promo-text  { font-size: 0.8rem; line-height: 1.45; }
+  .gift-promo-icon  { font-size: 1.15rem; }
+  .gift-promo-cta   { font-size: 0.72rem; padding: 5px 12px; }
+}
+
+@media (max-width: 480px) {
+  .gift-promo-inner {
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px;
+  }
+  .gift-promo-text  { font-size: 0.76rem; line-height: 1.4; }
+  .gift-promo-cta   { font-size: 0.72rem; padding: 5px 14px; }
+  .gift-promo-icon  { font-size: 1.05rem; }
+}
+
+/* احترام تقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+  .gift-promo-bar,
+  .gift-promo-bar::before,
+  .gift-promo-icon,
+  .gift-promo-text {
+    animation: none !important;
+  }
+}
