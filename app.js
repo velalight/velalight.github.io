@@ -305,3 +305,117 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(start, 1200); });
   else setTimeout(start, 1200);
 })();
+
+
+/* ═══════════════════════════════════════════════════════════
+   🖼️ GIFT IMAGE DIRECT v5 — يحط صورة الفواحة مباشرة
+   الصورة: Velalight-Car-Diffuser-03.webp
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlGiftImgV5) return;
+  window.__vlGiftImgV5 = true;
+
+  const GIFT_IMG = "https://velalight.github.io/Velalight-Car-Diffuser-03.webp";
+  const GIFT_IDS = ["pmvj8cij7c34", "pmvj8qxhca70"];
+  let busy = false;
+
+  /* 1) نصلّح الصورة في ALL_PRODUCTS (لو محتاجة) */
+  function patchProducts(){
+    try {
+      if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)){
+        ALL_PRODUCTS.forEach(function(p){
+          if(p && GIFT_IDS.indexOf(String(p.id)) > -1 && (!p.img || String(p.img).length < 15)){
+            p.img = GIFT_IMG;
+          }
+        });
+      }
+    } catch(e){}
+    try {
+      if(window.ALL_PRODUCTS && Array.isArray(window.ALL_PRODUCTS)){
+        window.ALL_PRODUCTS.forEach(function(p){
+          if(p && GIFT_IDS.indexOf(String(p.id)) > -1 && (!p.img || String(p.img).length < 15)){
+            p.img = GIFT_IMG;
+          }
+        });
+      }
+    } catch(e){}
+    try {
+      const cache = JSON.parse(localStorage.getItem("vl_products_v3") || "[]");
+      let changed = false;
+      cache.forEach(function(p){
+        if(p && GIFT_IDS.indexOf(String(p.id)) > -1 && p.img !== GIFT_IMG){
+          p.img = GIFT_IMG;
+          changed = true;
+        }
+      });
+      if(changed) localStorage.setItem("vl_products_v3", JSON.stringify(cache));
+    } catch(e){}
+  }
+
+  /* 2) نصلّح الصورة في السلة */
+  function fixCart(){
+    if(busy) return;
+    let cart;
+    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return; }
+    if(!Array.isArray(cart) || !cart.length) return;
+
+    let changed = false;
+    cart.forEach(function(item){
+      if(!item || item.isGift !== true) return;
+      if(item.img !== GIFT_IMG){
+        item.img = GIFT_IMG;
+        changed = true;
+        console.log("🖼️ Gift image set:", GIFT_IMG);
+      }
+    });
+
+    if(changed){
+      busy = true;
+      try { localStorage.setItem("vl_cart", JSON.stringify(cart)); } catch(e){}
+      const btn = document.getElementById("cartBtn");
+      if(btn){
+        const drawer = document.getElementById("cartDrawer");
+        const wasOpen = drawer && drawer.classList.contains("open");
+        btn.click();
+        if(!wasOpen) setTimeout(function(){ const c = document.getElementById("closeCart"); if(c) c.click(); }, 150);
+      }
+      setTimeout(function(){ busy = false; }, 600);
+    }
+  }
+
+  /* 3) تشغيلات متعددة لضمان الإصلاح */
+  setTimeout(patchProducts, 800);
+  setTimeout(fixCart, 1200);
+  setTimeout(fixCart, 2500);
+  setTimeout(fixCart, 5000);
+
+  /* 4) كل ما تفتح السلة */
+  const cb = document.getElementById("cartBtn");
+  if(cb) cb.addEventListener("click", function(){ setTimeout(fixCart, 350); });
+
+  /* 5) كل ما المنتجات تتحدث */
+  window.addEventListener("data-refresh", function(){
+    setTimeout(patchProducts, 400);
+    setTimeout(fixCart, 900);
+  });
+
+  /* 6) لو اتفتح تاب تاني وعدّل السلة */
+  window.addEventListener("storage", function(e){
+    if(e.key === "vl_cart") setTimeout(fixCart, 200);
+  });
+
+  /* 7) مراقبة دورية */
+  setInterval(fixCart, 2000);
+
+  /* 8) تشخيص */
+  setTimeout(function(){
+    const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
+    const gift = cart.find(function(i){ return i && i.isGift === true; });
+    console.log("═══════════════════════════════════════");
+    console.log("🖼️ Gift Image v5 READY");
+    console.log("🔗 Using image:", GIFT_IMG);
+    if(gift) console.log("🎁 Gift in cart:", gift.name || gift.id, "| img:", gift.img ? "✓" : "✗");
+    console.log("═══════════════════════════════════════");
+  }, 3000);
+})();
