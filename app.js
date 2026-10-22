@@ -846,3 +846,108 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   console.log("   Gift line will appear in WhatsApp message");
   console.log("═══════════════════════════════════════");
 })();
+
+
+/* ═══════════════════════════════════════════════════════════
+   🌐 GIFT I18N v1 — ترجمة شريط الهدية + شريط التقدم
+   يعمل تلقائي عند تغيير اللغة (زرار EN)
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlGiftI18N) return;
+  window.__vlGiftI18N = true;
+
+  const T = {
+    ar: {
+      bar_label: "عرض الهدية:",
+      bar_buy: "اشتري بـ",
+      bar_currency: "جنيه",
+      bar_get: "واحصل على",
+      bar_gift: "فواحة سيارة فاخرة",
+      bar_free: "هدية مجانية!",
+      bar_cta: "تسوّق الآن ✨",
+      bar_aria: "عرض خاص: هدية فواحة سيارة",
+      prog_unlocked: "مبروك! استحقيت فواحة السيارة هدية 🎉",
+      prog_pre: "باقي",
+      prog_post: "جنيه بس وتاخد فواحة سيارة هدية!"
+    },
+    en: {
+      bar_label: "Gift Offer:",
+      bar_buy: "Buy for",
+      bar_currency: "EGP",
+      bar_get: "and get a",
+      bar_gift: "Luxury Car Diffuser",
+      bar_free: "as a FREE gift!",
+      bar_cta: "Shop Now ✨",
+      bar_aria: "Special offer: Free car diffuser",
+      prog_unlocked: "Congrats! You earned a FREE Car Diffuser 🎉",
+      prog_pre: "Only",
+      prog_post: "EGP more to unlock your FREE Car Diffuser!"
+    }
+  };
+
+  function getLang(){ return (document.documentElement.lang === "en") ? "en" : "ar"; }
+
+  function translateBar(){
+    const bar = document.querySelector(".gift-promo-bar");
+    if(!bar) return;
+    const t = T[getLang()];
+    bar.setAttribute("aria-label", t.bar_aria);
+
+    const p = bar.querySelector(".gift-promo-text");
+    if(p){
+      p.innerHTML =
+        '<strong>' + t.bar_label + '</strong> ' +
+        '<span>' + t.bar_buy + '</span> ' +
+        '<b>1000 <span>' + t.bar_currency + '</span></b> ' +
+        '<span>' + t.bar_get + '</span> ' +
+        '<b>' + t.bar_gift + '</b> ' +
+        '<span>' + t.bar_free + '</span>';
+    }
+
+    const cta = bar.querySelector(".gift-promo-cta");
+    if(cta) cta.textContent = t.bar_cta;
+  }
+
+  function translateProgress(){
+    const row = document.getElementById("giftProgressRow");
+    if(!row || row.style.display === "none") return;
+    const txt = row.querySelector(".vl-ship-txt");
+    if(!txt) return;
+    const t = T[getLang()];
+    const isUnlocked = !!row.querySelector(".vl-ship-success");
+    if(isUnlocked){
+      txt.innerHTML = '🎁 <strong>' + t.prog_unlocked + '</strong>';
+    } else {
+      const strong = txt.querySelector("strong");
+      const remaining = strong ? strong.textContent : "0";
+      txt.innerHTML = '🎁 ' + t.prog_pre + ' <strong>' + remaining + '</strong> ' + t.prog_post;
+    }
+  }
+
+  new MutationObserver(function(){
+    translateBar();
+    setTimeout(translateProgress, 150);
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+
+  function watchCart(){
+    const ci = document.getElementById("cartItems");
+    if(ci) new MutationObserver(function(){ setTimeout(translateProgress, 250); }).observe(ci, { childList: true, subtree: true });
+    const cs = document.getElementById("cartSub");
+    if(cs) new MutationObserver(function(){ setTimeout(translateProgress, 250); }).observe(cs, { childList: true, characterData: true, subtree: true });
+    const cb = document.getElementById("cartBtn");
+    if(cb) cb.addEventListener("click", function(){ setTimeout(translateProgress, 700); });
+    setInterval(translateProgress, 2500);
+  }
+
+  function init(){
+    translateBar();
+    watchCart();
+    setTimeout(translateBar, 1000);
+    setTimeout(translateProgress, 2000);
+    console.log("🌐 Gift i18n v1 READY");
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(init, 300); });
+  else setTimeout(init, 300);
+})();
