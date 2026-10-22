@@ -526,3 +526,182 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     setTimeout(init, 1200);
   }
 })();
+
+
+/* ═══════════════════════════════════════════════════════════
+   ❌ GIFT BAR CLOSE v1 — زر إغلاق الشريط
+   - زر × أنيق على طرف الشريط
+   - عند الإغلاق: يخفي بحركة ناعمة
+   - يحفظ الاختيار في localStorage لمدة 7 أيام
+   - يمنع تتبع view للزوار اللي أغلقوه
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlGiftCloseBtn) return;
+  window.__vlGiftCloseBtn = true;
+
+  const KEY = "vl_gift_bar_closed";
+  const DAYS = 7;
+  const MS = DAYS * 24 * 60 * 60 * 1000;
+
+  /* ⚡ خطوة مبكرة: منع تتبع view لو الشريط متقفل من قبل */
+  try {
+    const ts = Number(localStorage.getItem(KEY) || 0);
+    if(ts && Date.now() - ts < MS){
+      sessionStorage.setItem("vl_gift_view_sent", "1");
+    }
+  } catch(e){}
+
+  /* 🧪 للاختبار: أضف ?resetGift=1 للـ URL لإظهار الشريط من جديد */
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if(params.get("resetGift") === "1"){
+      localStorage.removeItem(KEY);
+      sessionStorage.removeItem("vl_gift_view_sent");
+      console.log("🎁 Gift bar RESET — will show again");
+    }
+  } catch(e){}
+
+  function isRecentlyClosed(){
+    try {
+      const ts = Number(localStorage.getItem(KEY) || 0);
+      if(!ts) return false;
+      if(Date.now() - ts > MS){ localStorage.removeItem(KEY); return false; }
+      return true;
+    } catch(e){ return false; }
+  }
+
+  function injectCSS(){
+    if(document.getElementById("vlGiftCloseStyles")) return;
+    const style = document.createElement("style");
+    style.id = "vlGiftCloseStyles";
+    style.textContent = `
+      .gift-promo-bar{ position: relative !important; }
+      .gift-promo-close{
+        position: absolute;
+        top: 50%;
+        inset-inline-end: 10px;
+        transform: translateY(-50%);
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: rgba(0,0,0,.28);
+        border: 1.5px solid rgba(255,255,255,.4);
+        color: #fff;
+        font-size: 15px;
+        font-weight: 700;
+        line-height: 1;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        z-index: 15;
+        transition: background .22s ease, border-color .22s ease, transform .22s ease;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .gift-promo-close:hover{
+        background: rgba(0,0,0,.55);
+        border-color: #fff;
+        transform: translateY(-50%) scale(1.12) rotate(90deg);
+      }
+      .gift-promo-close:active{
+        transform: translateY(-50%) scale(.94) rotate(90deg);
+      }
+      .gift-promo-inner{
+        padding-inline-end: 46px !important;
+      }
+      @media (max-width: 480px){
+        .gift-promo-close{
+          top: 6px;
+          inset-inline-end: 6px;
+          transform: none;
+          width: 22px;
+          height: 22px;
+          font-size: 13px;
+        }
+        .gift-promo-close:hover{
+          transform: scale(1.12) rotate(90deg);
+        }
+        .gift-promo-close:active{
+          transform: scale(.94) rotate(90deg);
+        }
+        .gift-promo-inner{
+          padding-inline-end: 10px !important;
+          padding-inline-start: 10px !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function hideBar(animate){
+    const bar = document.querySelector(".gift-promo-bar");
+    if(!bar) return;
+    if(!animate){
+      bar.style.display = "none";
+      return;
+    }
+    bar.style.transition = "opacity .32s ease, max-height .4s ease";
+    bar.style.overflow = "hidden";
+    bar.style.maxHeight = bar.offsetHeight + "px";
+    requestAnimationFrame(function(){
+      bar.style.opacity = "0";
+      bar.style.maxHeight = "0";
+    });
+    setTimeout(function(){ bar.style.display = "none"; }, 450);
+  }
+
+  function handleClose(e){
+    e.preventDefault();
+    e.stopPropagation();
+    try { localStorage.setItem(KEY, String(Date.now())); } catch(err){}
+    hideBar(true);
+    try {
+      if(typeof gtag === "function"){
+        gtag("event", "gift_banner_close", {
+          event_category: "promotion",
+          event_label: "free_car_diffuser_1000egp"
+        });
+      }
+      if(typeof fbq === "function"){
+        fbq("trackCustom", "GiftBannerClose", {
+          promo: "free_car_diffuser"
+        });
+      }
+      console.log("📊 Tracked: gift_banner_close");
+    } catch(err){}
+    console.log("🎁 Gift bar closed for " + DAYS + " days");
+  }
+
+  function init(){
+    const bar = document.querySelector(".gift-promo-bar");
+    if(!bar) return;
+
+    if(isRecentlyClosed()){
+      hideBar(false);
+      console.log("🎁 Gift bar hidden (recently closed)");
+      return;
+    }
+
+    injectCSS();
+
+    if(!bar.querySelector(".gift-promo-close")){
+      const btn = document.createElement("button");
+      btn.className = "gift-promo-close";
+      btn.type = "button";
+      btn.setAttribute("aria-label", "إغلاق الإعلان");
+      btn.textContent = "✕";
+      btn.addEventListener("click", handleClose);
+      bar.appendChild(btn);
+    }
+
+    console.log("🎁 Gift bar close button READY");
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){ setTimeout(init, 600); });
+  } else {
+    setTimeout(init, 600);
+  }
+})();
