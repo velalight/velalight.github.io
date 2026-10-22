@@ -914,3 +914,91 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 /* ═══════════════════════════════════════════════════════════════════
    ✅ نهاية بلوكات الهدية — VelaLight Gift System v7
    ═══════════════════════════════════════════════════════════════════ */
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   🚨 CART FIX v1 — إصلاح "المنتج بيرجع بعد الحذف"
+   ✅ يلغي زر "تراجع" من الـ toast (السبب الرئيسي على الموبايل)
+   ✅ يعطّل CART BACKUP (احتياطي)
+   ✅ يحمي من double-tap على زر الحذف
+   ✅ يطبع logs للتشخيص
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlCartFixV1) return;
+  window.__vlCartFixV1 = true;
+
+  /* ═══ 1) إلغاء زر "تراجع" من الـ toast ═══ */
+  const originalShowToast = window.showToastWithAction;
+  window.showToastWithAction = function(msg, action, callback, timeout){
+    /* نعرض toast عادي بدون زر — المستخدم مش هيقدر يرجع المنتج */
+    if(typeof toast === "function") toast(msg);
+    console.log("🍞 Toast (no undo):", msg);
+    /* لا نستدعي الأصلي عشان نمنع زر التراجع */
+  };
+
+  /* ═══ 2) تعطيل CART BACKUP بشكل فعّال ═══ */
+  /* البلوك الأصلي بيسترجع من sessionStorage على DOMContentLoaded.
+     نمسح الـ backup دوريًا عشان ملوش لازمة */
+  function clearBackup(){
+    try { sessionStorage.removeItem("vl_cart_backup"); } catch(e){}
+  }
+  clearBackup();
+  setInterval(clearBackup, 1500);
+  console.log("🛡️ Cart backup cleared & disabled");
+
+  /* ═══ 3) حماية من double-tap على زر الحذف ═══ */
+  let deleting = false;
+  document.addEventListener("click", function(e){
+    const rm = e.target.closest("#cartItems .rm");
+    if(!rm) return;
+    if(deleting){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      console.log("🚫 Double-delete blocked");
+      return false;
+    }
+    deleting = true;
+    setTimeout(() => { deleting = false; }, 1200);
+  }, true);
+
+  /* ═══ 4) حماية من double-tap على زر "أضف للسلة" ═══ */
+  let adding = false;
+  document.addEventListener("click", function(e){
+    const add = e.target.closest(".p-add, #scentModalAdd, #addSuggestBtn");
+    if(!add) return;
+    if(adding){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      console.log("🚫 Double-add blocked");
+      return false;
+    }
+    adding = true;
+    setTimeout(() => { adding = false; }, 800);
+  }, true);
+
+  /* ═══ 5) مراقبة تغييرات السلة للتشخيص ═══ */
+  let lastCart = "";
+  setInterval(function(){
+    try {
+      const cart = localStorage.getItem("vl_cart") || "[]";
+      if(cart !== lastCart){
+        const arr = JSON.parse(cart);
+        const names = arr.map(i => (i.isGift ? "🎁 " : "") + (i.name || i.id)).join(" | ");
+        console.log("🛒 Cart changed → " + arr.length + " items: " + (names || "(فاضية)"));
+        lastCart = cart;
+      }
+    } catch(e){}
+  }, 1000);
+
+  console.log("═══════════════════════════════════════");
+  console.log("🚨 Cart Fix v1 ACTIVE");
+  console.log("   ✅ Undo toast: DISABLED");
+  console.log("   ✅ Cart backup: DISABLED");
+  console.log("   ✅ Double-delete: BLOCKED");
+  console.log("   ✅ Double-add: BLOCKED");
+  console.log("═══════════════════════════════════════");
+})();
