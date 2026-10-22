@@ -462,7 +462,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   window.__vlGiftCloseBtn = true;
 
   const KEY = "vl_gift_bar_closed";
-  const DAYS = 7;
+  const DAYS = 1;
   const MS = DAYS * 24 * 60 * 60 * 1000;
 
   try {
