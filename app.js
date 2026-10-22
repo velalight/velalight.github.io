@@ -1002,3 +1002,103 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   console.log("   ✅ Double-add: BLOCKED");
   console.log("═══════════════════════════════════════");
 })();
+
+
+/* ═══════════════════════════════════════════════════════════
+   🚨 ORDER SAVE FIX v1 — تشخيص وإصلاح فشل حفظ الطلب
+   ✅ يعرض الخطأ للمستخدم (toast) بدل ما يضيع في صمت
+   ✅ ينضف البيانات قبل الحفظ (يشيل undefined ويقصّر الصور)
+   ✅ يسجل حجم الطلب في Console (عشان نعرف لو تعدى 1MB)
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlOrderSaveFix) return;
+  window.__vlOrderSaveFix = true;
+
+  /* ═══ 1) دالة تنظيف الطلب ═══ */
+  function sanitizeOrder(order){
+    if(!order || typeof order !== "object") return order;
+
+    /* شيل أي حقل قيمته undefined (Firestore بيرفضها) */
+    const clean = {};
+    for(const key in order){
+      if(order[key] !== undefined && order[key] !== null){
+        clean[key] = order[key];
+      }
+    }
+
+    /* قصّر حقل img لو طويل جدًا (أكتر من 500 حرف) */
+    if(Array.isArray(clean.products)){
+      clean.products = clean.products.map(p => {
+        const prod = {...p};
+        if(typeof prod.img === "string" && prod.img.length > 500){
+          /* لو الصورة Data URL طويلة، شيلها أو خلي أول 100 حرف */
+          prod.img = prod.img.startsWith("data:") ? "" : prod.img.substring(0, 200);
+        }
+        return prod;
+      });
+    }
+
+    /* تأكد إن tracking مفيهوش undefined */
+    if(clean.tracking && typeof clean.tracking === "object"){
+      const t = {};
+      for(const k in clean.tracking){
+        if(clean.tracking[k] !== undefined && clean.tracking[k] !== null){
+          t[k] = clean.tracking[k];
+        }
+      }
+      clean.tracking = t;
+    }
+
+    return clean;
+  }
+
+  /* ═══ 2) اعتراض عملية الحفظ ═══ */
+  const originalAdd = DB && DB.add ? DB.add.bind(DB) : null;
+  if(originalAdd){
+    DB.add = async function(collection, data){
+      /* نطبق التنظيف بس على مجموعة orders */
+      if(collection === "orders"){
+        try {
+          const cleaned = sanitizeOrder(data);
+          /* حساب الحجم التقريبي */
+          const jsonStr = JSON.stringify(cleaned);
+          const sizeKB = (new Blob([jsonStr]).size / 1024).toFixed(1);
+          console.log("📦 Order save attempt | Size:", sizeKB + " KB", "| Products:", cleaned.products?.length || 0);
+
+          if(sizeKB > 1024){
+            console.warn("⚠️ Order size exceeds 1MB! This will likely fail.");
+          }
+
+          /* استدعاء الدالة الأصلية مع البيانات النظيفة */
+          const result = await originalAdd(collection, cleaned);
+          console.log("✅ Order saved successfully:", result?.id || "no-id");
+          return result;
+        } catch(err){
+          console.error("❌ Order save FAILED:", err);
+          /* عرض الخطأ للمستخدم */
+          if(typeof toast === "function"){
+            toast("⚠️ فشل حفظ الطلب في قاعدة البيانات. تواصل معنا عبر واتساب.");
+          }
+          /* إعادة رمي الخطأ عشان الكود الأصلي يعمل retry */
+          throw err;
+        }
+      }
+      /* أي collection تانية → زي ما هي */
+      return originalAdd(collection, data);
+    };
+    console.log("✅ Order save hook installed");
+  } else {
+    console.warn("⚠️ DB.add not available yet — will retry");
+    /* لو DB لسه مش جاهز، نعيد المحاولة بعد شوية */
+    const retry = setInterval(() => {
+      if(DB && DB.add){
+        clearInterval(retry);
+        /* إعادة تشغيل نفس البلوك */
+        window.__vlOrderSaveFix = false;
+        document.dispatchEvent(new Event("vl-retry-order-fix"));
+      }
+    }, 500);
+    setTimeout(() => clearInterval(retry), 10000);
+  }
+})();
