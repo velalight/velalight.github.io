@@ -453,8 +453,11 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 })();
 
 
+
+
 /* ─────────────────────────────────────────────────────────────
-   [5] GIFT BAR CLOSE v1 — زر إغلاق الشريط (×)
+   [5] GIFT BAR CLOSE v2 — زر إغلاق الشريط
+   ✅ يختفي لحد ما يـ Refresh (sessionStorage)
    ───────────────────────────────────────────────────────────── */
 (function(){
   "use strict";
@@ -462,30 +465,25 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   window.__vlGiftCloseBtn = true;
 
   const KEY = "vl_gift_bar_closed";
-  const DAYS = 1;
-  const MS = DAYS * 24 * 60 * 60 * 1000;
 
-  try {
-    const ts = Number(localStorage.getItem(KEY) || 0);
-    if(ts && Date.now() - ts < MS) sessionStorage.setItem("vl_gift_view_sent", "1");
-  } catch(e){}
+  /* ─── تنظيف أي قيمة قديمة في localStorage عشان يبدأ نظيف ─── */
+  try { localStorage.removeItem(KEY); } catch(e){}
 
+  /* لو الشريط اتقفل في الجلسة دي → منع تتبع view */
   try {
-    const params = new URLSearchParams(window.location.search);
-    if(params.get("resetGift") === "1"){
-      localStorage.removeItem(KEY);
-      sessionStorage.removeItem("vl_gift_view_sent");
+    if(sessionStorage.getItem(KEY) === "1"){
+      sessionStorage.setItem("vl_gift_view_sent", "1");
     }
   } catch(e){}
 
-  function isRecentlyClosed(){
-    try {
-      const ts = Number(localStorage.getItem(KEY) || 0);
-      if(!ts) return false;
-      if(Date.now() - ts > MS){ localStorage.removeItem(KEY); return false; }
-      return true;
-    } catch(e){ return false; }
-  }
+  /* ─── للاختبار: ?resetGift=1 ─── */
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if(params.get("resetGift") === "1"){
+      sessionStorage.removeItem(KEY);
+      sessionStorage.removeItem("vl_gift_view_sent");
+    }
+  } catch(e){}
 
   function injectCSS(){
     if(document.getElementById("vlGiftCloseStyles")) return;
@@ -525,7 +523,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
   function handleClose(e){
     e.preventDefault(); e.stopPropagation();
-    try { localStorage.setItem(KEY, String(Date.now())); } catch(err){}
+    try { sessionStorage.setItem(KEY, "1"); } catch(err){}
     hideBar(true);
     try {
       if(typeof gtag === "function") gtag("event", "gift_banner_close", { event_category: "promotion", event_label: "free_car_diffuser_1000egp" });
@@ -536,7 +534,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   function init(){
     const bar = document.querySelector(".gift-promo-bar");
     if(!bar) return;
-    if(isRecentlyClosed()){ hideBar(false); return; }
+    if(sessionStorage.getItem(KEY) === "1"){ hideBar(false); return; }
     injectCSS();
     if(!bar.querySelector(".gift-promo-close")){
       const btn = document.createElement("button");
