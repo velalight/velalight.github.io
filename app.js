@@ -1442,3 +1442,75 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   /* لما منتجات جديدة تتحمل */
   window.addEventListener("data-refresh", () => setTimeout(apply, 500));
 })();
+
+
+
+/* ═══════════════════════════════════════════════════════════
+   🎯 BOTTOM NAV REAL FIX — يكسر contain:paint + يخفي الفوتر مع السكرول
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlNavRealFix) return;
+  window.__vlNavRealFix = true;
+
+  /* ─── 1) كسر contain:paint على الكروت ─── */
+  const css = document.createElement("style");
+  css.textContent = `
+    @media (max-width: 900px) {
+      .p-card {
+        contain: layout style !important;
+      }
+      body {
+        padding-bottom: 130px !important;
+      }
+    }
+  `;
+  document.head.appendChild(css);
+
+  /* ─── 2) الفوتر يختفي مع السكرول لتحت، يظهر لما ترجع لفوق ─── */
+  let lastY = window.scrollY;
+  let showTimer = null;
+
+  function showNav(){
+    const nav = document.getElementById("vlBottomNav");
+    if(nav){
+      nav.style.transition = "transform 0.25s ease";
+      nav.style.transform = "translateY(0)";
+    }
+  }
+  function hideNav(){
+    const nav = document.getElementById("vlBottomNav");
+    if(nav){
+      nav.style.transition = "transform 0.25s ease";
+      nav.style.transform = "translateY(110%)";
+    }
+  }
+
+  window.addEventListener("scroll", function(){
+    const nav = document.getElementById("vlBottomNav");
+    if(!nav) return;
+    const y = window.scrollY;
+    const dy = y - lastY;
+
+    if(dy > 10){
+      hideNav();      /* بيسكرول لتحت → يختفي */
+    } else if(dy < -10){
+      showNav();      /* بيرجع لفوق → يظهر */
+    }
+    lastY = y;
+
+    clearTimeout(showTimer);
+    showTimer = setTimeout(showNav, 1500); /* دايماً يرجع بعد 1.5ث سكون */
+  }, { passive: true });
+
+  /* ─── 3) يرجع يظهر لما تفتح السلة (لما تقفلها) ─── */
+  const cartBtn = document.getElementById("cartBtn");
+  if(cartBtn){
+    cartBtn.addEventListener("click", function(){
+      setTimeout(showNav, 400);
+    });
+  }
+
+  setTimeout(showNav, 200);
+  console.log("🎯 Nav Real Fix applied — contain broken + auto-hide on scroll");
+})();
