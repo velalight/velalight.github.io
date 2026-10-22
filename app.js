@@ -143,140 +143,169 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 })();
 
 
+
 /* ═══════════════════════════════════════════════════════════
-   🎁 GIFT AUTO-ADD v1 — خطوة 2
-   إضافة مستقلة تمامًا — لا تعدل أي كود قديم
+   🎁 GIFT AUTO-ADD v2 — إضافة مستقلة تمامًا
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
-  if(window.__vlGiftAutoAddLoaded) return;
-  window.__vlGiftAutoAddLoaded = true;
+  if(window.__vlGiftAutoAddV2) return;
+  window.__vlGiftAutoAddV2 = true;
 
   const MIN = 1000;
   const GIFT_NAME_AR = "🎁 فواحة سيارة فاخرة — هدية";
   const GIFT_NAME_EN = "🎁 Luxury Car Diffuser — Free Gift";
-  const GIFT_SCENT_DEFAULT = "فانيلا";
-  let lastStatus = null;
+  const GIFT_SCENT = "فانيلا";
   let busy = false;
+  let lastWanted = null;
 
   const style = document.createElement("style");
-  style.id = "vlGiftStyles";
+  style.id = "vlGiftStylesV2";
   style.textContent = [
-    '#cartItems .citem[data-gift="1"]{background:linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)!important;border-color:rgba(39,174,96,.45)!important}',
+    '#cartItems .citem[data-gift="1"]{background:linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)!important;border-color:rgba(39,174,96,.45)!important;box-shadow:0 2px 12px rgba(39,174,96,.15)!important}',
+    '#cartItems .citem[data-gift="1"]::before{content:"🎁 هدية";position:absolute;top:8px;inset-inline-start:8px;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;font-size:.62rem;font-weight:800;padding:2px 8px;border-radius:99px;z-index:5;box-shadow:0 2px 8px rgba(39,174,96,.4)}',
     '#cartItems .citem[data-gift="1"] .cart-scent-picker,#cartItems .citem[data-gift="1"] .vl-save-later{display:none!important}',
     '#cartItems .citem[data-gift="1"] .val,#cartItems .citem[data-gift="1"] .val-total{color:#1e8449!important}',
-    '#cartItems .citem[data-gift="1"] .rm{opacity:.35}',
-    '#cartItems .citem[data-gift="1"] .rm:hover{opacity:1}'
+    '#cartItems .citem[data-gift="1"] .qty{opacity:.5;pointer-events:none}',
+    '#cartItems .citem[data-gift="1"] .rm{opacity:0;pointer-events:none}'
   ].join("");
   document.head.appendChild(style);
 
-  function parseNum(s){
-    if(!s) return 0;
-    return parseFloat(String(s).replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[^\d.]/g, "")) || 0;
+  function getProducts(){
+    try { if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) return ALL_PRODUCTS; } catch(e){}
+    try { if(window.ALL_PRODUCTS && Array.isArray(window.ALL_PRODUCTS)) return window.ALL_PRODUCTS; } catch(e){}
+    try { if(window.PRODUCTS && Array.isArray(window.PRODUCTS)) return window.PRODUCTS; } catch(e){}
+    try { const c = JSON.parse(localStorage.getItem("vl_products_v3") || "[]"); if(Array.isArray(c) && c.length) return c; } catch(e){}
+    return [];
   }
 
-  function findDiffuser(){
-    const list = window.ALL_PRODUCTS || window.PRODUCTS || [];
-    return list.find(p => {
+  function findGift(){
+    const list = getProducts();
+    if(!list.length) return null;
+    return list.find(function(p){
       if(!p || !p.id || p.active === false) return false;
-      if(Number(p.stock) === 0) return false;
-      const txt = [p.name, p.nameEn, p.desc, p.descEn, p.cat].join(" ").toLowerCase();
-      return txt.includes("فواحة") || txt.includes("دولاب") || txt.includes("معطر") ||
-             txt.includes("freshener") || txt.includes("diffuser") || txt.includes("closet");
-    });
+      if(p.stock !== undefined && p.stock !== null && p.stock !== "" && Number(p.stock) === 0) return false;
+      const t = [p.name, p.nameEn, p.desc, p.descEn, p.cat].filter(Boolean).join(" ").toLowerCase();
+      return t.indexOf("فواحة") > -1 || t.indexOf("فوا حة") > -1 ||
+             t.indexOf("دولاب") > -1 || t.indexOf("معطر") > -1 ||
+             t.indexOf("freshener") > -1 || t.indexOf("diffuser") > -1 || t.indexOf("closet") > -1;
+    }) || null;
   }
 
   function getCart(){
     try { return JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return []; }
   }
-
-  function hasGift(cart, id){
-    return cart.some(i => String(i.id) === String(id) && i.isGift === true);
+  function setCart(c){
+    try { localStorage.setItem("vl_cart", JSON.stringify(c)); } catch(e){}
+  }
+  function hasGift(c, id){
+    return c.some(function(i){ return String(i.id) === String(id) && i.isGift === true; });
+  }
+  function parseNum(s){
+    if(!s) return 0;
+    return parseFloat(String(s).replace(/[٠-٩]/g, function(d){ return "٠١٢٣٤٥٦٧٨٩".indexOf(d); }).replace(/[^\d.]/g, "")) || 0;
   }
 
-  function refreshDrawer(){
-    const drawer = document.getElementById("cartDrawer");
-    const wasOpen = drawer && drawer.classList.contains("open");
+  function forceRedraw(){
     const btn = document.getElementById("cartBtn");
     if(!btn) return;
+    const drawer = document.getElementById("cartDrawer");
+    const wasOpen = drawer && drawer.classList.contains("open");
     btn.click();
-    if(wasOpen){
-      setTimeout(() => btn.click(), 120);
-    } else {
-      setTimeout(() => { const c = document.getElementById("closeCart"); if(c) c.click(); }, 120);
-    }
+    if(!wasOpen) setTimeout(function(){ document.getElementById("closeCart") && document.getElementById("closeCart").click(); }, 100);
   }
 
   function addGift(){
     if(busy) return;
-    const p = findDiffuser();
-    if(!p){ console.warn("🎁 Gift: diffuser product not found in ALL_PRODUCTS"); return; }
+    const p = findGift();
+    if(!p){ console.warn("🎁 Gift: diffuser product NOT found. Products loaded:", getProducts().length); return; }
     const cart = getCart();
     if(hasGift(cart, p.id)) return;
     busy = true;
     try {
-      const giftItem = { ...p, price: 0, old: p.price || p.old || 0, name: GIFT_NAME_AR, nameEn: GIFT_NAME_EN, isGift: true };
-      if(typeof window.addToCart === "function"){
-        window.addToCart(giftItem, { scent: GIFT_SCENT_DEFAULT, qty: 1 });
-        setTimeout(refreshDrawer, 150);
-      }
-    } finally {
-      setTimeout(() => { busy = false; }, 1500);
+      const gift = Object.assign({}, p, {
+        price: 0,
+        old: Number(p.price || p.old || 0),
+        name: GIFT_NAME_AR,
+        nameEn: GIFT_NAME_EN,
+        isGift: true
+      });
+      cart.push(gift);
+      setCart(cart);
+      console.log("🎁 Gift added:", p.name || p.id);
+      setTimeout(forceRedraw, 100);
+      setTimeout(function(){ mark(); busy = false; }, 400);
+    } catch(e){
+      console.warn("🎁 Gift add failed:", e);
+      busy = false;
     }
   }
 
   function removeGift(){
     if(busy) return;
-    const p = findDiffuser();
+    const p = findGift();
     if(!p) return;
     const cart = getCart();
-    const idx = cart.findIndex(i => String(i.id) === String(p.id) && i.isGift === true);
+    const idx = cart.findIndex(function(i){ return String(i.id) === String(p.id) && i.isGift === true; });
     if(idx === -1) return;
     busy = true;
     try {
       cart.splice(idx, 1);
-      try { localStorage.setItem("vl_cart", JSON.stringify(cart)); } catch(e){}
-      setTimeout(refreshDrawer, 150);
-    } finally {
-      setTimeout(() => { busy = false; }, 1500);
+      setCart(cart);
+      console.log("🎁 Gift removed");
+      setTimeout(forceRedraw, 100);
+      setTimeout(function(){ mark(); busy = false; }, 400);
+    } catch(e){
+      busy = false;
     }
   }
 
-  function markGiftItems(){
+  function mark(){
     const cart = getCart();
-    document.querySelectorAll("#cartItems .citem").forEach(el => {
+    document.querySelectorAll("#cartItems .citem").forEach(function(el){
       const idx = Number(el.dataset.cartIdx);
-      const item = cart[idx];
-      if(item && item.isGift === true) el.setAttribute("data-gift", "1");
+      if(cart[idx] && cart[idx].isGift === true) el.setAttribute("data-gift", "1");
       else el.removeAttribute("data-gift");
     });
   }
 
   function check(){
     if(busy) return;
-    const sub = parseNum(document.getElementById("cartSub")?.textContent);
-    if(sub === 0) return;
-    const wantGift = sub >= MIN;
-    const status = wantGift ? "have" : "none";
-    if(status === lastStatus) return;
-    lastStatus = status;
-    if(wantGift) addGift();
+    const sub = parseNum(document.getElementById("cartSub") ? document.getElementById("cartSub").textContent : "");
+    if(sub === 0){ lastWanted = null; return; }
+    const want = sub >= MIN;
+    if(lastWanted === want){
+      const p = findGift();
+      if(p){
+        const cart = getCart();
+        if(want && !hasGift(cart, p.id)){ addGift(); return; }
+        if(!want && hasGift(cart, p.id)){ removeGift(); return; }
+      }
+      return;
+    }
+    lastWanted = want;
+    if(want) addGift();
     else removeGift();
   }
 
   function start(){
+    const prods = getProducts();
+    const found = findGift();
+    console.log("🎁 Gift Auto-Add v2 READY");
+    console.log("📦 Products loaded:", prods.length);
+    console.log("🎁 Diffuser found:", found ? (found.name || found.id) : "❌ NOT FOUND");
+    if(prods.length) console.log("🔍 Product names sample:", prods.slice(0, 5).map(function(p){ return p.name || p.id; }));
+    
     const cs = document.getElementById("cartSub");
     if(cs) new MutationObserver(check).observe(cs, { childList: true, characterData: true, subtree: true });
     const ci = document.getElementById("cartItems");
-    if(ci){
-      new MutationObserver(() => { markGiftItems(); setTimeout(check, 300); }).observe(ci, { childList: true, subtree: true });
-    }
-    window.addEventListener("data-refresh", () => setTimeout(() => { lastStatus = null; check(); }, 900));
-    document.getElementById("cartBtn")?.addEventListener("click", () => setTimeout(check, 700));
-    setTimeout(check, 1200);
-    setTimeout(markGiftItems, 1500);
+    if(ci) new MutationObserver(function(){ mark(); setTimeout(check, 250); }).observe(ci, { childList: true, subtree: true });
+    window.addEventListener("data-refresh", function(){ lastWanted = null; setTimeout(check, 800); });
+    const cb = document.getElementById("cartBtn");
+    if(cb) cb.addEventListener("click", function(){ setTimeout(check, 500); });
+    setTimeout(check, 1500);
   }
 
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(start, 1000));
-  else setTimeout(start, 1000);
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(start, 1200); });
+  else setTimeout(start, 1200);
 })();
