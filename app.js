@@ -141,3 +141,142 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(start, 600));
   else setTimeout(start, 600);
 })();
+
+
+/* ═══════════════════════════════════════════════════════════
+   🎁 GIFT AUTO-ADD v1 — خطوة 2
+   إضافة مستقلة تمامًا — لا تعدل أي كود قديم
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlGiftAutoAddLoaded) return;
+  window.__vlGiftAutoAddLoaded = true;
+
+  const MIN = 1000;
+  const GIFT_NAME_AR = "🎁 فواحة سيارة فاخرة — هدية";
+  const GIFT_NAME_EN = "🎁 Luxury Car Diffuser — Free Gift";
+  const GIFT_SCENT_DEFAULT = "فانيلا";
+  let lastStatus = null;
+  let busy = false;
+
+  const style = document.createElement("style");
+  style.id = "vlGiftStyles";
+  style.textContent = [
+    '#cartItems .citem[data-gift="1"]{background:linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)!important;border-color:rgba(39,174,96,.45)!important}',
+    '#cartItems .citem[data-gift="1"] .cart-scent-picker,#cartItems .citem[data-gift="1"] .vl-save-later{display:none!important}',
+    '#cartItems .citem[data-gift="1"] .val,#cartItems .citem[data-gift="1"] .val-total{color:#1e8449!important}',
+    '#cartItems .citem[data-gift="1"] .rm{opacity:.35}',
+    '#cartItems .citem[data-gift="1"] .rm:hover{opacity:1}'
+  ].join("");
+  document.head.appendChild(style);
+
+  function parseNum(s){
+    if(!s) return 0;
+    return parseFloat(String(s).replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[^\d.]/g, "")) || 0;
+  }
+
+  function findDiffuser(){
+    const list = window.ALL_PRODUCTS || window.PRODUCTS || [];
+    return list.find(p => {
+      if(!p || !p.id || p.active === false) return false;
+      if(Number(p.stock) === 0) return false;
+      const txt = [p.name, p.nameEn, p.desc, p.descEn, p.cat].join(" ").toLowerCase();
+      return txt.includes("فواحة") || txt.includes("دولاب") || txt.includes("معطر") ||
+             txt.includes("freshener") || txt.includes("diffuser") || txt.includes("closet");
+    });
+  }
+
+  function getCart(){
+    try { return JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return []; }
+  }
+
+  function hasGift(cart, id){
+    return cart.some(i => String(i.id) === String(id) && i.isGift === true);
+  }
+
+  function refreshDrawer(){
+    const drawer = document.getElementById("cartDrawer");
+    const wasOpen = drawer && drawer.classList.contains("open");
+    const btn = document.getElementById("cartBtn");
+    if(!btn) return;
+    btn.click();
+    if(wasOpen){
+      setTimeout(() => btn.click(), 120);
+    } else {
+      setTimeout(() => { const c = document.getElementById("closeCart"); if(c) c.click(); }, 120);
+    }
+  }
+
+  function addGift(){
+    if(busy) return;
+    const p = findDiffuser();
+    if(!p){ console.warn("🎁 Gift: diffuser product not found in ALL_PRODUCTS"); return; }
+    const cart = getCart();
+    if(hasGift(cart, p.id)) return;
+    busy = true;
+    try {
+      const giftItem = { ...p, price: 0, old: p.price || p.old || 0, name: GIFT_NAME_AR, nameEn: GIFT_NAME_EN, isGift: true };
+      if(typeof window.addToCart === "function"){
+        window.addToCart(giftItem, { scent: GIFT_SCENT_DEFAULT, qty: 1 });
+        setTimeout(refreshDrawer, 150);
+      }
+    } finally {
+      setTimeout(() => { busy = false; }, 1500);
+    }
+  }
+
+  function removeGift(){
+    if(busy) return;
+    const p = findDiffuser();
+    if(!p) return;
+    const cart = getCart();
+    const idx = cart.findIndex(i => String(i.id) === String(p.id) && i.isGift === true);
+    if(idx === -1) return;
+    busy = true;
+    try {
+      cart.splice(idx, 1);
+      try { localStorage.setItem("vl_cart", JSON.stringify(cart)); } catch(e){}
+      setTimeout(refreshDrawer, 150);
+    } finally {
+      setTimeout(() => { busy = false; }, 1500);
+    }
+  }
+
+  function markGiftItems(){
+    const cart = getCart();
+    document.querySelectorAll("#cartItems .citem").forEach(el => {
+      const idx = Number(el.dataset.cartIdx);
+      const item = cart[idx];
+      if(item && item.isGift === true) el.setAttribute("data-gift", "1");
+      else el.removeAttribute("data-gift");
+    });
+  }
+
+  function check(){
+    if(busy) return;
+    const sub = parseNum(document.getElementById("cartSub")?.textContent);
+    if(sub === 0) return;
+    const wantGift = sub >= MIN;
+    const status = wantGift ? "have" : "none";
+    if(status === lastStatus) return;
+    lastStatus = status;
+    if(wantGift) addGift();
+    else removeGift();
+  }
+
+  function start(){
+    const cs = document.getElementById("cartSub");
+    if(cs) new MutationObserver(check).observe(cs, { childList: true, characterData: true, subtree: true });
+    const ci = document.getElementById("cartItems");
+    if(ci){
+      new MutationObserver(() => { markGiftItems(); setTimeout(check, 300); }).observe(ci, { childList: true, subtree: true });
+    }
+    window.addEventListener("data-refresh", () => setTimeout(() => { lastStatus = null; check(); }, 900));
+    document.getElementById("cartBtn")?.addEventListener("click", () => setTimeout(check, 700));
+    setTimeout(check, 1200);
+    setTimeout(markGiftItems, 1500);
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(start, 1000));
+  else setTimeout(start, 1000);
+})();
