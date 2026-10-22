@@ -146,34 +146,37 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
 
 /* ═══════════════════════════════════════════════════════════
-   🎁 GIFT AUTO-ADD v3 — IDs جاهزة
-   الفواحة 95ج: pmvj8cij7c34 | الفواحة 125ج: pmvj8qxhca70
+   🎁 GIFT SINGLE v6 — فواحة واحدة فقط مهما كان الإجمالي
+   ✅ يستبدل v3 (امسحه من الملف)
+   ✅ يشيل التكرار تلقائيًا
+   ✅ يصلح الصورة
+   ✅ يقفل الكمية على 1
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
-  if(window.__vlGiftV3) return;
-  window.__vlGiftV3 = true;
+  if(window.__vlGiftV6) return;
+  window.__vlGiftV6 = true;
 
-  /* ⚠️ IDs الفواحة — جاهزة */
+  const GIFT_IMG = "https://velalight.github.io/Velalight-Car-Diffuser-03.webp";
   const GIFT_IDS = ["pmvj8cij7c34", "pmvj8qxhca70"];
-
   const MIN = 1000;
-  const GIFT_SCENT = "🎁 هدية";
   let busy = false;
-  let retryCount = 0;
 
+  /* ═══ CSS ═══ */
   const style = document.createElement("style");
-  style.id = "vlGiftStylesV3";
+  style.id = "vlGiftV6Styles";
   style.textContent = [
-    '#cartItems .citem[data-gift="1"]{background:linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)!important;border-color:rgba(39,174,96,.45)!important;box-shadow:0 2px 12px rgba(39,174,96,.15)!important;position:relative}',
-    '#cartItems .citem[data-gift="1"]::before{content:"🎁 هدية";position:absolute;top:8px;inset-inline-start:8px;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;font-size:.62rem;font-weight:800;padding:2px 8px;border-radius:99px;z-index:5;box-shadow:0 2px 8px rgba(39,174,96,.4)}',
+    '#cartItems .citem[data-gift="1"]{background:linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)!important;border-color:rgba(39,174,96,.45)!important;box-shadow:0 2px 12px rgba(39,174,96,.15)!important;position:relative;overflow:visible!important}',
+    '#cartItems .citem[data-gift="1"]::before{content:"🎁 هدية مجانية";position:absolute;top:-8px;inset-inline-start:10px;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;font-size:.62rem;font-weight:800;padding:3px 10px;border-radius:99px;z-index:10;box-shadow:0 3px 10px rgba(39,174,96,.4);letter-spacing:.3px}',
     '#cartItems .citem[data-gift="1"] .cart-scent-picker,#cartItems .citem[data-gift="1"] .vl-save-later{display:none!important}',
-    '#cartItems .citem[data-gift="1"] .val,#cartItems .citem[data-gift="1"] .val-total{color:#1e8449!important}',
-    '#cartItems .citem[data-gift="1"] .qty{opacity:.5;pointer-events:none}',
-    '#cartItems .citem[data-gift="1"] .rm{opacity:0;pointer-events:none}'
+    '#cartItems .citem[data-gift="1"] .val,#cartItems .citem[data-gift="1"] .val-total{color:#1e8449!important;font-weight:900!important}',
+    '#cartItems .citem[data-gift="1"] .qty{display:none!important}',
+    '#cartItems .citem[data-gift="1"] .rm{display:none!important}',
+    '#cartItems .citem[data-gift="1"] .citem-divider{background:rgba(39,174,96,.3)!important}'
   ].join("");
   document.head.appendChild(style);
 
+  /* ═══ Helpers ═══ */
   function getProducts(){
     try { if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS) && ALL_PRODUCTS.length) return ALL_PRODUCTS; } catch(e){}
     try { if(window.ALL_PRODUCTS && Array.isArray(window.ALL_PRODUCTS) && window.ALL_PRODUCTS.length) return window.ALL_PRODUCTS; } catch(e){}
@@ -184,10 +187,8 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
   function findGift(){
     const list = getProducts();
-    if(!list.length) return null;
-    for(let i = 0; i < GIFT_IDS.length; i++){
-      const id = GIFT_IDS[i];
-      const found = list.find(function(p){ return p && String(p.id) === String(id); });
+    for(const id of GIFT_IDS){
+      const found = list.find(p => p && String(p.id) === String(id));
       if(found) return found;
     }
     return null;
@@ -195,8 +196,9 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
   function getCart(){ try { return JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return []; } }
   function setCart(c){ try { localStorage.setItem("vl_cart", JSON.stringify(c)); } catch(e){} }
-  function hasGift(c, id){ return c.some(function(i){ return String(i.id) === String(id) && i.isGift === true; }); }
-  function parseNum(s){ if(!s) return 0; return parseFloat(String(s).replace(/[٠-٩]/g, function(d){ return "٠١٢٣٤٥٦٧٨٩".indexOf(d); }).replace(/[^\d.]/g, "")) || 0; }
+  function isGift(item){ return item && GIFT_IDS.indexOf(String(item.id)) > -1; }
+  function countGifts(){ return getCart().filter(isGift).length; }
+  function parseNum(s){ if(!s) return 0; return parseFloat(String(s).replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[^\d.]/g, "")) || 0; }
 
   function forceRedraw(){
     const btn = document.getElementById("cartBtn");
@@ -204,108 +206,129 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     const drawer = document.getElementById("cartDrawer");
     const wasOpen = drawer && drawer.classList.contains("open");
     btn.click();
-    if(!wasOpen) setTimeout(function(){ const c = document.getElementById("closeCart"); if(c) c.click(); }, 100);
-  }
-
-  function addGift(){
-    if(busy) return;
-    const p = findGift();
-    if(!p){
-      retryCount++;
-      if(retryCount <= 3) console.warn("🎁 Gift: product not found (retry " + retryCount + ")");
-      return;
-    }
-    const cart = getCart();
-    if(hasGift(cart, p.id)) return;
-    busy = true;
-    try {
-      const gift = Object.assign({}, p, {
-        price: 0,
-        old: Number(p.price || p.old || 0),
-        name: "🎁 فواحة سيارة فاخرة — هدية",
-        nameEn: "🎁 Luxury Car Diffuser — Free Gift",
-        isGift: true
-      });
-      cart.push(gift);
-      setCart(cart);
-      console.log("🎁 Gift added:", p.name || p.id, "| original price:", p.price);
-      setTimeout(forceRedraw, 100);
-      setTimeout(function(){ mark(); busy = false; }, 500);
-    } catch(e){
-      console.warn("🎁 addGift failed:", e);
-      busy = false;
-    }
-  }
-
-  function removeGift(){
-    if(busy) return;
-    const p = findGift();
-    if(!p) return;
-    const cart = getCart();
-    const idx = cart.findIndex(function(i){ return String(i.id) === String(p.id) && i.isGift === true; });
-    if(idx === -1) return;
-    busy = true;
-    try {
-      cart.splice(idx, 1);
-      setCart(cart);
-      console.log("🎁 Gift removed");
-      setTimeout(forceRedraw, 100);
-      setTimeout(function(){ mark(); busy = false; }, 500);
-    } catch(e){ busy = false; }
+    if(!wasOpen) setTimeout(() => { const c = document.getElementById("closeCart"); if(c) c.click(); }, 150);
   }
 
   function mark(){
     const cart = getCart();
-    document.querySelectorAll("#cartItems .citem").forEach(function(el){
+    document.querySelectorAll("#cartItems .citem").forEach(el => {
       const idx = Number(el.dataset.cartIdx);
-      if(cart[idx] && cart[idx].isGift === true) el.setAttribute("data-gift", "1");
+      if(cart[idx] && isGift(cart[idx])) el.setAttribute("data-gift", "1");
       else el.removeAttribute("data-gift");
     });
   }
 
-  function check(){
+  /* ═══ المنطق الأساسي ═══ */
+  function ensureSingleGift(){
     if(busy) return;
-    const sub = parseNum(document.getElementById("cartSub") ? document.getElementById("cartSub").textContent : "");
+    const sub = parseNum(document.getElementById("cartSub")?.textContent);
     if(sub === 0) return;
+
     const want = sub >= MIN;
-    const p = findGift();
-    if(!p){
-      if(want && retryCount < 5) setTimeout(check, 2000);
+    const count = countGifts();
+
+    /* الحالة 1: محتاج فواحة، مفيش → ضيف واحدة */
+    if(want && count === 0){
+      const p = findGift();
+      if(!p) return;
+      busy = true;
+      try {
+        const cart = getCart();
+        cart.push(Object.assign({}, p, {
+          price: 0,
+          old: Number(p.price || p.old || 0),
+          img: GIFT_IMG,
+          name: "🎁 فواحة سيارة فاخرة — هدية",
+          nameEn: "🎁 Luxury Car Diffuser — Free Gift",
+          isGift: true,
+          qty: 1
+        }));
+        setCart(cart);
+        console.log("🎁 Gift added (single).");
+        setTimeout(forceRedraw, 100);
+        setTimeout(() => { mark(); busy = false; }, 500);
+      } catch(e){ busy = false; }
       return;
     }
-    const cart = getCart();
-    if(want && !hasGift(cart, p.id)){ addGift(); return; }
-    if(!want && hasGift(cart, p.id)){ removeGift(); return; }
+
+    /* الحالة 2: الإجمالي أقل من الحد وفيه فواحة → امسحها */
+    if(!want && count > 0){
+      busy = true;
+      const cart = getCart();
+      setCart(cart.filter(item => !isGift(item)));
+      console.log("🎁 Gift removed (below threshold).");
+      setTimeout(forceRedraw, 100);
+      setTimeout(() => { mark(); busy = false; }, 500);
+      return;
+    }
+
+    /* الحالة 3: فيه أكتر من فواحة → خلي واحدة بس */
+    if(want && count > 1){
+      busy = true;
+      const cart = getCart();
+      let kept = false;
+      const newCart = cart.filter(item => {
+        if(!isGift(item)) return true;
+        if(kept) return false;
+        kept = true;
+        item.price = 0;
+        item.qty = 1;
+        item.isGift = true;
+        if(!item.img || item.img.length < 15) item.img = GIFT_IMG;
+        return true;
+      });
+      setCart(newCart);
+      console.log("🎁 Duplicates removed. Now 1 gift.");
+      setTimeout(forceRedraw, 100);
+      setTimeout(() => { mark(); busy = false; }, 500);
+      return;
+    }
+
+    /* الحالة 4: كل حاجة تمام، تأكد من الخصائص */
+    if(want && count === 1){
+      const cart = getCart();
+      let changed = false;
+      cart.forEach(item => {
+        if(isGift(item)){
+          if(item.price !== 0){ item.price = 0; changed = true; }
+          if(item.qty !== 1){ item.qty = 1; changed = true; }
+          if(item.img !== GIFT_IMG){ item.img = GIFT_IMG; changed = true; }
+          if(item.isGift !== true){ item.isGift = true; changed = true; }
+        }
+      });
+      if(changed) setCart(cart);
+    }
   }
 
+  /* ═══ التشغيل ═══ */
   function start(){
-    const prods = getProducts();
-    const found = findGift();
     console.log("═══════════════════════════════════════");
-    console.log("🎁 Gift Auto-Add v3 READY");
-    console.log("📦 Products loaded:", prods.length);
-    console.log("🎁 Diffuser found:", found ? (found.name || found.id) + " | " + found.price + " EGP" : "❌ NOT FOUND");
-    if(!found && prods.length > 0){
-      console.log("💡 Available:", prods.slice(0, 15).map(function(p){ return (p.name||"") + " [" + p.id + "]"; }));
-    }
+    console.log("🎁 Gift Single v6 READY — One gift only");
+    console.log("📏 Threshold: " + MIN + " EGP");
+    console.log("🎁 Gift IDs:", GIFT_IDS);
     console.log("═══════════════════════════════════════");
 
     const cs = document.getElementById("cartSub");
-    if(cs) new MutationObserver(check).observe(cs, { childList: true, characterData: true, subtree: true });
+    if(cs) new MutationObserver(() => setTimeout(ensureSingleGift, 150)).observe(cs, { childList: true, characterData: true, subtree: true });
+
     const ci = document.getElementById("cartItems");
-    if(ci) new MutationObserver(function(){ mark(); setTimeout(check, 300); }).observe(ci, { childList: true, subtree: true });
-    window.addEventListener("data-refresh", function(){ retryCount = 0; setTimeout(check, 800); });
+    if(ci) new MutationObserver(() => { mark(); setTimeout(ensureSingleGift, 300); }).observe(ci, { childList: true, subtree: true });
+
+    window.addEventListener("data-refresh", () => setTimeout(ensureSingleGift, 800));
+
     const cb = document.getElementById("cartBtn");
-    if(cb) cb.addEventListener("click", function(){ setTimeout(check, 600); });
-    setTimeout(check, 1500);
-    setTimeout(check, 4000);
-    setTimeout(check, 8000);
+    if(cb) cb.addEventListener("click", () => setTimeout(ensureSingleGift, 500));
+
+    setTimeout(ensureSingleGift, 1500);
+    setTimeout(ensureSingleGift, 3500);
+    setTimeout(ensureSingleGift, 6000);
+    setInterval(ensureSingleGift, 2500);
+    setInterval(mark, 1500);
   }
 
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(start, 1200); });
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(start, 1200));
   else setTimeout(start, 1200);
 })();
-
 
 /* ═══════════════════════════════════════════════════════════
    🖼️ GIFT IMAGE DIRECT v5 — يحط صورة الفواحة مباشرة
