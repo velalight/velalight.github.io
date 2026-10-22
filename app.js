@@ -978,3 +978,191 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", function(){ setTimeout(init, 300); });
   else setTimeout(init, 300);
 })();
+
+
+/* ═══════════════════════════════════════════════════════════
+   📱 MOBILE BOTTOM NAV FIX v1 — يمنع الفوتر من تغطية المحتوى
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlBottomNavFix) return;
+  window.__vlBottomNavFix = true;
+
+  const style = document.createElement("style");
+  style.id = "vlBottomNavFixStyles";
+  style.textContent = `
+    @media (max-width: 768px) {
+      /* مساحة أسفل الصفحة عشان الفوتر ما يغطيش المحتوى */
+      body {
+        padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      /* كروت المنتجات - مساحة إضافية تحت */
+      .pgrid {
+        padding-bottom: 20px !important;
+      }
+
+      /* زر "أضف للسلة" في الكارت */
+      .p-card .p-body {
+        padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      /* زر "استعرض كل المنتجات" */
+      .products-clean .btn-primary-lux,
+      #products .btn-primary-lux {
+        margin-bottom: 20px !important;
+      }
+
+      /* الفوتر الرئيسي */
+      footer {
+        margin-bottom: 0 !important;
+        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      /* لما السلة مفتوحة، الفوتر يختفي (ده كان موجود بالفعل) */
+      body.vl-cart-open #bottomNav,
+      body.vl-cart-open .bottom-nav,
+      body.vl-cart-open .mobile-nav,
+      body.vl-cart-open nav[class*="bottom"] {
+        display: none !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  console.log("📱 Bottom nav fix applied");
+})();
+
+
+/* ═══════════════════════════════════════════════════════════
+   🐛 CART DEBUG PANEL — افتح ?debug=1 للتفعيل
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlCartDebug) return;
+  window.__vlCartDebug = true;
+
+  if(!new URLSearchParams(location.search).get("debug")) return;
+
+  function makePanel(){
+    const p = document.createElement("div");
+    p.id = "vlDebugPanel";
+    p.style.cssText = "position:fixed;top:8px;left:8px;background:rgba(0,0,0,.92);color:#0f0;padding:8px 10px;font-size:10px;z-index:9999999;max-width:200px;font-family:monospace;border-radius:6px;line-height:1.5;box-shadow:0 4px 12px rgba(0,0,0,.3);cursor:pointer;";
+    document.body.appendChild(p);
+    return p;
+  }
+
+  function update(panel){
+    let cart = [];
+    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){}
+    const badge = document.getElementById("cartCount")?.textContent || "?";
+    const sub = document.getElementById("cartSub")?.textContent || "?";
+    const rendered = document.querySelectorAll("#cartItems .citem").length;
+    const dupIds = document.querySelectorAll("#cartItems").length;
+    const drawerOpen = document.getElementById("cartDrawer")?.classList.contains("open") ? "✓" : "✗";
+    const storageBytes = (localStorage.getItem("vl_cart") || "").length;
+
+    panel.innerHTML =
+      "<b>🔍 CART DEBUG</b><br>" +
+      "Cart items: <b>" + cart.length + "</b><br>" +
+      "Badge: " + badge + "<br>" +
+      "Sub total: " + sub + "<br>" +
+      "Rendered: <b>" + rendered + "</b><br>" +
+      "Drawer: " + drawerOpen + "<br>" +
+      "Storage: " + storageBytes + "b<br>" +
+      "Dup #cartItems: " + dupIds + "<br>" +
+      "<small style='color:#888'>Tap to copy</small>";
+  }
+
+  function init(){
+    const panel = makePanel();
+    setInterval(() => update(panel), 800);
+    panel.addEventListener("click", () => {
+      let cart = [];
+      try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){}
+      const info =
+        "=== CART DEBUG SNAPSHOT ===\n" +
+        "Cart: " + JSON.stringify(cart, null, 2) + "\n" +
+        "Raw storage: " + localStorage.getItem("vl_cart") + "\n" +
+        "Badge: " + (document.getElementById("cartCount")?.textContent) + "\n" +
+        "Rendered items: " + document.querySelectorAll("#cartItems .citem").length + "\n" +
+        "Dup #cartItems: " + document.querySelectorAll("#cartItems").length + "\n" +
+        "URL: " + location.href + "\n" +
+        "UA: " + navigator.userAgent + "\n" +
+        "Time: " + new Date().toISOString();
+      navigator.clipboard?.writeText(info).then(() => alert("✅ Copied!"));
+    });
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+
+
+/* ═══════════════════════════════════════════════════════════
+   🛡️ CART BACKUP v1 — نسخة احتياطية للسلة
+   يحفظ في sessionStorage + يستعيد لو localStorage اتمسح
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlCartBackup) return;
+  window.__vlCartBackup = true;
+
+  const KEY = "vl_cart";
+  const BACKUP = "vl_cart_backup";
+  let lastSaved = "";
+
+  function backup(){
+    try {
+      const current = localStorage.getItem(KEY);
+      if(current && current !== "[]" && current !== lastSaved){
+        lastSaved = current;
+        sessionStorage.setItem(BACKUP, current);
+        console.log("🛡️ Cart backed up");
+      }
+    } catch(e){}
+  }
+
+  function restore(){
+    try {
+      const main = localStorage.getItem(KEY);
+      if(main && main !== "[]" && main !== "null"){
+        return; /* main is fine */
+      }
+      const bak = sessionStorage.getItem(BACKUP);
+      if(bak && bak !== "[]" && bak !== "null"){
+        const arr = JSON.parse(bak);
+        if(Array.isArray(arr) && arr.length > 0){
+          localStorage.setItem(KEY, bak);
+          console.log("🛡️ ✅ Cart RESTORED from backup:", arr.length, "items");
+          if(typeof cartBadge === "function") cartBadge();
+          if(typeof te === "function") te();
+        }
+      }
+    } catch(e){}
+  }
+
+  /* backup on storage change */
+  window.addEventListener("storage", function(e){
+    if(e.key === KEY) backup();
+  });
+
+  /* backup before unload / hide */
+  window.addEventListener("beforeunload", backup);
+  window.addEventListener("pagehide", backup);
+  document.addEventListener("visibilitychange", function(){
+    if(document.visibilityState === "hidden") backup();
+  });
+
+  /* periodic backup */
+  setInterval(backup, 3000);
+
+  /* restore on load */
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){ setTimeout(restore, 400); });
+  } else {
+    setTimeout(restore, 400);
+  }
+
+  console.log("🛡️ Cart backup ACTIVE");
+})();
