@@ -86,9 +86,9 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 })();
 
 
+
 /* ═══════════════════════════════════════════════════════════
    🎁 GIFT PROGRESS BAR — إضافة مستقلة
-   لا تعدل أي كود قديم — تعمل بشكل مستقل بالكامل
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
@@ -144,27 +144,24 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
 
 
-
 /* ═══════════════════════════════════════════════════════════
-   🎁 GIFT SINGLE v6 — فواحة واحدة فقط مهما كان الإجمالي
-   ✅ يستبدل v3 (امسحه من الملف)
-   ✅ يشيل التكرار تلقائيًا
-   ✅ يصلح الصورة
-   ✅ يقفل الكمية على 1
+   🎁 GIFT SINGLE v7 — إصلاح نهائي (يستبدل v6)
+   ✅ يسمح بشراء الفواحة يدويًا (95 جنيه) بدون مسحها
+   ✅ الهدية التلقائية (0 جنيه) تظهر فقط لو السلة ≥ 1000
+   ✅ لو العميل اشترى فواحة + عدّى 1000 → عنده 2 (عادي)
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
-  if(window.__vlGiftV6) return;
-  window.__vlGiftV6 = true;
+  if(window.__vlGiftV7) return;
+  window.__vlGiftV7 = true;
 
   const GIFT_IMG = "https://velalight.github.io/Velalight-Car-Diffuser-03.webp";
   const GIFT_IDS = ["pmvj8cij7c34", "pmvj8qxhca70"];
   const MIN = 1000;
   let busy = false;
 
-  /* ═══ CSS ═══ */
   const style = document.createElement("style");
-  style.id = "vlGiftV6Styles";
+  style.id = "vlGiftV7Styles";
   style.textContent = [
     '#cartItems .citem[data-gift="1"]{background:linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)!important;border-color:rgba(39,174,96,.45)!important;box-shadow:0 2px 12px rgba(39,174,96,.15)!important;position:relative;overflow:visible!important}',
     '#cartItems .citem[data-gift="1"]::before{content:"🎁 هدية مجانية";position:absolute;top:-8px;inset-inline-start:10px;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;font-size:.62rem;font-weight:800;padding:3px 10px;border-radius:99px;z-index:10;box-shadow:0 3px 10px rgba(39,174,96,.4);letter-spacing:.3px}',
@@ -176,7 +173,6 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   ].join("");
   document.head.appendChild(style);
 
-  /* ═══ Helpers ═══ */
   function getProducts(){
     try { if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS) && ALL_PRODUCTS.length) return ALL_PRODUCTS; } catch(e){}
     try { if(window.ALL_PRODUCTS && Array.isArray(window.ALL_PRODUCTS) && window.ALL_PRODUCTS.length) return window.ALL_PRODUCTS; } catch(e){}
@@ -196,8 +192,12 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
   function getCart(){ try { return JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return []; } }
   function setCart(c){ try { localStorage.setItem("vl_cart", JSON.stringify(c)); } catch(e){} }
-  function isGift(item){ return item && GIFT_IDS.indexOf(String(item.id)) > -1; }
-  function countGifts(){ return getCart().filter(isGift).length; }
+
+  /* ← الفرق الأساسي: بيفحص isGift flag، مش id */
+  function isGiftItem(item){
+    return !!(item && item.isGift === true);
+  }
+
   function parseNum(s){ if(!s) return 0; return parseFloat(String(s).replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[^\d.]/g, "")) || 0; }
 
   function forceRedraw(){
@@ -213,27 +213,26 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     const cart = getCart();
     document.querySelectorAll("#cartItems .citem").forEach(el => {
       const idx = Number(el.dataset.cartIdx);
-      if(cart[idx] && isGift(cart[idx])) el.setAttribute("data-gift", "1");
+      if(cart[idx] && isGiftItem(cart[idx])) el.setAttribute("data-gift", "1");
       else el.removeAttribute("data-gift");
     });
   }
 
-  /* ═══ المنطق الأساسي ═══ */
   function ensureSingleGift(){
     if(busy) return;
     const sub = parseNum(document.getElementById("cartSub")?.textContent);
     if(sub === 0) return;
 
     const want = sub >= MIN;
-    const count = countGifts();
+    const cart = getCart();
+    const giftCount = cart.filter(isGiftItem).length;
 
-    /* الحالة 1: محتاج فواحة، مفيش → ضيف واحدة */
-    if(want && count === 0){
+    /* 1: محتاج هدية، مفيش هدية → ضيف واحدة */
+    if(want && giftCount === 0){
       const p = findGift();
       if(!p) return;
       busy = true;
       try {
-        const cart = getCart();
         cart.push(Object.assign({}, p, {
           price: 0,
           old: Number(p.price || p.old || 0),
@@ -244,66 +243,61 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
           qty: 1
         }));
         setCart(cart);
-        console.log("🎁 Gift added (single).");
+        console.log("🎁 Gift added (single v7).");
         setTimeout(forceRedraw, 100);
         setTimeout(() => { mark(); busy = false; }, 500);
       } catch(e){ busy = false; }
       return;
     }
 
-    /* الحالة 2: الإجمالي أقل من الحد وفيه فواحة → امسحها */
-    if(!want && count > 0){
+    /* 2: مش محتاج هدية → امسح الهدية فقط (مش الفواحة العادية) */
+    if(!want && giftCount > 0){
       busy = true;
-      const cart = getCart();
-      setCart(cart.filter(item => !isGift(item)));
-      console.log("🎁 Gift removed (below threshold).");
+      const newCart = cart.filter(item => !isGiftItem(item));
+      setCart(newCart);
+      console.log("🎁 Gift removed. Normal items kept:", newCart.length);
       setTimeout(forceRedraw, 100);
       setTimeout(() => { mark(); busy = false; }, 500);
       return;
     }
 
-    /* الحالة 3: فيه أكتر من فواحة → خلي واحدة بس */
-    if(want && count > 1){
+    /* 3: في أكتر من هدية → خلي واحدة */
+    if(want && giftCount > 1){
       busy = true;
-      const cart = getCart();
       let kept = false;
       const newCart = cart.filter(item => {
-        if(!isGift(item)) return true;
+        if(!isGiftItem(item)) return true;
         if(kept) return false;
         kept = true;
         item.price = 0;
         item.qty = 1;
-        item.isGift = true;
         if(!item.img || item.img.length < 15) item.img = GIFT_IMG;
         return true;
       });
       setCart(newCart);
-      console.log("🎁 Duplicates removed. Now 1 gift.");
+      console.log("🎁 Duplicate gifts removed.");
       setTimeout(forceRedraw, 100);
       setTimeout(() => { mark(); busy = false; }, 500);
       return;
     }
 
-    /* الحالة 4: كل حاجة تمام، تأكد من الخصائص */
-    if(want && count === 1){
-      const cart = getCart();
+    /* 4: هدية واحدة → تأكد من خصائصها */
+    if(want && giftCount === 1){
       let changed = false;
       cart.forEach(item => {
-        if(isGift(item)){
+        if(isGiftItem(item)){
           if(item.price !== 0){ item.price = 0; changed = true; }
           if(item.qty !== 1){ item.qty = 1; changed = true; }
           if(item.img !== GIFT_IMG){ item.img = GIFT_IMG; changed = true; }
-          if(item.isGift !== true){ item.isGift = true; changed = true; }
         }
       });
       if(changed) setCart(cart);
     }
   }
 
-  /* ═══ التشغيل ═══ */
   function start(){
     console.log("═══════════════════════════════════════");
-    console.log("🎁 Gift Single v6 READY — One gift only");
+    console.log("🎁 Gift Single v7 READY (respects manual buys)");
     console.log("📏 Threshold: " + MIN + " EGP");
     console.log("🎁 Gift IDs:", GIFT_IDS);
     console.log("═══════════════════════════════════════");
@@ -330,6 +324,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   else setTimeout(start, 1200);
 })();
 
+
 /* ═══════════════════════════════════════════════════════════
    🖼️ GIFT IMAGE DIRECT v5 — يحط صورة الفواحة مباشرة
    الصورة: Velalight-Car-Diffuser-03.webp
@@ -343,7 +338,6 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   const GIFT_IDS = ["pmvj8cij7c34", "pmvj8qxhca70"];
   let busy = false;
 
-  /* 1) نصلّح الصورة في ALL_PRODUCTS (لو محتاجة) */
   function patchProducts(){
     try {
       if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)){
@@ -376,7 +370,6 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     } catch(e){}
   }
 
-  /* 2) نصلّح الصورة في السلة */
   function fixCart(){
     if(busy) return;
     let cart;
@@ -407,31 +400,25 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     }
   }
 
-  /* 3) تشغيلات متعددة لضمان الإصلاح */
   setTimeout(patchProducts, 800);
   setTimeout(fixCart, 1200);
   setTimeout(fixCart, 2500);
   setTimeout(fixCart, 5000);
 
-  /* 4) كل ما تفتح السلة */
   const cb = document.getElementById("cartBtn");
   if(cb) cb.addEventListener("click", function(){ setTimeout(fixCart, 350); });
 
-  /* 5) كل ما المنتجات تتحدث */
   window.addEventListener("data-refresh", function(){
     setTimeout(patchProducts, 400);
     setTimeout(fixCart, 900);
   });
 
-  /* 6) لو اتفتح تاب تاني وعدّل السلة */
   window.addEventListener("storage", function(e){
     if(e.key === "vl_cart") setTimeout(fixCart, 200);
   });
 
-  /* 7) مراقبة دورية */
   setInterval(fixCart, 2000);
 
-  /* 8) تشخيص */
   setTimeout(function(){
     const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
     const gift = cart.find(function(i){ return i && i.isGift === true; });
@@ -446,14 +433,12 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
 /* ═══════════════════════════════════════════════════════════
    📊 GIFT TRACKING v2 — يعمل على كل الصفحات اللي مفيهاش الشريط
-   (index.html عنده بلوكه الخاص — ده بس للصفحات التانية)
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
   if(window.__vlGiftTrackingV2) return;
   window.__vlGiftTrackingV2 = true;
 
-  /* مهم: لو إحنا في index.html، نوقف — لأن البلوك بتاعه شغال */
   if(document.querySelector(".gift-promo-bar")){
     console.log("📊 Gift Tracking: skipped (index.html has its own)");
     return;
@@ -528,13 +513,8 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 })();
 
 
-
 /* ═══════════════════════════════════════════════════════════
    ❌ GIFT BAR CLOSE v1 — زر إغلاق الشريط
-   - زر × أنيق على طرف الشريط
-   - عند الإغلاق: يخفي بحركة ناعمة
-   - يحفظ الاختيار في localStorage لمدة 7 أيام
-   - يمنع تتبع view للزوار اللي أغلقوه
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
@@ -708,7 +688,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
 /* ═══════════════════════════════════════════════════════════
    💬 GIFT IN WHATSAPP v2 — إضافة الهدية في رسالة الواتساب
-   (مترجمة عربي/إنجليزي - يستبدل v1)
+   (مترجمة عربي/إنجليزي)
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
@@ -721,7 +701,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     try {
       const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
       if(!Array.isArray(cart)) return null;
-      return cart.find(i => i && GIFT_IDS.indexOf(String(i.id)) > -1) || null;
+      return cart.find(i => i && i.isGift === true) || null;
     } catch(e){ return null; }
   }
 
@@ -741,13 +721,11 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
       const text = urlObj.searchParams.get("text") || "";
       if(!text) return url;
 
-      /* لازم تكون رسالة طلب */
       const isOrderMsg = text.indexOf("رقم الطلب") > -1
                       || text.indexOf("Order ID") > -1
                       || text.indexOf("orderId") > -1;
       if(!isOrderMsg) return url;
 
-      /* متضاعفش */
       if(text.indexOf("🎁 هدية مجانية: فواحة") > -1) return url;
       if(text.indexOf("🎁 FREE GIFT: Luxury Car Diffuser") > -1) return url;
 
@@ -767,7 +745,6 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
           "✅ تم تطبيق عرض الهدية تلقائيًا\n" +
           "━━━━━━━━━━━━━━━━━━━━\n";
 
-      /* نحاول نحطه قبل آخر سطر (⏳ في انتظار) — أظرف مكان */
       let newText = null;
       const finalMarkers = ["⏳ في انتظار", "⏳ Awaiting", "Awaiting"];
       for(const m of finalMarkers){
@@ -777,7 +754,6 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
         }
       }
 
-      /* fallback: قبل سطر THANKS10 */
       if(!newText){
         const thanksMarkers = ["🎁 هدية: كود THANKS10", "THANKS10"];
         for(const m of thanksMarkers){
@@ -788,7 +764,6 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
         }
       }
 
-      /* fallback أخير: في آخر الرسالة */
       if(!newText) newText = text + "\n\n" + giftLine;
 
       urlObj.searchParams.set("text", newText);
@@ -843,7 +818,6 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     return originalOpen.call(window, url, target, features);
   };
 
-  /* Fallback: لو الواتساب اتفتح من modal، نعدل الـ link */
   if(window.MutationObserver){
     new MutationObserver(function(muts){
       if(!isGiftInCart()) return;
@@ -870,14 +844,12 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
   console.log("═══════════════════════════════════════");
   console.log("🎁 WhatsApp Gift Injection v2 READY (AR/EN)");
-  console.log("   Gift line will appear in WhatsApp message");
   console.log("═══════════════════════════════════════");
 })();
 
 
 /* ═══════════════════════════════════════════════════════════
    🌐 GIFT I18N v1 — ترجمة شريط الهدية + شريط التقدم
-   يعمل تلقائي عند تغيير اللغة (زرار EN)
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
@@ -981,56 +953,135 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
 
 /* ═══════════════════════════════════════════════════════════
-   📱 MOBILE BOTTOM NAV FIX v1 — يمنع الفوتر من تغطية المحتوى
+   📱 MOBILE BOTTOM NAV FIX v2 — إصلاح شامل
+   - يمنع البوتوم بار من تغطية زر "أضف للسلة" الذهبي
+   - padding-bottom كافي على body + كل الأقسام
+   - z-index مرتفع للأزرار
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
-  if(window.__vlBottomNavFix) return;
-  window.__vlBottomNavFix = true;
+  if(window.__vlBottomNavFixV2) return;
+  window.__vlBottomNavFixV2 = true;
 
   const style = document.createElement("style");
-  style.id = "vlBottomNavFixStyles";
+  style.id = "vlBottomNavFixV2Styles";
   style.textContent = `
     @media (max-width: 768px) {
-      /* مساحة أسفل الصفحة عشان الفوتر ما يغطيش المحتوى */
+      /* 1) مساحة كبيرة تحت الـ body */
       body {
-        padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+        padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)) !important;
+        position: relative !important;
       }
 
-      /* كروت المنتجات - مساحة إضافية تحت */
+      /* 2) الأقسام الرئيسية - مساحة إضافية */
+      #products, .products-clean, .sec, main, .vl-craftsmanship,
+      #about-us, #reviews, #scents, #brand-promise,
+      .vl-editorial, #faq-section, footer {
+        margin-bottom: 0 !important;
+        padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      /* 3) شبكة المنتجات */
       .pgrid {
-        padding-bottom: 20px !important;
+        padding-bottom: 120px !important;
+        margin-bottom: 0 !important;
       }
 
-      /* زر "أضف للسلة" في الكارت */
-      .p-card .p-body {
-        padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+      /* 4) كل كارت منتج - مساحة تحت الزر */
+      .p-card {
+        margin-bottom: 16px !important;
+        position: relative !important;
       }
 
-      /* زر "استعرض كل المنتجات" */
+      /* 5) زر "أضف للسلة" الذهبي - يبقى فوق كل حاجة */
+      .p-card .p-add {
+        position: relative !important;
+        z-index: 5 !important;
+      }
+
+      /* 6) الزر الذهبي الكبير "استعرض كل المنتجات" */
+      #products .btn-primary-lux,
       .products-clean .btn-primary-lux,
-      #products .btn-primary-lux {
+      .btn-primary-lux {
         margin-bottom: 20px !important;
+        position: relative !important;
+        z-index: 5 !important;
       }
 
-      /* الفوتر الرئيسي */
+      /* 7) الفوتر - مساحة سفلية كافية */
       footer {
         margin-bottom: 0 !important;
-        padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+        padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)) !important;
       }
 
-      /* لما السلة مفتوحة، الفوتر يختفي (ده كان موجود بالفعل) */
+      /* 8) لما السلة مفتوحة - الفوتر يختفي تمامًا */
       body.vl-cart-open #bottomNav,
       body.vl-cart-open .bottom-nav,
       body.vl-cart-open .mobile-nav,
-      body.vl-cart-open nav[class*="bottom"] {
+      body.vl-cart-open nav[class*="bottom"],
+      body.vl-cart-open [class*="bottomNav"] {
         display: none !important;
+      }
+
+      /* 9) زر العودة للأعلى - فوق البوتوم بار */
+      #backToTop {
+        bottom: calc(100px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      /* 10) زر واتساب العائم - فوق البوتوم بار */
+      .whatsapp-float {
+        bottom: calc(100px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      /* 11) زر الشات - فوق البوتوم بار */
+      #chatFab {
+        bottom: calc(100px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      /* 12) أي زر عائم تاني */
+      [class*="float"], [class*="fixed-bottom"] {
+        bottom: calc(100px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+      .pgrid {
+        padding-bottom: 130px !important;
       }
     }
   `;
   document.head.appendChild(style);
 
-  console.log("📱 Bottom nav fix applied");
+  /* إعادة تفعيل الحسابات لما عناصر جديدة تظهر */
+  function boostBottomPadding(){
+    /* نضيف مساحة إضافية لو فيه منتجات جديدة */
+    const grid = document.querySelector(".pgrid");
+    if(grid){
+      const cards = grid.querySelectorAll(".p-card");
+      if(cards.length > 0){
+        const last = cards[cards.length - 1];
+        last.style.marginBottom = "20px";
+      }
+    }
+  }
+
+  window.addEventListener("data-refresh", boostBottomPadding);
+  if(window.MutationObserver){
+    new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        m.addedNodes.forEach(function(node){
+          if(node.nodeType === 1 && (node.matches?.(".p-card") || node.querySelector?.(".p-card"))){
+            boostBottomPadding();
+          }
+        });
+      });
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+
+  console.log("📱 Bottom Nav Fix v2 — Applied (aggressive)");
 })();
 
 
@@ -1101,7 +1152,6 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
 /* ═══════════════════════════════════════════════════════════
    🛡️ CART BACKUP v1 — نسخة احتياطية للسلة
-   يحفظ في sessionStorage + يستعيد لو localStorage اتمسح
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
@@ -1118,7 +1168,6 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
       if(current && current !== "[]" && current !== lastSaved){
         lastSaved = current;
         sessionStorage.setItem(BACKUP, current);
-        console.log("🛡️ Cart backed up");
       }
     } catch(e){}
   }
@@ -1127,7 +1176,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     try {
       const main = localStorage.getItem(KEY);
       if(main && main !== "[]" && main !== "null"){
-        return; /* main is fine */
+        return;
       }
       const bak = sessionStorage.getItem(BACKUP);
       if(bak && bak !== "[]" && bak !== "null"){
@@ -1142,22 +1191,18 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     } catch(e){}
   }
 
-  /* backup on storage change */
   window.addEventListener("storage", function(e){
     if(e.key === KEY) backup();
   });
 
-  /* backup before unload / hide */
   window.addEventListener("beforeunload", backup);
   window.addEventListener("pagehide", backup);
   document.addEventListener("visibilitychange", function(){
     if(document.visibilityState === "hidden") backup();
   });
 
-  /* periodic backup */
   setInterval(backup, 3000);
 
-  /* restore on load */
   if(document.readyState === "loading"){
     document.addEventListener("DOMContentLoaded", function(){ setTimeout(restore, 400); });
   } else {
@@ -1166,3 +1211,4 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
   console.log("🛡️ Cart backup ACTIVE");
 })();
+
