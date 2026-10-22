@@ -528,6 +528,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 })();
 
 
+
 /* ═══════════════════════════════════════════════════════════
    ❌ GIFT BAR CLOSE v1 — زر إغلاق الشريط
    - زر × أنيق على طرف الشريط
@@ -544,7 +545,6 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   const DAYS = 7;
   const MS = DAYS * 24 * 60 * 60 * 1000;
 
-  /* ⚡ خطوة مبكرة: منع تتبع view لو الشريط متقفل من قبل */
   try {
     const ts = Number(localStorage.getItem(KEY) || 0);
     if(ts && Date.now() - ts < MS){
@@ -552,7 +552,6 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     }
   } catch(e){}
 
-  /* 🧪 للاختبار: أضف ?resetGift=1 للـ URL لإظهار الشريط من جديد */
   try {
     const params = new URLSearchParams(window.location.search);
     if(params.get("resetGift") === "1"){
@@ -708,16 +707,13 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
 
 /* ═══════════════════════════════════════════════════════════
-   💬 GIFT IN WHATSAPP v1 — إضافة الهدية في رسالة الواتساب
-   - يحقن سطر الهدية في رسالة الواتساب قبل فتحها
-   - يتعامل مع طريقة الفتح بـ popup
-   - يتعامل مع fallback modal
-   - يتسجل event: gift_in_whatsapp
+   💬 GIFT IN WHATSAPP v2 — إضافة الهدية في رسالة الواتساب
+   (مترجمة عربي/إنجليزي - يستبدل v1)
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
-  if(window.__vlGiftWhatsApp) return;
-  window.__vlGiftWhatsApp = true;
+  if(window.__vlGiftWhatsAppV2) return;
+  window.__vlGiftWhatsAppV2 = true;
 
   const GIFT_IDS = ["pmvj8cij7c34", "pmvj8qxhca70"];
 
@@ -731,57 +727,91 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
   function isGiftInCart(){ return !!getGiftItem(); }
 
+  function isEnglish(){
+    try {
+      if(typeof LANG !== "undefined" && LANG === "en") return true;
+      if(document.documentElement.lang === "en") return true;
+    } catch(e){}
+    return false;
+  }
+
   function modifyWAUrl(url){
     try {
       const urlObj = new URL(url);
       const text = urlObj.searchParams.get("text") || "";
       if(!text) return url;
 
-      /* مش order message → متلمسش */
-      if(text.indexOf("رقم الطلب") === -1 && text.indexOf("orderId") === -1) return url;
+      /* لازم تكون رسالة طلب */
+      const isOrderMsg = text.indexOf("رقم الطلب") > -1
+                      || text.indexOf("Order ID") > -1
+                      || text.indexOf("orderId") > -1;
+      if(!isOrderMsg) return url;
 
       /* متضاعفش */
       if(text.indexOf("🎁 هدية مجانية: فواحة") > -1) return url;
+      if(text.indexOf("🎁 FREE GIFT: Luxury Car Diffuser") > -1) return url;
 
       const gift = getGiftItem();
       const giftValue = gift ? Number(gift.old || 0) : 0;
+      const en = isEnglish();
 
-      const giftLine =
-        "\n━━━━━━━━━━━━━━━━━━━━\n" +
-        "🎁 هدية مجانية: فواحة سيارة فاخرة\n" +
-        (giftValue > 0 ? "💰 القيمة: " + giftValue + " جنيه → 0 جنيه\n" : "") +
-        "✅ تم تطبيق عرض الهدية تلقائيًا\n" +
-        "━━━━━━━━━━━━━━━━━━━━\n";
+      const giftLine = en
+        ? "\n━━━━━━━━━━━━━━━━━━━━\n" +
+          "🎁 FREE GIFT: Luxury Car Diffuser\n" +
+          (giftValue > 0 ? "💰 Value: " + giftValue + " EGP → 0 EGP\n" : "") +
+          "✅ Gift offer applied automatically\n" +
+          "━━━━━━━━━━━━━━━━━━━━\n"
+        : "\n━━━━━━━━━━━━━━━━━━━━\n" +
+          "🎁 هدية مجانية: فواحة سيارة فاخرة\n" +
+          (giftValue > 0 ? "💰 القيمة: " + giftValue + " جنيه → 0 جنيه\n" : "") +
+          "✅ تم تطبيق عرض الهدية تلقائيًا\n" +
+          "━━━━━━━━━━━━━━━━━━━━\n";
 
-      let newText;
-      if(text.indexOf("🎁 هدية: كود THANKS10") > -1){
-        newText = text.replace("🎁 هدية: كود THANKS10", giftLine.trim() + "\n\n🎁 هدية: كود THANKS10");
-      } else if(text.indexOf("⏳ في انتظار") > -1){
-        newText = text.replace("⏳ في انتظار", giftLine.trim() + "\n\n⏳ في انتظار");
-      } else {
-        newText = text + "\n\n" + giftLine;
+      /* نحاول نحطه قبل آخر سطر (⏳ في انتظار) — أظرف مكان */
+      let newText = null;
+      const finalMarkers = ["⏳ في انتظار", "⏳ Awaiting", "Awaiting"];
+      for(const m of finalMarkers){
+        if(text.indexOf(m) > -1){
+          newText = text.replace(m, giftLine.trim() + "\n\n" + m);
+          break;
+        }
       }
+
+      /* fallback: قبل سطر THANKS10 */
+      if(!newText){
+        const thanksMarkers = ["🎁 هدية: كود THANKS10", "THANKS10"];
+        for(const m of thanksMarkers){
+          if(text.indexOf(m) > -1){
+            newText = text.replace(m, giftLine.trim() + "\n\n" + m);
+            break;
+          }
+        }
+      }
+
+      /* fallback أخير: في آخر الرسالة */
+      if(!newText) newText = text + "\n\n" + giftLine;
 
       urlObj.searchParams.set("text", newText);
 
-      /* تتبع */
       try {
         if(typeof gtag === "function"){
           gtag("event", "gift_in_whatsapp", {
             event_category: "promotion",
             event_label: "free_car_diffuser",
             value: giftValue,
-            currency: "EGP"
+            currency: "EGP",
+            lang: en ? "en" : "ar"
           });
         }
         if(typeof fbq === "function"){
           fbq("trackCustom", "GiftInWhatsApp", {
             promo: "free_car_diffuser",
             gift_value: giftValue,
-            currency: "EGP"
+            currency: "EGP",
+            lang: en ? "en" : "ar"
           });
         }
-        console.log("📊 Tracked: gift_in_whatsapp");
+        console.log("📊 Tracked: gift_in_whatsapp | lang:", en ? "en" : "ar");
       } catch(e){}
 
       return urlObj.toString();
@@ -790,16 +820,13 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     }
   }
 
-  /* ─── Override window.open ─── */
   const originalOpen = window.open;
   window.open = function(url, target, features){
-    /* حالة 1: popup فاضي + فواحة في السلة → نرفض فتحه عشان نجبر الـ fallback */
     if((!url || url === "" || url === "about:blank") && isGiftInCart()){
       console.log("🎁 Skipping empty popup → will modify WhatsApp URL");
       return null;
     }
 
-    /* حالة 2: WhatsApp URL → تعديل */
     if(typeof url === "string" && (
       url.indexOf("wa.me") > -1 ||
       url.indexOf("whatsapp.com") > -1
@@ -807,7 +834,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
       if(isGiftInCart()){
         const modified = modifyWAUrl(url);
         if(modified !== url){
-          console.log("🎁 WhatsApp message modified with gift info");
+          console.log("🎁 WhatsApp message modified (v2 multilingual)");
           url = modified;
         }
       }
@@ -816,7 +843,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     return originalOpen.call(window, url, target, features);
   };
 
-  /* ─── Fallback: لو الواتساب اتفتح من modal، نعدل الـ link ─── */
+  /* Fallback: لو الواتساب اتفتح من modal، نعدل الـ link */
   if(window.MutationObserver){
     new MutationObserver(function(muts){
       if(!isGiftInCart()) return;
@@ -842,7 +869,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   }
 
   console.log("═══════════════════════════════════════");
-  console.log("🎁 WhatsApp Gift Injection READY");
+  console.log("🎁 WhatsApp Gift Injection v2 READY (AR/EN)");
   console.log("   Gift line will appear in WhatsApp message");
   console.log("═══════════════════════════════════════");
 })();
