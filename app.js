@@ -705,3 +705,144 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     setTimeout(init, 600);
   }
 })();
+
+
+/* ═══════════════════════════════════════════════════════════
+   💬 GIFT IN WHATSAPP v1 — إضافة الهدية في رسالة الواتساب
+   - يحقن سطر الهدية في رسالة الواتساب قبل فتحها
+   - يتعامل مع طريقة الفتح بـ popup
+   - يتعامل مع fallback modal
+   - يتسجل event: gift_in_whatsapp
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlGiftWhatsApp) return;
+  window.__vlGiftWhatsApp = true;
+
+  const GIFT_IDS = ["pmvj8cij7c34", "pmvj8qxhca70"];
+
+  function getGiftItem(){
+    try {
+      const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
+      if(!Array.isArray(cart)) return null;
+      return cart.find(i => i && GIFT_IDS.indexOf(String(i.id)) > -1) || null;
+    } catch(e){ return null; }
+  }
+
+  function isGiftInCart(){ return !!getGiftItem(); }
+
+  function modifyWAUrl(url){
+    try {
+      const urlObj = new URL(url);
+      const text = urlObj.searchParams.get("text") || "";
+      if(!text) return url;
+
+      /* مش order message → متلمسش */
+      if(text.indexOf("رقم الطلب") === -1 && text.indexOf("orderId") === -1) return url;
+
+      /* متضاعفش */
+      if(text.indexOf("🎁 هدية مجانية: فواحة") > -1) return url;
+
+      const gift = getGiftItem();
+      const giftValue = gift ? Number(gift.old || 0) : 0;
+
+      const giftLine =
+        "\n━━━━━━━━━━━━━━━━━━━━\n" +
+        "🎁 هدية مجانية: فواحة سيارة فاخرة\n" +
+        (giftValue > 0 ? "💰 القيمة: " + giftValue + " جنيه → 0 جنيه\n" : "") +
+        "✅ تم تطبيق عرض الهدية تلقائيًا\n" +
+        "━━━━━━━━━━━━━━━━━━━━\n";
+
+      let newText;
+      if(text.indexOf("🎁 هدية: كود THANKS10") > -1){
+        newText = text.replace("🎁 هدية: كود THANKS10", giftLine.trim() + "\n\n🎁 هدية: كود THANKS10");
+      } else if(text.indexOf("⏳ في انتظار") > -1){
+        newText = text.replace("⏳ في انتظار", giftLine.trim() + "\n\n⏳ في انتظار");
+      } else {
+        newText = text + "\n\n" + giftLine;
+      }
+
+      urlObj.searchParams.set("text", newText);
+
+      /* تتبع */
+      try {
+        if(typeof gtag === "function"){
+          gtag("event", "gift_in_whatsapp", {
+            event_category: "promotion",
+            event_label: "free_car_diffuser",
+            value: giftValue,
+            currency: "EGP"
+          });
+        }
+        if(typeof fbq === "function"){
+          fbq("trackCustom", "GiftInWhatsApp", {
+            promo: "free_car_diffuser",
+            gift_value: giftValue,
+            currency: "EGP"
+          });
+        }
+        console.log("📊 Tracked: gift_in_whatsapp");
+      } catch(e){}
+
+      return urlObj.toString();
+    } catch(e){
+      return url;
+    }
+  }
+
+  /* ─── Override window.open ─── */
+  const originalOpen = window.open;
+  window.open = function(url, target, features){
+    /* حالة 1: popup فاضي + فواحة في السلة → نرفض فتحه عشان نجبر الـ fallback */
+    if((!url || url === "" || url === "about:blank") && isGiftInCart()){
+      console.log("🎁 Skipping empty popup → will modify WhatsApp URL");
+      return null;
+    }
+
+    /* حالة 2: WhatsApp URL → تعديل */
+    if(typeof url === "string" && (
+      url.indexOf("wa.me") > -1 ||
+      url.indexOf("whatsapp.com") > -1
+    )){
+      if(isGiftInCart()){
+        const modified = modifyWAUrl(url);
+        if(modified !== url){
+          console.log("🎁 WhatsApp message modified with gift info");
+          url = modified;
+        }
+      }
+    }
+
+    return originalOpen.call(window, url, target, features);
+  };
+
+  /* ─── Fallback: لو الواتساب اتفتح من modal، نعدل الـ link ─── */
+  if(window.MutationObserver){
+    new MutationObserver(function(muts){
+      if(!isGiftInCart()) return;
+      muts.forEach(function(m){
+        m.addedNodes.forEach(function(node){
+          if(!node || node.nodeType !== 1) return;
+          const anchors = node.matches && node.matches('a[href*="wa.me"], a[href*="whatsapp.com"]')
+            ? [node]
+            : Array.from((node.querySelectorAll && node.querySelectorAll('a[href*="wa.me"], a[href*="whatsapp.com"]')) || []);
+          anchors.forEach(function(a){
+            if(a.dataset.vlGiftModified) return;
+            const orig = a.href;
+            const mod = modifyWAUrl(orig);
+            if(mod !== orig){
+              a.dataset.vlGiftModified = "1";
+              a.href = mod;
+              console.log("🎁 Modal anchor modified");
+            }
+          });
+        });
+      });
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+
+  console.log("═══════════════════════════════════════");
+  console.log("🎁 WhatsApp Gift Injection READY");
+  console.log("   Gift line will appear in WhatsApp message");
+  console.log("═══════════════════════════════════════");
+})();
