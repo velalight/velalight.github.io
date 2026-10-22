@@ -1407,5 +1407,151 @@ document.addEventListener('DOMContentLoaded', function(){
 <script src="pwa.js" defer></script>
 <script src="search.js" defer></script>
   <script src="exit-intent.js" defer></script>
+  
+<!-- ═══════════════════════════════════════════════════════════
+     📊 GIFT TRACKING v1 — GA4 + Meta Pixel
+     تتبع عرض وضغط واستحقاق الهدية
+     ═══════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  "use strict";
+  if(window.__vlGiftTracking) return;
+  window.__vlGiftTracking = true;
+
+  const VIEW_KEY = "vl_gift_view_sent";
+  const UNLOCK_KEY = "vl_gift_unlock_sent";
+  let lastSub = 0;
+
+  /* ─── 1) عرض الشريط (مرة واحدة في الجلسة) ─── */
+  function trackView(){
+    if(sessionStorage.getItem(VIEW_KEY)) return;
+    const banner = document.querySelector(".gift-promo-bar");
+    if(!banner) return;
+    sessionStorage.setItem(VIEW_KEY, "1");
+    try {
+      if(typeof gtag === "function"){
+        gtag("event", "gift_banner_view", {
+          event_category: "promotion",
+          event_label: "free_car_diffuser_1000egp",
+          value: 1000,
+          currency: "EGP"
+        });
+      }
+      if(typeof fbq === "function"){
+        fbq("trackCustom", "GiftBannerView", {
+          promo: "free_car_diffuser",
+          threshold: 1000,
+          currency: "EGP"
+        });
+      }
+      console.log("📊 Tracked: gift_banner_view");
+    } catch(e){}
+  }
+
+  /* ─── 2) الضغط على "تسوّق الآن" ─── */
+  function bindCTA(){
+    const cta = document.querySelector(".gift-promo-cta");
+    if(!cta || cta.dataset.vlTracked === "1") return;
+    cta.dataset.vlTracked = "1";
+    cta.addEventListener("click", function(){
+      try {
+        if(typeof gtag === "function"){
+          gtag("event", "gift_banner_click", {
+            event_category: "promotion",
+            event_label: "free_car_diffuser_1000egp",
+            value: 1000,
+            currency: "EGP"
+          });
+        }
+        if(typeof fbq === "function"){
+          fbq("trackCustom", "GiftBannerClick", {
+            promo: "free_car_diffuser",
+            threshold: 1000,
+            currency: "EGP"
+          });
+        }
+        console.log("📊 Tracked: gift_banner_click");
+      } catch(e){}
+    }, { passive: true });
+  }
+
+  /* ─── 3) استحقاق الهدية (لما السلة تعدّي 1000) ─── */
+  function checkUnlock(){
+    try {
+      const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
+      if(!Array.isArray(cart) || !cart.length) return;
+      const gift = cart.find(i => i && i.isGift === true);
+      if(!gift) return;
+      if(sessionStorage.getItem(UNLOCK_KEY)) return;
+      sessionStorage.setItem(UNLOCK_KEY, "1");
+
+      const subtotal = cart.reduce((s, i) => s + (Number(i.price || 0) * Number(i.qty || 1)), 0);
+
+      if(typeof gtag === "function"){
+        gtag("event", "gift_unlocked", {
+          event_category: "promotion",
+          event_label: "free_car_diffuser_unlocked",
+          value: subtotal,
+          currency: "EGP",
+          gift_name: gift.name || "car_diffuser",
+          gift_original_price: Number(gift.old || 0)
+        });
+      }
+      if(typeof fbq === "function"){
+        fbq("trackCustom", "GiftUnlocked", {
+          promo: "free_car_diffuser",
+          subtotal: subtotal,
+          currency: "EGP",
+          gift_value: Number(gift.old || 0)
+        });
+      }
+      console.log("📊 Tracked: gift_unlocked | subtotal:", subtotal);
+    } catch(e){}
+  }
+
+  /* ─── 4) مراقبة تغيّر السلة ─── */
+  function watchCart(){
+    const cs = document.getElementById("cartSub");
+    if(cs){
+      new MutationObserver(function(){
+        const v = parseFloat(String(cs.textContent || "").replace(/[^\d.]/g, "")) || 0;
+        if(v !== lastSub){
+          lastSub = v;
+          setTimeout(checkUnlock, 800);
+        }
+      }).observe(cs, { childList: true, characterData: true, subtree: true });
+    }
+
+    const ci = document.getElementById("cartItems");
+    if(ci){
+      new MutationObserver(function(){ setTimeout(checkUnlock, 800); }).observe(ci, { childList: true, subtree: true });
+    }
+
+    const cb = document.getElementById("cartBtn");
+    if(cb) cb.addEventListener("click", function(){ setTimeout(checkUnlock, 1200); });
+
+    setInterval(checkUnlock, 3000);
+  }
+
+  /* ─── 5) تشغيل ─── */
+  function init(){
+    trackView();
+    bindCTA();
+    watchCart();
+    setTimeout(bindCTA, 2000);
+    setTimeout(checkUnlock, 2000);
+    console.log("═══════════════════════════════════════");
+    console.log("📊 Gift Tracking v1 READY");
+    console.log("   Events: gift_banner_view, gift_banner_click, gift_unlocked");
+    console.log("═══════════════════════════════════════");
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){ setTimeout(init, 1200); });
+  } else {
+    setTimeout(init, 1200);
+  }
+})();
+</script>
 </body>
 </html>
