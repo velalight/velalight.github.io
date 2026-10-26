@@ -362,7 +362,10 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
     <!-- PRODUCTS -->
     <div id="tab-products" class="hidden">
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
-        <button class="btn sm" id="addProductBtn" type="button">➕ إضافة منتج جديد</button>
+       <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+  <button class="btn sm" id="addProductBtn" type="button">➕ إضافة منتج جديد</button>
+  <button class="btn sm ghost" id="generateSitemapBtn" type="button">📥 توليد sitemap.xml</button>
+</div>
         <div style="display:flex;gap:.5rem;flex:1;min-width:260px;max-width:760px;flex-wrap:wrap">
           <input id="productSearch" type="search" placeholder="🔎 ابحث باسم المنتج أو ID..." style="flex:1;min-width:220px;margin:0">
           <select id="productCatFilter" style="min-width:170px;margin:0">
@@ -538,6 +541,16 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 <script>
 (function(){
 "use strict";
+
+  function slugify(str) {
+  return String(str || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
 
 let loggedIn = false;
 let ALL_USERS = [];
@@ -771,6 +784,19 @@ function createProductRow(productId, scent, qty, price) {
 /* ═══════════════════════════════════════════════════════════
    ✨ [مُعدّلة] حساب الإجمالي مع دعم الخصم (كوبون + يدوي)
    ═══════════════════════════════════════════════════════════ */
+  let COUPONS_CACHE = null;
+let COUPONS_CACHE_TIME = 0;
+const COUPONS_CACHE_TTL = 60000;
+
+async function getCouponsCached() {
+  const now = Date.now();
+  if (COUPONS_CACHE && (now - COUPONS_CACHE_TIME) < COUPONS_CACHE_TTL) {
+    return COUPONS_CACHE;
+  }
+  COUPONS_CACHE = await window.FB.list('coupons') || [];
+  COUPONS_CACHE_TIME = now;
+  return COUPONS_CACHE;
+}
 async function updateTotal() {
   const rows = document.querySelectorAll('.product-row');
   let subTotal = 0;
@@ -787,7 +813,7 @@ async function updateTotal() {
 
   if (couponCode && window.FB && typeof window.FB.list === 'function') {
     try {
-      const coupons = await window.FB.list('coupons') || [];
+const coupons = await getCouponsCached();
       const c = coupons.find(x => (x.code || '').toUpperCase() === couponCode);
 
       if (c && c.active !== false) {
@@ -1708,6 +1734,36 @@ function initProductForm(){
     }
   });
   document.getElementById("addProductBtn")?.addEventListener("click", () => openProductForm(null));
+  document.getElementById("generateSitemapBtn")?.addEventListener("click", generateSitemap);
+
+function generateSitemap() {
+  const baseUrl = 'https://velalight.github.io';
+  const today = new Date().toISOString().slice(0, 10);
+  const pages = [
+    { url: '', priority: '1.0' },
+    { url: '/products.html', priority: '0.9' },
+    { url: '/reviews.html', priority: '0.7' },
+    { url: '/contact.html', priority: '0.6' },
+    { url: '/privacy.html', priority: '0.3' },
+    { url: '/terms.html', priority: '0.3' },
+  ];
+  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  pages.forEach(p => {
+    xml += `  <url>\n    <loc>${baseUrl}${p.url}</loc>\n    <lastmod>${today}</lastmod>\n    <priority>${p.priority}</priority>\n  </url>\n`;
+  });
+  PRODUCTS_ADMIN_CACHE.filter(p => p.active !== false && p.id).forEach(p => {
+    xml += `  <url>\n    <loc>${baseUrl}/shop/${p.id}.html</loc>\n    <lastmod>${today}</lastmod>\n    <priority>0.8</priority>\n  </url>\n`;
+  });
+  xml += '</urlset>';
+  const blob = new Blob([xml], { type: 'application/xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'sitemap.xml';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('✅ تم توليد sitemap.xml — ارفعه على GitHub');
+}
   document.getElementById("cancelProductBtn")?.addEventListener("click", () => document.getElementById("productForm").classList.add("hidden"));
   
   const updatePreview = () => {
@@ -1765,13 +1821,22 @@ function initProductForm(){
     }
 
     /* ✅ نحدد الـ Firestore document ID الصح */
-    let firestoreDocId;
-    if (existingId) {
-      const existingProduct = PRODUCTS_ADMIN_CACHE.find(p => p.id === existingId);
-      firestoreDocId = (existingProduct && existingProduct._fid) ? existingProduct._fid : existingId;
-    } else {
-      firestoreDocId = "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5);
-    }
+   let firestoreDocId;
+if (existingId) {
+  const existingProduct = PRODUCTS_ADMIN_CACHE.find(p => p.id === existingId);
+  firestoreDocId = (existingProduct && existingProduct._fid) ? existingProduct._fid : existingId;
+} else {
+  const slug = slugify(nameEn);
+  if (!slug) {
+    toast("⚠️ الاسم الإنجليزي غير صالح للرابط (استخدم حروف إنجليزية أو أرقام أو -)");
+    return;
+  }
+  if (PRODUCTS_ADMIN_CACHE.some(p => p.id === slug)) {
+    toast("⚠️ هذا الرابط مستخدم بالفعل. غيّر الاسم الإنجليزي قليلًا.");
+    return;
+  }
+  firestoreDocId = slug;
+}
 
     const payload = existingId
       ? { ...data, id_: existingId, updatedAt: Date.now() }
@@ -1919,7 +1984,9 @@ function bindCouponActions(list){
     btn.addEventListener("click", () => {
       if(!confirm("متأكد إنك عايز تحذف الكوبون ده؟")) return;
       const id = btn.dataset.delc;
-      window.FB.remove("coupons", id).then(() => {
+     window.FB.remove("coupons", id).then(() => {
+        COUPONS_CACHE = null;
+        COUPONS_CACHE_TIME = 0;
         toast("🗑️ تم حذف الكوبون");
         loadCoupons();
       }).catch(err => { console.error(err); toast("⚠️ فشل الحذف"); });
@@ -2006,6 +2073,8 @@ if(existing){ toast("⚠️ الكود ده مستخدم من قبل. اختار
     window.FB.set("coupons", "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, usedCount: 0, usedBy: [], createdAt: Date.now() });
     
   saveFn.then(() => {
+    COUPONS_CACHE = null;
+    COUPONS_CACHE_TIME = 0;
     toast("💾 تم حفظ الكوبون الذكي");
     document.getElementById("couponForm").classList.add("hidden");
     loadCoupons();
