@@ -1296,6 +1296,7 @@
 
 <script src="data.js?v=9"></script>
 <script type="module" src="firebase.js"></script>
+<script type="module" src="auth.js"></script>
 <script src="app.js"></script>
 
 <script>
@@ -1445,19 +1446,30 @@ function initLangWatcher(){
 }
 
 async function loadAllReviews(){
+  const seedReviews=(typeof SEED_REVIEWS!=="undefined"&&Array.isArray(SEED_REVIEWS))?SEED_REVIEWS:[];
+  let approvedReviews=[];
   try{
-    if(typeof DB !== "undefined" && typeof DB.list === "function"){
-      const revs=await DB.list("reviews");
-      if(Array.isArray(revs)){ window.ALL_REVIEWS=[...(typeof SEED_REVIEWS!=="undefined"?SEED_REVIEWS:[]),...revs]; }
+    if(window.FB&&window.FB.db){
+      const {collection,getDocs,query,where}=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      const approvedQuery=query(collection(window.FB.db,"reviews"),where("approved","==",true));
+      const snapshot=await getDocs(approvedQuery);
+      approvedReviews=snapshot.docs.map(docSnap=>({id:docSnap.id,...docSnap.data()}));
     }
-    if(P){
-      if(typeof renderReviews==="function") renderReviews();
-      const reviewSummary=(typeof prodReviews==="function") ? prodReviews(P.id) : [];
-      const revCount=$("#revCount");
-      if(revCount) revCount.textContent=reviewSummary.length;
-      if(typeof renderRatingSummary === "function") renderRatingSummary(reviewSummary);
-    }
-  }catch(e){ console.warn("Reviews load failed", e); }
+  }catch(e){
+    console.warn("Approved reviews load failed",e);
+  }
+
+  const allReviews=[...seedReviews,...approvedReviews];
+  if(typeof ALL_REVIEWS!=="undefined") ALL_REVIEWS=allReviews;
+  window.ALL_REVIEWS=allReviews;
+
+  if(P){
+    if(typeof renderReviews==="function") renderReviews();
+    const reviewSummary=(typeof prodReviews==="function")?prodReviews(P.id):[];
+    const revCount=$("#revCount");
+    if(revCount) revCount.textContent=reviewSummary.length;
+    if(typeof renderRatingSummary==="function") renderRatingSummary(reviewSummary);
+  }
 }
 
 function renderRatingSummary(reviewSummary){
@@ -1876,21 +1888,77 @@ function renderReviews(){
   const box=$("#pdReviews");
   if(!box) return;
   const revs=(typeof prodReviews==="function")?prodReviews(P.id):[];
-  if(!revs.length){ box.innerHTML=`<p style="color:var(--dim);text-align:center;padding:1.5rem">${(typeof LANG !== "undefined" && LANG==="en")?"No reviews yet. Be the first!":"لسة مفيش مراجعات. كن أول من يشارك رأيه! ✨"}</p>`; return; }
-  box.innerHTML=revs.map(r=>{ const date=r.createdAt?new Date(r.createdAt).toLocaleDateString((typeof LANG !== "undefined" && LANG==="en")?"en-US":"ar-EG"):""; return `<div class="rv-item"><div class="rv-head"><b>${r.name||"عميل"}</b><div style="display:flex;align-items:center;gap:.6rem"><span class="stars">${"★".repeat(r.rating||5)}</span><span class="rv-date">${date}</span></div></div><p>${r.text||""}</p></div>`; }).join("");
+  box.replaceChildren();
+  if(!revs.length){
+    const empty=document.createElement("p");
+    empty.style.cssText="color:var(--dim);text-align:center;padding:1.5rem";
+    empty.textContent=(typeof LANG!=="undefined"&&LANG==="en")?"No reviews yet. Be the first!":"لسة مفيش مراجعات. كن أول من يشارك رأيه! ✨";
+    box.appendChild(empty);
+    return;
+  }
+
+  const fragment=document.createDocumentFragment();
+  revs.forEach(r=>{
+    const item=document.createElement("div");
+    item.className="rv-item";
+    const head=document.createElement("div");
+    head.className="rv-head";
+    const name=document.createElement("b");
+    name.textContent=String(r.name||"عميل");
+    const meta=document.createElement("div");
+    meta.style.cssText="display:flex;align-items:center;gap:.6rem";
+    const stars=document.createElement("span");
+    stars.className="stars";
+    const rating=Math.max(1,Math.min(5,Math.round(Number(r.rating)||5)));
+    stars.textContent="★".repeat(rating);
+    const dateEl=document.createElement("span");
+    dateEl.className="rv-date";
+    let dateValue="";
+    if(r.createdAt){
+      const parsedDate=(typeof r.createdAt.toDate==="function")?r.createdAt.toDate():new Date(r.createdAt);
+      if(!Number.isNaN(parsedDate.getTime())) dateValue=parsedDate.toLocaleDateString((typeof LANG!=="undefined"&&LANG==="en")?"en-US":"ar-EG");
+    }
+    dateEl.textContent=dateValue;
+    meta.append(stars,dateEl);
+    head.append(name,meta);
+    const text=document.createElement("p");
+    text.textContent=String(r.text||"");
+    item.append(head,text);
+    fragment.appendChild(item);
+  });
+  box.appendChild(fragment);
 }
 
 $("#rvSubmit")?.addEventListener("click",async()=>{
   const name=$("#rvName")?.value.trim();
   const text=$("#rvText")?.value.trim();
   if(!name||!text){ if(typeof toast==="function") toast("⚠️ اكتب اسمك ومراجعتك"); return; }
+  if(name.length<2||name.length>50||text.length>1000){ if(typeof toast==="function") toast("⚠️ الاسم من حرفين إلى 50 حرفًا، والمراجعة حتى 1000 حرف."); return; }
+  const firebase=window.FB;
+  const user=firebase?.auth?.currentUser;
+  if(!firebase?.db||!firebase?.add){ if(typeof toast==="function") toast("⚠️ تعذر الاتصال بخدمة المراجعات. حاول مرة أخرى بعد قليل."); return; }
+  if(!user){
+    if(typeof window.openAuthModal==="function") window.openAuthModal();
+    if(typeof toast==="function") toast("سجّل الدخول أولًا لإرسال مراجعتك.");
+    return;
+  }
+  if(!P||!P.id){ if(typeof toast==="function") toast("⚠️ تعذر تحديد المنتج لهذه المراجعة."); return; }
+  const submitButton=$("#rvSubmit");
+  if(submitButton) submitButton.disabled=true;
   try{
-    if(typeof DB !== "undefined" && typeof DB.add === "function") {
-      await DB.add("reviews",{ productSlug:P.id, name, text, rating:selRating, createdAt:Date.now(), approved:false });
-    }
+    await firebase.add("reviews",{
+      productSlug:String(P.id),
+      name,
+      text,
+      rating:Number(selRating),
+      userId:user.uid,
+      createdAt:Date.now(),
+      approved:false
+    });
     if(typeof toast==="function") toast("✅ تم إرسال المراجعة — هتظهر بعد الموافقة");
     $("#rvName").value=""; $("#rvText").value=""; selRating=5; $$("#starPick button").forEach((b,i)=>b.classList.toggle("lit",i<5));
-  }catch(e){ if(typeof toast==="function") toast("⚠️ حدث خطأ أثناء الإرسال"); }
+  }catch(e){ console.error("Review submission failed",e); if(typeof toast==="function") toast("⚠️ تعذر إرسال المراجعة. تأكد من تسجيل الدخول وحاول مرة أخرى."); }
+  finally{ if(submitButton) submitButton.disabled=false; }
 });
 
 function renderRelated(){
