@@ -1735,7 +1735,7 @@ function initProductForm(){
       return;
     }
     
-    const existingId = document.getElementById("productForm").dataset.editId || "";
+       const existingId = document.getElementById("productForm").dataset.editId || "";
     const scents = document.getElementById("pf_scents").value.split(",").map(scent => scent.trim()).filter(Boolean);
     const stockVal = document.getElementById("pf_stock").value;
     const mainImgVal = document.getElementById("pf_img").value.trim();
@@ -1764,10 +1764,22 @@ function initProductForm(){
       data.stock = Number(stockVal);
     }
 
-    const saveFn = existingId ? window.FB.set("products", existingId, { ...data, id_: existingId }) : 
-      window.FB.set("products", "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, id_: "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), createdAt: Date.now(), sold: 0 });
-      
-    saveFn.then(() => {
+    /* ✅ نحدد الـ Firestore document ID الصح */
+    let firestoreDocId;
+    if (existingId) {
+      const existingProduct = PRODUCTS_ADMIN_CACHE.find(p => p.id === existingId);
+      firestoreDocId = (existingProduct && existingProduct._fid) ? existingProduct._fid : existingId;
+    } else {
+      firestoreDocId = "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5);
+    }
+
+    const payload = existingId
+      ? { ...data, id_: existingId, updatedAt: Date.now() }
+      : { ...data, id_: firestoreDocId, createdAt: Date.now(), sold: 0 };
+
+    console.log("💾 Saving product to Firestore doc:", firestoreDocId, "with id_:", payload.id_);
+
+    window.FB.set("products", firestoreDocId, payload).then(() => {
       toast("💾 تم حفظ المنتج");
       document.getElementById("productForm").classList.add("hidden");
       loadProducts();
