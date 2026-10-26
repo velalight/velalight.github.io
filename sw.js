@@ -10,7 +10,7 @@
  * ═══════════════════════════════════════════════════════════
  */
 
-const CACHE_VERSION = "v9";
+const CACHE_VERSION = "v10";
 const STATIC_CACHE  = `velalight-static-${CACHE_VERSION}`;
 const HTML_CACHE    = `velalight-html-${CACHE_VERSION}`;
 const IMAGE_CACHE   = `velalight-images-${CACHE_VERSION}`;
