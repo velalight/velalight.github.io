@@ -13,7 +13,7 @@ function track(e,t={}){try{window.gtag&&gtag("event",e,{...t,currency:"EGP"})}ca
 
 !function(){if(window.__vlAnalyticsInitialized)return;const e="function"==typeof window.gtag||!!document.querySelector('script[src*="googletagmanager.com/gtag/js"]'),t="function"==typeof window.fbq&&!0===window.fbq.loaded,a=!!window.ttq;if(!e&&0===CFG.GA4_ID.indexOf("G-")&&"G-XXXXXXXXXX"!==CFG.GA4_ID){const e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(CFG.GA4_ID),document.head.appendChild(e),window.dataLayer=window.dataLayer||[],window.gtag=function(){window.dataLayer.push(arguments)},window.gtag("js",new Date),window.gtag("config",CFG.GA4_ID)}t||0===CFG.META_PIXEL_ID.indexOf("YOUR_")||(function(e,t,a,r,o,n,s){e.fbq||(o=e.fbq=function(){o.callMethod?o.callMethod.apply(o,arguments):o.queue.push(arguments)},e._fbq||(e._fbq=o),o.push=o,o.loaded=!0,o.version="2.0",o.queue=[],(n=t.createElement(a)).async=!0,n.src="https://connect.facebook.net/en_US/fbevents.js",(s=t.getElementsByTagName(a)[0]).parentNode.insertBefore(n,s))}(window,document,"script"),window.fbq("init",CFG.META_PIXEL_ID),window.fbq("track","PageView")),a||0===CFG.TIKTOK_PIXEL_ID.indexOf("YOUR_")||function(e,t,a){e.TiktokAnalyticsObject=a;var r=e[a]=e[a]||[];r.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],r.setAndDefer=function(e,t){e[t]=function(){e.push([t].concat(Array.prototype.slice.call(arguments,0)))}};for(var o=0;o<r.methods.length;o++)r.setAndDefer(r,r.methods[o]);r.load=function(e,o){var n="https://analytics.tiktok.com/i18n/pixel/events.js";r._i=r._i||{},r._i[e]=[],r._i[e]._u=n,r._t=r._t||{},r._t[e]=+new Date,r._o=r._o||{},r._o[e]=o||{};var s=t.createElement("script");s.type="text/javascript",s.async=!0,s.src=n+"?sdkid="+encodeURIComponent(e)+"&lib="+a;var i=t.getElementsByTagName("script")[0];i.parentNode.insertBefore(s,i)},r.load(CFG.TIKTOK_PIXEL_ID),r.page()}(window,document,"ttq"),window.__vlAnalyticsInitialized=!0}();
 
-const $=e=>document.querySelector(e),$$=e=>[...document.querySelectorAll(e)];let LANG=localStorage.getItem("vl_lang")||"ar";const money=e=>Number(e||0).toLocaleString("en-US")+" "+("en"===LANG?"EGP":"ج.م"),IMG_CACHE_VERSION="v9",CDN=(e,t={})=>e?e.startsWith("data:")||e.startsWith("http")?e:`https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/${e}${String(e).includes("?")?"&":"?"}v=v9`:"";
+const $=e=>document.querySelector(e),$$=e=>[...document.querySelectorAll(e)];let LANG=localStorage.getItem("vl_lang")||"ar";const money=e=>Number(e||0).toLocaleString("en-US")+" "+("en"===LANG?"EGP":"ج.م"),IMG_CACHE_VERSION="v10",CDN=(e,t={})=>e?e.startsWith("data:")||e.startsWith("http")?e:`https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/${e}${String(e).includes("?")?"&":"?"}v=v10`:"";
 
 function toast(e){if(!$("#toasts"))return;const t=document.createElement("div");t.className="toast",t.textContent=e,$("#toasts").appendChild(t),setTimeout(()=>t.remove(),3200)}
 
@@ -31,7 +31,46 @@ let ALL_PRODUCTS=[],ALL_REVIEWS=[],dbProductsCache=[];
 
 async function loadAll(){try{dbProductsCache=await DB.list("products"),Array.isArray(dbProductsCache)||(dbProductsCache=[])}catch(e){console.warn("⚠️ Firebase failed, using local PRODUCTS",e),dbProductsCache=[]}const e=new Map;PRODUCTS.forEach(t=>{t&&t.id&&e.set(t.id,{...t})}),dbProductsCache.forEach(t=>{const a=t.id_||t.slug||t.pid||t.id;a&&(!1!==t.active?e.set(a,{...e.get(a)||{},...t,id:a,_fid:t.id||null}):e.delete(a))}),ALL_PRODUCTS=[...e.values()];try{localStorage.setItem("vl_products_v3",JSON.stringify(ALL_PRODUCTS.slice(0,200))),localStorage.setItem("vl_products_v3_time",String(Date.now()))}catch(e){}let t=[];try{t=await DB.list("reviews")}catch(e){}ALL_REVIEWS=[...void 0!==SEED_REVIEWS?SEED_REVIEWS:[],...t],setTimeout(function(){"function"==typeof injectAllProductSchemas&&injectAllProductSchemas(ALL_PRODUCTS),"function"==typeof injectBreadcrumbSchema&&injectBreadcrumbSchema()},100)}
 
-function loadFromCache(){ALL_PRODUCTS=[...PRODUCTS];try{const e=JSON.parse(localStorage.getItem("vl_products_v3")||"[]"),t=Number(localStorage.getItem("vl_products_v3_time")||"0");if(Array.isArray(e)&&e.length>0&&Date.now()-t<36e5){const t=new Map(ALL_PRODUCTS.map(e=>[e.id,e]));return e.forEach(e=>{if(!e||!e.id)return;const a=t.get(e.id);a&&(void 0!==e.sold&&(a.sold=e.sold),void 0!==e.stock&&(a.stock=e.stock),void 0!==e.active&&(a.active=e.active),void 0!==e.pinned&&(a.pinned=e.pinned),void 0!==e.pinnedAt&&(a.pinnedAt=e.pinnedAt),void 0!==e.video&&(a.video=e.video))}),!0}}catch(e){}return!1}
+function loadFromCache(){
+  ALL_PRODUCTS=[...PRODUCTS];
+  try{
+    const e=JSON.parse(localStorage.getItem("vl_products_v3")||"[]"),
+          t=Number(localStorage.getItem("vl_products_v3_time")||"0");
+    /* صلاحية الكاش: 5 دقايق بدل ساعة */
+    if(Array.isArray(e)&&e.length>0&&Date.now()-t<3e5){
+      const t=new Map(ALL_PRODUCTS.map(e=>[e.id,e]));
+      e.forEach(e=>{
+        if(!e||!e.id)return;
+        const a=t.get(e.id);
+        if(!a)return;
+        /* ✅ نحدّث كل الحقول المهمة بما فيها السعر */
+        if(void 0!==e.price)a.price=e.price;
+        if(void 0!==e.old)a.old=e.old;
+        if(void 0!==e.oldPrice)a.old=e.oldPrice;
+        if(void 0!==e.name)a.name=e.name;
+        if(void 0!==e.nameEn)a.nameEn=e.nameEn;
+        if(void 0!==e.desc)a.desc=e.desc;
+        if(void 0!==e.descEn)a.descEn=e.descEn;
+        if(void 0!==e.cat)a.cat=e.cat;
+        if(void 0!==e.badge)a.badge=e.badge;
+        if(void 0!==e.badgeEn)a.badgeEn=e.badgeEn;
+        if(void 0!==e.hours)a.hours=e.hours;
+        if(void 0!==e.hoursEn)a.hoursEn=e.hoursEn;
+        if(void 0!==e.scents)a.scents=e.scents;
+        if(void 0!==e.img)a.img=e.img;
+        if(void 0!==e.imgs)a.imgs=e.imgs;
+        if(void 0!==e.sold)a.sold=e.sold;
+        if(void 0!==e.stock)a.stock=e.stock;
+        if(void 0!==e.active)a.active=e.active;
+        if(void 0!==e.pinned)a.pinned=e.pinned;
+        if(void 0!==e.pinnedAt)a.pinnedAt=e.pinnedAt;
+        if(void 0!==e.video)a.video=e.video;
+      });
+      return!0;
+    }
+  }catch(e){}
+  return!1;
+}
 loadFromCache();
 
 const prodReviews=e=>ALL_REVIEWS.filter(t=>(t.productSlug||t.pid)===String(e)&&!1!==t.approved),ratingOf=e=>{const t=prodReviews(e);return t.length?{avg:+(t.reduce((e,t)=>e+(+t.rating||5),0)/t.length).toFixed(1),count:t.length}:null},getCart=()=>{try{return JSON.parse(localStorage.getItem("vl_cart")||"[]")}catch(e){return[]}},saveCart=e=>{try{localStorage.setItem("vl_cart",JSON.stringify(e))}catch(e){}cartBadge()};
