@@ -689,24 +689,19 @@
 
   if(!bar) return;
 
-  /* ✅ الإعلان يفضل ظاهر — sessionStorage بدل localStorage
-     يعني لما العميل يقفل التاب ويفتحه تاني → الإعلان يرجع */
-  try {
-    if(sessionStorage.getItem("bf_promo_dismissed") === "1"){
-      bar.classList.add("is-hidden");
-      return;
-    }
-  } catch(e){}
+  /* ✅ الإعلان يظهر دايماً مع كل تحميل صفحة — مفيش أي تخزين
+     - لو العميل داس ✕ → يختفي في الصفحة الحالية بس
+     - لو عمل Refresh → يرجع يظهر
+     - لو دخل الموقع تاني → يرجع يظهر */
 
   if(close){
     close.addEventListener("click", function(){
       bar.classList.add("is-hidden");
-      try { sessionStorage.setItem("bf_promo_dismissed", "1"); } catch(e){}
     });
   }
 })();
 </script>
-<!-- ═══ END BLACK FRIDAY PROMO BAR v2 ═══ -->
+  <!-- ═══ END BLACK FRIDAY PROMO BAR v2 ═══ -->
 
 <!-- ═══════════════════════════════════════════════
      TOP BAR
