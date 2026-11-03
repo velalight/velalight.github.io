@@ -686,14 +686,13 @@
   "use strict";
   var bar = document.getElementById("bfPromoBar");
   var close = document.getElementById("bfPromoClose");
-  var cta = document.getElementById("bfPromoCta");
 
   if(!bar) return;
 
-  /* زر العرض دلوقتي بيفتح مودال — مش محتاج cache buster */
-  
+  /* ✅ الإعلان يفضل ظاهر — sessionStorage بدل localStorage
+     يعني لما العميل يقفل التاب ويفتحه تاني → الإعلان يرجع */
   try {
-    if(localStorage.getItem("bf_promo_dismissed") === "1"){
+    if(sessionStorage.getItem("bf_promo_dismissed") === "1"){
       bar.classList.add("is-hidden");
       return;
     }
@@ -702,7 +701,7 @@
   if(close){
     close.addEventListener("click", function(){
       bar.classList.add("is-hidden");
-      try { localStorage.setItem("bf_promo_dismissed", "1"); } catch(e){}
+      try { sessionStorage.setItem("bf_promo_dismissed", "1"); } catch(e){}
     });
   }
 })();
@@ -909,7 +908,6 @@
       <p style="color:var(--mut);margin-top:.5rem;font-size:.95rem;" data-i18n="prod_sub">اكتشف أحدث تشكيلتنا من الشموع الفاخرة</p>
     </div>
     <div class="chips" id="chips" aria-hidden="true" style="display:none"></div>
-    <!-- ✅ [CLS Fix] skeleton ثابت في HTML بدل ما يضيفه app.js بعدين -->
     <div class="pgrid rv" id="pgrid">
       <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.4rem; padding:1rem;">
         <div class="skel" style="height:380px;border-radius:18px;"></div>
@@ -1044,7 +1042,6 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
       </div>
     </div>
     <div class="rv" data-reveal="left" data-reveal-delay="150">
-      <!-- ✅ [CLS Fix] width/height فقط بدون aspect-ratio — يحافظ على أبعاد الموبايل 100% -->
       <div style="border-radius:26px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh);transform:rotate(-1.5deg)">
         <img 
           src="velalight-wooden-luxury-set-3candles-detail.webp" 
@@ -1587,7 +1584,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 
 <!-- ═══ SCRIPTS ═══ -->
   <script>
-/* ═══ FAQ Schema Injection — يعمل مع تغيير اللغة تلقائي ═══ */
+/* ═══ FAQ Schema Injection ═══ */
 (function(){
   "use strict";
   
@@ -1631,7 +1628,6 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
     script.id = "faqSchema";
     script.textContent = JSON.stringify(schema);
     document.head.appendChild(script);
-    console.log("✅ FAQ Schema injected:", faqs.length, "questions");
   }
   
   var tries = 0;
@@ -1762,7 +1758,6 @@ document.addEventListener('DOMContentLoaded', function(){
   
 <!-- ═══════════════════════════════════════════════════════════
      📊 BLACK FRIDAY TRACKING v2 — GA4 + Meta Pixel
-     تتبع عرض الصحاب (اشتري 4 شمعات مساج + الخامسة هدية — ID 12)
      ═══════════════════════════════════════════════════════════ -->
 <script>
 (function(){
@@ -1775,7 +1770,6 @@ document.addEventListener('DOMContentLoaded', function(){
   const MASSAGE_ID = 12;
   let lastSub = 0;
 
-  /* ─── 1) عرض الشريط (مرة واحدة في الجلسة) ─── */
   function trackView(){
     if(sessionStorage.getItem(VIEW_KEY)) return;
     const banner = document.querySelector(".bf-promo-bar");
@@ -1799,7 +1793,6 @@ document.addEventListener('DOMContentLoaded', function(){
     } catch(e){}
   }
 
-  /* ─── 2) الضغط على "اطلبي العرض" ─── */
   function bindCTA(){
     const cta = document.querySelector(".bf-promo-cta");
     if(!cta || cta.dataset.vlTracked === "1") return;
@@ -1824,7 +1817,6 @@ document.addEventListener('DOMContentLoaded', function(){
     }, { passive: true });
   }
 
-  /* ─── 3) استحقاق العرض (لما السلة يبقى فيها 4 من المنتج ID 12) ─── */
   function checkUnlock(){
     try {
       const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
@@ -1861,11 +1853,9 @@ document.addEventListener('DOMContentLoaded', function(){
           currency: "EGP"
         });
       }
-      console.log("📊 Tracked: bf_offer_qualified | massageQty:", massageQty);
     } catch(e){}
   }
 
-  /* ─── 4) مراقبة تغيّر السلة ─── */
   function watchCart(){
     const cs = document.getElementById("cartSub");
     if(cs){
@@ -1889,17 +1879,12 @@ document.addEventListener('DOMContentLoaded', function(){
     setInterval(checkUnlock, 3000);
   }
 
-  /* ─── 5) تشغيل ─── */
   function init(){
     trackView();
     bindCTA();
     watchCart();
     setTimeout(bindCTA, 2000);
     setTimeout(checkUnlock, 2000);
-    console.log("═══════════════════════════════════════");
-    console.log("📊 Black Friday Tracking v2 READY");
-    console.log("   Events: bf_banner_view, bf_banner_click, bf_offer_qualified");
-    console.log("═══════════════════════════════════════");
   }
 
   if(document.readyState === "loading"){
@@ -1909,7 +1894,8 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 })();
 </script>
-  <!-- ═══════════════════════════════════════════════
+
+<!-- ═══════════════════════════════════════════════
      ⚡ BLACK FRIDAY OFFER MODAL — عرض الصحاب
      ═══════════════════════════════════════════════ -->
 <style>
@@ -2063,7 +2049,7 @@ document.addEventListener('DOMContentLoaded', function(){
   window.__vlBFModal = true;
 
   const PRODUCT_ID = 12;
-  /* ⚠️ القائمة دي مطابقة حرفياً لقائمة app.js (const E) — متغيّرش فيها */
+  /* القائمة دي مطابقة حرفياً لقائمة app.js (const E) */
   const SCENTS = [
     "فانيلا", "سينامون سبايس فانيلا", "لافندر", "موكا", "كراميل",
     "كاريبيان فروت", "فل", "ياسمين", "اناناس", "شيكولاتة",
@@ -2071,6 +2057,7 @@ document.addEventListener('DOMContentLoaded', function(){
     "تيوليب", "قهوة", "قهوة فانيلا", "قهوة بندق", "عود فانيليا",
     "عنبر", "فراولة", "عود خشب صندل"
   ];
+
   function getProduct(){
     try {
       if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)){
@@ -2167,6 +2154,16 @@ document.addEventListener('DOMContentLoaded', function(){
     try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ cart = []; }
     if(!Array.isArray(cart)) cart = [];
 
+    /* ✅ NEW: تنظيف القديم — نشيل أي شمعة مساج بدون عطر + الهدية القديمة
+       (ده اللي بيسبب مشكلة "أول شمعة بدون تفاصيل") */
+    cart = cart.filter(item => {
+      if(!item) return false;
+      if(Number(item.id) !== PRODUCT_ID) return true;
+      if(item.isGift === true) return false; /* شيل أي هدية مساج قديمة — هنضيف واحدة جديدة */
+      if(!item.scent || String(item.scent).trim() === "") return false; /* شيل أي شمعة بدون عطر */
+      return true;
+    });
+
     /* 4 شمعات بعطورها */
     scents.forEach(scent => {
       const ex = cart.find(i =>
@@ -2244,5 +2241,104 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 <!-- ═══ END BLACK FRIDAY OFFER MODAL ═══ -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     🎁 إصلاحات عطر وصورة الهدية في السلة
+     - يظهر منتقي العطر جوه الهدية
+     - صورة الهدية = صورة المنتج من الأدمن (لو الـ app.js بيغيّرها)
+     ═══════════════════════════════════════════════════════════ -->
+<style id="vlBFCartFixStyles">
+  /* ✅ إظهار منتقي العطر للهدية (app.js بيخفيه بـ display:none!important) */
+  #cartItems .citem[data-gift="1"] .cart-scent-picker {
+    display: flex !important;
+    visibility: visible !important;
+  }
+  #cartItems .citem[data-gift="1"] .cart-scent-select {
+    background-color: #eafaf1 !important;
+    border-color: rgba(39,174,96,.45) !important;
+    color: #1e8449 !important;
+    font-weight: 700 !important;
+  }
+</style>
+<script>
+(function(){
+  "use strict";
+  if(window.__vlBFGiftImageFix) return;
+  window.__vlBFGiftImageFix = true;
+
+  const PRODUCT_ID = 12;
+
+  function getProduct(){
+    try {
+      if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)){
+        const p = ALL_PRODUCTS.find(x => Number(x.id) === PRODUCT_ID);
+        if(p && p.img) return p;
+      }
+    } catch(e){}
+    try {
+      if(typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)){
+        const p = PRODUCTS.find(x => Number(x.id) === PRODUCT_ID);
+        if(p && p.img) return p;
+      }
+    } catch(e){}
+    try {
+      const c = JSON.parse(localStorage.getItem("vl_products_v3") || "[]");
+      const p = c.find(x => Number(x.id) === PRODUCT_ID);
+      if(p && p.img) return p;
+    } catch(e){}
+    return null;
+  }
+
+  function isWrongImage(url){
+    if(!url) return true;
+    const s = String(url).toLowerCase();
+    return s.includes("car-diffuser") ||
+           s.includes("diffuser") ||
+           s.includes("fawaha") ||
+           s.includes("فواحة");
+  }
+
+  function fixGiftImage(){
+    try {
+      const product = getProduct();
+      if(!product || !product.img) return;
+
+      const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
+      if(!Array.isArray(cart) || !cart.length) return;
+
+      let changed = false;
+      cart.forEach(item => {
+        if(!item) return;
+        if(Number(item.id) === PRODUCT_ID && item.isGift === true){
+          if(item.img !== product.img){
+            item.img = product.img;
+            changed = true;
+          }
+        }
+        /* أصلح كمان أي شمعة مساج عادية صورتها فواحة */
+        if(Number(item.id) === PRODUCT_ID && item.isGift !== true && isWrongImage(item.img)){
+          item.img = product.img;
+          changed = true;
+        }
+      });
+
+      if(changed){
+        try { localStorage.setItem("vl_cart", JSON.stringify(cart)); } catch(e){}
+        /* إعادة رسم السلة */
+        const cb = document.getElementById("cartBtn");
+        if(cb){
+          const wasOpen = document.getElementById("cartDrawer")?.classList.contains("open");
+          cb.click();
+          if(!wasOpen) setTimeout(() => document.getElementById("closeCart")?.click(), 120);
+        }
+      }
+    } catch(e){}
+  }
+
+  /* شغّلها كل 1.5 ثانية عشان تغلب الـ app.js لو لسه بيحط الصورة الغلط */
+  setInterval(fixGiftImage, 1500);
+  window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(fixGiftImage, 50); });
+})();
+</script>
 </body>
 </html>
