@@ -1767,3 +1767,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
     setTimeout(cleanup, 500);
   }
 })();
+
+/* تنظيف أي تخزين قديم للإعلان — يشتغل مرة واحدة بس */
+try { sessionStorage.removeItem("bf_promo_dismissed"); } catch(e){}
+try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
