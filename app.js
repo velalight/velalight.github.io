@@ -1652,3 +1652,54 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
   console.log("🎁 BF Offer Fix active — 4 massage candles (ID 12) = 1 free");
 })();
+
+/* ═══════════════════════════════════════════════════════════════════
+   🎁 إظهار منتقي العطر للهدية + مزامنة عطر الهدية مع أول شمعة
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlGiftScentFix) return;
+  window.__vlGiftScentFix = true;
+
+  /* 1) override الـ CSS القديم اللي كان بيخفي منتقي عطر الهدية */
+  const css = document.createElement("style");
+  css.textContent = `
+    #cartItems .citem[data-gift="1"] .cart-scent-picker {
+      display: flex !important;
+    }
+    #cartItems .citem[data-gift="1"] .cart-scent-select {
+      background-color: #eafaf1 !important;
+      border-color: rgba(39,174,96,.45) !important;
+    }
+  `;
+  document.head.appendChild(css);
+
+  /* 2) لو الهدية عطرها فاضي أو مش من القائمة → خد عطر أول شمعة مساج */
+  function syncGiftScent(){
+    let cart;
+    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return; }
+    if(!Array.isArray(cart) || !cart.length) return;
+
+    const firstMassage = cart.find(i =>
+      Number(i.id) === 12 && i.isGift !== true && i.scent
+    );
+    if(!firstMassage) return;
+
+    let changed = false;
+    cart.forEach(item => {
+      if(item && item.isGift === true && Number(item.id) === 12){
+        if(!item.scent || String(item.scent).trim() === ""){
+          item.scent = firstMassage.scent;
+          changed = true;
+        }
+      }
+    });
+
+    if(changed){
+      try { localStorage.setItem("vl_cart", JSON.stringify(cart)); } catch(e){}
+    }
+  }
+
+  setInterval(syncGiftScent, 1200);
+  window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(syncGiftScent, 50); });
+})();
