@@ -1570,3 +1570,85 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(init, 800));
   else setTimeout(init, 800);
 })();
+
+/* ═══════════════════════════════════════════════════════════════════
+   🎯 VELALIGHT — BLACK FRIDAY OFFER FIX
+   1) إلغاء عرض "فواحة بـ 1000 جنيه" القديم نهائياً
+   2) تفعيل "عرض الصحاب" — 4 شمعات مساج (ID 12) = الخامسة هدية
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlBFCartFix) return;
+  window.__vlBFCartFix = true;
+
+  const MASSAGE_ID = 12;
+  const MIN_QTY = 4;
+
+  function reconcile(){
+    let cart;
+    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return; }
+    if(!Array.isArray(cart)) return;
+
+    let changed = false;
+
+    /* 1) شيل أي هدية مش من ID 12 (فواحة 1000 وأي هدية قديمة) */
+    const filtered = cart.filter(item => {
+      if(item && item.isGift === true && Number(item.id) !== MASSAGE_ID){
+        changed = true;
+        return false;
+      }
+      return true;
+    });
+
+    /* 2) كمية شمعات المساج (بدون الهدية) */
+    const massageQty = filtered
+      .filter(i => i && Number(i.id) === MASSAGE_ID && i.isGift !== true)
+      .reduce((s, i) => s + Number(i.qty || 1), 0);
+
+    const giftIdx = filtered.findIndex(i => i && i.isGift === true && Number(i.id) === MASSAGE_ID);
+
+    if(massageQty >= MIN_QTY && giftIdx === -1){
+      const first = filtered.find(i => Number(i.id) === MASSAGE_ID && i.isGift !== true);
+      filtered.push({
+        id: MASSAGE_ID,
+        name: first?.name || "شمعة مساج ريلاكس",
+        nameEn: first?.nameEn || "Relaxing Massage Candle",
+        price: 0,
+        old: Number(first?.price || 0),
+        qty: 1,
+        scent: first?.scent || "مفاجأة",
+        isGift: true,
+        img: first?.img || ""
+      });
+      changed = true;
+    } else if(massageQty < MIN_QTY && giftIdx > -1){
+      filtered.splice(giftIdx, 1);
+      changed = true;
+    } else if(giftIdx > -1 && filtered[giftIdx].price !== 0){
+      filtered[giftIdx].price = 0;
+      changed = true;
+    }
+
+    if(changed){
+      try { localStorage.setItem("vl_cart", JSON.stringify(filtered)); } catch(e){}
+      const btn = document.getElementById("cartBtn");
+      if(btn){
+        const wasOpen = document.getElementById("cartDrawer")?.classList.contains("open");
+        btn.click();
+        if(!wasOpen) setTimeout(() => document.getElementById("closeCart")?.click(), 120);
+      }
+    }
+  }
+
+  /* كل 800ms — يقاوم بلوك [2] القديم اللي بيضيف الفواحة */
+  setInterval(reconcile, 800);
+  window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(reconcile, 30); });
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", () => setTimeout(reconcile, 800));
+  } else {
+    setTimeout(reconcile, 800);
+  }
+
+  console.log("🎁 BF Offer Fix active — 4 massage candles (ID 12) = 1 free");
+})();
