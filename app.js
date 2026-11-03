@@ -170,7 +170,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   style.textContent = [
     '#cartItems .citem[data-gift="1"]{background:linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)!important;border-color:rgba(39,174,96,.45)!important;box-shadow:0 2px 12px rgba(39,174,96,.15)!important;position:relative;overflow:visible!important}',
     '#cartItems .citem[data-gift="1"]::before{content:"🎁 هدية مجانية";position:absolute;top:-8px;inset-inline-start:10px;background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff;font-size:.62rem;font-weight:800;padding:3px 10px;border-radius:99px;z-index:10;box-shadow:0 3px 10px rgba(39,174,96,.4);letter-spacing:.3px}',
-    '#cartItems .citem[data-gift="1"] .cart-scent-picker,#cartItems .citem[data-gift="1"] .vl-save-later{display:none!important}',
+   '#cartItems .citem[data-gift="1"] .vl-save-later{display:none!important}',
     '#cartItems .citem[data-gift="1"] .val,#cartItems .citem[data-gift="1"] .val-total{color:#1e8449!important;font-weight:900!important}',
     '#cartItems .citem[data-gift="1"] .qty{display:none!important}',
     '#cartItems .citem[data-gift="1"] .rm{display:none!important}',
@@ -323,7 +323,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   if(window.__vlGiftImgV5) return;
   window.__vlGiftImgV5 = true;
 
-  const GIFT_IMG = "https://velalight.github.io/Velalight-Car-Diffuser-03.webp";
+  const GIFT_IMG = "https://velalight.github.io/velalight-massage-mandala-spa-spa.webp";
   const GIFT_IDS = ["pmvj8cij7c34", "pmvj8qxhca70"];
   let busy = false;
 
@@ -1702,4 +1702,68 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 
   setInterval(syncGiftScent, 1200);
   window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(syncGiftScent, 50); });
+})();
+
+/* ═══════════════════════════════════════════════════════════════════
+   🎯 FINAL CART CLEANUP — تنظيف نهائي للسلة
+   - يشيل أي شمعة مساج بدون عطر (يصلح مشكلة "أول شمعة بدون تفاصيل")
+   - يصلّح صورة الهدية لو اتغيّرت
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlFinalCartCleanup) return;
+  window.__vlFinalCartCleanup = true;
+
+  const MASSAGE_ID = 12;
+  const GIFT_IMG = "https://velalight.github.io/velalight-massage-mandala-spa-spa.webp";
+
+  function cleanup(){
+    let cart;
+    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return; }
+    if(!Array.isArray(cart) || !cart.length) return;
+
+    let changed = false;
+
+    /* 1) شيل أي شمعة مساج بدون عطر (regular, not gift) */
+    const cleaned = cart.filter(item => {
+      if(!item) return false;
+      if(Number(item.id) === MASSAGE_ID && item.isGift !== true){
+        if(!item.scent || String(item.scent).trim() === ""){
+          changed = true;
+          return false;
+        }
+      }
+      return true;
+    });
+
+    /* 2) صلّح صورة الهدية لو مش صورة المساج */
+    cleaned.forEach(item => {
+      if(item && item.isGift === true && Number(item.id) === MASSAGE_ID){
+        if(item.img !== GIFT_IMG){
+          item.img = GIFT_IMG;
+          changed = true;
+        }
+      }
+    });
+
+    if(changed){
+      try { localStorage.setItem("vl_cart", JSON.stringify(cleaned)); } catch(e){}
+      /* إعادة رسم السلة */
+      const btn = document.getElementById("cartBtn");
+      if(btn){
+        const wasOpen = document.getElementById("cartDrawer")?.classList.contains("open");
+        btn.click();
+        if(!wasOpen) setTimeout(() => document.getElementById("closeCart")?.click(), 120);
+      }
+    }
+  }
+
+  setInterval(cleanup, 700);
+  window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(cleanup, 50); });
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", () => setTimeout(cleanup, 500));
+  } else {
+    setTimeout(cleanup, 500);
+  }
 })();
