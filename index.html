@@ -345,19 +345,149 @@
 <a href="#products" class="skip-link">تخطي للمحتوى</a>
 
 <!-- ═══════════════════════════════════════════════
-     🎁 GIFT PROMO BAR — عرض الهدية
+     ⚡ BLACK FRIDAY PROMO BAR — عرض الصحاب
+     (اشتري 4 شمعات مساج + الخامسة هدية — منتج ID 12)
      ═══════════════════════════════════════════════ -->
-<div class="gift-promo-bar" role="region" aria-label="عرض خاص: هدية فواحة سيارة">
-  <div class="gift-promo-inner">
-    <span class="gift-promo-icon" aria-hidden="true">🎁</span>
-    <p class="gift-promo-text">
-      <strong>عرض الهدية:</strong>
-      اشتري بـ <b>1000 جنيه</b> واحصل على <b>فواحة سيارة فاخرة</b> هدية مجانية!
+<div class="bf-promo-bar" id="bfPromoBar" role="region" aria-label="عرض بلاك فرايدي: عرض الصحاب">
+  <div class="bf-promo-inner">
+    <span class="bf-promo-icon" aria-hidden="true">⚡</span>
+    <p class="bf-promo-text">
+      <strong>بلاك فرايدي — عرض الصحاب:</strong>
+      اشتري <b>4 شمعات مساج</b> واحصلي على <b>الخامسة هدية</b> 🎁
     </p>
-    <a href="products.html" class="gift-promo-cta">تسوّق الآن ✨</a>
+    <a href="shop/12.html" class="bf-promo-cta">اطلبي العرض ✨</a>
+    <button type="button" class="bf-promo-close" id="bfPromoClose" aria-label="إغلاق العرض">✕</button>
   </div>
+  <p class="bf-promo-note">* العرض ساري لحد نفاد الكمية</p>
 </div>
-<!-- ═══ END GIFT PROMO BAR ═══ -->
+<style>
+  .bf-promo-bar {
+    position: relative;
+    background: linear-gradient(135deg, #1a1512 0%, #2a1c0b 100%);
+    color: #fff;
+    padding: 14px 16px 10px;
+    border-bottom: 2px solid #d4af37;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+    z-index: 100;
+    animation: bfSlideDown 0.5s ease;
+  }
+  @keyframes bfSlideDown {
+    from { transform: translateY(-100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .bf-promo-bar.is-hidden { display: none !important; }
+  .bf-promo-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 32px;
+  }
+  .bf-promo-icon {
+    font-size: 1.4rem;
+    animation: bfPulse 1.6s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes bfPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+  .bf-promo-text {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.5;
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+  }
+  .bf-promo-text strong {
+    color: #ffd700;
+    font-weight: 800;
+    margin-left: 4px;
+  }
+  .bf-promo-text b {
+    color: #d4af37;
+    font-weight: 800;
+  }
+  .bf-promo-cta {
+    display: inline-block;
+    background: linear-gradient(135deg, #ffd700 0%, #d4af37 55%, #b8912b 100%);
+    color: #1a1512 !important;
+    font-weight: 800;
+    padding: 8px 20px;
+    border-radius: 99px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+  }
+  .bf-promo-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(212, 175, 55, 0.6);
+  }
+  .bf-promo-close {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 0.85rem;
+    cursor: pointer;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+  .bf-promo-close:hover {
+    background: rgba(212, 175, 55, 0.3);
+    border-color: #d4af37;
+  }
+  .bf-promo-note {
+    margin: 6px auto 0;
+    text-align: center;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.3px;
+    max-width: 1200px;
+  }
+  @media (max-width: 600px) {
+    .bf-promo-bar { padding: 10px 12px 8px; }
+    .bf-promo-inner { gap: 8px; padding-left: 26px; }
+    .bf-promo-text { font-size: 0.8rem; }
+    .bf-promo-cta { padding: 6px 14px; font-size: 0.75rem; }
+    .bf-promo-icon { font-size: 1.1rem; }
+    .bf-promo-note { font-size: 0.62rem; }
+    .bf-promo-close { top: 4px; right: 6px; width: 22px; height: 22px; font-size: 0.75rem; }
+  }
+</style>
+<script>
+  (function(){
+    "use strict";
+    var bar = document.getElementById("bfPromoBar");
+    var close = document.getElementById("bfPromoClose");
+    if(!bar) return;
+    try { if(localStorage.getItem("bf_promo_dismissed") === "1"){ bar.classList.add("is-hidden"); return; } } catch(e){}
+    if(close){
+      close.addEventListener("click", function(){
+        bar.classList.add("is-hidden");
+        try { localStorage.setItem("bf_promo_dismissed", "1"); } catch(e){}
+      });
+    }
+  })();
+</script>
+<!-- ═══ END BLACK FRIDAY PROMO BAR ═══ -->
 
 <!-- ═══════════════════════════════════════════════
      TOP BAR
@@ -1411,103 +1541,108 @@ document.addEventListener('DOMContentLoaded', function(){
   <script src="exit-intent.js" defer></script>
   
 <!-- ═══════════════════════════════════════════════════════════
-     📊 GIFT TRACKING v1 — GA4 + Meta Pixel
-     تتبع عرض وضغط واستحقاق الهدية
+     📊 BLACK FRIDAY TRACKING v2 — GA4 + Meta Pixel
+     تتبع عرض الصحاب (اشتري 4 شمعات مساج + الخامسة هدية — ID 12)
      ═══════════════════════════════════════════════════════════ -->
 <script>
 (function(){
   "use strict";
-  if(window.__vlGiftTracking) return;
-  window.__vlGiftTracking = true;
+  if(window.__vlBfTracking) return;
+  window.__vlBfTracking = true;
 
-  const VIEW_KEY = "vl_gift_view_sent";
-  const UNLOCK_KEY = "vl_gift_unlock_sent";
+  const VIEW_KEY = "vl_bf_view_sent";
+  const UNLOCK_KEY = "vl_bf_unlock_sent";
+  const MASSAGE_ID = 12;
   let lastSub = 0;
 
   /* ─── 1) عرض الشريط (مرة واحدة في الجلسة) ─── */
   function trackView(){
     if(sessionStorage.getItem(VIEW_KEY)) return;
-    const banner = document.querySelector(".gift-promo-bar");
+    const banner = document.querySelector(".bf-promo-bar");
     if(!banner) return;
     sessionStorage.setItem(VIEW_KEY, "1");
     try {
       if(typeof gtag === "function"){
-        gtag("event", "gift_banner_view", {
+        gtag("event", "bf_banner_view", {
           event_category: "promotion",
-          event_label: "free_car_diffuser_1000egp",
-          value: 1000,
+          event_label: "bf_buy4_get1_massage_id12",
           currency: "EGP"
         });
       }
       if(typeof fbq === "function"){
-        fbq("trackCustom", "GiftBannerView", {
-          promo: "free_car_diffuser",
-          threshold: 1000,
+        fbq("trackCustom", "BFBannerView", {
+          promo: "buy4_get1_massage",
+          product_id: MASSAGE_ID,
           currency: "EGP"
         });
       }
-      console.log("📊 Tracked: gift_banner_view");
     } catch(e){}
   }
 
-  /* ─── 2) الضغط على "تسوّق الآن" ─── */
+  /* ─── 2) الضغط على "اطلبي العرض" ─── */
   function bindCTA(){
-    const cta = document.querySelector(".gift-promo-cta");
+    const cta = document.querySelector(".bf-promo-cta");
     if(!cta || cta.dataset.vlTracked === "1") return;
     cta.dataset.vlTracked = "1";
     cta.addEventListener("click", function(){
       try {
         if(typeof gtag === "function"){
-          gtag("event", "gift_banner_click", {
+          gtag("event", "bf_banner_click", {
             event_category: "promotion",
-            event_label: "free_car_diffuser_1000egp",
-            value: 1000,
+            event_label: "bf_buy4_get1_massage_id12",
             currency: "EGP"
           });
         }
         if(typeof fbq === "function"){
-          fbq("trackCustom", "GiftBannerClick", {
-            promo: "free_car_diffuser",
-            threshold: 1000,
+          fbq("trackCustom", "BFBannerClick", {
+            promo: "buy4_get1_massage",
+            product_id: MASSAGE_ID,
             currency: "EGP"
           });
         }
-        console.log("📊 Tracked: gift_banner_click");
       } catch(e){}
     }, { passive: true });
   }
 
-  /* ─── 3) استحقاق الهدية (لما السلة تعدّي 1000) ─── */
+  /* ─── 3) استحقاق العرض (لما السلة يبقى فيها 4 من المنتج ID 12) ─── */
   function checkUnlock(){
     try {
       const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
       if(!Array.isArray(cart) || !cart.length) return;
-      const gift = cart.find(i => i && i.isGift === true);
-      if(!gift) return;
+
+      // نحسب كمية شمعات المساج (ID 12) في السلة
+      const massageQty = cart
+        .filter(function(i){ return i && Number(i.id) === MASSAGE_ID; })
+        .reduce(function(s, i){ return s + Number(i.qty || 1); }, 0);
+
+      if(massageQty < 4) return;
       if(sessionStorage.getItem(UNLOCK_KEY)) return;
       sessionStorage.setItem(UNLOCK_KEY, "1");
 
-      const subtotal = cart.reduce((s, i) => s + (Number(i.price || 0) * Number(i.qty || 1)), 0);
+      const subtotal = cart.reduce(function(s, i){
+        return s + (Number(i.price || 0) * Number(i.qty || 1));
+      }, 0);
 
       if(typeof gtag === "function"){
-        gtag("event", "gift_unlocked", {
+        gtag("event", "bf_offer_qualified", {
           event_category: "promotion",
-          event_label: "free_car_diffuser_unlocked",
-          value: subtotal,
+          event_label: "bf_qualified_4plus",
+          value: massageQty,
           currency: "EGP",
-          gift_name: gift.name || "car_diffuser",
-          gift_original_price: Number(gift.old || 0)
+          product_id: MASSAGE_ID,
+          cart_value: subtotal
         });
       }
       if(typeof fbq === "function"){
-        fbq("trackCustom", "GiftUnlocked", {
-          promo: "free_car_diffuser",
-          subtotal: subtotal,
-          currency: "EGP",
-          gift_value: Number(gift.old || 0)
+        fbq("trackCustom", "BFOfferQualified", {
+          promo: "buy4_get1_massage",
+          product_id: MASSAGE_ID,
+          qty: massageQty,
+          cart_value: subtotal,
+          currency: "EGP"
         });
       }
-      console.log("📊 Tracked: gift_unlocked | subtotal:", subtotal);
+      console.log("📊 Tracked: bf_offer_qualified | massageQty:", massageQty);
     } catch(e){}
   }
 
@@ -1543,8 +1678,8 @@ document.addEventListener('DOMContentLoaded', function(){
     setTimeout(bindCTA, 2000);
     setTimeout(checkUnlock, 2000);
     console.log("═══════════════════════════════════════");
-    console.log("📊 Gift Tracking v1 READY");
-    console.log("   Events: gift_banner_view, gift_banner_click, gift_unlocked");
+    console.log("📊 Black Friday Tracking v2 READY");
+    console.log("   Events: bf_banner_view, bf_banner_click, bf_offer_qualified");
     console.log("═══════════════════════════════════════");
   }
 
