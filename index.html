@@ -368,11 +368,11 @@
     <p class="bf-promo-en-sub">BUY 4 · GET 1 FREE</p>
   </div>
 
-  <a href="shop/12.html" class="bf-promo-cta" id="bfPromoCta">
+  <button type="button" class="bf-promo-cta" id="bfPromoCta" aria-haspopup="dialog">
     <span class="bf-cta-ar">اطلبي العرض</span>
     <span class="bf-cta-en">ORDER NOW ✨</span>
-  </a>
-
+  </button>
+  
   <button type="button" class="bf-promo-close" id="bfPromoClose" aria-label="إغلاق العرض">✕</button>
   <p class="bf-promo-note">* العرض ساري لحد نفاد الكمية · Limited Stock</p>
 </div>
@@ -568,8 +568,12 @@
   padding: 10px 22px;
   background: linear-gradient(135deg, #ffe45c 0%, #ffd700 40%, #d4af37 75%, #a67c00 100%);
   color: #1a1512 !important;
+  border: none;
   border-radius: 99px;
   text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
   font-weight: 900;
   font-size: 0.95rem;
   box-shadow: 0 6px 20px rgba(255,215,0,0.5), 0 0 0 2px rgba(255,215,0,0.3);
@@ -579,7 +583,7 @@
   animation: bfCtaBounce 2.5s ease-in-out infinite;
   z-index: 2;
 }
-.bf-promo-cta::before {
+  .bf-promo-cta::before {
   content: '';
   position: absolute;
   top: 0; left: -100%;
@@ -686,12 +690,8 @@
 
   if(!bar) return;
 
-  // ✅ Cache buster — يمنع ظهور السعر القديم (375) من الكاش
-  if(cta){
-    var today = new Date().toISOString().slice(0,10).replace(/-/g,'');
-    cta.href = "shop/12.html?v=" + today;
-  }
-
+  /* زر العرض دلوقتي بيفتح مودال — مش محتاج cache buster */
+  
   try {
     if(localStorage.getItem("bf_promo_dismissed") === "1"){
       bar.classList.add("is-hidden");
@@ -1909,5 +1909,339 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 })();
 </script>
+  <!-- ═══════════════════════════════════════════════
+     ⚡ BLACK FRIDAY OFFER MODAL — عرض الصحاب
+     ═══════════════════════════════════════════════ -->
+<style>
+.bf-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 999999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.bf-modal-overlay.is-open { opacity: 1; pointer-events: auto; }
+.bf-modal {
+  background: linear-gradient(135deg, #1a1512 0%, #2a1c0b 100%);
+  border: 2px solid #d4af37;
+  border-radius: 20px;
+  max-width: 520px; width: 100%;
+  max-height: 92vh; overflow-y: auto;
+  position: relative;
+  padding: 24px 20px;
+  color: #fff;
+  box-shadow: 0 20px 60px rgba(212,175,55,0.3), 0 0 0 1px rgba(212,175,55,0.5);
+  transform: scale(0.95);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: 'Tajawal', 'El Messiri', sans-serif;
+}
+.bf-modal-overlay.is-open .bf-modal { transform: scale(1); }
+.bf-modal-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid rgba(212,175,55,0.5);
+  background: transparent; color: #d4af37;
+  cursor: pointer; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease;
+}
+.bf-modal-close:hover { background: rgba(212,175,55,0.2); transform: rotate(90deg); }
+.bf-modal-header { text-align: center; margin-bottom: 18px; padding-top: 8px; }
+.bf-modal-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffd700, #d4af37);
+  color: #1a1512;
+  font-size: 0.7rem; font-weight: 900; letter-spacing: 1px;
+  padding: 4px 14px; border-radius: 99px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 10px rgba(255,215,0,0.5);
+}
+.bf-modal-header h2 {
+  margin: 0 0 6px;
+  font-family: 'El Messiri', 'Tajawal', serif;
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, #fff 0%, #ffd700 50%, #d4af37 100%);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.3;
+}
+.bf-modal-header p { margin: 0; font-size: 0.88rem; color: rgba(255,255,255,0.85); }
+.bf-modal-body { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+.bf-modal-row {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(212,175,55,0.25);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.bf-modal-num {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, #ffd700, #d4af37);
+  color: #1a1512; font-weight: 900; font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.bf-modal-scent {
+  flex: 1;
+  padding: 9px 12px 9px 32px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(212,175,55,0.4);
+  background: rgba(0,0,0,0.35) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='3' stroke-linecap='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat left 10px center;
+  background-size: 12px;
+  color: #fff; font-family: inherit;
+  font-size: 0.9rem; font-weight: 500;
+  cursor: pointer; outline: none;
+  appearance: none; -webkit-appearance: none;
+}
+.bf-modal-scent:focus { border-color: #ffd700; box-shadow: 0 0 0 3px rgba(255,215,0,0.2); }
+.bf-modal-scent option { background: #1a1512; color: #fff; }
+.bf-modal-scent.has-error { border-color: #e74c3c; animation: bfShake 0.3s; }
+@keyframes bfShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+.bf-modal-footer {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  border-top: 1px dashed rgba(212,175,55,0.35);
+  padding-top: 16px; margin-top: 6px;
+}
+.bf-modal-total { flex: 1; min-width: 110px; font-size: 0.88rem; color: rgba(255,255,255,0.8); }
+.bf-modal-total b { display: block; font-size: 1.2rem; color: #ffd700; font-weight: 900; margin-top: 2px; }
+.bf-modal-total s { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-inline-start: 4px; }
+.bf-modal-add {
+  flex: 1; min-width: 200px;
+  padding: 12px 20px; border-radius: 99px; border: none;
+  background: linear-gradient(135deg, #ffe45c, #ffd700 40%, #d4af37 75%, #a67c00);
+  color: #1a1512; font-family: inherit;
+  font-size: 0.96rem; font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(255,215,0,0.5);
+  transition: all 0.25s ease;
+  animation: bfCtaBounce 2.5s ease-in-out infinite;
+}
+.bf-modal-add:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,215,0,0.8); }
+.bf-modal-free-note {
+  width: 100%; text-align: center;
+  font-size: 0.75rem; color: rgba(255,215,0,0.85);
+  margin-top: 4px; font-weight: 600;
+}
+@media (max-width: 480px) {
+  .bf-modal { padding: 20px 16px; }
+  .bf-modal-header h2 { font-size: 1.15rem; }
+  .bf-modal-header p { font-size: 0.78rem; }
+  .bf-modal-scent { font-size: 0.84rem; padding: 8px 10px 8px 28px; }
+  .bf-modal-add { font-size: 0.88rem; padding: 11px 16px; }
+  .bf-modal-total b { font-size: 1.05rem; }
+}
+</style>
+
+<div class="bf-modal-overlay" id="bfModalOverlay" aria-hidden="true" role="dialog" aria-labelledby="bfModalTitle">
+  <div class="bf-modal">
+    <button class="bf-modal-close" id="bfModalClose" aria-label="إغلاق">✕</button>
+    <div class="bf-modal-header">
+      <span class="bf-modal-badge">⚡ BLACK FRIDAY · عرض الصحاب</span>
+      <h2 id="bfModalTitle">اشتري 4 شمعات مساج + الخامسة هدية 🎁</h2>
+      <p>اختاري عطر كل شمعة — الخامسة علينا</p>
+    </div>
+    <div class="bf-modal-body" id="bfModalBody"></div>
+    <div class="bf-modal-footer">
+      <div class="bf-modal-total">
+        الإجمالي
+        <b id="bfModalTotal">0</b>
+      </div>
+      <button class="bf-modal-add" id="bfModalAdd">🛍️ أضف 4 + الهدية للسلة</button>
+      <div class="bf-modal-free-note">✨ هتوفر سعر شمعة كاملة</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  if(window.__vlBFModal) return;
+  window.__vlBFModal = true;
+
+  const PRODUCT_ID = 12;
+  const SCENTS = [
+    "كاسيليا — Massage", "اينتو زانايت — Massage",
+    "بوكيت روز", "ورد بلدى", "لافندر", "فانيلا",
+    "ياسمين", "عود خشب صندل", "عنبر", "موكا",
+    "كراميل", "شيكولاتة", "قهوة", "فراولة", "كوكونات"
+  ];
+
+  function getProduct(){
+    try {
+      if(typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)){
+        const p = ALL_PRODUCTS.find(x => Number(x.id) === PRODUCT_ID);
+        if(p) return p;
+      }
+    } catch(e){}
+    try {
+      if(typeof PRODUCTS !== "undefined" && Array.isArray(PRODUCTS)){
+        const p = PRODUCTS.find(x => Number(x.id) === PRODUCT_ID);
+        if(p) return p;
+      }
+    } catch(e){}
+    try {
+      const c = JSON.parse(localStorage.getItem("vl_products_v3") || "[]");
+      return c.find(x => Number(x.id) === PRODUCT_ID) || null;
+    } catch(e){ return null; }
+  }
+
+  function money(n){
+    try { return new Intl.NumberFormat("en-EG").format(Math.round(n)) + " جنيه"; }
+    catch(e){ return Math.round(n) + " جنيه"; }
+  }
+
+  function openModal(){
+    const overlay = document.getElementById("bfModalOverlay");
+    const body = document.getElementById("bfModalBody");
+    if(!overlay || !body) return;
+
+    const product = getProduct();
+    if(!product){
+      if(typeof toast === "function") toast("⚠️ حصل خطأ في تحميل المنتج، جربي تاني");
+      return;
+    }
+
+    const price = Number(product.price) || 0;
+    const scentOpts = SCENTS.map(s => `<option value="${s}">${s}</option>`).join("");
+
+    body.innerHTML = "";
+    for(let i = 0; i < 4; i++){
+      const row = document.createElement("div");
+      row.className = "bf-modal-row";
+      row.innerHTML = `
+        <span class="bf-modal-num">${i+1}</span>
+        <select class="bf-modal-scent" data-i="${i}" aria-label="عطر الشمعة ${i+1}">
+          <option value="">— اختاري العطر —</option>
+          ${scentOpts}
+        </select>
+      `;
+      body.appendChild(row);
+    }
+
+    const totalEl = document.getElementById("bfModalTotal");
+    if(totalEl && price > 0){
+      const full = price * 4;
+      const grand = price * 5;
+      totalEl.innerHTML = money(full) + ` <s>${money(grand)}</s>`;
+    } else if(totalEl){
+      totalEl.textContent = "—";
+    }
+
+    overlay.classList.add("is-open");
+    overlay.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal(){
+    const overlay = document.getElementById("bfModalOverlay");
+    if(!overlay) return;
+    overlay.classList.remove("is-open");
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  function addAll(){
+    const selects = Array.from(document.querySelectorAll(".bf-modal-scent"));
+    const scents = [];
+    let hasError = false;
+
+    selects.forEach(sel => {
+      if(!sel.value){ hasError = true; sel.classList.add("has-error"); }
+      else { sel.classList.remove("has-error"); scents.push(sel.value); }
+    });
+
+    if(hasError){
+      if(typeof toast === "function") toast("⚠️ اختاري العطر لكل شمعة من 1 لـ 4");
+      return;
+    }
+
+    const product = getProduct();
+    if(!product){ toast && toast("⚠️ حصل خطأ"); return; }
+
+    let cart = [];
+    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ cart = []; }
+    if(!Array.isArray(cart)) cart = [];
+
+    /* 4 شمعات بعطورها */
+    scents.forEach(scent => {
+      const ex = cart.find(i =>
+        Number(i.id) === PRODUCT_ID &&
+        String(i.scent) === String(scent) &&
+        i.isGift !== true
+      );
+      if(ex){ ex.qty = Number(ex.qty || 1) + 1; }
+      else {
+        cart.push({
+          id: PRODUCT_ID,
+          name: product.name || "شمعة مساج ريلاكس",
+          nameEn: product.nameEn || "Relaxing Massage Candle",
+          price: Number(product.price) || 0,
+          old: 0, qty: 1,
+          scent: scent,
+          img: product.img || ""
+        });
+      }
+    });
+
+    /* الهدية بعطر أول شمعة */
+    cart.push({
+      id: PRODUCT_ID,
+      name: product.name || "شمعة مساج ريلاكس",
+      nameEn: product.nameEn || "Relaxing Massage Candle",
+      price: 0,
+      old: Number(product.price) || 0,
+      qty: 1,
+      scent: scents[0],
+      isGift: true,
+      img: product.img || ""
+    });
+
+    try { localStorage.setItem("vl_cart", JSON.stringify(cart)); } catch(e){}
+
+    closeModal();
+    if(typeof toast === "function") toast("🎉 تمت إضافة 4 شمعات + الهدية للسلة!");
+
+    setTimeout(() => {
+      const cb = document.getElementById("cartBtn");
+      if(cb) cb.click();
+    }, 350);
+  }
+
+  function init(){
+    const cta = document.getElementById("bfPromoCta");
+    if(cta) cta.addEventListener("click", e => { e.preventDefault(); openModal(); });
+
+    const closeBtn = document.getElementById("bfModalClose");
+    if(closeBtn) closeBtn.addEventListener("click", closeModal);
+
+    const overlay = document.getElementById("bfModalOverlay");
+    if(overlay) overlay.addEventListener("click", e => { if(e.target === overlay) closeModal(); });
+
+    const addBtn = document.getElementById("bfModalAdd");
+    if(addBtn) addBtn.addEventListener("click", addAll);
+
+    document.addEventListener("change", e => {
+      if(e.target.classList && e.target.classList.contains("bf-modal-scent")){
+        e.target.classList.remove("has-error");
+      }
+    });
+
+    document.addEventListener("keydown", e => {
+      if(e.key === "Escape") closeModal();
+    });
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+<!-- ═══ END BLACK FRIDAY OFFER MODAL ═══ -->
 </body>
 </html>
