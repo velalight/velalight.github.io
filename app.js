@@ -1771,3 +1771,108 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
 /* تنظيف أي تخزين قديم للإعلان — يشتغل مرة واحدة بس */
 try { sessionStorage.removeItem("bf_promo_dismissed"); } catch(e){}
 try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   🛡️ CART STABILITY FIX v2 — منع ترعش السلة + حماية الكتابة
+   - يمنع الكليكات البرمجية (isTrusted=false) من فتح/قفل السلة لو المستخدم شغال
+   - يمنع le() من مسح اللي المستخدم كتبه في الـ inputs
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlCartStability) return;
+  window.__vlCartStability = true;
+
+  const drawer = document.getElementById("cartDrawer");
+
+  /* ═══ 1) تتبع متى اتفتحت السلة ═══ */
+  if(drawer){
+    const obs = new MutationObserver(function(){
+      if(drawer.classList.contains("open")){
+        drawer.dataset.lastOpen = String(Date.now());
+      }
+    });
+    obs.observe(drawer, { attributes: true, attributeFilter: ["class"] });
+  }
+
+  function isUserTyping(){
+    const a = document.activeElement;
+    return a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA" || a.tagName === "SELECT");
+  }
+
+  function cartJustOpened(){
+    if(!drawer || !drawer.classList.contains("open")) return false;
+    const t = Number(drawer.dataset.lastOpen || 0);
+    return t && Date.now() - t < 2500;
+  }
+
+  /* ═══ 2) منع الكليكات البرمجية من ترعش السلة ═══ */
+  const cartBtn = document.getElementById("cartBtn");
+  const closeBtn = document.getElementById("closeCart");
+
+  [cartBtn, closeBtn].forEach(btn => {
+    if(!btn) return;
+    btn.addEventListener("click", function(e){
+      /* لو الكليك من المستخدم نفسه (بيده) → مسموح دايماً */
+      if(e.isTrusted) return;
+
+      /* كليك برمجي: لو المستخدم شغال في السلة → امنعه */
+      if(drawer && drawer.classList.contains("open")){
+        if(isUserTyping() || cartJustOpened()){
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+        }
+      }
+    }, true); /* capture phase — قبل أي handler تاني */
+  });
+
+  /* ═══ 3) حماية حقول الإدخال من المسح التلقائي ═══ */
+  const fields = ["coName", "coPhone", "coEmail", "coCity", "coAddr", "coNotes", "couponInput"];
+  const userEditing = new Set();
+  const lastGood = {};
+
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    lastGood[id] = el.value;
+
+    el.addEventListener("focus", function(){
+      /* الحماية تشتغل بس لو المستخدم بدأ يكتب فعلاً */
+      if(el.dataset.vlUserTyped === "1"){
+        userEditing.add(id);
+        lastGood[id] = el.value;
+      }
+    }, true);
+
+    el.addEventListener("input", function(){
+      el.dataset.vlUserTyped = "1";
+      userEditing.add(id);
+      lastGood[id] = el.value;
+    });
+
+    el.addEventListener("blur", function(){
+      setTimeout(function(){
+        userEditing.delete(id);
+        /* reset بعد ما المستخدم يخرج — عشان le() تقدر تشتغل تاني */
+        el.dataset.vlUserTyped = "";
+      }, 500);
+    }, true);
+  });
+
+  /* كل 80ms: لو الحقل focused والقيمة اتغيرت من غير المستخدم → رجعها */
+  setInterval(function(){
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if(!el || !el.isConnected) return;
+      if(!userEditing.has(id)) return;
+      if(document.activeElement !== el) return;
+      if(el.value !== lastGood[id]){
+        el.value = lastGood[id];
+      }
+    });
+  }, 80);
+
+  console.log("🛡️ Cart Stability Fix v2 active — no auto-close, no input clear");
+})();
