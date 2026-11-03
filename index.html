@@ -345,149 +345,369 @@
 <a href="#products" class="skip-link">تخطي للمحتوى</a>
 
 <!-- ═══════════════════════════════════════════════
-     ⚡ BLACK FRIDAY PROMO BAR — عرض الصحاب
-     (اشتري 4 شمعات مساج + الخامسة هدية — منتج ID 12)
+     ⚡ BLACK FRIDAY PROMO BAR v2 — عرض الصحاب
      ═══════════════════════════════════════════════ -->
 <div class="bf-promo-bar" id="bfPromoBar" role="region" aria-label="عرض بلاك فرايدي: عرض الصحاب">
-  <div class="bf-promo-inner">
-    <span class="bf-promo-icon" aria-hidden="true">⚡</span>
-    <p class="bf-promo-text">
-      <strong>بلاك فرايدي — عرض الصحاب:</strong>
-      اشتري <b>4 شمعات مساج</b> واحصلي على <b>الخامسة هدية</b> 🎁
-    </p>
-    <a href="shop/12.html" class="bf-promo-cta">اطلبي العرض ✨</a>
-    <button type="button" class="bf-promo-close" id="bfPromoClose" aria-label="إغلاق العرض">✕</button>
+  <div class="bf-promo-badge" aria-hidden="true">
+    <span class="bf-badge-line1">BLACK</span>
+    <span class="bf-badge-line2">FRIDAY</span>
+    <span class="bf-badge-sparkle">✨</span>
   </div>
-  <p class="bf-promo-note">* العرض ساري لحد نفاد الكمية</p>
+
+  <div class="bf-promo-content">
+    <h3 class="bf-promo-title">
+      <span class="bf-title-ar">عرض الصحاب</span>
+      <span class="bf-title-en">FRIENDS OFFER</span>
+    </h3>
+    <p class="bf-promo-sub">
+      اشتري <span class="bf-num">4</span> شمعات مساج
+      <span class="bf-amp">+</span>
+      الخامسة
+      <span class="bf-gift">هدية 🎁</span>
+    </p>
+    <p class="bf-promo-en-sub">BUY 4 · GET 1 FREE</p>
+  </div>
+
+  <a href="shop/12.html" class="bf-promo-cta" id="bfPromoCta">
+    <span class="bf-cta-ar">اطلبي العرض</span>
+    <span class="bf-cta-en">ORDER NOW ✨</span>
+  </a>
+
+  <button type="button" class="bf-promo-close" id="bfPromoClose" aria-label="إغلاق العرض">✕</button>
+  <p class="bf-promo-note">* العرض ساري لحد نفاد الكمية · Limited Stock</p>
 </div>
 <style>
+.bf-promo-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 16px 52px 22px 20px;
+  background:
+    radial-gradient(ellipse at top, rgba(212,175,55,0.35) 0%, transparent 60%),
+    linear-gradient(135deg, #0a0805 0%, #1a1512 50%, #2a1c0b 100%);
+  border-bottom: 2px solid #d4af37;
+  box-shadow:
+    0 4px 30px rgba(212,175,55,0.25),
+    inset 0 -1px 0 rgba(212,175,55,0.5);
+  overflow: hidden;
+  z-index: 100;
+  flex-wrap: wrap;
+  animation: bfBarSlide 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  min-height: 96px;
+  font-family: 'Tajawal', 'El Messiri', sans-serif;
+}
+.bf-promo-bar::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.18) 50%, transparent 100%);
+  animation: bfShimmer 4s infinite;
+  pointer-events: none;
+}
+@keyframes bfShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes bfBarSlide {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.bf-promo-bar.is-hidden { display: none !important; }
+
+.bf-promo-badge {
+  position: relative;
+  flex-shrink: 0;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffe45c 0%, #ffd700 40%, #d4af37 75%, #a67c00 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 20px rgba(255,215,0,0.6),
+    0 0 40px rgba(255,215,0,0.3),
+    inset 0 -3px 8px rgba(0,0,0,0.25),
+    inset 0 3px 8px rgba(255,255,255,0.4);
+  animation: bfBadgePulse 2s ease-in-out infinite;
+  transform: rotate(-8deg);
+  z-index: 2;
+}
+@keyframes bfBadgePulse {
+  0%, 100% {
+    transform: rotate(-8deg) scale(1);
+    box-shadow: 0 0 20px rgba(255,215,0,0.6), 0 0 40px rgba(255,215,0,0.3), inset 0 -3px 8px rgba(0,0,0,0.25), inset 0 3px 8px rgba(255,255,255,0.4);
+  }
+  50% {
+    transform: rotate(-8deg) scale(1.08);
+    box-shadow: 0 0 30px rgba(255,215,0,0.9), 0 0 60px rgba(255,215,0,0.5), inset 0 -3px 8px rgba(0,0,0,0.25), inset 0 3px 8px rgba(255,255,255,0.4);
+  }
+}
+.bf-badge-line1 {
+  font-family: 'Tajawal', 'Arial Black', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 900;
+  color: #1a1512;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.bf-badge-line2 {
+  font-family: 'Tajawal', 'Arial Black', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: #1a1512;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+.bf-badge-sparkle {
+  position: absolute;
+  top: -8px; right: -8px;
+  font-size: 1.05rem;
+  animation: bfSparkle 1.5s ease-in-out infinite;
+}
+@keyframes bfSparkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.4) rotate(20deg); opacity: 0.7; }
+}
+
+.bf-promo-content {
+  text-align: center;
+  flex: 1;
+  min-width: 220px;
+}
+.bf-promo-title {
+  margin: 0 0 6px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.bf-title-ar {
+  font-family: 'El Messiri', 'Tajawal', serif;
+  font-size: 1.55rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fff 0%, #ffd700 50%, #d4af37 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: bfTitleGlow 3s ease-in-out infinite;
+}
+@keyframes bfTitleGlow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(255,215,0,0.5)); }
+  50% { filter: drop-shadow(0 0 16px rgba(255,215,0,0.9)); }
+}
+.bf-title-en {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #d4af37;
+  opacity: 0.85;
+}
+.bf-promo-sub {
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.bf-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffd700, #d4af37);
+  color: #1a1512;
+  font-weight: 900;
+  font-size: 1rem;
+  box-shadow: 0 0 12px rgba(255,215,0,0.7);
+  animation: bfNumPop 2s ease-in-out infinite;
+}
+@keyframes bfNumPop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+.bf-amp { color: #d4af37; font-weight: 900; font-size: 1.1rem; }
+.bf-gift {
+  color: #ffd700;
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(255,215,0,0.6);
+  display: inline-block;
+  animation: bfGiftWiggle 3s ease-in-out infinite;
+}
+@keyframes bfGiftWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+.bf-promo-en-sub {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: rgba(212, 175, 55, 0.75);
+  font-family: 'Tajawal', sans-serif;
+}
+
+.bf-promo-cta {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #ffe45c 0%, #ffd700 40%, #d4af37 75%, #a67c00 100%);
+  color: #1a1512 !important;
+  border-radius: 99px;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 0.95rem;
+  box-shadow: 0 6px 20px rgba(255,215,0,0.5), 0 0 0 2px rgba(255,215,0,0.3);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  animation: bfCtaBounce 2.5s ease-in-out infinite;
+  z-index: 2;
+}
+.bf-promo-cta::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+  animation: bfCtaShine 3s infinite;
+}
+@keyframes bfCtaShine {
+  0%, 100% { left: -100%; }
+  50% { left: 100%; }
+}
+@keyframes bfCtaBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.bf-promo-cta:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(255,215,0,0.8), 0 0 0 3px rgba(255,215,0,0.5);
+}
+.bf-cta-ar { font-size: 0.95rem; font-weight: 900; }
+.bf-cta-en {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  opacity: 0.85;
+}
+
+.bf-promo-close {
+  position: absolute;
+  top: 8px; right: 10px;
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  color: #d4af37;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  z-index: 3;
+}
+.bf-promo-close:hover {
+  background: rgba(212, 175, 55, 0.3);
+  border-color: #ffd700;
+  color: #ffd700;
+  transform: rotate(90deg);
+}
+
+.bf-promo-note {
+  position: absolute;
+  bottom: 4px;
+  left: 0; right: 0;
+  text-align: center;
+  font-size: 0.62rem;
+  color: rgba(212, 175, 55, 0.6);
+  letter-spacing: 0.5px;
+  margin: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
   .bf-promo-bar {
-    position: relative;
-    background: linear-gradient(135deg, #1a1512 0%, #2a1c0b 100%);
-    color: #fff;
-    padding: 14px 16px 10px;
-    border-bottom: 2px solid #d4af37;
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
-    z-index: 100;
-    animation: bfSlideDown 0.5s ease;
-  }
-  @keyframes bfSlideDown {
-    from { transform: translateY(-100%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-  .bf-promo-bar.is-hidden { display: none !important; }
-  .bf-promo-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-left: 32px;
-  }
-  .bf-promo-icon {
-    font-size: 1.4rem;
-    animation: bfPulse 1.6s ease-in-out infinite;
-    flex-shrink: 0;
-  }
-  @keyframes bfPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-  }
-  .bf-promo-text {
-    margin: 0;
-    font-size: 0.95rem;
-    font-weight: 500;
-    line-height: 1.5;
+    padding: 12px 40px 22px 12px;
+    gap: 10px;
+    min-height: 118px;
+    flex-direction: column;
     text-align: center;
-    flex: 1;
-    min-width: 200px;
   }
-  .bf-promo-text strong {
-    color: #ffd700;
-    font-weight: 800;
-    margin-left: 4px;
+  .bf-promo-badge { width: 68px; height: 68px; }
+  .bf-badge-line1 { font-size: 0.55rem; }
+  .bf-badge-line2 { font-size: 0.7rem; }
+  .bf-title-ar { font-size: 1.18rem; }
+  .bf-title-en { font-size: 0.6rem; letter-spacing: 2px; }
+  .bf-promo-sub { font-size: 0.78rem; gap: 5px; }
+  .bf-num { width: 22px; height: 22px; font-size: 0.8rem; }
+  .bf-promo-en-sub { font-size: 0.62rem; letter-spacing: 1.5px; }
+  .bf-promo-cta { padding: 8px 18px; }
+  .bf-cta-ar { font-size: 0.82rem; }
+  .bf-cta-en { font-size: 0.55rem; }
+  .bf-promo-note { font-size: 0.55rem; bottom: 4px; }
+  .bf-promo-close { width: 22px; height: 22px; font-size: 0.75rem; top: 6px; right: 8px; }
+}
+@media (max-width: 400px) {
+  .bf-title-ar { font-size: 1rem; }
+  .bf-promo-sub { font-size: 0.72rem; }
+  .bf-title-en { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bf-promo-bar, .bf-promo-bar::before, .bf-promo-badge, .bf-badge-sparkle,
+  .bf-title-ar, .bf-num, .bf-gift, .bf-promo-cta, .bf-promo-cta::before {
+    animation: none !important;
   }
-  .bf-promo-text b {
-    color: #d4af37;
-    font-weight: 800;
-  }
-  .bf-promo-cta {
-    display: inline-block;
-    background: linear-gradient(135deg, #ffd700 0%, #d4af37 55%, #b8912b 100%);
-    color: #1a1512 !important;
-    font-weight: 800;
-    padding: 8px 20px;
-    border-radius: 99px;
-    text-decoration: none;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    flex-shrink: 0;
-  }
-  .bf-promo-cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(212, 175, 55, 0.6);
-  }
-  .bf-promo-close {
-    position: absolute;
-    top: 6px;
-    right: 10px;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    color: #fff;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    font-size: 0.85rem;
-    cursor: pointer;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    padding: 0;
-  }
-  .bf-promo-close:hover {
-    background: rgba(212, 175, 55, 0.3);
-    border-color: #d4af37;
-  }
-  .bf-promo-note {
-    margin: 6px auto 0;
-    text-align: center;
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.55);
-    letter-spacing: 0.3px;
-    max-width: 1200px;
-  }
-  @media (max-width: 600px) {
-    .bf-promo-bar { padding: 10px 12px 8px; }
-    .bf-promo-inner { gap: 8px; padding-left: 26px; }
-    .bf-promo-text { font-size: 0.8rem; }
-    .bf-promo-cta { padding: 6px 14px; font-size: 0.75rem; }
-    .bf-promo-icon { font-size: 1.1rem; }
-    .bf-promo-note { font-size: 0.62rem; }
-    .bf-promo-close { top: 4px; right: 6px; width: 22px; height: 22px; font-size: 0.75rem; }
-  }
+}
 </style>
 <script>
-  (function(){
-    "use strict";
-    var bar = document.getElementById("bfPromoBar");
-    var close = document.getElementById("bfPromoClose");
-    if(!bar) return;
-    try { if(localStorage.getItem("bf_promo_dismissed") === "1"){ bar.classList.add("is-hidden"); return; } } catch(e){}
-    if(close){
-      close.addEventListener("click", function(){
-        bar.classList.add("is-hidden");
-        try { localStorage.setItem("bf_promo_dismissed", "1"); } catch(e){}
-      });
+(function(){
+  "use strict";
+  var bar = document.getElementById("bfPromoBar");
+  var close = document.getElementById("bfPromoClose");
+  var cta = document.getElementById("bfPromoCta");
+
+  if(!bar) return;
+
+  // ✅ Cache buster — يمنع ظهور السعر القديم (375) من الكاش
+  if(cta){
+    var today = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    cta.href = "shop/12.html?v=" + today;
+  }
+
+  try {
+    if(localStorage.getItem("bf_promo_dismissed") === "1"){
+      bar.classList.add("is-hidden");
+      return;
     }
-  })();
+  } catch(e){}
+
+  if(close){
+    close.addEventListener("click", function(){
+      bar.classList.add("is-hidden");
+      try { localStorage.setItem("bf_promo_dismissed", "1"); } catch(e){}
+    });
+  }
+})();
 </script>
-<!-- ═══ END BLACK FRIDAY PROMO BAR ═══ -->
+<!-- ═══ END BLACK FRIDAY PROMO BAR v2 ═══ -->
 
 <!-- ═══════════════════════════════════════════════
      TOP BAR
@@ -1610,7 +1830,6 @@ document.addEventListener('DOMContentLoaded', function(){
       const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
       if(!Array.isArray(cart) || !cart.length) return;
 
-      // نحسب كمية شمعات المساج (ID 12) في السلة
       const massageQty = cart
         .filter(function(i){ return i && Number(i.id) === MASSAGE_ID; })
         .reduce(function(s, i){ return s + Number(i.qty || 1); }, 0);
