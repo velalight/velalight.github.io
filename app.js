@@ -160,7 +160,7 @@ if(typeof location!=="undefined"&&/velalight\.github\.io/i.test(location.hostnam
   if(window.__vlGiftV7) return;
   window.__vlGiftV7 = true;
 
-  const GIFT_IMG = "https://velalight.github.io/Velalight-Car-Diffuser-03.webp";
+  const GIFT_IMG = "https://velalight.github.io/velalight-massage-mandala-spa-spa.webp";
   const GIFT_IDS = ["pmvj8cij7c34", "pmvj8qxhca70"];
   const MIN = 1000;
   let busy = false;
