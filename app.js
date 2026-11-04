@@ -1086,575 +1086,238 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
 })();
 
 /* ═══════════════════════════════════════════════════════════════════
-   🛒 CART UX FIX v3 — السلة الاحترافية (Pro Max)
-   ✅ إخفاء إعلان الفواحة القديم نهائياً
-   ✅ سكرول سلس للمنتجات + فوتر ثابت ومضغوط
-   ✅ تصميم مودال في منتصف الشاشة (زي أمازون)
-   ✅ فورم بيانات مرتب وأسهل في الكتابة
+   💪 CART FINAL OWNER v2 — الحل الجذري النهائي للسلة (بدون أي تعارض)
+   - السلة بتقفل فوراً عند الإفراغ ومستحيل تعلق
+   - زر X محصن 100%
+   - الفوتر ثابت والأزرار دايماً ظاهرة
+   - إخفاء أي إعلانات فواحة أو صندوق دفع قديم
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
-  if(window.__vlCartUXFixV3) return;
-  window.__vlCartUXFixV3 = true;
+  if(window.__vlCartFinalOwnerV2) return;
+  window.__vlCartFinalOwnerV2 = true;
 
-  /* ═══ 1) CSS شامل بـ !important ═══ */
-  const style = document.createElement("style");
-  style.id = "vlCartUXStylesV3";
-  style.textContent = `
-    /* ─────────── DESKTOP: Centered Modal (Amazon Style) ─────────── */
-    @media (min-width: 1024px){
-      #cartDrawer.drawer{
-        width: 480px !important;
-        max-width: 95vw !important;
-        inset-inline: auto !important;
-        left: 50% !important;
-        right: auto !important;
-        top: 5vh !important;
-        bottom: 5vh !important;
-        height: 90vh !important;
-        border-radius: 16px !important;
-        border: 1px solid rgba(212,175,55,.3) !important;
-        transform: translateX(-50%) translateY(20px) scale(0.98) !important;
-        box-shadow: 0 24px 80px rgba(0,0,0,.4), 0 0 0 1px rgba(212,175,55,.1) !important;
-        z-index: 999999 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        overflow: hidden !important;
-        opacity: 0;
-        transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-      }
-      #cartDrawer.drawer.open{
-        transform: translateX(-50%) translateY(0) scale(1) !important;
-        opacity: 1;
-      }
-      #cartOv.ovl.open{
-        background: rgba(20,15,10,.6) !important;
-        backdrop-filter: blur(8px) !important;
-        -webkit-backdrop-filter: blur(8px) !important;
-      }
-    }
-
-    /* ─────────── HEADER: ثابت فوق ─────────── */
-    #cartDrawer .dhead{
-      flex: 0 0 auto !important;
-      padding: 16px 20px !important;
-      border-bottom: 1px solid rgba(212,175,55,.15) !important;
-      background: #fff !important;
-    }
-
-    /* ─────────── BODY: المنتجات (بسكرول) ─────────── */
-    #cartDrawer .dbody{
-      flex: 1 1 auto !important;
-      overflow-y: auto !important;
-      overflow-x: hidden !important;
-      min-height: 120px !important;
-      padding: 12px 16px !important;
+  // 1. إزالة أي ستايلات قديمة متعارضة (بنسيب vl-cart-luxe-styles لأنه فيه الستايلات الأساسية)
+  ["vlCartUXStylesV3", "vlCartUXStylesV4", "vlCartFinalCSS"].forEach(id => {
+    document.getElementById(id)?.remove();
+  });
+   
+  // 2. إضافة ستايل جديد متكامل
+  const css = document.createElement("style");
+  css.id = "vlCartFinalCSSV2";
+  css.textContent = `
+    /* ═══ حماية السلة ═══ */
+    #cartDrawer.drawer {
+      display: flex !important;
+      flex-direction: column !important;
+      width: min(480px, 100vw) !important;
+      height: 100vh !important;
+      height: 100dvh !important;
+      max-height: 100vh !important;
+      max-height: 100dvh !important;
+      overflow: hidden !important;
       background: #faf8f5 !important;
-      scroll-behavior: smooth !important;
+      z-index: 99999 !important;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
     }
-    #cartDrawer .dbody::-webkit-scrollbar{ width: 5px !important; }
-    #cartDrawer .dbody::-webkit-scrollbar-thumb{
-      background: rgba(212,175,55,.5) !important;
-      border-radius: 10px !important;
-    }
-
-    /* ─────────── FOOTER: البيانات (ثابت تحت) ─────────── */
-    #cartDrawer .dfoot{
-      flex: 0 0 auto !important;
-      max-height: 55vh !important; /* مساحة محددة عشان المنتجات تبان */
-      overflow-y: auto !important;
-      border-top: 1px solid rgba(212,175,55,.2) !important;
-      padding: 16px 20px calc(16px + env(safe-area-inset-bottom)) !important;
-      background: #ffffff !important;
-      box-shadow: 0 -10px 30px rgba(0,0,0,.05) !important;
-      position: relative !important;
-    }
-    #cartDrawer .dfoot::-webkit-scrollbar{ width: 5px !important; }
-    #cartDrawer .dfoot::-webkit-scrollbar-thumb{
-      background: rgba(212,175,55,.5) !important;
-      border-radius: 10px !important;
-    }
-
-    /* ─────────── FORM: ضغط الفورم وتنسيقه ─────────── */
-    #cartDrawer .co-form{
-      display: grid !important;
-      grid-template-columns: 1fr 1fr !important;
-      gap: 8px !important;
-      margin-bottom: 12px !important;
-    }
-    #cartDrawer .co-form > *{ margin: 0 !important; }
-    #cartDrawer .co-form > input[type="email"],
-    #cartDrawer .co-form > select,
-    #cartDrawer .co-form > input#coAddr,
-    #cartDrawer .co-form > textarea{
-      grid-column: 1 / -1 !important;
-    }
-    #cartDrawer input,
-    #cartDrawer select,
-    #cartDrawer textarea{
-      padding: 10px 12px !important;
-      font-size: .85rem !important;
-      border-radius: 8px !important;
-      border: 1px solid rgba(212,175,55,.3) !important;
-      background: #faf8f5 !important;
-      transition: all 0.2s !important;
-    }
-    #cartDrawer input:focus,
-    #cartDrawer select:focus,
-    #cartDrawer textarea:focus{
-      border-color: #d4af37 !important;
-      box-shadow: 0 0 0 3px rgba(212,175,55,.15) !important;
-      background: #ffffff !important;
-    }
-    #cartDrawer textarea{ min-height: 40px !important; max-height: 60px !important; }
-
-    /* ─────────── إخفاء العناصر اللي بتاخد مساحة (صندوق الدفع + شارات الثقة) ─────────── */
-    #cartDrawer .paybox,
-    #cartDrawer .vl-trust-wrap,
-    #cartDrawer .cart-shipping-note,
-    #cartDrawer .gift-promo-terms { 
-      display: none !important; 
-    }
-
-    /* ─────────── TOTALS ROWS ─────────── */
-    #cartDrawer .trow{
-      padding: 6px 0 !important;
-      font-size: .85rem !important;
-    }
-    #cartDrawer .trow.total{
-      padding-top: 10px !important;
-      margin-top: 6px !important;
-      border-top: 2px dashed rgba(212,175,55,.3) !important;
-      font-size: 1.1rem !important;
-      font-weight: 900 !important;
-    }
-
-    /* ─────────── COUPON ─────────── */
-    #cartDrawer #couponInput{ padding: 10px 12px !important; font-size: .85rem !important; }
-    #cartDrawer #applyCouponBtn{ padding: 10px 16px !important; font-size: .85rem !important; min-width: 80px !important; }
-
-    /* ─────────── BUTTONS ─────────── */
-    #cartDrawer #checkoutBtn{
-      padding: 14px !important;
-      font-size: .95rem !important;
-      border-radius: 10px !important;
-      margin-top: 12px !important;
-      font-weight: 800 !important;
-    }
-    #cartDrawer #emptyCartBtn{
-      padding: 10px !important;
-      font-size: .8rem !important;
-      margin-top: 6px !important;
-      opacity: .6 !important;
-    }
-    #cartDrawer #emptyCartBtn:hover{ opacity: 1 !important; }
-
-    /* ─────────── MOBILE: full screen ─────────── */
-    @media (max-width: 1023px){
-      #cartDrawer.drawer{
-        width: 100% !important;
-        max-width: 100% !important;
-        height: 100vh !important;
-        height: 100dvh !important;
-        max-height: 100vh !important;
-        max-height: 100dvh !important;
-        border-radius: 0 !important;
-        top: 0 !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        transform: translateY(100%) !important;
-        opacity: 1 !important;
-      }
-      #cartDrawer.drawer.open{ transform: translateY(0) !important; }
-      #cartDrawer .co-form{ grid-template-columns: 1fr !important; }
-      #cartDrawer .co-form > *{ grid-column: 1 / -1 !important; }
-      #cartDrawer .dfoot{ max-height: 60vh !important; }
-    }
-  `;
-  document.head.appendChild(style);
-
-  /* ═══ 2) مسح إعلان الفواحة القديم نهائياً من السلة ═══ */
-  function killOldGiftBanners(){
-    const row = document.getElementById("giftProgressRow");
-    if(row) row.remove();
     
-    const shipBar = document.querySelector("#cartDrawer .vl-ship-bar");
-    if(shipBar && shipBar.textContent.includes("فواحة")) {
-      const parent = shipBar.closest(".vl-ship-bar");
-      if(parent) parent.remove();
+    /* السلة تختفي تماماً لو مش مفتوحة */
+    #cartDrawer.drawer:not(.open) {
+      visibility: hidden !important;
+      pointer-events: none !important;
+      opacity: 0 !important;
     }
-  }
-
-  /* ═══ 3) إعادة ترتيب عناصر dfoot ═══ */
-  function rearrangeFooter(){
-    const dfoot = document.querySelector("#cartDrawer .dfoot");
-    if(!dfoot) return;
-    const cartItems = document.getElementById("cartItems");
-    if(cartItems && cartItems.querySelector(".vl-empty-cart")) return;
-
-    const coForm = dfoot.querySelector(".co-form");
-    const couponInput = dfoot.querySelector("#couponInput");
-    const couponRow = couponInput?.parentElement;
-    const discountRow = dfoot.querySelector("#discountRow");
-    const qtyDiscountRow = dfoot.querySelector("#qtyDiscountRow");
-    const cartSubRow = dfoot.querySelector("#cartSub")?.closest(".trow");
-    const cartTotalRow = dfoot.querySelector("#cartTotal")?.closest(".trow.total");
-    const checkoutBtn = dfoot.querySelector("#checkoutBtn");
-    const emptyBtn = dfoot.querySelector("#emptyCartBtn");
-    const dfootTitle = dfoot.querySelector("h4");
-
-    const newOrder = [
-      dfootTitle,
-      coForm,
-      couponRow,
-      discountRow,
-      qtyDiscountRow,
-      cartSubRow,
-      cartTotalRow,
-      checkoutBtn,
-      emptyBtn
-    ].filter(Boolean);
-
-    const seen = new Set();
-    const uniqueOrder = newOrder.filter(el => {
-      if(seen.has(el)) return false;
-      seen.add(el);
-      return true;
-    });
-
-    uniqueOrder.forEach(el => dfoot.appendChild(el));
-  }
-
-  /* ═══ 4) مراقبة الفتح والتحديثات ═══ */
-  function init(){
-    const drawer = document.getElementById("cartDrawer");
-    if(!drawer) return;
-
-    /* راقب أي عناصر بتتضاف (عشان نمسح الفواحة أول ما تظهر) */
-    new MutationObserver(function(){
-      if(drawer.classList.contains("open")){
-        killOldGiftBanners();
-      }
-    }).observe(drawer, { childList: true, subtree: true });
-
-    let lastOpenState = drawer.classList.contains("open");
-    new MutationObserver(function(){
-      const isOpen = drawer.classList.contains("open");
-      if(isOpen && !lastOpenState){
-        setTimeout(() => {
-          killOldGiftBanners();
-          rearrangeFooter();
-        }, 100);
-      }
-      lastOpenState = isOpen;
-    }).observe(drawer, { attributes: true, attributeFilter: ["class"] });
-
-    if(drawer.classList.contains("open")){
-      setTimeout(killOldGiftBanners, 100);
-      setTimeout(rearrangeFooter, 100);
+    #cartDrawer.drawer.open {
+      visibility: visible !important;
+      pointer-events: auto !important;
+      opacity: 1 !important;
     }
-  }
-
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-
-  /* شغل دوري عشان نضمن إن الفواحة مش بترجع */
-  setInterval(() => {
-    const drawer = document.getElementById("cartDrawer");
-    if(drawer && drawer.classList.contains("open")) {
-      killOldGiftBanners();
-    }
-  }, 500);
-
-  console.log("🛒 Cart UX Fix v3 Active — Pro Max Edition");
-})();
-
-/* ═══════════════════════════════════════════════════════════════════
-   🛒 CART UX FIX v4 — الحل الجذري النهائي للسلة (Ultimate Edition)
-   ✅ السلة بتقفل تلقائياً عند الإفراغ (مفيش سلة معلقة)
-   ✅ تصميم مودال في منتصف الشاشة (زي أمازون)
-   ✅ سكرول للمنتجات + فوتر مضغوط
-   ✅ فورم في عمودين على الديسكتوب
-   ═══════════════════════════════════════════════════════════════════ */
-(function(){
-  "use strict";
-  if(window.__vlCartUXFixV4) return;
-  window.__vlCartUXFixV4 = true;
-
-  /* ═══ 1) CSS شامل ═══ */
-  const style = document.createElement("style");
-  style.id = "vlCartUXStylesV4";
-  style.textContent = `
-    /* ─── DESKTOP: Modal Centered ─── */
-    @media (min-width: 1024px){
-      #cartDrawer.drawer{
-        width: 480px !important;
-        max-width: 95vw !important;
-        inset-inline: auto !important;
-        left: 50% !important;
-        right: auto !important;
-        top: 5vh !important;
-        bottom: auto !important;
-        height: 90vh !important;
-        border-radius: 16px !important;
-        border: 1px solid rgba(212,175,55,.3) !important;
-        transform: translateX(-50%) translateY(20px) scale(0.98) !important;
-        box-shadow: 0 24px 80px rgba(0,0,0,.4), 0 0 0 1px rgba(212,175,55,.1) !important;
-        z-index: 999999 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        overflow: hidden !important;
-        opacity: 0;
-        transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
-      }
-      #cartDrawer.drawer.open{
-        transform: translateX(-50%) translateY(0) scale(1) !important;
-        opacity: 1;
-      }
-      #cartOv.ovl.open{
-        background: rgba(20,15,10,.6) !important;
-        backdrop-filter: blur(8px) !important;
-        -webkit-backdrop-filter: blur(8px) !important;
-      }
-    }
-
-    /* ─── HEADER ─── */
-    #cartDrawer .dhead{
+    
+    /* الهيدر */
+    #cartDrawer .dhead {
       flex: 0 0 auto !important;
-      padding: 16px 20px !important;
-      border-bottom: 1px solid rgba(212,175,55,.15) !important;
       background: #fff !important;
+      padding: 14px 18px !important;
+      border-bottom: 1px solid rgba(212,175,55,.2) !important;
     }
-
-    /* ─── BODY (المنتجات بسكرول) ─── */
-    #cartDrawer .dbody{
-      flex: 1 1 auto !important;
+    
+    /* المنتجات (سكرول) */
+    #cartDrawer .dbody {
+      flex: 1 1 0 !important;
+      min-height: 0 !important;
       overflow-y: auto !important;
-      overflow-x: hidden !important;
-      min-height: 120px !important;
       padding: 12px 16px !important;
-      background: #faf8f5 !important;
-      scroll-behavior: smooth !important;
+      -webkit-overflow-scrolling: touch !important;
     }
-    #cartDrawer .dbody::-webkit-scrollbar{ width: 5px !important; }
-    #cartDrawer .dbody::-webkit-scrollbar-thumb{
-      background: rgba(212,175,55,.5) !important;
-      border-radius: 10px !important;
-    }
-
-    /* ─── FOOTER (البيانات ثابتة تحت) ─── */
-    #cartDrawer .dfoot{
+    
+    /* الفوتر (ثابت تحت) */
+    #cartDrawer .dfoot {
       flex: 0 0 auto !important;
-      max-height: 45vh !important;
-      overflow-y: auto !important;
+      max-height: 55vh !important;
+      background: #fff !important;
       border-top: 1px solid rgba(212,175,55,.2) !important;
-      padding: 16px 20px calc(16px + env(safe-area-inset-bottom)) !important;
-      background: #ffffff !important;
-      box-shadow: 0 -10px 30px rgba(0,0,0,.05) !important;
-      position: relative !important;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom)) !important;
+      display: flex !important;
+      flex-direction: column !important;
     }
-    #cartDrawer .dfoot::-webkit-scrollbar{ width: 5px !important; }
-    #cartDrawer .dfoot::-webkit-scrollbar-thumb{
-      background: rgba(212,175,55,.5) !important;
-      border-radius: 10px !important;
-    }
-
-    /* ─── FORM (عمودين) ─── */
-    #cartDrawer .co-form{
+    
+    /* الفورم (عمودين - مساحة أوسع) */
+    #cartDrawer .co-form {
       display: grid !important;
       grid-template-columns: 1fr 1fr !important;
       gap: 8px !important;
-      margin-bottom: 12px !important;
+      overflow-y: auto !important;
+      padding-bottom: 10px !important;
+      min-height: 0 !important;
     }
-    #cartDrawer .co-form > *{ margin: 0 !important; }
     #cartDrawer .co-form > input[type="email"],
     #cartDrawer .co-form > select,
-    #cartDrawer .co-form > input#coAddr,
-    #cartDrawer .co-form > textarea{
+    #cartDrawer .co-form > #coAddr,
+    #cartDrawer .co-form > textarea {
       grid-column: 1 / -1 !important;
     }
-    #cartDrawer input,
-    #cartDrawer select,
-    #cartDrawer textarea{
+    #cartDrawer input, #cartDrawer select, #cartDrawer textarea {
       padding: 10px 12px !important;
-      font-size: .85rem !important;
+      font-size: 0.85rem !important;
       border-radius: 8px !important;
       border: 1px solid rgba(212,175,55,.3) !important;
       background: #faf8f5 !important;
-      transition: all 0.2s !important;
     }
-    #cartDrawer input:focus,
-    #cartDrawer select:focus,
-    #cartDrawer textarea:focus{
-      border-color: #d4af37 !important;
-      box-shadow: 0 0 0 3px rgba(212,175,55,.15) !important;
-      background: #ffffff !important;
+    #cartDrawer textarea {
+      min-height: 40px !important;
+      max-height: 60px !important;
     }
-    #cartDrawer textarea{ min-height: 40px !important; max-height: 60px !important; }
-
-    /* ─── إخفاء العناصر الزيادة ─── */
+    
+    /* إخفاء الفوضى */
     #cartDrawer .paybox,
     #cartDrawer .vl-trust-wrap,
     #cartDrawer .cart-shipping-note,
-    #cartDrawer .gift-promo-terms{
+    #cartDrawer .gift-promo-terms,
+    #cartDrawer .vl-ship-bar,
+    #cartDrawer .vl-loyalty-hint {
       display: none !important;
     }
-
-    /* ─── TOTALS ─── */
-    #cartDrawer .trow{
-      padding: 6px 0 !important;
-      font-size: .85rem !important;
-    }
-    #cartDrawer .trow.total{
-      padding-top: 10px !important;
-      margin-top: 6px !important;
-      border-top: 2px dashed rgba(212,175,55,.3) !important;
-      font-size: 1.1rem !important;
-      font-weight: 900 !important;
-    }
-
-    /* ─── COUPON ─── */
-    #cartDrawer #couponInput{ padding: 10px 12px !important; font-size: .85rem !important; }
-    #cartDrawer #applyCouponBtn{ padding: 10px 16px !important; font-size: .85rem !important; min-width: 80px !important; }
-
-    /* ─── BUTTONS ─── */
-    #cartDrawer #checkoutBtn{
+    
+    /* الأزرار ثابتة دايماً */
+    #cartDrawer #checkoutBtn {
       padding: 14px !important;
-      font-size: .95rem !important;
+      font-size: 1rem !important;
       border-radius: 10px !important;
-      margin-top: 12px !important;
-      font-weight: 800 !important;
+      margin-top: 10px !important;
+      font-weight: 900 !important;
+      box-shadow: 0 4px 15px rgba(46,139,69,.3) !important;
     }
-    #cartDrawer #emptyCartBtn{
+    #cartDrawer #emptyCartBtn {
       padding: 10px !important;
-      font-size: .8rem !important;
+      font-size: 0.8rem !important;
       margin-top: 6px !important;
-      opacity: .6 !important;
+      opacity: 0.6 !important;
     }
-    #cartDrawer #emptyCartBtn:hover{ opacity: 1 !important; }
-
-    /* ─── MOBILE ─── */
-    @media (max-width: 1023px){
-      #cartDrawer.drawer{
-        width: 100% !important;
-        max-width: 100% !important;
-        height: 100vh !important;
-        height: 100dvh !important;
-        max-height: 100vh !important;
-        max-height: 100dvh !important;
-        border-radius: 0 !important;
-        top: 0 !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        transform: translateY(100%) !important;
-        opacity: 1 !important;
+    #cartDrawer #emptyCartBtn:hover { opacity: 1 !important; }
+    
+    /* الديسكتوب */
+    @media (min-width: 1024px) {
+      #cartDrawer.drawer {
+        height: 85vh !important;
+        max-height: 85vh !important;
+        top: 7.5vh !important;
+        bottom: auto !important;
+        left: 50% !important;
+        right: auto !important;
+        inset-inline: auto !important;
+        border-radius: 20px !important;
+        box-shadow: 0 20px 60px rgba(0,0,0,.3) !important;
       }
-      #cartDrawer.drawer.open{ transform: translateY(0) !important; }
-      #cartDrawer .co-form{ grid-template-columns: 1fr !important; }
-      #cartDrawer .co-form > *{ grid-column: 1 / -1 !important; }
-      #cartDrawer .dfoot{ max-height: 55vh !important; }
+    }
+    
+    /* الموبايل */
+    @media (max-width: 1023px) {
+      #cartDrawer .co-form { grid-template-columns: 1fr !important; }
+      #cartDrawer .co-form > * { grid-column: 1 / -1 !important; }
     }
   `;
-  document.head.appendChild(style);
+  document.head.appendChild(css);
 
-  /* ═══ 2) مراقبة تغيير السلة للإغلاق التلقائي ═══ */
-  function watchCartEmpty(){
-    let wasEmpty = false;
-    setInterval(function(){
+  // 3. دالة إغلاق قوية
+  function killCart() {
+    try {
+      document.getElementById("cartDrawer")?.classList.remove("open");
+      document.getElementById("cartOv")?.classList.remove("open");
+      document.getElementById("ovl")?.classList.remove("open");
+      document.body.classList.remove("vl-cart-open");
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+      document.documentElement.style.overflow = "";
+    } catch(e){}
+  }
+
+  // 4. تحصين زر X
+  function hardenClose() {
+    const btn = document.getElementById("closeCart");
+    if(!btn || btn.dataset.vlHardenedV2 === "1") return;
+    
+    const fresh = btn.cloneNode(true);
+    fresh.dataset.vlHardenedV2 = "1";
+    fresh.style.cssText = "position:relative !important; z-index:99999 !important; pointer-events:auto !important; cursor:pointer !important;";
+    
+    ["click", "touchend", "pointerdown"].forEach(evt => {
+      fresh.addEventListener(evt, function(e){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        killCart();
+      }, { capture: true });
+    });
+    
+    btn.parentNode.replaceChild(fresh, btn);
+  }
+  
+  hardenClose();
+  [100, 500, 1500].forEach(t => setTimeout(hardenClose, t));
+  
+  const drawer = document.getElementById("cartDrawer");
+  if(drawer) {
+    new MutationObserver(hardenClose).observe(drawer, { childList: true, subtree: true });
+  }
+
+  // 5. مراقبة الإفراغ (إغلاق فوري)
+  let prevLen = -1;
+  setInterval(function(){
+    try {
+      const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
+      const len = Array.isArray(cart) ? cart.length : 0;
+      
+      if(prevLen > 0 && len === 0){
+        const dr = document.getElementById("cartDrawer");
+        if(dr && dr.classList.contains("open")){
+          setTimeout(killCart, 200);
+          if(typeof toast === "function") setTimeout(() => toast("🗑️ تم إفراغ السلة"), 300);
+        }
+      }
+      prevLen = len;
+    } catch(e){}
+  }, 200);
+
+  // 6. منع أي كود قديم من فتح السلة وهي فاضية
+  const cartBtn = document.getElementById("cartBtn");
+  if(cartBtn) {
+    let lastClose = 0;
+    if(drawer) {
+      new MutationObserver(function(){
+        if(!drawer.classList.contains("open")) lastClose = Date.now();
+      }).observe(drawer, { attributes: true, attributeFilter: ["class"] });
+    }
+    
+    const orig = cartBtn.click.bind(cartBtn);
+    cartBtn.click = function(){
       try {
         const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
         const isEmpty = !Array.isArray(cart) || cart.length === 0;
-        
-        /* لو كانت فيها منتجات وبقت فاضية دلوقتي (يعني حصل إفراغ) */
-        if(isEmpty && !wasEmpty){
-          const drawer = document.getElementById("cartDrawer");
-          if(drawer && drawer.classList.contains("open")){
-            /* اقفل السلة تلقائياً */
-            setTimeout(function(){
-              drawer.classList.remove("open");
-              const ovl = document.getElementById("cartOv");
-              if(ovl) ovl.classList.remove("open");
-              document.body.classList.remove("vl-cart-open");
-              document.body.style.overflow = "";
-              if(typeof toast === "function") toast("🗑️ تم إفراغ السلة");
-            }, 300);
-          }
-        }
-        wasEmpty = isEmpty;
+        if(isEmpty && Date.now() - lastClose < 2000) return;
       } catch(e){}
-    }, 300);
-  }
-  watchCartEmpty();
-
-  /* ═══ 3) إعادة ترتيب الفوتر ═══ */
-  function rearrangeFooter(){
-    const dfoot = document.querySelector("#cartDrawer .dfoot");
-    if(!dfoot) return;
-    const cartItems = document.getElementById("cartItems");
-    if(cartItems && cartItems.querySelector(".vl-empty-cart")) return;
-
-    const coForm = dfoot.querySelector(".co-form");
-    const couponInput = dfoot.querySelector("#couponInput");
-    const couponRow = couponInput?.parentElement;
-    const discountRow = dfoot.querySelector("#discountRow");
-    const qtyDiscountRow = dfoot.querySelector("#qtyDiscountRow");
-    const cartSubRow = dfoot.querySelector("#cartSub")?.closest(".trow");
-    const cartTotalRow = dfoot.querySelector("#cartTotal")?.closest(".trow.total");
-    const checkoutBtn = dfoot.querySelector("#checkoutBtn");
-    const emptyBtn = dfoot.querySelector("#emptyCartBtn");
-    const dfootTitle = dfoot.querySelector("h4");
-
-    const newOrder = [
-      dfootTitle,
-      coForm,
-      couponRow,
-      discountRow,
-      qtyDiscountRow,
-      cartSubRow,
-      cartTotalRow,
-      checkoutBtn,
-      emptyBtn
-    ].filter(Boolean);
-
-    const seen = new Set();
-    const uniqueOrder = newOrder.filter(el => {
-      if(seen.has(el)) return false;
-      seen.add(el);
-      return true;
-    });
-
-    uniqueOrder.forEach(el => dfoot.appendChild(el));
+      return orig();
+    };
   }
 
-  /* ═══ 4) مراقبة الفتح ═══ */
-  function init(){
-    const drawer = document.getElementById("cartDrawer");
-    if(!drawer) return;
-
-    let lastOpenState = drawer.classList.contains("open");
-    new MutationObserver(function(){
-      const isOpen = drawer.classList.contains("open");
-      if(isOpen && !lastOpenState){
-        setTimeout(rearrangeFooter, 100);
-      }
-      lastOpenState = isOpen;
-    }).observe(drawer, { attributes: true, attributeFilter: ["class"] });
-
-    if(drawer.classList.contains("open")){
-      setTimeout(rearrangeFooter, 100);
-    }
-  }
-
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-
-  setTimeout(rearrangeFooter, 500);
+  console.log("💪 Cart Final Owner V2 — السلة تحت السيطرة الكاملة");
 })();
