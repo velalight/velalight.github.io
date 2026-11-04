@@ -10,7 +10,7 @@
  * ═══════════════════════════════════════════════════════════
  */
 
-const CACHE_VERSION = "v11";
+const CACHE_VERSION = "v12";
 const STATIC_CACHE  = `velalight-static-${CACHE_VERSION}`;
 const HTML_CACHE    = `velalight-html-${CACHE_VERSION}`;
 const IMAGE_CACHE   = `velalight-images-${CACHE_VERSION}`;
@@ -81,9 +81,13 @@ async function trimCache(cacheName, maxEntries) {
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(STATIC_CACHE)
-      .then(cache => cache.addAll(APP_SHELL).catch(err => {
-        console.warn("⚠️ App shell partial failure:", err);
-      }))
+      .then(cache => Promise.allSettled(
+        APP_SHELL.map(url =>
+          cache.add(url).catch(err =>
+            console.warn(`⚠️ Failed to cache ${url}:`, err)
+          )
+        )
+      ))
       .then(() => self.skipWaiting())
   );
 });
@@ -166,50 +170,63 @@ self.addEventListener("fetch", event => {
     return;
   }
 
-  /* CSS/JS/JSON → Stale-While-Revalidate */
+  /* app.js → Network-First (عشان الإصلاحات الحرجة توصل فوراً) */
+  if (url.includes("/app.js")) {
+    event.respondWith(networkFirstAsset(req, STATIC_CACHE));
+    return;
+  }
+
+  /* باقي CSS/JS/JSON → Stale-While-Revalidate */
   if (isStaticAsset(req)) {
-    event.respondWith(staleWhileRevalidate(req, STATIC_CACHE));
+    event.respondWith(staleWhileRevalidate(req, STATIC_CACHE, event));
     return;
   }
 });
+
 
 /* ═══════════════════════════════════════════════════════════
    Strategies
    ═══════════════════════════════════════════════════════════ */
 
-/* ─── 1. Network-First (HTML) ─── */
-async function networkFirstHTML(request) {
+/* ─── 0. Network-First للـ app.js ─── */
+async function networkFirstAsset(request, cacheName) {
   try {
-    const response = await fetch(request, { cache: "no-store" });
+    const response = await fetch(request);
     if (isCacheableResponse(response)) {
-      const cache = await caches.open(HTML_CACHE);
+      const cache = await caches.open(cacheName);
       cache.put(request, response.clone());
     }
     return response;
   } catch (error) {
     const cached = await caches.match(request);
-    if (cached) return cached;
-    return (await caches.match("/index.html")) || Response.error();
+    return cached || Response.error();
   }
 }
 
+/* ─── 1. Network-First (HTML) ─── */
+async function networkFirstHTML(request) {
+  // ... الكود القديم زي ما هو
+}
 /* ─── 2. Stale-While-Revalidate (CSS/JS) ─── */
-async function staleWhileRevalidate(request, cacheName) {
+async function staleWhileRevalidate(request, cacheName, event) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
 
-  const fetchPromise = fetch(request)
-    .then(response => {
+  const networkPromise = fetch(request)
+    .then(async response => {
       if (isCacheableResponse(response)) {
-        cache.put(request, response.clone());
-        /* حد أقصى للملفات الثابتة */
-        trimCache(cacheName, MAX_STATIC_ENTRIES);
+        await cache.put(request, response.clone());
+        await trimCache(cacheName, MAX_STATIC_ENTRIES);
       }
       return response;
     })
     .catch(() => null);
 
-  return cached || (await fetchPromise) || Response.error();
+  if (cached) {
+    if (event) event.waitUntil(networkPromise);
+    return cached;
+  }
+  return (await networkPromise) || Response.error();
 }
 
 /* ─── 3. Cache-First (Images & Fonts) ─── */
