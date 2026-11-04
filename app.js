@@ -1774,9 +1774,9 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   🛡️ CART STABILITY FIX v2 — منع ترعش السلة + حماية الكتابة
-   - يمنع الكليكات البرمجية (isTrusted=false) من فتح/قفل السلة لو المستخدم شغال
+   🛡️ CART STABILITY FIX v3 — منع ترعش السلة + حماية الكتابة على الموبايل
    - يمنع le() من مسح اللي المستخدم كتبه في الـ inputs
+   - يمنع الكليكات البرمجية من فتح/قفل السلة
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
@@ -1785,14 +1785,80 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
 
   const drawer = document.getElementById("cartDrawer");
 
-  /* ═══ 1) تتبع متى اتفتحت السلة ═══ */
+  /* ═══ 1) حماية حقول الإدخال من المسح التلقائي ═══ */
+  const FIELDS = ["coName", "coPhone", "coEmail", "coAddr", "coNotes", "couponInput"];
+
+  function patchLe(){
+    if(typeof window.le !== "function"){
+      setTimeout(patchLe, 500);
+      return;
+    }
+    if(window.__vlLePatched) return;
+    window.__vlLePatched = true;
+
+    const originalLe = window.le;
+    window.le = function(){
+      /* لو المستخدم بدأ يكتب في أي حقل → مانملأش تاني */
+      const anyTyped = FIELDS.some(id => {
+        const el = document.getElementById(id);
+        return el && el.dataset.vlUserTyped === "1";
+      });
+      if(anyTyped){
+        console.log("🛡️ le() skipped — user is typing");
+        return;
+      }
+      return originalLe.apply(this, arguments);
+    };
+    console.log("🛡️ le() patched");
+  }
+  setTimeout(patchLe, 300);
+  setTimeout(patchLe, 1500);
+  setTimeout(patchLe, 4000);
+
+  /* ═══ 2) علامة "المستخدم كتب" على الحقول ═══ */
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    el.addEventListener("input", function(){
+      el.dataset.vlUserTyped = "1";
+    }, true);
+
+    el.addEventListener("change", function(){
+      el.dataset.vlUserTyped = "1";
+    }, true);
+
+    el.addEventListener("focus", function(){
+      el.dataset.vlUserTyped = "1";
+    }, true);
+  });
+
+  /* مراقبة ديناميكية — لو السلة اتعاد رسمها والحقول جديدة */
   if(drawer){
-    const obs = new MutationObserver(function(){
+    new MutationObserver(function(){
+      FIELDS.forEach(id => {
+        const el = document.getElementById(id);
+        if(!el || el.dataset.vlGuardAttached === "1") return;
+        el.dataset.vlGuardAttached = "1";
+
+        el.addEventListener("input", function(){
+          el.dataset.vlUserTyped = "1";
+        }, true);
+
+        el.addEventListener("focus", function(){
+          el.dataset.vlUserTyped = "1";
+        }, true);
+      });
+    }).observe(drawer, { childList: true, subtree: true });
+  }
+
+  /* ═══ 3) منع الكليكات البرمجية من ترعش السلة ═══ */
+  if(drawer){
+    new MutationObserver(function(){
       if(drawer.classList.contains("open")){
         drawer.dataset.lastOpen = String(Date.now());
       }
-    });
-    obs.observe(drawer, { attributes: true, attributeFilter: ["class"] });
+    }).observe(drawer, { attributes: true, attributeFilter: ["class"] });
   }
 
   function isUserTyping(){
@@ -1803,76 +1869,43 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
   function cartJustOpened(){
     if(!drawer || !drawer.classList.contains("open")) return false;
     const t = Number(drawer.dataset.lastOpen || 0);
-    return t && Date.now() - t < 2500;
+    return t && Date.now() - t < 3000;
   }
 
-  /* ═══ 2) منع الكليكات البرمجية من ترعش السلة ═══ */
   const cartBtn = document.getElementById("cartBtn");
   const closeBtn = document.getElementById("closeCart");
 
   [cartBtn, closeBtn].forEach(btn => {
     if(!btn) return;
     btn.addEventListener("click", function(e){
-      /* لو الكليك من المستخدم نفسه (بيده) → مسموح دايماً */
-      if(e.isTrusted) return;
-
-      /* كليك برمجي: لو المستخدم شغال في السلة → امنعه */
+      if(e.isTrusted) return; /* كليك من المستخدم — مسموح */
       if(drawer && drawer.classList.contains("open")){
         if(isUserTyping() || cartJustOpened()){
           e.preventDefault();
           e.stopImmediatePropagation();
           e.stopPropagation();
+          console.log("🛡️ programmatic cart click blocked");
         }
       }
-    }, true); /* capture phase — قبل أي handler تاني */
-  });
-
-  /* ═══ 3) حماية حقول الإدخال من المسح التلقائي ═══ */
-  const fields = ["coName", "coPhone", "coEmail", "coCity", "coAddr", "coNotes", "couponInput"];
-  const userEditing = new Set();
-  const lastGood = {};
-
-  fields.forEach(id => {
-    const el = document.getElementById(id);
-    if(!el) return;
-
-    lastGood[id] = el.value;
-
-    el.addEventListener("focus", function(){
-      /* الحماية تشتغل بس لو المستخدم بدأ يكتب فعلاً */
-      if(el.dataset.vlUserTyped === "1"){
-        userEditing.add(id);
-        lastGood[id] = el.value;
-      }
-    }, true);
-
-    el.addEventListener("input", function(){
-      el.dataset.vlUserTyped = "1";
-      userEditing.add(id);
-      lastGood[id] = el.value;
-    });
-
-    el.addEventListener("blur", function(){
-      setTimeout(function(){
-        userEditing.delete(id);
-        /* reset بعد ما المستخدم يخرج — عشان le() تقدر تشتغل تاني */
-        el.dataset.vlUserTyped = "";
-      }, 500);
     }, true);
   });
 
-  /* كل 80ms: لو الحقل focused والقيمة اتغيرت من غير المستخدم → رجعها */
+  /* ═══ 4) حماية إضافية: حفظ القيمة ورجوعها لو اتغيرت من غير المستخدم ═══ */
+  const lastValues = {};
   setInterval(function(){
-    fields.forEach(id => {
+    FIELDS.forEach(id => {
       const el = document.getElementById(id);
-      if(!el || !el.isConnected) return;
-      if(!userEditing.has(id)) return;
-      if(document.activeElement !== el) return;
-      if(el.value !== lastGood[id]){
-        el.value = lastGood[id];
+      if(!el) return;
+      const active = document.activeElement === el;
+      if(active){
+        lastValues[id] = el.value;
+      } else if(el.dataset.vlUserTyped === "1" && lastValues[id] !== undefined){
+        if(el.value !== lastValues[id] && el.value.trim() === ""){
+          el.value = lastValues[id];
+        }
       }
     });
-  }, 80);
+  }, 200);
 
-  console.log("🛡️ Cart Stability Fix v2 active — no auto-close, no input clear");
+  console.log("🛡️ Cart Stability Fix v3 active — mobile-safe");
 })();
