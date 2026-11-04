@@ -457,8 +457,8 @@ window.vlPersistCart = window.vlPersistCart || function(cart){
     }
   }
 
-  setInterval(reconcile, 800);
-  window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(reconcile, 30); });
+// setInterval(reconcile, 800);
+   window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(reconcile, 30); });
 
   if(document.readyState === "loading"){
     document.addEventListener("DOMContentLoaded", () => setTimeout(reconcile, 800));
@@ -505,8 +505,8 @@ window.vlPersistCart = window.vlPersistCart || function(cart){
     if(changed){ window.vlPersistCart(cart); }
   }
 
-  setInterval(syncGiftScent, 1200);
-  window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(syncGiftScent, 50); });
+// setInterval(syncGiftScent, 1200);
+   window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(syncGiftScent, 50); });
 })();
 
 
@@ -552,8 +552,8 @@ window.vlPersistCart = window.vlPersistCart || function(cart){
     }
   }
 
-  setInterval(cleanup, 700);
-  window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(cleanup, 50); });
+// setInterval(cleanup, 700);
+   window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(cleanup, 50); });
 
   if(document.readyState === "loading"){
     document.addEventListener("DOMContentLoaded", () => setTimeout(cleanup, 500));
