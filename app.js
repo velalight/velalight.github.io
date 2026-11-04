@@ -573,6 +573,7 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
 
 /* ═══════════════════════════════════════════════════════════════════
    🎯 VELALIGHT — BLACK FRIDAY OFFER FIX
+   ✅ FIX: شلنا btn.click() لمنع الرعشة
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
@@ -627,7 +628,16 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
 
     if(changed){
       try { localStorage.setItem("vl_cart", JSON.stringify(filtered)); } catch(e){}
-      // ✅ FIX: شلنا btn.click() عشان نمنع الرعشة
+      /* ✅ FIX: شلنا btn.click() — بنعمل dispatch لحدث storage بس */
+      try {
+        if(document.getElementById("cartDrawer")?.classList.contains("open")){
+          window.dispatchEvent(new StorageEvent("storage", {
+            key: "vl_cart",
+            newValue: JSON.stringify(filtered),
+            storageArea: localStorage
+          }));
+        }
+      } catch(e){}
     }
   }
 
@@ -640,7 +650,6 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
     setTimeout(reconcile, 800);
   }
 })();
-
 
 /* ═══════════════════════════════════════════════════════════════════
    🎁 إظهار منتقي العطر للهدية
@@ -685,6 +694,7 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
 
 /* ═══════════════════════════════════════════════════════════════════
    🎯 FINAL CART CLEANUP
+   ✅ FIX: شلنا btn.click() لمنع الرعشة
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
@@ -723,7 +733,16 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
 
     if(changed){
       try { localStorage.setItem("vl_cart", JSON.stringify(cleaned)); } catch(e){}
-      // ✅ FIX: شلنا btn.click() عشان نمنع الرعشة
+      /* ✅ FIX: شلنا btn.click() — بنعمل dispatch لحدث storage بس */
+      try {
+        if(document.getElementById("cartDrawer")?.classList.contains("open")){
+          window.dispatchEvent(new StorageEvent("storage", {
+            key: "vl_cart",
+            newValue: JSON.stringify(cleaned),
+            storageArea: localStorage
+          }));
+        }
+      } catch(e){}
     }
   }
 
