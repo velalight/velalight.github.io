@@ -278,45 +278,8 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
   if(window.__vlFinalFixes) return;
   window.__vlFinalFixes = true;
 
-  (function(){
-    const style = document.createElement("style");
-    style.id = "vlBottomFixStyles";
-    style.textContent = `
-      @media (max-width: 900px) {
-        body { position: relative !important; padding-bottom: 200px !important; }
-        .pgrid { padding-bottom: 200px !important; }
-        .pgrid .p-card:last-child, .pgrid > *:last-child { margin-bottom: 100px !important; }
-        .p-add { position: relative !important; z-index: 100 !important; }
-        #products .btn-primary-lux, .btn-primary-lux { position: relative !important; z-index: 100 !important; margin-bottom: 40px !important; }
-        footer { padding-bottom: 200px !important; }
-        body.vl-cart-open #bottomNav, body.vl-cart-open .bottom-nav, body.vl-cart-open [class*="bottomNav"], body.vl-cart-open [class*="bottom-nav"] { display: none !important; }
-        #backToTop, #chatFab, .whatsapp-float { bottom: 100px !important; }
-      }
-    `;
-    document.head.appendChild(style);
-
-    function applyPad(){
-      const sels = ["#bottomNav", ".bottom-nav", "[class*='bottomNav']", "nav[class*='bottom']", "[class*='bottom-nav']"];
-      let h = 0;
-      for(const s of sels){
-        const el = document.querySelector(s);
-        if(el){
-          const cs = getComputedStyle(el);
-          if((cs.position === "fixed" || cs.position === "sticky") && el.offsetHeight > 20 && el.offsetHeight < 250){ h = el.offsetHeight; break; }
-        }
-      }
-      if(h > 0){
-        const pad = h + 130;
-        document.body.style.setProperty("padding-bottom", pad + "px", "important");
-        console.log("📱 Nav height:", h + "px | Body padding:", pad + "px");
-      }
-    }
-    setTimeout(applyPad, 500);
-    setTimeout(applyPad, 1500);
-    setTimeout(applyPad, 3000);
-    window.addEventListener("resize", () => setTimeout(applyPad, 200));
-  })();
-
+   // ✅ REMOVED: الـ padding-bottom كان بيتخانق مع Spacer Fix
+   
   (function(){
     const T = { ar: "* العرض ساري لحد نفاد الكمية", en: "* Offer valid while stock lasts" };
     const style = document.createElement("style");
@@ -347,76 +310,9 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
 })();
 
 
-/* ═══════════════════════════════════════════════════════════
-   🎯 BOTTOM NAV ULTIMATE FIX
-   ═══════════════════════════════════════════════════════════ */
-(function(){
-  "use strict";
-  if(window.__vlNavUltimate) return;
-  window.__vlNavUltimate = true;
-
-  const css = document.createElement("style");
-  css.id = "vlNavUltimateCss";
-  css.textContent = `
-    @media (max-width: 900px) {
-      .p-add, button.p-add, .p-add.p-add { position: relative !important; z-index: 10000 !important; pointer-events: auto !important; }
-      #products, .products-clean, #products.sec { padding-bottom: 60px !important; }
-      .pgrid { padding-bottom: 60px !important; }
-      footer { padding-bottom: 60px !important; }
-    }
-  `;
-  document.head.appendChild(css);
-
-  function apply(){
-    const nav = document.getElementById("vlBottomNav");
-    const navH = nav ? nav.offsetHeight : 0;
-    const safe = 34;
-    const total = (navH > 0 ? navH : 64) + safe + 100;
-
-    document.body.style.setProperty("padding-bottom", total + "px", "important");
-
-    const pgrid = document.querySelector("#pgrid");
-    if(pgrid) pgrid.style.setProperty("padding-bottom", "100px", "important");
-
-    const lastCard = document.querySelector("#pgrid .p-card:last-child");
-    if(lastCard) lastCard.style.setProperty("margin-bottom", "80px", "important");
-
-    const btnShowAll = document.querySelector("#products .btn-primary-lux");
-    if(btnShowAll) btnShowAll.style.setProperty("margin-bottom", "80px", "important");
-
-    const footer = document.querySelector("footer");
-    if(footer) footer.style.setProperty("padding-bottom", (total + 40) + "px", "important");
-
-    document.querySelectorAll("#backToTop, #chatFab, .whatsapp-float").forEach(el => {
-      el.style.setProperty("bottom", (total - 20) + "px", "important");
-    });
-
-    if(document.body.classList.contains("vl-cart-open")){
-      if(nav) nav.style.setProperty("display", "none", "important");
-    } else if(nav) {
-      nav.style.removeProperty("display");
-    }
-    return total;
-  }
-
-  setTimeout(apply, 100);
-  setTimeout(apply, 500);
-  setTimeout(apply, 1500);
-  setTimeout(apply, 3000);
-  setTimeout(() => { apply(); }, 4000);
-  setInterval(apply, 2000);
-
-  window.addEventListener("resize", () => setTimeout(apply, 150));
-  window.addEventListener("orientationchange", () => setTimeout(apply, 400));
-  window.addEventListener("load", () => setTimeout(apply, 200));
-
-  if(window.MutationObserver && document.body){
-    new MutationObserver(() => setTimeout(apply, 100)).observe(document.body, {
-      childList: true, subtree: false, attributes: true, attributeFilter: ["class", "style"]
-    });
-  }
-})();
-
+/* ═══════════════════════════════════════════════════════════════════
+   🎯 BOTTOM NAV — REMOVED (كان بيتخانق مع Spacer Fix)
+   ═══════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════════════════════
    🎯 BOTTOM NAV FINAL FIX — Spacer Element
@@ -488,51 +384,9 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
 })();
 
 
-/* ═══════════════════════════════════════════════════════════
-   🎯 BOTTOM NAV REAL FIX
-   ═══════════════════════════════════════════════════════════ */
-(function(){
-  "use strict";
-  if(window.__vlNavRealFix) return;
-  window.__vlNavRealFix = true;
-
-  const css = document.createElement("style");
-  css.textContent = `
-    @media (max-width: 900px) {
-      .p-card { contain: layout style !important; }
-      body { padding-bottom: 130px !important; }
-    }
-  `;
-  document.head.appendChild(css);
-
-  let lastY = window.scrollY;
-  let showTimer = null;
-
-  function showNav(){
-    const nav = document.getElementById("vlBottomNav");
-    if(nav){ nav.style.transition = "transform 0.25s ease"; nav.style.transform = "translateY(0)"; }
-  }
-  function hideNav(){
-    const nav = document.getElementById("vlBottomNav");
-    if(nav){ nav.style.transition = "transform 0.25s ease"; nav.style.transform = "translateY(110%)"; }
-  }
-
-  window.addEventListener("scroll", function(){
-    const nav = document.getElementById("vlBottomNav");
-    if(!nav) return;
-    const y = window.scrollY;
-    const dy = y - lastY;
-    if(dy > 10){ hideNav(); } else if(dy < -10){ showNav(); }
-    lastY = y;
-    clearTimeout(showTimer);
-    showTimer = setTimeout(showNav, 1500);
-  }, { passive: true });
-
-  const cartBtn = document.getElementById("cartBtn");
-  if(cartBtn){ cartBtn.addEventListener("click", function(){ setTimeout(showNav, 400); }); }
-
-  setTimeout(showNav, 200);
-})();
+/* ═══════════════════════════════════════════════════════════════════
+   🎯 BOTTOM NAV REAL FIX — REMOVED (كان بيحرّك الناف بار ويسبب layout shift)
+   ═══════════════════════════════════════════════════════════════════ */
 
 
 /* ═══════════════════════════════════════════════════════════
@@ -594,17 +448,10 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
   document.head.appendChild(giftStyle);
 
   function publishCartChange(cart){
-    try {
-      if(document.getElementById("cartDrawer")?.classList.contains("open")){
-        window.dispatchEvent(new StorageEvent("storage", {
-          key: CART_KEY,
-          newValue: JSON.stringify(cart),
-          storageArea: localStorage
-        }));
-      }
-    } catch(e){}
+    // ✅ DISABLED: الـ synthetic StorageEvent كان بيعمل loop لا نهائي مع الـ storage listener
+    // القيم بتتحدّث تلقائياً في نفس التاب عن طريق te() بعد كل saveCart
   }
-
+   
   function reconcile(){
     if(reconciling) return;
     reconciling = true;
@@ -682,11 +529,11 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
     if(reconcileQueued) return;
     reconcileQueued = true;
     setTimeout(() => {
-      reconcileQueued = false;
-      reconcile();
-    }, 0);
+      try { reconcile(); }
+      finally { reconcileQueued = false; }  // ✅ بيتصفّر بعد التنفيذ مش قبله
+    }, 50);  // ✅ 50ms بدل 0ms عشان نمنع الـ race condition
   }
-
+   
   // Same-tab writes do not emit the browser's native "storage" event.
   // Observe only writes to the cart key, rather than checking it on a timer.
   try {
@@ -880,22 +727,9 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
   const drawer = document.getElementById("cartDrawer");
   if(drawer) { new MutationObserver(hardenClose).observe(drawer, { childList: true, subtree: true }); }
 
-  let prevLen = -1;
-  setInterval(function(){
-    try {
-      const cart = JSON.parse(localStorage.getItem("vl_cart") || "[]");
-      const len = Array.isArray(cart) ? cart.length : 0;
-      if(prevLen > 0 && len === 0){
-        const dr = document.getElementById("cartDrawer");
-        if(dr && dr.classList.contains("open")){
-          setTimeout(killCart, 200);
-          if(typeof toast === "function") setTimeout(() => toast("🗑️ تم إفراغ السلة"), 300);
-        }
-      }
-      prevLen = len;
-    } catch(e){}
-  }, 200);
-
+  // ✅ REMOVED: setInterval(..., 200) كان بيقفل السلة تلقائياً وبسبب وميض في الفتح/القفل
+  // إغلاق السلة دلوقتي يدوي عن طريق زر X فقط
+   
   const cartBtn = document.getElementById("cartBtn");
   if(cartBtn) {
     let lastClose = 0;
@@ -916,28 +750,21 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
 
 
 /* ═══════════════════════════════════════════════════════════════════
-   🎯 CART POLISH v1 — إصلاحات نهائية
-   ✅ FIX: form عمود واحد بحقول كبيرة
-   ✅ FIX: هدية خضرا واضحة
-   ✅ FIX: إخفاء خصم الكمية
+   🎯 CART POLISH v2 — CSS فقط + تحديث الهدية event-driven (بدون intervals)
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
-  if(window.__vlCartPolishV1) return;
-  window.__vlCartPolishV1 = true;
+  if(window.__vlCartPolishV2) return;
+  window.__vlCartPolishV2 = true;
 
   const css = document.createElement("style");
-  css.id = "vlCartPolishV1CSS";
+  css.id = "vlCartPolishV2CSS";
   css.textContent = `
-    /* ✅ FIX 1: form عمود واحد بحقول كبيرة */
     #cartDrawer .co-form { display: block !important; }
     #cartDrawer .co-form > * { width: 100% !important; margin-bottom: 12px !important; display: block !important; }
     #cartDrawer input, #cartDrawer select, #cartDrawer textarea { padding: 14px 16px !important; font-size: 1.05rem !important; border-radius: 10px !important; min-height: 50px !important; line-height: 1.5 !important; width: 100% !important; box-sizing: border-box !important; background: #fff !important; border: 1.5px solid rgba(212,175,55,.3) !important; }
     #cartDrawer input::placeholder, #cartDrawer textarea::placeholder { font-size: 1rem !important; color: #888 !important; }
     #cartDrawer textarea { min-height: 80px !important; max-height: 120px !important; resize: vertical !important; }
-    
-    
-    /* ✅ FIX 3: هدية بلون أخضر */
     #cartItems .citem[data-gift="1"] { background: linear-gradient(135deg, #eafaf1 0%, #d5f5e3 100%) !important; border: 1.5px solid rgba(39,174,96,.55) !important; position: relative !important; overflow: visible !important; padding-top: 22px !important; }
     #cartItems .citem[data-gift="1"]::before { content: "🎁 هدية مجانية"; position: absolute; top: -8px; inset-inline-start: 10px; background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; font-size: 0.7rem; font-weight: 800; padding: 4px 14px; border-radius: 99px; z-index: 10; box-shadow: 0 3px 10px rgba(39,174,96,.4); }
     #cartItems .citem[data-gift="1"] .qty, #cartItems .citem[data-gift="1"] .rm, #cartItems .citem[data-gift="1"] .vl-save-later { display: none !important; }
@@ -959,43 +786,25 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
       });
     } catch(e){}
   }
-  setInterval(markGifts, 400);
-  window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(markGifts, 50); });
+
+  // ✅ بديل الـ polling: يتنفذ مرة واحدة كل ما محتوى السلة يتغيّر
+  function hookCartItems(){
+    const el = document.getElementById("cartItems");
+    if(!el || el.dataset.vlGiftObserver === "1") return;
+    el.dataset.vlGiftObserver = "1";
+    new MutationObserver(markGifts).observe(el, { childList: true });
+  }
   if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", () => setTimeout(markGifts, 500));
+    document.addEventListener("DOMContentLoaded", function(){
+      hookCartItems();
+      setTimeout(markGifts, 300);
+    }, { once: true });
   } else {
-    setTimeout(markGifts, 500);
+    hookCartItems();
+    setTimeout(markGifts, 300);
   }
-
-  let lastReset = 0;
-  function resetQtyDiscountFromTotal(){
-    const now = Date.now();
-    if(now - lastReset < 100) return;
-    
-    const subEl = document.getElementById("cartSub");
-    const totalEl = document.getElementById("cartTotal");
-    if(!subEl || !totalEl) return;
-    
-    const parseVal = s => parseFloat(String(s||"").replace(/[^\d.]/g, "")) || 0;
-    const sub = parseVal(subEl.textContent);
-    if(sub <= 0) return;
-    
-    let couponDiscount = 0;
-    try {
-      const c = JSON.parse(localStorage.getItem("vl_coupon") || "null");
-      if(c && c.discount) couponDiscount = Number(c.discount) || 0;
-    } catch(e){}
-    
-    const expected = Math.max(0, sub - couponDiscount);
-    const current = parseVal(totalEl.textContent);
-    
-    if(Math.abs(current - expected) > 1){
-      lastReset = now;
-      const formatted = new Intl.NumberFormat("en-EG").format(Math.round(expected)) + " ج";
-      totalEl.textContent = formatted;
-    }
-  }
-  setInterval(resetQtyDiscountFromTotal, 300);
-
-  console.log("🎯 Cart Polish v1 Active — form + gift + no qty discount");
+  window.addEventListener("storage", e => {
+    if(e.key === "vl_cart") setTimeout(markGifts, 30);
+  });
+  window.addEventListener("data-refresh", () => setTimeout(markGifts, 100));
 })();
