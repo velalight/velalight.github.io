@@ -1909,3 +1909,224 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
 
   console.log("🛡️ Cart Stability Fix v3 active — mobile-safe");
 })();
+
+/* ═══════════════════════════════════════════════════════════════════
+   🛒 CART UX FIX — سلة احترافية زي أمازون/نون
+   - على الديسكتوب: modal في النص (مش ملزوقة شمال)
+   - الفوتر ثابت تحت (مش بيسكرول)
+   - الحقول أوسع وأسهل في الكتابة
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+  if(window.__vlCartUXFix) return;
+  window.__vlCartUXFix = true;
+
+  const style = document.createElement("style");
+  style.id = "vlCartUXStyles";
+  style.textContent = `
+    /* ── Desktop: modal centered ── */
+    @media (min-width: 1024px){
+      #cartDrawer.drawer{
+        width: 520px !important;
+        max-width: 96vw !important;
+        inset-inline: auto !important;
+        left: 50% !important;
+        right: auto !important;
+        top: auto !important;
+        bottom: 0 !important;
+        max-height: 92vh !important;
+        border-radius: 20px 20px 0 0 !important;
+        border: 1px solid var(--line) !important;
+        transform: translateX(-50%) translateY(110%) !important;
+        box-shadow: 0 -10px 60px rgba(0,0,0,.35) !important;
+      }
+      #cartDrawer.drawer.open{
+        transform: translateX(-50%) translateY(0) !important;
+      }
+    }
+
+    /* ── Body: scrolls alone ── */
+    #cartDrawer .dbody{
+      flex: 1 1 auto !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      min-height: 0 !important;
+      padding: 16px 18px !important;
+    }
+
+    /* ── Footer: FIXED under (not scrolling) ── */
+    #cartDrawer .dfoot{
+      flex: 0 0 auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+      border-top: 1px solid var(--line) !important;
+      padding: 16px 18px calc(16px + env(safe-area-inset-bottom)) !important;
+      background: #ffffff !important;
+      box-shadow: 0 -4px 20px rgba(0,0,0,.06) !important;
+    }
+
+    /* ── Form: wider, easier to fill ── */
+    #cartDrawer .co-form{
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 10px !important;
+    }
+    #cartDrawer .co-form > *{
+      margin: 0 !important;
+    }
+    #cartDrawer .co-form > input[type="email"],
+    #cartDrawer .co-form > select,
+    #cartDrawer .co-form > input#coAddr,
+    #cartDrawer .co-form > textarea{
+      grid-column: 1 / -1 !important;
+    }
+    #cartDrawer input,
+    #cartDrawer select,
+    #cartDrawer textarea{
+      padding: 11px 14px !important;
+      font-size: .9rem !important;
+      border-radius: 10px !important;
+      border: 1.5px solid rgba(217,171,95,.25) !important;
+      background: #fdfbf7 !important;
+      transition: border-color .2s, box-shadow .2s, background .2s !important;
+    }
+    #cartDrawer input:focus,
+    #cartDrawer select:focus,
+    #cartDrawer textarea:focus{
+      border-color: #d4af37 !important;
+      box-shadow: 0 0 0 3px rgba(212,175,55,.15) !important;
+      background: #ffffff !important;
+      outline: none !important;
+    }
+    #cartDrawer textarea{
+      min-height: 52px !important;
+      max-height: none !important;
+      resize: vertical !important;
+    }
+
+    /* ── Totals rows: more air ── */
+    #cartDrawer .trow{
+      padding: 8px 0 !important;
+      font-size: .88rem !important;
+      border-bottom: 1px dashed rgba(212,175,55,.15);
+    }
+    #cartDrawer .trow.total{
+      padding-top: 12px !important;
+      margin-top: 6px !important;
+      border-top: 2px solid rgba(212,175,55,.4) !important;
+      border-bottom: none !important;
+      font-size: 1.15rem !important;
+    }
+
+    /* ── Coupon: wider input ── */
+    #cartDrawer #couponInput{
+      padding: 11px 14px !important;
+      font-size: .9rem !important;
+    }
+    #cartDrawer #applyCouponBtn{
+      padding: 11px 22px !important;
+      font-size: .88rem !important;
+      min-width: 90px;
+    }
+
+    /* ── Buttons: big primary + smaller secondary ── */
+    #cartDrawer #checkoutBtn{
+      padding: 14px 20px !important;
+      font-size: 1rem !important;
+      border-radius: 12px !important;
+      margin-top: 12px !important;
+      box-shadow: 0 8px 24px -8px rgba(46,139,69,.45) !important;
+    }
+    #cartDrawer #emptyCartBtn{
+      padding: 10px 16px !important;
+      font-size: .82rem !important;
+      margin-top: 8px !important;
+      border-radius: 10px !important;
+    }
+
+    /* ── Payment note: smaller ── */
+    #cartDrawer .paybox{
+      padding: 10px 12px !important;
+      font-size: .78rem !important;
+      margin-top: 10px !important;
+      border-radius: 10px !important;
+    }
+
+    /* ── Mobile: keep narrow, full-screen-ish ── */
+    @media (max-width: 1023px){
+      #cartDrawer.drawer{
+        width: 100% !important;
+        max-width: 100% !important;
+        border-radius: 0 !important;
+      }
+      #cartDrawer .co-form{
+        grid-template-columns: 1fr !important;
+      }
+      #cartDrawer .co-form > *{
+        grid-column: 1 / -1 !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  /* ── إعادة ترتيب العناصر جوه dfoot عشان يبقى مرتب ── */
+  function rearrangeFooter(){
+    const dfoot = document.querySelector("#cartDrawer .dfoot");
+    if(!dfoot || dfoot.dataset.vlReorganized === "1") return;
+    dfoot.dataset.vlReorganized = "1";
+
+    const coForm = dfoot.querySelector(".co-form");
+    const couponRow = dfoot.querySelector("#couponInput")?.parentElement;
+    const discountRow = dfoot.querySelector("#discountRow");
+    const cartSubRow = dfoot.querySelector("#cartSub")?.closest(".trow");
+    const cartTotalRow = dfoot.querySelector("#cartTotal")?.closest(".trow.total");
+    const shipNote = dfoot.querySelector(".cart-shipping-note");
+    const paybox = dfoot.querySelector(".paybox");
+    const checkoutBtn = dfoot.querySelector("#checkoutBtn");
+    const emptyBtn = dfoot.querySelector("#emptyCartBtn");
+
+    /* ابني ترتيب جديد: بيانات → كوبون → خصم → إجمالي → ملاحظة → دفع → أزرار */
+    const newOrder = [
+      dfoot.querySelector("h4"),
+      coForm,
+      couponRow,
+      discountRow,
+      cartSubRow,
+      cartTotalRow,
+      shipNote,
+      paybox,
+      checkoutBtn,
+      emptyBtn
+    ].filter(Boolean);
+
+    /* شيلهم كلهم ثم أضفهم بالترتيب */
+    newOrder.forEach(el => dfoot.appendChild(el));
+
+    console.log("🛒 Cart footer reorganized");
+  }
+
+  function init(){
+    const drawer = document.getElementById("cartDrawer");
+    if(!drawer) return;
+
+    /* عند فتح السلة: رتب الفوتر + فعّل الستايل الجديد */
+    new MutationObserver(function(){
+      if(drawer.classList.contains("open")){
+        rearrangeFooter();
+      }
+    }).observe(drawer, { attributes: true, attributeFilter: ["class"] });
+
+    /* للزوار اللي بيلاقوا السلة مفتوحة (بعد reload) */
+    if(drawer.classList.contains("open")){
+      rearrangeFooter();
+    }
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+  console.log("🛒 Cart UX Fix active — desktop modal + fixed footer + wider inputs");
+})();
