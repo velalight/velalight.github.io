@@ -1871,7 +1871,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const cb = document.getElementById("cartBtn");
     if(cb) cb.addEventListener("click", function(){ setTimeout(checkUnlock, 1200); });
 
-    setInterval(checkUnlock, 3000);
+   
   }
 
   function init(){
@@ -2238,12 +2238,9 @@ document.addEventListener('DOMContentLoaded', function(){
 <!-- ═══ END BLACK FRIDAY OFFER MODAL ═══ -->
 
 <!-- ═══════════════════════════════════════════════════════════
-     🎁 إصلاحات عطر وصورة الهدية في السلة
-     - يظهر منتقي العطر جوه الهدية
-     - صورة الهدية = صورة المنتج من الأدمن (لو الـ app.js بيغيّرها)
+     🎁 ستايلات عرض عطر الهدية — event-driven فقط
      ═══════════════════════════════════════════════════════════ -->
 <style id="vlBFCartFixStyles">
-  /* ✅ إظهار منتقي العطر للهدية (app.js بيخفيه بـ display:none!important) */
   #cartItems .citem[data-gift="1"] .cart-scent-picker {
     display: flex !important;
     visibility: visible !important;
@@ -2258,8 +2255,8 @@ document.addEventListener('DOMContentLoaded', function(){
 <script>
 (function(){
   "use strict";
-  if(window.__vlBFGiftImageFix) return;
-  window.__vlBFGiftImageFix = true;
+  if(window.__vlBFGiftImageFixV2) return;
+  window.__vlBFGiftImageFixV2 = true;
 
   const PRODUCT_ID = 12;
 
@@ -2293,6 +2290,7 @@ document.addEventListener('DOMContentLoaded', function(){
            s.includes("فواحة");
   }
 
+  // ✅ النسخة الجديدة: بتعدل localStorage بدون ما تفتح السلة
   function fixGiftImage(){
     try {
       const product = getProduct();
@@ -2310,7 +2308,6 @@ document.addEventListener('DOMContentLoaded', function(){
             changed = true;
           }
         }
-        /* أصلح كمان أي شمعة مساج عادية صورتها فواحة */
         if(Number(item.id) === PRODUCT_ID && item.isGift !== true && isWrongImage(item.img)){
           item.img = product.img;
           changed = true;
@@ -2318,22 +2315,30 @@ document.addEventListener('DOMContentLoaded', function(){
       });
 
       if(changed){
-        try { localStorage.setItem("vl_cart", JSON.stringify(cart)); } catch(e){}
-        /* إعادة رسم السلة */
-        const cb = document.getElementById("cartBtn");
-        if(cb){
-          const wasOpen = document.getElementById("cartDrawer")?.classList.contains("open");
-          cb.click();
-          if(!wasOpen) setTimeout(() => document.getElementById("closeCart")?.click(), 120);
+        // ✅ تحديث localStorage فقط — بدون فتح السلة أو إعادة رسمها
+        localStorage.setItem("vl_cart", JSON.stringify(cart));
+        // ✅ إعادة رسم السلة لو كانت مفتوحة (بدون فتح/قفل)
+        const drawer = document.getElementById("cartDrawer");
+        if(drawer && drawer.classList.contains("open")){
+          // نستدعي te() لو موجودة (من app.js)
+          if(typeof window.te === "function") {
+            try { window.te(); } catch(e){}
+          }
         }
       }
     } catch(e){}
   }
 
-  /* شغّلها كل 1.5 ثانية عشان تغلب الـ app.js لو لسه بيحط الصورة الغلط */
-  setInterval(fixGiftImage, 1500);
-  window.addEventListener("storage", e => { if(e.key === "vl_cart") setTimeout(fixGiftImage, 50); });
+  // ✅ مرة واحدة عند التحميل فقط (بدون interval)
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", () => setTimeout(fixGiftImage, 800), { once: true });
+  } else {
+    setTimeout(fixGiftImage, 800);
+  }
+
+  // ✅ event-driven: كل ما السلة تتغير في تاب تاني
+  window.addEventListener("storage", e => {
+    if(e.key === "vl_cart") setTimeout(fixGiftImage, 50);
+  });
 })();
 </script>
-</body>
-</html>
