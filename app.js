@@ -1911,69 +1911,90 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
 })();
 
 /* ═══════════════════════════════════════════════════════════════════
-   🛒 CART UX FIX — سلة احترافية زي أمازون/نون
-   - على الديسكتوب: modal في النص (مش ملزوقة شمال)
-   - الفوتر ثابت تحت (مش بيسكرول)
-   - الحقول أوسع وأسهل في الكتابة
+   🛒 CART UX FIX v2 — سلة احترافية زي أمازون/نون
+   ✅ على الديسكتوب: modal في النص (مش ملزوقة شمال)
+   ✅ المنتجات بسكرول لوحدها + البيانات ثابتة تحت
+   ✅ حقول أوسع وأسهل في الكتابة
+   ✅ تصميم فخم (ذهبي × أبيض)
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
-  if(window.__vlCartUXFix) return;
-  window.__vlCartUXFix = true;
+  if(window.__vlCartUXFixV2) return;
+  window.__vlCartUXFixV2 = true;
 
+  /* ═══ 1) CSS شامل بـ !important ═══ */
   const style = document.createElement("style");
-  style.id = "vlCartUXStyles";
+  style.id = "vlCartUXStylesV2";
   style.textContent = `
-    /* ── Desktop: modal centered ── */
+    /* ─────────── DESKTOP: Modal centered (Amazon style) ─────────── */
     @media (min-width: 1024px){
       #cartDrawer.drawer{
-        width: 520px !important;
-        max-width: 96vw !important;
+        width: 540px !important;
+        max-width: 94vw !important;
         inset-inline: auto !important;
         left: 50% !important;
         right: auto !important;
         top: auto !important;
         bottom: 0 !important;
-        max-height: 92vh !important;
-        border-radius: 20px 20px 0 0 !important;
-        border: 1px solid var(--line) !important;
+        max-height: 90vh !important;
+        height: auto !important;
+        border-radius: 24px 24px 0 0 !important;
+        border: 1px solid rgba(212,175,55,.25) !important;
+        border-bottom: none !important;
         transform: translateX(-50%) translateY(110%) !important;
-        box-shadow: 0 -10px 60px rgba(0,0,0,.35) !important;
+        box-shadow: 0 -20px 60px rgba(0,0,0,.35), 0 0 0 1px rgba(212,175,55,.15) !important;
+        z-index: 999999 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
       }
       #cartDrawer.drawer.open{
         transform: translateX(-50%) translateY(0) !important;
       }
+      #cartOv.ovl.open{
+        background: rgba(20,15,10,.55) !important;
+        backdrop-filter: blur(6px) !important;
+        -webkit-backdrop-filter: blur(6px) !important;
+      }
     }
 
-    /* ── Body: scrolls alone ── */
+    /* ─────────── BODY: scroll alone ─────────── */
     #cartDrawer .dbody{
       flex: 1 1 auto !important;
       overflow-y: auto !important;
       overflow-x: hidden !important;
       min-height: 0 !important;
-      padding: 16px 18px !important;
+      padding: 18px 20px !important;
+      scroll-behavior: smooth !important;
+      -webkit-overflow-scrolling: touch !important;
     }
+    #cartDrawer .dbody::-webkit-scrollbar{ width: 6px !important; }
+    #cartDrawer .dbody::-webkit-scrollbar-thumb{
+      background: rgba(212,175,55,.45) !important;
+      border-radius: 99px !important;
+    }
+    #cartDrawer .dbody::-webkit-scrollbar-track{ background: transparent !important; }
 
-    /* ── Footer: FIXED under (not scrolling) ── */
+    /* ─────────── FOOTER: FIXED under (no scroll) ─────────── */
     #cartDrawer .dfoot{
       flex: 0 0 auto !important;
       max-height: none !important;
-      overflow: visible !important;
-      border-top: 1px solid var(--line) !important;
-      padding: 16px 18px calc(16px + env(safe-area-inset-bottom)) !important;
+      overflow-y: visible !important;
+      border-top: 1px solid rgba(212,175,55,.2) !important;
+      padding: 16px 20px calc(16px + env(safe-area-inset-bottom)) !important;
       background: #ffffff !important;
-      box-shadow: 0 -4px 20px rgba(0,0,0,.06) !important;
+      box-shadow: 0 -6px 24px rgba(0,0,0,.06) !important;
+      position: relative !important;
     }
 
-    /* ── Form: wider, easier to fill ── */
+    /* ─────────── FORM: wider, easier ─────────── */
     #cartDrawer .co-form{
       display: grid !important;
       grid-template-columns: 1fr 1fr !important;
       gap: 10px !important;
+      margin-bottom: 12px !important;
     }
-    #cartDrawer .co-form > *{
-      margin: 0 !important;
-    }
+    #cartDrawer .co-form > *{ margin: 0 !important; }
     #cartDrawer .co-form > input[type="email"],
     #cartDrawer .co-form > select,
     #cartDrawer .co-form > input#coAddr,
@@ -1986,9 +2007,11 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
       padding: 11px 14px !important;
       font-size: .9rem !important;
       border-radius: 10px !important;
-      border: 1.5px solid rgba(217,171,95,.25) !important;
+      border: 1.5px solid rgba(217,171,95,.3) !important;
       background: #fdfbf7 !important;
       transition: border-color .2s, box-shadow .2s, background .2s !important;
+      font-family: inherit !important;
+      color: #1a1512 !important;
     }
     #cartDrawer input:focus,
     #cartDrawer select:focus,
@@ -2000,15 +2023,15 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
     }
     #cartDrawer textarea{
       min-height: 52px !important;
-      max-height: none !important;
+      max-height: 90px !important;
       resize: vertical !important;
     }
 
-    /* ── Totals rows: more air ── */
+    /* ─────────── TOTALS ROWS ─────────── */
     #cartDrawer .trow{
       padding: 8px 0 !important;
       font-size: .88rem !important;
-      border-bottom: 1px dashed rgba(212,175,55,.15);
+      border-bottom: 1px dashed rgba(212,175,55,.12) !important;
     }
     #cartDrawer .trow.total{
       padding-top: 12px !important;
@@ -2016,81 +2039,109 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
       border-top: 2px solid rgba(212,175,55,.4) !important;
       border-bottom: none !important;
       font-size: 1.15rem !important;
+      font-weight: 900 !important;
     }
 
-    /* ── Coupon: wider input ── */
-    #cartDrawer #couponInput{
-      padding: 11px 14px !important;
-      font-size: .9rem !important;
-    }
-    #cartDrawer #applyCouponBtn{
-      padding: 11px 22px !important;
-      font-size: .88rem !important;
-      min-width: 90px;
-    }
+    /* ─────────── COUPON ─────────── */
+    #cartDrawer #couponInput{ padding: 11px 14px !important; font-size: .9rem !important; }
+    #cartDrawer #applyCouponBtn{ padding: 11px 22px !important; font-size: .88rem !important; min-width: 90px !important; }
 
-    /* ── Buttons: big primary + smaller secondary ── */
+    /* ─────────── BUTTONS ─────────── */
     #cartDrawer #checkoutBtn{
       padding: 14px 20px !important;
       font-size: 1rem !important;
       border-radius: 12px !important;
-      margin-top: 12px !important;
+      margin-top: 10px !important;
       box-shadow: 0 8px 24px -8px rgba(46,139,69,.45) !important;
+      font-weight: 800 !important;
     }
     #cartDrawer #emptyCartBtn{
       padding: 10px 16px !important;
       font-size: .82rem !important;
-      margin-top: 8px !important;
+      margin-top: 6px !important;
       border-radius: 10px !important;
+      opacity: .7 !important;
     }
+    #cartDrawer #emptyCartBtn:hover{ opacity: 1 !important; }
 
-    /* ── Payment note: smaller ── */
+    /* ─────────── PAYMENT BOX ─────────── */
     #cartDrawer .paybox{
-      padding: 10px 12px !important;
+      padding: 10px 14px !important;
       font-size: .78rem !important;
-      margin-top: 10px !important;
+      margin-top: 12px !important;
       border-radius: 10px !important;
+      line-height: 1.5 !important;
     }
 
-    /* ── Mobile: keep narrow, full-screen-ish ── */
+    /* ─────────── MOBILE: full screen ─────────── */
     @media (max-width: 1023px){
       #cartDrawer.drawer{
         width: 100% !important;
         max-width: 100% !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        max-height: 100vh !important;
+        max-height: 100dvh !important;
         border-radius: 0 !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: translateY(100%) !important;
       }
-      #cartDrawer .co-form{
-        grid-template-columns: 1fr !important;
+      #cartDrawer.drawer.open{ transform: translateY(0) !important; }
+      #cartDrawer .co-form{ grid-template-columns: 1fr !important; }
+      #cartDrawer .co-form > *{ grid-column: 1 / -1 !important; }
+      #cartDrawer .dfoot{
+        padding: 14px 16px calc(14px + env(safe-area-inset-bottom)) !important;
+        max-height: 58vh !important;
+        overflow-y: auto !important;
       }
-      #cartDrawer .co-form > *{
-        grid-column: 1 / -1 !important;
+      #cartDrawer .dbody{ padding: 14px 16px !important; }
+    }
+
+    /* ─────────── Small phones ─────────── */
+    @media (max-width: 480px){
+      #cartDrawer .dfoot{ max-height: 62vh !important; }
+      #cartDrawer input,
+      #cartDrawer select,
+      #cartDrawer textarea{
+        padding: 10px 12px !important;
+        font-size: .88rem !important;
       }
+      #cartDrawer #checkoutBtn{ padding: 13px 18px !important; font-size: .95rem !important; }
     }
   `;
   document.head.appendChild(style);
 
-  /* ── إعادة ترتيب العناصر جوه dfoot عشان يبقى مرتب ── */
+  /* ═══ 2) إعادة ترتيب عناصر dfoot بشكل احترافي ═══ */
   function rearrangeFooter(){
     const dfoot = document.querySelector("#cartDrawer .dfoot");
-    if(!dfoot || dfoot.dataset.vlReorganized === "1") return;
-    dfoot.dataset.vlReorganized = "1";
+    if(!dfoot) return;
+    const cartItems = document.getElementById("cartItems");
+    if(cartItems && cartItems.querySelector(".vl-empty-cart")) return;
+
+    dfoot.dataset.vlReorganizedV2 = "1";
 
     const coForm = dfoot.querySelector(".co-form");
-    const couponRow = dfoot.querySelector("#couponInput")?.parentElement;
+    const couponInput = dfoot.querySelector("#couponInput");
+    const couponRow = couponInput?.parentElement;
     const discountRow = dfoot.querySelector("#discountRow");
+    const qtyDiscountRow = dfoot.querySelector("#qtyDiscountRow");
     const cartSubRow = dfoot.querySelector("#cartSub")?.closest(".trow");
     const cartTotalRow = dfoot.querySelector("#cartTotal")?.closest(".trow.total");
     const shipNote = dfoot.querySelector(".cart-shipping-note");
     const paybox = dfoot.querySelector(".paybox");
     const checkoutBtn = dfoot.querySelector("#checkoutBtn");
     const emptyBtn = dfoot.querySelector("#emptyCartBtn");
+    const dfootTitle = dfoot.querySelector("h4");
 
-    /* ابني ترتيب جديد: بيانات → كوبون → خصم → إجمالي → ملاحظة → دفع → أزرار */
     const newOrder = [
-      dfoot.querySelector("h4"),
+      dfootTitle,
       coForm,
       couponRow,
       discountRow,
+      qtyDiscountRow,
       cartSubRow,
       cartTotalRow,
       shipNote,
@@ -2099,26 +2150,41 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
       emptyBtn
     ].filter(Boolean);
 
-    /* شيلهم كلهم ثم أضفهم بالترتيب */
-    newOrder.forEach(el => dfoot.appendChild(el));
+    const seen = new Set();
+    const uniqueOrder = newOrder.filter(el => {
+      if(seen.has(el)) return false;
+      seen.add(el);
+      return true;
+    });
 
-    console.log("🛒 Cart footer reorganized");
+    uniqueOrder.forEach(el => dfoot.appendChild(el));
   }
 
+  /* ═══ 3) مراقبة الفتح ═══ */
   function init(){
     const drawer = document.getElementById("cartDrawer");
     if(!drawer) return;
 
-    /* عند فتح السلة: رتب الفوتر + فعّل الستايل الجديد */
+    let lastOpenState = drawer.classList.contains("open");
     new MutationObserver(function(){
-      if(drawer.classList.contains("open")){
-        rearrangeFooter();
+      const isOpen = drawer.classList.contains("open");
+      if(isOpen && !lastOpenState){
+        setTimeout(rearrangeFooter, 100);
       }
+      lastOpenState = isOpen;
     }).observe(drawer, { attributes: true, attributeFilter: ["class"] });
 
-    /* للزوار اللي بيلاقوا السلة مفتوحة (بعد reload) */
     if(drawer.classList.contains("open")){
-      rearrangeFooter();
+      setTimeout(rearrangeFooter, 100);
+    }
+
+    const dfoot = drawer.querySelector(".dfoot");
+    if(dfoot){
+      new MutationObserver(function(){
+        if(drawer.classList.contains("open")){
+          setTimeout(rearrangeFooter, 200);
+        }
+      }).observe(dfoot, { childList: true, subtree: false });
     }
   }
 
@@ -2128,5 +2194,9 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
     init();
   }
 
-  console.log("🛒 Cart UX Fix active — desktop modal + fixed footer + wider inputs");
+  setTimeout(init, 500);
+  setTimeout(rearrangeFooter, 1500);
+
+  console.log("🛒 Cart UX Fix v2 active — Amazon-style modal + fixed footer + wider inputs");
 })();
+
