@@ -21,19 +21,13 @@
   .co-back { color: var(--mut); text-decoration: none; font-size: 0.9rem; padding: 8px 14px; border-radius: 99px; border: 1px solid var(--line); transition: 0.2s; }
   .co-back:hover { border-color: var(--gold); color: var(--gold2); }
   .co-main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 80px; }
-  .co-steps { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 32px; }
-  .co-step { display: flex; align-items: center; gap: 8px; opacity: 0.4; transition: 0.3s; }
-  .co-step.active { opacity: 1; }
-  .co-step.done { opacity: 0.7; }
-  .co-step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--line); color: var(--mut); display: grid; place-items: center; font-weight: 700; font-size: 0.9rem; }
-  .co-step.active .co-step-num { background: var(--gold); color: #fff; }
-  .co-step.done .co-step-num { background: var(--ok, #27ae60); color: #fff; }
-  .co-step-label { font-size: 0.85rem; font-weight: 600; }
-  .co-step-line { width: 40px; height: 2px; background: var(--line); }
+  .co-title { text-align: center; margin-bottom: 24px; }
+  .co-title h1 { font-family: 'El Messiri', serif; font-size: 1.6rem; color: var(--ink); margin: 0 0 4px; }
+  .co-title p { color: var(--mut); font-size: 0.9rem; margin: 0; }
   .co-layout { display: grid; grid-template-columns: 1fr 380px; gap: 28px; align-items: start; }
   @media (max-width: 900px) { .co-layout { grid-template-columns: 1fr; } }
-  .co-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 24px; }
-  .co-card h2 { font-family: 'El Messiri', serif; font-size: 1.2rem; margin: 0 0 18px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+  .co-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+  .co-card h2 { font-family: 'El Messiri', serif; font-size: 1.1rem; margin: 0 0 18px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
   .co-form { display: flex; flex-direction: column; gap: 14px; }
   .co-field label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--mut); margin-bottom: 6px; }
   .co-field input, .co-field select, .co-field textarea { width: 100%; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 10px; font-family: inherit; font-size: 0.95rem; background: var(--bg2, #faf6f0); color: var(--ink); transition: 0.2s; }
@@ -52,7 +46,7 @@
   .co-pay-note { background: #fffaf0; border: 1px dashed var(--gold); border-radius: 10px; padding: 12px 14px; font-size: 0.82rem; color: var(--mut); line-height: 1.6; margin-top: 14px; }
   .co-summary { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px; position: sticky; top: 80px; }
   .co-summary h3 { font-family: 'El Messiri', serif; font-size: 1.05rem; margin: 0 0 16px; color: var(--ink); }
-  .co-summary-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--line); }
+  .co-summary-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--line); max-height: 320px; overflow-y: auto; }
   .co-summary-item { display: flex; gap: 10px; align-items: center; }
   .co-summary-item img { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; background: var(--bg2, #faf6f0); flex-shrink: 0; }
   .co-summary-item-info { flex: 1; min-width: 0; }
@@ -63,35 +57,25 @@
   .co-summary-row.total { font-size: 1.05rem; font-weight: 800; color: var(--ink); border-top: 2px solid var(--line); padding-top: 12px; margin-top: 12px; }
   .co-summary-row.total span:last-child { color: var(--gold2); }
   .co-ship-free { background: #eafaf1; border: 1px solid #27ae60; color: #1e8449; padding: 10px 12px; border-radius: 10px; font-size: 0.8rem; font-weight: 600; text-align: center; margin-bottom: 12px; }
-  .co-btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 12px; background: var(--gold); color: #fff; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none; }
-  .co-btn:hover { background: #b8863f; }
-  .co-btn.wa { background: #25d366; }
-  .co-btn.wa:hover { background: #1eaa50; }
-  .co-btn.ghost { background: transparent; color: var(--mut); border: 1.5px solid var(--line); font-weight: 600; }
-  .co-btn.ghost:hover { border-color: var(--gold); color: var(--gold2); }
-  .co-btn-row { display: flex; gap: 10px; margin-top: 18px; }
-  .co-btn-row .co-btn { flex: 1; }
+  .co-btn { display: block; width: 100%; padding: 16px; border: none; border-radius: 12px; background: #25d366; color: #fff; font-family: inherit; font-size: 1.05rem; font-weight: 800; cursor: pointer; transition: 0.2s; text-align: center; text-decoration: none; }
+  .co-btn:hover { background: #1eaa50; }
+  .co-btn:disabled { opacity: 0.6; cursor: not-allowed; }
   .co-empty { text-align: center; padding: 60px 20px; }
   .co-empty .icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.7; }
   .co-empty h2 { font-family: 'El Messiri', serif; font-size: 1.4rem; color: var(--gold2); margin: 0 0 8px; }
   .co-empty p { color: var(--mut); margin: 0 0 20px; font-size: 0.9rem; }
-  .co-empty .co-btn { display: inline-block; width: auto; padding: 12px 32px; }
+  .co-empty .co-btn { display: inline-block; width: auto; padding: 12px 32px; background: var(--gold); }
   .co-success { text-align: center; padding: 40px 20px; }
   .co-success .icon { font-size: 4rem; margin-bottom: 16px; }
-  .co-success h2 { font-family: 'El Messiri', serif; font-size: 1.6rem; color: var(--ok, #27ae60); margin: 0 0 12px; }
+  .co-success h2 { font-family: 'El Messiri', serif; font-size: 1.6rem; color: #27ae60; margin: 0 0 12px; }
   .co-success p { color: var(--mut); font-size: 0.95rem; line-height: 1.7; margin: 0 0 8px; }
   .co-success .order-id { display: inline-block; background: var(--bg2, #faf6f0); border: 1px dashed var(--gold); padding: 8px 16px; border-radius: 8px; font-family: monospace; font-size: 1rem; color: var(--gold2); font-weight: 700; margin: 12px 0; }
   .co-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 12px 24px; border-radius: 99px; font-size: 0.9rem; z-index: 9999; opacity: 0; transition: 0.3s; pointer-events: none; }
   .co-toast.show { opacity: 1; }
-  .co-step-panel { display: none; }
-  .co-step-panel.active { display: block; }
   @media (max-width: 600px) {
-    .co-steps { gap: 4px; }
-    .co-step-label { display: none; }
-    .co-step-line { width: 20px; }
     .co-card { padding: 18px; }
     .co-summary { position: static; }
-    .co-btn-row { flex-direction: column; }
+    .co-title h1 { font-size: 1.3rem; }
   }
 </style>
 </head>
@@ -125,7 +109,6 @@ function money(n){return Number(n||0).toLocaleString('en-US')+' ج.م'}
 function toast(msg){const t=document.getElementById('coToast');t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2800)}
 function escapeHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
-let currentStep = 1;
 let paymentMethod = 'instapay';
 
 function init(){
@@ -150,50 +133,31 @@ function renderCheckout(cart){
   const shippingFree = subtotal >= FREE_SHIPPING_THRESHOLD;
 
   document.getElementById('coMain').innerHTML = `
-    <div class="co-steps">
-      <div class="co-step active" data-step="1"><div class="co-step-num">1</div><div class="co-step-label">الشحن</div></div>
-      <div class="co-step-line"></div>
-      <div class="co-step" data-step="2"><div class="co-step-num">2</div><div class="co-step-label">الدفع</div></div>
-      <div class="co-step-line"></div>
-      <div class="co-step" data-step="3"><div class="co-step-num">3</div><div class="co-step-label">التأكيد</div></div>
+    <div class="co-title">
+      <h1>🛍️ إتمام الطلب</h1>
+      <p>املأ بياناتك واختار طريقة الدفع، وبعدها اضغط "تأكيد الطلب"</p>
     </div>
     <div class="co-layout">
       <div>
-        <div class="co-step-panel active" data-panel="1">
-          <div class="co-card">
-            <h2>📦 بيانات الشحن</h2>
-            <div class="co-form">
-              <div class="co-field"><label for="coName">الاسم بالكامل *</label><input id="coName" type="text" autocomplete="name" value="${escapeHtml(user.name||'')}" placeholder="مثال: أحمد محمد"></div>
-              <div class="co-field"><label for="coPhone">رقم الموبايل *</label><input id="coPhone" type="tel" autocomplete="tel" inputmode="tel" value="${escapeHtml(user.phone||'')}" placeholder="01XXXXXXXXX"></div>
-              <div class="co-field"><label for="coEmail">الإيميل (اختياري)</label><input id="coEmail" type="email" autocomplete="email" value="${escapeHtml(user.email||'')}" placeholder="you@example.com"><small>هنبعت عليه تأكيد الطلب</small></div>
-              <div class="co-field"><label for="coCity">المحافظة *</label><select id="coCity"><option value="">اختر المحافظة</option>${GOVS.map(g=>`<option value="${g}" ${user.city===g?'selected':''}>${g}</option>`).join('')}</select></div>
-              <div class="co-field"><label for="coAddr">العنوان بالتفصيل *</label><textarea id="coAddr" autocomplete="street-address" placeholder="الشارع، رقم العمارة، الدور، علامة مميزة">${escapeHtml(user.addr||'')}</textarea></div>
-              <div class="co-field"><label for="coNotes">ملاحظات (اختياري)</label><textarea id="coNotes" placeholder="أي تفاصيل إضافية للطلب">${escapeHtml(user.notes||'')}</textarea></div>
-            </div>
-            <div class="co-btn-row">
-              <a href="javascript:history.back()" class="co-btn ghost">← رجوع للسلة</a>
-              <button class="co-btn" id="toStep2">التالي: الدفع →</button>
-            </div>
+        <div class="co-card">
+          <h2>📦 بيانات الشحن</h2>
+          <div class="co-form">
+            <div class="co-field"><label for="coName">الاسم بالكامل *</label><input id="coName" type="text" autocomplete="name" value="${escapeHtml(user.name||'')}" placeholder="مثال: أحمد محمد"></div>
+            <div class="co-field"><label for="coPhone">رقم الموبايل *</label><input id="coPhone" type="tel" autocomplete="tel" inputmode="tel" value="${escapeHtml(user.phone||'')}" placeholder="01XXXXXXXXX"></div>
+            <div class="co-field"><label for="coEmail">الإيميل (اختياري)</label><input id="coEmail" type="email" autocomplete="email" value="${escapeHtml(user.email||'')}" placeholder="you@example.com"><small>هنبعت عليه تأكيد الطلب</small></div>
+            <div class="co-field"><label for="coCity">المحافظة *</label><select id="coCity"><option value="">اختر المحافظة</option>${GOVS.map(g=>`<option value="${g}" ${user.city===g?'selected':''}>${g}</option>`).join('')}</select></div>
+            <div class="co-field"><label for="coAddr">العنوان بالتفصيل *</label><textarea id="coAddr" autocomplete="street-address" placeholder="الشارع، رقم العمارة، الدور، علامة مميزة">${escapeHtml(user.addr||'')}</textarea></div>
+            <div class="co-field"><label for="coNotes">ملاحظات (اختياري)</label><textarea id="coNotes" placeholder="أي تفاصيل إضافية للطلب">${escapeHtml(user.notes||'')}</textarea></div>
           </div>
         </div>
-        <div class="co-step-panel" data-panel="2">
-          <div class="co-card">
-            <h2>💳 طريقة الدفع</h2>
-            <div class="co-pay-opts">
-              <label class="co-pay-opt selected"><input type="radio" name="pay" value="instapay" checked><span class="ico">💳</span><div class="co-pay-opt-text"><b>InstaPay</b><small>تحويل فوري عبر تطبيق InstaPay</small></div></label>
-              <label class="co-pay-opt"><input type="radio" name="pay" value="vodafone"><span class="ico">📱</span><div class="co-pay-opt-text"><b>فودافون كاش</b><small>تحويل عبر محفظة فودافون كاش</small></div></label>
-              <label class="co-pay-opt"><input type="radio" name="pay" value="orange"><span class="ico">📲</span><div class="co-pay-opt-text"><b>أورنج كاش</b><small>تحويل عبر محفظة أورنج كاش</small></div></label>
-            </div>
-            <div class="co-pay-note">💡 <b>ملحوظة:</b> قيمة المنتجات بتتحول مقدمًا عبر الطريقة اللي هتختارها. تفاصيل التحويل هتوصلك على واتساب فور تأكيد الطلب. <b>تكلفة الشحن تُدفع كاش لمندوب الشحن عند الاستلام.</b></div>
-            <div class="co-btn-row"><button class="co-btn ghost" id="backTo1">← رجوع</button><button class="co-btn" id="toStep3">التالي: المراجعة →</button></div>
+        <div class="co-card">
+          <h2>💳 طريقة الدفع</h2>
+          <div class="co-pay-opts">
+            <label class="co-pay-opt selected"><input type="radio" name="pay" value="instapay" checked><span class="ico">💳</span><div class="co-pay-opt-text"><b>InstaPay</b><small>تحويل فوري عبر تطبيق InstaPay</small></div></label>
+            <label class="co-pay-opt"><input type="radio" name="pay" value="vodafone"><span class="ico">📱</span><div class="co-pay-opt-text"><b>فودافون كاش</b><small>تحويل عبر محفظة فودافون كاش</small></div></label>
+            <label class="co-pay-opt"><input type="radio" name="pay" value="orange"><span class="ico">📲</span><div class="co-pay-opt-text"><b>أورنج كاش</b><small>تحويل عبر محفظة أورنج كاش</small></div></label>
           </div>
-        </div>
-        <div class="co-step-panel" data-panel="3">
-          <div class="co-card">
-            <h2>✅ مراجعة وتأكيد</h2>
-            <div id="coReviewBox"></div>
-            <div class="co-btn-row"><button class="co-btn ghost" id="backTo2">← رجوع</button><button class="co-btn wa" id="confirmBtn">💬 تأكيد الطلب عبر واتساب</button></div>
-          </div>
+          <div class="co-pay-note">💡 <b>ملحوظة:</b> قيمة المنتجات بتتحول مقدمًا عبر الطريقة اللي هتختارها. تفاصيل التحويل هتوصلك على واتساب فور تأكيد الطلب. <b>تكلفة الشحن تُدفع كاش لمندوب الشحن عند الاستلام.</b></div>
         </div>
       </div>
       <aside class="co-summary">
@@ -205,6 +169,8 @@ function renderCheckout(cart){
         <div class="co-summary-row"><span>قيمة المنتجات</span><span>${money(subtotal)}</span></div>
         <div class="co-summary-row"><span>الشحن</span><span>${shippingFree?'🎉 مجاني':'يُدفع كاش للمندوب'}</span></div>
         <div class="co-summary-row total"><span>الإجمالي</span><span>${money(subtotal)}</span></div>
+        <button class="co-btn" id="confirmBtn" style="margin-top:16px;">💬 تأكيد الطلب عبر واتساب</button>
+        <p style="font-size:0.75rem;color:var(--mut);text-align:center;margin:10px 0 0;line-height:1.5;">بالضغط على الزر، هيتحولك على واتساب برسالة فيها كل تفاصيل طلبك</p>
       </aside>
     </div>`;
 
@@ -212,31 +178,26 @@ function renderCheckout(cart){
 }
 
 function bindEvents(cart){
-  document.getElementById('toStep2').addEventListener('click',()=>{ if(!validateShipping())return; saveShippingToUser(); goToStep(2); });
-  document.getElementById('toStep3').addEventListener('click',()=>{ goToStep(3); renderReview(cart); });
-  document.getElementById('backTo1').addEventListener('click',()=>goToStep(1));
-  document.getElementById('backTo2').addEventListener('click',()=>goToStep(2));
-  document.querySelectorAll('.co-pay-opt input').forEach(inp=>{ inp.addEventListener('change',e=>{ paymentMethod=e.target.value; document.querySelectorAll('.co-pay-opt').forEach(el=>el.classList.remove('selected')); e.target.closest('.co-pay-opt').classList.add('selected'); }); });
+  document.querySelectorAll('.co-pay-opt input').forEach(inp=>{
+    inp.addEventListener('change',e=>{
+      paymentMethod=e.target.value;
+      document.querySelectorAll('.co-pay-opt').forEach(el=>el.classList.remove('selected'));
+      e.target.closest('.co-pay-opt').classList.add('selected');
+    });
+  });
   document.getElementById('confirmBtn').addEventListener('click',()=>confirmOrder(cart));
 }
 
-function goToStep(n){
-  currentStep = n;
-  document.querySelectorAll('.co-step-panel').forEach(p=>p.classList.toggle('active',Number(p.dataset.panel)===n));
-  document.querySelectorAll('.co-step').forEach(s=>{ const step=Number(s.dataset.step); s.classList.toggle('active',step===n); s.classList.toggle('done',step<n); });
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function validateShipping(){
+function validate(){
   const name=document.getElementById('coName').value.trim();
-  const phone=document.getElementById('coPhone').value.trim();
+  const phone=document.getElementById('coPhone').value.trim().replace(/\s/g,'');
   const city=document.getElementById('coCity').value;
   const addr=document.getElementById('coAddr').value.trim();
-  if(!name){toast('⚠️ اكتب الاسم بالكامل');return false}
-  if(!phone){toast('⚠️ اكتب رقم الموبايل');return false}
-  if(!/^01[0-9]{9}$/.test(phone.replace(/\s/g,''))){toast('⚠️ رقم الموبايل غير صحيح (11 رقم يبدأ بـ 01)');return false}
-  if(!city){toast('⚠️ اختر المحافظة');return false}
-  if(!addr){toast('⚠️ اكتب العنوان بالتفصيل');return false}
+  if(!name){toast('⚠️ اكتب الاسم بالكامل');document.getElementById('coName').focus();return false}
+  if(!phone){toast('⚠️ اكتب رقم الموبايل');document.getElementById('coPhone').focus();return false}
+  if(!/^01[0-9]{9}$/.test(phone)){toast('⚠️ رقم الموبايل غير صحيح (11 رقم يبدأ بـ 01)');document.getElementById('coPhone').focus();return false}
+  if(!city){toast('⚠️ اختر المحافظة');document.getElementById('coCity').focus();return false}
+  if(!addr){toast('⚠️ اكتب العنوان بالتفصيل');document.getElementById('coAddr').focus();return false}
   return true;
 }
 
@@ -251,30 +212,10 @@ function saveShippingToUser(){
   saveUser(user);
 }
 
-function renderReview(cart){
-  const user=getUser();
-  const subtotal=cart.reduce((s,i)=>s+Number(i.price||0)*Number(i.qty||1),0);
-  const payNames={instapay:'InstaPay',vodafone:'فودافون كاش',orange:'أورنج كاش'};
-  document.getElementById('coReviewBox').innerHTML = `
-    <div style="background:var(--bg2,#faf6f0);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;font-size:0.9rem;line-height:1.7;">
-      <div><b>👤 الاسم:</b> ${escapeHtml(user.name)}</div>
-      <div><b>📱 الموبايل:</b> ${escapeHtml(user.phone)}</div>
-      ${user.email?`<div><b>📧 الإيميل:</b> ${escapeHtml(user.email)}</div>`:''}
-      <div><b>🏙️ المحافظة:</b> ${escapeHtml(user.city)}</div>
-      <div><b>📍 العنوان:</b> ${escapeHtml(user.addr)}</div>
-      ${user.notes?`<div><b>📝 ملاحظات:</b> ${escapeHtml(user.notes)}</div>`:''}
-    </div>
-    <div style="background:var(--bg2,#faf6f0);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;font-size:0.9rem;line-height:1.7;">
-      <div><b>💳 طريقة الدفع:</b> ${payNames[paymentMethod]||'InstaPay'}</div>
-      <div><b>💰 الإجمالي:</b> <span style="color:var(--gold2);font-weight:800;">${money(subtotal)}</span></div>
-      <div style="font-size:0.8rem;color:var(--mut);margin-top:6px;">🚚 الشحن يُدفع كاش لمندوب الشحن عند الاستلام</div>
-    </div>
-    <div style="font-size:0.82rem;color:var(--mut);line-height:1.6;">بالضغط على "تأكيد الطلب"، هيتحولك على واتساب برسالة فيها كل تفاصيل طلبك. بعد ما تبعتها، هنتواصل معاك لتأكيد الدفع والشحن.</div>`;
-}
-
 function confirmOrder(cart){
+  if(!validate())return;
+  saveShippingToUser();
   const user=getUser();
-  if(!user.name||!user.phone||!user.addr){toast('⚠️ فيه بيانات ناقصة');goToStep(1);return}
   const subtotal=cart.reduce((s,i)=>s+Number(i.price||0)*Number(i.qty||1),0);
   const orderId='VL-'+Math.random().toString(36).slice(2,8).toUpperCase();
   const payNames={instapay:'InstaPay',vodafone:'فودافون كاش',orange:'أورنج كاش'};
@@ -320,7 +261,7 @@ function renderSuccess(orderId){
       <p>لو واتساب مفتحش تلقائياً، اضغط على الزرار تحت عشان تبعته.</p>
       <div class="order-id">${orderId}</div>
       <p style="font-size:0.85rem;">هنتواصل معاك قريب لتأكيد الدفع والشحن.</p>
-      <div style="margin-top:24px;"><a href="products.html" class="co-btn" style="display:inline-block;width:auto;padding:12px 32px;">🕯️ تصفح منتجات تانية</a></div>
+      <div style="margin-top:24px;"><a href="products.html" class="co-btn" style="display:inline-block;width:auto;padding:12px 32px;background:var(--gold);">🕯️ تصفح منتجات تانية</a></div>
     </div>`;
 }
 
