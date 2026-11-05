@@ -1725,8 +1725,8 @@ if(btt){
 }
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(() => console.log('✨ SW Ready'))
+// navigator.serviceWorker.register('/sw.js')
+    .then(() => console.log('✨ SW Ready'))
       .catch(e => console.log('SW registration skipped'));
   });
 }
