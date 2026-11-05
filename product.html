@@ -2215,5 +2215,79 @@ if(document.readyState === "loading"){
 <script src="ga4-events.js" defer></script>
 <script src="pwa.js" defer></script>
 <script src="search.js" defer></script>
+  <!-- ═══ CART CLEANUP — VelaLight ═══ -->
+<style>
+  /* إخفاء حقول الإدخال من درج السلة */
+  #cartDrawer .co-form,
+  #cartDrawer .paybox,
+  #cartDrawer .cart-shipping-note,
+  #cartDrawer h4[data-i18n="delivery_h"],
+  #cartDrawer #couponInput,
+  #cartDrawer #applyCouponBtn,
+  #cartDrawer #discountRow,
+  #cartDrawer #couponCodeLbl,
+  #cartDrawer #emptyCartBtn {
+    display: none !important;
+  }
+  /* مساحة مريحة للمنتجات */
+  #cartDrawer .dbody {
+    padding-bottom: 12px !important;
+  }
+  /* زر متابعة الدفع */
+  #cartDrawer #checkoutBtn {
+    background: linear-gradient(135deg, #d4af37, #b8863f) !important;
+    color: #fff !important;
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+    padding: 14px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 6px 18px rgba(212,175,55,0.35) !important;
+    margin-top: 10px !important;
+  }
+</style>
+<script>
+(function(){
+  function setupCleanCart(){
+    var oldBtn = document.getElementById('checkoutBtn');
+    if (!oldBtn) return;
+    if (oldBtn.dataset.vlClean === '1') return;
+
+    var newBtn = oldBtn.cloneNode(true);
+    newBtn.dataset.vlClean = '1';
+    newBtn.textContent = '🛍️ متابعة الدفع';
+    newBtn.classList.remove('wa');
+
+    newBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      var cart = [];
+      try { cart = JSON.parse(localStorage.getItem('vl_cart') || '[]'); } catch(err) { cart = []; }
+      if (!cart.length) {
+        if (typeof toast === 'function') toast('🕯️ السلة فاضية');
+        return;
+      }
+
+      var missingScent = cart.find(function(i){ return !i.scent || !String(i.scent).trim(); });
+      if (missingScent) {
+        if (typeof toast === 'function') toast('⚠️ اختار عطر لكل منتج في السلة');
+        return;
+      }
+
+      window.location.href = 'checkout.html';
+    }, true);
+
+    oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(setupCleanCart, 1200); });
+  } else {
+    setTimeout(setupCleanCart, 1200);
+  }
+  setTimeout(setupCleanCart, 3000);
+})();
+</script>
+<!-- ═══ END CART CLEANUP ═══ -->
 </body>
 </html>
