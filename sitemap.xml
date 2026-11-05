@@ -30,33 +30,10 @@
     <lastmod>2026-11-05</lastmod>
     <priority>0.3</priority>
   </url>
+
+  <!-- المنتجات الثابتة 1 → 14 -->
   <url>
     <loc>https://velalight.github.io/shop/1.html</loc>
-    <lastmod>2026-11-05</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/shop/10.html</loc>
-    <lastmod>2026-11-05</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/shop/11.html</loc>
-    <lastmod>2026-11-05</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/shop/12.html</loc>
-    <lastmod>2026-11-05</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/shop/13.html</loc>
-    <lastmod>2026-11-05</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://velalight.github.io/shop/14.html</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
@@ -101,87 +78,114 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmslvu1gma3f.html</loc>
+    <loc>https://velalight.github.io/shop/10.html</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmsn1dexa008.html</loc>
+    <loc>https://velalight.github.io/shop/11.html</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmt0g52r31ab.html</loc>
+    <loc>https://velalight.github.io/shop/12.html</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmt2u7x1gfbe.html</loc>
+    <loc>https://velalight.github.io/shop/13.html</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmt2u7x97e65.html</loc>
+    <loc>https://velalight.github.io/shop/14.html</loc>
+    <lastmod>2026-11-05</lastmod>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- المنتجات الديناميكية (من الأدمن) -->
+  <url>
+    <loc>https://velalight.github.io/product.html?p=pmslvu1gma3f</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmt2u7xcjaef.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmsn1dexa008</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmt2u7xf8b4a.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmt0g52r31ab</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmt2u7xhs406.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmt2u7x1gfbe</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmt2u7xkt8d4.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmt2u7x97e65</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmt2u7xnf29c.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmt2u7xcjaef</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmt2u7xq749e.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmt2u7xf8b4a</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmtd6tlor9e3.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmt2u7xhs406</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmtvijkkede4.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmt2u7xkt8d4</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmvj8cij7c34.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmt2u7xnf29c</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmvj8qxhca70.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmt2u7xq749e</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmvoyd30hb35.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmtd6tlor9e3</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://velalight.github.io/shop/pmvoytiqpc6f.html</loc>
+    <loc>https://velalight.github.io/product.html?p=pmtvijkkede4</loc>
+    <lastmod>2026-11-05</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://velalight.github.io/product.html?p=pmvj8cij7c34</loc>
+    <lastmod>2026-11-05</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://velalight.github.io/product.html?p=pmvj8qxhca70</loc>
+    <lastmod>2026-11-05</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://velalight.github.io/product.html?p=pmvoyd30hb35</loc>
+    <lastmod>2026-11-05</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://velalight.github.io/product.html?p=pmvoytiqpc6f</loc>
     <lastmod>2026-11-05</lastmod>
     <priority>0.8</priority>
   </url>
