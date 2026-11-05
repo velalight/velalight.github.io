@@ -1,7 +1,7 @@
 /* ─── App Version Check (force reload على نسخة جديدة) ─── */
 (function(){
   try {
-    var APP_VERSION = "11";
+    var APP_VERSION = "13";
     var saved = localStorage.getItem("vl_app_version");
     if (saved && saved !== APP_VERSION) {
       localStorage.setItem("vl_app_version", APP_VERSION);
