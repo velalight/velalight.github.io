@@ -205,7 +205,30 @@ async function networkFirstAsset(request, cacheName) {
 
 /* ─── 1. Network-First (HTML) ─── */
 async function networkFirstHTML(request) {
-  // ... الكود القديم زي ما هو
+  const cache = await caches.open(HTML_CACHE);
+
+  try {
+    const response = await fetch(request);
+
+    // لو الرد سليم، احفظه في الكاش وارجعه
+    if (isCacheableResponse(response)) {
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (error) {
+    // لو النت فاصل، جيب آخر نسخة محفوظة
+    const cached = await cache.match(request);
+    if (cached) return cached;
+
+    // لو مفيش نسخة محفوظة، ارجع صفحة الرئيسية من الكاش
+    const fallback = await caches.match("/index.html");
+    if (fallback) return fallback;
+
+    return new Response(
+      "<h1>لا يوجد اتصال بالإنترنت</h1><p>حاول تحديث الصفحة.</p>",
+      { headers: { "Content-Type": "text/html; charset=utf-8" }, status: 503 }
+    );
+  }
 }
 /* ─── 2. Stale-While-Revalidate (CSS/JS) ─── */
 async function staleWhileRevalidate(request, cacheName, event) {
