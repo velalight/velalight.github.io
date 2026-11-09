@@ -379,3 +379,95 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
     animation: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════
+   🧠 QUIZ BANNER — ضمان الظهور (VelaLight)
+   ═══════════════════════════════════════════════ */
+.vl-quiz-banner {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  min-height: 90px !important;
+  position: relative !important;
+  z-index: 50 !important;
+  background: linear-gradient(135deg, #1a0f2e 0%, #2d1b4e 50%, #4a2c7a 100%) !important;
+  overflow: hidden !important;
+  border-bottom: 1px solid rgba(255, 209, 102, 0.4) !important;
+  box-sizing: border-box !important;
+}
+.vl-quiz-banner-inner {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  align-items: center !important;
+  gap: 16px !important;
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  padding: 18px 24px !important;
+  text-decoration: none !important;
+  color: #fff !important;
+  z-index: 1 !important;
+}
+.vl-quiz-banner-icon {
+  display: block !important;
+  font-size: 2.6rem !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+.vl-quiz-banner-content {
+  display: block !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+.vl-quiz-banner-title {
+  display: block !important;
+  font-family: 'El Messiri', 'Tajawal', serif !important;
+  font-size: 1.4rem !important;
+  font-weight: 800 !important;
+  margin: 0 0 4px !important;
+  color: #ffd166 !important;
+  line-height: 1.2 !important;
+}
+.vl-quiz-banner-sub {
+  display: block !important;
+  font-size: 0.85rem !important;
+  margin: 0 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  line-height: 1.4 !important;
+}
+.vl-quiz-banner-cta {
+  display: flex !important;
+  visibility: visible !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 10px 22px !important;
+  background: linear-gradient(135deg, #ffd700, #d4af37) !important;
+  color: #1a1512 !important;
+  border-radius: 50px !important;
+  font-weight: 900 !important;
+  font-size: 0.95rem !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+@media (max-width: 700px) {
+  .vl-quiz-banner-inner {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    padding: 14px 16px !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .vl-quiz-banner-icon { font-size: 2rem !important; }
+  .vl-quiz-banner-content { flex: 1 1 100% !important; order: 2 !important; }
+  .vl-quiz-banner-title { font-size: 1.1rem !important; }
+  .vl-quiz-banner-sub { font-size: 0.75rem !important; }
+  .vl-quiz-banner-cta {
+    order: 3 !important;
+    flex: 1 1 100% !important;
+    justify-content: center !important;
+    padding: 10px 16px !important;
+  }
+}
+/* ═══ END QUIZ BANNER ═══ */
