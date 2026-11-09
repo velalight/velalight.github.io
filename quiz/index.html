@@ -1,292 +1,635 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>مين يعرفك أكتر؟ | VelaLight</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: linear-gradient(135deg, #2d1b4e, #4a2c7a);
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
-      overflow-x: hidden;
-    }
-    .screen {
-      max-width: 440px;
-      width: 100%;
-      display: none;
-      animation: fadeIn 0.4s ease;
-    }
-    .screen.active { display: block; }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 12px;
-      color: #ffd166;
-    }
-    p.subtitle {
-      font-size: 1rem;
-      opacity: 0.9;
-      margin-bottom: 28px;
-      line-height: 1.7;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 16px;
-      font-size: 1.1rem;
-      border: 2px solid rgba(255,255,255,0.2);
-      border-radius: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      text-align: center;
-      margin-bottom: 20px;
-      outline: none;
-      transition: border 0.2s;
-    }
-    input[type="text"]::placeholder { color: rgba(255,255,255,0.5); }
-    input[type="text"]:focus { border-color: #ff6b9d; }
-    button {
-      background: #ff6b9d;
-      color: #fff;
-      border: none;
-      padding: 16px 40px;
-      font-size: 1.1rem;
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: transform 0.2s, background 0.2s;
-      width: 100%;
-    }
-    button:hover:not(:disabled) { background: #ff4d88; transform: scale(1.02); }
-    button:disabled { opacity: 0.4; cursor: not-allowed; }
-    .progress-bar {
-      width: 100%;
-      height: 6px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 10px;
-      margin-bottom: 24px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: #ffd166;
-      border-radius: 10px;
-      transition: width 0.3s ease;
-      width: 0%;
-    }
-    .q-number {
-      font-size: 0.9rem;
-      opacity: 0.7;
-      margin-bottom: 8px;
-    }
-    .q-text {
-      font-size: 1.3rem;
-      font-weight: bold;
-      margin-bottom: 24px;
-      line-height: 1.5;
-      min-height: 60px;
-    }
-    .options { display: flex; flex-direction: column; gap: 12px; }
-    .option {
-      background: rgba(255,255,255,0.08);
-      border: 2px solid rgba(255,255,255,0.15);
-      color: #fff;
-      padding: 16px;
-      border-radius: 12px;
-      font-size: 1rem;
-      cursor: pointer;
-      text-align: right;
-      transition: all 0.2s;
-      width: 100%;
-    }
-    .option:hover { background: rgba(255,255,255,0.15); }
-    .option.selected {
-      background: #ff6b9d;
-      border-color: #ff6b9d;
-      transform: scale(1.02);
-    }
-    .result-score {
-      font-size: 4rem;
-      font-weight: bold;
-      color: #ffd166;
-      margin: 20px 0;
-    }
-    .result-msg {
-      font-size: 1.2rem;
-      margin-bottom: 28px;
-      line-height: 1.6;
-    }
-    .share-box {
-      background: rgba(255,255,255,0.1);
-      padding: 16px;
-      border-radius: 12px;
-      margin-bottom: 16px;
-      font-size: 0.85rem;
-      word-break: break-all;
-      opacity: 0.8;
-    }
-    .powered {
-      margin-top: 32px;
-      font-size: 0.75rem;
-      opacity: 0.5;
-    }
-    .btn-secondary {
-      background: transparent;
-      border: 2px solid rgba(255,255,255,0.3);
-      margin-top: 12px;
-      font-size: 1rem;
-    }
-    .btn-secondary:hover { background: rgba(255,255,255,0.1); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>دوامة الريحة | VelaLight</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:linear-gradient(160deg,#1a0f2e,#2d1b4e 40%,#4a2c7a);color:#fff;min-height:100vh;display:flex;justify-content:center;padding:16px;overflow-x:hidden}
+#app{max-width:460px;width:100%;margin:auto}
+.screen{display:none;animation:fade .4s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+h1{font-size:1.9rem;color:#ffd166;margin-bottom:10px;line-height:1.3}
+h2{font-size:1.4rem;color:#ffd166;margin-bottom:12px}
+p.sub{opacity:.88;line-height:1.7;margin-bottom:22px;font-size:1rem}
+button{background:#ff6b9d;color:#fff;border:none;padding:16px;font-size:1.05rem;border-radius:14px;cursor:pointer;font-weight:bold;width:100%;transition:.2s;margin-top:8px}
+button:hover:not(:disabled){background:#ff4d88;transform:scale(1.01)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.sec{background:transparent;border:2px solid rgba(255,255,255,.3)}
+button.sec:hover{background:rgba(255,255,255,.1)}
+button.small{padding:12px;font-size:.95rem}
+input[type=text]{width:100%;padding:16px;font-size:1.05rem;border:2px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;text-align:center;margin-bottom:16px;outline:none}
+input::placeholder{color:rgba(255,255,255,.45)}
+input:focus{border-color:#ff6b9d}
+.progress{width:100%;height:6px;background:rgba(255,255,255,.15);border-radius:10px;margin-bottom:20px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#ffd166,#ff6b9d);transition:width .3s}
+.qnum{font-size:.85rem;opacity:.65;margin-bottom:6px}
+.qtext{font-size:1.2rem;font-weight:bold;margin-bottom:20px;line-height:1.5;min-height:56px}
+.opt{background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.12);color:#fff;padding:15px;border-radius:12px;font-size:.98rem;cursor:pointer;text-align:right;transition:.2s;width:100%;margin-bottom:10px;font-family:inherit}
+.opt:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3)}
+.opt.sel{background:#ff6b9d;border-color:#ff6b9d}
+.scent-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.scent-card{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);border-radius:16px;padding:20px 12px;cursor:pointer;text-align:center;transition:.2s}
+.scent-card:hover{background:rgba(255,255,255,.16);transform:translateY(-2px)}
+.scent-card .emoji{font-size:2rem;display:block;margin-bottom:8px}
+.scent-card .name{font-size:.9rem;font-weight:bold}
+.result-hero{background:linear-gradient(135deg,rgba(255,107,157,.3),rgba(255,209,102,.2));border:2px solid rgba(255,209,102,.5);border-radius:20px;padding:28px 20px;text-align:center;margin-bottom:20px}
+.result-hero .persona{font-size:2rem;color:#ffd166;font-weight:bold;margin-bottom:8px}
+.result-hero .scent{font-size:1.1rem;opacity:.9;margin-bottom:16px}
+.result-hero .desc{font-size:.95rem;line-height:1.7;opacity:.9;margin-bottom:12px}
+.result-hero .hidden-trait{font-size:.85rem;opacity:.75;font-style:italic;border-top:1px solid rgba(255,255,255,.2);padding-top:12px;margin-top:12px}
+.product-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:16px;margin-bottom:16px}
+.product-box .prod-name{color:#ffd166;font-weight:bold;margin-bottom:4px}
+.product-box .prod-desc{font-size:.85rem;opacity:.8}
+.product-box .prod-cta{font-size:.85rem;margin-top:10px;color:#ff6b9d;font-weight:bold}
+.menu-grid{display:grid;gap:12px;margin-top:20px}
+.menu-item{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:18px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:space-between;text-align:right}
+.menu-item:hover{background:rgba(255,255,255,.15);transform:translateX(-2px)}
+.menu-item.locked{opacity:.5;cursor:not-allowed}
+.menu-item .mi-left{display:flex;align-items:center;gap:14px;flex:1}
+.menu-item .mi-icon{font-size:1.6rem}
+.menu-item .mi-title{font-weight:bold;margin-bottom:3px}
+.menu-item .mi-sub{font-size:.8rem;opacity:.7}
+.menu-item .mi-arrow{opacity:.5}
+.share-box{background:rgba(255,255,255,.08);padding:14px;border-radius:12px;margin-bottom:12px;font-size:.78rem;word-break:break-all;opacity:.85}
+.score-big{font-size:4rem;font-weight:bold;color:#ffd166;margin:16px 0;text-align:center}
+.msg{font-size:1.05rem;line-height:1.6;text-align:center;margin-bottom:20px}
+.powered{text-align:center;font-size:.72rem;opacity:.4;margin-top:32px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)}
+.streak-box{display:flex;justify-content:center;gap:8px;margin:16px 0}
+.streak-day{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.streak-day.done{background:#ff6b9d;font-weight:bold}
+.daily-q{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:20px;margin-bottom:16px}
+.daily-q .dq-text{font-size:1.15rem;font-weight:bold;margin-bottom:16px;line-height:1.5}
+.dq-opt{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);padding:12px 14px;border-radius:10px;margin-bottom:8px;cursor:pointer;font-size:.95rem;transition:.2s;display:flex;justify-content:space-between;align-items:center}
+.dq-opt:hover{background:rgba(255,255,255,.14)}
+.dq-opt .pct{color:#ffd166;font-weight:bold;font-size:.9rem}
+.leader-item{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.leader-item .li-name{font-weight:bold}
+.leader-item .li-score{color:#ffd166;font-weight:bold}
+.leader-item.first{border-color:#ffd166;background:rgba(255,209,102,.1)}
+.tag{display:inline-block;background:rgba(255,107,157,.3);padding:3px 10px;border-radius:20px;font-size:.75rem;margin:0 4px 4px 0}
+.back-btn{background:transparent;border:none;color:#fff;opacity:.7;padding:8px 0;text-align:right;font-size:.9rem;width:auto;cursor:pointer;margin-bottom:12px}
+</style>
 </head>
 <body>
+<div id="app"></div>
 
-  <!-- شاشة 1: البداية -->
-  <div class="screen active" id="screen-start">
-    <h1>مين يعرفك أكتر؟</h1>
-    <p class="subtitle">جاوب 10 أسئلة عن نفسك، وابعت التحدي لأصحابك.<br>مين فيهم هيعرفك أكتر؟ ❤️</p>
-    <input type="text" id="user-name" placeholder="اكتب اسمك..." maxlength="20">
-    <button id="btn-start" disabled>ابدأ التحدي</button>
+<script>
+// ================================================================
+// 📦 البيانات الأساسية
+// ================================================================
+
+// TODO: غيّر أسماء المنتجات والصور لتناسب الـ 23 عطر في مستودعك
+const PERFUMES = {
+  "الحالم":     { product: "عطر الياسمين الليلي", image: "", url: "#" },
+  "الدافئ":     { product: "شمعة الفانيليا",     image: "", url: "#" },
+  "الجسور":     { product: "عطر العود الملكي",   image: "", url: "#" },
+  "الغامض":     { product: "عطر الصندل",         image: "", url: "#" },
+  "الاجتماعي":  { product: "عطر البرغموت",       image: "", url: "#" },
+  "الحكيم":     { product: "عطر اللبان",         image: "", url: "#" },
+  "الرومانسي":  { product: "عطر الورد الطائفي",  image: "", url: "#" },
+  "المتحمس":    { product: "عطر الحمضيات",       image: "", url: "#" }
+};
+
+const PERSONALITY_META = {
+  "الحالم":    { emoji:"🌙", desc:"بتعيش جواك أكتر من برا. بتحس بالدنيا قبل ما تفهمها، وذكرياتك أغلى من أي حاجة." },
+  "الدافئ":    { emoji:"🔥", desc:"الناس بتحس بالأمان حواليك. إنت الحضن اللي الكل بيرجعله." },
+  "الجسور":    { emoji:"⚡", desc:"واثق، بتاخد قرارات صعبة، ومش بتخاف تواجه. قوتك مش في صوتك، في ثباتك." },
+  "الغامض":    { emoji:"🌫️", desc:"عميق، مش سهل تفهمك. بتخبي مش لأنك مش واثق، لأنك بتحمي اللي جواك." },
+  "الاجتماعي": { emoji:"✨", desc:"طاقة وضحك ولمة. بتجمع الناس حواليك وبتخلي أي مكان أحلى." },
+  "الحكيم":    { emoji:"🕯️", desc:"هادي، بتفكر قبل ما تتكلم. حكمتك جاية من وجع مش من سن." },
+  "الرومانسي": { emoji:"🌹", desc:"بتحب بعمق وبتتأثر بسرعة. بتدي أكتر مما بتاخد وبتقول مش مهم." },
+  "المتحمس":   { emoji:"☀️", desc:"بتبدأ كل حاجة بحماس. عندك طاقة محدش يقدر يوقفها." }
+};
+
+// 20 سؤال عميق - كل إجابة مربوطة بشخصية
+const PERSONALITY_QUESTIONS = [
+  { q:"أول حاجة بتفتكرها من طفولتك؟", opts:[["بيت الجدة وريحة الأكل","الدافئ"],["الشارع وأنا بلعب مع ولاد الجيران","الاجتماعي"],["أوضة لوحدي بقرأ أو أرسم","الحالم"],["لحظة خوف مش قادر أنساها","الغامض"]] },
+  { q:"لما بتفكر في البيت، إيه أول إحساس بييجي؟", opts:[["دفا وحضن","الدافئ"],["صوت وضحك","الاجتماعي"],["هدوء وسكينة","الحكيم"],["حاجة ناقصة","الحالم"]] },
+  { q:"إيه اللي كنت بتخاف منه وأنت صغير؟", opts:[["الظلمة","الحالم"],["إني أضيع من أهلي","الدافئ"],["حد يسخر مني","الرومانسي"],["إني أكون لوحدي","الاجتماعي"]] },
+  { q:"أول شخص حبيته (مش بالضرورة حب رومانسي)؟", opts:[["حد في العيلة كان دايماً معايا","الدافئ"],["صاحب/ة من الطفولة","الاجتماعي"],["شخصية من فيلم أو كتاب","الحالم"],["شخص لسه بفكر فيه","الرومانسي"]] },
+  { q:"لو رجعت لطفولتك يوم واحد، هتعمل إيه؟", opts:[["أقعد مع حد فقدته","الدافئ"],["ألعب في الشارع لآخر النهار","الاجتماعي"],["أقعد في أوضتي أسوح","الحالم"],["أعمل حاجة كنت خايف أعملها","المتحمس"]] },
+  { q:"إيه اللي بيخليك تحس إنك في أمان؟", opts:[["حد قريب مني","الدافئ"],["بيتي وأغراضي","الحكيم"],["إني لوحدي","الغامض"],["إني مشغول بحاجة بحبها","المتحمس"]] },
+  { q:"إيه أكتر حاجة بتخاف منها دلوقتي؟", opts:[["الوحدة","الاجتماعي"],["الفشل","الجسور"],["إن حد يخون ثقتي","الرومانسي"],["إن الوقت يعدي وأنا مش عايش","المتحمس"]] },
+  { q:"لما بتضايق، بتعمل إيه؟", opts:[["أتكلم مع حد قريب","الدافئ"],["أقعد لوحدي أفكر","الحالم"],["أخرج أتمشى","المتحمس"],["أقفل على نفسي","الغامض"]] },
+  { q:"إيه الحاجة اللي بتخبيها عن الناس؟", opts:[["ضعفي","الجسور"],["خوفي من الوحدة","الاجتماعي"],["حساسيتي الزيادة","الرومانسي"],["إني مش فاهم نفسي","الغامض"]] },
+  { q:"لو حد قالك 'إنت قوي'، هتفتكر إيه؟", opts:[["إنه مش شايف الضعف اللي جوايا","الجسور"],["إنه بيحاول يجاملي","الغامض"],["إنه شايف فيا حاجة أنا مش شايفها","الحكيم"],["إنه بيحبني","الدافئ"]] },
+  { q:"إيه اللي بيخليك تحس إنك حي؟", opts:[["لحظة ضحك مع ناس بحبهم","الاجتماعي"],["لحظة تأمل لوحدي","الحالم"],["إني أعمل حاجة جديدة","المتحمس"],["إني أساعد حد","الدافئ"]] },
+  { q:"آخر مرة بكيت فيها كانت ليه؟", opts:[["من كتر ما ضحكت","الاجتماعي"],["موقف أثر فيّ","الرومانسي"],["إحباط أو ظلم","الجسور"],["حاجة فقدتها","الدافئ"]] },
+  { q:"إيه أكتر حاجة بتخاف تقولها لأقرب الناس ليك؟", opts:[["إني محتاجهم","الجسور"],["إني زهقت","الغامض"],["إني بحبهم زيادة","الرومانسي"],["إني مش زي ما هما فاكرين","الحالم"]] },
+  { q:"بابين: واحد فيه حياة مضمونة ومملة، والتاني فيه حلم ومخاطرة. هتختار إيه؟", opts:[["المضمون، أنا بحب الأمان","الحكيم"],["المخاطرة، الحياة من غيرها ملهاش طعم","المتحمس"],["المضمون، بس هفضل أفكر في التاني","الحالم"],["التاني، بس هاخد خطوة خطوة","الجسور"]] },
+  { q:"إيه الحاجة اللي بتعملها وبتقول إنك مش بتحبها، بس بتستمتع بيها؟", opts:[["القعدة لوحدي","الحالم"],["الكلام مع الغرباء","الاجتماعي"],["التنظيم الزيادة","الحكيم"],["الجدال","الجسور"]] },
+  { q:"لو طفلك اللي جواك يقدر يتكلم، هيقولك إيه؟", opts:[["خدني نلعب","المتحمس"],["حسّسني بالأمان","الدافئ"],["سمعني","الرومانسي"],["إنت نسيتني","الحالم"]] },
+  { q:"إيه اللي بيميزك عن أي حد تاني؟", opts:[["قلبي اللي بيحس بكل حاجة","الرومانسي"],["عقلي اللي بيفكر في كل حاجة","الحكيم"],["طاقتي اللي مبتخلصش","المتحمس"],["هدوئي في العواصف","الغامض"]] },
+  { q:"لو هتكتب رسالة لنسخة منك بعد 10 سنين، هتقولها إيه؟", opts:[["إنت قدرت","الجسور"],["إنت لسه زي ما إنت","الحكيم"],["إنت سعيد؟","الحالم"],["إنت محبوب","الرومانسي"]] },
+  { q:"إيه الحاجة اللي بتخاف تخسرها؟", opts:[["الناس اللي بحبهم","الدافئ"],["حريتي","المتحمس"],["ذكرياتي","الحالم"],["إحساسي إني فاهم نفسي","الحكيم"]] },
+  { q:"لو اللعبة دي هتغير حاجة فيك، هتكون إيه؟", opts:[["إني أحب نفسي أكتر","الرومانسي"],["إني أفهم نفسي أكتر","الحالم"],["إني أكون أشجع","الجسور"],["إني أكون أقرب من الناس","الاجتماعي"]] }
+];
+
+// أسئلة الشريك (10) - واقعية عشان التخمين يشتغل
+const PARTNER_QUESTIONS = [
+  { q:"إيه أكلة الراحة بتاعتك؟", o:["كشري","بيتزا","شاورما","مشاوي"] },
+  { q:"بتصحى الصبح إزاي؟", o:["أبص على الموبايل","أشرب مية","أشرب قهوة","أرجع أنام"] },
+  { q:"بتفضل تقضي الويكند فين؟", o:["البحر","البيت","قهوة","مول"] },
+  { q:"إيه أكتر حاجة بتعصبك؟", o:["نت بطيء","مضغ بصوت عالي","التأخير","ناس مش بترد"] },
+  { q:"إيه لونك المفضل؟", o:["أزرق","أسود","أبيض","أحمر"] },
+  { q:"بتشرب إيه الصبح؟", o:["قهوة","شاي","عصير","مية"] },
+  { q:"إيه أكتر نوع فيلم بتحبه؟", o:["أكشن","كوميدي","رومانسي","دراما"] },
+  { q:"خايف من إيه؟", o:["الوحدة","الفشل","الظلمة","المستقبل"] },
+  { q:"إيه أكتر حاجة بتضحكك؟", o:["مواقف محرجة","نكت","ريلز","صحابي"] },
+  { q:"لو معاك فلوس زيادة، هتصرفها على إيه؟", o:["سفر","ملابس","أكل","هدايا"] }
+];
+
+const FRIENDS_QUESTIONS = [
+  { q:"بيعرف يطبخ؟", o:["أيوه شاطر","أساسيات بس","بيحرق المية","بيطلب دايماً"] },
+  { q:"قهوة ولا شاي؟", o:["قهوة","شاي","الاتنين","مش بيشرب"] },
+  { q:"بحر ولا جبل؟", o:["بحر","جبل","الاتنين","البيت"] },
+  { q:"بيسافر إزاي؟", o:["منظم جداً","سبونتينيوس","خطة مرنة","مش بيسافر"] },
+  { q:"بيحب يقعد لوحده ولا مع الناس؟", o:["لوحده","مع الناس","حسب المود","مفيش فرق"] },
+  { q:"بيلبس إيه أكتر؟", o:["كاجوال","رياضي","رسمي","ستايل خاص"] },
+  { q:"بيصحى بدري؟", o:["أيوه","لا","حسب اليوم","بيصحى متأخر دايماً"] },
+  { q:"بيحب الحيوانات؟", o:["بيموت فيهم","بيحب القطط","بيحب الكلاب","مش فارقة"] },
+  { q:"بيعمل إيه لو زهق؟", o:["ينام","يتفرج","يخرج","يكلم حد"] },
+  { q:"بيحب المفاجآت؟", o:["بيموت فيها","بيحب الهدوء","حسب المفاجأة","مش بيحبها"] }
+];
+
+const FAMILY_QUESTIONS = [
+  { q:"بيتكلم في التليفون كتير؟", o:["كتير جداً","عادي","قليل","مش بيتكلم"] },
+  { q:"أكل بيتي ولا مطاعم؟", o:["بيتي دايماً","مطاعم","الاتنين","حسب المزاج"] },
+  { q:"بيتفرج على إيه؟", o:["أخبار","مسلسلات","رياضة","أفلام"] },
+  { q:"بيحب يزور الناس؟", o:["بيموت في الزيارات","عادي","قليل","يقعد في البيت"] },
+  { q:"بيهتم بإيه في يومه؟", o:["الشغل","العيلة","الراحة","الموبايل"] },
+  { q:"بيتعامل مع المشاكل إزاي؟", o:["بيواجه","بيتجاهل","بيتكلم","بيزعل"] },
+  { q:"يقعد مع العيلة ولا لوحده؟", o:["مع العيلة دايماً","لوحده","حسب اليوم","مش فارقة"] },
+  { q:"بيحب يساعد في البيت؟", o:["أيوه كتير","لو اتطلب","قليل","مش بيحب"] },
+  { q:"بيتضايق من إيه؟", o:["الصوت العالي","الفوضى","التأخير","الجدال"] },
+  { q:"بيسمع كلام مين؟", o:["الأكبر","اللي بيفهمه","اللي بيحبه","محدش"] }
+];
+
+const DAILY_QUESTIONS = [
+  { q:"إيه أول حاجة بتروحلها لما تكون زهقان؟", o:["الموبايل","السرير","الأكل","الخروج"] },
+  { q:"إيه اللي بتخاف إن الناس تعرفه عنك؟", o:["ضعفي","خوفي","حبي","وحدتي"] },
+  { q:"لو هتعيد يوم واحد من حياتك، هتختار إيه؟", o:["يوم حلو","يوم وحش","يوم فقدت فيه حد","مش هعيد"] },
+  { q:"إيه الحاجة اللي بتخليك تحس إنك حي؟", o:["الحب","النجاح","الصحاب","الهدوء"] },
+  { q:"إيه أكتر حاجة بتندم عليها؟", o:["كلام قلته","فرصة ضاعت","حد خسرته","وقت ضيعته"] },
+  { q:"لو حد قالك 'أنا فاهمك'، هتصدقه؟", o:["أيوه","لا","حسب مين","نفسي أصدق"] },
+  { q:"إيه الحاجة اللي نفسك تعملها ومش قادر؟", o:["أسامح","أحب","أسيب الماضي","أبدأ من جديد"] }
+];
+
+// ================================================================
+// 🧰 أدوات مساعدة
+// ================================================================
+
+const app = document.getElementById('app');
+const store = {
+  get:k=>{try{return JSON.parse(localStorage.getItem('baynna_'+k))}catch{return null}},
+  set:(k,v)=>localStorage.setItem('baynna_'+k,JSON.stringify(v)),
+  del:k=>localStorage.removeItem('baynna_'+k)
+};
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
+function enc(obj){return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function dec(str){str=str.replace(/-/g,'+').replace(/_/g,'/');while(str.length%4)str+='=';return JSON.parse(decodeURIComponent(escape(atob(str))))}
+
+function render(html){app.innerHTML=`<div class="screen active">${html}</div>`;window.scrollTo(0,0)}
+
+// ================================================================
+// 🚦 التوجيه
+// ================================================================
+
+function init(){
+  const params = new URLSearchParams(location.search);
+  if(params.get('c')) return showChallenge(dec(params.get('c')));
+  if(params.get('r')) return showResultBack(dec(params.get('r')));
+  const persona = store.get('personality');
+  if(!persona) return showHook();
+  showHome();
+}
+
+// ================================================================
+// 🎣 المرحلة 0: الخطاف
+// ================================================================
+
+function showHook(){
+  const scents = [
+    {emoji:"🌸",name:"فانيليا",key:"الدافئ"},
+    {emoji:"🌺",name:"ياسمين",key:"الحالم"},
+    {emoji:"🍋",name:"حمضيات",key:"المتحمس"},
+    {emoji:"🌫️",name:"صندل",key:"الغامض"}
+  ];
+  render(`
+    <h1>كل ريحة ليها حكاية</h1>
+    <p class="sub">اختار الريحة اللي بتريحك... وهنقولك إنت مين</p>
+    <div class="scent-grid">
+      ${scents.map(s=>`<div class="scent-card" onclick="pickHook('${s.key}')"><span class="emoji">${s.emoji}</span><span class="name">${s.name}</span></div>`).join('')}
+    </div>
     <div class="powered">Powered by VelaLight</div>
-  </div>
+  `);
+}
 
-  <!-- شاشة 2: الأسئلة -->
-  <div class="screen" id="screen-quiz">
-    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
-    <div class="q-number" id="q-number">سؤال 1 من 10</div>
-    <div class="q-text" id="q-text"></div>
-    <div class="options" id="options"></div>
-  </div>
+function pickHook(key){
+  render(`
+    <h1>${PERSONALITY_META[key].emoji} إنت من الناس اللي...</h1>
+    <p class="sub">${PERSONALITY_META[key].desc}</p>
+    <p class="sub" style="color:#ffd166;font-weight:bold">عايز تعرف شخصيتك العطرية كاملة؟ 20 سؤال هيغيروا طريقة شوفتك لنفسك.</p>
+    <button onclick="startPersonality()">ادخل الرحلة 🌙</button>
+  `);
+}
 
-  <!-- شاشة 3: النتيجة -->
-  <div class="screen" id="screen-result">
-    <h1 id="result-title">تحديك جاهز! 🎉</h1>
-    <p class="result-msg" id="result-msg"></p>
-    <div class="share-box" id="share-link"></div>
-    <button id="btn-copy">انسخ الرابط</button>
-    <button class="btn-secondary" id="btn-restart">ابدأ من جديد</button>
+function startPersonality(){
+  store.set('progress',{phase:'personality',idx:0,answers:[]});
+  renderPersonalityQ();
+}
+
+// ================================================================
+// 🧠 المرحلة 1: 20 سؤال
+// ================================================================
+
+function renderPersonalityQ(){
+  const p = store.get('progress');
+  const q = PERSONALITY_QUESTIONS[p.idx];
+  const pct = (p.idx/20)*100;
+  render(`
+    <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="qnum">سؤال ${p.idx+1} من 20</div>
+    <div class="qtext">${q.q}</div>
+    ${q.opts.map((o,i)=>`<button class="opt" onclick="answerP(${i})">${o[0]}</button>`).join('')}
+  `);
+}
+
+function answerP(i){
+  const p = store.get('progress');
+  p.answers.push(PERSONALITY_QUESTIONS[p.idx].opts[i][1]);
+  p.idx++;
+  if(p.idx >= PERSONALITY_QUESTIONS.length){
+    finishPersonality(p.answers);
+  } else {
+    store.set('progress',p);
+    renderPersonalityQ();
+  }
+}
+
+function finishPersonality(answers){
+  const counts = {};
+  answers.forEach(a=>counts[a]=(counts[a]||0)+1);
+  const winner = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
+  const persona = { type:winner, scores:counts, date:Date.now() };
+  store.set('personality',persona);
+  store.del('progress');
+  showPersonalityResult(persona);
+}
+
+function showPersonalityResult(persona){
+  const meta = PERSONALITY_META[persona.type];
+  const perfume = PERFUMES[persona.type];
+  const text = `شخصيتي العطرية: ${persona.type} ${meta.emoji}\n${meta.desc}\n\nاكتشف شخصيتك إنت كمان:\n${location.origin}${location.pathname}`;
+  render(`
+    <div class="result-hero">
+      <div class="persona">${meta.emoji} ${persona.type}</div>
+      <div class="scent">ريحتك: ${perfume.product}</div>
+      <div class="desc">${meta.desc}</div>
+      <div class="hidden-trait">"${getHiddenTrait(persona.type)}"</div>
+    </div>
+    <div class="product-box">
+      <div class="prod-name">🕯️ ${perfume.product}</div>
+      <div class="prod-desc">المنتج ده اتصمم للناس اللي زيك — من فيلا لايت</div>
+      <div class="prod-cta" onclick="alert('هيتم إضافة رابط المنتج قريبًا')">اعرف أكتر ←</div>
+    </div>
+    <button onclick="shareResult('${esc(text)}')">📤 شارك شخصيتك</button>
+    <button class="sec" onclick="showHome()">ادخل دوامة الريحة 🌊</button>
     <div class="powered">Powered by VelaLight</div>
-  </div>
+  `);
+}
 
-  <script>
-    // بيانات الأسئلة
-    const QUESTIONS = [
-      { q: "إيه أكتر حاجة بتعصبك؟", options: ["حد يقاطعني وأنا بتكلم", "حد يتأخر عليا", "حد ينسى حاجة مهمة قلتله عليها", "حد يزعقلي"] },
-      { q: "لو معاك أجازة أسبوع ومفيش شغل، هتعمل إيه؟", options: ["أسافر مكان جديد", "أقعد في البيت وأرتاح", "أخرج مع أصحابي كل يوم", "أشتغل على حاجة بحبها"] },
-      { q: "إيه أكتر حاجة بتخليك تثق في حد؟", options: ["إنه يوفي بوعده", "إنه يسمعني من غير ما يحكم", "إنه يكون صريح معايا حتى لو الكلام وحش", "إنه يساندني وقت الضيق"] },
-      { q: "لو صحابك وصفوك بكلمة واحدة، هتكون إيه؟", options: ["الجدع", "الضحكة", "العاقل", "اللي بيسمع"] },
-      { q: "إيه أحب حاجة في يومك؟", options: ["الصبح مع القهوة", "وقت الغدا مع العيلة", "الليل لما الكل ينام", "وقت الخروجة مع الصحاب"] },
-      { q: "لو حصل خلاف بينك وبين صاحبك، هتعمل إيه؟", options: ["أتكلم معاه على طول", "أستنى هو يبدأ", "أسيبها تنسى لوحدها", "أحكي لحد تاني وأشوف رأيه"] },
-      { q: "إيه أكتر حاجة بتخاف منها؟", options: ["الوحدة", "الفشل", "إن حد يخون ثقتي", "إن الوقت يعدي وأنا مش عايش"] },
-      { q: "لو هتختار هدية لصاحبك، هتختار إيه؟", options: ["حاجة هو محتاجها", "حاجة تضحكه", "حاجة معمولة بإيدي", "خروجة مفاجأة"] },
-      { q: "إيه أكتر حاجة بتخليك مبسوط؟", options: ["نجاح حد قريب مني", "مدح الناس ليا", "إني أعمل حاجة بحبها", "إني أكون مع ناس بحبهم"] },
-      { q: "لو صحابك عايزين يعرفوك أكتر، هتقولهم إيه؟", options: ["إني بضحك على كل حاجة", "إني بحب أساعد من غير ما أتكلم", "إني بحتاج وقت عشان أفتح قلبي", "إني بحب المفاجآت والجديد"] }
-    ];
+function getHiddenTrait(t){
+  return {
+    "الحالم":"قوتك في هدوئك مش في صوتك",
+    "الدافئ":"إنت اللي بتحتاج أمان أكتر مما بتدي",
+    "الجسور":"خوفك من الضعف مش من الخطر",
+    "الغامض":"بتخبي عشان بتحمي، مش عشان مش واثق",
+    "الاجتماعي":"بتضحك كتير عشان متبكيش",
+    "الحكيم":"عندك حكمة من وجع مش من سن",
+    "الرومانسي":"بتدي أكتر مما بتاخد وبتقول مش مهم",
+    "المتحمس":"أصعب حاجة عندك هي إنك تكمل"
+  }[t];
+}
 
-    let currentQ = 0;
-    let answers = [];
-    let userName = "";
+// ================================================================
+// 🏠 الصفحة الرئيسية (القائمة)
+// ================================================================
 
-    const $ = (id) => document.getElementById(id);
-    const screens = { start: $("screen-start"), quiz: $("screen-quiz"), result: $("screen-result") };
+function showHome(){
+  const persona = store.get('personality');
+  const streak = store.get('streak') || {days:[],count:0};
+  const todayDone = (store.get('dailyDate')===today());
+  const meta = PERSONALITY_META[persona.type];
+  render(`
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:2.5rem">${meta.emoji}</div>
+      <h2>${persona.type}</h2>
+      <p style="opacity:.7;font-size:.85rem">${PERFUMES[persona.type].product}</p>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item" onclick="showPersonalityResult(store.get('personality'))">
+        <div class="mi-left"><span class="mi-icon">🧠</span><div><div class="mi-title">شخصيتك العطرية</div><div class="mi-sub">شوف نتيجتك تاني</div></div></div>
+        <span class="mi-arrow">›</span>
+      </div>
+      <div class="menu-item" onclick="showPhaseSetup('partner')">
+        <div class="mi-left"><span class="mi-icon">💑</span><div><div class="mi-title">توافق الشريك</div><div class="mi-sub">اختبر لو شريكك يعرفك</div></div></div>
+        <span class="mi-arrow">›</span>
+      </div>
+      <div class="menu-item" onclick="showPhaseSetup('friends')">
+        <div class="mi-left"><span class="mi-icon">👥</span><div><div class="mi-title">أصحابك يعرفوك؟</div><div class="mi-sub">مين فيهم فاهمك أكتر</div></div></div>
+        <span class="mi-arrow">›</span>
+      </div>
+      <div class="menu-item" onclick="showPhaseSetup('family')">
+        <div class="mi-left"><span class="mi-icon">👨‍👩‍👧</span><div><div class="mi-title">عالم العيلة</div><div class="mi-sub">أسئلة بين الأجيال</div></div></div>
+        <span class="mi-arrow">›</span>
+      </div>
+      <div class="menu-item" onclick="showDaily()">
+        <div class="mi-left"><span class="mi-icon">🔥</span><div><div class="mi-title">سؤال اليوم</div><div class="mi-sub">${todayDone?'✓ جاوبت النهارده':'جاوب واحصل على Streak'}</div></div></div>
+        <span class="mi-arrow">›</span>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="sec small" onclick="shareApp()">📤 ادعي أصحابك للعبة</button>
+    </div>
+    <div class="powered">Powered by VelaLight</div>
+  `);
+}
 
-    function showScreen(name) {
-      Object.values(screens).forEach(s => s.classList.remove("active"));
-      screens[name].classList.add("active");
-      window.scrollTo(0, 0);
-    }
+function shareApp(){
+  const text = `جرب لعبة "دوامة الريحة" — 20 سؤال هيعرفوك شخصيتك العطرية\n${location.origin}${location.pathname}`;
+  shareResult(text);
+}
 
-    // شاشة البداية
-    const nameInput = $("user-name");
-    const startBtn = $("btn-start");
+function shareResult(text){
+  if(navigator.share){
+    navigator.share({text}).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text).then(()=>alert('اتنسخ! الصقه في أي مكان')).catch(()=>prompt('انسخ:',text));
+  }
+}
 
-    nameInput.addEventListener("input", () => {
-      startBtn.disabled = nameInput.value.trim().length < 2;
-    });
+// ================================================================
+// 💑👥👨‍👩‍👧 المراحل 2-4: إعداد التحدي
+// ================================================================
 
-    startBtn.addEventListener("click", () => {
-      userName = nameInput.value.trim();
-      currentQ = 0;
-      answers = [];
-      renderQuestion();
-      showScreen("quiz");
-    });
+function getPhaseQuestions(phase){
+  return phase==='partner'?PARTNER_QUESTIONS:phase==='friends'?FRIENDS_QUESTIONS:FAMILY_QUESTIONS;
+}
 
-    // عرض السؤال
-    function renderQuestion() {
-      const q = QUESTIONS[currentQ];
-      $("q-number").textContent = `سؤال ${currentQ + 1} من ${QUESTIONS.length}`;
-      $("q-text").textContent = q.q;
-      $("progress").style.width = `${((currentQ) / QUESTIONS.length) * 100}%`;
+function showPhaseSetup(phase){
+  const titles = {partner:'توافق الشريك 💑',friends:'أصحابك يعرفوك؟ 👥',family:'عالم العيلة 👨‍👩‍👧'};
+  const subs = {partner:'جاوب 10 أسئلة عن نفسك، وابعت الرابط لشريكك يخمن',friends:'جاوب، وابعت الرابط لصحابك، وشوف مين يعرفك أكتر',family:'جاوب، وابعت الرابط لأفراد عيلتك'};
+  render(`
+    <button class="back-btn" onclick="showHome()">← رجوع</button>
+    <h1>${titles[phase]}</h1>
+    <p class="sub">${subs[phase]}</p>
+    <input type="text" id="phase-name" placeholder="اسمك..." maxlength="20" value="${esc(store.get('name')||'')}">
+    <button onclick="startPhase('${phase}')">يلا نبدأ</button>
+    <div class="powered">Powered by VelaLight</div>
+  `);
+}
 
-      const optionsEl = $("options");
-      optionsEl.innerHTML = "";
-      q.options.forEach((opt, idx) => {
-        const btn = document.createElement("button");
-        btn.className = "option";
-        btn.textContent = opt;
-        btn.addEventListener("click", () => selectAnswer(idx));
-        optionsEl.appendChild(btn);
-      });
-    }
+function startPhase(phase){
+  const name = document.getElementById('phase-name').value.trim();
+  if(name.length<2) return alert('اكتب اسمك');
+  store.set('name',name);
+  store.set('progress',{phase,idx:0,answers:[],name});
+  renderPhaseQ();
+}
 
-    function selectAnswer(idx) {
-      document.querySelectorAll(".option").forEach(b => b.classList.remove("selected"));
-      document.querySelectorAll(".option")[idx].classList.add("selected");
-      answers[currentQ] = idx;
+function renderPhaseQ(){
+  const p = store.get('progress');
+  const qs = getPhaseQuestions(p.phase);
+  const q = qs[p.idx];
+  const pct = (p.idx/qs.length)*100;
+  render(`
+    <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="qnum">سؤال ${p.idx+1} من ${qs.length}</div>
+    <div class="qtext">${q.q}</div>
+    ${q.o.map((o,i)=>`<button class="opt" onclick="answerPhase(${i})">${o}</button>`).join('')}
+  `);
+}
 
-      setTimeout(() => {
-        currentQ++;
-        if (currentQ < QUESTIONS.length) {
-          renderQuestion();
-        } else {
-          showResult();
-        }
-      }, 250);
-    }
+function answerPhase(i){
+  const p = store.get('progress');
+  p.answers.push(i);
+  p.idx++;
+  if(p.idx >= getPhaseQuestions(p.phase).length){
+    finishPhase(p);
+  } else {
+    store.set('progress',p);
+    renderPhaseQ();
+  }
+}
 
-    // شاشة النتيجة
-    function showResult() {
-      $("progress").style.width = "100%";
-      $("result-title").textContent = `تحديك جاهز يا ${userName}! 🎉`;
-      $("result-msg").textContent = "دلوقتي ابعت الرابط ده لأصحابك، وأول ما يجاوبوا هتشوف مين فيهم عارفك أكتر.";
+function finishPhase(p){
+  const challenge = {p:p.phase,n:p.name,a:p.answers};
+  const encoded = enc(challenge);
+  const url = `${location.origin}${location.pathname}?c=${encoded}`;
+  store.del('progress');
+  const shareText = `جرب تخمن إجاباتي!\n${url}`;
+  render(`
+    <h1>تحديك جاهز! 🎉</h1>
+    <p class="sub">ابعت الرابط ده لـ ${p.phase==='partner'?'شريكك':p.phase==='friends'?'أصحابك':'عيلتك'}، وأول ما يجاوبوا هتشوف النتايج.</p>
+    <div class="share-box">${esc(url)}</div>
+    <button onclick="copyShare('${esc(shareText)}')">📋 انسخ وابعت</button>
+    <button class="sec" onclick="if(navigator.share)navigator.share({text:'${esc(shareText)}'}).catch(()=>{});else copyShare('${esc(shareText)}')">📤 شارك</button>
+    <button class="sec" onclick="showHome()">رجوع للقائمة</button>
+    <div class="powered">Powered by VelaLight</div>
+  `);
+}
 
-      // رابط مؤقت (هيتولد من Firebase لاحقًا)
-      const fakeId = Math.random().toString(36).substring(2, 8);
-      const link = `https://velalight.github.io/quiz/?challenge=${fakeId}`;
-      $("share-link").textContent = link;
+function copyShare(text){
+  navigator.clipboard.writeText(text).then(()=>alert('اتنسخ!')).catch(()=>prompt('انسخ:',text));
+}
 
-      showScreen("result");
-    }
+// ================================================================
+// 🎯 وضع التحدي (لما حد يفتح رابط ?c=)
+// ================================================================
 
-    // نسخ الرابط
-    $("btn-copy").addEventListener("click", async () => {
-      const link = $("share-link").textContent;
-      try {
-        await navigator.clipboard.writeText(link);
-        $("btn-copy").textContent = "✓ اتنسخ!";
-        setTimeout(() => { $("btn-copy").textContent = "انسخ الرابط"; }, 2000);
-      } catch {
-        alert("انسخ الرابط يدويًا: " + link);
-      }
-    });
+let CHALLENGE = null;
 
-    // إعادة البدء
-    $("btn-restart").addEventListener("click", () => {
-      nameInput.value = "";
-      startBtn.disabled = true;
-      showScreen("start");
-    });
-  </script>
+function showChallenge(challenge){
+  CHALLENGE = challenge;
+  const titles = {partner:'شريك',friends:'صاحب',family:'حد من العيلة'};
+  const qs = getPhaseQuestions(challenge.p);
+  render(`
+    <h1>${esc(challenge.n)} عايز يعرف!</h1>
+    <p class="sub">${esc(challenge.n)} جاوب 10 أسئلة عن نفسه. خمّن إجاباته — وشوف هتعرف ${titles[challenge.p]}ك ده كويس ولا لأ؟</p>
+    <input type="text" id="guesser-name" placeholder="اسمك..." maxlength="20">
+    <button onclick="startGuess()">يلا نبدأ</button>
+    <div class="powered">Powered by VelaLight</div>
+  `);
+}
+
+function startGuess(){
+  const name = document.getElementById('guesser-name').value.trim();
+  if(name.length<2) return alert('اكتب اسمك');
+  CHALLENGE.guesser = name;
+  CHALLENGE.guesses = [];
+  CHALLENGE.gIdx = 0;
+  renderGuessQ();
+}
+
+function renderGuessQ(){
+  const qs = getPhaseQuestions(CHALLENGE.p);
+  const q = qs[CHALLENGE.gIdx];
+  const pct = (CHALLENGE.gIdx/qs.length)*100;
+  render(`
+    <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="qnum">سؤال ${CHALLENGE.gIdx+1} من ${qs.length} — بتخمن إجابات ${esc(CHALLENGE.n)}</div>
+    <div class="qtext">${q.q}</div>
+    ${q.o.map((o,i)=>`<button class="opt" onclick="guessAnswer(${i})">${o}</button>`).join('')}
+  `);
+}
+
+function guessAnswer(i){
+  CHALLENGE.guesses.push(i);
+  CHALLENGE.gIdx++;
+  if(CHALLENGE.gIdx >= getPhaseQuestions(CHALLENGE.p).length){
+    showGuessResult();
+  } else {
+    renderGuessQ();
+  }
+}
+
+function showGuessResult(){
+  const correct = CHALLENGE.a.filter((a,i)=>a===CHALLENGE.guesses[i]).length;
+  const total = CHALLENGE.a.length;
+  const pct = Math.round((correct/total)*100);
+  let msg;
+  if(pct===100) msg = `${esc(CHALLENGE.n)} مش هيقدر يخبي عنك حاجة 😍`;
+  else if(pct>=80) msg = `قريب جدًا! واضح إنك بتعرف ${esc(CHALLENGE.n)} كويس`;
+  else if(pct>=60) msg = `مش وحش! لسه فيه شوية أسرار`;
+  else if(pct>=40) msg = `نص نص — محتاجين تتكلموا أكتر 😅`;
+  else if(pct>=20) msg = `شكلك محتاج تعرف ${esc(CHALLENGE.n)} من الأول 😂`;
+  else msg = `مفيش ولا نقطة؟! تعالى نتعرف من جديد 😂`;
+  
+  // إعداد رابط النتيجة للصاحب
+  const resultData = {p:CHALLENGE.p,on:CHALLENGE.n,gn:CHALLENGE.guesser,a:CHALLENGE.a,g:CHALLENGE.guesses,s:correct};
+  const resultUrl = `${location.origin}${location.pathname}?r=${enc(resultData)}`;
+  const shareText = `خمنت إجابات ${CHALLENGE.n} وطلعت ${correct}/${total} (${pct}%)!\n${resultUrl}`;
+  
+  render(`
+    <h1>النتيجة 🎯</h1>
+    <div class="score-big">${correct}/${total}</div>
+    <p class="msg">${msg}</p>
+    <p class="msg" style="color:#ffd166">${pct}%</p>
+    <button onclick="copyShare('${esc(shareText)}')">📤 ابعت نتيجتك لـ ${esc(CHALLENGE.n)}</button>
+    <button class="sec" onclick="location.href=location.pathname">🎮 العب إنت كمان</button>
+    <div class="powered">Powered by VelaLight</div>
+  `);
+}
+
+// ================================================================
+// 📊 استقبال النتيجة (لما الصاحب يفتح ?r=)
+// ================================================================
+
+function showResultBack(data){
+  // حفظ في leaderboard محلي
+  const key = 'leader_'+data.p+'_'+data.on;
+  const leaders = store.get(key) || [];
+  leaders.push({name:data.gn, score:data.s, total:data.a.length, date:Date.now()});
+  leaders.sort((a,b)=>b.score-a.score);
+  store.set(key,leaders.slice(0,20));
+  
+  const pct = Math.round((data.s/data.a.length)*100);
+  render(`
+    <h1>${esc(data.gn)} خمّن إجاباتك! 🎯</h1>
+    <div class="score-big">${data.s}/${data.a.length}</div>
+    <p class="msg">${pct}% توافق</p>
+    <p class="msg" style="font-size:.9rem;opacity:.7">تم حفظ النتيجة في لوحة الشرف بتاعتك</p>
+    <button onclick="location.href=location.pathname">🏠 الرئيسية</button>
+    <div class="powered">Powered by VelaLight</div>
+  `);
+}
+
+// ================================================================
+// 🔥 سؤال اليوم + Streak
+// ================================================================
+
+function today(){return new Date().toISOString().slice(0,10)}
+
+function showDaily(){
+  const todayDone = store.get('dailyDate')===today();
+  if(todayDone){
+    return showDailyResult();
+  }
+  const q = DAILY_QUESTIONS[new Date().getDate() % DAILY_QUESTIONS.length];
+  render(`
+    <button class="back-btn" onclick="showHome()">← رجوع</button>
+    <h1>🔥 سؤال اليوم</h1>
+    <p class="sub">جاوب، وشوف نسبة الناس اللي اختارت زيك</p>
+    <div class="daily-q">
+      <div class="dq-text">${q.q}</div>
+      ${q.o.map((o,i)=>`<div class="dq-opt" onclick="answerDaily(${i})">${o}<span class="pct" id="pct-${i}"></span></div>`).join('')}
+    </div>
+    <div class="powered">Powered by VelaLight</div>
+  `);
+}
+
+function answerDaily(i){
+  const q = DAILY_QUESTIONS[new Date().getDate() % DAILY_QUESTIONS.length];
+  // نسب وهمية للتوضيح — في النسخة النهائية Firebase
+  const fake = [45,25,15,15];
+  const shuffled = [...fake].sort(()=>Math.random()-0.5);
+  q.o.forEach((_,idx)=>{
+    const el = document.getElementById('pct-'+idx);
+    el.textContent = (idx===i ? fake[0] : shuffled[idx]) + '%';
+    if(idx===i) el.style.color = '#ff6b9d';
+  });
+  store.set('dailyDate',today());
+  store.set('dailyAnswer',i);
+  
+  // تحديث streak
+  const s = store.get('streak') || {days:[], count:0};
+  const t = today();
+  if(!s.days.includes(t)){
+    s.days.push(t);
+    if(s.days.length>30) s.days = s.days.slice(-30);
+    s.count = s.days.length;
+    store.set('streak',s);
+  }
+  
+  setTimeout(()=>{
+    render(`
+      <h1>✓ تم!</h1>
+      <p class="msg">شوفت إجاباتك. تعالى بكرة عشان سؤال جديد</p>
+      <div class="streak-box">
+        ${s.days.slice(-7).map(()=>`<div class="streak-day done">🔥</div>`).join('')}
+      </div>
+      <p class="msg" style="color:#ffd166">${s.count} يوم متتالي</p>
+      <button onclick="showHome()">رجوع للرئيسية</button>
+      <div class="powered">Powered by VelaLight</div>
+    `);
+  }, 800);
+}
+
+function showDailyResult(){
+  const s = store.get('streak') || {days:[], count:0};
+  render(`
+    <button class="back-btn" onclick="showHome()">← رجوع</button>
+    <h1>🔥 سؤال اليوم</h1>
+    <p class="sub">جاوبت سؤال النهارده! ارجع بكرة عشان سؤال جديد</p>
+    <div class="streak-box">
+      ${s.days.slice(-7).map(()=>`<div class="streak-day done">🔥</div>`).join('')}
+    </div>
+    <p class="msg" style="color:#ffd166;font-size:1.3rem">${s.count} يوم متتالي</p>
+    <button onclick="showHome()">رجوع للرئيسية</button>
+    <div class="powered">Powered by VelaLight</div>
+  `);
+}
+
+// ================================================================
+// 🚀 بدء التطبيق
+// ================================================================
+
+init();
+</script>
 </body>
 </html>
