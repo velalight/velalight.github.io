@@ -702,7 +702,189 @@
 })();
 </script>
   <!-- ═══ END BLACK FRIDAY PROMO BAR v2 ═══ -->
-
+<!-- ═══════════════════════════════════════════════
+     🧠 QUIZ BANNER — بعد عرض الصحاب مباشرة
+     ═══════════════════════════════════════════════ -->
+<section class="vl-quiz-banner" aria-label="العب ألعاب نفسية">
+  <a href="https://velalight.github.io/quiz/" class="vl-quiz-banner-inner">
+    <div class="vl-quiz-banner-icon">🧠</div>
+    <div class="vl-quiz-banner-content">
+      <h2 class="vl-quiz-banner-title">ألعاب خطرة نفسية</h2>
+      <p class="vl-quiz-banner-sub">اكتشف شخصيتك العطرية الحقيقية من 10 أسئلة عميقة ✨</p>
+    </div>
+    <div class="vl-quiz-banner-cta">
+      <span>العب الآن</span>
+      <span class="vl-quiz-banner-arrow">←</span>
+    </div>
+  </a>
+</section>
+<style>
+.vl-quiz-banner {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  background: linear-gradient(135deg, #1a0f2e 0%, #2d1b4e 50%, #4a2c7a 100%);
+  overflow: hidden;
+  animation: vlQuizBannerSlide 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  border-bottom: 1px solid rgba(255, 209, 102, 0.4);
+}
+.vl-quiz-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(255, 209, 102, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(255, 107, 157, 0.2) 0%, transparent 50%);
+  animation: vlQuizBannerGlow 3s ease-in-out infinite;
+  pointer-events: none;
+}
+.vl-quiz-banner::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 209, 102, 0.08) 50%, transparent 100%);
+  animation: vlQuizBannerShimmer 4s infinite;
+  pointer-events: none;
+}
+@keyframes vlQuizBannerSlide {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes vlQuizBannerGlow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+@keyframes vlQuizBannerShimmer {
+  0% { transform: translateX(-100%) rotate(25deg); }
+  100% { transform: translateX(100%) rotate(25deg); }
+}
+.vl-quiz-banner-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  text-decoration: none;
+  color: #fff;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+.vl-quiz-banner-inner:hover {
+  transform: scale(1.01);
+}
+.vl-quiz-banner-icon {
+  font-size: 3rem;
+  filter: drop-shadow(0 0 15px rgba(255, 209, 102, 0.8));
+  animation: vlQuizIconPulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes vlQuizIconPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 15px rgba(255, 209, 102, 0.8)); }
+  50% { transform: scale(1.1) rotate(5deg); filter: drop-shadow(0 0 25px rgba(255, 209, 102, 1)); }
+}
+.vl-quiz-banner-content {
+  flex: 1;
+  min-width: 0;
+}
+.vl-quiz-banner-title {
+  font-family: 'El Messiri', 'Tajawal', serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+  background: linear-gradient(135deg, #fff 0%, #ffd166 60%, #ff6b9d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+.vl-quiz-banner-sub {
+  font-size: 0.9rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+}
+.vl-quiz-banner-cta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #d4af37 100%);
+  color: #1a1512;
+  border-radius: 50px;
+  font-weight: 900;
+  font-size: 1rem;
+  box-shadow: 
+    0 4px 20px rgba(255, 215, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  animation: vlQuizCtaPulse 2.5s ease-in-out infinite;
+}
+@keyframes vlQuizCtaPulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.6); }
+  50% { box-shadow: 0 4px 30px rgba(255, 215, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.8); }
+}
+.vl-quiz-banner-inner:hover .vl-quiz-banner-cta {
+  transform: translateX(-4px) scale(1.05);
+}
+.vl-quiz-banner-arrow {
+  font-size: 1.2rem;
+  animation: vlQuizArrow 1.5s ease-in-out infinite;
+}
+@keyframes vlQuizArrow {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-4px); }
+}
+@media (max-width: 700px) {
+  .vl-quiz-banner-inner {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+    justify-content: center;
+    text-align: center;
+  }
+  .vl-quiz-banner-icon {
+    font-size: 2.2rem;
+  }
+  .vl-quiz-banner-content {
+    flex: 1 1 100%;
+    order: 2;
+  }
+  .vl-quiz-banner-title {
+    font-size: 1.2rem;
+  }
+  .vl-quiz-banner-sub {
+    font-size: 0.8rem;
+  }
+  .vl-quiz-banner-cta {
+    order: 3;
+    flex: 1 1 100%;
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+  .vl-quiz-banner-arrow {
+    transform: rotate(180deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vl-quiz-banner,
+  .vl-quiz-banner::before,
+  .vl-quiz-banner::after,
+  .vl-quiz-banner-icon,
+  .vl-quiz-banner-cta,
+  .vl-quiz-banner-arrow {
+    animation: none !important;
+  }
+}
+</style>
+<!-- ═══ END QUIZ BANNER ═══ -->
+  
 <!-- ═══════════════════════════════════════════════
      TOP BAR
      ═══════════════════════════════════════════════ -->
