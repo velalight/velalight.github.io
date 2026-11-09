@@ -30,14 +30,10 @@ input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
 .opt{background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.1);color:#fff;padding:16px;border-radius:12px;font-size:.98rem;cursor:pointer;text-align:right;transition:.2s;width:100%;margin-bottom:10px;font-family:inherit;line-height:1.5}
 .opt:hover{background:rgba(255,255,255,.12);border-color:rgba(255,209,102,.5);transform:translateX(-3px)}
 .opt.sel{background:linear-gradient(135deg,#ff6b9d,#ff4d88);border-color:#ff6b9d}
-
-/* شاشة التحليل النفسي */
 .insight{background:linear-gradient(135deg,rgba(255,209,102,.15),rgba(255,107,157,.1));border:2px solid rgba(255,209,102,.4);border-radius:20px;padding:32px 24px;text-align:center;animation:fade .4s;position:relative}
 .insight-icon{font-size:3rem;margin-bottom:16px;animation:glow 2s infinite}
 .insight-text{font-size:1.1rem;line-height:1.8;color:#fff;font-style:italic;opacity:.95}
 .insight-tag{display:inline-block;margin-top:20px;padding:6px 16px;background:rgba(255,209,102,.2);border-radius:20px;font-size:.85rem;color:#ffd166}
-
-/* شاشة النتيجة */
 .result-hero{background:linear-gradient(135deg,rgba(255,107,157,.2),rgba(255,209,102,.15));border:2px solid rgba(255,209,102,.5);border-radius:24px;padding:32px 20px;text-align:center;margin-bottom:20px;animation:glow 3s infinite}
 .result-hero .emoji{font-size:4rem;margin-bottom:12px}
 .result-hero .persona{font-size:1.8rem;color:#ffd166;font-weight:bold;margin-bottom:8px}
@@ -47,7 +43,7 @@ input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
 .product-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,209,102,.3);border-radius:16px;padding:20px;margin-bottom:16px}
 .product-box .prod-name{color:#ffd166;font-weight:bold;margin-bottom:6px;font-size:1.1rem}
 .product-box .prod-desc{font-size:.85rem;opacity:.8;margin-bottom:12px}
-.product-box .prod-cta{display:inline-block;background:rgba(255,107,157,.2);color:#ff6b9d;padding:8px 20px;border-radius:20px;font-size:.9rem;font-weight:bold;text-decoration:none}
+.product-box .prod-cta{display:inline-block;background:rgba(255,107,157,.2);color:#ff6b9d;padding:8px 20px;border-radius:20px;font-size:.9rem;font-weight:bold;text-decoration:none;margin-top:8px}
 .menu-grid{display:grid;gap:14px;margin-top:20px}
 .menu-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;cursor:pointer;transition:.25s;display:flex;align-items:center;justify-content:space-between;text-align:right}
 .menu-item:hover{background:rgba(255,255,255,.1);transform:translateX(-3px);border-color:rgba(255,209,102,.4)}
@@ -72,6 +68,11 @@ input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
 .copy-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:20px;z-index:1000;animation:fade .3s}
 .copy-modal-inner{background:#1a0f2e;border:2px solid #ffd166;border-radius:20px;padding:24px;max-width:400px;width:100%}
 .copy-modal textarea{width:100%;height:100px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:12px;color:#fff;font-family:monospace;font-size:.85rem;direction:ltr;text-align:left;margin-bottom:12px;resize:none}
+.scent-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.scent-card{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.12);border-radius:16px;padding:16px 8px;cursor:pointer;text-align:center;transition:.25s}
+.scent-card:hover{background:rgba(255,209,102,.15);border-color:rgba(255,209,102,.5);transform:translateY(-2px)}
+.scent-card .emoji{font-size:1.8rem;margin-bottom:6px}
+.scent-card .name{font-weight:bold;font-size:.8rem;line-height:1.3}
 </style>
 </head>
 <body>
@@ -107,8 +108,22 @@ const PERFUMES = {
   sandalwood:     { ar:"عود خشب صندل", en:"Sandalwood Oud", emoji:"🪔" }
 };
 
+// ربط كل عطر بشخصية عطرية
+const PERFUME_TO_PERSONA = {
+  vanilla: "الدافئ", cinnamon: "الدافئ", caramel: "الدافئ", chocolate: "الدافئ",
+  lavender: "الحكيم", mocha: "الحكيم", coffee: "الحكيم",
+  vanilla_coffee: "الحكيم", hazelnut: "الحكيم",
+  caribbean: "الاجتماعي", strawberry: "الاجتماعي",
+  jasmine_sambac: "الحالم", jasmine: "الحالم", coconut: "الحالم",
+  pineapple: "المتحمس",
+  cassilia: "الرومانسي", bouquet: "الرومانسي",
+  egyptian_rose: "الرومانسي", tulip: "الرومانسي",
+  zanaite: "الغامض", amber: "الغامض",
+  vanilla_oud: "الجسور", sandalwood: "الجسور"
+};
+
 // ================================================================
-// 🎭 الشخصيات العطرية (8) — كل واحدة مربوطة بعطر أساسي + عطرين بديلين
+// 🎭 الشخصيات العطرية (8)
 // ================================================================
 const ARCHETYPES = {
   "الحالم": {
@@ -162,7 +177,7 @@ const ARCHETYPES = {
 };
 
 // ================================================================
-// 🧠 10 أسئلة نفسية عميقة — كل إجابة معاها تحليل + شخصية
+// 🧠 10 أسئلة نفسية عميقة
 // ================================================================
 const DEEP_QUESTIONS = [
   {
@@ -257,14 +272,12 @@ const DEEP_QUESTIONS = [
   }
 ];
 
-// أسئلة الشريك/الأصحاب/العيلة — نسأل عن الشخص ونخمن
 const GUESS_INTRO = {
   partner: "شريكك",
-  friends: "صاحبك", 
+  friends: "صاحبك",
   family: "حد من عيلتك"
 };
 
-// سؤال اليوم — مختارة من العميقة
 const DAILY_POOL = [
   { q:"إيه أول حاجة بتروحلها لما تكون زهقان؟", o:["الموبايل","السرير","الأكل","الخروج"] },
   { q:"إيه اللي بتخاف إن الناس تعرفه عنك؟", o:["ضعفي","خوفي","حبي","وحدتي"] },
@@ -291,7 +304,6 @@ function dec(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';
 function today(){return new Date().toISOString().slice(0,10)}
 function render(html){app.innerHTML=`<div class="screen active">${html}</div>`;window.scrollTo(0,0)}
 
-// نسخ موثوق مع fallback
 async function copyText(text){
   try {
     if(navigator.clipboard && window.isSecureContext){
@@ -355,24 +367,25 @@ function init(){
 }
 
 // ================================================================
-// 🎣 الخطاف
+// 🎣 الخطاف — كل الـ 23 عطر
 // ================================================================
 function showHook(){
-  const scents = [
-    { k:"جasmine", emoji:"🌸", name:"ياسمين", persona:"الحالم" },
-    { k:"vanilla", emoji:"🍦", name:"فانيلا", persona:"الدافئ" },
-    { k:"amber", emoji:"✨", name:"عنبر", persona:"الغامض" },
-    { k:"pineapple", emoji:"🍍", name:"أناناس", persona:"المتحمس" }
-  ];
+  const scentList = Object.entries(PERFUMES).map(([key, p]) => ({
+    key,
+    emoji: p.emoji,
+    name: p.ar,
+    persona: PERFUME_TO_PERSONA[key] || "الحالم"
+  }));
+  
   render(`
-    <div style="text-align:center;margin-bottom:24px;font-size:.75rem;letter-spacing:3px;opacity:.5">ألعاب خطرة نفسية</div>
+    <div style="text-align:center;margin-bottom:16px;font-size:.75rem;letter-spacing:3px;opacity:.5">ألعاب خطرة نفسية</div>
     <h1>كل ريحة ليها حكاية</h1>
     <p class="sub">اختار الريحة اللي بتريحك... وهنقولك إنت مين من جواك</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
-      ${scents.map(s=>`
-        <div onclick="pickHook('${s.persona}')" style="background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.12);border-radius:18px;padding:24px 12px;cursor:pointer;text-align:center;transition:.25s" onmouseover="this.style.background='rgba(255,209,102,.15)';this.style.borderColor='rgba(255,209,102,.5)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.borderColor='rgba(255,255,255,.12)'">
-          <div style="font-size:2.4rem;margin-bottom:8px">${s.emoji}</div>
-          <div style="font-weight:bold;font-size:.95rem">${s.name}</div>
+    <div class="scent-grid">
+      ${scentList.map(s=>`
+        <div class="scent-card" onclick="pickHook('${s.persona}')">
+          <div class="emoji">${s.emoji}</div>
+          <div class="name">${s.name}</div>
         </div>
       `).join('')}
     </div>
@@ -471,7 +484,7 @@ function showPersonalityResult(persona){
       <div class="prod-name">🎁 عطورك المقترحة من فيلا لايت</div>
       <div class="prod-desc">عطرك الأساسي: <b>${main.ar}</b></div>
       <div class="prod-desc">كمان هيعجبوك: ${alt1.ar} · ${alt2.ar}</div>
-      <a href="https://velalight.github.io/" class="prod-cta" style="margin-top:12px;display:inline-block">زور متجر فيلا لايت ←</a>
+      <a href="https://velalight.github.io/products.html" class="prod-cta">زور متجر فيلا لايت ←</a>
     </div>
     
     <button onclick="shareOrCopy('${esc(shareText)}')">📤 شارك شخصيتك</button>
@@ -522,13 +535,13 @@ function showHome(){
 }
 
 // ================================================================
-// 💑 المراحل 2-4: الشريك / الأصحاب / العيلة
+// 💑 المراحل 2-4
 // ================================================================
 function showPhaseSetup(phase){
   const titles = {partner:'توافق الشريك 💑',friends:'أصحابك يعرفوك؟ 👥',family:'عالم العيلة 👨‍👩‍👧'};
   const subs = {
-    partner:'جاوب 10 أسئلة عميقة عن نفسك، وابعت الرابط لشريكك يخمن إجاباتك. النتيجة هتظهر لو حقيقي بيفهمك.',
-    friends:'اختبر أصحابك: مين فيهم يعرفك بجد؟ كل صاحب يخمن إجاباتك، والنتيجة هتقول مين أقرب لك.',
+    partner:'جاوب 10 أسئلة عميقة عن نفسك، وابعت الرابط لشريكك يخمن إجاباتك.',
+    friends:'اختبر أصحابك: مين فيهم يعرفك بجد؟',
     family:'اختبر عيلتك: هل هما فاهمينك ولا لسه بيشوفوك من برا؟'
   };
   render(`
