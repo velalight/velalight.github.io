@@ -2424,5 +2424,131 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 <!-- ═══ END CART CLEANUP ═══ -->
 
+  <!-- ═══════════════════════════════════════════════
+     🧠 زر اللعبة العائم — VelaLight Quiz
+     ═══════════════════════════════════════════════ -->
+<style>
+  .vl-quiz-float {
+    position: fixed;
+    bottom: 110px;
+    right: 20px;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 40%, #d4af37 100%);
+    color: #1a1512;
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Tajawal', 'El Messiri', sans-serif;
+    font-weight: 900;
+    font-size: 0.95rem;
+    box-shadow:
+      0 0 20px rgba(255, 215, 0, 0.8),
+      0 0 40px rgba(255, 215, 0, 0.5),
+      0 6px 20px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    border: 2px solid #fff8d6;
+    animation: vlQuizPulse 2s ease-in-out infinite, vlQuizBob 3s ease-in-out infinite;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    white-space: nowrap;
+  }
+  .vl-quiz-float:hover {
+    transform: scale(1.08) translateY(-3px);
+    box-shadow:
+      0 0 30px rgba(255, 215, 0, 1),
+      0 0 60px rgba(255, 215, 0, 0.7),
+      0 10px 30px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+  .vl-quiz-float::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, transparent 70%);
+    border-radius: 50px;
+    z-index: -1;
+    animation: vlQuizGlow 2s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .vl-quiz-float .vl-quiz-icon {
+    font-size: 1.4rem;
+    animation: vlQuizSpin 4s ease-in-out infinite;
+    display: inline-block;
+  }
+  .vl-quiz-float .vl-quiz-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+    text-align: right;
+  }
+  .vl-quiz-float .vl-quiz-main {
+    font-size: 1rem;
+    font-weight: 900;
+  }
+  .vl-quiz-float .vl-quiz-sub {
+    font-size: 0.68rem;
+    font-weight: 600;
+    opacity: 0.75;
+    margin-top: 2px;
+  }
+  @keyframes vlQuizPulse {
+    0%, 100% {
+      box-shadow:
+        0 0 20px rgba(255, 215, 0, 0.8),
+        0 0 40px rgba(255, 215, 0, 0.5),
+        0 6px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+    50% {
+      box-shadow:
+        0 0 30px rgba(255, 215, 0, 1),
+        0 0 70px rgba(255, 215, 0, 0.8),
+        0 6px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+  }
+  @keyframes vlQuizBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  @keyframes vlQuizSpin {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-15deg); }
+    75% { transform: rotate(15deg); }
+  }
+  @keyframes vlQuizGlow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+  @media (max-width: 700px) {
+    .vl-quiz-float {
+      bottom: 100px;
+      right: 12px;
+      padding: 11px 16px;
+    }
+    .vl-quiz-float .vl-quiz-icon { font-size: 1.2rem; }
+    .vl-quiz-float .vl-quiz-main { font-size: 0.85rem; }
+    .vl-quiz-float .vl-quiz-sub { font-size: 0.6rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .vl-quiz-float,
+    .vl-quiz-float::before,
+    .vl-quiz-float .vl-quiz-icon {
+      animation: none !important;
+    }
+  }
+</style>
+<a href="https://velalight.github.io/quiz/"
+   class="vl-quiz-float"
+   aria-label="العب ألعاب خطرة نفسية — اكتشف شخصيتك العطرية">
+  <span class="vl-quiz-icon">🧠</span>
+  <span class="vl-quiz-text">
+    <span class="vl-quiz-main">العب ألعاب نفسية</span>
+    <span class="vl-quiz-sub">اكتشف شخصيتك العطرية ✨</span>
+  </span>
+</a>
+<!-- ═══ نهاية زر اللعبة العائم ═══ -->
 </body>
 </html>
