@@ -346,6 +346,7 @@
 
 <!-- ═══════════════════════════════════════════════
      ⚡ BLACK FRIDAY PROMO BAR v2 — عرض الصحاب
+     (تم ضغط الـ CSS هنا لتقليل الارتفاع)
      ═══════════════════════════════════════════════ -->
 <div class="bf-promo-bar" id="bfPromoBar" role="region" aria-label="عرض بلاك فرايدي: عرض الصحاب">
   <div class="bf-promo-badge" aria-hidden="true">
@@ -377,25 +378,20 @@
   <p class="bf-promo-note">* العرض ساري لحد نفاد الكمية · Limited Stock</p>
 </div>
 <style>
+/* ═══ COMPACT BLACK FRIDAY BAR (تم تقليل الارتفاع) ═══ */
 .bf-promo-bar {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  padding: 16px 52px 22px 20px;
-  background:
-    radial-gradient(ellipse at top, rgba(212,175,55,0.35) 0%, transparent 60%),
-    linear-gradient(135deg, #0a0805 0%, #1a1512 50%, #2a1c0b 100%);
+  gap: 12px;
+  padding: 6px 40px 10px 16px;
+  background: radial-gradient(ellipse at top, rgba(212,175,55,0.35) 0%, transparent 60%), linear-gradient(135deg, #0a0805 0%, #1a1512 50%, #2a1c0b 100%);
   border-bottom: 2px solid #d4af37;
-  box-shadow:
-    0 4px 30px rgba(212,175,55,0.25),
-    inset 0 -1px 0 rgba(212,175,55,0.5);
+  box-shadow: 0 3px 15px rgba(212,175,55,0.25), inset 0 -1px 0 rgba(212,175,55,0.5);
   overflow: hidden;
   z-index: 100;
   flex-wrap: wrap;
-  animation: bfBarSlide 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  min-height: 96px;
   font-family: 'Tajawal', 'El Messiri', sans-serif;
 }
 .bf-promo-bar::before {
@@ -405,280 +401,62 @@
   animation: bfShimmer 4s infinite;
   pointer-events: none;
 }
-@keyframes bfShimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-@keyframes bfBarSlide {
-  from { transform: translateY(-100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
+@keyframes bfShimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 .bf-promo-bar.is-hidden { display: none !important; }
 
 .bf-promo-badge {
   position: relative;
   flex-shrink: 0;
-  width: 88px;
-  height: 88px;
+  width: 55px; height: 55px;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, #ffe45c 0%, #ffd700 40%, #d4af37 75%, #a67c00 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow:
-    0 0 20px rgba(255,215,0,0.6),
-    0 0 40px rgba(255,215,0,0.3),
-    inset 0 -3px 8px rgba(0,0,0,0.25),
-    inset 0 3px 8px rgba(255,255,255,0.4);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 0 15px rgba(255,215,0,0.6), inset 0 -2px 5px rgba(0,0,0,0.25), inset 0 2px 5px rgba(255,255,255,0.4);
   animation: bfBadgePulse 2s ease-in-out infinite;
   transform: rotate(-8deg);
   z-index: 2;
 }
 @keyframes bfBadgePulse {
-  0%, 100% {
-    transform: rotate(-8deg) scale(1);
-    box-shadow: 0 0 20px rgba(255,215,0,0.6), 0 0 40px rgba(255,215,0,0.3), inset 0 -3px 8px rgba(0,0,0,0.25), inset 0 3px 8px rgba(255,255,255,0.4);
-  }
-  50% {
-    transform: rotate(-8deg) scale(1.08);
-    box-shadow: 0 0 30px rgba(255,215,0,0.9), 0 0 60px rgba(255,215,0,0.5), inset 0 -3px 8px rgba(0,0,0,0.25), inset 0 3px 8px rgba(255,255,255,0.4);
-  }
+  0%, 100% { transform: rotate(-8deg) scale(1); box-shadow: 0 0 15px rgba(255,215,0,0.6), inset 0 -2px 5px rgba(0,0,0,0.25); }
+  50% { transform: rotate(-8deg) scale(1.05); box-shadow: 0 0 25px rgba(255,215,0,0.9), inset 0 -2px 5px rgba(0,0,0,0.25); }
 }
-.bf-badge-line1 {
-  font-family: 'Tajawal', 'Arial Black', sans-serif;
-  font-size: 0.68rem;
-  font-weight: 900;
-  color: #1a1512;
-  letter-spacing: 0.5px;
-  line-height: 1;
-  margin-bottom: 2px;
-}
-.bf-badge-line2 {
-  font-family: 'Tajawal', 'Arial Black', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 900;
-  color: #1a1512;
-  letter-spacing: 0.5px;
-  line-height: 1;
-}
-.bf-badge-sparkle {
-  position: absolute;
-  top: -8px; right: -8px;
-  font-size: 1.05rem;
-  animation: bfSparkle 1.5s ease-in-out infinite;
-}
-@keyframes bfSparkle {
-  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
-  50% { transform: scale(1.4) rotate(20deg); opacity: 0.7; }
-}
+.bf-badge-line1 { font-size: 0.5rem; font-weight: 900; color: #1a1512; line-height: 1; margin-bottom: 1px; }
+.bf-badge-line2 { font-size: 0.65rem; font-weight: 900; color: #1a1512; line-height: 1; }
+.bf-badge-sparkle { position: absolute; top: -5px; right: -5px; font-size: 0.8rem; animation: bfSparkle 1.5s ease-in-out infinite; }
+@keyframes bfSparkle { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.3) rotate(15deg); } }
 
-.bf-promo-content {
-  text-align: center;
-  flex: 1;
-  min-width: 220px;
-}
-.bf-promo-title {
-  margin: 0 0 6px;
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.bf-title-ar {
-  font-family: 'El Messiri', 'Tajawal', serif;
-  font-size: 1.55rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #fff 0%, #ffd700 50%, #d4af37 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: bfTitleGlow 3s ease-in-out infinite;
-}
-@keyframes bfTitleGlow {
-  0%, 100% { filter: drop-shadow(0 0 8px rgba(255,215,0,0.5)); }
-  50% { filter: drop-shadow(0 0 16px rgba(255,215,0,0.9)); }
-}
-.bf-title-en {
-  font-family: 'Tajawal', sans-serif;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 3px;
-  color: #d4af37;
-  opacity: 0.85;
-}
-.bf-promo-sub {
-  margin: 0 0 4px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.bf-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ffd700, #d4af37);
-  color: #1a1512;
-  font-weight: 900;
-  font-size: 1rem;
-  box-shadow: 0 0 12px rgba(255,215,0,0.7);
-  animation: bfNumPop 2s ease-in-out infinite;
-}
-@keyframes bfNumPop {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-}
-.bf-amp { color: #d4af37; font-weight: 900; font-size: 1.1rem; }
-.bf-gift {
-  color: #ffd700;
-  font-weight: 800;
-  text-shadow: 0 0 10px rgba(255,215,0,0.6);
-  display: inline-block;
-  animation: bfGiftWiggle 3s ease-in-out infinite;
-}
-@keyframes bfGiftWiggle {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-5deg); }
-  75% { transform: rotate(5deg); }
-}
-.bf-promo-en-sub {
-  margin: 0;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: rgba(212, 175, 55, 0.75);
-  font-family: 'Tajawal', sans-serif;
-}
+.bf-promo-content { text-align: center; flex: 1; min-width: 200px; }
+.bf-promo-title { margin: 0 0 2px; display: flex; align-items: baseline; justify-content: center; gap: 6px; flex-wrap: wrap; }
+.bf-title-ar { font-size: 1.1rem; font-weight: 800; background: linear-gradient(135deg, #fff 0%, #ffd700 50%, #d4af37 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.bf-title-en { font-size: 0.55rem; font-weight: 800; letter-spacing: 2px; color: #d4af37; opacity: 0.85; }
+.bf-promo-sub { margin: 0 0 2px; font-size: 0.8rem; font-weight: 600; color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; }
+.bf-num { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, #ffd700, #d4af37); color: #1a1512; font-weight: 900; font-size: 0.75rem; }
+.bf-amp { color: #d4af37; font-weight: 900; font-size: 1rem; }
+.bf-gift { color: #ffd700; font-weight: 800; }
+.bf-promo-en-sub { margin: 0; font-size: 0.55rem; font-weight: 700; letter-spacing: 1px; color: rgba(212, 175, 55, 0.75); }
 
 .bf-promo-cta {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 10px 22px;
-  background: linear-gradient(135deg, #ffe45c 0%, #ffd700 40%, #d4af37 75%, #a67c00 100%);
-  color: #1a1512 !important;
-  border: none;
-  border-radius: 99px;
-  text-decoration: none;
-  cursor: pointer;
-  font-family: inherit;
-  outline: none;
-  font-weight: 900;
-  font-size: 0.95rem;
-  box-shadow: 0 6px 20px rgba(255,215,0,0.5), 0 0 0 2px rgba(255,215,0,0.3);
-  transition: all 0.25s ease;
-  position: relative;
-  overflow: hidden;
-  animation: bfCtaBounce 2.5s ease-in-out infinite;
-  z-index: 2;
+  flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 0;
+  padding: 6px 16px; background: linear-gradient(135deg, #ffe45c 0%, #ffd700 40%, #d4af37 75%, #a67c00 100%);
+  color: #1a1512 !important; border: none; border-radius: 99px; text-decoration: none; cursor: pointer;
+  font-weight: 900; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(255,215,0,0.5);
+  transition: all 0.25s ease; z-index: 2;
 }
-  .bf-promo-cta::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
-  animation: bfCtaShine 3s infinite;
-}
-@keyframes bfCtaShine {
-  0%, 100% { left: -100%; }
-  50% { left: 100%; }
-}
-@keyframes bfCtaBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-}
-.bf-promo-cta:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 30px rgba(255,215,0,0.8), 0 0 0 3px rgba(255,215,0,0.5);
-}
-.bf-cta-ar { font-size: 0.95rem; font-weight: 900; }
-.bf-cta-en {
-  font-size: 0.58rem;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  opacity: 0.85;
-}
+.bf-promo-cta:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 6px 20px rgba(255,215,0,0.8); }
+.bf-cta-ar { font-size: 0.8rem; font-weight: 900; }
+.bf-cta-en { font-size: 0.45rem; font-weight: 800; letter-spacing: 1px; opacity: 0.85; }
 
-.bf-promo-close {
-  position: absolute;
-  top: 8px; right: 10px;
-  background: transparent;
-  border: 1px solid rgba(212, 175, 55, 0.5);
-  color: #d4af37;
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  font-size: 0.85rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  padding: 0;
-  z-index: 3;
-}
-.bf-promo-close:hover {
-  background: rgba(212, 175, 55, 0.3);
-  border-color: #ffd700;
-  color: #ffd700;
-  transform: rotate(90deg);
-}
-
-.bf-promo-note {
-  position: absolute;
-  bottom: 4px;
-  left: 0; right: 0;
-  text-align: center;
-  font-size: 0.62rem;
-  color: rgba(212, 175, 55, 0.6);
-  letter-spacing: 0.5px;
-  margin: 0;
-  pointer-events: none;
-}
+.bf-promo-close { position: absolute; top: 4px; right: 6px; background: transparent; border: 1px solid rgba(212, 175, 55, 0.5); color: #d4af37; width: 20px; height: 20px; border-radius: 50%; font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; z-index: 3; }
+.bf-promo-close:hover { background: rgba(212, 175, 55, 0.3); transform: rotate(90deg); }
+.bf-promo-note { position: absolute; bottom: 2px; left: 0; right: 0; text-align: center; font-size: 0.5rem; color: rgba(212, 175, 55, 0.6); margin: 0; pointer-events: none; }
 
 @media (max-width: 700px) {
-  .bf-promo-bar {
-    padding: 12px 40px 22px 12px;
-    gap: 10px;
-    min-height: 118px;
-    flex-direction: column;
-    text-align: center;
-  }
-  .bf-promo-badge { width: 68px; height: 68px; }
-  .bf-badge-line1 { font-size: 0.55rem; }
-  .bf-badge-line2 { font-size: 0.7rem; }
-  .bf-title-ar { font-size: 1.18rem; }
-  .bf-title-en { font-size: 0.6rem; letter-spacing: 2px; }
-  .bf-promo-sub { font-size: 0.78rem; gap: 5px; }
-  .bf-num { width: 22px; height: 22px; font-size: 0.8rem; }
-  .bf-promo-en-sub { font-size: 0.62rem; letter-spacing: 1.5px; }
-  .bf-promo-cta { padding: 8px 18px; }
-  .bf-cta-ar { font-size: 0.82rem; }
-  .bf-cta-en { font-size: 0.55rem; }
-  .bf-promo-note { font-size: 0.55rem; bottom: 4px; }
-  .bf-promo-close { width: 22px; height: 22px; font-size: 0.75rem; top: 6px; right: 8px; }
-}
-@media (max-width: 400px) {
-  .bf-title-ar { font-size: 1rem; }
-  .bf-promo-sub { font-size: 0.72rem; }
-  .bf-title-en { display: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .bf-promo-bar, .bf-promo-bar::before, .bf-promo-badge, .bf-badge-sparkle,
-  .bf-title-ar, .bf-num, .bf-gift, .bf-promo-cta, .bf-promo-cta::before {
-    animation: none !important;
-  }
+  .bf-promo-bar { padding: 6px 30px 8px 10px; gap: 8px; }
+  .bf-promo-badge { width: 45px; height: 45px; }
+  .bf-title-ar { font-size: 0.95rem; }
+  .bf-promo-sub { font-size: 0.7rem; }
+  .bf-promo-cta { padding: 5px 12px; font-size: 0.75rem; }
+  .bf-promo-note { display: none; }
 }
 </style>
 <script>
@@ -686,14 +464,7 @@
   "use strict";
   var bar = document.getElementById("bfPromoBar");
   var close = document.getElementById("bfPromoClose");
-
   if(!bar) return;
-
-  /* ✅ الإعلان يظهر دايماً مع كل تحميل صفحة — مفيش أي تخزين
-     - لو العميل داس ✕ → يختفي في الصفحة الحالية بس
-     - لو عمل Refresh → يرجع يظهر
-     - لو دخل الموقع تاني → يرجع يظهر */
-
   if(close){
     close.addEventListener("click", function(){
       bar.classList.add("is-hidden");
@@ -701,9 +472,11 @@
   }
 })();
 </script>
-  <!-- ═══ END BLACK FRIDAY PROMO BAR v2 ═══ -->
+<!-- ═══ END BLACK FRIDAY PROMO BAR v2 ═══ -->
+
 <!-- ═══════════════════════════════════════════════
      🧠 QUIZ BANNER — بعد عرض الصحاب مباشرة
+     (تم ضغط الـ CSS هنا لتقليل الارتفاع)
      ═══════════════════════════════════════════════ -->
 <section class="vl-quiz-banner" aria-label="العب ألعاب نفسية">
   <a href="https://velalight.github.io/quiz/" class="vl-quiz-banner-inner">
@@ -719,122 +492,103 @@
   </a>
 </section>
 <style>
+/* ═══ COMPACT QUIZ BANNER (تم تقليل الارتفاع) ═══ */
 .vl-quiz-banner {
-  position: relative;
-  padding: 0;
-  margin: 0;
-  background: linear-gradient(135deg, #1a0f2e 0%, #2d1b4e 50%, #4a2c7a 100%);
-  overflow: hidden;
-  animation: vlQuizBannerSlide 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  border-bottom: 1px solid rgba(255, 209, 102, 0.4);
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  background: linear-gradient(135deg, #1a0f2e 0%, #2d1b4e 50%, #4a2c7a 100%) !important;
+  overflow: hidden !important;
+  border-bottom: 1px solid rgba(255, 209, 102, 0.4) !important;
+  z-index: 50 !important;
+  box-sizing: border-box !important;
 }
 .vl-quiz-banner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(255, 209, 102, 0.25) 0%, transparent 50%),
-    radial-gradient(circle at 80% 50%, rgba(255, 107, 157, 0.2) 0%, transparent 50%);
-  animation: vlQuizBannerGlow 3s ease-in-out infinite;
-  pointer-events: none;
-}
-.vl-quiz-banner::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 209, 102, 0.08) 50%, transparent 100%);
-  animation: vlQuizBannerShimmer 4s infinite;
-  pointer-events: none;
-}
-@keyframes vlQuizBannerSlide {
-  from { transform: translateY(-30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-@keyframes vlQuizBannerGlow {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
-}
-@keyframes vlQuizBannerShimmer {
-  0% { transform: translateX(-100%) rotate(25deg); }
-  100% { transform: translateX(100%) rotate(25deg); }
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: radial-gradient(circle at 20% 50%, rgba(255, 209, 102, 0.2) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255, 107, 157, 0.15) 0%, transparent 50%) !important;
+  pointer-events: none !important;
 }
 .vl-quiz-banner-inner {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 20px 24px;
-  text-decoration: none;
-  color: #fff;
-  z-index: 1;
-  transition: transform 0.3s ease;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  align-items: center !important;
+  gap: 12px !important;
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  padding: 10px 20px !important;
+  text-decoration: none !important;
+  color: #fff !important;
+  z-index: 1 !important;
+  transition: transform 0.3s ease !important;
 }
 .vl-quiz-banner-inner:hover {
-  transform: scale(1.01);
+  transform: scale(1.01) !important;
 }
 .vl-quiz-banner-icon {
-  font-size: 3rem;
-  filter: drop-shadow(0 0 15px rgba(255, 209, 102, 0.8));
-  animation: vlQuizIconPulse 2s ease-in-out infinite;
-  flex-shrink: 0;
+  display: block !important;
+  font-size: 1.8rem !important;
+  line-height: 1 !important;
+  filter: drop-shadow(0 0 10px rgba(255, 209, 102, 0.6)) !important;
+  animation: vlQuizIconPulse 2s ease-in-out infinite !important;
+  flex-shrink: 0 !important;
 }
 @keyframes vlQuizIconPulse {
-  0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 15px rgba(255, 209, 102, 0.8)); }
-  50% { transform: scale(1.1) rotate(5deg); filter: drop-shadow(0 0 25px rgba(255, 209, 102, 1)); }
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(5deg); }
 }
-.vl-quiz-banner-content {
-  flex: 1;
-  min-width: 0;
-}
+.vl-quiz-banner-content { display: block !important; flex: 1 !important; min-width: 0 !important; }
 .vl-quiz-banner-title {
-  font-family: 'El Messiri', 'Tajawal', serif;
-  font-size: 1.5rem;
-  font-weight: 800;
-  margin: 0 0 4px;
-  background: linear-gradient(135deg, #fff 0%, #ffd166 60%, #ff6b9d 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 1.2;
+  display: block !important;
+  font-family: 'El Messiri', 'Tajawal', serif !important;
+  font-size: 1.1rem !important;
+  font-weight: 800 !important;
+  margin: 0 0 2px !important;
+  background: linear-gradient(135deg, #fff 0%, #ffd166 60%, #ff6b9d 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: #ffd166 !important;
+  line-height: 1.2 !important;
 }
 .vl-quiz-banner-sub {
-  font-size: 0.9rem;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.4;
+  display: block !important;
+  font-size: 0.75rem !important;
+  margin: 0 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  line-height: 1.3 !important;
 }
 .vl-quiz-banner-cta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #d4af37 100%);
-  color: #1a1512;
-  border-radius: 50px;
-  font-weight: 900;
-  font-size: 1rem;
-  box-shadow: 
-    0 4px 20px rgba(255, 215, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-  animation: vlQuizCtaPulse 2.5s ease-in-out infinite;
+  display: flex !important;
+  visibility: visible !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 8px 16px !important;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #d4af37 100%) !important;
+  color: #1a1512 !important;
+  border-radius: 50px !important;
+  font-weight: 900 !important;
+  font-size: 0.85rem !important;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4) !important;
+  flex-shrink: 0 !important;
+  animation: vlQuizCtaPulse 2.5s ease-in-out infinite !important;
+  white-space: nowrap !important;
 }
 @keyframes vlQuizCtaPulse {
-  0%, 100% { box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.6); }
-  50% { box-shadow: 0 4px 30px rgba(255, 215, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.8); }
-}
-.vl-quiz-banner-inner:hover .vl-quiz-banner-cta {
-  transform: translateX(-4px) scale(1.05);
+  0%, 100% { box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4) !important; }
+  50% { box-shadow: 0 4px 25px rgba(255, 215, 0, 0.8) !important; }
 }
 .vl-quiz-banner-arrow {
-  font-size: 1.2rem;
-  animation: vlQuizArrow 1.5s ease-in-out infinite;
+  display: inline-block !important;
+  font-size: 1rem !important;
+  animation: vlQuizArrow 1.5s ease-in-out infinite !important;
 }
 @keyframes vlQuizArrow {
   0%, 100% { transform: translateX(0); }
@@ -842,45 +596,24 @@
 }
 @media (max-width: 700px) {
   .vl-quiz-banner-inner {
-    flex-wrap: wrap;
-    gap: 12px;
-    padding: 16px;
-    justify-content: center;
-    text-align: center;
+    gap: 10px !important;
+    padding: 8px 12px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    text-align: center !important;
   }
-  .vl-quiz-banner-icon {
-    font-size: 2.2rem;
-  }
-  .vl-quiz-banner-content {
-    flex: 1 1 100%;
-    order: 2;
-  }
-  .vl-quiz-banner-title {
-    font-size: 1.2rem;
-  }
-  .vl-quiz-banner-sub {
-    font-size: 0.8rem;
-  }
+  .vl-quiz-banner-icon { font-size: 1.5rem !important; }
+  .vl-quiz-banner-content { flex: 1 1 100% !important; order: 2 !important; }
+  .vl-quiz-banner-title { font-size: 1rem !important; }
+  .vl-quiz-banner-sub { font-size: 0.65rem !important; }
   .vl-quiz-banner-cta {
-    order: 3;
-    flex: 1 1 100%;
-    justify-content: center;
-    padding: 12px 20px;
-    font-size: 0.95rem;
+    order: 3 !important;
+    flex: 1 1 100% !important;
+    justify-content: center !important;
+    padding: 6px 12px !important;
+    font-size: 0.75rem !important;
   }
-  .vl-quiz-banner-arrow {
-    transform: rotate(180deg);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .vl-quiz-banner,
-  .vl-quiz-banner::before,
-  .vl-quiz-banner::after,
-  .vl-quiz-banner-icon,
-  .vl-quiz-banner-cta,
-  .vl-quiz-banner-arrow {
-    animation: none !important;
-  }
+  .vl-quiz-banner-arrow { transform: rotate(180deg) !important; }
 }
 </style>
 <!-- ═══ END QUIZ BANNER ═══ -->
