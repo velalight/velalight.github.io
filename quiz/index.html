@@ -306,10 +306,9 @@ const store = {
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
 
 // ================================================================
-// 🔗 ترميز مضغوط للرابط (أقصر + أنضف)
+// 🔗 ترميز مضغوط للرابط
 // ================================================================
 function enc(obj){
-  // ضغط: مرحلة بحرف واحد + إجابات كنص أرقام
   const phaseMap = {partner:'p', friends:'f', family:'m'};
   const compact = {
     p: phaseMap[obj.p] || 'p',
@@ -357,13 +356,23 @@ function showCopyModal(text){
 
 // ================================================================
 // 📤 مشاركة (واتساب مباشر + نسخ + Web Share)
+// ⚠️ كل دالة بتقبل النص مباشرة من window._vlShareText
 // ================================================================
 function shareWhatsApp(text){
+  if(!text) text = window._vlShareText || '';
+  if(!text){ alert('لا يوجد نص للمشاركة'); return; }
   const url = 'https://wa.me/?text=' + encodeURIComponent(text);
-  window.open(url, '_blank');
+  try {
+    const w = window.open(url, '_blank');
+    if(!w) location.href = url;
+  } catch(e){
+    location.href = url;
+  }
 }
 
 async function shareOrCopy(text){
+  if(!text) text = window._vlShareText || '';
+  if(!text){ alert('لا يوجد نص للنسخ'); return; }
   const ok = await copyText(text);
   if(ok){
     alert('✓ اتنسخ! الصقه في واتساب أو أي تطبيق');
@@ -514,7 +523,10 @@ function showPersonalityResult(persona){
   const main = PERFUMES[a.primary];
   const alt1 = PERFUMES[a.alts[0]];
   const alt2 = PERFUMES[a.alts[1]];
-  const shareText = `شخصيتي العطرية الحقيقية: ${persona.type} ${a.emoji}\n${a.desc}\n\nعطري المثالي: ${main.emoji} ${main.ar}\n\nاكتشف شخصيتك:\n${location.origin}${location.pathname}`;
+  
+  // تخزين النص في متغير عام — مش في onclick
+  window._vlShareText = `شخصيتي العطرية الحقيقية: ${persona.type} ${a.emoji}\n${a.desc}\n\nعطري المثالي: ${main.emoji} ${main.ar}\n\nاكتشف شخصيتك:\n${location.origin}${location.pathname}`;
+  
   render(`
     <div class="result-hero">
       <div class="emoji">${a.emoji}</div>
@@ -529,11 +541,11 @@ function showPersonalityResult(persona){
       <div class="prod-desc">كمان هيعجبوك: ${alt1.ar} · ${alt2.ar}</div>
       <a href="https://velalight.github.io/products.html" class="prod-cta" onclick="event.stopPropagation()">زور متجر فيلا لايت ←</a>
     </div>
-    <div class="share-actions">
-      <button class="wa" onclick="event.stopPropagation();shareWhatsApp('${esc(shareText)}')">📱 شارك على واتساب</button>
-      <button onclick="event.stopPropagation();shareOrCopy('${esc(shareText)}')">📋 انسخ النص</button>
-    </div>
     <button class="sec" onclick="event.stopPropagation();showHome()">ادخل دوامة الريحة 🌊</button>
+    <div class="share-actions">
+      <button class="wa" onclick="event.stopPropagation();shareWhatsApp(window._vlShareText)">📱 شارك على واتساب</button>
+      <button onclick="event.stopPropagation();shareOrCopy(window._vlShareText)">📋 انسخ النص</button>
+    </div>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
@@ -611,7 +623,9 @@ function finishDangerous(themes){
 
 function showDangerousResult(themeKey){
   const t = DANGEROUS_THEMES[themeKey] || DANGEROUS_THEMES["الوجع"];
-  const shareText = `عملت اختبار "الأسئلة النفسية الخطرة" وطلع تحليلي:\n${t.emoji} ${t.title}\n\n${t.desc.substring(0,150)}...\n\nاعمل الاختبار إنت كمان:\n${location.origin}${location.pathname}`;
+  
+  window._vlShareText = `عملت اختبار "الأسئلة النفسية الخطرة" وطلع تحليلي:\n${t.emoji} ${t.title}\n\n${t.desc.substring(0,150)}...\n\nاعمل الاختبار إنت كمان:\n${location.origin}${location.pathname}`;
+  
   render(`
     <div class="danger-hero">
       <div class="emoji">${t.emoji}</div>
@@ -622,11 +636,11 @@ function showDangerousResult(themeKey){
         "${t.question}"
       </div>
     </div>
-    <div class="share-actions">
-      <button class="wa" onclick="event.stopPropagation();shareWhatsApp('${esc(shareText)}')">📱 شارك على واتساب</button>
-      <button onclick="event.stopPropagation();shareOrCopy('${esc(shareText)}')">📋 انسخ النص</button>
-    </div>
     <button class="sec" onclick="event.stopPropagation();showHome()">🏠 رجوع للرئيسية</button>
+    <div class="share-actions">
+      <button class="wa" onclick="event.stopPropagation();shareWhatsApp(window._vlShareText)">📱 شارك على واتساب</button>
+      <button onclick="event.stopPropagation();shareOrCopy(window._vlShareText)">📋 انسخ النص</button>
+    </div>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
@@ -638,6 +652,10 @@ function showHome(){
   const persona = store.get('personality');
   const todayDone = store.get('dailyDate')===today();
   const s = store.get('streak') || {days:[],count:0};
+  
+  // تخزين نص دعوة الأصحاب
+  window._vlShareText = `جرب ألعاب خطرة نفسية — اكتشف شخصيتك العطرية الحقيقية\n${location.origin}${location.pathname}`;
+  
   let heroHtml = '';
   if(persona){
     const a = ARCHETYPES[persona.type];
@@ -658,7 +676,7 @@ function showHome(){
       <div class="menu-item" onclick="event.stopPropagation();showPhaseSetup('family')"><div class="mi-left"><span class="mi-icon">👨‍👩‍👧</span><div><div class="mi-title">عالم العيلة</div><div class="mi-sub">أسئلة بين الأجيال</div></div></div></div>
       <div class="menu-item" onclick="event.stopPropagation();showDaily()"><div class="mi-left"><span class="mi-icon">🔥</span><div><div class="mi-title">سؤال اليوم</div><div class="mi-sub">${todayDone?'✓ جاوبت النهارده':'جاوب واحصل على Streak'}</div></div></div></div>
     </div>
-    <button class="sec" style="margin-top:20px" onclick="event.stopPropagation();shareOrCopy('جرب ألعاب خطرة نفسية — اكتشف شخصيتك العطرية الحقيقية\\n${location.origin}${location.pathname}')">📤 ادعي أصحابك للعبة</button>
+    <button class="sec" style="margin-top:20px" onclick="event.stopPropagation();shareOrCopy(window._vlShareText)">📤 ادعي أصحابك للعبة</button>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
@@ -715,16 +733,18 @@ function finishPhase(p){
   const challenge = {p:p.phase,n:p.name,a:p.answers};
   const encoded = enc(challenge);
   const url = `${location.origin}${location.pathname}?c=${encoded}`;
-  const shareText = `🎯 تحدي نفسي من ${p.name}\n\nخمن إجاباتي على 10 أسئلة عميقة، وشوف نسبة فهمك ليا.\n\n${url}`;
+  
+  window._vlShareText = `🎯 تحدي نفسي من ${p.name}\n\nخمن إجاباتي على 10 أسئلة عميقة، وشوف نسبة فهمك ليا.\n\n${url}`;
+  
   render(`
     <h1>تحديك جاهز! 🎉</h1>
     <p class="sub">ابعت الرابط ده، وأول ما يجاوبوا هتشوف مين فيهم يعرفك بجد.</p>
     <div class="share-box">${esc(url)}</div>
-    <div class="share-actions">
-      <button class="wa" onclick="event.stopPropagation();shareWhatsApp('${esc(shareText)}')">📱 ابعت على واتساب مباشرة</button>
-      <button onclick="event.stopPropagation();shareOrCopy('${esc(shareText)}')">📋 انسخ النص كامل</button>
-    </div>
     <button class="sec" onclick="event.stopPropagation();showHome()">رجوع للرئيسية</button>
+    <div class="share-actions">
+      <button class="wa" onclick="event.stopPropagation();shareWhatsApp(window._vlShareText)">📱 ابعت على واتساب مباشرة</button>
+      <button onclick="event.stopPropagation();shareOrCopy(window._vlShareText)">📋 انسخ النص كامل</button>
+    </div>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
@@ -785,17 +805,19 @@ function showGuessResult(){
   else msg = `مفيش ولا نقطة؟! تعالى نتعرف من جديد 😂`;
   const resultData = {p:CHALLENGE.p,on:CHALLENGE.n,gn:CHALLENGE.guesser,a:CHALLENGE.a,g:CHALLENGE.guesses,s:correct};
   const resultUrl = `${location.origin}${location.pathname}?r=${enc(resultData)}`;
-  const shareText = `خمنت إجابات ${CHALLENGE.n} على 10 أسئلة نفسية عميقة\nالنتيجة: ${correct}/${total} (${pct}%)\n\n${resultUrl}`;
+  
+  window._vlShareText = `خمنت إجابات ${CHALLENGE.n} على 10 أسئلة نفسية عميقة\nالنتيجة: ${correct}/${total} (${pct}%)\n\n${resultUrl}`;
+  
   render(`
     <h1>النتيجة 🎯</h1>
     <div class="score-big">${correct}/${total}</div>
     <p class="msg" style="color:#ffd166;font-size:1.3rem;font-weight:bold">${pct}% فهم</p>
     <p class="msg">${msg}</p>
-    <div class="share-actions">
-      <button class="wa" onclick="event.stopPropagation();shareWhatsApp('${esc(shareText)}')">📱 ابعت النتيجة لـ ${esc(CHALLENGE.n)}</button>
-      <button onclick="event.stopPropagation();shareOrCopy('${esc(shareText)}')">📋 انسخ النتيجة</button>
-    </div>
     <button class="sec" onclick="event.stopPropagation();location.href=location.pathname">🎮 العب إنت كمان</button>
+    <div class="share-actions">
+      <button class="wa" onclick="event.stopPropagation();shareWhatsApp(window._vlShareText)">📱 ابعت النتيجة لـ ${esc(CHALLENGE.n)}</button>
+      <button onclick="event.stopPropagation();shareOrCopy(window._vlShareText)">📋 انسخ النتيجة</button>
+    </div>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
