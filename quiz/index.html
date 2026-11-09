@@ -362,10 +362,10 @@ function init(){
   const p = new URLSearchParams(location.search);
   if(p.get('c')) return showChallenge(dec(p.get('c')));
   if(p.get('r')) return showResultBack(dec(p.get('r')));
-  if(store.get('personality')) return showHome();
+  // دايمًا ابدأ بشاشة اختيار العطر — النتيجة المحفوظة هتظهر بس لو ضغط على "شخصيتك العطرية" من القائمة
   showHook();
 }
-
+  
 // ================================================================
 // 🎣 الخطاف — كل الـ 23 عطر
 // ================================================================
