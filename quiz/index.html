@@ -2,10 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>مين يعرفك أكتر؟ | VelaLight</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: 'Segoe UI', Tahoma, sans-serif;
       background: linear-gradient(135deg, #2d1b4e, #4a2c7a);
@@ -15,51 +15,278 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 24px;
+      padding: 20px;
+      overflow-x: hidden;
     }
-    .card {
-      max-width: 420px;
+    .screen {
+      max-width: 440px;
       width: 100%;
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    .screen.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     h1 {
-      font-size: 2.2rem;
+      font-size: 2rem;
       margin-bottom: 12px;
       color: #ffd166;
     }
     p.subtitle {
-      font-size: 1.1rem;
+      font-size: 1rem;
       opacity: 0.9;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
       line-height: 1.7;
     }
-    button.start-btn {
+    input[type="text"] {
+      width: 100%;
+      padding: 16px;
+      font-size: 1.1rem;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      text-align: center;
+      margin-bottom: 20px;
+      outline: none;
+      transition: border 0.2s;
+    }
+    input[type="text"]::placeholder { color: rgba(255,255,255,0.5); }
+    input[type="text"]:focus { border-color: #ff6b9d; }
+    button {
       background: #ff6b9d;
       color: #fff;
       border: none;
-      padding: 16px 48px;
-      font-size: 1.2rem;
+      padding: 16px 40px;
+      font-size: 1.1rem;
       border-radius: 50px;
       cursor: pointer;
       font-weight: bold;
       transition: transform 0.2s, background 0.2s;
+      width: 100%;
     }
-    button.start-btn:hover {
-      background: #ff4d88;
-      transform: scale(1.05);
+    button:hover:not(:disabled) { background: #ff4d88; transform: scale(1.02); }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #ffd166;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+    .q-number {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      margin-bottom: 8px;
+    }
+    .q-text {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 24px;
+      line-height: 1.5;
+      min-height: 60px;
+    }
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: right;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    .option:hover { background: rgba(255,255,255,0.15); }
+    .option.selected {
+      background: #ff6b9d;
+      border-color: #ff6b9d;
+      transform: scale(1.02);
+    }
+    .result-score {
+      font-size: 4rem;
+      font-weight: bold;
+      color: #ffd166;
+      margin: 20px 0;
+    }
+    .result-msg {
+      font-size: 1.2rem;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+    .share-box {
+      background: rgba(255,255,255,0.1);
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      word-break: break-all;
+      opacity: 0.8;
     }
     .powered {
-      margin-top: 40px;
-      font-size: 0.8rem;
-      opacity: 0.6;
+      margin-top: 32px;
+      font-size: 0.75rem;
+      opacity: 0.5;
     }
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid rgba(255,255,255,0.3);
+      margin-top: 12px;
+      font-size: 1rem;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); }
   </style>
 </head>
 <body>
-  <div class="card">
+
+  <!-- شاشة 1: البداية -->
+  <div class="screen active" id="screen-start">
     <h1>مين يعرفك أكتر؟</h1>
     <p class="subtitle">جاوب 10 أسئلة عن نفسك، وابعت التحدي لأصحابك.<br>مين فيهم هيعرفك أكتر؟ ❤️</p>
-    <button class="start-btn" onclick="alert('اللعبة هتشتغل قريبًا!')">ابدأ التحدي</button>
+    <input type="text" id="user-name" placeholder="اكتب اسمك..." maxlength="20">
+    <button id="btn-start" disabled>ابدأ التحدي</button>
     <div class="powered">Powered by VelaLight</div>
   </div>
+
+  <!-- شاشة 2: الأسئلة -->
+  <div class="screen" id="screen-quiz">
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <div class="q-number" id="q-number">سؤال 1 من 10</div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options"></div>
+  </div>
+
+  <!-- شاشة 3: النتيجة -->
+  <div class="screen" id="screen-result">
+    <h1 id="result-title">تحديك جاهز! 🎉</h1>
+    <p class="result-msg" id="result-msg"></p>
+    <div class="share-box" id="share-link"></div>
+    <button id="btn-copy">انسخ الرابط</button>
+    <button class="btn-secondary" id="btn-restart">ابدأ من جديد</button>
+    <div class="powered">Powered by VelaLight</div>
+  </div>
+
+  <script>
+    // بيانات الأسئلة
+    const QUESTIONS = [
+      { q: "إيه أكتر حاجة بتعصبك؟", options: ["حد يقاطعني وأنا بتكلم", "حد يتأخر عليا", "حد ينسى حاجة مهمة قلتله عليها", "حد يزعقلي"] },
+      { q: "لو معاك أجازة أسبوع ومفيش شغل، هتعمل إيه؟", options: ["أسافر مكان جديد", "أقعد في البيت وأرتاح", "أخرج مع أصحابي كل يوم", "أشتغل على حاجة بحبها"] },
+      { q: "إيه أكتر حاجة بتخليك تثق في حد؟", options: ["إنه يوفي بوعده", "إنه يسمعني من غير ما يحكم", "إنه يكون صريح معايا حتى لو الكلام وحش", "إنه يساندني وقت الضيق"] },
+      { q: "لو صحابك وصفوك بكلمة واحدة، هتكون إيه؟", options: ["الجدع", "الضحكة", "العاقل", "اللي بيسمع"] },
+      { q: "إيه أحب حاجة في يومك؟", options: ["الصبح مع القهوة", "وقت الغدا مع العيلة", "الليل لما الكل ينام", "وقت الخروجة مع الصحاب"] },
+      { q: "لو حصل خلاف بينك وبين صاحبك، هتعمل إيه؟", options: ["أتكلم معاه على طول", "أستنى هو يبدأ", "أسيبها تنسى لوحدها", "أحكي لحد تاني وأشوف رأيه"] },
+      { q: "إيه أكتر حاجة بتخاف منها؟", options: ["الوحدة", "الفشل", "إن حد يخون ثقتي", "إن الوقت يعدي وأنا مش عايش"] },
+      { q: "لو هتختار هدية لصاحبك، هتختار إيه؟", options: ["حاجة هو محتاجها", "حاجة تضحكه", "حاجة معمولة بإيدي", "خروجة مفاجأة"] },
+      { q: "إيه أكتر حاجة بتخليك مبسوط؟", options: ["نجاح حد قريب مني", "مدح الناس ليا", "إني أعمل حاجة بحبها", "إني أكون مع ناس بحبهم"] },
+      { q: "لو صحابك عايزين يعرفوك أكتر، هتقولهم إيه؟", options: ["إني بضحك على كل حاجة", "إني بحب أساعد من غير ما أتكلم", "إني بحتاج وقت عشان أفتح قلبي", "إني بحب المفاجآت والجديد"] }
+    ];
+
+    let currentQ = 0;
+    let answers = [];
+    let userName = "";
+
+    const $ = (id) => document.getElementById(id);
+    const screens = { start: $("screen-start"), quiz: $("screen-quiz"), result: $("screen-result") };
+
+    function showScreen(name) {
+      Object.values(screens).forEach(s => s.classList.remove("active"));
+      screens[name].classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    // شاشة البداية
+    const nameInput = $("user-name");
+    const startBtn = $("btn-start");
+
+    nameInput.addEventListener("input", () => {
+      startBtn.disabled = nameInput.value.trim().length < 2;
+    });
+
+    startBtn.addEventListener("click", () => {
+      userName = nameInput.value.trim();
+      currentQ = 0;
+      answers = [];
+      renderQuestion();
+      showScreen("quiz");
+    });
+
+    // عرض السؤال
+    function renderQuestion() {
+      const q = QUESTIONS[currentQ];
+      $("q-number").textContent = `سؤال ${currentQ + 1} من ${QUESTIONS.length}`;
+      $("q-text").textContent = q.q;
+      $("progress").style.width = `${((currentQ) / QUESTIONS.length) * 100}%`;
+
+      const optionsEl = $("options");
+      optionsEl.innerHTML = "";
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.textContent = opt;
+        btn.addEventListener("click", () => selectAnswer(idx));
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(idx) {
+      document.querySelectorAll(".option").forEach(b => b.classList.remove("selected"));
+      document.querySelectorAll(".option")[idx].classList.add("selected");
+      answers[currentQ] = idx;
+
+      setTimeout(() => {
+        currentQ++;
+        if (currentQ < QUESTIONS.length) {
+          renderQuestion();
+        } else {
+          showResult();
+        }
+      }, 250);
+    }
+
+    // شاشة النتيجة
+    function showResult() {
+      $("progress").style.width = "100%";
+      $("result-title").textContent = `تحديك جاهز يا ${userName}! 🎉`;
+      $("result-msg").textContent = "دلوقتي ابعت الرابط ده لأصحابك، وأول ما يجاوبوا هتشوف مين فيهم عارفك أكتر.";
+
+      // رابط مؤقت (هيتولد من Firebase لاحقًا)
+      const fakeId = Math.random().toString(36).substring(2, 8);
+      const link = `https://velalight.github.io/quiz/?challenge=${fakeId}`;
+      $("share-link").textContent = link;
+
+      showScreen("result");
+    }
+
+    // نسخ الرابط
+    $("btn-copy").addEventListener("click", async () => {
+      const link = $("share-link").textContent;
+      try {
+        await navigator.clipboard.writeText(link);
+        $("btn-copy").textContent = "✓ اتنسخ!";
+        setTimeout(() => { $("btn-copy").textContent = "انسخ الرابط"; }, 2000);
+      } catch {
+        alert("انسخ الرابط يدويًا: " + link);
+      }
+    });
+
+    // إعادة البدء
+    $("btn-restart").addEventListener("click", () => {
+      nameInput.value = "";
+      startBtn.disabled = true;
+      showScreen("start");
+    });
+  </script>
 </body>
 </html>
