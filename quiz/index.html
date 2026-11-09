@@ -8,7 +8,7 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Segoe UI',Tahoma,sans-serif;background:radial-gradient(ellipse at top,#1a0f2e,#0d0618 60%,#000);color:#fff;min-height:100vh;display:flex;justify-content:center;padding:16px;overflow-x:hidden}
 #app{max-width:480px;width:100%;margin:auto;position:relative}
-.screen{display:none;animation:fade .5s ease}
+.screen{display:none;animation:fade .5s ease;cursor:pointer}
 .screen.active{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes glow{0%,100%{box-shadow:0 0 20px rgba(255,209,102,.3)}50%{box-shadow:0 0 35px rgba(255,209,102,.6)}}
@@ -34,6 +34,9 @@ input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
 .insight-icon{font-size:3rem;margin-bottom:16px;animation:glow 2s infinite}
 .insight-text{font-size:1.1rem;line-height:1.8;color:#fff;font-style:italic;opacity:.95}
 .insight-tag{display:inline-block;margin-top:20px;padding:6px 16px;background:rgba(255,209,102,.2);border-radius:20px;font-size:.85rem;color:#ffd166}
+.auto-advance-bar{width:100%;height:3px;background:rgba(255,255,255,.1);border-radius:10px;margin-top:24px;overflow:hidden}
+.auto-advance-fill{height:100%;width:0%;background:linear-gradient(90deg,#ffd166,#ff6b9d);border-radius:10px;box-shadow:0 0 10px rgba(255,209,102,.6)}
+.auto-hint{text-align:center;opacity:.5;font-size:.78rem;margin-top:12px;color:#fff}
 .result-hero{background:linear-gradient(135deg,rgba(255,107,157,.2),rgba(255,209,102,.15));border:2px solid rgba(255,209,102,.5);border-radius:24px;padding:32px 20px;text-align:center;margin-bottom:20px;animation:glow 3s infinite}
 .result-hero .emoji{font-size:4rem;margin-bottom:12px}
 .result-hero .persona{font-size:1.8rem;color:#ffd166;font-weight:bold;margin-bottom:8px}
@@ -47,6 +50,8 @@ input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
 .menu-grid{display:grid;gap:14px;margin-top:20px}
 .menu-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;cursor:pointer;transition:.25s;display:flex;align-items:center;justify-content:space-between;text-align:right}
 .menu-item:hover{background:rgba(255,255,255,.1);transform:translateX(-3px);border-color:rgba(255,209,102,.4)}
+.menu-item.danger{background:linear-gradient(135deg,rgba(255,60,60,.12),rgba(255,107,157,.08));border:1px solid rgba(255,60,60,.35);animation:glow 3s infinite}
+.menu-item.danger:hover{background:linear-gradient(135deg,rgba(255,60,60,.2),rgba(255,107,157,.15));border-color:rgba(255,60,60,.6)}
 .menu-item .mi-left{display:flex;align-items:center;gap:14px;flex:1}
 .menu-item .mi-icon{font-size:1.8rem}
 .menu-item .mi-title{font-weight:bold;margin-bottom:4px}
@@ -65,7 +70,7 @@ input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
 .dq-opt .pct{color:#ffd166;font-weight:bold;font-size:.9rem;min-width:40px}
 .back-btn{background:transparent;border:none;color:#fff;opacity:.7;padding:8px 0;text-align:right;font-size:.9rem;width:auto;cursor:pointer;margin-bottom:16px;box-shadow:none}
 .back-btn:hover{opacity:1;transform:none}
-.copy-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:20px;z-index:1000;animation:fade .3s}
+.copy-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:20px;z-index:1000;animation:fade .3s;cursor:default}
 .copy-modal-inner{background:#1a0f2e;border:2px solid #ffd166;border-radius:20px;padding:24px;max-width:400px;width:100%}
 .copy-modal textarea{width:100%;height:100px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:12px;color:#fff;font-family:monospace;font-size:.85rem;direction:ltr;text-align:left;margin-bottom:12px;resize:none}
 .scent-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
@@ -73,6 +78,14 @@ input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
 .scent-card:hover{background:rgba(255,209,102,.15);border-color:rgba(255,209,102,.5);transform:translateY(-2px)}
 .scent-card .emoji{font-size:1.8rem;margin-bottom:6px}
 .scent-card .name{font-weight:bold;font-size:.8rem;line-height:1.3}
+.danger-hero{background:linear-gradient(135deg,rgba(255,60,60,.2),rgba(100,0,50,.15));border:2px solid rgba(255,60,60,.5);border-radius:24px;padding:32px 20px;text-align:center;margin-bottom:20px;animation:glowDanger 2s infinite}
+@keyframes glowDanger{0%,100%{box-shadow:0 0 20px rgba(255,60,60,.4)}50%{box-shadow:0 0 40px rgba(255,60,60,.7)}}
+.danger-hero .emoji{font-size:3.5rem;margin-bottom:12px}
+.danger-hero .persona{font-size:1.7rem;color:#ff6b6b;font-weight:bold;margin-bottom:12px}
+.danger-hero .desc{font-size:.95rem;line-height:1.9;opacity:.92;text-align:right;margin-bottom:20px}
+.danger-hero .reflect{background:rgba(255,255,255,.06);border-right:3px solid #ff6b6b;padding:16px;border-radius:8px;margin-top:16px;text-align:right;font-style:italic;font-size:.92rem;line-height:1.7}
+.danger-hero .reflect-label{color:#ff6b6b;font-weight:bold;font-style:normal;margin-bottom:8px;display:block;font-size:.85rem}
+.warning-badge{display:inline-block;background:rgba(255,60,60,.2);border:1px solid rgba(255,60,60,.5);color:#ff6b6b;padding:4px 14px;border-radius:20px;font-size:.75rem;font-weight:bold;margin-bottom:16px;letter-spacing:1px}
 </style>
 </head>
 <body>
@@ -80,7 +93,7 @@ input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
 
 <script>
 // ================================================================
-// 🧴 العطور الـ 23 من فيلا لايت
+// 🧴 العطور الـ 23
 // ================================================================
 const PERFUMES = {
   vanilla:        { ar:"فانيلا", en:"Vanilla", emoji:"🍦" },
@@ -108,7 +121,6 @@ const PERFUMES = {
   sandalwood:     { ar:"عود خشب صندل", en:"Sandalwood Oud", emoji:"🪔" }
 };
 
-// ربط كل عطر بشخصية عطرية
 const PERFUME_TO_PERSONA = {
   vanilla: "الدافئ", cinnamon: "الدافئ", caramel: "الدافئ", chocolate: "الدافئ",
   lavender: "الحكيم", mocha: "الحكيم", coffee: "الحكيم",
@@ -123,160 +135,202 @@ const PERFUME_TO_PERSONA = {
 };
 
 // ================================================================
-// 🎭 الشخصيات العطرية (8)
+// 🎭 الشخصيات العطرية
 // ================================================================
 const ARCHETYPES = {
-  "الحالم": {
-    emoji: "🌙", primary: "jasmine",
-    alts: ["jasmine_sambac", "tulip"],
-    desc: "بتعيش جواك أكتر من برا. ذكرياتك أغلى من أي حاجة، وبتدور على إحساس فقدته. عالمك الداخلي أوسع من اللي الناس شايفينه.",
-    hidden: "قوتك في هدوئك مش في صوتك"
-  },
-  "الدافئ": {
-    emoji: "🔥", primary: "vanilla",
-    alts: ["caramel", "cinnamon"],
-    desc: "الناس بتحس بالأمان حواليك. إنت الحضن اللي الكل بيرجعله، وبتدي من غير ما تحسب. قلبك أكبر من اللي بتسمح لحد يشوفه.",
-    hidden: "إنت اللي بتحتاج أمان أكتر مما بتدي"
-  },
-  "الجسور": {
-    emoji: "⚡", primary: "vanilla_oud",
-    alts: ["sandalwood", "amber"],
-    desc: "واثق، بتاخد قرارات صعبة، ومش بتخاف تواجه. قوتك مش في صوتك، في ثباتك. بتحمل أكتر من اللي بيبان عليك.",
-    hidden: "خوفك من الضعف مش من الخطر"
-  },
-  "الغامض": {
-    emoji: "🌫️", primary: "amber",
-    alts: ["sandalwood", "mocha"],
-    desc: "عميق، مش سهل تفهمك. بتخبي مش لأنك مش واثق، لأنك بتحمي اللي جواك. الناس بتقرب منك بالوقت، مش بالكلام.",
-    hidden: "بتخبي عشان بتحمي، مش عشان مش واثق"
-  },
-  "الاجتماعي": {
-    emoji: "✨", primary: "caribbean",
-    alts: ["pineapple", "strawberry"],
-    desc: "طاقة وضحك ولمة. بتجمع الناس حواليك وبتخلي أي مكان أحلى. بتحب الناس وبتحب تحس إنك محبوب.",
-    hidden: "بتضحك كتير عشان متبكيش"
-  },
-  "الحكيم": {
-    emoji: "🕯️", primary: "coffee",
-    alts: ["hazelnut", "vanilla_coffee"],
-    desc: "هادي، بتفكر قبل ما تتكلم. حكمتك جاية من وجع مش من سن. بتشوف اللي الناس مش شايفينه، وبتفضل تسمع أكتر ما تتكلم.",
-    hidden: "عندك حكمة من وجع مش من سن"
-  },
-  "الرومانسي": {
-    emoji: "🌹", primary: "egyptian_rose",
-    alts: ["bouquet", "tulip"],
-    desc: "بتحب بعمق وبتتأثر بسرعة. بتدي أكتر مما بتاخد وبتقول مش مهم. بتفضل الوجع على الوهم، وبتحلم بحب يستاهل.",
-    hidden: "بتدي أكتر مما بتاخد وبتقول مش مهم"
-  },
-  "المتحمس": {
-    emoji: "☀️", primary: "pineapple",
-    alts: ["caribbean", "strawberry"],
-    desc: "بتبدأ كل حاجة بحماس. عندك طاقة محدش يقدر يوقفها، وبتحب تجرب كل جديد. أصعب حاجة عندك إنك تكمل.",
-    hidden: "أصعب حاجة عندك هي إنك تكمل"
-  }
+  "الحالم": { emoji: "🌙", primary: "jasmine", alts: ["jasmine_sambac","tulip"], desc: "بتعيش جواك أكتر من برا. ذكرياتك أغلى من أي حاجة، وبتدور على إحساس فقدته. عالمك الداخلي أوسع من اللي الناس شايفينه.", hidden: "قوتك في هدوئك مش في صوتك" },
+  "الدافئ": { emoji: "🔥", primary: "vanilla", alts: ["caramel","cinnamon"], desc: "الناس بتحس بالأمان حواليك. إنت الحضن اللي الكل بيرجعله، وبتدي من غير ما تحسب. قلبك أكبر من اللي بتسمح لحد يشوفه.", hidden: "إنت اللي بتحتاج أمان أكتر مما بتدي" },
+  "الجسور": { emoji: "⚡", primary: "vanilla_oud", alts: ["sandalwood","amber"], desc: "واثق، بتاخد قرارات صعبة، ومش بتخاف تواجه. قوتك مش في صوتك، في ثباتك. بتحمل أكتر من اللي بيبان عليك.", hidden: "خوفك من الضعف مش من الخطر" },
+  "الغامض": { emoji: "🌫️", primary: "amber", alts: ["sandalwood","mocha"], desc: "عميق، مش سهل تفهمك. بتخبي مش لأنك مش واثق، لأنك بتحمي اللي جواك. الناس بتقرب منك بالوقت، مش بالكلام.", hidden: "بتخبي عشان بتحمي، مش عشان مش واثق" },
+  "الاجتماعي": { emoji: "✨", primary: "caribbean", alts: ["pineapple","strawberry"], desc: "طاقة وضحك ولمة. بتجمع الناس حواليك وبتخلي أي مكان أحلى. بتحب الناس وبتحب تحس إنك محبوب.", hidden: "بتضحك كتير عشان متبكيش" },
+  "الحكيم": { emoji: "🕯️", primary: "coffee", alts: ["hazelnut","vanilla_coffee"], desc: "هادي، بتفكر قبل ما تتكلم. حكمتك جاية من وجع مش من سن. بتشوف اللي الناس مش شايفينه، وبتفضل تسمع أكتر ما تتكلم.", hidden: "عندك حكمة من وجع مش من سن" },
+  "الرومانسي": { emoji: "🌹", primary: "egyptian_rose", alts: ["bouquet","tulip"], desc: "بتحب بعمق وبتتأثر بسرعة. بتدي أكتر مما بتاخد وبتقول مش مهم. بتفضل الوجع على الوهم، وبتحلم بحب يستاهل.", hidden: "بتدي أكتر مما بتاخد وبتقول مش مهم" },
+  "المتحمس": { emoji: "☀️", primary: "pineapple", alts: ["caribbean","strawberry"], desc: "بتبدأ كل حاجة بحماس. عندك طاقة محدش يقدر يوقفها، وبتحب تجرب كل جديد. أصعب حاجة عندك إنك تكمل.", hidden: "أصعب حاجة عندك هي إنك تكمل" }
 };
 
 // ================================================================
-// 🧠 10 أسئلة نفسية عميقة
+// 🧠 10 أسئلة نفسية عميقة (للتحدي العطري)
 // ================================================================
 const DEEP_QUESTIONS = [
-  {
-    q: "لو هتختار ذكرى واحدة تعيشها تاني كل يوم، هتكون إيه؟",
-    opts: [
-      { t: "أول مرة حسيت إني محبوب", insight: "بتدور على الإحساس اللي فقدته، مش الذكرى نفسها. الحب عنده معنى أكبر من اللي بتعترف بيه.", persona: "الرومانسي" },
-      { t: "ليلة ضحكنا لآخر الليل", insight: "بتشتاق للناس اللي كانوا معاك أكتر من اللحظة. علاقاتك هي اللي بتعرفك.", persona: "الاجتماعي" },
-      { t: "لحظة إنجاز كبير", insight: "قيمتك مرتبطة بإثبات نفسك. بتخاف تكون عادي، فبتدور على التميز.", persona: "الجسور" },
-      { t: "ذكرى من طفولتك", insight: "بتدور على براءة فقدتها. ماضيك هو البوصلة اللي بتوجه حاضرك.", persona: "الحالم" }
-    ]
-  },
-  {
-    q: "إيه الحاجة اللي بتخاف إن الناس تعرفها عنك؟",
-    opts: [
-      { t: "إني محتاج حد", insight: "قوتك بتخبي ضعفك. بتفضل تتعب لوحدك على إنك تطلب.", persona: "الجسور" },
-      { t: "إني خايف", insight: "بتخبي خوفك ورا هدوء مصطنع. اللي جواك عاصفة محدش شايفها.", persona: "الغامض" },
-      { t: "إني حساس أكتر من اللي ببينه", insight: "بتعمل درع من البرود عشان محدش يوصل لقلبك بسهولة.", persona: "الغامض" },
-      { t: "إني مش عارف أنا مين", insight: "بتدور على هويتك في كل حاجة. البحث ده هو رحلتك الحقيقية.", persona: "الحالم" }
-    ]
-  },
-  {
-    q: "لو طفلك اللي جواك يقدر يتكلم دلوقتي، هيقولك إيه؟",
-    opts: [
-      { t: "خدني نلعب", insight: "بتشتاق للوقت اللي مكنش فيه مسؤوليات. الحياة بقت أثقل من اللي كنت متوقع.", persona: "المتحمس" },
-      { t: "حسّسني بالأمان", insight: "بتحتاج حد يحتويك مش بس يفهمك. الأمان الحقيقي مش قوة، هو إنك تسيب نفسك.", persona: "الدافئ" },
-      { t: "سمعني من غير ما تحكم", insight: "بتدور على حد بيقبلك زي ما إنت. الإحساس بالرفض وجع قديم لسه بيمسك فيك.", persona: "الرومانسي" },
-      { t: "إنت نسيتني", insight: "بتخاف إنك خسرت جزء من نفسك. كل أسئلة الحياة الكبيرة بترجعلك لطفولتك.", persona: "الحالم" }
-    ]
-  },
-  {
-    q: "إيه اللحظة اللي غيرتك للأبد؟",
-    opts: [
-      { t: "لحظة فقدت فيها حد", insight: "الحزن علمك إن الحب مش مضمون. بقيت حذر أكتر مما لازم.", persona: "الغامض" },
-      { t: "لحظة فشل كبير", insight: "الفشل بقى دافعك مش خوفك. بتقوم أقوى كل مرة، بس بتنسى ترتاح.", persona: "الجسور" },
-      { t: "لحظة حب أول مرة", insight: "بتدور على نفس الإحساس تاني. أول حب بيحدد إنت بتدور على إيه طول عمرك.", persona: "الرومانسي" },
-      { t: "لحظة قررت تبدأ من جديد", insight: "إنت شخص بيعيد بناء نفسه. التغيير عندك مش حدث، هو أسلوب حياة.", persona: "المتحمس" }
-    ]
-  },
-  {
-    q: "بابين: واحد فيه حياة مضمونة بس مملة، والتاني فيه حلم ومخاطرة. هتختار إيه؟",
-    opts: [
-      { t: "المضمون، أنا بحب الأمان", insight: "الأمان أغلى عندك من الأحلام. بس خد بالك: الأمان اللي مش متبادل مع حريتك، هو حبس.", persona: "الحكيم" },
-      { t: "المخاطرة، الحياة من غيرها ملهاش طعم", insight: "الحياة بدون مخاطرة ملهاش معنى عندك. بتفضل تندم على اللي عملته مش اللي ماعملتوش.", persona: "المتحمس" },
-      { t: "المضمون، بس هفضل أفكر في التاني", insight: "بتعيش في اللي كان ممكن يكون. الأسوأ من الفشل هو الندم على اللي ماجربتوش.", persona: "الحالم" },
-      { t: "التاني، بس هاخد خطوة خطوة", insight: "بتوازن بين الحكمة والجرأة. مش خايف تخاطر، بس خايف تخسر اللي وصلتله.", persona: "الجسور" }
-    ]
-  },
-  {
-    q: "إيه اللي بيخليك تحس إنك حي؟",
-    opts: [
-      { t: "لحظة ضحك مع ناس بحبهم", insight: "إنت بتعيش من خلال الناس. الوحدة بالنسبة لك مش وحدة، هي موت صغير.", persona: "الاجتماعي" },
-      { t: "لحظة تأمل لوحدك", insight: "عمقك نابع من وحدتك. بتلاقي نفسك لما تبعد عن الضوضاء.", persona: "الغامض" },
-      { t: "إني أعمل حاجة جديدة", insight: "بتدور على نفسك في التجربة. الروتين بيميتك من جواك.", persona: "المتحمس" },
-      { t: "إني أساعد حد", insight: "قيمتك من عطائك. لكن خد بالك: مش كل مساعدة محتاجينها، بعض الناس محتاجين بس إنك تكون موجود.", persona: "الدافئ" }
-    ]
-  },
-  {
-    q: "لو هتكتب رسالة لنسخة منك بعد 10 سنين، هتقولها إيه؟",
-    opts: [
-      { t: "إنت قدرت", insight: "بتدور على إثبات إنك كفاية. أصعب سؤال عندك: كفاية لمين؟", persona: "الجسور" },
-      { t: "إنت لسه زي ما إنت", insight: "بتخاف التغيير يفقدك نفسك. الحقيقة إن اللي بيحافظ على نفسه هو اللي بيعرف يتطور.", persona: "الحكيم" },
-      { t: "إنت سعيد؟", insight: "سعادتك هي مقياس نجاحك. بس سؤال: هل السعادة هدف، ولا نتيجة؟", persona: "الحالم" },
-      { t: "إنت محبوب", insight: "الحب هو اللي بيديك معنى. بدون حب، كل نجاح شكله فاضي.", persona: "الرومانسي" }
-    ]
-  },
-  {
-    q: "إيه أكتر حاجة بتخاف تخسرها؟",
-    opts: [
-      { t: "الناس اللي بحبهم", insight: "علاقاتك هي أساس وجودك. الخوف من الفقد بيمنعك أحيانًا تعيش اللحظة.", persona: "الدافئ" },
-      { t: "حريتي", insight: "القيود بتخنقك حتى لو كانت حب. بتخاف الارتباط يفقدك نفسك.", persona: "المتحمس" },
-      { t: "ذكرياتي", insight: "ماضيك هو اللي بيعرفك. لكن اللي بيعيش في الماضي، بيفوته الحاضر.", persona: "الحالم" },
-      { t: "إحساسي إني فاهم نفسي", insight: "بتخاف تفقد السيطرة على نفسك. اللايقين أرعب عندك من الوجع نفسه.", persona: "الحكيم" }
-    ]
-  },
-  {
-    q: "إيه اللي بيخليك تثق في حد؟ وإيه اللي بيكسر الثقة على طول؟",
-    opts: [
-      { t: "الوفاء بالوعد / الكذب", insight: "الثقة عندك فعل مش كلام. الوعود عندك عقود، مش مجاملة.", persona: "الجسور" },
-      { t: "الصدق حتى لو موجع / التضليل", insight: "بتفضل الوجع على الوهم. الخيانة الصامتة أصعب عندك من الغضب الواضح.", persona: "الغامض" },
-      { t: "الاستماع / الحكم", insight: "بتدور على حد يشوفك مش يقيّمك. الإحساس بالحكم بيسد ودنك.", persona: "الرومانسي" },
-      { t: "الوقت / الاستعجال", insight: "الثقة عندك بتبنيها بالصبر. المستعجل في نظرك مش جدير.", persona: "الحكيم" }
-    ]
-  },
-  {
-    q: "إيه الحاجة اللي نفسك تعملها ومش قادر؟",
-    opts: [
-      { t: "أسامح حد", insight: "شايل وجع أكتر من اللي بتعترف بيه. المسامحة عندك مش ضعف، هي تحرر.", persona: "الدافئ" },
-      { t: "أحب تاني", insight: "خوفك من الحب أكبر من شوقك ليه. الوجع القديم بقى أأمن من المجهول.", persona: "الغامض" },
-      { t: "أسيب الماضي", insight: "الماضي بيمسك فيك. كل مرة بتحاول تمشي، بيرجعك خطوة.", persona: "الحالم" },
-      { t: "أبدأ من جديد", insight: "بتخاف تبدأ من غير ضمانات. البداية بتحتاج إيمان، مش خطة.", persona: "الحكيم" }
-    ]
-  }
+  { q: "لو هتختار ذكرى واحدة تعيشها تاني كل يوم، هتكون إيه؟", opts: [
+    { t: "أول مرة حسيت إني محبوب", insight: "بتدور على الإحساس اللي فقدته، مش الذكرى نفسها. الحب عنده معنى أكبر من اللي بتعترف بيه.", persona: "الرومانسي" },
+    { t: "ليلة ضحكنا لآخر الليل", insight: "بتشتاق للناس اللي كانوا معاك أكتر من اللحظة. علاقاتك هي اللي بتعرفك.", persona: "الاجتماعي" },
+    { t: "لحظة إنجاز كبير", insight: "قيمتك مرتبطة بإثبات نفسك. بتخاف تكون عادي، فبتدور على التميز.", persona: "الجسور" },
+    { t: "ذكرى من طفولتك", insight: "بتدور على براءة فقدتها. ماضيك هو البوصلة اللي بتوجه حاضرك.", persona: "الحالم" }
+  ]},
+  { q: "إيه الحاجة اللي بتخاف إن الناس تعرفها عنك؟", opts: [
+    { t: "إني محتاج حد", insight: "قوتك بتخبي ضعفك. بتفضل تتعب لوحدك على إنك تطلب.", persona: "الجسور" },
+    { t: "إني خايف", insight: "بتخبي خوفك ورا هدوء مصطنع. اللي جواك عاصفة محدش شايفها.", persona: "الغامض" },
+    { t: "إني حساس أكتر من اللي ببينه", insight: "بتعمل درع من البرود عشان محدش يوصل لقلبك بسهولة.", persona: "الغامض" },
+    { t: "إني مش عارف أنا مين", insight: "بتدور على هويتك في كل حاجة. البحث ده هو رحلتك الحقيقية.", persona: "الحالم" }
+  ]},
+  { q: "لو طفلك اللي جواك يقدر يتكلم دلوقتي، هيقولك إيه؟", opts: [
+    { t: "خدني نلعب", insight: "بتشتاق للوقت اللي مكنش فيه مسؤوليات. الحياة بقت أثقل من اللي كنت متوقع.", persona: "المتحمس" },
+    { t: "حسّسني بالأمان", insight: "بتحتاج حد يحتويك مش بس يفهمك. الأمان الحقيقي مش قوة، هو إنك تسيب نفسك.", persona: "الدافئ" },
+    { t: "سمعني من غير ما تحكم", insight: "بتدور على حد بيقبلك زي ما إنت. الإحساس بالرفض وجع قديم لسه بيمسك فيك.", persona: "الرومانسي" },
+    { t: "إنت نسيتني", insight: "بتخاف إنك خسرت جزء من نفسك. كل أسئلة الحياة الكبيرة بترجعلك لطفولتك.", persona: "الحالم" }
+  ]},
+  { q: "إيه اللحظة اللي غيرتك للأبد؟", opts: [
+    { t: "لحظة فقدت فيها حد", insight: "الحزن علمك إن الحب مش مضمون. بقيت حذر أكتر مما لازم.", persona: "الغامض" },
+    { t: "لحظة فشل كبير", insight: "الفشل بقى دافعك مش خوفك. بتقوم أقوى كل مرة، بس بتنسى ترتاح.", persona: "الجسور" },
+    { t: "لحظة حب أول مرة", insight: "بتدور على نفس الإحساس تاني. أول حب بيحدد إنت بتدور على إيه طول عمرك.", persona: "الرومانسي" },
+    { t: "لحظة قررت تبدأ من جديد", insight: "إنت شخص بيعيد بناء نفسه. التغيير عندك مش حدث، هو أسلوب حياة.", persona: "المتحمس" }
+  ]},
+  { q: "بابين: واحد فيه حياة مضمونة بس مملة، والتاني فيه حلم ومخاطرة. هتختار إيه؟", opts: [
+    { t: "المضمون، أنا بحب الأمان", insight: "الأمان أغلى عندك من الأحلام. بس خد بالك: الأمان اللي مش متبادل مع حريتك، هو حبس.", persona: "الحكيم" },
+    { t: "المخاطرة، الحياة من غيرها ملهاش طعم", insight: "الحياة بدون مخاطرة ملهاش معنى عندك. بتفضل تندم على اللي عملته مش اللي ماعملتوش.", persona: "المتحمس" },
+    { t: "المضمون، بس هفضل أفكر في التاني", insight: "بتعيش في اللي كان ممكن يكون. الأسوأ من الفشل هو الندم على اللي ماجربتوش.", persona: "الحالم" },
+    { t: "التاني، بس هاخد خطوة خطوة", insight: "بتوازن بين الحكمة والجرأة. مش خايف تخاطر، بس خايف تخسر اللي وصلتله.", persona: "الجسور" }
+  ]},
+  { q: "إيه اللي بيخليك تحس إنك حي؟", opts: [
+    { t: "لحظة ضحك مع ناس بحبهم", insight: "إنت بتعيش من خلال الناس. الوحدة بالنسبة لك مش وحدة، هي موت صغير.", persona: "الاجتماعي" },
+    { t: "لحظة تأمل لوحدك", insight: "عمقك نابع من وحدتك. بتلاقي نفسك لما تبعد عن الضوضاء.", persona: "الغامض" },
+    { t: "إني أعمل حاجة جديدة", insight: "بتدور على نفسك في التجربة. الروتين بيميتك من جواك.", persona: "المتحمس" },
+    { t: "إني أساعد حد", insight: "قيمتك من عطائك. لكن خد بالك: مش كل مساعدة محتاجينها.", persona: "الدافئ" }
+  ]},
+  { q: "لو هتكتب رسالة لنسخة منك بعد 10 سنين، هتقولها إيه؟", opts: [
+    { t: "إنت قدرت", insight: "بتدور على إثبات إنك كفاية. أصعب سؤال عندك: كفاية لمين؟", persona: "الجسور" },
+    { t: "إنت لسه زي ما إنت", insight: "بتخاف التغيير يفقدك نفسك. الحقيقة إن اللي بيحافظ على نفسه هو اللي بيعرف يتطور.", persona: "الحكيم" },
+    { t: "إنت سعيد؟", insight: "سعادتك هي مقياس نجاحك. بس سؤال: هل السعادة هدف، ولا نتيجة؟", persona: "الحالم" },
+    { t: "إنت محبوب", insight: "الحب هو اللي بيديك معنى. بدون حب، كل نجاح شكله فاضي.", persona: "الرومانسي" }
+  ]},
+  { q: "إيه أكتر حاجة بتخاف تخسرها؟", opts: [
+    { t: "الناس اللي بحبهم", insight: "علاقاتك هي أساس وجودك. الخوف من الفقد بيمنعك أحيانًا تعيش اللحظة.", persona: "الدافئ" },
+    { t: "حريتي", insight: "القيود بتخنقك حتى لو كانت حب. بتخاف الارتباط يفقدك نفسك.", persona: "المتحمس" },
+    { t: "ذكرياتي", insight: "ماضيك هو اللي بيعرفك. لكن اللي بيعيش في الماضي، بيفوته الحاضر.", persona: "الحالم" },
+    { t: "إحساسي إني فاهم نفسي", insight: "بتخاف تفقد السيطرة على نفسك. اللايقين أرعب عندك من الوجع نفسه.", persona: "الحكيم" }
+  ]},
+  { q: "إيه اللي بيخليك تثق في حد؟", opts: [
+    { t: "الوفاء بالوعد / الكذب", insight: "الثقة عندك فعل مش كلام. الوعود عندك عقود، مش مجاملة.", persona: "الجسور" },
+    { t: "الصدق حتى لو موجع / التضليل", insight: "بتفضل الوجع على الوهم. الخيانة الصامتة أصعب عندك من الغضب الواضح.", persona: "الغامض" },
+    { t: "الاستماع / الحكم", insight: "بتدور على حد يشوفك مش يقيّمك. الإحساس بالحكم بيسد ودنك.", persona: "الرومانسي" },
+    { t: "الوقت / الاستعجال", insight: "الثقة عندك بتبنيها بالصبر. المستعجل في نظرك مش جدير.", persona: "الحكيم" }
+  ]},
+  { q: "إيه الحاجة اللي نفسك تعملها ومش قادر؟", opts: [
+    { t: "أسامح حد", insight: "شايل وجع أكتر من اللي بتعترف بيه. المسامحة عندك مش ضعف، هي تحرر.", persona: "الدافئ" },
+    { t: "أحب تاني", insight: "خوفك من الحب أكبر من شوقك ليه. الوجع القديم بقى أأمن من المجهول.", persona: "الغامض" },
+    { t: "أسيب الماضي", insight: "الماضي بيمسك فيك. كل مرة بتحاول تمشي، بيرجعك خطوة.", persona: "الحالم" },
+    { t: "أبدأ من جديد", insight: "بتخاف تبدأ من غير ضمانات. البداية بتحتاج إيمان، مش خطة.", persona: "الحكيم" }
+  ]}
 ];
 
-const GUESS_INTRO = {
-  partner: "شريكك",
-  friends: "صاحبك",
-  family: "حد من عيلتك"
+// ================================================================
+// 🧨 10 أسئلة نفسية خطرة — محدش بيسألها
+// ================================================================
+const DANGEROUS_QUESTIONS = [
+  { q: "لو عرفت إنك هتموت بعد سنة، هتعمل إيه في أول أسبوع؟", opts: [
+    { t: "أسيب كل حاجة وأسافر مش عارف أرجع", insight: "الهروب مش رحلة، هو خوف لابس شكل حرية. إنت مش هربان من الحياة، إنت هربان من نفسك.", theme: "الخوف" },
+    { t: "أقعد مع كل الناس اللي بحبهم", insight: "بتخاف تفقد اللي بتحبهم قبل ما تقولهم إنك بتحبهم. إنت شايل كلام كتير ومش قادر تقوله.", theme: "الحب" },
+    { t: "أعمل كل الحاجات اللي كنت خايف أعملها", insight: "بتستنى إذن من حد عشان تعيش. مفيش إذن جاي. اللي جواك بقاله سنين بيستنى.", theme: "الشجاعة" },
+    { t: "مش هعمل حاجة. هستسلم", insight: "الاستسلام أسهل من المواجهة، بس أوجع. إنت مش مستسلم، إنت تعبان من الحمل.", theme: "الوجع" }
+  ]},
+  { q: "إيه أكبر كذبة قلتها لنفسك وصدقتها؟", opts: [
+    { t: "إني بخير", insight: "الكذبة الأصعب هي اللي بنصدقها لوحدنا. إنت عارف إنك مش بخير، بس بتخاف تسأل نفسك.", theme: "الوجع" },
+    { t: "إني مش محتاج حد", insight: "أكبر خوف هو إنك محتاج ومش لاقي. الاستقلال اللي بتتباهى بيه، هو خوف متخفي.", theme: "الوحدة" },
+    { t: "إني نسيت", insight: "النسيان مش ذاكرة ضعيفة، هو قلب تعبان مش قادر يحمل. إنت فاكر كل حاجة.", theme: "الفقد" },
+    { t: "إني قوي", insight: "القوة اللي بتخبي الضعف، هي أضعف حاجة فيك. محدش بيبقى قوي 24 ساعة.", theme: "الوجع" }
+  ]},
+  { q: "لو حد قرأ أفكارك لمدة يوم، هيكتشف عنك إيه؟", opts: [
+    { t: "إني بحكم على الناس كتير", insight: "الحكم على الناس مراية لحكمك على نفسك. إنت قاسي على نفسك أكتر من أي حد.", theme: "الذنب" },
+    { t: "إني بحبهم أكتر من اللي ببينه", insight: "خوفك من الرفض بيخليك تخبي حبك. والناس فاكرة إنك بارد.", theme: "الحب" },
+    { t: "إني تعبان ومحدش شايف", insight: "أكبر وجع هو الوجع اللي محدش بيلاحظه. بتضحك عشان محدش يسأل.", theme: "الوجع" },
+    { t: "إني بستمثل شخصية مش أنا", insight: "إنت عايش دور بقاله سنين. المشكلة إنك نسيت إنت مين من كتر التمثيل.", theme: "الهوية" }
+  ]},
+  { q: "إيه الحاجة اللي بتخاف تقولها لنفسك في المراية؟", opts: [
+    { t: "إني وحيد حتى لو حواليا ناس", insight: "الوحدة الحقيقية مش غياب الناس، هي غياب حد يفهمك. إنت محاط بناس، بس جواك خالي.", theme: "الوحدة" },
+    { t: "إني خايف من بكرة", insight: "الخوف من المستقبل هو علامة إنك مش مرتاح في حاضرك. المستقبل مش هيبقى أحسن لو إنت زي ما إنت.", theme: "الخوف" },
+    { t: "إني مش عارف أنا مين", insight: "بتدور على نفسك في كل حاجة، بس بتخاف تلاقي الإجابة. لأنه لو لقيتها، لازم تتغير.", theme: "الهوية" },
+    { t: "إني محتاج مساعدة ومش عارف أطلبها", insight: "طلب المساعدة مش ضعف، هو أشجع حاجة ممكن تعملها. إنت محتاج تسمح لنفسك.", theme: "الوحدة" }
+  ]},
+  { q: "إيه الحلم اللي خليت حد تاني يقتله فيك؟", opts: [
+    { t: "حلم فني — كنت عايز ترسم/تغني/تكتب", insight: "الخوف من الحكم عليك قتل الإبداع اللي جواك. اللي جواك لسه عايش، بس مدفون.", theme: "الخذلان" },
+    { t: "حب حقيقي — خفت تعترف بيه", insight: "خوفك من الرفض خلاك تسيب حاجة ممكن تكون أحلى حاجة في حياتك.", theme: "الندم" },
+    { t: "سفر/تجربة — حد قالك مش هتقدر", insight: "كلام حد تاني بقى صوتك الداخلي. إنت بتصدق حد مش إنت.", theme: "الخذلان" },
+    { t: "ثقة في نفسي — حد كسرها", insight: "حد كسر مرايتك، وإنت مكبر الصورة المكسورة. وقت تتفرج على نفسك من جديد.", theme: "الهوية" }
+  ]},
+  { q: "إيه السؤال اللي بتخاف حد يسألك عنه؟", opts: [
+    { t: "ليه لسه لوحدك؟", insight: "الوحدة مش اختيار، هي نتيجة خوف. بتخاف تختار غلط، فمش بتختار خالص.", theme: "الخوف" },
+    { t: "إيه اللي وجعك؟", insight: "الوجع اللي محدش سأل عنه هو اللي بيكبر. إنت محتاج تحكيه لحد، أي حد.", theme: "الوجع" },
+    { t: "إنت مبسوط؟", insight: "السؤال ده بيفضحك. مش عارف تجاوب، لأنك مش متأكد لو تعرف يعني إيه سعادة أصلًا.", theme: "الهوية" },
+    { t: "إنت مين؟", insight: "بتخاف السؤال ده لأنك بقالك سنين بتلعب أدوار مش إنت.", theme: "الهوية" }
+  ]},
+  { q: "إيه الحاجة اللي بتحاول تقنع نفسك إنك مش محتاجها؟", opts: [
+    { t: "الحب", insight: "بتقول مش محتاج حب عشان متتوجعش. بس اللي بيقول كده، ده أكتر واحد محتاجه.", theme: "الحب" },
+    { t: "حد يفهمني", insight: "بتقول مش محتاج حد يفهمك، لأنك تعبت من محاولات فاشلة. بس الحقيقة: إنت محتاج أكتر من أي وقت.", theme: "الوحدة" },
+    { t: "إني أرتاح", insight: "بتقول مش محتاج ترتاح، عشان خايف لو وقفت مش هتكمل. بس التعب مش شرف.", theme: "الوجع" },
+    { t: "إني أسامح", insight: "بتقول مش محتاج تسامح، عشان خايف تسامح وتتوجع تاني. بس اللي شايل الغضب، هو اللي بيتعب.", theme: "الذنب" }
+  ]},
+  { q: "لو حياتك كانت فيلم، إيه اسمه؟", opts: [
+    { t: "الرحلة الطويلة", insight: "إنت في نص الرحلة، وبتحس إنها طويلة. بس الطول ده مش عيب، هو حكاية بتتبني.", theme: "الوجع" },
+    { t: "التمثيلية", insight: "بتحس إنك بتلعب دور في حياة ناس تانية. لكنك نسيت إنك البطل في حياتك.", theme: "الهوية" },
+    { t: "الفصل الأخير", insight: "بتحس إن حاجة هتخلص. بس الفصل الأخير مش نهاية، هو بداية لفصل جديد.", theme: "الخوف" },
+    { t: "بدون عنوان", insight: "بتخاف تحدد إنت مين، عشان متتحبسش في تعريف. لكن اللايقين مرهق.", theme: "الهوية" }
+  ]},
+  { q: "إيه الحاجة اللي نفسك تعملها بس خايف إنك تنجح فيها؟", opts: [
+    { t: "أحب من جديد", insight: "خوفك من النجاح في الحب أكبر من خوفك من الفشل. لأنك عارف لو نجحت، مش هتقدر تهرب تاني.", theme: "الحب" },
+    { t: "أعمل حاجة كبيرة في شغلي", insight: "النجاح بيلزمك تكون قد اللي إنت بقيت عليه. والخوف مش من النجاح، من التغيير.", theme: "الخوف" },
+    { t: "أسامح نفسي", insight: "أصعب حاجة هي إنك تسامح نفسك. لأنك حاطط نفسك في محكمة دخلها محدش غيرك.", theme: "الذنب" },
+    { t: "أكون سعيد", insight: "السعادة بتحس إنها مش من حقك. إنت مستني حد يديك إذن تكون مبسوط. مفيش إذن جاي.", theme: "الوجع" }
+  ]}
+];
+
+// ================================================================
+// 🎭 تحليل الأسئلة الخطرة — أنواع نفسية
+// ================================================================
+const DANGEROUS_THEMES = {
+  "الخوف": {
+    emoji: "🌑", title: "الهارب",
+    desc: "بتخاف من حاجات كتير. مش عشان جبان، عشان تعبان. الخوف بقى جزء منك، ومش هتقدر تعيش لو مش هتواجه. الخوف مش عدو، هو علامة إن حاجة محتاجة تتظبط جواك. مش هتقدر تهرب منه، لأن اللي بتهرب منه هو نفسك.",
+    question: "لو خفت مرة واحدة بس... كنت هتعمل إيه؟"
+  },
+  "الحب": {
+    emoji: "💔", title: "المشتاق",
+    desc: "بتحب بعمق، ولدرجة إنك بتخاف. الحب عندك مش رفاهية، ده أساس وجودك. بتحب الناس اللي حواليك بجد، وبتحس بيهم، وبتحمل أكتر من نصيبك عشانهم. بس السؤال اللي محدش بيسأله: بتحب نفسك بنفس العمق؟ لأن الحب اللي مش بيبدأ من جواك، مش هيكمل.",
+    question: "إمتى آخر مرة قلت لحد إنك بتحبه وكنت متأكد من كلامك؟"
+  },
+  "الوحدة": {
+    emoji: "🌫️", title: "الوحيد وسط الناس",
+    desc: "إنت مش لوحدك، بس حاسس بالوحدة. دي أوحش حاجة — تكون حاطط ناس حواليك ومش لاقي حد فيهم. الوحدة دي مش غياب الناس، هي غياب اللي يشوفك. اللي يسألك مش بس كلام، اللي يحس بيك من غير ما تتكلم.",
+    question: "لو حد في حياتك شافك بجد... كنت هتقول إيه؟"
+  },
+  "الفقد": {
+    emoji: "🕯️", title: "الحامل",
+    desc: "شايل فقد كبير، ولسه بتحمله. يمكن محدش شايفه، بس إنت حاسس بيه في كل حاجة. الحقيقة اللي بتحاول تهرب منها: الفقد مش بيروح. بس بيتحول من وجع لذكرى، وده بياخد وقت، ومش عيب.",
+    question: "إيه الحاجة اللي نفسك تقولها للشخص اللي فقدته؟"
+  },
+  "الندم": {
+    emoji: "⏳", title: "المعلّق",
+    desc: "عايش في الماضي، بتعيد وبتفكر وبتندم. الحقيقة اللي بتحاول تهرب منها: الماضي مش هيتغير. الحاضر هو اللي بيمشي. الندم حاجة كويسة لو خلّاك أحسن، وحاجة وحشة لو خلّاك عايش في اللي كان.",
+    question: "اللي بتندم عليه... إيه الدرس اللي علمك إياه؟"
+  },
+  "الهوية": {
+    emoji: "🎭", title: "الباحث",
+    desc: "بتدور على نفسك في كل حاجة. في الناس، في الشغل، في العلاقات، في العزلة. الحقيقة: إنت مش حاجة واحدة، إنت رحلة. وأنت في الرحلة دي، مش محتاج توصل، محتاج تعيش. اللي بتدور عليه مش في حتة، هو فيك.",
+    question: "لو محدش عارفك، إنت مين؟"
+  },
+  "الوجع": {
+    emoji: "🥀", title: "المخفي",
+    desc: "وجعك مش ظاهر، بس موجود في كل حاجة. بتضحك عشان محدش يسأل، وبتسكت عشان محدش يعرف. الوجع اللي شايله لوحده هو اللي بيكبر. مش لازم تفضل كده. مش ضعف إنك تحكي، الضعف إنك تفضل حابس.",
+    question: "لو حد سألك 'إنت كويس؟' وكان سؤال حقيقي... كنت هتقول إيه؟"
+  },
+  "الشجاعة": {
+    emoji: "🔥", title: "المحارب اللي مستني إذن",
+    desc: "جواك نار، بس بتستنى إذن عشان تشعلها. بتخاف إنك تكون قد نفسك، وده خوف كل العظماء. الحقيقة: مفيش حد هيديك إذن. الإذن اللي بتستناه، هو أنت.",
+    question: "لو عرفت إنك مش هتفشل، كنت هتعمل إيه؟"
+  },
+  "الذنب": {
+    emoji: "⚖️", title: "القاضي على نفسه",
+    desc: "إنت أقسى قاضي على نفسك. حاطط نفسك في محكمة، ومحدش فيها غيرك. بتصدر الأحكام، وبتنفذ العقاب. بس سؤال: إنت ليه بتحاسب نفسك على حاجات مش بتتحاسب عليها حد تاني؟ إنت إنسان، والإنسان بيغلط. المسامحة مش هدية لحد، هي هدية لنفسك.",
+    question: "إيه الحاجة اللي محتاج تسامح نفسك عليها؟"
+  },
+  "الخذلان": {
+    emoji: "💧", title: "اللي مكسور مرايته",
+    desc: "حد كسر مرايتك، وإنت مكبر الصورة المكسورة. بتشوف نفسك من خلال كلام حد تاني. الحقيقة: اللي قاله ده كلامه هو، مش حقيقتك إنت. وقت تتفرج على نفسك من جديد، من غير المرايا المكسورة.",
+    question: "لو كل اللي اتقالك عنك كان غلط... إنت مين؟"
+  }
 };
+
+const GUESS_INTRO = { partner: "شريكك", friends: "صاحبك", family: "حد من عيلتك" };
 
 const DAILY_POOL = [
   { q:"إيه أول حاجة بتروحلها لما تكون زهقان؟", o:["الموبايل","السرير","الأكل","الخروج"] },
@@ -305,54 +359,62 @@ function today(){return new Date().toISOString().slice(0,10)}
 function render(html){app.innerHTML=`<div class="screen active">${html}</div>`;window.scrollTo(0,0)}
 
 async function copyText(text){
-  try {
-    if(navigator.clipboard && window.isSecureContext){
-      await navigator.clipboard.writeText(text);
-      return true;
-    }
-  } catch(e){}
+  try { if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); return true; } } catch(e){}
   try {
     const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.left = '-9999px';
-    ta.style.top = '0';
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    const ok = document.execCommand('copy');
-    document.body.removeChild(ta);
-    return ok;
+    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px'; ta.style.top = '0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    const ok = document.execCommand('copy'); document.body.removeChild(ta); return ok;
   } catch(e){ return false; }
 }
 
 function showCopyModal(text){
   const div = document.createElement('div');
   div.className = 'copy-modal';
-  div.innerHTML = `
-    <div class="copy-modal-inner">
-      <h2 style="margin-bottom:12px">📋 انسخ الرابط</h2>
-      <p style="opacity:.7;font-size:.85rem;margin-bottom:12px">اضغط مطولاً أو Ctrl+A ثم Ctrl+C</p>
-      <textarea readonly>${esc(text)}</textarea>
-      <button onclick="this.closest('.copy-modal').remove()">تم</button>
-    </div>
-  `;
+  div.innerHTML = `<div class="copy-modal-inner"><h2 style="margin-bottom:12px">📋 انسخ الرابط</h2><p style="opacity:.7;font-size:.85rem;margin-bottom:12px">اضغط مطولاً أو Ctrl+A ثم Ctrl+C</p><textarea readonly>${esc(text)}</textarea><button onclick="this.closest('.copy-modal').remove()">تم</button></div>`;
   document.body.appendChild(div);
-  const ta = div.querySelector('textarea');
-  ta.focus();
-  ta.select();
+  const ta = div.querySelector('textarea'); ta.focus(); ta.select();
 }
 
 async function shareOrCopy(text){
   const ok = await copyText(text);
-  if(ok){
-    alert('✓ اتنسخ!');
-  } else if(navigator.share){
-    try { await navigator.share({text}); return; } catch(e){}
-    showCopyModal(text);
-  } else {
-    showCopyModal(text);
-  }
+  if(ok){ alert('✓ اتنسخ!'); }
+  else if(navigator.share){ try { await navigator.share({text}); return; } catch(e){} showCopyModal(text); }
+  else { showCopyModal(text); }
+}
+
+// ================================================================
+// ⏱️ آلة تحويل تلقائي (تستخدم في كل الأسئلة)
+// ================================================================
+function autoAdvance(callback, duration){
+  duration = duration || 4000;
+  let advanced = false;
+  const advance = () => {
+    if(advanced) return;
+    advanced = true;
+    clearInterval(timer);
+    const screen = app.querySelector('.screen');
+    if(screen) screen.removeEventListener('click', clickHandler);
+    callback();
+  };
+  
+  const clickHandler = function(e){
+    if(window.getSelection().toString()) return;
+    advance();
+  };
+  
+  const startTime = Date.now();
+  const timer = setInterval(() => {
+    if(advanced){ clearInterval(timer); return; }
+    const elapsed = Date.now() - startTime;
+    const pct = Math.min(100, (elapsed / duration) * 100);
+    const fill = document.getElementById('autoAdvanceFill');
+    if(fill) fill.style.width = pct + '%';
+    if(elapsed >= duration){ advance(); }
+  }, 50);
+  
+  const screen = app.querySelector('.screen');
+  if(screen) screen.addEventListener('click', clickHandler);
 }
 
 // ================================================================
@@ -362,19 +424,15 @@ function init(){
   const p = new URLSearchParams(location.search);
   if(p.get('c')) return showChallenge(dec(p.get('c')));
   if(p.get('r')) return showResultBack(dec(p.get('r')));
-  // دايمًا ابدأ بشاشة اختيار العطر — النتيجة المحفوظة هتظهر بس لو ضغط على "شخصيتك العطرية" من القائمة
   showHook();
 }
-  
+
 // ================================================================
-// 🎣 الخطاف — كل الـ 23 عطر
+// 🎣 الخطاف
 // ================================================================
 function showHook(){
   const scentList = Object.entries(PERFUMES).map(([key, p]) => ({
-    key,
-    emoji: p.emoji,
-    name: p.ar,
-    persona: PERFUME_TO_PERSONA[key] || "الحالم"
+    key, emoji: p.emoji, name: p.ar, persona: PERFUME_TO_PERSONA[key] || "الحالم"
   }));
   
   render(`
@@ -382,12 +440,7 @@ function showHook(){
     <h1>كل ريحة ليها حكاية</h1>
     <p class="sub">اختار الريحة اللي بتريحك... وهنقولك إنت مين من جواك</p>
     <div class="scent-grid">
-      ${scentList.map(s=>`
-        <div class="scent-card" onclick="pickHook('${s.persona}')">
-          <div class="emoji">${s.emoji}</div>
-          <div class="name">${s.name}</div>
-        </div>
-      `).join('')}
+      ${scentList.map(s=>`<div class="scent-card" onclick="event.stopPropagation();pickHook('${s.persona}')"><div class="emoji">${s.emoji}</div><div class="name">${s.name}</div></div>`).join('')}
     </div>
     <div class="powered">Powered by VelaLight</div>
   `);
@@ -399,7 +452,7 @@ function pickHook(persona){
     <h1>${a.emoji} إنت من الناس اللي...</h1>
     <p class="sub">${a.desc}</p>
     <p class="sub" style="color:#ffd166;font-weight:bold;font-size:1.05rem">بس ده مجرد بداية... 10 أسئلة عميقة هتغير طريقة شوفتك لنفسك</p>
-    <button onclick="startPersonality()">ادخل الرحلة 🌙</button>
+    <button onclick="event.stopPropagation();startPersonality()">ادخل الرحلة 🌙</button>
   `);
 }
 
@@ -409,7 +462,7 @@ function startPersonality(){
 }
 
 // ================================================================
-// 🧠 المرحلة 1: 10 أسئلة عميقة مع تحليل
+// 🧠 المرحلة 1: 10 أسئلة عميقة
 // ================================================================
 function renderDeepQ(){
   const p = store.get('progress');
@@ -419,7 +472,7 @@ function renderDeepQ(){
     <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
     <div class="qnum">سؤال ${p.idx+1} من ${DEEP_QUESTIONS.length}</div>
     <div class="qtext">${q.q}</div>
-    ${q.opts.map((o,i)=>`<button class="opt" onclick="answerDeep(${i})">${o.t}</button>`).join('')}
+    ${q.opts.map((o,i)=>`<button class="opt" onclick="event.stopPropagation();answerDeep(${i})">${o.t}</button>`).join('')}
   `);
 }
 
@@ -439,19 +492,17 @@ function showInsight(text, persona){
       <div class="insight-text">"${text}"</div>
       <div class="insight-tag">${a.emoji} ${persona}</div>
     </div>
-    <button class="sec" onclick="nextDeep()" style="margin-top:24px">التالي ←</button>
+    <div class="auto-advance-bar"><div class="auto-advance-fill" id="autoAdvanceFill"></div></div>
+    <p class="auto-hint">⏱ بيتحول تلقائي — أو دوس في أي مكان</p>
   `);
+  autoAdvance(nextDeep, 4000);
 }
 
 function nextDeep(){
   const p = store.get('progress');
   p.idx++;
-  if(p.idx >= DEEP_QUESTIONS.length){
-    finishDeep(p.answers);
-  } else {
-    store.set('progress',p);
-    renderDeepQ();
-  }
+  if(p.idx >= DEEP_QUESTIONS.length){ finishDeep(p.answers); }
+  else { store.set('progress',p); renderDeepQ(); }
 }
 
 function finishDeep(answers){
@@ -479,16 +530,105 @@ function showPersonalityResult(persona){
       <div class="desc">${a.desc}</div>
       <div class="hidden-trait">"${a.hidden}"</div>
     </div>
-    
     <div class="product-box">
       <div class="prod-name">🎁 عطورك المقترحة من فيلا لايت</div>
       <div class="prod-desc">عطرك الأساسي: <b>${main.ar}</b></div>
       <div class="prod-desc">كمان هيعجبوك: ${alt1.ar} · ${alt2.ar}</div>
-      <a href="https://velalight.github.io/products.html" class="prod-cta">زور متجر فيلا لايت ←</a>
+      <a href="https://velalight.github.io/products.html" class="prod-cta" onclick="event.stopPropagation()">زور متجر فيلا لايت ←</a>
     </div>
-    
-    <button onclick="shareOrCopy('${esc(shareText)}')">📤 شارك شخصيتك</button>
-    <button class="sec" onclick="showHome()">ادخل دوامة الريحة 🌊</button>
+    <button onclick="event.stopPropagation();shareOrCopy('${esc(shareText)}')">📤 شارك شخصيتك</button>
+    <button class="sec" onclick="event.stopPropagation();showHome()">ادخل دوامة الريحة 🌊</button>
+    <div class="powered">Powered by VelaLight</div>
+  `);
+}
+
+// ================================================================
+// 🧨 الأسئلة الخطرة — سكشن منفصل
+// ================================================================
+function showDangerousIntro(){
+  render(`
+    <button class="back-btn" onclick="event.stopPropagation();showHome()">← رجوع</button>
+    <div class="danger-hero">
+      <div class="emoji">🧨</div>
+      <h1 style="color:#ff6b6b">أسئلة نفسية خطرة</h1>
+      <p class="sub" style="opacity:.85">10 أسئلة محدش بيسألها. إجابات محدش عايز يسمعها.</p>
+      <p class="sub" style="opacity:.7;font-size:.9rem">تعال نعرف إنت مين لما محدش شايفك.</p>
+    </div>
+    <p class="sub" style="font-size:.85rem;text-align:center;opacity:.7">⚠️ الأسئلة دي هتلمس حتت مش بتحب تلمسها. لو مش جاهز، اطلع دلوقتي. لو جاهز، ادخل.</p>
+    <button onclick="event.stopPropagation();startDangerous()" style="background:linear-gradient(135deg,#ff3c3c,#c70039)">ادخل الجحيم 🔥</button>
+    <div class="powered">Powered by VelaLight</div>
+  `);
+}
+
+function startDangerous(){
+  store.set('dangerous',{idx:0,answers:[],themes:[]});
+  renderDangerousQ();
+}
+
+function renderDangerousQ(){
+  const p = store.get('dangerous');
+  const q = DANGEROUS_QUESTIONS[p.idx];
+  const pct = (p.idx/DANGEROUS_QUESTIONS.length)*100;
+  render(`
+    <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
+    <div class="qnum" style="color:#ff6b6b">🧨 سؤال ${p.idx+1} من ${DANGEROUS_QUESTIONS.length}</div>
+    <div class="qtext">${q.q}</div>
+    ${q.opts.map((o,i)=>`<button class="opt" onclick="event.stopPropagation();answerDangerous(${i})">${o.t}</button>`).join('')}
+  `);
+}
+
+function answerDangerous(i){
+  const p = store.get('dangerous');
+  const opt = DANGEROUS_QUESTIONS[p.idx].opts[i];
+  p.themes.push(opt.theme);
+  store.set('dangerous',p);
+  showDangerousInsight(opt.insight);
+}
+
+function showDangerousInsight(text){
+  render(`
+    <div class="insight" style="border-color:rgba(255,60,60,.5);background:linear-gradient(135deg,rgba(255,60,60,.15),rgba(100,0,50,.1))">
+      <div class="insight-icon">🔥</div>
+      <div class="insight-text">"${text}"</div>
+    </div>
+    <div class="auto-advance-bar"><div class="auto-advance-fill" id="autoAdvanceFill"></div></div>
+    <p class="auto-hint">⏱ بيتحول تلقائي — أو دوس في أي مكان</p>
+  `);
+  autoAdvance(nextDangerous, 4500);
+}
+
+function nextDangerous(){
+  const p = store.get('dangerous');
+  p.idx++;
+  if(p.idx >= DANGEROUS_QUESTIONS.length){ finishDangerous(p.themes); }
+  else { store.set('dangerous',p); renderDangerousQ(); }
+}
+
+function finishDangerous(themes){
+  const counts = {};
+  themes.forEach(t=>counts[t]=(counts[t]||0)+1);
+  const winner = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
+  store.set('dangerousResult',{theme:winner, counts, date:Date.now()});
+  store.del('dangerous');
+  showDangerousResult(winner);
+}
+
+function showDangerousResult(themeKey){
+  const t = DANGEROUS_THEMES[themeKey] || DANGEROUS_THEMES["الوجع"];
+  const shareText = `عملت اختبار "الأسئلة النفسية الخطرة" وطلع تحليلي:\n${t.emoji} ${t.title}\n\n${t.desc.substring(0,150)}...\n\nاعمل الاختبار إنت كمان:\n${location.origin}${location.pathname}`;
+  
+  render(`
+    <div class="danger-hero">
+      <div class="emoji">${t.emoji}</div>
+      <div class="persona">${t.title}</div>
+      <div class="desc">${t.desc}</div>
+      <div class="reflect">
+        <span class="reflect-label">🤔 سؤال يفكرك</span>
+        "${t.question}"
+      </div>
+    </div>
+    <button onclick="event.stopPropagation();shareOrCopy('${esc(shareText)}')">📤 شارك تحليلك</button>
+    <button class="sec" onclick="event.stopPropagation();showHome()">🏠 رجوع للرئيسية</button>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
@@ -498,44 +638,60 @@ function showPersonalityResult(persona){
 // ================================================================
 function showHome(){
   const persona = store.get('personality');
-  const a = ARCHETYPES[persona.type];
-  const main = PERFUMES[a.primary];
   const todayDone = store.get('dailyDate')===today();
   const s = store.get('streak') || {days:[],count:0};
   
-  render(`
-    <div style="text-align:center;margin-bottom:24px">
-      <div style="font-size:3rem">${a.emoji}</div>
-      <h2>${persona.type}</h2>
-      <p style="opacity:.7;font-size:.9rem">${main.emoji} ${main.ar}</p>
-      ${s.count>0?`<p style="color:#ffd166;margin-top:8px;font-size:.85rem">🔥 ${s.count} يوم متتالي</p>`:''}
-    </div>
-    
-    <div class="menu-grid">
-      <div class="menu-item" onclick="showPersonalityResult(store.get('personality'))">
-        <div class="mi-left"><span class="mi-icon">🧠</span><div><div class="mi-title">شخصيتك العطرية</div><div class="mi-sub">شوف نتيجتك وتحليلك</div></div></div>
+  let heroHtml = '';
+  if(persona){
+    const a = ARCHETYPES[persona.type];
+    const main = PERFUMES[a.primary];
+    heroHtml = `
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="font-size:3rem">${a.emoji}</div>
+        <h2>${persona.type}</h2>
+        <p style="opacity:.7;font-size:.9rem">${main.emoji} ${main.ar}</p>
+        ${s.count>0?`<p style="color:#ffd166;margin-top:8px;font-size:.85rem">🔥 ${s.count} يوم متتالي</p>`:''}
       </div>
-      <div class="menu-item" onclick="showPhaseSetup('partner')">
+    `;
+  } else {
+    heroHtml = `
+      <div style="text-align:center;margin-bottom:24px">
+        <h2>مرحبًا 👋</h2>
+        <p class="sub">اختار من الأسفل</p>
+      </div>
+    `;
+  }
+  
+  render(`
+    ${heroHtml}
+    <div class="menu-grid">
+      <div class="menu-item danger" onclick="event.stopPropagation();showDangerousIntro()">
+        <div class="mi-left"><span class="mi-icon">🧨</span><div><div class="mi-title">أسئلة نفسية خطرة</div><div class="mi-sub">10 أسئلة محدش بيجرؤ يسألها 🔥</div></div></div>
+      </div>
+      ${persona ? `
+      <div class="menu-item" onclick="event.stopPropagation();showPersonalityResult(store.get('personality'))">
+        <div class="mi-left"><span class="mi-icon">🧠</span><div><div class="mi-title">شخصيتك العطرية</div><div class="mi-sub">شوف نتيجتك وتحليلك</div></div></div>
+      </div>` : ''}
+      <div class="menu-item" onclick="event.stopPropagation();showPhaseSetup('partner')">
         <div class="mi-left"><span class="mi-icon">💑</span><div><div class="mi-title">توافق الشريك</div><div class="mi-sub">اختبر لو شريكك يعرفك بجد</div></div></div>
       </div>
-      <div class="menu-item" onclick="showPhaseSetup('friends')">
+      <div class="menu-item" onclick="event.stopPropagation();showPhaseSetup('friends')">
         <div class="mi-left"><span class="mi-icon">👥</span><div><div class="mi-title">أصحابك يعرفوك؟</div><div class="mi-sub">مين فيهم فاهمك أكتر</div></div></div>
       </div>
-      <div class="menu-item" onclick="showPhaseSetup('family')">
+      <div class="menu-item" onclick="event.stopPropagation();showPhaseSetup('family')">
         <div class="mi-left"><span class="mi-icon">👨‍👩‍👧</span><div><div class="mi-title">عالم العيلة</div><div class="mi-sub">أسئلة بين الأجيال</div></div></div>
       </div>
-      <div class="menu-item" onclick="showDaily()">
+      <div class="menu-item" onclick="event.stopPropagation();showDaily()">
         <div class="mi-left"><span class="mi-icon">🔥</span><div><div class="mi-title">سؤال اليوم</div><div class="mi-sub">${todayDone?'✓ جاوبت النهارده':'جاوب واحصل على Streak'}</div></div></div>
       </div>
     </div>
-    
-    <button class="sec" style="margin-top:20px" onclick="shareOrCopy('جرب ألعاب خطرة نفسية — اكتشف شخصيتك العطرية الحقيقية\\n${location.origin}${location.pathname}')">📤 ادعي أصحابك للعبة</button>
+    <button class="sec" style="margin-top:20px" onclick="event.stopPropagation();shareOrCopy('جرب ألعاب خطرة نفسية — اكتشف شخصيتك العطرية الحقيقية\\n${location.origin}${location.pathname}')">📤 ادعي أصحابك للعبة</button>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
 
 // ================================================================
-// 💑 المراحل 2-4
+// 💑 المراحل
 // ================================================================
 function showPhaseSetup(phase){
   const titles = {partner:'توافق الشريك 💑',friends:'أصحابك يعرفوك؟ 👥',family:'عالم العيلة 👨‍👩‍👧'};
@@ -545,11 +701,11 @@ function showPhaseSetup(phase){
     family:'اختبر عيلتك: هل هما فاهمينك ولا لسه بيشوفوك من برا؟'
   };
   render(`
-    <button class="back-btn" onclick="showHome()">← رجوع</button>
+    <button class="back-btn" onclick="event.stopPropagation();showHome()">← رجوع</button>
     <h1>${titles[phase]}</h1>
     <p class="sub">${subs[phase]}</p>
-    <input type="text" id="phase-name" placeholder="اسمك..." maxlength="20" value="${esc(store.get('name')||'')}">
-    <button onclick="startPhase('${phase}')">يلا نبدأ</button>
+    <input type="text" id="phase-name" placeholder="اسمك..." maxlength="20" value="${esc(store.get('name')||'')}" onclick="event.stopPropagation()">
+    <button onclick="event.stopPropagation();startPhase('${phase}')">يلا نبدأ</button>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
@@ -570,7 +726,7 @@ function renderPhaseQ(){
     <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
     <div class="qnum">سؤال ${p.idx+1} من ${DEEP_QUESTIONS.length}</div>
     <div class="qtext">${q.q}</div>
-    ${q.opts.map((o,i)=>`<button class="opt" onclick="answerPhase(${i})">${o.t}</button>`).join('')}
+    ${q.opts.map((o,i)=>`<button class="opt" onclick="event.stopPropagation();answerPhase(${i})">${o.t}</button>`).join('')}
   `);
 }
 
@@ -578,12 +734,8 @@ function answerPhase(i){
   const p = store.get('progress');
   p.answers.push(i);
   p.idx++;
-  if(p.idx >= DEEP_QUESTIONS.length){
-    finishPhase(p);
-  } else {
-    store.set('progress',p);
-    renderPhaseQ();
-  }
+  if(p.idx >= DEEP_QUESTIONS.length){ finishPhase(p); }
+  else { store.set('progress',p); renderPhaseQ(); }
 }
 
 function finishPhase(p){
@@ -591,13 +743,12 @@ function finishPhase(p){
   const encoded = enc(challenge);
   const url = `${location.origin}${location.pathname}?c=${encoded}`;
   const shareText = `🎯 تحدي نفسي من ${p.name}\n\nخمن إجاباتي على 10 أسئلة عميقة، وشوف نسبة فهمك ليا.\n\n${url}`;
-  
   render(`
     <h1>تحديك جاهز! 🎉</h1>
     <p class="sub">ابعت الرابط ده، وأول ما يجاوبوا هتشوف مين فيهم يعرفك بجد.</p>
     <div class="share-box">${esc(url)}</div>
-    <button onclick="shareOrCopy('${esc(shareText)}')">📤 انسخ الرابط</button>
-    <button class="sec" onclick="showHome()">رجوع للرئيسية</button>
+    <button onclick="event.stopPropagation();shareOrCopy('${esc(shareText)}')">📤 انسخ الرابط</button>
+    <button class="sec" onclick="event.stopPropagation();showHome()">رجوع للرئيسية</button>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
@@ -613,8 +764,8 @@ function showChallenge(challenge){
   render(`
     <h1>${esc(challenge.n)} عايز يعرف! 🎯</h1>
     <p class="sub">${phaseLabel} ${esc(challenge.n)} جاوب على 10 أسئلة نفسية عميقة. <b>خمّن إجاباته</b> — وشوف لو فاهمه بجد.</p>
-    <input type="text" id="guesser-name" placeholder="اسمك..." maxlength="20">
-    <button onclick="startGuess()">يلا نبدأ</button>
+    <input type="text" id="guesser-name" placeholder="اسمك..." maxlength="20" onclick="event.stopPropagation()">
+    <button onclick="event.stopPropagation();startGuess()">يلا نبدأ</button>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
@@ -635,18 +786,15 @@ function renderGuessQ(){
     <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
     <div class="qnum">سؤال ${CHALLENGE.gIdx+1} من 10 — بتخمن إجابات ${esc(CHALLENGE.n)}</div>
     <div class="qtext">${q.q}</div>
-    ${q.opts.map((o,i)=>`<button class="opt" onclick="guessAnswer(${i})">${o.t}</button>`).join('')}
+    ${q.opts.map((o,i)=>`<button class="opt" onclick="event.stopPropagation();guessAnswer(${i})">${o.t}</button>`).join('')}
   `);
 }
 
 function guessAnswer(i){
   CHALLENGE.guesses.push(i);
   CHALLENGE.gIdx++;
-  if(CHALLENGE.gIdx >= DEEP_QUESTIONS.length){
-    showGuessResult();
-  } else {
-    renderGuessQ();
-  }
+  if(CHALLENGE.gIdx >= DEEP_QUESTIONS.length){ showGuessResult(); }
+  else { renderGuessQ(); }
 }
 
 function showGuessResult(){
@@ -663,54 +811,48 @@ function showGuessResult(){
   const resultData = {p:CHALLENGE.p,on:CHALLENGE.n,gn:CHALLENGE.guesser,a:CHALLENGE.a,g:CHALLENGE.guesses,s:correct};
   const resultUrl = `${location.origin}${location.pathname}?r=${enc(resultData)}`;
   const shareText = `خمنت إجابات ${CHALLENGE.n} على 10 أسئلة نفسية عميقة\nالنتيجة: ${correct}/${total} (${pct}%)\n\n${resultUrl}`;
-  
   render(`
     <h1>النتيجة 🎯</h1>
     <div class="score-big">${correct}/${total}</div>
     <p class="msg" style="color:#ffd166;font-size:1.3rem;font-weight:bold">${pct}% فهم</p>
     <p class="msg">${msg}</p>
-    <button onclick="shareOrCopy('${esc(shareText)}')">📤 ابعت النتيجة لـ ${esc(CHALLENGE.n)}</button>
-    <button class="sec" onclick="location.href=location.pathname">🎮 العب إنت كمان</button>
+    <button onclick="event.stopPropagation();shareOrCopy('${esc(shareText)}')">📤 ابعت النتيجة لـ ${esc(CHALLENGE.n)}</button>
+    <button class="sec" onclick="event.stopPropagation();location.href=location.pathname">🎮 العب إنت كمان</button>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
 
-// ================================================================
-// 📊 استقبال النتيجة
-// ================================================================
 function showResultBack(data){
   const key = 'leader_'+data.p+'_'+data.on;
   const leaders = store.get(key) || [];
   leaders.push({name:data.gn, score:data.s, total:data.a.length, date:Date.now()});
   leaders.sort((a,b)=>b.score-a.score);
   store.set(key,leaders.slice(0,20));
-  
   const pct = Math.round((data.s/data.a.length)*100);
   render(`
     <h1>${esc(data.gn)} خمّن إجاباتك! 🎯</h1>
     <div class="score-big">${data.s}/${data.a.length}</div>
     <p class="msg" style="color:#ffd166;font-size:1.4rem;font-weight:bold">${pct}% فهم</p>
     <p class="msg">النتيجة اتحفظت في لوحة الشرف</p>
-    <button onclick="location.href=location.pathname">🏠 الرئيسية</button>
+    <button onclick="event.stopPropagation();location.href=location.pathname">🏠 الرئيسية</button>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
 
 // ================================================================
-// 🔥 سؤال اليوم + Streak
+// 🔥 سؤال اليوم
 // ================================================================
 function showDaily(){
   const todayDone = store.get('dailyDate')===today();
   if(todayDone) return showDailyResult();
-  
   const q = DAILY_POOL[new Date().getDate() % DAILY_POOL.length];
   render(`
-    <button class="back-btn" onclick="showHome()">← رجوع</button>
+    <button class="back-btn" onclick="event.stopPropagation();showHome()">← رجوع</button>
     <h1>🔥 سؤال اليوم</h1>
     <p class="sub">جاوب، وشوف نسبة الناس اللي اختارت زيك</p>
     <div class="daily-q">
       <div class="dq-text">${q.q}</div>
-      ${q.o.map((o,i)=>`<div class="dq-opt" onclick="answerDaily(${i})">${o}<span class="pct" id="pct-${i}"></span></div>`).join('')}
+      ${q.o.map((o,i)=>`<div class="dq-opt" onclick="event.stopPropagation();answerDaily(${i})">${o}<span class="pct" id="pct-${i}"></span></div>`).join('')}
     </div>
     <div class="powered">Powered by VelaLight</div>
   `);
@@ -726,7 +868,6 @@ function answerDaily(i){
     if(idx===i) el.style.color = '#ff6b9d';
   });
   store.set('dailyDate',today());
-  
   const s = store.get('streak') || {days:[],count:0};
   const t = today();
   if(!s.days.includes(t)){
@@ -735,16 +876,13 @@ function answerDaily(i){
     s.count = s.days.length;
     store.set('streak',s);
   }
-  
   setTimeout(()=>{
     render(`
       <h1>✓ تم!</h1>
       <p class="msg">شوفت إجاباتك. تعالى بكرة عشان سؤال جديد</p>
-      <div class="streak-box">
-        ${s.days.slice(-7).map(()=>`<div class="streak-day done">🔥</div>`).join('')}
-      </div>
+      <div class="streak-box">${s.days.slice(-7).map(()=>`<div class="streak-day done">🔥</div>`).join('')}</div>
       <p class="msg" style="color:#ffd166;font-size:1.3rem">${s.count} يوم متتالي</p>
-      <button onclick="showHome()">رجوع للرئيسية</button>
+      <button onclick="event.stopPropagation();showHome()">رجوع للرئيسية</button>
       <div class="powered">Powered by VelaLight</div>
     `);
   }, 900);
@@ -753,14 +891,12 @@ function answerDaily(i){
 function showDailyResult(){
   const s = store.get('streak') || {days:[],count:0};
   render(`
-    <button class="back-btn" onclick="showHome()">← رجوع</button>
+    <button class="back-btn" onclick="event.stopPropagation();showHome()">← رجوع</button>
     <h1>🔥 سؤال اليوم</h1>
     <p class="sub">جاوبت سؤال النهارده! ارجع بكرة عشان سؤال جديد</p>
-    <div class="streak-box">
-      ${s.days.slice(-7).map(()=>`<div class="streak-day done">🔥</div>`).join('')}
-    </div>
+    <div class="streak-box">${s.days.slice(-7).map(()=>`<div class="streak-day done">🔥</div>`).join('')}</div>
     <p class="msg" style="color:#ffd166;font-size:1.3rem">${s.count} يوم متتالي</p>
-    <button onclick="showHome()">رجوع للرئيسية</button>
+    <button onclick="event.stopPropagation();showHome()">رجوع للرئيسية</button>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
