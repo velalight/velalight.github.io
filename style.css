@@ -30,8 +30,6 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
 
 /* ═══════════════════════════════════════════════════════════
    ✨ IMAGE FIX v5 — Blur Background (Instagram Style)
-   الصورة كاملة + المربع مليان + مفيش تقطيع
-   ✅ يستخدم CSS Variable (--bg-image) اللي بيتحدد من JS
    ═══════════════════════════════════════════════════════════ */
 
 /* ─── 1) كروت المنتجات في الصفحة الرئيسية ─── */
@@ -45,7 +43,7 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
   background: var(--bg2);
 }
 
-/* طبقة الـ blur — بتقرا الصورة من --bg-image */
+/* طبقة الـ blur */
 .pgrid .p-media.has-blur-bg::before {
   content: '';
   position: absolute;
@@ -208,11 +206,6 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
 
 /* ═══════════════════════════════════════════════════════════
    🎁 GIFT PROMO BAR v1 — شريط عرض الهدية
-   عرض: عند الشراء بـ 1000 جنيه → فواحة سيارة هدية
-   ✅ Non-sticky عشان ميبوّظش التنقل
-   ✅ Red gradient + Yellow text
-   ✅ Shine animation + Icon bounce
-   ✅ Responsive كامل
    ═══════════════════════════════════════════════════════════ */
 
 .gift-promo-bar {
@@ -228,7 +221,6 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
   font-family: 'Tajawal', var(--ff, sans-serif);
 }
 
-/* لمعة بتعدي على الشريط من فترة للتانية */
 .gift-promo-bar::before {
   content: '';
   position: absolute;
@@ -289,9 +281,7 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
   font-weight: 600;
   margin: 0;
   text-align: center;
-  text-shadow:
-    0 1px 0 rgba(0, 0, 0, 0.35),
-    0 2px 6px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.25);
   line-height: 1.5;
   letter-spacing: 0.2px;
 }
@@ -345,7 +335,6 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
   outline-offset: 3px;
 }
 
-/* ═══ Responsive ═══ */
 @media (max-width: 900px) {
   .gift-promo-text { font-size: 0.85rem; }
   .gift-promo-icon { font-size: 1.3rem; }
@@ -370,7 +359,6 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
   .gift-promo-icon  { font-size: 1.05rem; }
 }
 
-/* احترام تقليل الحركة */
 @media (prefers-reduced-motion: reduce) {
   .gift-promo-bar,
   .gift-promo-bar::before,
@@ -380,21 +368,30 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
   }
 }
 
-/* ═══════════════════════════════════════════════
-   🧠 QUIZ BANNER — ضمان الظهور (VelaLight)
-   ═══════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════
+   🧠 QUIZ BANNER — COMPACT (VelaLight)
+   ═══════════════════════════════════════════════════════════ */
 .vl-quiz-banner {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
-  width: 100% !important;
-  min-height: 90px !important;
   position: relative !important;
-  z-index: 50 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
   background: linear-gradient(135deg, #1a0f2e 0%, #2d1b4e 50%, #4a2c7a 100%) !important;
   overflow: hidden !important;
   border-bottom: 1px solid rgba(255, 209, 102, 0.4) !important;
+  z-index: 50 !important;
   box-sizing: border-box !important;
+}
+.vl-quiz-banner::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: radial-gradient(circle at 20% 50%, rgba(255, 209, 102, 0.2) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255, 107, 157, 0.15) 0%, transparent 50%) !important;
+  pointer-events: none !important;
 }
 .vl-quiz-banner-inner {
   display: flex !important;
@@ -402,72 +399,99 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
   opacity: 1 !important;
   position: relative !important;
   align-items: center !important;
-  gap: 16px !important;
+  gap: 12px !important;
   max-width: 1100px !important;
   margin: 0 auto !important;
-  padding: 18px 24px !important;
+  padding: 10px 20px !important;
   text-decoration: none !important;
   color: #fff !important;
   z-index: 1 !important;
+  transition: transform 0.3s ease !important;
+}
+.vl-quiz-banner-inner:hover {
+  transform: scale(1.01) !important;
 }
 .vl-quiz-banner-icon {
   display: block !important;
-  font-size: 2.6rem !important;
+  font-size: 1.8rem !important;
   line-height: 1 !important;
+  filter: drop-shadow(0 0 10px rgba(255, 209, 102, 0.6)) !important;
+  animation: vlQuizIconPulse 2s ease-in-out infinite !important;
   flex-shrink: 0 !important;
 }
-.vl-quiz-banner-content {
-  display: block !important;
-  flex: 1 !important;
-  min-width: 0 !important;
+@keyframes vlQuizIconPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(5deg); }
 }
+.vl-quiz-banner-content { display: block !important; flex: 1 !important; min-width: 0 !important; }
 .vl-quiz-banner-title {
   display: block !important;
   font-family: 'El Messiri', 'Tajawal', serif !important;
-  font-size: 1.4rem !important;
+  font-size: 1.1rem !important;
   font-weight: 800 !important;
-  margin: 0 0 4px !important;
+  margin: 0 0 2px !important;
+  background: linear-gradient(135deg, #fff 0%, #ffd166 60%, #ff6b9d 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
   color: #ffd166 !important;
   line-height: 1.2 !important;
 }
 .vl-quiz-banner-sub {
   display: block !important;
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   margin: 0 !important;
   color: rgba(255, 255, 255, 0.9) !important;
-  line-height: 1.4 !important;
+  line-height: 1.3 !important;
 }
 .vl-quiz-banner-cta {
   display: flex !important;
   visibility: visible !important;
   align-items: center !important;
   gap: 6px !important;
-  padding: 10px 22px !important;
-  background: linear-gradient(135deg, #ffd700, #d4af37) !important;
+  padding: 8px 16px !important;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #d4af37 100%) !important;
   color: #1a1512 !important;
   border-radius: 50px !important;
   font-weight: 900 !important;
-  font-size: 0.95rem !important;
+  font-size: 0.85rem !important;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4) !important;
   flex-shrink: 0 !important;
+  animation: vlQuizCtaPulse 2.5s ease-in-out infinite !important;
   white-space: nowrap !important;
+}
+@keyframes vlQuizCtaPulse {
+  0%, 100% { box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4) !important; }
+  50% { box-shadow: 0 4px 25px rgba(255, 215, 0, 0.8) !important; }
+}
+.vl-quiz-banner-arrow {
+  display: inline-block !important;
+  font-size: 1rem !important;
+  animation: vlQuizArrow 1.5s ease-in-out infinite !important;
+}
+@keyframes vlQuizArrow {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-4px); }
 }
 @media (max-width: 700px) {
   .vl-quiz-banner-inner {
-    flex-wrap: wrap !important;
     gap: 10px !important;
-    padding: 14px 16px !important;
+    padding: 8px 12px !important;
+    flex-wrap: wrap !important;
     justify-content: center !important;
     text-align: center !important;
   }
-  .vl-quiz-banner-icon { font-size: 2rem !important; }
+  .vl-quiz-banner-icon { font-size: 1.5rem !important; }
   .vl-quiz-banner-content { flex: 1 1 100% !important; order: 2 !important; }
-  .vl-quiz-banner-title { font-size: 1.1rem !important; }
-  .vl-quiz-banner-sub { font-size: 0.75rem !important; }
+  .vl-quiz-banner-title { font-size: 1rem !important; }
+  .vl-quiz-banner-sub { font-size: 0.65rem !important; }
   .vl-quiz-banner-cta {
     order: 3 !important;
     flex: 1 1 100% !important;
     justify-content: center !important;
-    padding: 10px 16px !important;
+    padding: 6px 12px !important;
+    font-size: 0.75rem !important;
   }
+  .vl-quiz-banner-arrow { transform: rotate(180deg) !important; }
 }
 /* ═══ END QUIZ BANNER ═══ */
