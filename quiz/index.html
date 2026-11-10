@@ -109,12 +109,47 @@ input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
 .shop-cta p{font-size:.85rem;margin-bottom:8px;color:rgba(255,255,255,.85)}
 .shop-cta .btn-shop-link{display:inline-block;background:linear-gradient(135deg,#d4af37,#b8863f);color:#1a1512;padding:10px 20px;border-radius:30px;text-decoration:none;font-weight:900;font-size:.85rem;box-shadow:0 4px 12px rgba(212,175,55,.4);transition:.25s}
 .shop-cta .btn-shop-link:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(212,175,55,.7)}
+/* ستايل رسالة فخ الخروج */
+.gift-exit-modal{position:fixed;inset:0;background:rgba(10,5,20,.95);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;text-align:center;animation:fade .4s}
+.gift-exit-modal.show{display:flex}
+.gift-content{background:linear-gradient(135deg,#1a0f2e,#2d1b4e);border:2px solid #d4af37;border-radius:24px;padding:32px 24px;max-width:400px;width:100%;box-shadow:0 0 40px rgba(212,175,55,.3)}
+.gift-content h2{color:#ffd166;font-size:1.8rem;margin-bottom:12px}
+.gift-content p{font-size:1rem;color:#fff;margin-bottom:20px;line-height:1.6}
+.gift-content .promo-box{background:rgba(255,255,255,.1);border:2px dashed #ff6b9d;border-radius:12px;padding:16px;margin-bottom:24px;font-size:1.1rem;font-weight:bold;color:#ffd166}
+.gift-content .btn-gift{background:linear-gradient(135deg,#d4af37,#b8863f);color:#1a1512;border:none;padding:16px;border-radius:14px;font-size:1.1rem;font-weight:900;cursor:pointer;width:100%;margin-bottom:12px;font-family:inherit;text-decoration:none;display:block}
+.gift-content .btn-close-gift{background:transparent;border:none;color:rgba(255,255,255,.5);font-size:.9rem;cursor:pointer;text-decoration:underline}
 </style>
 </head>
 <body>
 <div id="app"></div>
 
+<!-- شاشة فخ الخروج (الهدية) -->
+<div class="gift-exit-modal" id="exitGiftModal">
+  <div class="gift-content">
+    <div style="font-size:3rem;margin-bottom:10px">🎁</div>
+    <h2>استنى! هديتك مستنياك</h2>
+    <p>عشان إنت شخصية مميزة، عملنالك عرض خاص.<br><b>اطلب أي شمعة، وهنبعتلك فواحة عربيتك هدية ببلاش!</b></p>
+    <div class="promo-box">كود الخصم: VELAGIFT<br><span style="font-size:.8rem;color:#fff;font-weight:normal">(يضاف تلقائياً عند الطلب)</span></div>
+    <a href="https://velalight.github.io/products.html" class="btn-gift" onclick="trackEvent('exit_gift_click', 'clicked_exit_gift')">🛍️ اطلب دلوقتي وخد الهدية</a>
+    <button class="btn-close-gift" onclick="document.getElementById('exitGiftModal').classList.remove('show')">لا شكراً، مكمل اللعبة</button>
+  </div>
+</div>
+
 <script>
+// ================================================================
+// 📊 تتبع الأحداث (GA4 & Meta Pixel)
+// ================================================================
+function trackEvent(eventName, eventParams) {
+  try {
+    if (typeof gtag === 'function') {
+      gtag('event', eventName, eventParams);
+    }
+    if (typeof fbq === 'function') {
+      fbq('trackCustom', eventName, eventParams);
+    }
+  } catch(e) {}
+}
+
 // ================================================================
 // 🧴 العطور الـ 23
 // ================================================================
@@ -556,6 +591,7 @@ function showCopyModal(text){
 function shareWhatsApp(text){
   if(!text) text = window._vlShareText || '';
   if(!text){ alert('لا يوجد نص للمشاركة'); return; }
+  trackEvent('share_whatsapp', { method: 'whatsapp' });
   const url = 'https://wa.me/?text=' + encodeURIComponent(text);
   try { const w = window.open(url, '_blank'); if(!w) location.href = url; } catch(e){ location.href = url; }
 }
@@ -572,12 +608,13 @@ async function shareOrCopy(text){
 // 📸 توليد صورة الستوري (Canvas) — التصميم الاحترافي
 // ================================================================
 function generateStoryImage(personaType, personaEmoji, perfumeName, personaDesc) {
+  trackEvent('generate_story', { persona: personaType });
   const canvas = document.createElement('canvas');
   canvas.width = 1080;
   canvas.height = 1920;
   const ctx = canvas.getContext('2d');
 
-  // 1. الخلفية المتدرجة (بنفسجي غامق وفخم)
+  // 1. الخلفية المتدرجة الفخمة
   const grad = ctx.createLinearGradient(0, 0, 1080, 1920);
   grad.addColorStop(0, '#0f061a');
   grad.addColorStop(0.5, '#1a0f2e');
@@ -585,15 +622,15 @@ function generateStoryImage(personaType, personaEmoji, perfumeName, personaDesc)
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, 1080, 1920);
 
-  // 2. دوائر منورة في الخلفية (Glow effects)
+  // 2. إضاءة خلفية ناعمة
   const glow1 = ctx.createRadialGradient(200, 300, 0, 200, 300, 400);
-  glow1.addColorStop(0, 'rgba(255, 209, 102, 0.15)');
+  glow1.addColorStop(0, 'rgba(255, 209, 102, 0.12)');
   glow1.addColorStop(1, 'rgba(255, 209, 102, 0)');
   ctx.fillStyle = glow1;
   ctx.fillRect(0, 0, 1080, 1920);
 
   const glow2 = ctx.createRadialGradient(900, 1600, 0, 900, 1600, 500);
-  glow2.addColorStop(0, 'rgba(255, 107, 157, 0.1)');
+  glow2.addColorStop(0, 'rgba(255, 107, 157, 0.08)');
   glow2.addColorStop(1, 'rgba(255, 107, 157, 0)');
   ctx.fillStyle = glow2;
   ctx.fillRect(0, 0, 1080, 1920);
@@ -601,20 +638,19 @@ function generateStoryImage(personaType, personaEmoji, perfumeName, personaDesc)
   // 3. الهيدر (VelaLight)
   ctx.textAlign = 'center';
   ctx.fillStyle = '#ffd166';
-  ctx.font = 'bold 80px "Segoe UI", Tahoma, sans-serif';
-  ctx.fillText('VelaLight', 540, 200);
+  ctx.font = 'bold 85px "Segoe UI", Tahoma, sans-serif';
+  ctx.fillText('VelaLight', 540, 180);
 
   ctx.fillStyle = 'rgba(255,255,255,0.4)';
-  ctx.font = '40px "Segoe UI", Tahoma, sans-serif';
-  ctx.fillText('Luxury Candle Studio', 540, 270);
+  ctx.font = '35px "Segoe UI", Tahoma, sans-serif';
+  ctx.fillText('Luxury Candle Studio', 540, 240);
 
-  // 4. الكارت الزجاجي في النص
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+  // 4. الكارت الزجاجي
+  const cardX = 90, cardY = 400, cardW = 900, cardH = 950, radius = 40;
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 3;
   ctx.beginPath();
-  // رسم مستطيل بحواف دائرية
-  const cardX = 100, cardY = 500, cardW = 880, cardH = 800, radius = 40;
   ctx.moveTo(cardX + radius, cardY);
   ctx.lineTo(cardX + cardW - radius, cardY);
   ctx.quadraticCurveTo(cardX + cardW, cardY, cardX + cardW, cardY + radius);
@@ -628,25 +664,32 @@ function generateStoryImage(personaType, personaEmoji, perfumeName, personaDesc)
   ctx.fill();
   ctx.stroke();
 
-  // 5. الأيقونة / الإيموجي
-  ctx.font = '150px "Segoe UI", Tahoma, sans-serif';
-  ctx.fillText(personaEmoji || '🧠', 540, 700);
+  // 5. الإيموجي (مع دايرة توهج)
+  ctx.beginPath();
+  ctx.arc(540, 600, 110, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255, 209, 102, 0.15)';
+  ctx.fill();
+  
+  ctx.font = '130px "Segoe UI", Tahoma, sans-serif';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(personaEmoji || '🧠', 540, 610);
+  ctx.textBaseline = 'alphabetic';
 
   // 6. اسم الشخصية
   ctx.fillStyle = '#ffd166';
-  ctx.font = 'bold 100px "Segoe UI", Tahoma, sans-serif';
-  ctx.fillText(personaType, 540, 880);
+  ctx.font = 'bold 90px "Segoe UI", Tahoma, sans-serif';
+  ctx.fillText(personaType, 540, 800);
 
   // 7. "شخصيتك العطرية"
   ctx.fillStyle = 'rgba(255,255,255,0.8)';
-  ctx.font = '50px "Segoe UI", Tahoma, sans-serif';
-  ctx.fillText('شخصيتك العطرية', 540, 960);
+  ctx.font = '45px "Segoe UI", Tahoma, sans-serif';
+  ctx.fillText('شخصيتك العطرية', 540, 870);
 
-  // 8. اسم العطر (مربع صغير)
+  // 8. اسم العطر
   if (perfumeName) {
     ctx.fillStyle = 'rgba(255, 209, 102, 0.15)';
     ctx.beginPath();
-    const px = 300, py = 1000, pw = 480, ph = 80, pr = 40;
+    const px = 240, py = 920, pw = 600, ph = 70, pr = 35;
     ctx.moveTo(px + pr, py);
     ctx.lineTo(px + pw - pr, py);
     ctx.quadraticCurveTo(px + pw, py, px + pw, py + pr);
@@ -660,27 +703,27 @@ function generateStoryImage(personaType, personaEmoji, perfumeName, personaDesc)
     ctx.fill();
 
     ctx.fillStyle = '#ffd166';
-    ctx.font = 'bold 45px "Segoe UI", Tahoma, sans-serif';
-    ctx.fillText(`عطرك المثالي: ${perfumeName}`, 540, 1055);
+    ctx.font = 'bold 40px "Segoe UI", Tahoma, sans-serif';
+    ctx.fillText(`عطرك المثالي: ${perfumeName}`, 540, 968);
   }
 
-  // 9. وصف قصير للشخصية
+  // 9. وصف قصير
   if (personaDesc) {
-    ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.font = 'italic 40px "Segoe UI", Tahoma, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = '38px "Segoe UI", Tahoma, sans-serif';
+    
     const words = personaDesc.split(' ');
     let line = '';
-    let y = 1160;
-    const maxWidth = 700;
+    let y = 1080;
+    const maxWidth = 750;
     
     for (let n = 0; n < words.length; n++) {
       const testLine = line + words[n] + ' ';
       const metrics = ctx.measureText(testLine);
-      const testWidth = metrics.width;
-      if (testWidth > maxWidth && n > 0) {
+      if (metrics.width > maxWidth && n > 0) {
         ctx.fillText(line, 540, y);
         line = words[n] + ' ';
-        y += 60;
+        y += 55;
       } else {
         line = testLine;
       }
@@ -688,20 +731,20 @@ function generateStoryImage(personaType, personaEmoji, perfumeName, personaDesc)
     ctx.fillText(line, 540, y);
   }
 
-  // 10. الفوتر (Powered by VelaLight + CTA)
+  // 10. الفوتر
   ctx.fillStyle = 'rgba(255,255,255,0.4)';
   ctx.font = '35px "Segoe UI", Tahoma, sans-serif';
-  ctx.fillText('Powered by VelaLight', 540, 1700);
+  ctx.fillText('Powered by VelaLight', 540, 1650);
 
   ctx.fillStyle = '#ffd166';
-  ctx.font = 'bold 45px "Segoe UI", Tahoma, sans-serif';
-  ctx.fillText('اكتشف شخصيتك إنت كمان 👇', 540, 1770);
+  ctx.font = 'bold 50px "Segoe UI", Tahoma, sans-serif';
+  ctx.fillText('اكتشف شخصيتك إنت كمان 👇', 540, 1740);
 
   ctx.fillStyle = 'rgba(255,255,255,0.6)';
-  ctx.font = '30px "Segoe UI", Tahoma, sans-serif';
-  ctx.fillText('velalight.github.io/quiz', 540, 1830);
+  ctx.font = '35px "Segoe UI", Tahoma, sans-serif';
+  ctx.fillText('velalight.github.io/quiz', 540, 1810);
 
-  // تحميل الصورة
+  // تحميل
   const link = document.createElement('a');
   link.download = 'velalight-story.png';
   link.href = canvas.toDataURL('image/png');
@@ -713,14 +756,14 @@ function generateStoryImage(personaType, personaEmoji, perfumeName, personaDesc)
 }
 
 // ================================================================
-// 🔍 ربط المنتج بالمتجر (بحث بالاسم)
+// 🔍 ربط المنتج بالمتجر
 // ================================================================
 function getShopLink(perfumeName) {
   return `https://velalight.github.io/products.html?q=${encodeURIComponent(perfumeName)}`;
 }
 
 // ================================================================
-// ⏱️ تحويل تلقائي (6 ثواني) + زرار يدوي
+// ⏱️ تحويل تلقائي
 // ================================================================
 function autoAdvance(callback, duration){
   duration = duration || 6000;
@@ -781,7 +824,7 @@ function showHook(){
     </div>
     <div class="shop-cta">
       <p>عايز تشوف منتجات العطور كاملة؟</p>
-      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link" target="_blank" onclick="trackEvent('shop_link_click', {location: 'hook'})">اكتشف شموع VelaLight ←</a>
     </div>
     <div class="powered">Powered by VelaLight</div>
   `);
@@ -799,6 +842,7 @@ function pickHook(persona){
 }
 
 function startPersonality(){
+  trackEvent('game_start', {mode: 'personality'});
   store.set('progress',{phase:'personality',idx:0,answers:[]});
   renderDeepQ();
 }
@@ -872,6 +916,7 @@ function finishDeep(answers){
   const persona = { type:winner, scores:counts, date:Date.now() };
   store.set('personality',persona);
   store.del('progress');
+  trackEvent('game_complete', {mode: 'personality', result: winner});
   showPersonalityResult(persona);
 }
 
@@ -895,7 +940,7 @@ function showPersonalityResult(persona){
       <div class="prod-name">🎁 عطورك المقترحة من فيلا لايت</div>
       <div class="prod-desc">عطرك الأساسي: <b>${main.ar}</b></div>
       <div class="prod-desc">كمان هيعجبوك: ${alt1.ar} · ${alt2.ar}</div>
-      <a href="${getShopLink(main.ar)}" class="prod-cta" onclick="event.stopPropagation()">اطلب عطر شخصيتك ←</a>
+      <a href="${getShopLink(main.ar)}" class="prod-cta" target="_blank" onclick="event.stopPropagation(); trackEvent('shop_link_click', {location: 'result', persona: '${persona.type}'})">اطلب عطر شخصيتك ←</a>
     </div>
     <button class="insta" onclick="event.stopPropagation();generateStoryImage('${persona.type}', '${a.emoji}', '${main.ar}', '${a.desc}')">📸 شارك على إنستجرام</button>
     <button class="sec" onclick="event.stopPropagation();showHome()">ادخل دوامة الريحة 🌊</button>
@@ -926,6 +971,7 @@ function showDangerousIntro(){
 }
 
 function startDangerous(){
+  trackEvent('game_start', {mode: 'dangerous'});
   store.set('dangerous',{idx:0,answers:[],themes:[]});
   renderDangerousQ();
 }
@@ -993,6 +1039,7 @@ function finishDangerous(themes){
   const winner = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0][0];
   store.set('dangerousResult',{theme:winner, counts, date:Date.now()});
   store.del('dangerous');
+  trackEvent('game_complete', {mode: 'dangerous', result: winner});
   showDangerousResult(winner);
 }
 
@@ -1052,7 +1099,7 @@ function showHome(){
     </div>
     <div class="shop-cta">
       <p>عايز تشوف منتجات العطور كاملة؟</p>
-      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link" target="_blank" onclick="trackEvent('shop_link_click', {location: 'home'})">اكتشف شموع VelaLight ←</a>
     </div>
     <button class="sec" style="margin-top:12px" onclick="event.stopPropagation();shareOrCopy(window._vlShareText)">📤 ادعي أصحابك للعبة</button>
     <div class="powered">Powered by VelaLight</div>
@@ -1084,6 +1131,7 @@ function startPhase(phase){
   if(name.length<2) return alert('اكتب اسمك الأول');
   store.set('name',name);
   store.set('progress',{phase,idx:0,answers:[],name});
+  trackEvent('game_start', {mode: phase});
   renderPhaseQ();
 }
 
@@ -1140,6 +1188,7 @@ function finishPhase(p){
   const encoded = enc(challenge);
   const url = `${location.origin}${location.pathname}?c=${encoded}`;
   window._vlShareText = `🎯 تحدي نفسي من ${p.name}\n\nخمن إجاباتي على 10 أسئلة، وشوف نسبة فهمك ليا.\n\n${url}`;
+  trackEvent('game_complete', {mode: p.phase});
   
   render(`
     <h1>تحديك جاهز! 🎉</h1>
@@ -1147,7 +1196,7 @@ function finishPhase(p){
     <div class="share-box">${esc(url)}</div>
     <div class="shop-cta">
       <p>قبل ما تبعت، شوف العطور اللي تناسب شخصيتك</p>
-      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link" target="_blank" onclick="trackEvent('shop_link_click', {location: 'challenge_ready'})">اكتشف شموع VelaLight ←</a>
     </div>
     <button class="sec" onclick="event.stopPropagation();showHome()">رجوع للرئيسية</button>
     <div class="share-actions">
@@ -1181,6 +1230,7 @@ function startGuess(){
   CHALLENGE.guesser = name;
   CHALLENGE.guesses = [];
   CHALLENGE.gIdx = 0;
+  trackEvent('game_start', {mode: 'guess_' + CHALLENGE.p});
   renderGuessQ();
 }
 
@@ -1241,6 +1291,7 @@ function showGuessResult(){
   const resultData = {p:CHALLENGE.p,on:CHALLENGE.n,gn:CHALLENGE.guesser,a:CHALLENGE.a,g:CHALLENGE.guesses,s:correct};
   const resultUrl = `${location.origin}${location.pathname}?r=${enc(resultData)}`;
   window._vlShareText = `خمنت إجابات ${CHALLENGE.n} على 10 أسئلة\nالنتيجة: ${correct}/${total} (${pct}%)\n\n${resultUrl}`;
+  trackEvent('game_complete', {mode: 'guess_' + CHALLENGE.p, score: correct});
   
   render(`
     <h1>النتيجة 🎯</h1>
@@ -1249,7 +1300,7 @@ function showGuessResult(){
     <p class="msg">${msg}</p>
     <div class="shop-cta">
       <p>عايز تشوف عطور تناسب ذوقك؟</p>
-      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link" target="_blank" onclick="trackEvent('shop_link_click', {location: 'guess_result'})">اكتشف شموع VelaLight ←</a>
     </div>
     <button class="sec" onclick="event.stopPropagation();location.href=location.pathname">🎮 العب إنت كمان</button>
     <div class="share-actions">
@@ -1274,7 +1325,7 @@ function showResultBack(data){
     <p class="msg">النتيجة اتحفظت في لوحة الشرف</p>
     <div class="shop-cta">
       <p>عايز تشوف عطور تناسب ذوقك؟</p>
-      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link" target="_blank" onclick="trackEvent('shop_link_click', {location: 'leaderboard'})">اكتشف شموع VelaLight ←</a>
     </div>
     <button onclick="event.stopPropagation();location.href=location.pathname">🏠 الرئيسية</button>
     <div class="powered">Powered by VelaLight</div>
@@ -1318,6 +1369,7 @@ function answerDaily(i){
     s.count = s.days.length;
     store.set('streak',s);
   }
+  trackEvent('daily_question_answered', {streak: s.count});
   setTimeout(()=>{
     const extraText = `كملت ${s.count} أيام متتالية في دوامة الريحة`;
     window._vlShareText = `كملت ${s.count} أيام متتالية في دوامة الريحة 🔥\nإنت مين؟ اعرف شخصيتك:\n${location.origin}${location.pathname}`;
@@ -1329,7 +1381,7 @@ function answerDaily(i){
       <button class="insta" onclick="event.stopPropagation();generateStoryImage('الـ Streak', '🔥', '', '${extraText}')">📸 شارك على إنستجرام</button>
       <div class="shop-cta">
         <p>عايز تشوف عطور تناسب ذوقك؟</p>
-        <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+        <a href="https://velalight.github.io/products.html" class="btn-shop-link" target="_blank" onclick="trackEvent('shop_link_click', {location: 'daily_streak'})">اكتشف شموع VelaLight ←</a>
       </div>
       <button onclick="event.stopPropagation();showHome()">رجوع للرئيسية</button>
       <div class="powered">Powered by VelaLight</div>
@@ -1349,7 +1401,7 @@ function showDailyResult(){
     <button class="insta" onclick="event.stopPropagation();generateStoryImage('الـ Streak', '🔥', '', '${extraText}')">📸 شارك على إنستجرام</button>
     <div class="shop-cta">
       <p>عايز تشوف عطور تناسب ذوقك؟</p>
-      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link" target="_blank" onclick="trackEvent('shop_link_click', {location: 'daily_result'})">اكتشف شموع VelaLight ←</a>
     </div>
     <button onclick="event.stopPropagation();showHome()">رجوع للرئيسية</button>
     <div class="powered">Powered by VelaLight</div>
@@ -1357,7 +1409,7 @@ function showDailyResult(){
 }
 
 // ================================================================
-// 🚪 Popup تأكيد الخروج
+// 🚪 Popup تأكيد الخروج من التحدي
 // ================================================================
 function showExitConfirm(from){
   const div = document.createElement('div');
@@ -1372,6 +1424,38 @@ function showExitConfirm(from){
   `;
   document.body.appendChild(div);
 }
+
+// ================================================================
+// 🪤 فخ الخروج (الهدية) - يظهر بعد 30 ثانية أو لو حاول يقفل
+// ================================================================
+let exitIntentShown = false;
+function triggerExitIntent() {
+  if (exitIntentShown) return;
+  // لا تظهر في الصفحة الرئيسية
+  if (document.querySelector('.screen.active') && document.querySelector('.screen.active').id === 'screen-home') return;
+  
+  exitIntentShown = true;
+  const modal = document.getElementById('exitGiftModal');
+  if (modal) {
+    modal.classList.add('show');
+    trackEvent('exit_intent_shown', {});
+  }
+}
+
+// تفعيل فخ الخروج لو الماوس خرج من الشاشة (كمبيوتر)
+document.addEventListener('mouseleave', function(e) {
+  if (e.clientY < 10) triggerExitIntent();
+});
+
+// تفعيل فخ الخروج لو المستخدم واقف بقاله 40 ثانية (موبايل أو كمبيوتر)
+let idleTimer;
+function resetIdleTimer() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(triggerExitIntent, 40000); // 40 ثانية
+}
+document.addEventListener('mousemove', resetIdleTimer);
+document.addEventListener('keydown', resetIdleTimer);
+document.addEventListener('touchstart', resetIdleTimer);
 
 // ابدأ
 init();
