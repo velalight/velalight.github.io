@@ -90,7 +90,7 @@
 <link rel="stylesheet" href="pwa.css">  
 <link rel="stylesheet" href="search.css">
 
-<!-- ═══ ✨ BreadcrumbList Schema — جديد ═══ -->
+<!-- ═══ ✨ BreadcrumbList Schema ═══ -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -112,7 +112,7 @@
 }
 </script>
 
-<!-- ═══ ✨ CollectionPage Schema — جديد ═══ -->
+<!-- ═══ ✨ CollectionPage Schema ═══ -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -246,7 +246,7 @@
     <div class="products-count" id="productsCount"></div>
 
     <div class="products-grid" id="productsGrid">
-      <!-- ✨ Skeleton محسّن — يختفي بمجرد تحميل البيانات من Firebase -->
+      <!-- ✨ Skeleton محسّن -->
       <div class="products-skeleton">
         <div class="skel" style="height:380px;border-radius:18px;"></div>
         <div class="skel" style="height:380px;border-radius:18px;"></div>
@@ -356,7 +356,6 @@
       </div>
     </div>
 
-    <!-- ✅ [تعديل] — فوتر واحد مدمج (بدل ما كان مكرر مرتين) -->
     <div class="fbot" style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:10px;">
       <span data-i18n="foot_rights" style="font-size:0.85rem;color:var(--dim);">© 2026 VelaLight — جميع الحقوق محفوظة</span>
       <div style="font-size:0.8rem;color:var(--mut);display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;">
@@ -377,7 +376,6 @@
 
 <!-- ═══════════════════════════════════════════════
      PRODUCT SCHEMA + ITEMLIST + BREADCRUMB
-     ✅ [تعديل] — يستمع لـ data-refresh + يتوقف فوراً بعد الحقن
      ═══════════════════════════════════════════════ -->
 <script>
 (function(){
@@ -416,22 +414,18 @@
       return true;
     } catch(e) {
       console.warn("⚠️ Schema injection failed:", e);
-      // نوقف المحاولات لمنع الحلقة اللانهائية
       injected = true;
       if (timer) { clearInterval(timer); timer = null; }
       return true;
     }
   }
 
-  /* 1) محاولة فورية */
   if (injectSchemas()) return;
 
-  /* 2) استماع لحدث data-refresh (أسرع بكتير من polling) */
   window.addEventListener("data-refresh", function(){
     injectSchemas();
   });
 
-  /* 3) polling مع توقف تلقائي — بحد أقصى 10 ثواني */
   var tries = 0;
   var MAX_TRIES = 20;
   timer = setInterval(function(){
@@ -451,20 +445,13 @@
 <script type="module" src="firebase.js"></script>
 <script src="app.js?v=12" defer></script>
 <script src="bottom-nav.js" defer></script>
-
-<!--
-  ✨ [تم الحذف] سكريبت الكاش القديم (renderFromCache)
-  السبب:
-  - كان بيعمل رندر مرتين (كاش قديم → Firebase جديد)
-  - كل صورة بتتحمل مرتين = بطء + استهلاك داتا + فلاش
-  - app.js عنده بالفعل fallback للكاش لو Firebase فشل
--->
 <script src="ga4-events.js" defer></script>
 <script src="pwa.js" defer></script>
 <script src="search.js" defer></script>
-  <!-- ═══ CART CLEANUP — VelaLight ═══ -->
+
+<!-- ═══ CART CLEANUP — VelaLight ═══ -->
 <style>
-  /* إخفاء حقول الإدخال من درج السلة */
+  /* إخفاء حقول الإدخال من درج السلة (بدون زر التفريغ) */
   #cartDrawer .co-form,
   #cartDrawer .paybox,
   #cartDrawer .cart-shipping-note,
@@ -472,14 +459,15 @@
   #cartDrawer #couponInput,
   #cartDrawer #applyCouponBtn,
   #cartDrawer #discountRow,
-  #cartDrawer #couponCodeLbl,
-  #cartDrawer #emptyCartBtn {
+  #cartDrawer #couponCodeLbl {
     display: none !important;
   }
+
   /* مساحة مريحة للمنتجات */
   #cartDrawer .dbody {
     padding-bottom: 12px !important;
   }
+
   /* زر متابعة الدفع */
   #cartDrawer #checkoutBtn {
     background: linear-gradient(135deg, #d4af37, #b8863f) !important;
@@ -491,9 +479,58 @@
     box-shadow: 0 6px 18px rgba(212,175,55,0.35) !important;
     margin-top: 10px !important;
   }
+
+  /* ✅ زر تفريغ السلة — ظاهر وبستايل أنيق */
+  #cartDrawer #emptyCartBtn {
+    display: block !important;
+    background: rgba(255, 60, 60, 0.08) !important;
+    border: 1px solid rgba(255, 60, 60, 0.35) !important;
+    color: #c94a4a !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    padding: 10px !important;
+    border-radius: 10px !important;
+    margin-top: 8px !important;
+    cursor: pointer !important;
+    transition: 0.2s !important;
+    font-family: inherit !important;
+  }
+  #cartDrawer #emptyCartBtn:hover {
+    background: rgba(255, 60, 60, 0.18) !important;
+    border-color: rgba(255, 60, 60, 0.6) !important;
+  }
+
+  /* ✅ بادج "هدية" للمنتجات اللي عليها isGift (احتياطي) */
+  #cartDrawer .cart-item.is-gift,
+  #cartDrawer .cart-item[data-isgift="true"] {
+    position: relative;
+    border: 1px dashed rgba(212, 175, 55, 0.6) !important;
+    background: rgba(212, 175, 55, 0.06) !important;
+    border-radius: 12px;
+    padding: 10px !important;
+  }
+  #cartDrawer .cart-item.is-gift::before,
+  #cartDrawer .cart-item[data-isgift="true"]::before {
+    content: '🎁 هدية';
+    display: inline-block;
+    background: linear-gradient(135deg, #d4af37, #b8863f);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 99px;
+    margin-bottom: 6px;
+  }
 </style>
 <script>
 (function(){
+  function toastOrAlert(msg){
+    if (typeof toast === 'function') {
+      try { toast(msg); return; } catch(e){}
+    }
+    alert(msg);
+  }
+
   function setupCleanCart(){
     var oldBtn = document.getElementById('checkoutBtn');
     if (!oldBtn) return;
@@ -510,17 +547,35 @@
 
       var cart = [];
       try { cart = JSON.parse(localStorage.getItem('vl_cart') || '[]'); } catch(err) { cart = []; }
+
+      // 1) السلة فاضية
       if (!cart.length) {
-        if (typeof toast === 'function') toast('🕯️ السلة فاضية');
+        toastOrAlert('🕯️ السلة فاضية');
         return;
       }
 
-      var missingScent = cart.find(function(i){ return !i.scent || !String(i.scent).trim(); });
+      // 2) ✅ التحقق الجديد: الفواحة لوحدها ممنوعة
+      var paidItems = cart.filter(function(i){
+        return !i.isGift && Number(i.price) > 0;
+      });
+      var giftItems = cart.filter(function(i){ return i.isGift; });
+
+      if (paidItems.length === 0 && giftItems.length > 0) {
+        toastOrAlert('🎁 الفواحة هدية مجانية مع أي منتج!\nضيف منتج واحد على الأقل عشان تكمل الطلب.');
+        return;
+      }
+
+      // 3) لازم يكون فيه عطر لكل منتج (عدا الهدية)
+      var missingScent = cart.find(function(i){
+        if (i.isGift) return false;
+        return !i.scent || !String(i.scent).trim();
+      });
       if (missingScent) {
-        if (typeof toast === 'function') toast('⚠️ اختار عطر لكل منتج في السلة');
+        toastOrAlert('⚠️ اختار عطر لكل منتج في السلة');
         return;
       }
 
+      // 4) تمام — تحويل لصفحة الدفع
       window.location.href = 'checkout.html';
     }, true);
 
