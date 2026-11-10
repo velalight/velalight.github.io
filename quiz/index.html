@@ -22,6 +22,8 @@ button.sec{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2
 button.sec:hover{background:rgba(255,255,255,.15);transform:none}
 button.wa{background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 4px 15px rgba(37,211,102,.4)}
 button.wa:hover{box-shadow:0 6px 20px rgba(37,211,102,.6)}
+button.shop{background:linear-gradient(135deg,#d4af37,#b8863f);color:#1a1512;box-shadow:0 4px 15px rgba(212,175,55,.4);font-weight:900}
+button.shop:hover{box-shadow:0 6px 20px rgba(212,175,55,.7);transform:translateY(-2px)}
 input[type=text]{width:100%;padding:16px;font-size:1.05rem;border:2px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.06);color:#fff;text-align:center;margin-bottom:16px;outline:none;font-family:inherit}
 input::placeholder{color:rgba(255,255,255,.4)}
 input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
@@ -89,6 +91,25 @@ input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
 .danger-hero .reflect-label{color:#ff6b6b;font-weight:bold;font-style:normal;margin-bottom:8px;display:block;font-size:.85rem}
 .warning-badge{display:inline-block;background:rgba(255,60,60,.2);border:1px solid rgba(255,60,60,.5);color:#ff6b6b;padding:4px 14px;border-radius:20px;font-size:.75rem;font-weight:bold;margin-bottom:16px;letter-spacing:1px}
 .share-actions{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+/* ═══ زرار الرجوع في أعلى الشاشة ═══ */
+.top-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.1)}
+.top-nav .back-icon{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;width:38px;height:38px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;margin:0;box-shadow:none;transition:.2s;flex-shrink:0}
+.top-nav .back-icon:hover{background:rgba(255,107,157,.2);border-color:#ff6b9d;transform:none}
+.top-nav .nav-title{font-size:.85rem;opacity:.7;flex:1;text-align:center}
+.top-nav .nav-skip{font-size:.75rem;color:#ffd166;background:transparent;border:none;cursor:pointer;padding:4px 8px;font-family:inherit;width:auto;margin:0;box-shadow:none;text-decoration:underline}
+.top-nav .nav-skip:hover{color:#fff;background:transparent;transform:none}
+/* ═══ Popup تأكيد الخروج ═══ */
+.confirm-exit{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;animation:fade .3s;cursor:default}
+.confirm-exit-inner{background:linear-gradient(135deg,#1a0f2e,#2d1b4e);border:2px solid #ffd166;border-radius:20px;padding:28px 24px;max-width:380px;width:100%;text-align:center}
+.confirm-exit-inner h2{color:#ffd166;margin-bottom:12px;font-size:1.2rem}
+.confirm-exit-inner p{opacity:.85;font-size:.9rem;margin-bottom:20px;line-height:1.6}
+.confirm-exit-inner .btn-stay{background:linear-gradient(135deg,#ff6b9d,#ff4d88);color:#fff;border:none;padding:14px;border-radius:12px;font-size:1rem;font-weight:bold;cursor:pointer;width:100%;margin-bottom:10px;font-family:inherit;box-shadow:0 4px 15px rgba(255,107,157,.3)}
+.confirm-exit-inner .btn-leave{background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;padding:12px;border-radius:12px;font-size:.85rem;cursor:pointer;width:100%;font-family:inherit}
+/* ═══ Shop CTA ═══ */
+.shop-cta{margin:16px 0;padding:14px;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.4);border-radius:14px;text-align:center}
+.shop-cta p{font-size:.85rem;margin-bottom:8px;color:rgba(255,255,255,.85)}
+.shop-cta .btn-shop-link{display:inline-block;background:linear-gradient(135deg,#d4af37,#b8863f);color:#1a1512;padding:10px 20px;border-radius:30px;text-decoration:none;font-weight:900;font-size:.85rem;box-shadow:0 4px 12px rgba(212,175,55,.4);transition:.25s}
+.shop-cta .btn-shop-link:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(212,175,55,.7)}
 </style>
 </head>
 <body>
@@ -148,7 +169,7 @@ const ARCHETYPES = {
   "المتحمس": { emoji: "☀️", primary: "pineapple", alts: ["caribbean","strawberry"], desc: "بتبدأ كل حاجة بحماس. عندك طاقة محدش يقدر يوقفها، وبتحب تجرب كل جديد. أصعب حاجة عندك إنك تكمل.", hidden: "أصعب حاجة عندك هي إنك تكمل" }
 };
 
-// ═══ 1) أسئلة اكتشاف الشخصية العطرية (للمستخدم نفسه) ═══
+// ═══ 1) أسئلة اكتشاف الشخصية (اكتشف نفسك) ═══
 const DEEP_QUESTIONS = [
   { q: "لو هتختار ذكرى واحدة تعيشها تاني كل يوم، هتكون إيه؟", opts: [
     { t: "أول مرة حسيت إني محبوب", insight: "بتدور على الإحساس اللي فقدته، مش الذكرى نفسها. الحب عنده معنى أكبر من اللي بتعترف بيه.", persona: "الرومانسي" },
@@ -212,7 +233,7 @@ const DEEP_QUESTIONS = [
   ]}
 ];
 
-// ═══ 2) أسئلة توافق الشريك (المرتبطين) ═══
+// ═══ 2) أسئلة الشريك ═══
 const PARTNER_QUESTIONS = [
   { q: "إيه أكتر حاجة بتخليك تحس إن شريكك فاهمك؟", opts: [
     { t: "إنه يسمعني من غير ما يقاطعني", insight: "الإنصات هو أعلى درجات الحب. إنت بتدور على حد يحس بيك مش بس يسمعك.", persona: "الرومانسي" },
@@ -276,7 +297,7 @@ const PARTNER_QUESTIONS = [
   ]}
 ];
 
-// ═══ 3) أسئلة الأصحاب (هل يعرفوك؟) ═══
+// ═══ 3) أسئلة الأصحاب ═══
 const FRIENDS_QUESTIONS = [
   { q: "إيه أكتر حاجة بتعرفك عن أصحابك؟", opts: [
     { t: "إنهم يفتكروا تفاصيلك الصغيرة", insight: "الاهتمام بالتفاصيل = حب. إنت بتحس إنك مهم لما حد يفتكر حاجة صغيرة عنك.", persona: "الرومانسي" },
@@ -340,7 +361,7 @@ const FRIENDS_QUESTIONS = [
   ]}
 ];
 
-// ═══ 4) أسئلة العيلة (بين الأجيال) ═══
+// ═══ 4) أسئلة العيلة ═══
 const FAMILY_QUESTIONS = [
   { q: "إيه أكتر حاجة بتخليك تحس إن عيلتك فهماك؟", opts: [
     { t: "إنهم يسيبوكي تعيشي حياتك", insight: "إنت محتاج مساحة وحرية. العيلة اللي بتفهم = اللي بتحترم اختياراتك.", persona: "المتحمس" },
@@ -404,7 +425,79 @@ const FAMILY_QUESTIONS = [
   ]}
 ];
 
-// ═══ 5) أسئلة اليوم ═══
+// ═══ 5) أسئلة الخطرة ═══
+const DANGEROUS_QUESTIONS = [
+  { q: "لو عرفت إنك هتموت بعد سنة، هتعمل إيه في أول أسبوع؟", opts: [
+    { t: "أسيب كل حاجة وأسافر مش عارف أرجع", insight: "الهروب مش رحلة، هو خوف لابس شكل حرية. إنت مش هربان من الحياة، إنت هربان من نفسك.", theme: "الخوف" },
+    { t: "أقعد مع كل الناس اللي بحبهم", insight: "بتخاف تفقد اللي بتحبهم قبل ما تقولهم إنك بتحبهم. إنت شايل كلام كتير ومش قادر تقوله.", theme: "الحب" },
+    { t: "أعمل كل الحاجات اللي كنت خايف أعملها", insight: "بتستنى إذن من حد عشان تعيش. مفيش إذن جاي. اللي جواك بقاله سنين بيستنى.", theme: "الشجاعة" },
+    { t: "مش هعمل حاجة. هستسلم", insight: "الاستسلام أسهل من المواجهة، بس أوجع. إنت مش مستسلم، إنت تعبان من الحمل.", theme: "الوجع" }
+  ]},
+  { q: "إيه أكبر كذبة قلتها لنفسك وصدقتها؟", opts: [
+    { t: "إني بخير", insight: "الكذبة الأصعب هي اللي بنصدقها لوحدنا. إنت عارف إنك مش بخير، بس بتخاف تسأل نفسك.", theme: "الوجع" },
+    { t: "إني مش محتاج حد", insight: "أكبر خوف هو إنك محتاج ومش لاقي. الاستقلال اللي بتتباهى بيه، هو خوف متخفي.", theme: "الوحدة" },
+    { t: "إني نسيت", insight: "النسيان مش ذاكرة ضعيفة، هو قلب تعبان مش قادر يحمل. إنت فاكر كل حاجة.", theme: "الفقد" },
+    { t: "إني قوي", insight: "القوة اللي بتخبي الضعف، هي أضعف حاجة فيك. محدش بيبقى قوي 24 ساعة.", theme: "الوجع" }
+  ]},
+  { q: "لو حد قرأ أفكارك لمدة يوم، هيكتشف عنك إيه؟", opts: [
+    { t: "إني بحكم على الناس كتير", insight: "الحكم على الناس مراية لحكمك على نفسك. إنت قاسي على نفسك أكتر من أي حد.", theme: "الذنب" },
+    { t: "إني بحبهم أكتر من اللي ببينه", insight: "خوفك من الرفض بيخليك تخبي حبك. والناس فاكرة إنك بارد.", theme: "الحب" },
+    { t: "إني تعبان ومحدش شايف", insight: "أكبر وجع هو الوجع اللي محدش بيلاحظه. بتضحك عشان محدش يسأل.", theme: "الوجع" },
+    { t: "إني بستمثل شخصية مش أنا", insight: "إنت عايش دور بقاله سنين. المشكلة إنك نسيت إنت مين من كتر التمثيل.", theme: "الهوية" }
+  ]},
+  { q: "إيه الحاجة اللي بتخاف تقولها لنفسك في المراية؟", opts: [
+    { t: "إني وحيد حتى لو حواليا ناس", insight: "الوحدة الحقيقية مش غياب الناس، هي غياب حد يفهمك. إنت محاط بناس، بس جواك خالي.", theme: "الوحدة" },
+    { t: "إني خايف من بكرة", insight: "الخوف من المستقبل هو علامة إنك مش مرتاح في حاضرك. المستقبل مش هيبقى أحسن لو إنت زي ما إنت.", theme: "الخوف" },
+    { t: "إني مش عارف أنا مين", insight: "بتدور على نفسك في كل حاجة، بس بتخاف تلاقي الإجابة. لأنه لو لقيتها، لازم تتغير.", theme: "الهوية" },
+    { t: "إني محتاج مساعدة ومش عارف أطلبها", insight: "طلب المساعدة مش ضعف، هو أشجع حاجة ممكن تعملها. إنت محتاج تسمح لنفسك.", theme: "الوحدة" }
+  ]},
+  { q: "إيه الحلم اللي خليت حد تاني يقتله فيك؟", opts: [
+    { t: "حلم فني — كنت عايز ترسم/تغني/تكتب", insight: "الخوف من الحكم عليك قتل الإبداع اللي جواك. اللي جواك لسه عايش، بس مدفون.", theme: "الخذلان" },
+    { t: "حب حقيقي — خفت تعترف بيه", insight: "خوفك من الرفض خلاك تسيب حاجة ممكن تكون أحلى حاجة في حياتك.", theme: "الندم" },
+    { t: "سفر/تجربة — حد قالك مش هتقدر", insight: "كلام حد تاني بقى صوتك الداخلي. إنت بتصدق حد مش إنت.", theme: "الخذلان" },
+    { t: "ثقة في نفسي — حد كسرها", insight: "حد كسر مرايتك، وإنت مكبر الصورة المكسورة. وقت تتفرج على نفسك من جديد.", theme: "الهوية" }
+  ]},
+  { q: "إيه السؤال اللي بتخاف حد يسألك عنه؟", opts: [
+    { t: "ليه لسه لوحدك؟", insight: "الوحدة مش اختيار، هي نتيجة خوف. بتخاف تختار غلط، فمش بتختار خالص.", theme: "الخوف" },
+    { t: "إيه اللي وجعك؟", insight: "الوجع اللي محدش سأل عنه هو اللي بيكبر. إنت محتاج تحكيه لحد، أي حد.", theme: "الوجع" },
+    { t: "إنت مبسوط؟", insight: "السؤال ده بيفضحك. مش عارف تجاوب، لأنك مش متأكد لو تعرف يعني إيه سعادة أصلًا.", theme: "الهوية" },
+    { t: "إنت مين؟", insight: "بتخاف السؤال ده لأنك بقالك سنين بتلعب أدوار مش إنت.", theme: "الهوية" }
+  ]},
+  { q: "إيه الحاجة اللي بتحاول تقنع نفسك إنك مش محتاجها؟", opts: [
+    { t: "الحب", insight: "بتقول مش محتاج حب عشان متتوجعش. بس اللي بيقول كده، ده أكتر واحد محتاجه.", theme: "الحب" },
+    { t: "حد يفهمني", insight: "بتقول مش محتاج حد يفهمك، لأنك تعبت من محاولات فاشلة. بس الحقيقة: إنت محتاج أكتر من أي وقت.", theme: "الوحدة" },
+    { t: "إني أرتاح", insight: "بتقول مش محتاج ترتاح، عشان خايف لو وقفت مش هتكمل. بس التعب مش شرف.", theme: "الوجع" },
+    { t: "إني أسامح", insight: "بتقول مش محتاج تسامح، عشان خايف تسامح وتتوجع تاني. بس اللي شايل الغضب، هو اللي بيتعب.", theme: "الذنب" }
+  ]},
+  { q: "لو حياتك كانت فيلم، إيه اسمه؟", opts: [
+    { t: "الرحلة الطويلة", insight: "إنت في نص الرحلة، وبتحس إنها طويلة. بس الطول ده مش عيب، هو حكاية بتتبني.", theme: "الوجع" },
+    { t: "التمثيلية", insight: "بتحس إنك بتلعب دور في حياة ناس تانية. لكنك نسيت إنك البطل في حياتك.", theme: "الهوية" },
+    { t: "الفصل الأخير", insight: "بتحس إن حاجة هتخلص. بس الفصل الأخير مش نهاية، هو بداية لفصل جديد.", theme: "الخوف" },
+    { t: "بدون عنوان", insight: "بتخاف تحدد إنت مين، عشان متتحبسش في تعريف. لكن اللايقين مرهق.", theme: "الهوية" }
+  ]},
+  { q: "إيه الحاجة اللي نفسك تعملها بس خايف إنك تنجح فيها؟", opts: [
+    { t: "أحب من جديد", insight: "خوفك من النجاح في الحب أكبر من خوفك من الفشل. لأنك عارف لو نجحت، مش هتقدر تهرب تاني.", theme: "الحب" },
+    { t: "أعمل حاجة كبيرة في شغلي", insight: "النجاح بيلزمك تكون قد اللي إنت بقيت عليه. والخوف مش من النجاح، من التغيير.", theme: "الخوف" },
+    { t: "أسامح نفسي", insight: "أصعب حاجة هي إنك تسامح نفسك. لأنك حاطط نفسك في محكمة دخلها محدش غيرك.", theme: "الذنب" },
+    { t: "أكون سعيد", insight: "السعادة بتحس إنها مش من حقك. إنت مستني حد يديك إذن تكون مبسوط. مفيش إذن جاي.", theme: "الوجع" }
+  ]}
+];
+
+const DANGEROUS_THEMES = {
+  "الخوف": { emoji: "🌑", title: "الهارب", desc: "بتخاف من حاجات كتير. مش عشان جبان، عشان تعبان. الخوف بقى جزء منك، ومش هتقدر تعيش لو مش هتواجه. الخوف مش عدو، هو علامة إن حاجة محتاجة تتظبط جواك. مش هتقدر تهرب منه، لأن اللي بتهرب منه هو نفسك.", question: "لو خفت مرة واحدة بس... كنت هتعمل إيه؟" },
+  "الحب": { emoji: "💔", title: "المشتاق", desc: "بتحب بعمق، ولدرجة إنك بتخاف. الحب عندك مش رفاهية، ده أساس وجودك. بتحب الناس اللي حواليك بجد، وبتحس بيهم، وبتحمل أكتر من نصيبك عشانهم. بس السؤال اللي محدش بيسأله: بتحب نفسك بنفس العمق؟ لأن الحب اللي مش بيبدأ من جواك، مش هيكمل.", question: "إمتى آخر مرة قلت لحد إنك بتحبه وكنت متأكد من كلامك؟" },
+  "الوحدة": { emoji: "🌫️", title: "الوحيد وسط الناس", desc: "إنت مش لوحدك، بس حاسس بالوحدة. دي أوحش حاجة — تكون حاطط ناس حواليك ومش لاقي حد فيهم. الوحدة دي مش غياب الناس، هي غياب اللي يشوفك. اللي يسألك مش بس كلام، اللي يحس بيك من غير ما تتكلم.", question: "لو حد في حياتك شافك بجد... كنت هتقول إيه؟" },
+  "الفقد": { emoji: "🕯️", title: "الحامل", desc: "شايل فقد كبير، ولسه بتحمله. يمكن محدش شايفه، بس إنت حاسس بيه في كل حاجة. الحقيقة اللي بتحاول تهرب منها: الفقد مش بيروح. بس بيتحول من وجع لذكرى، وده بياخد وقت، ومش عيب.", question: "إيه الحاجة اللي نفسك تقولها للشخص اللي فقدته؟" },
+  "الندم": { emoji: "⏳", title: "المعلّق", desc: "عايش في الماضي، بتعيد وبتفكر وبتندم. الحقيقة اللي بتحاول تهرب منها: الماضي مش هيتغير. الحاضر هو اللي بيمشي. الندم حاجة كويسة لو خلّاك أحسن، وحاجة وحشة لو خلّاك عايش في اللي كان.", question: "اللي بتندم عليه... إيه الدرس اللي علمك إياه؟" },
+  "الهوية": { emoji: "🎭", title: "الباحث", desc: "بتدور على نفسك في كل حاجة. في الناس، في الشغل، في العلاقات، في العزلة. الحقيقة: إنت مش حاجة واحدة، إنت رحلة. وأنت في الرحلة دي، مش محتاج توصل، محتاج تعيش. اللي بتدور عليه مش في حتة، هو فيك.", question: "لو محدش عارفك، إنت مين؟" },
+  "الوجع": { emoji: "🥀", title: "المخفي", desc: "وجعك مش ظاهر، بس موجود في كل حاجة. بتضحك عشان محدش يسأل، وبتسكت عشان محدش يعرف. الوجع اللي شايله لوحده هو اللي بيكبر. مش لازم تفضل كده. مش ضعف إنك تحكي، الضعف إنك تفضل حابس.", question: "لو حد سألك 'إنت كويس؟' وكان سؤال حقيقي... كنت هتقول إيه؟" },
+  "الشجاعة": { emoji: "🔥", title: "المحارب اللي مستني إذن", desc: "جواك نار، بس بتستنى إذن عشان تشعلها. بتخاف إنك تكون قد نفسك، وده خوف كل العظماء. الحقيقة: مفيش حد هيديك إذن. الإذن اللي بتستناه، هو أنت.", question: "لو عرفت إنك مش هتفشل، كنت هتعمل إيه؟" },
+  "الذنب": { emoji: "⚖️", title: "القاضي على نفسه", desc: "إنت أقسى قاضي على نفسك. حاطط نفسك في محكمة، ومحدش فيها غيرك. بتصدر الأحكام، وبتنفذ العقاب. بس سؤال: إنت ليه بتحاسب نفسك على حاجات مش بتتحاسب عليها حد تاني؟ إنت إنسان، والإنسان بيغلط. المسامحة مش هدية لحد، هي هدية لنفسك.", question: "إيه الحاجة اللي محتاج تسامح نفسك عليها؟" },
+  "الخذلان": { emoji: "💧", title: "اللي مكسور مرايته", desc: "حد كسر مرايتك، وإنت مكبر الصورة المكسورة. بتشوف نفسك من خلال كلام حد تاني. الحقيقة: اللي قاله ده كلامه هو، مش حقيقتك إنت. وقت تتفرج على نفسك من جديد، من غير المرايا المكسورة.", question: "لو كل اللي اتقالك عنك كان غلط... إنت مين؟" }
+};
+
+const GUESS_INTRO = { partner: "شريكك", friends: "صاحبك", family: "حد من عيلتك" };
+
 const DAILY_POOL = [
   { q:"إيه أول حاجة بتروحلها لما تكون زهقان؟", o:["الموبايل","السرير","الأكل","الخروج"] },
   { q:"إيه اللي بتخاف إن الناس تعرفه عنك؟", o:["ضعفي","خوفي","حبي","وحدتي"] },
@@ -428,35 +521,25 @@ const store = {
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
 
 // ================================================================
-// 🔗 ترميز مضغوط للرابط
+// 🔗 ترميز الرابط
 // ================================================================
 function enc(obj){
   const phaseMap = {partner:'p', friends:'f', family:'m'};
-  const compact = {
-    p: phaseMap[obj.p] || 'p',
-    n: obj.n,
-    a: obj.a.join('')
-  };
+  const compact = { p: phaseMap[obj.p] || 'p', n: obj.n, a: obj.a.join('') };
   return btoa(unescape(encodeURIComponent(JSON.stringify(compact)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
-
 function dec(s){
   s = s.replace(/-/g,'+').replace(/_/g,'/');
   while(s.length%4) s+='=';
   const obj = JSON.parse(decodeURIComponent(escape(atob(s))));
   const phaseMap = {p:'partner', f:'friends', m:'family'};
-  return {
-    p: phaseMap[obj.p] || 'partner',
-    n: obj.n,
-    a: obj.a.split('').map(Number)
-  };
+  return { p: phaseMap[obj.p] || 'partner', n: obj.n, a: obj.a.split('').map(Number) };
 }
-
 function today(){return new Date().toISOString().slice(0,10)}
 function render(html){app.innerHTML=`<div class="screen active">${html}</div>`;window.scrollTo(0,0)}
 
 // ================================================================
-// 📋 نسخ موثوق (3 طبقات)
+// 📋 نسخ
 // ================================================================
 async function copyText(text){
   try { if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); return true; } } catch(e){}
@@ -467,7 +550,6 @@ async function copyText(text){
     const ok = document.execCommand('copy'); document.body.removeChild(ta); return ok;
   } catch(e){ return false; }
 }
-
 function showCopyModal(text){
   const div = document.createElement('div');
   div.className = 'copy-modal';
@@ -475,43 +557,27 @@ function showCopyModal(text){
   document.body.appendChild(div);
   const ta = div.querySelector('textarea'); ta.focus(); ta.select();
 }
-
-// ================================================================
-// 📤 مشاركة (واتساب مباشر + نسخ + Web Share)
-// ================================================================
 function shareWhatsApp(text){
   if(!text) text = window._vlShareText || '';
   if(!text){ alert('لا يوجد نص للمشاركة'); return; }
   const url = 'https://wa.me/?text=' + encodeURIComponent(text);
-  try {
-    const w = window.open(url, '_blank');
-    if(!w) location.href = url;
-  } catch(e){
-    location.href = url;
-  }
+  try { const w = window.open(url, '_blank'); if(!w) location.href = url; } catch(e){ location.href = url; }
 }
-
 async function shareOrCopy(text){
   if(!text) text = window._vlShareText || '';
   if(!text){ alert('لا يوجد نص للنسخ'); return; }
   const ok = await copyText(text);
-  if(ok){
-    alert('✓ اتنسخ! الصقه في واتساب أو أي تطبيق');
-    return;
-  }
-  if(navigator.share){
-    try { await navigator.share({text}); return; } catch(e){}
-  }
+  if(ok){ alert('✓ اتنسخ! الصقه في واتساب أو أي تطبيق'); return; }
+  if(navigator.share){ try { await navigator.share({text}); return; } catch(e){} }
   showCopyModal(text);
 }
 
 // ================================================================
-// ⏱️ تحويل تلقائي (تم زيادة الوقت + إضافة زرار)
+// ⏱️ تحويل تلقائي (6 ثواني) + زرار يدوي
 // ================================================================
 function autoAdvance(callback, duration){
-  duration = duration || 6000; 
+  duration = duration || 6000;
   let advanced = false;
-  
   const advance = () => {
     if(advanced) return;
     advanced = true;
@@ -522,13 +588,11 @@ function autoAdvance(callback, duration){
     if(btn) btn.removeEventListener('click', advance);
     callback();
   };
-  
   const clickHandler = function(e){
-    if(e.target.tagName === 'BUTTON' && e.target.id === 'manualNextBtn') return;
+    if(e.target.tagName === 'BUTTON') return;
     if(window.getSelection().toString()) return;
     advance();
   };
-  
   const startTime = Date.now();
   const timer = setInterval(() => {
     if(advanced){ clearInterval(timer); return; }
@@ -538,10 +602,8 @@ function autoAdvance(callback, duration){
     if(fill) fill.style.width = pct + '%';
     if(elapsed >= duration){ advance(); }
   }, 50);
-  
   const screen = app.querySelector('.screen');
   if(screen) screen.addEventListener('click', clickHandler);
-  
   const btn = document.getElementById('manualNextBtn');
   if(btn) btn.addEventListener('click', advance);
 }
@@ -551,14 +613,8 @@ function autoAdvance(callback, duration){
 // ================================================================
 function init(){
   const p = new URLSearchParams(location.search);
-  if(p.get('c')){
-    try { return showChallenge(dec(p.get('c'))); }
-    catch(e){ console.error('Invalid challenge link', e); showHook(); return; }
-  }
-  if(p.get('r')){
-    try { return showResultBack(dec(p.get('r'))); }
-    catch(e){ console.error('Invalid result link', e); showHook(); return; }
-  }
+  if(p.get('c')){ try { return showChallenge(dec(p.get('c'))); } catch(e){ showHook(); return; } }
+  if(p.get('r')){ try { return showResultBack(dec(p.get('r'))); } catch(e){ showHook(); return; } }
   showHook();
 }
 
@@ -576,6 +632,10 @@ function showHook(){
     <div class="scent-grid">
       ${scentList.map(s=>`<div class="scent-card" onclick="event.stopPropagation();pickHook('${s.persona}')"><div class="emoji">${s.emoji}</div><div class="name">${s.name}</div></div>`).join('')}
     </div>
+    <div class="shop-cta">
+      <p>عايز تشوف منتجات العطور كاملة؟</p>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+    </div>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
@@ -583,6 +643,7 @@ function showHook(){
 function pickHook(persona){
   const a = ARCHETYPES[persona];
   render(`
+    <button class="back-btn" onclick="event.stopPropagation();showHook()">← رجوع</button>
     <h1>${a.emoji} إنت من الناس اللي...</h1>
     <p class="sub">${a.desc}</p>
     <p class="sub" style="color:#ffd166;font-weight:bold;font-size:1.05rem">بس ده مجرد بداية... 10 أسئلة عميقة هتغير طريقة شوفتك لنفسك</p>
@@ -596,18 +657,35 @@ function startPersonality(){
 }
 
 // ================================================================
-// 🧠 المرحلة 1 (اكتشف نفسك)
+// 🧠 المرحلة 1 (اكتشف نفسك) — مع زرار رجوع
 // ================================================================
 function renderDeepQ(){
   const p = store.get('progress');
   const q = DEEP_QUESTIONS[p.idx];
   const pct = (p.idx/DEEP_QUESTIONS.length)*100;
+  
+  let backBtnHTML = '';
+  if(p.idx > 0){
+    backBtnHTML = `<button class="back-icon" onclick="event.stopPropagation();prevDeep()" title="السؤال السابق">→</button>`;
+  } else {
+    backBtnHTML = `<button class="back-icon" onclick="event.stopPropagation();showExitConfirm('personality')" title="إلغاء">✕</button>`;
+  }
+  
   render(`
+    <div class="top-nav">
+      ${backBtnHTML}
+      <div class="nav-title">${p.idx+1} / ${DEEP_QUESTIONS.length}</div>
+      <button class="nav-skip" onclick="event.stopPropagation();showExitConfirm('personality')">إلغاء</button>
+    </div>
     <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
-    <div class="qnum">سؤال ${p.idx+1} من ${DEEP_QUESTIONS.length}</div>
     <div class="qtext">${q.q}</div>
     ${q.opts.map((o,i)=>`<button class="opt" onclick="event.stopPropagation();answerDeep(${i})">${o.t}</button>`).join('')}
   `);
+}
+
+function prevDeep(){
+  const p = store.get('progress');
+  if(p.idx > 0){ p.idx--; p.answers.pop(); store.set('progress',p); renderDeepQ(); }
 }
 
 function answerDeep(i){
@@ -682,7 +760,7 @@ function showPersonalityResult(persona){
 }
 
 // ================================================================
-// 🧨 الأسئلة الخطرة
+// 🧨 الخطرة
 // ================================================================
 function showDangerousIntro(){
   render(`
@@ -708,12 +786,29 @@ function renderDangerousQ(){
   const p = store.get('dangerous');
   const q = DANGEROUS_QUESTIONS[p.idx];
   const pct = (p.idx/DANGEROUS_QUESTIONS.length)*100;
+  
+  let backBtnHTML = '';
+  if(p.idx > 0){
+    backBtnHTML = `<button class="back-icon" onclick="event.stopPropagation();prevDangerous()" title="السؤال السابق">→</button>`;
+  } else {
+    backBtnHTML = `<button class="back-icon" onclick="event.stopPropagation();showExitConfirm('dangerous')" title="إلغاء">✕</button>`;
+  }
+  
   render(`
+    <div class="top-nav">
+      ${backBtnHTML}
+      <div class="nav-title" style="color:#ff6b6b">${p.idx+1} / ${DANGEROUS_QUESTIONS.length}</div>
+      <button class="nav-skip" onclick="event.stopPropagation();showExitConfirm('dangerous')">إلغاء</button>
+    </div>
     <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
-    <div class="qnum" style="color:#ff6b6b">🧨 سؤال ${p.idx+1} من ${DANGEROUS_QUESTIONS.length}</div>
     <div class="qtext">${q.q}</div>
     ${q.opts.map((o,i)=>`<button class="opt" onclick="event.stopPropagation();answerDangerous(${i})">${o.t}</button>`).join('')}
   `);
+}
+
+function prevDangerous(){
+  const p = store.get('dangerous');
+  if(p.idx > 0){ p.idx--; p.themes.pop(); store.set('dangerous',p); renderDangerousQ(); }
 }
 
 function answerDangerous(i){
@@ -755,7 +850,6 @@ function finishDangerous(themes){
 
 function showDangerousResult(themeKey){
   const t = DANGEROUS_THEMES[themeKey] || DANGEROUS_THEMES["الوجع"];
-  
   window._vlShareText = `عملت اختبار "الأسئلة النفسية الخطرة" وطلع تحليلي:\n${t.emoji} ${t.title}\n\n${t.desc.substring(0,150)}...\n\nاعمل الاختبار إنت كمان:\n${location.origin}${location.pathname}`;
   
   render(`
@@ -784,7 +878,6 @@ function showHome(){
   const persona = store.get('personality');
   const todayDone = store.get('dailyDate')===today();
   const s = store.get('streak') || {days:[],count:0};
-  
   window._vlShareText = `جرب ألعاب خطرة نفسية — اكتشف شخصيتك العطرية الحقيقية\n${location.origin}${location.pathname}`;
   
   let heroHtml = '';
@@ -795,6 +888,7 @@ function showHome(){
   } else {
     heroHtml = `<div style="text-align:center;margin-bottom:24px"><h2>مرحبًا 👋</h2><p class="sub">اختار من الأسفل</p></div>`;
   }
+  
   render(`
     ${heroHtml}
     <div class="menu-grid">
@@ -807,7 +901,11 @@ function showHome(){
       <div class="menu-item" onclick="event.stopPropagation();showPhaseSetup('family')"><div class="mi-left"><span class="mi-icon">👨‍👩‍👧</span><div><div class="mi-title">عالم العيلة</div><div class="mi-sub">أسئلة بين الأجيال</div></div></div></div>
       <div class="menu-item" onclick="event.stopPropagation();showDaily()"><div class="mi-left"><span class="mi-icon">🔥</span><div><div class="mi-title">سؤال اليوم</div><div class="mi-sub">${todayDone?'✓ جاوبت النهارده':'جاوب واحصل على Streak'}</div></div></div></div>
     </div>
-    <button class="sec" style="margin-top:20px" onclick="event.stopPropagation();shareOrCopy(window._vlShareText)">📤 ادعي أصحابك للعبة</button>
+    <div class="shop-cta">
+      <p>عايز تشوف منتجات العطور كاملة؟</p>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+    </div>
+    <button class="sec" style="margin-top:12px" onclick="event.stopPropagation();shareOrCopy(window._vlShareText)">📤 ادعي أصحابك للعبة</button>
     <div class="powered">Powered by VelaLight</div>
   `);
 }
@@ -850,12 +948,28 @@ function renderPhaseQ(){
   const q = qs[p.idx];
   const pct = (p.idx/qs.length)*100;
   
+  let backBtnHTML = '';
+  if(p.idx > 0){
+    backBtnHTML = `<button class="back-icon" onclick="event.stopPropagation();prevPhase()" title="السؤال السابق">→</button>`;
+  } else {
+    backBtnHTML = `<button class="back-icon" onclick="event.stopPropagation();showExitConfirm('${p.phase}')" title="إلغاء">✕</button>`;
+  }
+  
   render(`
+    <div class="top-nav">
+      ${backBtnHTML}
+      <div class="nav-title">${p.idx+1} / ${qs.length}</div>
+      <button class="nav-skip" onclick="event.stopPropagation();showExitConfirm('${p.phase}')">إلغاء</button>
+    </div>
     <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
-    <div class="qnum">سؤال ${p.idx+1} من ${qs.length}</div>
     <div class="qtext">${q.q}</div>
     ${q.opts.map((o,i)=>`<button class="opt" onclick="event.stopPropagation();answerPhase(${i})">${o.t}</button>`).join('')}
   `);
+}
+
+function prevPhase(){
+  const p = store.get('progress');
+  if(p.idx > 0){ p.idx--; p.answers.pop(); store.set('progress',p); renderPhaseQ(); }
 }
 
 function answerPhase(i){
@@ -876,13 +990,16 @@ function finishPhase(p){
   const challenge = {p:p.phase,n:p.name,a:p.answers};
   const encoded = enc(challenge);
   const url = `${location.origin}${location.pathname}?c=${encoded}`;
-  
   window._vlShareText = `🎯 تحدي نفسي من ${p.name}\n\nخمن إجاباتي على 10 أسئلة، وشوف نسبة فهمك ليا.\n\n${url}`;
   
   render(`
     <h1>تحديك جاهز! 🎉</h1>
     <p class="sub">ابعت الرابط ده، وأول ما يجاوبوا هتشوف مين فيهم يعرفك بجد.</p>
     <div class="share-box">${esc(url)}</div>
+    <div class="shop-cta">
+      <p>قبل ما تبعت، شوف العطور اللي تناسب شخصيتك</p>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+    </div>
     <button class="sec" onclick="event.stopPropagation();showHome()">رجوع للرئيسية</button>
     <div class="share-actions">
       <button class="wa" onclick="event.stopPropagation();shareWhatsApp(window._vlShareText)">📱 ابعت على واتساب مباشرة</button>
@@ -926,23 +1043,38 @@ function renderGuessQ(){
   
   const q = qs[CHALLENGE.gIdx];
   const pct = (CHALLENGE.gIdx/qs.length)*100;
+  
+  let backBtnHTML = '';
+  if(CHALLENGE.gIdx > 0){
+    backBtnHTML = `<button class="back-icon" onclick="event.stopPropagation();prevGuess()" title="السؤال السابق">→</button>`;
+  } else {
+    backBtnHTML = `<button class="back-icon" onclick="event.stopPropagation();showExitConfirm('guess')" title="إلغاء">✕</button>`;
+  }
+  
   render(`
+    <div class="top-nav">
+      ${backBtnHTML}
+      <div class="nav-title">${CHALLENGE.gIdx+1} / ${qs.length}</div>
+      <button class="nav-skip" onclick="event.stopPropagation();showExitConfirm('guess')">إلغاء</button>
+    </div>
     <div class="progress"><div class="progress-fill" style="width:${pct}%"></div></div>
-    <div class="qnum">سؤال ${CHALLENGE.gIdx+1} من 10 — بتخمن إجابات ${esc(CHALLENGE.n)}</div>
+    <div class="qnum" style="font-size:.8rem;opacity:.7;text-align:center;margin-bottom:8px">بتخمن إجابات ${esc(CHALLENGE.n)}</div>
     <div class="qtext">${q.q}</div>
     ${q.opts.map((o,i)=>`<button class="opt" onclick="event.stopPropagation();guessAnswer(${i})">${o.t}</button>`).join('')}
   `);
 }
 
+function prevGuess(){
+  if(CHALLENGE.gIdx > 0){ CHALLENGE.gIdx--; CHALLENGE.guesses.pop(); renderGuessQ(); }
+}
+
 function guessAnswer(i){
   CHALLENGE.guesses.push(i);
   CHALLENGE.gIdx++;
-  
   let qs;
   if (CHALLENGE.p === 'partner') qs = PARTNER_QUESTIONS;
   else if (CHALLENGE.p === 'friends') qs = FRIENDS_QUESTIONS;
   else qs = FAMILY_QUESTIONS;
-
   if(CHALLENGE.gIdx >= qs.length){ showGuessResult(); }
   else { renderGuessQ(); }
 }
@@ -959,7 +1091,6 @@ function showGuessResult(){
   else msg = `مفيش ولا نقطة؟! تعالى نتعرف من جديد 😂`;
   const resultData = {p:CHALLENGE.p,on:CHALLENGE.n,gn:CHALLENGE.guesser,a:CHALLENGE.a,g:CHALLENGE.guesses,s:correct};
   const resultUrl = `${location.origin}${location.pathname}?r=${enc(resultData)}`;
-  
   window._vlShareText = `خمنت إجابات ${CHALLENGE.n} على 10 أسئلة\nالنتيجة: ${correct}/${total} (${pct}%)\n\n${resultUrl}`;
   
   render(`
@@ -967,6 +1098,10 @@ function showGuessResult(){
     <div class="score-big">${correct}/${total}</div>
     <p class="msg" style="color:#ffd166;font-size:1.3rem;font-weight:bold">${pct}% فهم</p>
     <p class="msg">${msg}</p>
+    <div class="shop-cta">
+      <p>عايز تشوف عطور تناسب ذوقك؟</p>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+    </div>
     <button class="sec" onclick="event.stopPropagation();location.href=location.pathname">🎮 العب إنت كمان</button>
     <div class="share-actions">
       <button class="wa" onclick="event.stopPropagation();shareWhatsApp(window._vlShareText)">📱 ابعت النتيجة لـ ${esc(CHALLENGE.n)}</button>
@@ -988,6 +1123,10 @@ function showResultBack(data){
     <div class="score-big">${data.s}/${data.a.length}</div>
     <p class="msg" style="color:#ffd166;font-size:1.4rem;font-weight:bold">${pct}% فهم</p>
     <p class="msg">النتيجة اتحفظت في لوحة الشرف</p>
+    <div class="shop-cta">
+      <p>عايز تشوف عطور تناسب ذوقك؟</p>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+    </div>
     <button onclick="event.stopPropagation();location.href=location.pathname">🏠 الرئيسية</button>
     <div class="powered">Powered by VelaLight</div>
   `);
@@ -1036,6 +1175,10 @@ function answerDaily(i){
       <p class="msg">شوفت إجاباتك. تعالى بكرة عشان سؤال جديد</p>
       <div class="streak-box">${s.days.slice(-7).map(()=>`<div class="streak-day done">🔥</div>`).join('')}</div>
       <p class="msg" style="color:#ffd166;font-size:1.3rem">${s.count} يوم متتالي</p>
+      <div class="shop-cta">
+        <p>عايز تشوف عطور تناسب ذوقك؟</p>
+        <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+      </div>
       <button onclick="event.stopPropagation();showHome()">رجوع للرئيسية</button>
       <div class="powered">Powered by VelaLight</div>
     `);
@@ -1050,9 +1193,30 @@ function showDailyResult(){
     <p class="sub">جاوبت سؤال النهارده! ارجع بكرة عشان سؤال جديد</p>
     <div class="streak-box">${s.days.slice(-7).map(()=>`<div class="streak-day done">🔥</div>`).join('')}</div>
     <p class="msg" style="color:#ffd166;font-size:1.3rem">${s.count} يوم متتالي</p>
+    <div class="shop-cta">
+      <p>عايز تشوف عطور تناسب ذوقك؟</p>
+      <a href="https://velalight.github.io/products.html" class="btn-shop-link">اكتشف شموع VelaLight ←</a>
+    </div>
     <button onclick="event.stopPropagation();showHome()">رجوع للرئيسية</button>
     <div class="powered">Powered by VelaLight</div>
   `);
+}
+
+// ================================================================
+// 🚪 Popup تأكيد الخروج
+// ================================================================
+function showExitConfirm(from){
+  const div = document.createElement('div');
+  div.className = 'confirm-exit';
+  div.innerHTML = `
+    <div class="confirm-exit-inner">
+      <h2>متأكد إنك عايز تسيب التحدي؟</h2>
+      <p>لو خرجت دلوقتي، هتخسر تقدمك وتضيع فرصة اكتشاف شخصيتك. <br><b>10 ثواني بس وتوصل للنتيجة.</b></p>
+      <button class="btn-stay" onclick="this.closest('.confirm-exit').remove()">كمّل التحدي 💪</button>
+      <button class="btn-leave" onclick="this.closest('.confirm-exit').remove();showHome()">أيوة، عايز أخرج</button>
+    </div>
+  `;
+  document.body.appendChild(div);
 }
 
 // ابدأ
