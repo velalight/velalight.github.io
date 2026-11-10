@@ -591,50 +591,104 @@
 })();
 </script>
 <!-- ═══ END CART CLEANUP ═══ -->
-  <!-- ═══ GIFT REMOVAL FIX v1 — يسمح بمسح الفواحة من السلة ═══ -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     GIFT REMOVAL FIX v2 — الحل المضمون لمسح الفواحة
+     التغييرات عن v1:
+     1. شيلنا شرط rmBtn.style.display === 'none' (كان false دايماً)
+     2. ضفنا attributes: true عشان نراقب data-gift
+     3. force inline !important (بيغلب أي CSS خارجي)
+     4. كذا timing + الاستماع لفتح السلة
+     ═══════════════════════════════════════════════════════════ -->
 <style id="vlGiftRemovalFixCSS">
-  /* ✅ إظهار زر المسح للهدية (كان مخفي في app.js CART POLISH v2) */
-  #cartItems .citem[data-gift="1"] button.rm {
+  /* ✅ محاولة CSS بـ specificity أعلى من app.js */
+  /* app.js:        #cartItems .citem[data-gift="1"] .rm          = (1, 3, 0) */
+  /* حلنا:          html #cartItems .citem[data-gift="1"] .rm    = (1, 3, 1) ✓ */
+  html #cartItems .citem[data-gift="1"] .rm,
+  html #cartItems .citem[data-gift="1"][data-cart-idx] .rm {
     display: grid !important;
     visibility: visible !important;
     opacity: 1 !important;
     pointer-events: auto !important;
+    width: 28px !important;
+    height: 28px !important;
+    position: absolute !important;
+    top: 8px !important;
+    inset-inline-end: 8px !important;
+    z-index: 20 !important;
   }
-  /* ✅ إبقاء زر الـ qty مخفي للهدية (الكمية ثابتة = 1) */
-  #cartItems .citem[data-gift="1"] .qty {
+  /* إبقاء زر الـ qty مخفي للهدية (الكمية ثابتة = 1) */
+  html #cartItems .citem[data-gift="1"] .qty {
     display: none !important;
   }
 </style>
 <script>
 (function(){
   "use strict";
-  if (window.__vlGiftRemovalFixV1) return;
-  window.__vlGiftRemovalFixV1 = true;
+  if (window.__vlGiftRemovalFixV2) return;
+  window.__vlGiftRemovalFixV2 = true;
 
-  // 🛡️ Safety net: لو الـ CSS اتمسح لأي سبب، نضيف ستايل inline
-  function ensureRemoveBtnVisible() {
-    var giftCards = document.querySelectorAll('#cartItems .citem[data-gift="1"]');
-    giftCards.forEach(function(card){
+  // 💪 الحل المضمون: inline style بـ !important بيغلب كل CSS خارجي
+  function forceShowRemoveBtns() {
+    var cards = document.querySelectorAll('#cartItems .citem[data-gift="1"]');
+    cards.forEach(function(card){
       var rmBtn = card.querySelector('.rm');
-      if (rmBtn && rmBtn.style.display === 'none') {
-        rmBtn.style.display = 'grid';
-        rmBtn.style.visibility = 'visible';
-        rmBtn.style.opacity = '1';
-        rmBtn.style.pointerEvents = 'auto';
-      }
+      if (!rmBtn) return;
+      // مش بنعمل أي check — دايماً بنفرض الستايل
+      rmBtn.style.setProperty('display', 'grid', 'important');
+      rmBtn.style.setProperty('visibility', 'visible', 'important');
+      rmBtn.style.setProperty('opacity', '1', 'important');
+      rmBtn.style.setProperty('pointer-events', 'auto', 'important');
+      rmBtn.style.setProperty('width', '28px', 'important');
+      rmBtn.style.setProperty('height', '28px', 'important');
+      rmBtn.style.setProperty('position', 'absolute', 'important');
+      rmBtn.style.setProperty('top', '8px', 'important');
+      rmBtn.style.setProperty('inset-inline-end', '8px', 'important');
+      rmBtn.style.setProperty('z-index', '20', 'important');
     });
   }
 
-  // شغّل مع كل تحديث للسلة
-  var cartItems = document.getElementById('cartItems');
-  if (cartItems) {
-    new MutationObserver(ensureRemoveBtnVisible).observe(cartItems, { childList: true });
+  // راقب childList + attributes (data-gift بيتحط بعد ما items تترندر)
+  function hookObserver(){
+    var el = document.getElementById('cartItems');
+    if (!el) return;
+    if (el.dataset.vlGiftObsV2 === '1') return;
+    el.dataset.vlGiftObsV2 = '1';
+    new MutationObserver(forceShowRemoveBtns).observe(el, {
+      childList: true,
+      attributes: true,
+      attributeFilter: ['data-gift'],
+      subtree: true
+    });
+    forceShowRemoveBtns();
   }
-  setTimeout(ensureRemoveBtnVisible, 500);
-  setTimeout(ensureRemoveBtnVisible, 1500);
-  setTimeout(ensureRemoveBtnVisible, 3000);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', hookObserver);
+  } else {
+    hookObserver();
+  }
+
+  // محاولات متعددة لضمان التنفيذ بعد ما app.js يخلص
+  [100, 300, 600, 1200, 2000, 3500, 5000].forEach(function(t){
+    setTimeout(function(){ hookObserver(); forceShowRemoveBtns(); }, t);
+  });
+
+  // كل مرة السلة تتفتح
+  var cartBtn = document.getElementById('cartBtn');
+  if (cartBtn) {
+    cartBtn.addEventListener('click', function(){
+      setTimeout(forceShowRemoveBtns, 200);
+      setTimeout(forceShowRemoveBtns, 600);
+      setTimeout(forceShowRemoveBtns, 1200);
+    });
+  }
+
+  // Fallback: interval خفيف كضمان أخير (كل 3 ثواني بس)
+  setInterval(forceShowRemoveBtns, 3000);
 })();
 </script>
-<!-- ═══ END GIFT REMOVAL FIX ═══ -->
+<!-- ═══ END GIFT REMOVAL FIX v2 ═══ -->
+
 </body>
 </html>
