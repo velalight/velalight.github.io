@@ -591,5 +591,50 @@
 })();
 </script>
 <!-- ═══ END CART CLEANUP ═══ -->
+  <!-- ═══ GIFT REMOVAL FIX v1 — يسمح بمسح الفواحة من السلة ═══ -->
+<style id="vlGiftRemovalFixCSS">
+  /* ✅ إظهار زر المسح للهدية (كان مخفي في app.js CART POLISH v2) */
+  #cartItems .citem[data-gift="1"] button.rm {
+    display: grid !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  /* ✅ إبقاء زر الـ qty مخفي للهدية (الكمية ثابتة = 1) */
+  #cartItems .citem[data-gift="1"] .qty {
+    display: none !important;
+  }
+</style>
+<script>
+(function(){
+  "use strict";
+  if (window.__vlGiftRemovalFixV1) return;
+  window.__vlGiftRemovalFixV1 = true;
+
+  // 🛡️ Safety net: لو الـ CSS اتمسح لأي سبب، نضيف ستايل inline
+  function ensureRemoveBtnVisible() {
+    var giftCards = document.querySelectorAll('#cartItems .citem[data-gift="1"]');
+    giftCards.forEach(function(card){
+      var rmBtn = card.querySelector('.rm');
+      if (rmBtn && rmBtn.style.display === 'none') {
+        rmBtn.style.display = 'grid';
+        rmBtn.style.visibility = 'visible';
+        rmBtn.style.opacity = '1';
+        rmBtn.style.pointerEvents = 'auto';
+      }
+    });
+  }
+
+  // شغّل مع كل تحديث للسلة
+  var cartItems = document.getElementById('cartItems');
+  if (cartItems) {
+    new MutationObserver(ensureRemoveBtnVisible).observe(cartItems, { childList: true });
+  }
+  setTimeout(ensureRemoveBtnVisible, 500);
+  setTimeout(ensureRemoveBtnVisible, 1500);
+  setTimeout(ensureRemoveBtnVisible, 3000);
+})();
+</script>
+<!-- ═══ END GIFT REMOVAL FIX ═══ -->
 </body>
 </html>
