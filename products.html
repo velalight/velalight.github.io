@@ -292,8 +292,23 @@
       <input id="coAddr" data-i18n-ph="ph_addr" placeholder="العنوان بالتفصيل *">
       <textarea id="coNotes" rows="2" data-i18n-ph="ph_notes" placeholder="ملاحظات"></textarea>
     </div>
-    <div class="trow"><span data-i18n="subtotal">قيمة المنتجات</span><b id="cartSub">0</b></div>
-    <div class="trow total"><span data-i18n="total">الإجمالي</span><b id="cartTotal">0</b></div>
+    <!-- ═══ حقل الكوبون — جديد ═══ -->
+<div class="vl-coupon-wrap">
+  <input id="couponInput" type="text" placeholder="كود الخصم (مثل WELCOME10)" autocomplete="off" dir="ltr">
+  <button id="applyCouponBtn" type="button">تطبيق</button>
+</div>
+
+<div id="discountRow" class="trow" style="display:none">
+  <span>
+    🎟️ الخصم
+    <span id="couponCodeLbl"></span>
+  </span>
+  <b id="cartDiscount">0</b>
+</div>
+
+<div class="trow"><span data-i18n="subtotal">قيمة المنتجات</span><b id="cartSub">0</b></div>
+<div class="trow total"><span data-i18n="total">الإجمالي</span><b id="cartTotal">0</b></div>
+    
     <p class="cart-shipping-note" data-i18n="ship_note">🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.</p>
     <button class="btn wa" id="checkoutBtn" style="width:100%;margin-top:.8rem" data-i18n="checkout_wa">✅ إتمام الطلب عبر واتساب</button>
     <button class="btn ghost sm" id="emptyCartBtn" style="width:100%;margin-top:.5rem" data-i18n="empty_cart">🗑️ إفراغ السلة</button>
@@ -453,15 +468,76 @@
 <style>
   /* إخفاء حقول الإدخال من درج السلة (بدون زر التفريغ) */
   #cartDrawer .co-form,
-  #cartDrawer .paybox,
-  #cartDrawer .cart-shipping-note,
-  #cartDrawer h4[data-i18n="delivery_h"],
-  #cartDrawer #couponInput,
-  #cartDrawer #applyCouponBtn,
-  #cartDrawer #discountRow,
-  #cartDrawer #couponCodeLbl {
-    display: none !important;
-  }
+#cartDrawer .paybox,
+#cartDrawer .cart-shipping-note,
+#cartDrawer h4[data-i18n="delivery_h"] {
+  display: none !important;
+}
+
+/* ═══ COUPON UI — ظاهر وشغال ═══ */
+#cartDrawer .vl-coupon-wrap {
+  display: flex !important;
+  gap: 8px;
+  margin: 8px 0 10px;
+}
+#cartDrawer #couponInput {
+  display: block !important;
+  flex: 1 !important;
+  padding: 10px 14px !important;
+  border: 1.5px solid rgba(212, 175, 55, 0.4) !important;
+  border-radius: 10px !important;
+  font-size: 0.9rem !important;
+  font-family: inherit !important;
+  background: #fff !important;
+  color: #3d2f1f !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  outline: none !important;
+  transition: 0.2s !important;
+}
+#cartDrawer #couponInput:focus {
+  border-color: #d4af37 !important;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15) !important;
+}
+#cartDrawer #couponInput::placeholder {
+  color: #a89a84 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: 0.85rem !important;
+}
+#cartDrawer #applyCouponBtn {
+  display: block !important;
+  background: linear-gradient(135deg, #d4af37, #b8863f) !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 10px 16px !important;
+  border-radius: 10px !important;
+  font-size: 0.88rem !important;
+  font-weight: 800 !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: 0.2s !important;
+}
+#cartDrawer #applyCouponBtn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4) !important;
+}
+#cartDrawer #discountRow {
+  display: none;
+  color: #1e8449 !important;
+  font-weight: 700 !important;
+}
+#cartDrawer #discountRow b {
+  color: #1e8449 !important;
+  font-weight: 800 !important;
+}
+#cartDrawer #couponCodeLbl {
+  font-size: 0.75rem !important;
+  color: #1e8449 !important;
+  margin-inline-start: 4px !important;
+}
 
   /* مساحة مريحة للمنتجات */
   #cartDrawer .dbody {
