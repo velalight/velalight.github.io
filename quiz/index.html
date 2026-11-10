@@ -130,7 +130,8 @@ input:focus{border-color:#ff6b9d;box-shadow:0 0 15px rgba(255,107,157,.3)}
     <h2>استنى! هديتك مستنياك</h2>
     <p>عشان إنت شخصية مميزة، عملنالك عرض خاص.<br><b>اطلب أي شمعة، وهنبعتلك فواحة عربيتك هدية ببلاش!</b></p>
     <div class="promo-box">كود الخصم: VELAGIFT<br><span style="font-size:.8rem;color:#fff;font-weight:normal">(يضاف تلقائياً عند الطلب)</span></div>
-    <a href="https://velalight.github.io/products.html" class="btn-gift" onclick="trackEvent('exit_gift_click', 'clicked_exit_gift')">🛍️ اطلب دلوقتي وخد الهدية</a>
+    <a href="javascript:void(0);" class="btn-gift" onclick="addGiftToCart(); setTimeout(function(){ window.location.href='https://velalight.github.io/products.html'; }, 1000);">🛍️ اطلب دلوقتي وخد الهدية</a>
+    
     <button class="btn-close-gift" onclick="document.getElementById('exitGiftModal').classList.remove('show')">لا شكراً، مكمل اللعبة</button>
   </div>
 </div>
@@ -1459,6 +1460,40 @@ document.addEventListener('touchstart', resetIdleTimer);
 
 // ابدأ
 init();
+  function addGiftToCart() {
+  // 1. شكل الفواحة اللي هتتحط في السلة
+  const giftItem = {
+    id: "pmvj8cij7c34", 
+    name: "فواحة سيارة (هدية)", 
+    nameEn: "Car Diffuser (Gift)",
+    price: 0, 
+    old: 150, 
+    qty: 1,
+    isGift: true, 
+    img: "https://velalight.github.io/fawaha.jpg" // يفضل تحط رابط صورة الفواحة هنا
+  };
+
+  // 2. نقرا السلة الحالية
+  let cart = [];
+  try {
+    cart = JSON.parse(localStorage.getItem('vl_cart') || '[]');
+  } catch(e) { cart = []; }
+
+  // 3. نتأكد إنها مش متضافة قبل كده
+  const alreadyHasGift = cart.find(item => item.id === "pmvj8cij7c34");
+  
+  if (!alreadyHasGift) {
+    cart.push(giftItem);
+    localStorage.setItem('vl_cart', JSON.stringify(cart));
+    
+    // 4. نظبط رقم السلة اللي فوق في المتجر
+    const cartCount = document.getElementById('cartCount');
+    if (cartCount) {
+      let totalQty = cart.reduce((sum, item) => sum + (Number(item.qty) || 1), 0);
+      cartCount.textContent = totalQty;
+    }
+  }
+}
 </script>
 </body>
 </html>
