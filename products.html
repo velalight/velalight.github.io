@@ -755,6 +755,52 @@
 })();
 </script>
 <!-- ═══ END GIFT REMOVAL FIX v2 ═══ -->
+<!-- ═══ COUPON OFFLINE FALLBACK — حل فوري للكوبون ═══ -->
+<script>
+document.addEventListener('click', function(e) {
+  // بنمسك زرار تطبيق الكوبون قبل ما app.js يشتغل
+  if (e.target && e.target.id === 'applyCouponBtn') {
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
+    const code = (document.getElementById('couponInput')?.value || "").trim().toUpperCase();
+    if (!code) {
+      if (typeof toast === 'function') toast("⚠️ اكتب كود الخصم أولاً");
+      else alert("⚠️ اكتب كود الخصم أولاً");
+      return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem('vl_cart') || '[]');
+    const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 1), 0);
+
+    // 1. لو الكود WELCOME10، هنطبقه محلياً (من غير سيرفر)
+    if (code === "WELCOME10") {
+      const discount = Math.round(subtotal * 0.10);
+      const couponData = { 
+        code: "WELCOME10", 
+        type: "percent", 
+        value: 10, 
+        _fid: "welcome10_local", 
+        discount: discount, 
+        _savedAt: Date.now() 
+      };
+      
+      localStorage.setItem("vl_coupon", JSON.stringify(couponData));
+      
+      if (typeof toast === 'function') toast("🎟️ تم تطبيق كود WELCOME10! وفرت " + discount + " ج.م");
+      else alert("🎟️ تم تطبيق كود WELCOME10! وفرت " + discount + " ج.م");
+      
+      // بنعمل تحديث للصفحة عشان الخصم يظهر في السلة
+      setTimeout(() => location.reload(), 500);
+      return;
+    }
+
+    // 2. لو كود تاني، هنحاول نكلم السيرفر (لأننا لسه مفعلناهوش)
+    if (typeof toast === 'function') toast("⚠️ الكود ده محتاج السيرفر يتفعل");
+    else alert("⚠️ الكود ده محتاج السيرفر يتفعل");
+  }
+}, true);
+</script>
+<!-- ═══ END COUPON OFFLINE FALLBACK ═══ -->
 </body>
 </html>
