@@ -292,22 +292,23 @@
       <input id="coAddr" data-i18n-ph="ph_addr" placeholder="العنوان بالتفصيل *">
       <textarea id="coNotes" rows="2" data-i18n-ph="ph_notes" placeholder="ملاحظات"></textarea>
     </div>
+
     <!-- ═══ حقل الكوبون — جديد ═══ -->
-<div class="vl-coupon-wrap">
-  <input id="couponInput" type="text" placeholder="كود الخصم (مثل WELCOME10)" autocomplete="off" dir="ltr">
-  <button id="applyCouponBtn" type="button">تطبيق</button>
-</div>
+    <div class="vl-coupon-wrap">
+      <input id="couponInput" type="text" placeholder="كود الخصم (مثل WELCOME10)" autocomplete="off" dir="ltr">
+      <button id="applyCouponBtn" type="button">تطبيق</button>
+    </div>
 
-<div id="discountRow" class="trow" style="display:none">
-  <span>
-    🎟️ الخصم
-    <span id="couponCodeLbl"></span>
-  </span>
-  <b id="cartDiscount">0</b>
-</div>
+    <div id="discountRow" class="trow" style="display:none">
+      <span>
+        🎟️ الخصم
+        <span id="couponCodeLbl"></span>
+      </span>
+      <b id="cartDiscount">0</b>
+    </div>
 
-<div class="trow"><span data-i18n="subtotal">قيمة المنتجات</span><b id="cartSub">0</b></div>
-<div class="trow total"><span data-i18n="total">الإجمالي</span><b id="cartTotal">0</b></div>
+    <div class="trow"><span data-i18n="subtotal">قيمة المنتجات</span><b id="cartSub">0</b></div>
+    <div class="trow total"><span data-i18n="total">الإجمالي</span><b id="cartTotal">0</b></div>
     
     <p class="cart-shipping-note" data-i18n="ship_note">🚚 الشحن: يُدفع كاش لمندوب الشحن عند الاستلام.</p>
     <button class="btn wa" id="checkoutBtn" style="width:100%;margin-top:.8rem" data-i18n="checkout_wa">✅ إتمام الطلب عبر واتساب</button>
@@ -466,78 +467,82 @@
 
 <!-- ═══ CART CLEANUP — VelaLight ═══ -->
 <style>
-  /* إخفاء حقول الإدخال من درج السلة (بدون زر التفريغ) */
-  #cartDrawer .co-form,
-#cartDrawer .paybox,
-#cartDrawer .cart-shipping-note,
-#cartDrawer h4[data-i18n="delivery_h"] {
-  display: none !important;
-}
+  /* ✅ استخدام body عشان نغلب الـ CSS اللي app.js بيحقنه */
+  body #cartDrawer .co-form,
+  body #cartDrawer .paybox,
+  body #cartDrawer .cart-shipping-note,
+  body #cartDrawer h4[data-i18n="delivery_h"] {
+    display: none !important;
+  }
 
-/* ═══ COUPON UI — ظاهر وشغال ═══ */
-#cartDrawer .vl-coupon-wrap {
-  display: flex !important;
-  gap: 8px;
-  margin: 8px 0 10px;
-}
-#cartDrawer #couponInput {
-  display: block !important;
-  flex: 1 !important;
-  padding: 10px 14px !important;
-  border: 1.5px solid rgba(212, 175, 55, 0.4) !important;
-  border-radius: 10px !important;
-  font-size: 0.9rem !important;
-  font-family: inherit !important;
-  background: #fff !important;
-  color: #3d2f1f !important;
-  text-align: center !important;
-  text-transform: uppercase !important;
-  letter-spacing: 1px !important;
-  outline: none !important;
-  transition: 0.2s !important;
-}
-#cartDrawer #couponInput:focus {
-  border-color: #d4af37 !important;
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15) !important;
-}
-#cartDrawer #couponInput::placeholder {
-  color: #a89a84 !important;
-  text-transform: none !important;
-  letter-spacing: 0 !important;
-  font-size: 0.85rem !important;
-}
-#cartDrawer #applyCouponBtn {
-  display: block !important;
-  background: linear-gradient(135deg, #d4af37, #b8863f) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 10px 16px !important;
-  border-radius: 10px !important;
-  font-size: 0.88rem !important;
-  font-weight: 800 !important;
-  font-family: inherit !important;
-  cursor: pointer !important;
-  white-space: nowrap !important;
-  transition: 0.2s !important;
-}
-#cartDrawer #applyCouponBtn:hover {
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4) !important;
-}
-#cartDrawer #discountRow {
-  display: none;
-  color: #1e8449 !important;
-  font-weight: 700 !important;
-}
-#cartDrawer #discountRow b {
-  color: #1e8449 !important;
-  font-weight: 800 !important;
-}
-#cartDrawer #couponCodeLbl {
-  font-size: 0.75rem !important;
-  color: #1e8449 !important;
-  margin-inline-start: 4px !important;
-}
+  /* ═══ COUPON UI — ظاهر وشغال ═══ */
+  #cartDrawer .vl-coupon-wrap {
+    display: flex !important;
+    gap: 8px;
+    margin: 10px 0;
+  }
+  #cartDrawer #couponInput {
+    display: block !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    padding: 11px 14px !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.45) !important;
+    border-radius: 10px !important;
+    font-size: 0.92rem !important;
+    font-family: inherit !important;
+    background: #fff !important;
+    color: #3d2f1f !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.2px !important;
+    outline: none !important;
+    transition: 0.2s !important;
+    box-sizing: border-box !important;
+  }
+  #cartDrawer #couponInput:focus {
+    border-color: #d4af37 !important;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18) !important;
+  }
+  #cartDrawer #couponInput::placeholder {
+    color: #a89a84 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-size: 0.85rem !important;
+  }
+  #cartDrawer #applyCouponBtn {
+    display: block !important;
+    background: linear-gradient(135deg, #d4af37, #b8863f) !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 11px 18px !important;
+    border-radius: 10px !important;
+    font-size: 0.88rem !important;
+    font-weight: 800 !important;
+    font-family: inherit !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    transition: 0.2s !important;
+    box-shadow: 0 3px 10px rgba(212, 175, 55, 0.3) !important;
+    flex-shrink: 0 !important;
+  }
+  #cartDrawer #applyCouponBtn:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 5px 16px rgba(212, 175, 55, 0.45) !important;
+  }
+  #cartDrawer #discountRow {
+    display: none;
+    color: #1e8449 !important;
+    font-weight: 700 !important;
+  }
+  #cartDrawer #discountRow b {
+    color: #1e8449 !important;
+    font-weight: 800 !important;
+  }
+  #cartDrawer #couponCodeLbl {
+    font-size: 0.75rem !important;
+    color: #1e8449 !important;
+    margin-inline-start: 4px !important;
+  }
 
   /* مساحة مريحة للمنتجات */
   #cartDrawer .dbody {
@@ -670,16 +675,8 @@
 
 <!-- ═══════════════════════════════════════════════════════════
      GIFT REMOVAL FIX v2 — الحل المضمون لمسح الفواحة
-     التغييرات عن v1:
-     1. شيلنا شرط rmBtn.style.display === 'none' (كان false دايماً)
-     2. ضفنا attributes: true عشان نراقب data-gift
-     3. force inline !important (بيغلب أي CSS خارجي)
-     4. كذا timing + الاستماع لفتح السلة
      ═══════════════════════════════════════════════════════════ -->
 <style id="vlGiftRemovalFixCSS">
-  /* ✅ محاولة CSS بـ specificity أعلى من app.js */
-  /* app.js:        #cartItems .citem[data-gift="1"] .rm          = (1, 3, 0) */
-  /* حلنا:          html #cartItems .citem[data-gift="1"] .rm    = (1, 3, 1) ✓ */
   html #cartItems .citem[data-gift="1"] .rm,
   html #cartItems .citem[data-gift="1"][data-cart-idx] .rm {
     display: grid !important;
@@ -693,7 +690,6 @@
     inset-inline-end: 8px !important;
     z-index: 20 !important;
   }
-  /* إبقاء زر الـ qty مخفي للهدية (الكمية ثابتة = 1) */
   html #cartItems .citem[data-gift="1"] .qty {
     display: none !important;
   }
@@ -704,13 +700,11 @@
   if (window.__vlGiftRemovalFixV2) return;
   window.__vlGiftRemovalFixV2 = true;
 
-  // 💪 الحل المضمون: inline style بـ !important بيغلب كل CSS خارجي
   function forceShowRemoveBtns() {
     var cards = document.querySelectorAll('#cartItems .citem[data-gift="1"]');
     cards.forEach(function(card){
       var rmBtn = card.querySelector('.rm');
       if (!rmBtn) return;
-      // مش بنعمل أي check — دايماً بنفرض الستايل
       rmBtn.style.setProperty('display', 'grid', 'important');
       rmBtn.style.setProperty('visibility', 'visible', 'important');
       rmBtn.style.setProperty('opacity', '1', 'important');
@@ -724,7 +718,6 @@
     });
   }
 
-  // راقب childList + attributes (data-gift بيتحط بعد ما items تترندر)
   function hookObserver(){
     var el = document.getElementById('cartItems');
     if (!el) return;
@@ -745,12 +738,10 @@
     hookObserver();
   }
 
-  // محاولات متعددة لضمان التنفيذ بعد ما app.js يخلص
   [100, 300, 600, 1200, 2000, 3500, 5000].forEach(function(t){
     setTimeout(function(){ hookObserver(); forceShowRemoveBtns(); }, t);
   });
 
-  // كل مرة السلة تتفتح
   var cartBtn = document.getElementById('cartBtn');
   if (cartBtn) {
     cartBtn.addEventListener('click', function(){
@@ -760,7 +751,6 @@
     });
   }
 
-  // Fallback: interval خفيف كضمان أخير (كل 3 ثواني بس)
   setInterval(forceShowRemoveBtns, 3000);
 })();
 </script>
