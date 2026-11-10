@@ -53,6 +53,8 @@
   .co-summary-item-info b { display: block; font-size: 0.85rem; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .co-summary-item-info small { display: block; font-size: 0.72rem; color: var(--mut); margin-top: 2px; }
   .co-summary-item-price { font-size: 0.85rem; font-weight: 700; color: var(--gold2); white-space: nowrap; }
+  .co-summary-item.is-gift { background: rgba(39,174,96,.06); border: 1px dashed rgba(39,174,96,.4); border-radius: 10px; padding: 8px; margin: -4px; }
+  .co-summary-item.is-gift .co-summary-item-price { color: #1e8449; }
   .co-summary-row { display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 8px; color: var(--mut); }
   .co-summary-row.total { font-size: 1.05rem; font-weight: 800; color: var(--ink); border-top: 2px solid var(--line); padding-top: 12px; margin-top: 12px; }
   .co-summary-row.total span:last-child { color: var(--gold2); }
@@ -63,7 +65,7 @@
   .co-empty { text-align: center; padding: 60px 20px; }
   .co-empty .icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.7; }
   .co-empty h2 { font-family: 'El Messiri', serif; font-size: 1.4rem; color: var(--gold2); margin: 0 0 8px; }
-  .co-empty p { color: var(--mut); margin: 0 0 20px; font-size: 0.9rem; }
+  .co-empty p { color: var(--mut); margin: 0 0 20px; font-size: 0.9rem; line-height: 1.6; }
   .co-empty .co-btn { display: inline-block; width: auto; padding: 12px 32px; background: var(--gold); }
   .co-success { text-align: center; padding: 40px 20px; }
   .co-success .icon { font-size: 4rem; margin-bottom: 16px; }
@@ -103,17 +105,32 @@ const GOVS = ['القاهرة','الجيزة','الإسكندرية','القلي
 
 function getCart(){try{return JSON.parse(localStorage.getItem('vl_cart')||'[]')}catch(e){return[]}}
 function saveCart(c){try{localStorage.setItem('vl_cart',JSON.stringify(c))}catch(e){}}
-function getUser(){try{return JSON.parse(localStorage.getItem('vl_user')||'{}')}catch(e){return{}}}
+function getUser(){try{return JSON.parse(localStorage.getItem('vl_user')||'{}')}catch(e){return{}}} 
 function saveUser(u){try{localStorage.setItem('vl_user',JSON.stringify(u))}catch(e){}}
 function money(n){return Number(n||0).toLocaleString('en-US')+' ج.م'}
 function toast(msg){const t=document.getElementById('coToast');t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2800)}
 function escapeHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+// ✅ دالة التحقق: هل السلة فيها منتجات مدفوعة؟
+function hasPaidItems(cart){
+  return cart.some(function(i){ return !i.isGift && Number(i.price) > 0; });
+}
+function getGiftItems(cart){
+  return cart.filter(function(i){ return i.isGift === true; });
+}
 
 let paymentMethod = 'instapay';
 
 function init(){
   const cart = getCart();
   if(!cart.length){ renderEmpty(); return; }
+
+  // ✅ التحقق الجديد: الفواحة لوحدها ممنوعة
+  if(!hasPaidItems(cart) && getGiftItems(cart).length > 0){
+    renderGiftOnlyWarning();
+    return;
+  }
+
   renderCheckout(cart);
 }
 
@@ -127,10 +144,31 @@ function renderEmpty(){
     </div>`;
 }
 
+// ✅ شاشة جديدة: تحذير الفواحة لوحدها
+function renderGiftOnlyWarning(){
+  document.getElementById('coMain').innerHTML = `
+    <div class="co-empty">
+      <div class="icon">🎁</div>
+      <h2>الفواحة هدية مجانية!</h2>
+      <p style="max-width:420px;margin:0 auto 12px;">الفواحة بتيجي هدية مع أي منتج من VelaLight — مش ينفع تطلبها لوحدها.</p>
+      <p style="color:var(--gold2);font-weight:800;font-size:1rem;margin:8px 0 24px;">
+        ضيف منتج واحد على الأقل عشان تقدر تكمل الطلب
+      </p>
+      <a href="products.html" class="co-btn" style="background:var(--gold);">
+        🕯️ تصفح المنتجات
+      </a>
+      <p style="font-size:0.8rem;color:var(--mut);margin-top:20px;">
+        الفواحة محفوظة في سلتك — لما تضيف منتج، هتلاقيها معاك.
+      </p>
+    </div>`;
+}
+
 function renderCheckout(cart){
   const user = getUser();
   const subtotal = cart.reduce((s,i)=>s+Number(i.price||0)*Number(i.qty||1),0);
   const shippingFree = subtotal >= FREE_SHIPPING_THRESHOLD;
+  const paidCount = cart.filter(i=>!i.isGift && Number(i.price) > 0).length;
+  const giftCount = cart.filter(i=>i.isGift).length;
 
   document.getElementById('coMain').innerHTML = `
     <div class="co-title">
@@ -161,10 +199,19 @@ function renderCheckout(cart){
         </div>
       </div>
       <aside class="co-summary">
-        <h3>🛍️ ملخص الطلب (${cart.length} منتج)</h3>
+        <h3>🛍️ ملخص الطلب (${paidCount}${giftCount?' + '+giftCount+' 🎁':''})</h3>
         ${shippingFree?'<div class="co-ship-free">🎉 مبروك! الشحن مجاني على طلبك</div>':''}
         <div class="co-summary-items">
-          ${cart.map(item=>`<div class="co-summary-item"><img src="${escapeHtml(item.img||'velalight-wooden-luxury-set-3candles-detail.webp')}" alt="" onerror="this.style.display='none'"><div class="co-summary-item-info"><b>${escapeHtml(item.name||'منتج')}</b><small>${escapeHtml(item.scent||'')} • × ${item.qty||1}${item.isGift?' • 🎁 هدية':''}</small></div><div class="co-summary-item-price">${Number(item.price)===0?'مجاني':money(Number(item.price||0)*Number(item.qty||1))}</div></div>`).join('')}
+          ${cart.map(item=>`
+            <div class="co-summary-item ${item.isGift?'is-gift':''}">
+              <img src="${escapeHtml(item.img||'velalight-wooden-luxury-set-3candles-detail.webp')}" alt="" onerror="this.style.display='none'">
+              <div class="co-summary-item-info">
+                <b>${escapeHtml(item.name||'منتج')}</b>
+                <small>${escapeHtml(item.scent||'')} • × ${item.qty||1}${item.isGift?' • 🎁 هدية':''}</small>
+              </div>
+              <div class="co-summary-item-price">${Number(item.price)===0?'مجاني':money(Number(item.price||0)*Number(item.qty||1))}</div>
+            </div>
+          `).join('')}
         </div>
         <div class="co-summary-row"><span>قيمة المنتجات</span><span>${money(subtotal)}</span></div>
         <div class="co-summary-row"><span>الشحن</span><span>${shippingFree?'🎉 مجاني':'يُدفع كاش للمندوب'}</span></div>
@@ -213,6 +260,13 @@ function saveShippingToUser(){
 }
 
 function confirmOrder(cart){
+  // ✅ Safety net: التحقق مرة تانية من وجود منتج مدفوع
+  if(!hasPaidItems(cart)){
+    toast('🎁 الفواحة هدية مجانية مع أي منتج — ضيف منتج أول');
+    setTimeout(()=>location.href='products.html',1800);
+    return;
+  }
+
   if(!validate())return;
   saveShippingToUser();
   const user=getUser();
