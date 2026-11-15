@@ -548,3 +548,26 @@ body:has(#cartDrawer.open) #vlFreeShipWrap {
 .modal { z-index: 9999999 !important; }
 .drawer { z-index: 9999999 !important; }
 .ovl { z-index: 9999998 !important; }
+
+/* ═══ FIX: إزالة البلور من السلة عشان تبان واضحة على الموبايل ═══ */
+#cartDrawer.drawer,
+#cartDrawer {
+  background: #ffffff !important;          /* خلفية بيضاء صلبة */
+  backdrop-filter: none !important;        /* إلغاء البلور */
+  -webkit-backdrop-filter: none !important;/* إلغاء البلور للسفاري */
+  filter: none !important;
+  z-index: 100000 !important;              /* رفع السلة فوق الطبقة اللي تحتها */
+}
+
+/* التأكد إن صور المنتجات جوه السلة واضحة 100% */
+#cartDrawer img {
+  filter: none !important;
+  transform: translateZ(0) !important;     /* تحسين الرندر على الموبايل */
+}
+
+/* تخفيف البلور عن الخلفية اللي ورا السلة عشان ميتعبش العين */
+#cartOv, .ovl.open {
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+  z-index: 99999 !important;               /* أقل من السلة عشان متغطيهاش */
+}
