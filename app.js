@@ -238,39 +238,37 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
     return clean;
   }
 
-  const originalAdd = DB && DB.add ? DB.add.bind(DB) : null;
-  if(originalAdd){
-    DB.add = async function(collection, data){
-      if(collection === "orders"){
-        try {
-          const cleaned = sanitizeOrder(data);
-          const jsonStr = JSON.stringify(cleaned);
-          const sizeKB = (new Blob([jsonStr]).size / 1024).toFixed(1);
-          console.log("📦 Order save attempt | Size:", sizeKB + " KB", "| Products:", cleaned.products?.length || 0);
-          if(sizeKB > 1024){ console.warn("⚠️ Order size exceeds 1MB! This will likely fail."); }
-          const result = await originalAdd(collection, cleaned);
-          console.log("✅ Order saved successfully:", result?.id || "no-id");
-          return result;
-        } catch(err){
-          console.error("❌ Order save FAILED:", err);
-          if(typeof toast === "function"){ toast("⚠️ فشل حفظ الطلب في قاعدة البيانات. تواصل معنا عبر واتساب."); }
-          throw err;
+  function installOrderSaveHook(retriesLeft) {
+    const originalAdd = DB && DB.add ? DB.add.bind(DB) : null;
+    if (originalAdd) {
+      DB.add = async function(collection, data) {
+        if (collection === "orders") {
+          try {
+            const cleaned = sanitizeOrder(data);
+            const jsonStr = JSON.stringify(cleaned);
+            const sizeKB = (new Blob([jsonStr]).size / 1024).toFixed(1);
+            console.log("📦 Order save attempt | Size:", sizeKB + " KB", "| Products:", cleaned.products?.length || 0);
+            if (sizeKB > 1024) { console.warn("⚠️ Order size exceeds 1MB! This will likely fail."); }
+            const result = await originalAdd(collection, cleaned);
+            console.log("✅ Order saved successfully:", result?.id || "no-id");
+            return result;
+          } catch (err) {
+            console.error("❌ Order save FAILED:", err);
+            if (typeof toast === "function") { toast("⚠️ فشل حفظ الطلب في قاعدة البيانات. تواصل معنا عبر واتساب."); }
+            throw err;
+          }
         }
-      }
-      return originalAdd(collection, data);
-    };
-    console.log("✅ Order save hook installed");
-  } else {
-    console.warn("⚠️ DB.add not available yet — will retry");
-    const retry = setInterval(() => {
-      if(DB && DB.add){
-        clearInterval(retry);
-        window.__vlOrderSaveFix = false;
-        document.dispatchEvent(new Event("vl-retry-order-fix"));
-      }
-    }, 500);
-    setTimeout(() => clearInterval(retry), 10000);
+        return originalAdd(collection, data);
+      };
+      console.log("✅ Order save hook installed");
+    } else if (retriesLeft > 0) {
+      setTimeout(function() { installOrderSaveHook(retriesLeft - 1); }, 500);
+    } else {
+      console.warn("⚠️ DB.add not available after retries — hook not installed");
+    }
   }
+
+  installOrderSaveHook(10);
 })();
 
 
