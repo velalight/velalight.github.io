@@ -1051,3 +1051,135 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
     }
   }, true);
 })();
+
+/* ═══════════════════════════════════════════════════════════
+   🚫 منع الخصومات تمامًا — VelaLight
+   - يمسح أي كوبون مطبّق
+   - يمنع تطبيق كوبونات جديدة
+   - يخفي صفوف الخصم
+   - يصحح الإجمالي (بدون خصم) كل لحظة
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+
+  // ─── 1) إخفاء كل عناصر الخصم ───
+  var css = document.createElement("style");
+  css.id = "vlNoDiscountStyles";
+  css.textContent = [
+    "#qtyDiscountRow,",
+    "#discountRow,",
+    ".vl-disc-row,",
+    "#cartDiscount,",
+    ".vl-loyalty-hint {",
+    "  display: none !important;",
+    "}"
+  ].join("\n");
+  document.head.appendChild(css);
+
+  // ─── 2) مسح أي كوبون موجود ───
+  function killCoupon(){
+    try {
+      localStorage.removeItem("vl_coupon");
+      localStorage.removeItem("vl_loyalty_unlocked");
+    } catch(e){}
+    var input = document.getElementById("couponInput");
+    if(input) input.value = "";
+    var couponRow = document.getElementById("discountRow");
+    if(couponRow) couponRow.style.display = "none";
+  }
+
+  // ─── 3) منع تطبيق أي كوبون جديد ───
+  function blockCouponApply(){
+    var applyBtn = document.getElementById("applyCouponBtn");
+    if(!applyBtn || applyBtn.dataset.vlBlocked === "1") return;
+    applyBtn.dataset.vlBlocked = "1";
+
+    var clone = applyBtn.cloneNode(true);
+    applyBtn.parentNode.replaceChild(clone, applyBtn);
+
+    clone.addEventListener("click", function(e){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      killCoupon();
+      if(typeof toast === "function") toast("الكوبونات غير مفعّلة حاليًا 🎁");
+    }, true);
+  }
+
+  // ─── 4) تصحيح الإجمالي (بدون خصم) ───
+  function recalcTotal(){
+    var cart = [];
+    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return; }
+    if(!Array.isArray(cart) || !cart.length) return;
+
+    // احسب الإجمالي الحقيقي من عناصر السلة
+    var subtotal = 0;
+    cart.forEach(function(item){
+      subtotal += (Number(item.price) || 0) * (Number(item.qty) || 1);
+    });
+
+    var formatted = subtotal.toLocaleString("en-US") + " ج.م";
+
+    var subEl = document.getElementById("cartSub");
+    var totalEl = document.getElementById("cartTotal");
+    var discountEl = document.getElementById("cartDiscount");
+
+    if(subEl && subEl.textContent !== formatted) subEl.textContent = formatted;
+    if(totalEl && totalEl.textContent !== formatted) totalEl.textContent = formatted;
+    if(discountEl) discountEl.textContent = "-0";
+  }
+
+  // ─── 5) راقب التغييرات في DOM ───
+  var observer = new MutationObserver(function(){
+    // لو ظهر أي عنصر خصم جديد — اخفيه
+    var discountRows = document.querySelectorAll("#qtyDiscountRow, #discountRow, .vl-disc-row");
+    discountRows.forEach(function(row){ row.style.display = "none"; });
+
+    // صحّح الإجمالي
+    recalcTotal();
+
+    // امنع أي زر كوبون جديد
+    blockCouponApply();
+  });
+
+  // ─── 6) شغّل المراقبة عند تحميل الصفحة ───
+  function init(){
+    killCoupon();
+
+    // ابدأ المراقبة
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
+
+    // فحص دوري كاحتياط
+    setInterval(function(){
+      recalcTotal();
+      killCoupon();
+    }, 500);
+
+    // امسح الكوبون كل ما المستخدم يحاول يفتح السلة
+    var cartBtn = document.getElementById("cartBtn");
+    if(cartBtn){
+      cartBtn.addEventListener("click", function(){
+        setTimeout(killCoupon, 50);
+      }, true);
+    }
+
+    // امسح الكوبون قبل الـ checkout مباشرة
+    var checkoutBtn = document.getElementById("checkoutBtn");
+    if(checkoutBtn){
+      checkoutBtn.addEventListener("click", function(){
+        killCoupon();
+      }, true);
+    }
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+  console.log("🚫 Coupons & discounts disabled — free shipping (3 diffusers) remains active");
+})();
