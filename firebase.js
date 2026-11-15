@@ -84,18 +84,10 @@ try {
      ✅ Firestore مع offline persistence
      الميزة: الموقع يشتغل حتى لو النت قطع مؤقتاً
      ═══════════════════════════════════════════════════════════ */
-  try {
-    db = initializeFirestore(app, {
-      localCache: persistentLocalCache({
-        tabManager: persistentMultipleTabManager()
-      })
-    });
-    console.log("💾 Firestore offline persistence enabled");
-  } catch (cacheError) {
-    console.warn("⚠️ Persistent cache unavailable, falling back to default:", cacheError);
-    db = getFirestore(app);
-  }
-
+  // ✅ تعطيل الكاش المؤقت لحل مشكلة التهنيج
+db = getFirestore(app);
+console.log("Firestore initialized with default settings (cache disabled)");
+  
   /* ═══════════════════════════════════════════════════════════
      ✅ Auth مع persistent login
      الميزة: المستخدم يفضل مسجل دخول حتى بعد إغلاق المتصفح
