@@ -1357,42 +1357,31 @@ function parseFirestoreDoc(doc, fallbackId){
   return out;
 }
 async function fetchFreshProduct(pid){
-  const project="velalight";
-  const baseURL="https://firestore.googleapis.com/v1/projects/"+project+"/databases/(default)/documents";
+  // ═══ 1) Firebase SDK مباشرة (يتجاوز الكاش) ═══
   try{
-    const resp=await fetch(baseURL+"/products/"+encodeURIComponent(pid),{cache:"no-store"});
+    if(window.FB && window.FB.db){
+      const {doc,getDocFromServer}=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      const snap=await getDocFromServer(doc(window.FB.db,"products",pid));
+      if(snap.exists()){
+        return {id:pid,_fid:pid,...snap.data()};
+      }
+    }
+  }catch(e){ console.warn("SDK fresh fetch failed:",e.message); }
+
+  // ═══ 2) REST API مع API key (fallback) ═══
+  try{
+    const apiKey="AIzaSyDTX0J7Fvccv2oLvpGYYZXiHteGuiE8y8o";
+    const url="https://firestore.googleapis.com/v1/projects/velalight/databases/(default)/documents/products/"+encodeURIComponent(pid)+"?key="+apiKey;
+    const resp=await fetch(url,{cache:"no-store"});
     if(resp.ok){
       const doc=await resp.json();
       return parseFirestoreDoc(doc,pid);
     }
   }catch(e){}
-  const fields=["id","id_","slug","pid","_fid"];
-  for(const f of fields){
-    try{
-      const body={structuredQuery:{
-        from:[{collectionId:"products"}],
-        where:{fieldFilter:{field:{fieldPath:f},op:"EQUAL",value:{stringValue:pid}}},
-        limit:1
-      }};
-      const resp=await fetch(baseURL+":runQuery",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(body),
-        cache:"no-store"
-      });
-      if(resp.ok){
-        const results=await resp.json();
-        if(Array.isArray(results)){
-          for(const r of results){
-            if(r.document) return parseFirestoreDoc(r.document,pid);
-          }
-        }
-      }
-    }catch(e){}
-  }
+
   return null;
 }
-const getWishlist=()=>{
+  const getWishlist=()=>{
   try{return JSON.parse(localStorage.getItem("vl_wishlist")||"[]")}catch(e){return[]}
 };
 const saveWishlist=l=>localStorage.setItem("vl_wishlist",JSON.stringify(l));
