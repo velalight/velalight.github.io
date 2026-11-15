@@ -13,6 +13,9 @@ const vm = require('vm');
 // ─── 1) Firebase Init ───
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
+// ✅ نستخرج project id من الـ service account لاستخدامه في السكريبت المضمّن
+const projectId = serviceAccount.project_id || 'velalight';
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
@@ -177,7 +180,12 @@ function generateProductHtml(product) {
     ]
   };
   
-  const oldPriceHtml = oldPrice > price ? `<del>${formatPrice(oldPrice)} ج.م</del>` : '';
+  // ✅ العنصر صار له id، وله data-fid (معرّف مستند Firebase) عشان السكريبت يجيب السعر الصح
+  const oldPriceHtml = oldPrice > price 
+    ? `<del id="product-old-price">${formatPrice(oldPrice)} ج.م</del>` 
+    : '';
+  
+  const fid = product._fid || id;
   
   return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -238,7 +246,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--dark);
 .footer a{color:var(--gold2);text-decoration:none}
 </style>
 </head>
-<body>
+<body data-fid="${escapeAttr(fid)}">
 
 <header class="header">
   <a href="https://velalight.github.io/">🕯️ VelaLight</a>
@@ -261,7 +269,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--dark);
       <h1>${escapeHtml(name)}</h1>
       
       <div class="price">
-        <span class="now">${formatPrice(price)} ج.م</span>
+        <span class="now" id="product-price">${formatPrice(price)} ج.م</span>
         ${oldPriceHtml}
       </div>
 
@@ -284,6 +292,48 @@ body{font-family:'Tajawal',sans-serif;background:var(--cream);color:var(--dark);
 <footer class="footer">
   © 2026 <a href="https://velalight.github.io/">VelaLight</a> — جميع الحقوق محفوظة
 </footer>
+
+<!-- ✅ سكريبت جلب السعر المحدث من Firebase مباشرة عند فتح الصفحة -->
+<script>
+(function(){
+  try{
+    var pid = location.pathname.split('/').pop().replace(/\.html$/,'');
+    if(!pid) return;
+    var fid = (document.body && document.body.getAttribute('data-fid')) || pid;
+    var projectId = ${JSON.stringify(projectId)};
+    var url = 'https://firestore.googleapis.com/v1/projects/'+projectId+'/databases/(default)/documents/products/'+encodeURIComponent(fid);
+    fetch(url,{cache:'no-store'}).then(function(r){
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    }).then(function(d){
+      var f=d.fields||{};
+      function num(x){
+        if(!x) return null;
+        if(x.integerValue!==undefined) return Number(x.integerValue);
+        if(x.doubleValue!==undefined) return Number(x.doubleValue);
+        if(x.stringValue!==undefined) return Number(x.stringValue);
+        return null;
+      }
+      var price=num(f.price);
+      var old=num(f.old);
+      if(price!==null && !isNaN(price)){
+        var el=document.getElementById('product-price');
+        if(el) el.textContent=price.toLocaleString('en-US')+' ج.م';
+      }
+      if(old!==null && !isNaN(old)){
+        var oldEl=document.getElementById('product-old-price');
+        if(oldEl){
+          if(price!==null && old>price){
+            oldEl.textContent=old.toLocaleString('en-US')+' ج.م';
+          }else{
+            oldEl.textContent='';
+          }
+        }
+      }
+    }).catch(function(e){ if(window.console) console.warn('VelaLight price refresh failed:',e); });
+  }catch(e){}
+})();
+<\/script>
 
 </body>
 </html>`;
