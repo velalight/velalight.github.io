@@ -1332,7 +1332,66 @@ let productPid="";
 let cloudCatalog=[];
 let zoomImages=[];
 let zoomIndex=0;
-
+/* ═══ Fresh data fetch — بتتجاوز كاش Firestore الـ persistent ═══ */
+function firestoreValue(v){
+  if(!v) return null;
+  if(v.stringValue!==undefined) return v.stringValue;
+  if(v.integerValue!==undefined) return parseInt(v.integerValue,10);
+  if(v.doubleValue!==undefined) return parseFloat(v.doubleValue);
+  if(v.booleanValue!==undefined) return v.booleanValue;
+  if(v.nullValue!==undefined) return null;
+  if(v.timestampValue!==undefined) return new Date(v.timestampValue);
+  if(v.arrayValue) return (v.arrayValue.values||[]).map(firestoreValue);
+  if(v.mapValue){
+    const m={};
+    const f=v.mapValue.fields||{};
+    for(const k in f) m[k]=firestoreValue(f[k]);
+    return m;
+  }
+  return null;
+}
+function parseFirestoreDoc(doc, fallbackId){
+  if(!doc||!doc.fields) return null;
+  const out={id:fallbackId,_fid:(doc.name||"").split("/").pop()||fallbackId};
+  for(const k in doc.fields) out[k]=firestoreValue(doc.fields[k]);
+  return out;
+}
+async function fetchFreshProduct(pid){
+  const project="velalight";
+  const baseURL="https://firestore.googleapis.com/v1/projects/"+project+"/databases/(default)/documents";
+  try{
+    const resp=await fetch(baseURL+"/products/"+encodeURIComponent(pid),{cache:"no-store"});
+    if(resp.ok){
+      const doc=await resp.json();
+      return parseFirestoreDoc(doc,pid);
+    }
+  }catch(e){}
+  const fields=["id","id_","slug","pid","_fid"];
+  for(const f of fields){
+    try{
+      const body={structuredQuery:{
+        from:[{collectionId:"products"}],
+        where:{fieldFilter:{field:{fieldPath:f},op:"EQUAL",value:{stringValue:pid}}},
+        limit:1
+      }};
+      const resp=await fetch(baseURL+":runQuery",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(body),
+        cache:"no-store"
+      });
+      if(resp.ok){
+        const results=await resp.json();
+        if(Array.isArray(results)){
+          for(const r of results){
+            if(r.document) return parseFirestoreDoc(r.document,pid);
+          }
+        }
+      }
+    }catch(e){}
+  }
+  return null;
+}
 const getWishlist=()=>{
   try{return JSON.parse(localStorage.getItem("vl_wishlist")||"[]")}catch(e){return[]}
 };
@@ -1513,6 +1572,37 @@ document.addEventListener("click", (e) => {
 });
 
 async function loadCloudCatalog(pid){
+  // ═══ أولًا: جلب حديث من REST API (يتجاوز كاش Firestore) ═══
+  try{
+    const fresh=await fetchFreshProduct(pid);
+    if(fresh){
+      if(fresh.active===false){ showNotFound(); return; }
+      try{
+        const cacheKey="vl_products_cache_v2";
+        let cache=[];
+        try{ cache=JSON.parse(localStorage.getItem(cacheKey)||"[]"); }catch(e){}
+        if(!Array.isArray(cache)) cache=[];
+        const merged={...fresh,id:pid};
+        const idx=cache.findIndex(x=>String(x.id)===String(pid));
+        if(idx>=0) cache[idx]=merged; else cache.push(merged);
+        localStorage.setItem(cacheKey,JSON.stringify(cache.slice(-100)));
+      }catch(e){}
+      P={...fresh,id:pid};
+      render();
+      try{
+        if(typeof DB!=="undefined" && typeof DB.list==="function"){
+          DB.list("products").then(function(cloud){
+            cloudCatalog=cloud||[];
+            if(P && typeof renderRelated==="function") renderRelated();
+          }).catch(function(){});
+        }
+      }catch(e){}
+      return;
+    }
+  }catch(e){
+    console.warn("Fresh REST fetch failed, using SDK cache",e);
+  }
+  // ═══ ثانيًا: fallback للكود الأصلي (SDK cache) ═══
   try{
     if(typeof DB !== "undefined" && typeof DB.list === "function") {
       const cloud = await DB.list("products");
@@ -2289,140 +2379,5 @@ if(document.readyState === "loading"){
 })();
 </script>
 <!-- ═══ END CART CLEANUP ═══ -->
-<script>
-<script>
-(function() {
-  'use strict';
-  var PROJECT = 'velalight';
-  var pid = new URLSearchParams(location.search).get('p');
-  if (!pid) return;
-
-  var API = 'https://firestore.googleapis.com/v1/projects/' + PROJECT +
-            '/databases/(default)/documents/products/' + encodeURIComponent(pid);
-  var CACHE_KEY = 'vl_product_cache_' + pid;
-  var appliedPrice = false;
-
-  // تحويل قيمة Firestore REST إلى JS
-  function pv(f) {
-    if (!f) return null;
-    if (f.stringValue !== undefined) return f.stringValue;
-    if (f.integerValue !== undefined) return parseInt(f.integerValue, 10);
-    if (f.doubleValue !== undefined) return parseFloat(f.doubleValue);
-    if (f.booleanValue !== undefined) return f.booleanValue;
-    if (f.nullValue !== undefined) return null;
-    if (f.arrayValue) return (f.arrayValue.values || []).map(pv);
-    return null;
-  }
-
-  function parseDoc(doc) {
-    if (!doc || !doc.fields) return null;
-    var out = { id: pid, _fid: pid };
-    for (var k in doc.fields) out[k] = pv(doc.fields[k]);
-    return out;
-  }
-
-  function fmt(n) { return Number(n || 0).toLocaleString('en-US') + ' ج.م'; }
-
-  function cdn(p) {
-    if (!p) return '';
-    if (/^https?:/.test(p)) return p;
-    return 'https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/' + p;
-  }
-
-  // تحديث السعر لو المحتوى ظاهر بالفعل
-  function updatePrice(p) {
-    if (!p || p.price === undefined || p.price === null) return;
-    var priceEl = document.getElementById('pdPrice');
-    if (priceEl) priceEl.textContent = fmt(p.price);
-    var sticky = document.getElementById('pdStickyPrice');
-    if (sticky) sticky.textContent = fmt(p.price);
-    var oldEl = document.getElementById('pdOld');
-    if (oldEl) {
-      if (p.old && Number(p.old) > Number(p.price)) {
-        oldEl.textContent = fmt(p.old);
-        oldEl.style.display = 'inline';
-      } else {
-        oldEl.style.display = 'none';
-      }
-    }
-  }
-
-  // رسم المحتوى لو الـ SDK فشل (fallback كامل)
-  function renderFull(p) {
-    var wrap = document.getElementById('pdWrap');
-    if (!wrap) return;
-
-    var loading = document.getElementById('pdLoading');
-    var notFound = document.getElementById('pdNotFound');
-    if (loading) loading.classList.add('hidden');
-    if (notFound) notFound.classList.add('hidden');
-    wrap.classList.remove('hidden');
-
-    var name = p.name || p.nameEn || 'منتج';
-    var nameEl = document.getElementById('pdName');
-    if (nameEl) nameEl.textContent = name;
-    var crumb = document.getElementById('crumbName');
-    if (crumb) crumb.textContent = name;
-    document.title = name + ' | VelaLight';
-
-    updatePrice(p);
-
-    var desc = p.desc || p.descEn || '';
-    var descEl = document.getElementById('pdDesc');
-    if (descEl) descEl.textContent = desc;
-    var descFull = document.getElementById('pdDescFull');
-    if (descFull) {
-      descFull.innerHTML = desc.split('\n').filter(Boolean).map(function(x) {
-        return '<p style="margin-bottom:.9rem">' + x + '</p>';
-      }).join('') || '<p>' + desc + '</p>';
-    }
-
-    var imgs = Array.isArray(p.imgs) && p.imgs.length ? p.imgs : (p.img ? [p.img] : []);
-    var imgEl = document.getElementById('pdImg');
-    if (imgEl && imgs.length) {
-      imgEl.src = cdn(imgs[0]);
-      imgEl.alt = name;
-      imgEl.classList.add('loaded');
-    }
-
-    var specCat = document.getElementById('specCat');
-    if (specCat) specCat.textContent = p.cat || '';
-  }
-
-  // 1) جلب من REST فورًا
-  fetch(API, { cache: 'no-store' })
-    .then(function(r) { if (!r.ok) throw new Error('not found'); return r.json(); })
-    .then(function(doc) {
-      var p = parseDoc(doc);
-      if (!p) throw new Error('empty');
-      try { localStorage.setItem(CACHE_KEY, JSON.stringify(p)); } catch(e) {}
-
-      // استنى لحظة صغيرة عشان لو الـ SDK هيشتغل، مايتعارضش
-      setTimeout(function() {
-        var wrap = document.getElementById('pdWrap');
-        var rendered = wrap && !wrap.classList.contains('hidden');
-        if (rendered) {
-          updatePrice(p);           // المحتوى ظاهر → حدّث السعر بس
-        } else {
-          renderFull(p);            // المحتوى مختفي → ارسمه بالكامل
-        }
-        appliedPrice = true;
-      }, 1200);
-    })
-    .catch(function() {
-      // فشل الاتصال → استخدم الكاش المحلي
-      try {
-        var cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
-        if (cached) {
-          setTimeout(function() {
-            var wrap = document.getElementById('pdWrap');
-            var rendered = wrap && !wrap.classList.contains('hidden');
-            if (rendered) updatePrice(cached); else renderFull(cached);
-          }, 1500);
-        }
-      } catch(e) {}
-    });
-})();
-</script>
 </body>
 </html>
