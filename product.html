@@ -2289,5 +2289,59 @@ if(document.readyState === "loading"){
 })();
 </script>
 <!-- ═══ END CART CLEANUP ═══ -->
+<script>
+(function() {
+  try {
+    // 1. الحصول على معرف المنتج (p) من رابط الصفحة
+    var params = new URLSearchParams(window.location.search);
+    var pid = params.get('p');
+    if (!pid) return; // إذا لم يوجد معرف، اخرج
+
+    // 2. إعدادات Firebase (استبدل YOUR_PROJECT_ID باسم مشروعك في Firebase)
+    var projectId = 'YOUR_PROJECT_ID'; // ← غيّر هذا
+    var url = 'https://firestore.googleapis.com/v1/projects/' + projectId +
+              '/databases/(default)/documents/products/' + encodeURIComponent(pid);
+
+    // 3. جلب بيانات المنتج من Firestore
+    fetch(url, { cache: 'no-store' })
+      .then(function(res) {
+        if (!res.ok) throw new Error('Product not found');
+        return res.json();
+      })
+      .then(function(data) {
+        var fields = data.fields || {};
+        var price = null;
+
+        // استخراج السعر من الحقول المحتملة
+        if (fields.price) {
+          if (fields.price.integerValue !== undefined) price = parseInt(fields.price.integerValue, 10);
+          else if (fields.price.doubleValue !== undefined) price = parseFloat(fields.price.doubleValue);
+        }
+        if (price === null && fields.priceAfterDiscount) {
+          if (fields.priceAfterDiscount.integerValue !== undefined) price = parseInt(fields.priceAfterDiscount.integerValue, 10);
+          else if (fields.priceAfterDiscount.doubleValue !== undefined) price = parseFloat(fields.priceAfterDiscount.doubleValue);
+        }
+
+        if (price === null || isNaN(price)) return;
+
+        // 4. تحديث عنصر السعر في الصفحة
+        // نبحث عن العنصر الذي يحمل الفئة price-main (الموجود في CSS الخاص بالصفحة)
+        var priceEl = document.querySelector('.price-main');
+        if (priceEl) {
+          priceEl.textContent = price.toLocaleString('en-US') + ' ج.م';
+        } else {
+          // خطة بديلة: البحث عن أي عنصر يعرض السعر
+          var altEl = document.querySelector('.pd-price');
+          if (altEl) altEl.textContent = price.toLocaleString('en-US') + ' ج.م';
+        }
+      })
+      .catch(function(err) {
+        console.warn('VelaLight: could not update price on product page —', err.message);
+      });
+  } catch (e) {
+    // تجاهل الأخطاء
+  }
+})();
+</script>
 </body>
 </html>
