@@ -495,3 +495,56 @@ a,button{color:inherit}#backToTop:hover,.skip-link{background:var(--gold);color:
   .vl-quiz-banner-arrow { transform: rotate(180deg) !important; }
 }
 /* ═══ END QUIZ BANNER ═══ */
+
+/* ═══ 1. إخفاء الأزرار العائمة (اللعبة، الواتساب، الشحن) لما المودال يفتح ═══ */
+body:has(#scentOv[style*="display: flex"]) .vl-quiz-float,
+body:has(#scentOv[style*="display: flex"]) .whatsapp-float,
+body:has(#scentOv[style*="display: flex"]) #vlFreeShipWrap,
+body:has(#scentOv[style*="display: block"]) .vl-quiz-float,
+body:has(#scentOv[style*="display: block"]) .whatsapp-float,
+body:has(#scentOv[style*="display: block"]) #vlFreeShipWrap,
+body:has(#accOv[style*="display: flex"]) .vl-quiz-float,
+body:has(#accOv[style*="display: flex"]) .whatsapp-float,
+body:has(#cartDrawer.open) .vl-quiz-float,
+body:has(#cartDrawer.open) .whatsapp-float,
+body:has(#cartDrawer.open) #vlFreeShipWrap {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* ═══ 2. تثبيت زر "أضف للسلة" في أسفل المودال عشان يبقى واضح ومغطي على أي حاجة ═══ */
+.mpanel {
+  display: flex !important;
+  flex-direction: column !important;
+  max-height: 90vh !important;
+  overflow: hidden !important;
+  z-index: 9999999 !important;
+}
+
+/* منطقة اختيار العطر بتاخد المساحة الباقية وتعمل سكرول لوحدها */
+.mpanel .scents-pick {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  margin-bottom: 10px !important;
+}
+
+/* زر أضف للسلة يبقى ثابت في الأسفل ومغطي على أي حاجة */
+#scentModalAdd {
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 99999 !important;
+  background: linear-gradient(135deg, var(--gold), #b8863f) !important;
+  color: #fff !important;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.2) !important;
+  margin-top: auto !important;
+  width: 100% !important;
+  font-size: 1.1rem !important;
+  padding: 15px !important;
+  border-radius: 12px !important;
+}
+
+/* ═══ 3. رفع مستوى المودال عشان يغطي أي أزرار عائمة ═══ */
+.modal { z-index: 9999999 !important; }
+.drawer { z-index: 9999999 !important; }
+.ovl { z-index: 9999998 !important; }
