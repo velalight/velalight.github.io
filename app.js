@@ -171,7 +171,6 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
     try { sessionStorage.removeItem("vl_cart_backup"); } catch(e){}
   }
   clearBackup();
-  setInterval(clearBackup, 1500);
   console.log("🛡️ Cart backup cleared & disabled");
 
   let deleting = false;
@@ -202,18 +201,7 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
     setTimeout(() => { adding = false; }, 800);
   }, true);
 
-  let lastCart = "";
-  setInterval(function(){
-    try {
-      const cart = localStorage.getItem("vl_cart") || "[]";
-      if(cart !== lastCart){
-        const arr = JSON.parse(cart);
-        const names = arr.map(i => (i.isGift ? "🎁 " : "") + (i.name || i.id)).join(" | ");
-        console.log("🛒 Cart changed → " + arr.length + " items: " + (names || "(فاضية)"));
-        lastCart = cart;
-      }
-    } catch(e){}
-  }, 1000);
+
 })();
 
 
@@ -392,7 +380,6 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
   setTimeout(apply, 1500);
   setTimeout(apply, 3000);
   setTimeout(apply, 5000);
-  setInterval(apply, 2500);
 
   window.addEventListener("resize", () => setTimeout(apply, 150));
   window.addEventListener("orientationchange", () => setTimeout(apply, 400));
@@ -552,23 +539,7 @@ ${e.shippingIncluded?"🚚 الشحن: مجاني\n":""}
    
   // Same-tab writes do not emit the browser's native "storage" event.
   // Observe only writes to the cart key, rather than checking it on a timer.
-  try {
-    const originalSetItem = Storage.prototype.setItem;
-    if(!Storage.prototype.__vlCartOfferSetItemPatched){
-      const wrappedSetItem = function(key, value){
-        const result = originalSetItem.apply(this, arguments);
-        if(this === window.localStorage && key === CART_KEY) queueReconcile();
-        return result;
-      };
-      Object.defineProperty(Storage.prototype, "__vlCartOfferSetItemPatched", {
-        value: true,
-        configurable: false
-      });
-      Storage.prototype.setItem = wrappedSetItem;
-    }
-  } catch(error){
-    console.warn("Could not attach cart change listener:", error);
-  }
+  
 
   window.addEventListener("storage", event => {
     if(event.key === CART_KEY) queueReconcile();
@@ -667,18 +638,6 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
     }, true);
   });
 
-  const lastValues = {};
-  setInterval(function(){
-    FIELDS.forEach(id => {
-      const el = document.getElementById(id);
-      if(!el) return;
-      const active = document.activeElement === el;
-      if(active){ lastValues[id] = el.value; }
-      else if(el.dataset.vlUserTyped === "1" && lastValues[id] !== undefined){
-        if(el.value !== lastValues[id] && el.value.trim() === ""){ el.value = lastValues[id]; }
-      }
-    });
-  }, 200);
 })();
 
 
@@ -826,360 +785,110 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
 })();
 
 /* ═══════════════════════════════════════════════════════════
-   🚚 Free Shipping Banner — 3+ Diffusers
-   كود مستقل: لو في السلة 3 فواحات أو أكتر → شحن مجاني
+   🚀 VELALIGHT FINAL — Event-Driven (بدون Intervals)
    ═══════════════════════════════════════════════════════════ */
 (function(){
   "use strict";
+  if(window.__vlFinalClean) return;
+  window.__vlFinalClean = true;
 
-  // ═══ 1) تحديد هل المنتج فواحة ولا لأ ═══
-  function isDiffuser(product){
-    if(!product) return false;
-    var txt = [
-      product.name || "",
-      product.nameEn || "",
-      product.desc || "",
-      product.descEn || "",
-      product.cat || ""
-    ].join(" ").toLowerCase();
-    return txt.indexOf("فواح") !== -1
-        || txt.indexOf("ديفيوزر") !== -1
-        || txt.indexOf("diffuser") !== -1
-        || txt.indexOf("فواحة") !== -1;
+  // CSS: إخفاء الخصم والكوبونات
+  var css = document.createElement("style");
+  css.textContent = "#qtyDiscountRow, #discountRow, .vl-disc-row, #cartDiscount, .vl-loyalty-hint { display: none !important; } #cartDrawer #applyCouponBtn, #cartDrawer #couponInput { display: none !important; }";
+  document.head.appendChild(css);
+
+  function killCoupon(){
+    try { localStorage.removeItem("vl_coupon"); localStorage.removeItem("vl_loyalty_unlocked"); } catch(e){}
+    var i = document.getElementById("couponInput"); if(i) i.value = "";
   }
 
-  // ═══ 2) عدّ الفواحات في السلة ═══
+  function isDiffuser(p){
+    if(!p) return false;
+    var t = [p.name||"", p.nameEn||"", p.desc||"", p.descEn||"", p.cat||""].join(" ").toLowerCase();
+    return t.indexOf("فواح") !== -1 || t.indexOf("diffuser") !== -1 || t.indexOf("فواحة") !== -1 || t.indexOf("ديفيوزر") !== -1;
+  }
+
   function countDiffusers(){
-    var cart = [];
-    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); }
-    catch(e) { cart = []; }
+    var cart = []; try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){}
     if(!Array.isArray(cart)) return 0;
-
-    var allProducts = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS))
-      ? ALL_PRODUCTS
-      : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
-
-    var count = 0;
-    cart.forEach(function(item){
-      if(!item) return;
-      var qty = parseInt(item.qty, 10) || 1;
-
-      // جرّب تلاقي المنتج في ALL_PRODUCTS للتحقق من الاسم الكامل
-      var full = allProducts.find(function(p){
-        return p && (String(p.id) === String(item.id));
-      }) || item;
-
-      if(isDiffuser(full)) count += qty;
+    var all = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS)) ? ALL_PRODUCTS : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
+    var n = 0;
+    cart.forEach(function(i){
+      if(!i) return;
+      var full = all.find(function(p){ return p && String(p.id) === String(i.id); }) || i;
+      if(isDiffuser(full)) n += (parseInt(i.qty, 10) || 1);
     });
-    return count;
+    return n;
   }
 
-  // ═══ 3) عرض/إخفاء البانر ═══
-  function renderBanner(){
-    var cartItems = document.getElementById("cartItems");
-    if(!cartItems) return;
-
-    var existing = document.getElementById("vlDiffuserShipBanner");
+  function renderShipping(){
+    var ci = document.getElementById("cartItems");
+    if(!ci) return;
+    var ex = document.getElementById("vlDiffuserShipBanner");
     var count = countDiffusers();
     var needed = Math.max(0, 3 - count);
 
-    // لو السلة فاضية → اخفي البانر
-    if(cartItems.querySelector(".vl-empty-cart") || count === 0 && cartItems.children.length === 0){
-      if(existing) existing.remove();
-      return;
+    if(ci.querySelector(".vl-empty-cart") || count === 0){ if(ex) ex.remove(); return; }
+
+    if(!ex){
+      ex = document.createElement("div");
+      ex.id = "vlDiffuserShipBanner";
+      ex.style.cssText = "margin:0 0 10px;padding:10px 12px;border-radius:12px;font-size:.82rem;font-weight:600;line-height:1.5;text-align:center;transition:all .3s ease;border:1px solid transparent;";
+      ci.insertBefore(ex, ci.firstChild);
     }
-
-    // لو مفيش فواحات أصلًا في السلة → اخفي البانر
-    // (نعرضه بس لو المستخدم بدأ يضيف فواحات)
-    if(count === 0){
-      if(existing) existing.remove();
-      return;
-    }
-
-    // لو موجود → حدّث المحتوى
-    if(existing){
-      updateBannerContent(existing, count, needed);
-      return;
-    }
-
-    // أنشئ البانر
-    var banner = document.createElement("div");
-    banner.id = "vlDiffuserShipBanner";
-    banner.style.cssText = [
-      "margin: 0 0 10px",
-      "padding: 10px 12px",
-      "border-radius: 12px",
-      "font-size: .82rem",
-      "font-weight: 600",
-      "line-height: 1.5",
-      "text-align: center",
-      "transition: all .3s ease",
-      "border: 1px solid transparent"
-    ].join(";");
-
-    updateBannerContent(banner, count, needed);
-
-    // ضيفه أول عنصر في cartItems
-    cartItems.insertBefore(banner, cartItems.firstChild);
-  }
-
-  function updateBannerContent(banner, count, needed){
     if(count >= 3){
-      // 🎉 مبروك
-      banner.style.background = "linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)";
-      banner.style.borderColor = "rgba(39,174,96,.45)";
-      banner.style.color = "#1e8449";
-      banner.innerHTML = "🎉 <b>مبروك!</b> عندك " + count + " فواحة — <b>شحن مجاني</b> 🚚";
+      ex.style.background = "linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)";
+      ex.style.borderColor = "rgba(39,174,96,.45)";
+      ex.style.color = "#1e8449";
+      ex.innerHTML = "🎉 <b>مبروك!</b> عندك " + count + " فواحة — <b>شحن مجاني</b> 🚚";
     } else {
-      // ⏳ كمّلهم
-      banner.style.background = "linear-gradient(135deg,#fdf5ed 0%,#faf0e6 100%)";
-      banner.style.borderColor = "rgba(212,175,55,.4)";
-      banner.style.color = "#8b6f47";
-      banner.innerHTML = "🚚 عندك " + count + " فواحة — كمّلهم <b>" + needed + "</b> واحصل على <b>شحن مجاني</b>";
+      ex.style.background = "linear-gradient(135deg,#fdf5ed 0%,#faf0e6 100%)";
+      ex.style.borderColor = "rgba(212,175,55,.4)";
+      ex.style.color = "#8b6f47";
+      ex.innerHTML = "🚚 عندك " + count + " فواحة — كمّلهم <b>" + needed + "</b> واحصل على <b>شحن مجاني</b>";
     }
   }
 
-  // ═══ 4) تشغيل تلقائي لما السلة تتغير ═══
-  var lastCartKey = "";
-  function checkAndRender(){
-    var key = "";
-    try { key = localStorage.getItem("vl_cart") || ""; } catch(e){}
-    if(key === lastCartKey){
-      // حتى لو مفيش تغيير، تأكد إن البانر موجود
-      if(!document.getElementById("vlDiffuserShipBanner")) renderBanner();
-      return;
-    }
-    lastCartKey = key;
-    renderBanner();
+  function recalcTotal(){
+    var cart = []; try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return; }
+    if(!Array.isArray(cart)) return;
+    var sub = cart.reduce(function(s, i){ return s + (Number(i.price)||0)*(Number(i.qty)||1); }, 0);
+    var f = sub.toLocaleString("en-US") + " ج.م";
+    var se = document.getElementById("cartSub"); if(se && se.textContent !== f) se.textContent = f;
+    var te = document.getElementById("cartTotal"); if(te && te.textContent !== f) te.textContent = f;
   }
 
-  // ═══ 5) راقب فتح السلة + تغييراتها ═══
-  document.addEventListener("DOMContentLoaded", function(){
-    // كل 400 مللي افحص لو السلة اتفتحت
-    setInterval(function(){
-      var drawer = document.getElementById("cartDrawer");
-      var isOpen = drawer && (drawer.classList.contains("open")
-                    || drawer.style.transform === "translateX(0)"
-                    || document.body.classList.contains("vl-cart-open"));
-      if(isOpen){
-        checkAndRender();
-      }
-    }, 400);
-
-    // استنى تغييرات localStorage من تابات تانية
-    window.addEventListener("storage", function(e){
-      if(e.key === "vl_cart"){
-        lastCartKey = "";
-        checkAndRender();
-      }
-    });
-  });
-
-  // ═══ 6) احسب الشحن في الإجمالي (اختياري) ═══
-  // دالة عامة ممكن تستخدمها في checkout لو عايز
-  window.vlHasFreeDiffuserShipping = function(){
-    return countDiffusers() >= 3;
-  };
-
-  console.log("✅ Free Shipping Banner (3+ Diffusers) loaded");
-})();
-/* ═══════════════════════════════════════════════════════════
-   🚫 إخفاء خصم الكمية نهائيًا
-   ═══════════════════════════════════════════════════════════ */
-(function(){
-  "use strict";
-
-  var style = document.createElement("style");
-  style.id = "vlNoQtyDiscount";
-  style.textContent = [
-    "#qtyDiscountRow{ display:none !important; }",
-    ".vl-disc-row{ display:none !important; }",
-    "#cartDiscount{ display:none !important; }",
-    "#discountRow{ display:none !important; }"
-  ].join("\n");
-  document.head.appendChild(style);
-
-  console.log("🚫 Qty discount hidden");
-})();
-
-/* ═══════════════════════════════════════════════════════════
-   💰 إعادة حساب الإجمالي بدون خصم كمية
-   ═══════════════════════════════════════════════════════════ */
-(function(){
-  "use strict";
-
-  function recalcCartTotal(){
-    var cart = [];
-    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e) { return; }
-    if(!Array.isArray(cart) || !cart.length) return;
-
-    var subtotal = cart.reduce(function(sum, item){
-      return sum + (Number(item.price) || 0) * (Number(item.qty) || 1);
-    }, 0);
-
-    // حدّث عنصر "قيمة المنتجات"
-    var cartSub = document.getElementById("cartSub");
-    if(cartSub) cartSub.textContent = subtotal.toLocaleString("en-US") + " ج.م";
-
-    // حدّث عنصر "الإجمالي" (بدون خصم)
-    var cartTotal = document.getElementById("cartTotal");
-    if(cartTotal) cartTotal.textContent = subtotal.toLocaleString("en-US") + " ج.م";
-
-    // صفّر أي خصم معروض
-    var cartDiscount = document.getElementById("cartDiscount");
-    if(cartDiscount) cartDiscount.textContent = "-0";
+  function updateCartUI(){
+    killCoupon();
+    recalcTotal();
+    renderShipping();
   }
 
-  // شغّلها كل ما السلة تتغير
-  var lastKey = "";
-  setInterval(function(){
-    var key = "";
-    try { key = localStorage.getItem("vl_cart") || ""; } catch(e){}
-    if(key !== lastKey){
-      lastKey = key;
-      setTimeout(recalcCartTotal, 100);
-      setTimeout(recalcCartTotal, 500);
-      setTimeout(recalcCartTotal, 1200);
-    }
-  }, 400);
-
-  // شغّلها كمان عند تغيير كمية في السلة
-  document.addEventListener("click", function(e){
-    if(e.target.closest(".cq-plus, .cq-minus, .p-add")){
-      setTimeout(recalcCartTotal, 300);
-      setTimeout(recalcCartTotal, 800);
-    }
-  }, true);
-})();
-
-/* ═══════════════════════════════════════════════════════════
-   🚫 منع الخصومات تمامًا — VelaLight
-   - يمسح أي كوبون مطبّق
-   - يمنع تطبيق كوبونات جديدة
-   - يخفي صفوف الخصم
-   - يصحح الإجمالي (بدون خصم) كل لحظة
-   ═══════════════════════════════════════════════════════════ */
-(function(){
-  "use strict";
-
-  // ─── 1) إخفاء كل عناصر الخصم ───
-  var css = document.createElement("style");
-  css.id = "vlNoDiscountStyles";
-  css.textContent = [
-    "#qtyDiscountRow,",
-    "#discountRow,",
-    ".vl-disc-row,",
-    "#cartDiscount,",
-    ".vl-loyalty-hint {",
-    "  display: none !important;",
-    "}"
-  ].join("\n");
-  document.head.appendChild(css);
-
-  // ─── 2) مسح أي كوبون موجود ───
-  function killCoupon(){
-    try {
-      localStorage.removeItem("vl_coupon");
-      localStorage.removeItem("vl_loyalty_unlocked");
-    } catch(e){}
-    var input = document.getElementById("couponInput");
-    if(input) input.value = "";
-    var couponRow = document.getElementById("discountRow");
-    if(couponRow) couponRow.style.display = "none";
-  }
-
-  // ─── 3) منع تطبيق أي كوبون جديد ───
-  function blockCouponApply(){
-    var applyBtn = document.getElementById("applyCouponBtn");
-    if(!applyBtn || applyBtn.dataset.vlBlocked === "1") return;
-    applyBtn.dataset.vlBlocked = "1";
-
-    var clone = applyBtn.cloneNode(true);
-    applyBtn.parentNode.replaceChild(clone, applyBtn);
-
-    clone.addEventListener("click", function(e){
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      killCoupon();
+  function blockCoupon(){
+    var b = document.getElementById("applyCouponBtn");
+    if(!b || b.dataset.vlBlocked === "1") return;
+    b.dataset.vlBlocked = "1";
+    var c = b.cloneNode(true);
+    b.parentNode.replaceChild(c, b);
+    c.addEventListener("click", function(e){
+      e.preventDefault(); e.stopImmediatePropagation(); killCoupon();
       if(typeof toast === "function") toast("الكوبونات غير مفعّلة حاليًا 🎁");
     }, true);
   }
 
-  // ─── 4) تصحيح الإجمالي (بدون خصم) ───
-  function recalcTotal(){
-    var cart = [];
-    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ return; }
-    if(!Array.isArray(cart) || !cart.length) return;
+  if(document.readyState === "loading"){ document.addEventListener("DOMContentLoaded", updateCartUI); }
+  else { updateCartUI(); }
+  blockCoupon();
 
-    // احسب الإجمالي الحقيقي من عناصر السلة
-    var subtotal = 0;
-    cart.forEach(function(item){
-      subtotal += (Number(item.price) || 0) * (Number(item.qty) || 1);
-    });
-
-    var formatted = subtotal.toLocaleString("en-US") + " ج.م";
-
-    var subEl = document.getElementById("cartSub");
-    var totalEl = document.getElementById("cartTotal");
-    var discountEl = document.getElementById("cartDiscount");
-
-    if(subEl && subEl.textContent !== formatted) subEl.textContent = formatted;
-    if(totalEl && totalEl.textContent !== formatted) totalEl.textContent = formatted;
-    if(discountEl) discountEl.textContent = "-0";
-  }
-
-  // ─── 5) راقب التغييرات في DOM ───
-  var observer = new MutationObserver(function(){
-    // لو ظهر أي عنصر خصم جديد — اخفيه
-    var discountRows = document.querySelectorAll("#qtyDiscountRow, #discountRow, .vl-disc-row");
-    discountRows.forEach(function(row){ row.style.display = "none"; });
-
-    // صحّح الإجمالي
-    recalcTotal();
-
-    // امنع أي زر كوبون جديد
-    blockCouponApply();
-  });
-
-  // ─── 6) شغّل المراقبة عند تحميل الصفحة ───
-  function init(){
-    killCoupon();
-
-    // ابدأ المراقبة
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      characterData: true
-    });
-
-    // فحص دوري كاحتياط
-    setInterval(function(){
-      recalcTotal();
-      killCoupon();
-    }, 500);
-
-    // امسح الكوبون كل ما المستخدم يحاول يفتح السلة
-    var cartBtn = document.getElementById("cartBtn");
-    if(cartBtn){
-      cartBtn.addEventListener("click", function(){
-        setTimeout(killCoupon, 50);
-      }, true);
+  // راقب السلة بس (مش الـ body كله)
+  var ci = document.getElementById("cartItems");
+  if(ci){ new MutationObserver(updateCartUI).observe(ci, { childList: true }); }
+  
+  window.addEventListener("storage", function(e){ if(e.key === "vl_cart") setTimeout(updateCartUI, 50); });
+  
+  document.addEventListener("click", function(e){
+    if(e.target.closest(".p-add, #scentModalAdd, #addSuggestBtn, .cq-plus, .cq-minus, .rm")){
+      setTimeout(updateCartUI, 300);
     }
-
-    // امسح الكوبون قبل الـ checkout مباشرة
-    var checkoutBtn = document.getElementById("checkoutBtn");
-    if(checkoutBtn){
-      checkoutBtn.addEventListener("click", function(){
-        killCoupon();
-      }, true);
-    }
-  }
-
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-
-  console.log("🚫 Coupons & discounts disabled — free shipping (3 diffusers) remains active");
+  }, true);
 })();
