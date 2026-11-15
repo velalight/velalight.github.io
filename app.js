@@ -983,3 +983,21 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
 
   console.log("✅ Free Shipping Banner (3+ Diffusers) loaded");
 })();
+/* ═══════════════════════════════════════════════════════════
+   🚫 إخفاء خصم الكمية نهائيًا
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+
+  var style = document.createElement("style");
+  style.id = "vlNoQtyDiscount";
+  style.textContent = [
+    "#qtyDiscountRow{ display:none !important; }",
+    ".vl-disc-row{ display:none !important; }",
+    "#cartDiscount{ display:none !important; }",
+    "#discountRow{ display:none !important; }"
+  ].join("\n");
+  document.head.appendChild(style);
+
+  console.log("🚫 Qty discount hidden");
+})();
