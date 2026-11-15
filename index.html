@@ -76,7 +76,6 @@
 <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
 <link rel="dns-prefetch" href="https://www.googletagmanager.com">
 <link rel="preconnect" href="https://images.weserv.nl">
-<link rel="preload" as="image" href="https://images.weserv.nl/?url=https%3A%2F%2Fvelalight.github.io%2Fvelalight-wooden-luxury-set-3candles-detail.webp&w=1000&q=75&output=webp" fetchpriority="high">
 
 <!-- ═══ Stylesheets ═══ -->
   <!-- ═══ Firebase Preconnect (أسرع تحميل) ═══ -->
@@ -116,57 +115,39 @@
 <link rel="manifest" href="manifest.json">
 
 <!-- ═══════════════════════════════════════════════
-     LUXURY SCROLL REVEAL — CSS
+     LUXURY SCROLL REVEAL — CSS (بدون فلتر تمويه تقيل)
      ═══════════════════════════════════════════════ -->
 <style>
   /* منع الفراغ الأفقي على الموبايل */
   html, body { overflow-x: hidden; max-width: 100%; }
 
-  /* ═══ الحالة الابتدائية: مخفي + تحرك + blur ═══ */
+  /* ═══ الحالة الابتدائية: تحرك بدون فلتر ═══ */
   .js [data-reveal] {
     opacity: 0;
-    transform: translate3d(0, 40px, 0) scale(0.98);
-    filter: blur(6px);
-    transition:
-      opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 1.1s cubic-bezier(0.22, 1, 0.36, 1),
-      filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translate3d(0, 30px, 0) scale(0.98);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
     backface-visibility: hidden;
+    will-change: opacity, transform;
   }
   .js [data-reveal].is-visible {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
-    filter: blur(0);
   }
 
   /* ═══ نوع Zoom — للصور ═══ */
   .js [data-reveal="zoom"] {
-    transform: translate3d(0, 30px, 0) scale(0.92);
-    filter: blur(8px);
+    transform: translate3d(0, 20px, 0) scale(0.95);
   }
   .js [data-reveal="zoom"].is-visible {
     transform: translate3d(0, 0, 0) scale(1);
-    filter: blur(0);
   }
 
   /* ═══ Left / Right — بس على الشاشات الكبيرة ═══ */
   @media (min-width: 901px) {
-    .js [data-reveal="left"] {
-      transform: translate3d(-70px, 0, 0) scale(0.97);
-      filter: blur(6px);
-    }
-    .js [data-reveal="left"].is-visible {
-      transform: translate3d(0, 0, 0) scale(1);
-      filter: blur(0);
-    }
-    .js [data-reveal="right"] {
-      transform: translate3d(70px, 0, 0) scale(0.97);
-      filter: blur(6px);
-    }
-    .js [data-reveal="right"].is-visible {
-      transform: translate3d(0, 0, 0) scale(1);
-      filter: blur(0);
-    }
+    .js [data-reveal="left"] { transform: translate3d(-50px, 0, 0) scale(0.97); }
+    .js [data-reveal="left"].is-visible { transform: translate3d(0, 0, 0) scale(1); }
+    .js [data-reveal="right"] { transform: translate3d(50px, 0, 0) scale(0.97); }
+    .js [data-reveal="right"].is-visible { transform: translate3d(0, 0, 0) scale(1); }
   }
 
   /* ═══ على الموبايل: كل الحركات → Fade-Up فقط ═══ */
@@ -176,11 +157,7 @@
     .js [data-reveal="left"],
     .js [data-reveal="right"],
     .js [data-reveal="flip"] {
-      transform: translate3d(0, 22px, 0);
-      filter: none;
-      transition:
-        opacity .75s cubic-bezier(0.22, 1, 0.36, 1),
-        transform .75s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: translate3d(0, 20px, 0);
     }
     .js [data-reveal].is-visible,
     .js [data-reveal="zoom"].is-visible,
@@ -188,37 +165,32 @@
     .js [data-reveal="right"].is-visible,
     .js [data-reveal="flip"].is-visible {
       transform: translate3d(0, 0, 0);
-      filter: blur(0);
     }
   }
 
   /* ═══ Stagger ═══ */
   .js [data-reveal-stagger] > * {
     opacity: 0;
-    transform: translate3d(0, 35px, 0) scale(0.98);
-    filter: none;
-    transition:
-      opacity .8s cubic-bezier(0.22, 1, 0.36, 1),
-      transform .8s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translate3d(0, 20px, 0);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   }
   .js [data-reveal-stagger].is-visible > * {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-    filter: blur(0);
+    transform: translate3d(0, 0, 0);
   }
   .js [data-reveal-stagger].is-visible > *:nth-child(1) { transition-delay: 0ms; }
-  .js [data-reveal-stagger].is-visible > *:nth-child(2) { transition-delay: 120ms; }
-  .js [data-reveal-stagger].is-visible > *:nth-child(3) { transition-delay: 240ms; }
-  .js [data-reveal-stagger].is-visible > *:nth-child(4) { transition-delay: 360ms; }
-  .js [data-reveal-stagger].is-visible > *:nth-child(5) { transition-delay: 480ms; }
-  .js [data-reveal-stagger].is-visible > *:nth-child(6) { transition-delay: 600ms; }
-  .js [data-reveal-stagger].is-visible > *:nth-child(7) { transition-delay: 720ms; }
-  .js [data-reveal-stagger].is-visible > *:nth-child(8) { transition-delay: 840ms; }
+  .js [data-reveal-stagger].is-visible > *:nth-child(2) { transition-delay: 100ms; }
+  .js [data-reveal-stagger].is-visible > *:nth-child(3) { transition-delay: 200ms; }
+  .js [data-reveal-stagger].is-visible > *:nth-child(4) { transition-delay: 300ms; }
+  .js [data-reveal-stagger].is-visible > *:nth-child(5) { transition-delay: 400ms; }
+  .js [data-reveal-stagger].is-visible > *:nth-child(6) { transition-delay: 500ms; }
+  .js [data-reveal-stagger].is-visible > *:nth-child(7) { transition-delay: 600ms; }
+  .js [data-reveal-stagger].is-visible > *:nth-child(8) { transition-delay: 700ms; }
 
   /* توافق مع نظام .rv القديم */
   .js .rv.is-visible,
-  .js .rv.on { opacity: 1; transform: none; filter: none; }
-  html:not(.js) .rv { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .js .rv.on { opacity: 1; transform: none; }
+  html:not(.js) .rv { opacity: 1 !important; transform: none !important; }
 
   /* احترام تقليل الحركة */
   @media (prefers-reduced-motion: reduce) {
@@ -226,7 +198,6 @@
     .js [data-reveal-stagger] > * {
       opacity: 1 !important;
       transform: none !important;
-      filter: none !important;
       transition: none !important;
     }
   }
@@ -346,7 +317,6 @@
 
 <!-- ═══════════════════════════════════════════════
      ⚡ BLACK FRIDAY PROMO BAR v2 — عرض الصحاب
-     (تم ضغط الـ CSS هنا لتقليل الارتفاع)
      ═══════════════════════════════════════════════ -->
 <div class="bf-promo-bar" id="bfPromoBar" role="region" aria-label="عرض بلاك فرايدي: عرض الصحاب">
   <div class="bf-promo-badge" aria-hidden="true">
@@ -476,7 +446,6 @@
 
 <!-- ═══════════════════════════════════════════════
      🧠 QUIZ BANNER — بعد عرض الصحاب مباشرة
-     (تم ضغط الـ CSS هنا لتقليل الارتفاع)
      ═══════════════════════════════════════════════ -->
 <section class="vl-quiz-banner" aria-label="العب ألعاب نفسية">
   <a href="https://velalight.github.io/quiz/" class="vl-quiz-banner-inner">
@@ -492,7 +461,7 @@
   </a>
 </section>
 <style>
-/* ═══ COMPACT QUIZ BANNER (تم تقليل الارتفاع) ═══ */
+/* ═══ COMPACT QUIZ BANNER ═══ */
 .vl-quiz-banner {
   display: block !important;
   visibility: visible !important;
@@ -1370,7 +1339,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
   </svg>
 </a>
-
+  
 <!-- ═══════════════════════════════════════════════
      SCROLL REVEAL — JS
      ═══════════════════════════════════════════════ -->
@@ -1959,7 +1928,6 @@ document.addEventListener('DOMContentLoaded', function(){
   window.__vlBFModal = true;
 
   const PRODUCT_ID = 12;
-  /* القائمة دي مطابقة حرفياً لقائمة app.js (const E) */
   const SCENTS = [
     "فانيلا", "سينامون سبايس فانيلا", "لافندر", "موكا", "كراميل",
     "كاريبيان فروت", "فل", "ياسمين", "اناناس", "شيكولاتة",
@@ -2058,23 +2026,20 @@ document.addEventListener('DOMContentLoaded', function(){
     }
 
     const product = getProduct();
-    if(!product){ toast && toast("⚠️ حصل خطأ"); return; }
+    if(!product){ if(typeof toast === "function") toast("⚠️ حصل خطأ"); return; }
 
     let cart = [];
     try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e){ cart = []; }
     if(!Array.isArray(cart)) cart = [];
 
-    /* ✅ NEW: تنظيف القديم — نشيل أي شمعة مساج بدون عطر + الهدية القديمة
-       (ده اللي بيسبب مشكلة "أول شمعة بدون تفاصيل") */
     cart = cart.filter(item => {
       if(!item) return false;
       if(Number(item.id) !== PRODUCT_ID) return true;
-      if(item.isGift === true) return false; /* شيل أي هدية مساج قديمة — هنضيف واحدة جديدة */
-      if(!item.scent || String(item.scent).trim() === "") return false; /* شيل أي شمعة بدون عطر */
+      if(item.isGift === true) return false;
+      if(!item.scent || String(item.scent).trim() === "") return false;
       return true;
     });
 
-    /* 4 شمعات بعطورها */
     scents.forEach(scent => {
       const ex = cart.find(i =>
         Number(i.id) === PRODUCT_ID &&
@@ -2095,7 +2060,6 @@ document.addEventListener('DOMContentLoaded', function(){
       }
     });
 
-    /* الهدية بعطر أول شمعة */
     cart.push({
       id: PRODUCT_ID,
       name: product.name || "شمعة مساج ريلاكس",
@@ -2718,8 +2682,6 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  // ═══ فتح صفحة المنتجات بالضغط على الدايرة — بس لما تكون بره الـ trio ═══
-  // (لما تكون جوه trio بتتحول لكارت عرض، الضغط عليها بيبقى scroll سلايدر)
   var touchStartX = 0, touchStartY = 0;
   wrap.addEventListener('touchstart', function(e){
     if(e.touches && e.touches[0]){
@@ -2729,7 +2691,7 @@ document.addEventListener('DOMContentLoaded', function(){
   }, {passive:true});
   wrap.addEventListener('touchend', function(e){
     if(e.target === closeBtn) return;
-    if(wrap.closest('.vl-top-trio')) return; // داخل الـ trio، ما تعملش navigate
+    if(wrap.closest('.vl-top-trio')) return;
     if(!e.changedTouches || !e.changedTouches[0]) return;
     var dx = Math.abs(e.changedTouches[0].clientX - touchStartX);
     var dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
@@ -2739,7 +2701,7 @@ document.addEventListener('DOMContentLoaded', function(){
   }, {passive:true});
   wrap.addEventListener('click', function(e){
     if(e.target === closeBtn) return;
-    if(wrap.closest('.vl-top-trio')) return; // داخل الـ trio، ما تعملش navigate
+    if(wrap.closest('.vl-top-trio')) return;
     window.location.href = 'products.html';
   });
 })();
@@ -2748,7 +2710,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <!-- ═══ VL_TOP_TRIO — 3 في 1 (يعمل على موبايل + لابتوب) ═══ -->
 <style>
-/* ═══ الحاوية الأساسية (لكل الشاشات) ═══ */
 .vl-top-trio {
   display: flex !important;
   flex-wrap: nowrap !important;
@@ -2761,7 +2722,7 @@ document.addEventListener('DOMContentLoaded', function(){
   margin: 0 !important;
   box-sizing: border-box !important;
 }
-  .vl-top-trio > * {
+.vl-top-trio > * {
   margin: 0 !important;
   border-radius: 10px !important;
   height: 82px !important;
@@ -2769,7 +2730,6 @@ document.addEventListener('DOMContentLoaded', function(){
   box-sizing: border-box !important;
 }
 
-/* ═══ لابتوب (أكبر من 768 بكسل): 3 كروت جنب بعض متساويين ═══ */
 @media (min-width: 769px) {
   .vl-top-trio > * {
     flex: 1 1 0 !important;
@@ -2781,7 +2741,6 @@ document.addEventListener('DOMContentLoaded', function(){
   .vl-top-trio #vlFreeShipWrap .vl-title { font-size: 0.95rem !important; }
 }
 
-/* ═══ موبايل (أقل من 768 بكسل): سلايدر ═══ */
 @media (max-width: 768px) {
   .vl-top-trio {
     overflow-x: auto !important;
@@ -2797,7 +2756,6 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 }
 
-/* ═══ إخفاء العناصر الزيادة (على كل الشاشات) ═══ */
 .vl-top-trio .bf-promo-badge,
 .vl-top-trio .bf-title-en,
 .vl-top-trio .bf-promo-en-sub,
@@ -2809,7 +2767,6 @@ document.addEventListener('DOMContentLoaded', function(){
   display: none !important;
 }
 
-/* ═══ عرض الصحاب — شكل مدمج ═══ */
 .vl-top-trio .bf-promo-bar {
   padding: 8px 30px 8px 10px !important;
   border: 1px solid #d4af37 !important;
@@ -2821,7 +2778,6 @@ document.addEventListener('DOMContentLoaded', function(){
 .vl-top-trio .bf-promo-sub { font-size: 0.68rem !important; justify-content: flex-start !important; margin: 2px 0 0 !important; }
 .vl-top-trio .bf-promo-cta { padding: 6px 12px !important; font-size: 0.72rem !important; height: auto !important; flex-shrink: 0 !important; }
 
-/* ═══ ألعاب نفسية — شكل مدمج ═══ */
 .vl-top-trio .vl-quiz-banner { border: 1px solid #d4af37 !important; background: linear-gradient(135deg, #1a0f2e 0%, #2d1b4e 100%) !important; }
 .vl-top-trio .vl-quiz-banner-inner { padding: 8px 10px !important; flex-wrap: nowrap !important; height: 100% !important; align-items: center !important; gap: 8px !important; }
 .vl-top-trio .vl-quiz-banner-icon { font-size: 1.6rem !important; flex-shrink: 0 !important; }
@@ -2829,7 +2785,6 @@ document.addEventListener('DOMContentLoaded', function(){
 .vl-top-trio .vl-quiz-banner-title { font-size: 0.9rem !important; margin: 0 !important; }
 .vl-top-trio .vl-quiz-banner-cta { padding: 6px 12px !important; font-size: 0.72rem !important; flex-shrink: 0 !important; }
 
-/* ═══ دايرة الشحن — شكل مدمج أفقي ═══ */
 .vl-top-trio #vlFreeShipWrap {
   position: static !important;
   bottom: auto !important;
@@ -2872,6 +2827,10 @@ document.addEventListener('DOMContentLoaded', function(){
 .vl-top-trio #vlFreeShipWrap .vl-sub { font-size: 0.68rem !important; color: #d4af37 !important; max-width: none !important; }
 .vl-top-trio #vlFreeShipWrap .vl-sub b { color: #ffd700 !important; }
 .vl-top-trio #vlFreeShipWrap .vl-badge-inner > div { display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: flex-start !important; }
+
+@media (min-width: 769px) {
+  .vl-top-trio .bf-promo-bar::before, .vl-top-trio .vl-quiz-banner-icon, .vl-top-trio #vlFreeShipWrap .vl-icon { animation: none !important; }
+}
 </style>
 
 <script>
