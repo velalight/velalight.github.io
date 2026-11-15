@@ -824,3 +824,162 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
   });
   window.addEventListener("data-refresh", () => setTimeout(markGifts, 100));
 })();
+
+/* ═══════════════════════════════════════════════════════════
+   🚚 Free Shipping Banner — 3+ Diffusers
+   كود مستقل: لو في السلة 3 فواحات أو أكتر → شحن مجاني
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+
+  // ═══ 1) تحديد هل المنتج فواحة ولا لأ ═══
+  function isDiffuser(product){
+    if(!product) return false;
+    var txt = [
+      product.name || "",
+      product.nameEn || "",
+      product.desc || "",
+      product.descEn || "",
+      product.cat || ""
+    ].join(" ").toLowerCase();
+    return txt.indexOf("فواح") !== -1
+        || txt.indexOf("ديفيوزر") !== -1
+        || txt.indexOf("diffuser") !== -1
+        || txt.indexOf("فواحة") !== -1;
+  }
+
+  // ═══ 2) عدّ الفواحات في السلة ═══
+  function countDiffusers(){
+    var cart = [];
+    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); }
+    catch(e) { cart = []; }
+    if(!Array.isArray(cart)) return 0;
+
+    var allProducts = (typeof ALL_PRODUCTS !== "undefined" && Array.isArray(ALL_PRODUCTS))
+      ? ALL_PRODUCTS
+      : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
+
+    var count = 0;
+    cart.forEach(function(item){
+      if(!item) return;
+      var qty = parseInt(item.qty, 10) || 1;
+
+      // جرّب تلاقي المنتج في ALL_PRODUCTS للتحقق من الاسم الكامل
+      var full = allProducts.find(function(p){
+        return p && (String(p.id) === String(item.id));
+      }) || item;
+
+      if(isDiffuser(full)) count += qty;
+    });
+    return count;
+  }
+
+  // ═══ 3) عرض/إخفاء البانر ═══
+  function renderBanner(){
+    var cartItems = document.getElementById("cartItems");
+    if(!cartItems) return;
+
+    var existing = document.getElementById("vlDiffuserShipBanner");
+    var count = countDiffusers();
+    var needed = Math.max(0, 3 - count);
+
+    // لو السلة فاضية → اخفي البانر
+    if(cartItems.querySelector(".vl-empty-cart") || count === 0 && cartItems.children.length === 0){
+      if(existing) existing.remove();
+      return;
+    }
+
+    // لو مفيش فواحات أصلًا في السلة → اخفي البانر
+    // (نعرضه بس لو المستخدم بدأ يضيف فواحات)
+    if(count === 0){
+      if(existing) existing.remove();
+      return;
+    }
+
+    // لو موجود → حدّث المحتوى
+    if(existing){
+      updateBannerContent(existing, count, needed);
+      return;
+    }
+
+    // أنشئ البانر
+    var banner = document.createElement("div");
+    banner.id = "vlDiffuserShipBanner";
+    banner.style.cssText = [
+      "margin: 0 0 10px",
+      "padding: 10px 12px",
+      "border-radius: 12px",
+      "font-size: .82rem",
+      "font-weight: 600",
+      "line-height: 1.5",
+      "text-align: center",
+      "transition: all .3s ease",
+      "border: 1px solid transparent"
+    ].join(";");
+
+    updateBannerContent(banner, count, needed);
+
+    // ضيفه أول عنصر في cartItems
+    cartItems.insertBefore(banner, cartItems.firstChild);
+  }
+
+  function updateBannerContent(banner, count, needed){
+    if(count >= 3){
+      // 🎉 مبروك
+      banner.style.background = "linear-gradient(135deg,#eafaf1 0%,#d5f5e3 100%)";
+      banner.style.borderColor = "rgba(39,174,96,.45)";
+      banner.style.color = "#1e8449";
+      banner.innerHTML = "🎉 <b>مبروك!</b> عندك " + count + " فواحة — <b>شحن مجاني</b> 🚚";
+    } else {
+      // ⏳ كمّلهم
+      banner.style.background = "linear-gradient(135deg,#fdf5ed 0%,#faf0e6 100%)";
+      banner.style.borderColor = "rgba(212,175,55,.4)";
+      banner.style.color = "#8b6f47";
+      banner.innerHTML = "🚚 عندك " + count + " فواحة — كمّلهم <b>" + needed + "</b> واحصل على <b>شحن مجاني</b>";
+    }
+  }
+
+  // ═══ 4) تشغيل تلقائي لما السلة تتغير ═══
+  var lastCartKey = "";
+  function checkAndRender(){
+    var key = "";
+    try { key = localStorage.getItem("vl_cart") || ""; } catch(e){}
+    if(key === lastCartKey){
+      // حتى لو مفيش تغيير، تأكد إن البانر موجود
+      if(!document.getElementById("vlDiffuserShipBanner")) renderBanner();
+      return;
+    }
+    lastCartKey = key;
+    renderBanner();
+  }
+
+  // ═══ 5) راقب فتح السلة + تغييراتها ═══
+  document.addEventListener("DOMContentLoaded", function(){
+    // كل 400 مللي افحص لو السلة اتفتحت
+    setInterval(function(){
+      var drawer = document.getElementById("cartDrawer");
+      var isOpen = drawer && (drawer.classList.contains("open")
+                    || drawer.style.transform === "translateX(0)"
+                    || document.body.classList.contains("vl-cart-open"));
+      if(isOpen){
+        checkAndRender();
+      }
+    }, 400);
+
+    // استنى تغييرات localStorage من تابات تانية
+    window.addEventListener("storage", function(e){
+      if(e.key === "vl_cart"){
+        lastCartKey = "";
+        checkAndRender();
+      }
+    });
+  });
+
+  // ═══ 6) احسب الشحن في الإجمالي (اختياري) ═══
+  // دالة عامة ممكن تستخدمها في checkout لو عايز
+  window.vlHasFreeDiffuserShipping = function(){
+    return countDiffusers() >= 3;
+  };
+
+  console.log("✅ Free Shipping Banner (3+ Diffusers) loaded");
+})();
