@@ -15,7 +15,7 @@
 <meta property="og:image" content="https://velalight.github.io/velalight-wooden-luxury-set-3candles-detail.webp">
 <meta property="og:url" content="https://velalight.github.io/product.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://velalight.github.io/product.html">
+<link rel="canonical" href="https://velalight.github.io/shop/ID.html" id="canonicalLink">
   
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
 <script>
@@ -2368,5 +2368,16 @@ if(document.readyState === "loading"){
 })();
 </script>
 <!-- ═══ END CART CLEANUP ═══ -->
+  <script>
+(function() {
+  try {
+    var pid = new URLSearchParams(location.search).get('p');
+    var canonical = document.getElementById('canonicalLink');
+    if (pid && canonical) {
+      canonical.setAttribute('href', 'https://velalight.github.io/shop/' + pid + '.html');
+    }
+  } catch(e) {}
+})();
+</script>
 </body>
 </html>
