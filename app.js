@@ -1001,3 +1001,53 @@ try { localStorage.removeItem("bf_promo_dismissed"); } catch(e){}
 
   console.log("🚫 Qty discount hidden");
 })();
+
+/* ═══════════════════════════════════════════════════════════
+   💰 إعادة حساب الإجمالي بدون خصم كمية
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+  "use strict";
+
+  function recalcCartTotal(){
+    var cart = [];
+    try { cart = JSON.parse(localStorage.getItem("vl_cart") || "[]"); } catch(e) { return; }
+    if(!Array.isArray(cart) || !cart.length) return;
+
+    var subtotal = cart.reduce(function(sum, item){
+      return sum + (Number(item.price) || 0) * (Number(item.qty) || 1);
+    }, 0);
+
+    // حدّث عنصر "قيمة المنتجات"
+    var cartSub = document.getElementById("cartSub");
+    if(cartSub) cartSub.textContent = subtotal.toLocaleString("en-US") + " ج.م";
+
+    // حدّث عنصر "الإجمالي" (بدون خصم)
+    var cartTotal = document.getElementById("cartTotal");
+    if(cartTotal) cartTotal.textContent = subtotal.toLocaleString("en-US") + " ج.م";
+
+    // صفّر أي خصم معروض
+    var cartDiscount = document.getElementById("cartDiscount");
+    if(cartDiscount) cartDiscount.textContent = "-0";
+  }
+
+  // شغّلها كل ما السلة تتغير
+  var lastKey = "";
+  setInterval(function(){
+    var key = "";
+    try { key = localStorage.getItem("vl_cart") || ""; } catch(e){}
+    if(key !== lastKey){
+      lastKey = key;
+      setTimeout(recalcCartTotal, 100);
+      setTimeout(recalcCartTotal, 500);
+      setTimeout(recalcCartTotal, 1200);
+    }
+  }, 400);
+
+  // شغّلها كمان عند تغيير كمية في السلة
+  document.addEventListener("click", function(e){
+    if(e.target.closest(".cq-plus, .cq-minus, .p-add")){
+      setTimeout(recalcCartTotal, 300);
+      setTimeout(recalcCartTotal, 800);
+    }
+  }, true);
+})();
