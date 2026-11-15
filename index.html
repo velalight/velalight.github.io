@@ -2749,6 +2749,133 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 <!-- ═══ END Free Shipping Badge ═══ -->
+  <!-- ═══ Mobile Top Trio Layout — 3 في 1 ═══ -->
+<style>
+@media (max-width: 768px) {
+  .vl-top-trio {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 8px !important;
+    padding: 8px !important;
+    background: #0a0805 !important;
+    scrollbar-width: none !important;
+    align-items: center !important;
+  }
+  .vl-top-trio::-webkit-scrollbar { display: none !important; }
+  
+  .vl-top-trio > * {
+    flex: 0 0 90% !important; /* بياخد 90% من الشاشة عشان تسحبه */
+    scroll-snap-align: center !important;
+    margin: 0 !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+    height: 85px !important;
+    display: flex !important;
+    align-items: center !important;
+    overflow: hidden !important;
+  }
+
+  /* 1. عرض الصحاب */
+  .vl-top-trio .bf-promo-bar { 
+    padding: 10px 30px 10px 10px !important; 
+    justify-content: space-between !important; 
+    border: 1px solid #d4af37 !important;
+  }
+  .vl-top-trio .bf-promo-badge { display: none !important; }
+  .vl-top-trio .bf-promo-content { text-align: right !important; min-width: 0 !important; flex: 1 !important; display: flex; flex-direction: column; justify-content: center; }
+  .vl-top-trio .bf-title-ar { font-size: 0.95rem !important; }
+  .vl-top-trio .bf-title-en { display: none !important; }
+  .vl-top-trio .bf-promo-sub { font-size: 0.7rem !important; margin: 4px 0 0 !important; }
+  .vl-top-trio .bf-promo-en-sub { display: none !important; }
+  .vl-top-trio .bf-promo-cta { padding: 6px 14px !important; font-size: 0.75rem !important; white-space: nowrap !important; flex-shrink: 0 !important; height: auto !important; }
+  .vl-top-trio .bf-promo-note { display: none !important; }
+  .vl-top-trio .bf-promo-close { right: 6px !important; top: 50% !important; transform: translateY(-50%) !important; }
+
+  /* 2. ألعاب نفسية */
+  .vl-top-trio .vl-quiz-banner { 
+    border: 1px solid #d4af37 !important; 
+    background: linear-gradient(135deg, #1a0f2e 0%, #2d1b4e 100%) !important;
+  }
+  .vl-top-trio .vl-quiz-banner-inner { 
+    padding: 10px !important; 
+    flex-wrap: nowrap !important; 
+    text-align: right !important; 
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  .vl-top-trio .vl-quiz-banner-icon { font-size: 1.8rem !important; }
+  .vl-top-trio .vl-quiz-banner-content { flex: 1 !important; display: flex; flex-direction: column; justify-content: center; }
+  .vl-top-trio .vl-quiz-banner-title { font-size: 0.95rem !important; margin-bottom: 4px !important; }
+  .vl-top-trio .vl-quiz-banner-sub { display: none !important; }
+  .vl-top-trio .vl-quiz-banner-cta { padding: 6px 12px !important; font-size: 0.75rem !important; flex-shrink: 0 !important; }
+  .vl-top-trio .vl-quiz-banner-arrow { display: none !important; }
+
+  /* 3. دايرة الشحن المجاني */
+  .vl-top-trio #vlFreeShipWrap {
+    position: static !important;
+    bottom: auto !important;
+    left: auto !important;
+    width: auto !important;
+    animation: none !important;
+    padding: 10px !important;
+    background: linear-gradient(135deg, #1a1512, #2a1c0b) !important;
+    border: 1px solid #d4af37 !important;
+    justify-content: center !important;
+    z-index: 10 !important;
+  }
+  .vl-top-trio #vlFreeShipWrap .vl-badge {
+    width: 100% !important;
+    height: auto !important;
+    animation: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .vl-top-trio #vlFreeShipWrap .vl-badge::before { display: none !important; }
+  .vl-top-trio #vlFreeShipWrap .vl-badge-inner {
+    flex-direction: row !important;
+    gap: 10px !important;
+    width: 100% !important;
+    height: auto !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    align-items: center !important;
+  }
+  .vl-top-trio #vlFreeShipWrap .vl-badge-inner::before { display: none !important; }
+  .vl-top-trio #vlFreeShipWrap .vl-icon { font-size: 1.8rem !important; margin-bottom: 0 !important; }
+  .vl-top-trio #vlFreeShipWrap .vl-title { font-size: 0.95rem !important; color: #fff !important; margin-bottom: 4px !important; }
+  .vl-top-trio #vlFreeShipWrap .vl-sub { font-size: 0.7rem !important; color: #d4af37 !important; max-width: none !important; text-align: right !important; }
+  .vl-top-trio #vlFreeShipWrap .vl-spark { display: none !important; }
+  .vl-top-trio #vlFreeShipWrap .vl-badge-inner > div { display: flex; flex-direction: column; justify-content: center; }
+  .vl-top-trio #vlFreeShipClose { display: none !important; }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // تجميع التلاتة في شريط واحد
+  var trio = document.createElement("div");
+  trio.className = "vl-top-trio";
+  
+  var bf = document.getElementById("bfPromoBar");
+  var quiz = document.querySelector(".vl-quiz-banner");
+  var freeShip = document.getElementById("vlFreeShipWrap");
+  
+  if (bf && quiz && freeShip) {
+    bf.parentNode.insertBefore(trio, bf);
+    trio.appendChild(bf);
+    trio.appendChild(quiz);
+    trio.appendChild(freeShip);
+  }
+});
+</script>
+<!-- ═══ END Mobile Top Trio ═══ -->
 </body>
 </html>
 
