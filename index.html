@@ -1716,7 +1716,6 @@ document.addEventListener('DOMContentLoaded', function(){
       if(typeof gtag === "function"){
         gtag("event", "bf_offer_qualified", {
           event_category: "promotion",
-          event_label: "bf_qualified_4plus",
           value: massageQty,
           currency: "EGP",
           product_id: MASSAGE_ID,
@@ -1754,8 +1753,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const cb = document.getElementById("cartBtn");
     if(cb) cb.addEventListener("click", function(){ setTimeout(checkUnlock, 1200); });
-
-   
   }
 
   function init(){
