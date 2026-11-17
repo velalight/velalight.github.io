@@ -6,42 +6,6 @@
 <title>لوحة التحكم | VelaLight</title>
 <meta name="robots" content="noindex,nofollow">
 
-<!-- ═══ TRACKING CODES (GA4 & Meta Pixel) ═══ -->
-<!-- 1. Google Analytics 4 (GA4) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BWBD8ZZD23"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-BWBD8ZZD23');
-</script>
-
-<!-- 2. Meta Pixel (Facebook Pixel) -->
-<script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1377896053806991');
-  fbq('track', 'PageView');
-</script>
-<noscript>
-  <img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1377896053806991&ev=PageView&noscript=1"/>
-</noscript>
-<!-- ═══ End Tracking Codes ═══ -->
-  <!-- ═══ Firebase Preconnect (أسرع تحميل) ═══ -->
-<link rel="preconnect" href="https://firestore.googleapis.com">
-<link rel="preconnect" href="https://firebaseinstallations.googleapis.com">
-<link rel="preconnect" href="https://identitytoolkit.googleapis.com">
-<link rel="dns-prefetch" href="https://firestore.googleapis.com">
-<link rel="dns-prefetch" href="https://firebaseinstallations.googleapis.com">
-<!-- ═══ End Preconnect ═══ -->
-
 <link rel="stylesheet" href="style.css">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -139,62 +103,11 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   font-size:.85rem;
   min-width:180px;
 }
-.status-badge{padding:.2rem .6rem;border-radius:99px;font-size:.7rem;font-weight:700;color:#fff}
-.st-0{background:#e67e22}
-.st-1{background:#3498db}
-.st-2{background:#9b59b6}
-.st-3{background:#2ecc71}
-.st-4{background:#e74c3c}
-.st-5{background:#27ae60}
-.payment-badge{padding:.1rem .5rem;border-radius:99px;font-size:.6rem;font-weight:700}
-.payment-paid{background:#d4edda;color:#155724}
-.payment-pending{background:#fff3cd;color:#856404}
-.payment-failed{background:#f8d7da;color:#721c24}
-.payment-refunded{background:#e2e3e5;color:#383d41}
-.delete-btn{background:transparent;border:0;color:#e74c3c;cursor:pointer;font-size:.85rem;padding:0 .3rem}
-.delete-btn:hover{color:#c0392b}
-/* ═══ نموذج الطلب اليدوي ═══ */
-#manualOrderForm .g select, #manualOrderForm .g input { width:100%; padding:.6rem; border-radius:10px; border:1px solid var(--line); background:var(--panel); font-family:inherit; font-size:.9rem; }
-#manualOrderForm .g select { cursor:pointer; }
-.product-row { display:grid; grid-template-columns:2fr 1.5fr 0.8fr 1fr auto; gap:.6rem; align-items:center; margin-bottom:.6rem; background:var(--panel2); padding:.6rem; border-radius:12px; border:1px solid var(--line); }
-.product-row .remove-row { background:transparent; border:0; color:#e74c3c; font-size:1.2rem; cursor:pointer; padding:0 6px; }
-.product-row .remove-row:hover { color:#c0392b; }
-.product-row select, .product-row input { width:100%; padding:.4rem .6rem; border-radius:8px; border:1px solid var(--line); background:var(--bg); font-family:inherit; font-size:.85rem; }
-.product-row .scent-select { width:100%; }
-#mo_total { font-size:1.2rem; color:var(--gold2); font-weight:700; }
-.add-row-btn { margin:.6rem 0 1rem; }
-/* ═══ نافذة عرض الطلب (Modal) ═══ */
-.modal-overlay {
-  position:fixed; top:0; left:0; width:100%; height:100%;
-  background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center;
-  z-index:9999; padding:1rem;
-}
-.modal-box {
-  background:var(--panel); border-radius:20px; max-width:560px; width:100%;
-  max-height:80vh; overflow-y:auto; padding:1.6rem; border:1px solid var(--gold);
-  box-shadow:0 20px 50px rgba(0,0,0,0.3);
-}
-.modal-box h3 { font-family:var(--fd); color:var(--gold2); margin:0 0 1rem; }
-.modal-box .close-modal { float:left; background:transparent; border:0; font-size:1.6rem; cursor:pointer; color:var(--dim); }
-.modal-box .close-modal:hover { color:#e74c3c; }
-.modal-box table { width:100%; border-collapse:collapse; font-size:.85rem; }
-.modal-box table th { text-align:start; padding:.4rem .3rem; border-bottom:2px solid var(--line); }
-.modal-box table td { padding:.4rem .3rem; border-bottom:1px solid var(--line); }
-.modal-box .total { font-size:1.2rem; font-weight:700; color:var(--gold2); margin-top:.8rem; display:flex; justify-content:space-between; border-top:2px solid var(--gold); padding-top:.8rem; }
-.modal-box .edit-mode input, .modal-box .edit-mode select { width:100%; padding:.2rem .4rem; border-radius:6px; border:1px solid var(--line); background:var(--bg); font-size:.8rem; }
-
-/* ═══ الحقول الفارغة في جدول العملاء ═══ */
-.cell-empty{color:var(--dim);font-size:.75rem;font-style:italic}
-.cell-phone{direction:ltr;text-align:left;font-family:monospace;font-size:.82rem;letter-spacing:.5px}
-
 @media(max-width:600px){
   table.adm{display:block;overflow-x:auto}
   .pform .g{grid-template-columns:1fr}
   .order-filters{flex-direction:column;align-items:stretch}
   .order-filters input, .order-filters select{min-width:auto}
-  .product-row { grid-template-columns:1fr; gap:.4rem; }
-  .product-row .remove-row { justify-self:end; }
-  .modal-box { max-width:100%; }
 }
 </style>
 </head>
@@ -242,104 +155,20 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 
     <!-- ORDERS -->
     <div id="tab-orders">
-      <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
-        <button class="btn sm" id="manualOrderBtn" type="button">➕ إضافة طلب يدوي (واتساب / تليفون)</button>
-      </div>
-
-      <!-- نموذج الطلب اليدوي مع منتجات متعددة + خصومات -->
-      <div id="manualOrderForm" class="pform hidden">
-        <h3 style="color:var(--gold2);margin-bottom:1rem">📝 إضافة طلب يدوي</h3>
-        <div class="g">
-          <div><label>اسم العميل *</label><input id="mo_name" placeholder="الاسم بالكامل"></div>
-          <div><label>رقم الموبايل *</label><input id="mo_phone" type="tel" placeholder="010xxxxxxx"></div>
-        </div>
-        <div class="g">
-          <div><label>المدينة</label><input id="mo_city" placeholder="القاهرة"></div>
-          <div><label>العنوان</label><input id="mo_addr" placeholder="العنوان بالتفصيل"></div>
-        </div>
-        <div><label>ملاحظات</label><textarea id="mo_notes" rows="2" placeholder="أي تفاصيل إضافية"></textarea></div>
-
-        <!-- منطقة المنتجات المتعددة -->
-        <div style="margin:1rem 0;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;">
-            <label style="font-weight:700;color:var(--gold2);display:block;">🛍️ المنتجات</label>
-            <button type="button" class="btn sm ghost" id="clearAllRowsBtn" style="color:#e74c3c;border-color:#e74c3c;">🗑️ مسح الكل</button>
-          </div>
-          <div id="productRowsContainer">
-            <!-- سيتم إضافة الصفوف ديناميكياً -->
-          </div>
-          <button type="button" class="btn sm ghost add-row-btn" id="addProductRowBtn">➕ إضافة منتج آخر</button>
-        </div>
-
-        <!-- ✨ جديد: حقول الخصم -->
-        <div style="margin-top:1rem;padding-top:1rem;border-top:1px dashed var(--line);">
-          <label style="font-weight:700;color:var(--gold2);display:block;margin-bottom:.5rem;">🎟️ الخصومات (اختياري)</label>
-          <div class="g">
-            <div>
-              <label>🎟️ كود الخصم</label>
-              <input id="mo_coupon_code" placeholder="مثال: WELCOME10" style="text-transform:uppercase">
-              <div class="gallery-hint">سيتم التحقق تلقائياً من قائمة الكوبونات</div>
-            </div>
-            <div>
-              <label>💸 خصم يدوي (ج.م)</label>
-              <input id="mo_manual_discount" type="number" min="0" step="0.01" placeholder="مثال: 50">
-              <div class="gallery-hint">مبلغ ثابت يُخصم من الإجمالي</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ملخص الإجمالي -->
-        <div style="margin-top:1rem;border-top:1px solid var(--line);padding-top:.8rem;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:.35rem;font-size:.9rem;">
-            <span>💰 إجمالي المنتجات:</span>
-            <span id="mo_subtotal">0 ج.م</span>
-          </div>
-          <div id="mo_discount_row" style="display:none;justify-content:space-between;margin-bottom:.35rem;color:var(--ok);font-size:.9rem;">
-            <span id="mo_discount_label">🎟️ الخصم:</span>
-            <span id="mo_discount_amount">-0 ج.م</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:.4rem;border-top:1px dashed var(--line);">
-            <span style="font-weight:700;">💰 الإجمالي النهائي:</span>
-            <span id="mo_total" style="font-size:1.4rem;color:var(--gold2);font-weight:700;">0 ج.م</span>
-          </div>
-        </div>
-
-        <div style="display:flex;gap:.6rem;margin-top:1rem">
-          <button class="btn sm" id="saveManualOrderBtn" type="button">💾 حفظ الطلب</button>
-          <button class="btn sm ghost" id="cancelManualOrderBtn" type="button">إلغاء</button>
-        </div>
-      </div>
-
       <div class="order-filters">
         <input id="orderSearch" type="search" placeholder="🔎 ابحث برقم الطلب أو اسم العميل">
         <select id="orderStatusFilter">
           <option value="">كل الحالات</option>
-          <option value="0">قيد المراجعة</option>
-          <option value="1">قيد التجهيز</option>
-          <option value="2">تم التجهيز</option>
-          <option value="3">تم الشحن</option>
-          <option value="4">ملغي</option>
-          <option value="5">مكتمل</option>
+          <option value="0">قيد المراجعة</option><option value="1">قيد التجهيز</option>
+          <option value="2">تم التجهيز</option><option value="3">تم الشحن</option>
+          <option value="4">مكتمل</option><option value="5">ملغي</option>
         </select>
         <input id="orderDateFrom" type="date" placeholder="من تاريخ">
         <input id="orderDateTo" type="date" placeholder="إلى تاريخ">
         <button class="btn sm ghost" id="clearOrderFilters" type="button">✖️ مسح</button>
       </div>
       <table class="adm">
-        <thead>
-          <tr>
-            <th>رقم الطلب</th>
-            <th>التاريخ</th>
-            <th>آخر تحديث</th>
-            <th>العميل</th>
-            <th>الموبايل</th>
-            <th>المنتجات</th>
-            <th>الإجمالي</th>
-            <th>حالة الدفع</th>
-            <th>حالة الطلب</th>
-            <th>إجراءات</th>
-          </tr>
-        </thead>
+        <thead><tr><th>رقم الطلب</th><th>التاريخ</th><th>العميل</th><th>الموبايل</th><th>الإجمالي</th><th>الحالة</th></tr></thead>
         <tbody id="ordersBody"></tbody>
       </table>
     </div>
@@ -362,10 +191,8 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
     <!-- PRODUCTS -->
     <div id="tab-products" class="hidden">
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
-       <div style="display:flex;gap:.5rem;flex-wrap:wrap">
-  <button class="btn sm" id="addProductBtn" type="button">➕ إضافة منتج جديد</button>
-  <button class="btn sm ghost" id="generateSitemapBtn" type="button">📥 توليد sitemap.xml</button>
-</div>
+        <button class="btn sm" id="addProductBtn" type="button">➕ إضافة منتج جديد</button>
+        <button class="export-btn" id="exportProductsBtn" type="button">📥 تصدير المنتجات Excel (CSV)</button>
         <div style="display:flex;gap:.5rem;flex:1;min-width:260px;max-width:760px;flex-wrap:wrap">
           <input id="productSearch" type="search" placeholder="🔎 ابحث باسم المنتج أو ID..." style="flex:1;min-width:220px;margin:0">
           <select id="productCatFilter" style="min-width:170px;margin:0">
@@ -374,7 +201,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
             <option value="crystal">شموع كريستالية</option><option value="metal">شموع معدنية</option>
             <option value="massage">شموع المساج</option><option value="gift">الهدايا</option>
             <option value="bride">بوكس العروسة</option>
-            <option value="soap">صابون طبيعي</option>
           </select>
           <select id="productSort" style="min-width:150px;margin:0">
             <option value="newest">الأحدث أولًا</option><option value="name">الاسم</option>
@@ -399,7 +225,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         </div>
         <div class="g">
           <div><label>المخزون (فارغ = غير محدود)</label><input id="pf_stock" type="number" min="0" placeholder="مثال: 10"></div>
-          <div><label>التصنيف</label><select id="pf_cat"><option value="wood">شموع خشبية</option><option value="glass">شموع زجاجية</option><option value="crystal">شموع كريستالية</option><option value="metal">شموع معدنية</option><option value="massage">شموع المساج</option><option value="gift">الهدايا</option><option value="bride">بوكس العروسة</option><option value="soap">صابون طبيعي</option></select></div>
+          <div><label>التصنيف</label><select id="pf_cat"><option value="wood">شموع خشبية</option><option value="glass">شموع زجاجية</option><option value="crystal">شموع كريستالية</option><option value="metal">شموع معدنية</option><option value="massage">شموع المساج</option><option value="gift">الهدايا</option><option value="bride">بوكس العروسة</option></select></div>
         </div>
         <div class="g">
           <div><label>الصورة الرئيسية (اسم الملف أو رابط)</label><input id="pf_img" placeholder="مثال: RR.jpg"></div>
@@ -438,7 +264,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
       <div style="display:flex;gap:.6rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:1rem">
         <button class="btn sm" id="addCouponBtn" type="button">➕ إضافة كوبون جديد</button>
       </div>
-      <p style="color:var(--dim);font-size:.78rem;margin:-.35rem 0 1rem">أنشئ كوبونات خصم ذكية لعملائك — مع تحكم كامل في التواريخ، الحد الأدنى، الحد الأقصى، وأول عميل فقط.</p>
+      <p style="color:var(--dim);font-size:.78rem;margin:-.35rem 0 1rem">أنشئ كوبونات خصم لعملائك — نسبتك المئوية أو مبلغ ثابت. الكوبون يظهر للعميل في السلة.</p>
       <div class="pform hidden" id="couponForm">
         <h3 style="color:var(--gold2);margin-bottom:1rem" id="couponFormTitle">كوبون جديد</h3>
         <div class="g">
@@ -450,20 +276,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
           <div><label>أقصى عدد استخدامات (فارغ = غير محدود)</label><input id="cf_maxUses" type="number" min="0" placeholder="مثال: 100"></div>
         </div>
         <div class="g">
-          <div><label>تاريخ البدء *</label><input id="cf_startDate" type="date" /></div>
-          <div><label>تاريخ الانتهاء *</label><input id="cf_expires" type="date" /></div>
-        </div>
-        <div class="g">
-          <div><label>الحد الأدنى للطلب (ج.م) *</label><input id="cf_minOrder" type="number" placeholder="مثال: 200" /></div>
-          <div><label>الحد الأقصى للخصم (ج.م) *</label><input id="cf_maxDiscount" type="number" placeholder="مثال: 50" /></div>
-        </div>
-        <div style="margin:0.5rem 0 1rem;">
-          <label style="display:flex;align-items:center;gap:0.6rem;font-weight:700;cursor:pointer;">
-            <input type="checkbox" id="cf_firstOrderOnly" style="width:20px;height:20px;" />
-            🎯 تفعيل لأول عميل فقط (أول طلب)
-          </label>
-        </div>
-        <div class="g">
+          <div><label>تاريخ الانتهاء (اختياري)</label><input id="cf_expires" type="date"></div>
           <div><label>الحالة</label><select id="cf_active"><option value="true">✅ مفعل</option><option value="false">❌ متوقف</option></select></div>
         </div>
         <div style="display:flex;gap:.6rem;margin-top:1rem">
@@ -472,7 +285,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
         </div>
       </div>
       <table class="adm">
-        <thead><tr><th>الكود</th><th>النوع</th><th>القيمة</th><th>الاستخدام</th><th>تاريخ البدء</th><th>تاريخ الانتهاء</th><th>حد أدنى</th><th>حد أقصى للخصم</th><th>أول عميل</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+        <thead><tr><th>الكود</th><th>النوع</th><th>القيمة</th><th>الاستخدام</th><th>الانتهاء</th><th>الحالة</th><th>إجراءات</th></tr></thead>
         <tbody id="couponsBody"></tbody>
       </table>
     </div>
@@ -523,17 +336,6 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
   </div>
 </div>
 
-<!-- ═══ نافذة عرض/تعديل الطلب (Modal) ═══ -->
-<div id="orderModal" class="modal-overlay hidden" style="display:none;">
-  <div class="modal-box">
-    <button class="close-modal" id="closeModalBtn">&times;</button>
-    <h3 id="modalTitle">📦 تفاصيل الطلب</h3>
-    <div id="modalContent">
-      <!-- سيتم ملء المحتوى ديناميكياً -->
-    </div>
-  </div>
-</div>
-
 <div id="toasts"></div>
 
 <script src="data.js"></script>
@@ -543,33 +345,17 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
 (function(){
 "use strict";
 
-  function slugify(str) {
-  return String(str || '')
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
-}
-
 let loggedIn = false;
 let ALL_USERS = [];
 let ALL_COUPONS = [];
 let ALL_ORDERS = [];
 let PRODUCTS_ADMIN_CACHE = [];
 
-// ═══ متغيرات الطلب اليدوي ═══
-let productRowCounter = 0;
-let appliedManualCoupon = null; // { code, discount, type, value } أو null
-
 document.addEventListener("DOMContentLoaded", () => {
   initTabs();
   initProductForm();
   initCouponForm();
   initCraftForm();
-  initManualOrder();
-  initOrderModal();
   document.getElementById("orderSearch")?.addEventListener("input", filterOrders);
   document.getElementById("orderStatusFilter")?.addEventListener("change", filterOrders);
   document.getElementById("orderDateFrom")?.addEventListener("change", filterOrders);
@@ -694,626 +480,15 @@ function initTabs(){
   });
 }
 
-// ═══════════════════════════════════════════════════════════
-// ✅ MANUAL ORDER SYSTEM — مع منتجات متعددة وتتبع Pixel + تسجيل العملاء
-// ═══════════════════════════════════════════════════════════
-
-function getProductById(id) {
-  const allProducts = (PRODUCTS_ADMIN_CACHE && PRODUCTS_ADMIN_CACHE.length) 
-    ? PRODUCTS_ADMIN_CACHE 
-    : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
-  return allProducts.find(p => p.id === id) || null;
-}
-
-function getProductScents(productId) {
-  const p = getProductById(productId);
-  return (p && p.scents) ? p.scents : [];
-}
-
-function getProductPrice(productId) {
-  const p = getProductById(productId);
-  return p ? p.price : 0;
-}
-
-function createProductRow(productId, scent, qty, price) {
-  const container = document.getElementById('productRowsContainer');
-  const rowId = 'productRow_' + (++productRowCounter);
-
-  const allProducts = (PRODUCTS_ADMIN_CACHE && PRODUCTS_ADMIN_CACHE.length) 
-    ? PRODUCTS_ADMIN_CACHE 
-    : (typeof PRODUCTS !== "undefined" ? PRODUCTS : []);
-  const productOptions = allProducts
-    .filter(p => p.active !== false)
-    .map(p => `<option value="${p.id}" ${p.id === productId ? 'selected' : ''} data-price="${p.price || 0}">${p.name || p.id} (${p.price || 0} ج.م)</option>`)
-    .join('');
-
-  const scents = getProductScents(productId);
-  const scentOptions = scents.map(s => `<option value="${s}" ${s === scent ? 'selected' : ''}>${s}</option>`).join('');
-
-  const row = document.createElement('div');
-  row.className = 'product-row';
-  row.id = rowId;
-  row.innerHTML = `
-    <select class="product-select" data-row="${rowId}">
-      <option value="">اختر المنتج</option>
-      ${productOptions}
-    </select>
-    <select class="scent-select" data-row="${rowId}">
-      <option value="">بدون عطر</option>
-      ${scentOptions}
-    </select>
-    <input type="number" class="qty-input" data-row="${rowId}" value="${qty || 1}" min="1" step="1">
-    <input type="number" class="price-input" data-row="${rowId}" value="${price || getProductPrice(productId) || 0}" min="0" step="0.01">
-    <button type="button" class="remove-row" data-row="${rowId}" title="حذف هذا المنتج">✕</button>
-  `;
-
-  container.appendChild(row);
-
-  const productSelect = row.querySelector('.product-select');
-  const scentSelect = row.querySelector('.scent-select');
-  const qtyInput = row.querySelector('.qty-input');
-  const priceInput = row.querySelector('.price-input');
-  const removeBtn = row.querySelector('.remove-row');
-
-  productSelect.addEventListener('change', function() {
-    const pid = this.value;
-    const selectedOption = this.options[this.selectedIndex];
-    const defaultPrice = selectedOption ? parseFloat(selectedOption.dataset.price) || 0 : 0;
-    
-    const newScents = getProductScents(pid);
-    scentSelect.innerHTML = '<option value="">بدون عطر</option>' + 
-      newScents.map(s => `<option value="${s}">${s}</option>`).join('');
-    priceInput.value = defaultPrice;
-    updateTotal();
-  });
-
-  qtyInput.addEventListener('input', updateTotal);
-  priceInput.addEventListener('input', updateTotal);
-
-  removeBtn.addEventListener('click', function() {
-    if (container.children.length <= 1) {
-      toast('⚠️ يجب أن يكون هناك منتج واحد على الأقل');
-      return;
-    }
-    row.remove();
-    updateTotal();
-  });
-
-  updateTotal();
-}
-
-/* ═══════════════════════════════════════════════════════════
-   ✨ [مُعدّلة] حساب الإجمالي مع دعم الخصم (كوبون + يدوي)
-   ═══════════════════════════════════════════════════════════ */
-  let COUPONS_CACHE = null;
-let COUPONS_CACHE_TIME = 0;
-const COUPONS_CACHE_TTL = 60000;
-
-async function getCouponsCached() {
-  const now = Date.now();
-  if (COUPONS_CACHE && (now - COUPONS_CACHE_TIME) < COUPONS_CACHE_TTL) {
-    return COUPONS_CACHE;
-  }
-  COUPONS_CACHE = await window.FB.list('coupons') || [];
-  COUPONS_CACHE_TIME = now;
-  return COUPONS_CACHE;
-}
-async function updateTotal() {
-  const rows = document.querySelectorAll('.product-row');
-  let subTotal = 0;
-  rows.forEach(row => {
-    const qty = parseFloat(row.querySelector('.qty-input').value) || 0;
-    const price = parseFloat(row.querySelector('.price-input').value) || 0;
-    subTotal += qty * price;
-  });
-
-  // ✅ حساب خصم الكوبون
-  let couponDiscount = 0;
-  const couponCode = (document.getElementById('mo_coupon_code')?.value || '').trim().toUpperCase();
-  appliedManualCoupon = null;
-
-  if (couponCode && window.FB && typeof window.FB.list === 'function') {
-    try {
-const coupons = await getCouponsCached();
-      const c = coupons.find(x => (x.code || '').toUpperCase() === couponCode);
-
-      if (c && c.active !== false) {
-        const now = Date.now();
-        const notStarted = c.startDate && now < new Date(c.startDate).getTime();
-        const expired = c.expiresAt && now > Number(c.expiresAt);
-        const usedUp = c.maxUses && Number(c.usedCount || 0) >= Number(c.maxUses);
-        const belowMin = c.minOrder && subTotal < c.minOrder;
-
-        if (!notStarted && !expired && !usedUp && !belowMin) {
-          if (c.type === 'percent') {
-            couponDiscount = subTotal * (Number(c.value || 0) / 100);
-          } else {
-            couponDiscount = Number(c.value || 0);
-          }
-          if (c.maxDiscount && couponDiscount > c.maxDiscount) {
-            couponDiscount = c.maxDiscount;
-          }
-          couponDiscount = Math.round(couponDiscount);
-          appliedManualCoupon = { code: c.code, discount: couponDiscount, type: c.type, value: c.value };
-        }
-      }
-    } catch (e) {
-      console.warn('⚠️ Coupon lookup failed:', e);
-    }
-  }
-
-  // ✅ الخصم اليدوي
-  const manualDiscount = parseFloat(document.getElementById('mo_manual_discount')?.value) || 0;
-  const totalDiscount = couponDiscount + manualDiscount;
-  const finalTotal = Math.max(0, subTotal - totalDiscount);
-
-  // ✅ تحديث الواجهة
-  const subEl = document.getElementById('mo_subtotal');
-  if (subEl) subEl.textContent = subTotal.toFixed(2) + ' ج.م';
-
-  const totalEl = document.getElementById('mo_total');
-  if (totalEl) totalEl.textContent = finalTotal.toFixed(2) + ' ج.م';
-
-  const discRow = document.getElementById('mo_discount_row');
-  const discAmt = document.getElementById('mo_discount_amount');
-  const discLbl = document.getElementById('mo_discount_label');
-
-  if (discRow && discAmt && discLbl) {
-    if (totalDiscount > 0) {
-      discRow.style.display = 'flex';
-      discAmt.textContent = '-' + totalDiscount.toFixed(2) + ' ج.م';
-
-      let labelParts = [];
-      if (couponDiscount > 0 && appliedManualCoupon) {
-        labelParts.push(`🎟️ كوبون ${appliedManualCoupon.code} (${couponDiscount.toFixed(0)} ج.م)`);
-      }
-      if (manualDiscount > 0) {
-        labelParts.push(`💸 خصم يدوي (${manualDiscount.toFixed(0)} ج.م)`);
-      }
-      discLbl.textContent = labelParts.join(' + ') + ':';
-    } else {
-      discRow.style.display = 'none';
-    }
-  }
-
-  return { subTotal, couponDiscount, manualDiscount, totalDiscount, finalTotal };
-}
-
-async function saveCustomer(orderData) {
-  if(!window.FB) return;
-  try {
-    // محاولة جلب المستخدمين
-    let users = [];
-    try {
-      users = await window.FB.list("users") || [];
-    } catch(listErr) {
-      console.warn("⚠️ Could not list users, will try direct creation:", listErr);
-    }
-    
-    let existing = null;
-    if (orderData.phone) {
-      existing = users.find(u => String(u.phone || '').trim() === String(orderData.phone || '').trim());
-    }
-    if (!existing && orderData.email) {
-      existing = users.find(u => String(u.email || '').trim() === String(orderData.email || '').trim());
-    }
-    
-    if (existing) {
-      const newOrdersCount = (existing.ordersCount || 0) + 1;
-      const newTotalSpent = (existing.totalSpent || 0) + Number(orderData.total || 0);
-      await window.FB.update("users", existing.id, {
-        ordersCount: newOrdersCount,
-        totalSpent: newTotalSpent,
-        lastOrder: Date.now(),
-        name: existing.name || orderData.name || '',
-        phone: existing.phone || orderData.phone || '',
-        email: existing.email || orderData.email || '',
-        city: orderData.city || existing.city || '',
-        address: orderData.address || existing.address || ''
-      });
-      console.log('✅ تم تحديث العميل:', existing.id);
-    } else {
-      const newUser = {
-        name: orderData.name || '',
-        phone: orderData.phone || '',
-        email: orderData.email || '',
-        city: orderData.city || '',
-        address: orderData.address || '',
-        ordersCount: 1,
-        totalSpent: Number(orderData.total || 0),
-        createdAt: Date.now(),
-        lastOrder: Date.now(),
-        provider: 'manual'
-      };
-      
-      const userId = 'u' + Date.now().toString(36) + Math.random().toString(16).slice(2,5);
-      await window.FB.set("users", userId, newUser);
-      console.log('✅ تم إنشاء عميل جديد:', userId);
-    }
-  } catch(err) {
-    console.error('❌ فشل حفظ العميل:', err);
-    // محاولة بديلة: إنشاء العميل مباشرة
-    try {
-      const userId = 'u' + Date.now().toString(36) + Math.random().toString(16).slice(2,5);
-      const newUser = {
-        name: orderData.name || '',
-        phone: orderData.phone || '',
-        email: orderData.email || '',
-        city: orderData.city || '',
-        address: orderData.address || '',
-        ordersCount: 1,
-        totalSpent: Number(orderData.total || 0),
-        createdAt: Date.now(),
-        lastOrder: Date.now(),
-        provider: 'manual'
-      };
-      await window.FB.set("users", userId, newUser);
-      console.log('✅ تم إنشاء عميل جديد (طريقة بديلة):', userId);
-    } catch(err2) {
-      console.error('❌ فشل إنشاء العميل حتى بالطريقة البديلة:', err2);
-    }
-  }
-}
-
-function initManualOrder() {
-  const btn = document.getElementById('manualOrderBtn');
-  const form = document.getElementById('manualOrderForm');
-  const cancelBtn = document.getElementById('cancelManualOrderBtn');
-  const saveBtn = document.getElementById('saveManualOrderBtn');
-  const addRowBtn = document.getElementById('addProductRowBtn');
-  const clearAllBtn = document.getElementById('clearAllRowsBtn');
-
-  btn.addEventListener('click', function() {
-    form.classList.toggle('hidden');
-    if (!form.classList.contains('hidden')) {
-      document.getElementById('mo_name').value = '';
-      document.getElementById('mo_phone').value = '';
-      document.getElementById('mo_city').value = '';
-      document.getElementById('mo_addr').value = '';
-      document.getElementById('mo_notes').value = '';
-      document.getElementById('mo_coupon_code').value = '';
-      document.getElementById('mo_manual_discount').value = '';
-      appliedManualCoupon = null;
-      const container = document.getElementById('productRowsContainer');
-      container.innerHTML = '';
-      productRowCounter = 0;
-      createProductRow('', '', 1, 0);
-      updateTotal();
-    }
-  });
-
-  cancelBtn.addEventListener('click', function() {
-    form.classList.add('hidden');
-  });
-
-  addRowBtn.addEventListener('click', function() {
-    createProductRow('', '', 1, 0);
-  });
-
-  clearAllBtn.addEventListener('click', function() {
-    if (confirm('🗑️ هل تريد مسح جميع المنتجات من الطلب الحالي؟')) {
-      const container = document.getElementById('productRowsContainer');
-      container.innerHTML = '';
-      productRowCounter = 0;
-      createProductRow('', '', 1, 0);
-      updateTotal();
-      toast('🗑️ تم مسح جميع المنتجات');
-    }
-  });
-
-  // ✨ [جديد] أحداث الخصم
-  document.getElementById('mo_coupon_code')?.addEventListener('blur', () => { updateTotal(); });
-  document.getElementById('mo_coupon_code')?.addEventListener('change', () => { updateTotal(); });
-  document.getElementById('mo_manual_discount')?.addEventListener('input', () => { updateTotal(); });
-
-  saveBtn.addEventListener('click', async function() {
-    const name = document.getElementById('mo_name').value.trim();
-    const phone = document.getElementById('mo_phone').value.trim();
-    const city = document.getElementById('mo_city').value.trim();
-    const addr = document.getElementById('mo_addr').value.trim();
-    const notes = document.getElementById('mo_notes').value.trim();
-
-    if (!name) { toast('⚠️ اكتب اسم العميل'); return; }
-    if (!phone) { toast('⚠️ اكتب رقم الموبايل'); return; }
-
-    const productRows = document.querySelectorAll('.product-row');
-    const products = [];
-    let hasError = false;
-
-    productRows.forEach(row => {
-      const productId = row.querySelector('.product-select').value;
-      const scent = row.querySelector('.scent-select').value || '';
-      const qty = parseInt(row.querySelector('.qty-input').value) || 0;
-      const price = parseFloat(row.querySelector('.price-input').value) || 0;
-
-      if (!productId) {
-        toast('⚠️ اختر منتجاً في جميع الصفوف');
-        hasError = true;
-        return;
-      }
-      if (qty <= 0 || price <= 0) {
-        toast('⚠️ الكمية والسعر يجب أن يكونا أكبر من صفر');
-        hasError = true;
-        return;
-      }
-
-      const product = getProductById(productId);
-      products.push({
-        id: productId,
-        name: product ? (product.name || productId) : productId,
-        scent: scent,
-        quantity: qty,
-        price: price,
-        total: qty * price
-      });
-    });
-
-    if (hasError || products.length === 0) return;
-
-    // ✅ احسب الإجمالي والخصم
-    const calc = await updateTotal();
-    const subTotal = calc.subTotal;
-    const couponDiscount = calc.couponDiscount;
-    const manualDiscount = calc.manualDiscount;
-    const totalDiscount = calc.totalDiscount;
-    const finalTotal = calc.finalTotal;
-
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let orderId = 'VL-';
-    for (let i = 0; i < 6; i++) orderId += chars[Math.floor(Math.random() * chars.length)];
-
-    const couponCode = (document.getElementById('mo_coupon_code')?.value || '').trim().toUpperCase();
-
-    const orderData = {
-      orderId: orderId,
-      name: name,
-      phone: phone,
-      email: '',
-      city: city || '',
-      address: addr || '',
-      notes: notes || '',
-      subTotal: subTotal,
-      discount: totalDiscount,
-      couponDiscount: couponDiscount,
-      manualDiscount: manualDiscount,
-      couponCode: appliedManualCoupon ? appliedManualCoupon.code : (couponCode || ''),
-      total: finalTotal,
-      products: products,
-      status: 0,
-      paymentStatus: 'pending',
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      source: 'manual'
-    };
-
-    try {
-      await window.FB.add('orders', orderData);
-      await saveCustomer(orderData);
-
-      if (typeof fbq === 'function') {
-        fbq('track', 'Purchase', {
-          value: finalTotal,
-          currency: 'EGP',
-          content_ids: products.map(p => p.id),
-          content_names: products.map(p => p.name),
-          num_items: products.length,
-          order_id: orderId
-        });
-        console.log('✅ Pixel Purchase event sent');
-      }
-
-      if (typeof gtag === 'function') {
-        gtag('event', 'purchase', {
-          transaction_id: orderId,
-          value: finalTotal,
-          currency: 'EGP',
-          items: products.map(p => ({
-            item_id: p.id,
-            item_name: p.name,
-            price: p.price,
-            quantity: p.quantity
-          }))
-        });
-        console.log('✅ GA4 Purchase event sent');
-      }
-
-      const discountMsg = totalDiscount > 0 ? ` (خصم: ${totalDiscount} ج.م)` : '';
-      toast(`✅ تم تسجيل الطلب ${orderId}${discountMsg}`);
-      form.classList.add('hidden');
-      loadOrders();
-      loadUsers();
-
-    } catch (error) {
-      console.error('Error saving manual order:', error);
-      toast('⚠️ فشل حفظ الطلب. تأكد من الاتصال بقاعدة البيانات.');
-    }
-  });
-}
-
-// ═══ نافذة عرض وتعديل الطلب (Modal) ═══
-let currentEditingOrderId = null;
-
-function initOrderModal() {
-  const modal = document.getElementById('orderModal');
-  const closeBtn = document.getElementById('closeModalBtn');
-
-  closeBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-    modal.classList.add('hidden');
-  });
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.style.display = 'none';
-      modal.classList.add('hidden');
-    }
-  });
-}
-
-function openOrderModal(orderIdentifier) {
-  // البحث عن الطلب باستخدام _fid أو orderId أو id
-  const order = ALL_ORDERS.find(o => 
-    (o._fid && o._fid === orderIdentifier) || 
-    (o.orderId && o.orderId === orderIdentifier) || 
-    (o.id && o.id === orderIdentifier)
-  );
-  
-  if (!order) { 
-    toast('⚠️ الطلب غير موجود'); 
-    console.error('Order not found for identifier:', orderIdentifier, 'Available orders:', ALL_ORDERS.map(o => ({_fid: o._fid, orderId: o.orderId, id: o.id})));
-    return; 
-  }
-
-  const modal = document.getElementById('orderModal');
-  const title = document.getElementById('modalTitle');
-  const content = document.getElementById('modalContent');
-
-  title.textContent = `📦 تفاصيل الطلب: ${order.orderId || order.id}`;
-
-  const productsHtml = (order.products && order.products.length) 
-    ? `<table>
-        <thead><tr><th>المنتج</th><th>العطر</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th></tr></thead>
-        <tbody>
-          ${order.products.map(p => `
-            <tr>
-              <td>${p.name || p.id}</td>
-              <td>${p.scent || '-'}</td>
-              <td>${p.quantity || 1}</td>
-              <td>${money(p.price || 0)}</td>
-              <td>${money(p.total || (p.price * p.quantity) || 0)}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>`
-    : '<p style="color:var(--dim)">لا توجد منتجات مسجلة لهذا الطلب.</p>';
-
-  const statusLabels = ["قيد المراجعة", "قيد التجهيز", "تم التجهيز", "تم الشحن", "ملغي", "مكتمل"];
-  const currentStatus = Number(order.status || 0);
-  const statusOptions = statusLabels.map((label, idx) => 
-    `<option value="${idx}" ${idx === currentStatus ? 'selected' : ''}>${label}</option>`
-  ).join('');
-
-  const paymentLabels = { pending: 'قيد الانتظار', paid: 'تم الدفع', failed: 'فشل الدفع', refunded: 'تم الاسترجاع' };
-  const paymentOptions = Object.entries(paymentLabels).map(([val, label]) =>
-    `<option value="${val}" ${val === (order.paymentStatus || 'pending') ? 'selected' : ''}>${label}</option>`
-  ).join('');
-
-  // ✨ [جديد] عرض الخصم إن وُجد
-  const subTotal = Number(order.subTotal || order.productsTotal || order.total || 0);
-  const discount = Number(order.discount || 0);
-  let discountHtml = '';
-  if (discount > 0) {
-    let parts = [];
-    if (order.couponCode) parts.push(`🎟️ كوبون ${order.couponCode}`);
-    if (order.manualDiscount > 0) parts.push(`💸 خصم يدوي`);
-    discountHtml = `
-      <div style="display:flex;justify-content:space-between;margin-top:.4rem;color:var(--ok);font-size:.9rem;">
-        <span>${parts.join(' + ') || '🎟️ الخصم'}:</span>
-        <span>-${money(discount)}</span>
-      </div>
-    `;
-  }
-
-  content.innerHTML = `
-    <div style="margin-bottom:1rem;">
-      <p><b>العميل:</b> ${order.name || '-'}</p>
-      <p><b>رقم الموبايل:</b> ${order.phone || '-'}</p>
-      <p><b>المدينة:</b> ${order.city || '-'}</p>
-      <p><b>العنوان:</b> ${order.address || '-'}</p>
-      <p><b>ملاحظات:</b> ${order.notes || '-'}</p>
-      <p><b>تاريخ الطلب:</b> ${order.createdAt ? new Date(order.createdAt).toLocaleString('ar-EG') : '-'}</p>
-      <p><b>آخر تحديث:</b> ${order.updatedAt ? new Date(order.updatedAt).toLocaleString('ar-EG') : '-'}</p>
-      ${order.source ? `<p><b>مصدر الطلب:</b> ${order.source === 'manual' ? '✍️ يدوي' : '🌐 من الموقع'}</p>` : ''}
-    </div>
-    <div style="margin:1rem 0;">
-      <label><b>حالة الطلب:</b></label>
-      <select id="modalStatusSelect" style="width:100%;padding:.4rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-size:.9rem;margin-top:.3rem;">
-        ${statusOptions}
-      </select>
-    </div>
-    <div style="margin:1rem 0;">
-      <label><b>حالة الدفع:</b></label>
-      <select id="modalPaymentSelect" style="width:100%;padding:.4rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);font-size:.9rem;margin-top:.3rem;">
-        ${paymentOptions}
-      </select>
-    </div>
-    <div style="margin:1rem 0;">
-      <label><b>المنتجات:</b></label>
-      ${productsHtml}
-    </div>
-    ${discount > 0 ? `
-    <div style="margin-top:.8rem;padding-top:.8rem;border-top:1px dashed var(--line);">
-      <div style="display:flex;justify-content:space-between;font-size:.9rem;color:var(--mut);">
-        <span>إجمالي المنتجات:</span>
-        <span>${money(subTotal)}</span>
-      </div>
-      ${discountHtml}
-    </div>
-    ` : ''}
-    <div class="total">
-      <span>💰 الإجمالي الكلي</span>
-      <span>${money(order.total || 0)}</span>
-    </div>
-    <div style="display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap;">
-      <button class="btn sm" id="modalSaveBtn" type="button" style="flex:1;">💾 حفظ التعديلات</button>
-      <button class="btn sm danger" id="modalDeleteBtn" type="button" style="flex:1;">🗑️ حذف الطلب</button>
-      <button class="btn sm ghost" id="modalCloseBtn" type="button" style="flex:1;">✖️ إغلاق</button>
-    </div>
-  `;
-
-  currentEditingOrderId = order._fid || order.id;
-
-  // ربط الأحداث
-  document.getElementById('modalSaveBtn').addEventListener('click', async function() {
-    const newStatus = parseInt(document.getElementById('modalStatusSelect').value);
-    const newPayment = document.getElementById('modalPaymentSelect').value;
-    try {
-      await window.FB.update('orders', currentEditingOrderId, {
-        status: newStatus,
-        paymentStatus: newPayment,
-        updatedAt: Date.now()
-      });
-      toast('✅ تم تحديث الطلب بنجاح');
-      modal.style.display = 'none';
-      modal.classList.add('hidden');
-      loadOrders();
-    } catch(err) {
-      console.error(err);
-      toast('⚠️ فشل تحديث الطلب');
-    }
-  });
-
-  document.getElementById('modalDeleteBtn').addEventListener('click', function() {
-    if (!confirm('🗑️ هل أنت متأكد من حذف هذا الطلب نهائياً؟ لا يمكن التراجع.')) return;
-    window.FB.remove('orders', currentEditingOrderId).then(() => {
-      toast('🗑️ تم حذف الطلب');
-      modal.style.display = 'none';
-      modal.classList.add('hidden');
-      loadOrders();
-    }).catch(err => {
-      console.error(err);
-      toast('⚠️ فشل حذف الطلب');
-    });
-  });
-
-  document.getElementById('modalCloseBtn').addEventListener('click', function() {
-    modal.style.display = 'none';
-    modal.classList.add('hidden');
-  });
-
-  modal.style.display = 'flex';
-  modal.classList.remove('hidden');
-}
-
-function populateProductSelect() {}
-
-// ═══ ORDERS ═══
+// ═══ ORDERS — تم إصلاح حساب الإيرادات لاستبعاد الملغي والمكتمل ═══
 function loadOrders(){
   if(!window.FB || typeof window.FB.watch !== "function") return;
   window.FB.watch("orders", orders => {
     orders.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
     ALL_ORDERS = orders;
     document.getElementById("stOrders").textContent = orders.length;
+    
+    // ═══ إصلاح الإيرادات: استبعاد المكتمل (4) والملغي (5) ═══
     const revenue = orders.filter(order => order.status !== 4 && order.status !== 5)
                           .reduce((total, order) => total + Number(order.total || 0), 0);
     document.getElementById("stRevenue").textContent = money(revenue);
@@ -1329,7 +504,7 @@ function filterOrders(){
   let filtered = ALL_ORDERS;
   if(search){
     filtered = filtered.filter(order => {
-      const haystack = (order.orderId || order.id || "") + " " + (order.name || "") + " " + (order.phone || "");
+      const haystack = (order.id || "") + " " + (order.name || "") + " " + (order.phone || "");
       return haystack.toLowerCase().includes(search);
     });
   }
@@ -1358,134 +533,32 @@ function filterOrders(){
   renderOrders(filtered);
 }
 
-function isValidStatusTransition(current, target) {
-  const allowed = {
-    0: [1, 4],
-    1: [2, 4],
-    2: [3],
-    3: [5],
-    4: [],
-    5: []
-  };
-  if(!allowed[current]) return true;
-  return allowed[current].includes(target);
-}
-
 function renderOrders(orders){
   const body = document.getElementById("ordersBody");
   if(!body) return;
   if(!orders.length){
-    body.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد طلبات تطابق الفلتر</td></tr>`;
+    body.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد طلبات تطابق الفلتر</td></tr>`;
     return;
   }
-  const STATUS = ["قيد المراجعة", "قيد التجهيز", "تم التجهيز", "تم الشحن", "ملغي", "مكتمل"];
-  
+  const STATUS = ["قيد المراجعة", "قيد التجهيز", "تم التجهيز", "تم الشحن", "مكتمل", "ملغي"];
   body.innerHTML = orders.map(order => {
     const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString("ar-EG") : "-";
-    const updatedDate = order.updatedAt ? new Date(order.updatedAt).toLocaleDateString("ar-EG") : (order.createdAt ? new Date(order.createdAt).toLocaleDateString("ar-EG") : "-");
-    const currentStatus = Number(order.status || 0);
-    const statusOptions = STATUS.map((status, index) => 
-      `<option value="${index}"${currentStatus === index ? " selected" : ""}>${status}</option>`
-    ).join("");
-    
-    const paymentStatus = order.paymentStatus || 'pending';
-    const paymentLabels = {
-      pending: 'قيد الانتظار',
-      paid: 'تم الدفع',
-      failed: 'فشل الدفع',
-      refunded: 'تم الاسترجاع'
-    };
-    const paymentClasses = {
-      pending: 'payment-pending',
-      paid: 'payment-paid',
-      failed: 'payment-failed',
-      refunded: 'payment-refunded'
-    };
-    const paymentText = paymentLabels[paymentStatus] || paymentStatus;
-    const paymentClass = paymentClasses[paymentStatus] || 'payment-pending';
-    
-    const orderId = order.orderId || order.id || "-";
-    const productCount = (order.products && order.products.length) ? order.products.length : 0;
-    const totalDisplay = Number(order.discount || 0) > 0 
-      ? `<b>${money(order.total || 0)}</b><br><small style="color:var(--ok);font-size:.65rem">خصم ${money(order.discount)}</small>`
-      : `<b>${money(order.total || 0)}</b>`;
-    
+    const statusOptions = STATUS.map((status,index) => `<option value="${index}"${order.status === index ? " selected" : ""}>${status}</option>`).join("");
     return `
       <tr>
-        <td style="direction:ltr;font-size:.78rem;font-weight:700;">${orderId}</td>
-        <td style="font-size:.75rem;">${date}</td>
-        <td style="font-size:.75rem;color:var(--dim);">${updatedDate}</td>
+        <td style="direction:ltr;font-size:.78rem">${order.id || "-"}</td>
+        <td>${date}</td>
         <td>${order.name || "-"}</td>
-        <td class="cell-phone">${order.phone || "-"}</td>
-        <td style="font-size:.8rem;text-align:center;">${productCount} منتج</td>
-        <td>${totalDisplay}</td>
-        <td><span class="payment-badge ${paymentClass}">${paymentText}</span></td>
-        <td>
-          <select data-oid="${order._fid || order.id}" data-current="${currentStatus}" class="status-select">
-            ${statusOptions}
-          </select>
-        </td>
-        <td style="display:flex;gap:.3rem;flex-wrap:wrap;align-items:center;">
-          <button class="btn sm ghost" data-view="${order._fid || order.id}" title="عرض وتعديل الطلب" style="font-size:.7rem;padding:.2rem .5rem;">👁️</button>
-          <button class="delete-btn" data-del="${order._fid || order.id}" title="حذف الطلب نهائياً (لا يمكن التراجع)">🗑️</button>
-        </td>
+        <td style="direction:ltr">${order.phone || "-"}</td>
+        <td>${money(order.total || 0)}</td>
+        <td><select data-oid="${order._fid || order.id}">${statusOptions}</select></td>
       </tr>`;
   }).join("");
-  
-  // ربط أحداث تغيير الحالة
-  document.querySelectorAll("#ordersBody .status-select").forEach(select => {
-    select.addEventListener("change", async function() {
-      const oid = this.dataset.oid;
-      const current = Number(this.dataset.current);
-      const target = Number(this.value);
-      
-      if(!isValidStatusTransition(current, target)) {
-        toast(`⚠️ لا يمكن تغيير الحالة من "${STATUS[current]}" إلى "${STATUS[target]}"`);
-        this.value = current;
-        return;
-      }
-      
-      if(!confirm(`هل أنت متأكد من تغيير حالة الطلب ${oid} من "${STATUS[current]}" إلى "${STATUS[target]}"؟`)) {
-        this.value = current;
-        return;
-      }
-      
-      try {
-        await window.FB.update("orders", oid, { 
-          status: target,
-          updatedAt: Date.now()
-        });
-        toast("✅ تم تحديث الحالة بنجاح");
-        this.dataset.current = target;
-      } catch(error) {
-        console.error(error);
-        toast("⚠️ فشل تحديث الحالة");
-        this.value = current;
-      }
-    });
-  });
-
-  // ربط زر عرض الطلب
-  document.querySelectorAll("#ordersBody [data-view]").forEach(btn => {
-    btn.addEventListener("click", function() {
-      const oid = this.dataset.view;
-      openOrderModal(oid);
-    });
-  });
-
-  // ربط زر حذف الطلب
-  document.querySelectorAll("#ordersBody .delete-btn").forEach(btn => {
-    btn.addEventListener("click", async function() {
-      const oid = this.dataset.del;
-      if(!confirm(`🗑️ هل أنت متأكد من حذف الطلب ${oid} نهائياً؟ لا يمكن التراجع عن هذا الإجراء.`)) return;
-      try {
-        await window.FB.remove("orders", oid);
-        toast("🗑️ تم حذف الطلب");
-        loadOrders();
-      } catch(error) {
-        console.error(error);
-        toast("⚠️ فشل حذف الطلب");
-      }
+  document.querySelectorAll("#ordersBody select").forEach(select => {
+    select.addEventListener("change", () => {
+      window.FB.update("orders", select.dataset.oid, { status: Number(select.value) })
+        .then(() => toast("✅ تم تحديث الحالة"))
+        .catch(error => { console.error(error); toast("⚠️ فشل تحديث الحالة"); });
     });
   });
 }
@@ -1498,7 +571,6 @@ function clearOrderFilters(){
   filterOrders();
 }
 
-// ═══ USERS ═══
 function loadUsers(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("users").then(users => {
@@ -1528,13 +600,6 @@ function renderUsers(users){
     body.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--dim)">لا يوجد عملاء بعد</td></tr>`;
     return;
   }
-
-  const safeCell = (val, extraClass = '') => {
-    const v = String(val || '').trim();
-    if (!v || v === '-') return `<td class="${extraClass}"><span class="cell-empty">— لم يُسجَّل —</span></td>`;
-    return `<td class="${extraClass}">${v}</td>`;
-  };
-
   body.innerHTML = list.map((u, i) => {
     let date = "-";
     if(u.createdAt){
@@ -1543,18 +608,73 @@ function renderUsers(users){
     }
     return `<tr>
       <td>${i+1}</td>
-      <td><b>${u.name || '<span class="cell-empty">—</span>'}</b></td>
-      ${safeCell(u.email)}
-      ${safeCell(u.phone, 'cell-phone')}
-      ${safeCell(u.city)}
-      <td style="text-align:center;">${u.ordersCount || 0}</td>
-      <td style="text-align:center;">${money(u.totalSpent || 0)}</td>
-      <td style="text-align:center;font-size:.78rem">${date}</td>
+      <td><b>${u.name||"-"}</b></td>
+      <td style="direction:ltr;font-size:.8rem">${u.email||"-"}</td>
+      <td style="direction:ltr">${u.phone||"-"}</td>
+      <td>${u.city||"-"}</td>
+      <td>${u.ordersCount||0}</td>
+      <td>${money(u.totalSpent||0)}</td>
+      <td style="font-size:.78rem">${date}</td>
     </tr>`;
   }).join("");
 }
 
 document.addEventListener("input", (e) => { if(e.target.id === "userSearch") renderUsers(ALL_USERS); });
+
+
+// ═══ تصدير كتالوج المنتجات كاملًا (المحلي + Firestore) بصيغة Excel-compatible CSV ═══
+document.addEventListener("click", (event) => {
+  if(event.target.id !== "exportProductsBtn") return;
+  const products = Array.isArray(PRODUCTS_ADMIN_CACHE) ? PRODUCTS_ADMIN_CACHE : [];
+  if(!products.length){ toast("⚠️ لم يتم تحميل المنتجات بعد. انتظر لحظات ثم حاول مرة أخرى."); return; }
+
+  const headers = [
+    "Product ID","الاسم العربي","English Name","الوصف العربي","English Description",
+    "السعر EGP","السعر قبل الخصم EGP","التصنيف العربي","Category English",
+    "مدة الاحتراق عربي","Burn Time English","العطور عربي","Scents English",
+    "الصورة الرئيسية URL","كل الصور URLs","الحالة","المخزون","شارة عربي","Badge English","Video URL"
+  ];
+  const scentEnglish = value => {
+    const found = (typeof SCENTS !== "undefined" ? SCENTS : []).find(pair => pair[0] === value || pair[1] === value);
+    return found ? found[1] : value;
+  };
+  const scentArabic = value => {
+    const found = (typeof SCENTS !== "undefined" ? SCENTS : []).find(pair => pair[0] === value || pair[1] === value);
+    return found ? found[0] : value;
+  };
+  const imageUrl = value => {
+    if(!value) return "";
+    if(/^https?:\/\//i.test(String(value)) || String(value).startsWith("data:")) return String(value);
+    return typeof CDN === "function" ? CDN(String(value)) : String(value);
+  };
+  const csvCell = value => '"' + String(value ?? "").replace(/"/g, '""') + '"';
+  const rows = products.map(product => {
+    const images = typeof imgsOf === "function" ? imgsOf(product) : (product.imgs || product.images || (product.img ? [product.img] : []));
+    const scents = Array.isArray(product.scents) ? product.scents : [];
+    const catAr = (typeof CATS !== "undefined" && CATS.ar && CATS.ar[product.cat]) || product.cat || "";
+    const catEn = (typeof CATS !== "undefined" && CATS.en && CATS.en[product.cat]) || product.cat || "";
+    const badgeMap = {"خصم":"Sale","الأكثر مبيعًا":"Best Seller","مميز":"Featured","الأكثر طلبًا":"Most Requested","جديد":"New","نفدت الكمية":"Sold Out"};
+    return [
+      product.id, product.name, product.nameEn || product.en, product.desc, product.descEn,
+      product.price, product.old || product.oldPrice, catAr, catEn,
+      product.hours, product.hoursEn, scents.map(scentArabic).join(" | "), scents.map(scentEnglish).join(" | "),
+      imageUrl(images[0] || product.img), images.map(imageUrl).join(" | "),
+      product.active === false ? "مخفي / Inactive" : "ظاهر / Active",
+      product.stock ?? "", product.badge || "", product.badgeEn || badgeMap[product.badge] || "", imageUrl(product.video)
+    ];
+  });
+  const csv = "\uFEFF" + [headers, ...rows].map(row => row.map(csvCell).join(",")).join("\r\n");
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `velalight-products-${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+  toast("✅ تم تصدير " + products.length + " منتجًا مع بياناتها وروابط صورها");
+});
 
 document.addEventListener("click", (e) => {
   if(e.target.id !== "exportUsersBtn") return;
@@ -1581,7 +701,8 @@ document.addEventListener("click", (e) => {
   toast("✅ تم تصدير العملاء بنجاح (" + ALL_USERS.length + " عميل)");
 });
 
-// ═══ PRODUCTS ═══
+// ═══ PRODUCTS (تم إصلاح المخزون نهائياً) ═══
+
 function renderAdminProducts(){
   const search = String(document.getElementById("productSearch")?.value || "").trim().toLowerCase();
   const cat = document.getElementById("productCatFilter")?.value || "";
@@ -1612,6 +733,7 @@ function renderAdminProducts(){
   }
   
   body.innerHTML = list.map(product => {
+    // ═══ عرض ∞ إذا كان المخزون null أو undefined ═══
     const stockDisplay = (product.stock === null || product.stock === undefined || product.stock === "") ? "∞" : product.stock;
     const pinIcon = product.pinned ? ' 📌' : '';
     const imgSrc = (typeof imgOf === "function") ? imgOf(product) : (product.img || "");
@@ -1636,45 +758,32 @@ function renderAdminProducts(){
   bindProductActions(PRODUCTS_ADMIN_CACHE);
 }
 
-/* ✅ [تعديل] — عرض المنتجات المحلية فوراً + دمج مع Firebase */
+// ═══ تحميل المنتجات مع دمج البيانات المحلية و Firebase ═══
 function loadProducts(){
-  /* ═══ 1) عرض المنتجات المحلية فوراً (تظهر بسرعة) ═══ */
-  try {
-    if (Array.isArray(PRODUCTS) && PRODUCTS.length) {
-      PRODUCTS_ADMIN_CACHE = PRODUCTS
-        .filter(p => p && p.id)
-        .map(p => ({ ...p, _fid: null, active: p.active !== false }));
-      renderAdminProducts();
-      console.log("⚡ [Local] المنتجات المحلية ظهرت فوراً:", PRODUCTS_ADMIN_CACHE.length);
-    }
-  } catch(e) {
-    console.warn("⚠️ Local products preload failed:", e);
-  }
-
-  /* ═══ 2) ثم جلب من Firestore ودمج ═══ */
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("products").then(cloud => {
     const map = new Map();
-
-    /* إضافة المنتجات المحلية (من data.js) */
+    // 1. المنتجات المحلية (data.js)
     (PRODUCTS || []).forEach(product => {
       if(!product || !product.id) return;
       map.set(product.id, { ...product, _fid:null, active:true });
     });
-
-    /* دمج منتجات Firestore (الـ 13 منتج بتوعك) */
+    // 2. بيانات Firebase
     (cloud || []).forEach(data => {
       const slug = data.id_ || data.slug || data.pid || data.id;
       if(!slug) return;
       if(data.active === false){ map.delete(slug); return; }
       const local = map.get(slug) || {};
+      // ═══ إصلاح جذري: الحفاظ على قيمة المخزون من Firebase أو المحلي ═══
       let finalStock = null;
       if (data.stock !== undefined && data.stock !== null && data.stock !== "") {
         finalStock = Number(data.stock);
       } else if (local.stock !== undefined && local.stock !== null && local.stock !== "") {
         finalStock = Number(local.stock);
       }
+      // إذا لم يوجد أي قيمة، نضع null (يعني غير محدود)
       if (isNaN(finalStock)) finalStock = null;
+
       map.set(slug, {
         ...local,
         ...data,
@@ -1684,15 +793,11 @@ function loadProducts(){
         stock: finalStock
       });
     });
-
     PRODUCTS_ADMIN_CACHE = [...map.values()];
     renderAdminProducts();
-    console.log("✅ [Merged] إجمالي المنتجات بعد الدمج:", PRODUCTS_ADMIN_CACHE.length);
-  }).catch(error => {
-    console.error("Products error:", error);
-    toast("⚠️ تعذر تحميل المنتجات من السيرفر — يتم عرض المحلي فقط");
-  });
+  }).catch(error => { console.error("Products error:", error); toast("⚠️ تعذر تحميل المنتجات"); });
 }
+
 function bindProductActions(list){
   document.querySelectorAll("#productsBody [data-edit]").forEach(button => {
     button.addEventListener("click", () => {
@@ -1735,36 +840,6 @@ function initProductForm(){
     }
   });
   document.getElementById("addProductBtn")?.addEventListener("click", () => openProductForm(null));
-  document.getElementById("generateSitemapBtn")?.addEventListener("click", generateSitemap);
-
-function generateSitemap() {
-  const baseUrl = 'https://velalight.github.io';
-  const today = new Date().toISOString().slice(0, 10);
-  const pages = [
-    { url: '', priority: '1.0' },
-    { url: '/products.html', priority: '0.9' },
-    { url: '/reviews.html', priority: '0.7' },
-    { url: '/contact.html', priority: '0.6' },
-    { url: '/privacy.html', priority: '0.3' },
-    { url: '/terms.html', priority: '0.3' },
-  ];
-  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-  pages.forEach(p => {
-    xml += `  <url>\n    <loc>${baseUrl}${p.url}</loc>\n    <lastmod>${today}</lastmod>\n    <priority>${p.priority}</priority>\n  </url>\n`;
-  });
-  PRODUCTS_ADMIN_CACHE.filter(p => p.active !== false && p.id).forEach(p => {
-    xml += `  <url>\n    <loc>${baseUrl}/shop/${p.id}.html</loc>\n    <lastmod>${today}</lastmod>\n    <priority>0.8</priority>\n  </url>\n`;
-  });
-  xml += '</urlset>';
-  const blob = new Blob([xml], { type: 'application/xml' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'sitemap.xml';
-  a.click();
-  URL.revokeObjectURL(url);
-  toast('✅ تم توليد sitemap.xml — ارفعه على GitHub');
-}
   document.getElementById("cancelProductBtn")?.addEventListener("click", () => document.getElementById("productForm").classList.add("hidden"));
   
   const updatePreview = () => {
@@ -1782,6 +857,7 @@ function generateSitemap() {
   document.getElementById("pf_img")?.addEventListener("input", updatePreview);
   document.getElementById("pf_images")?.addEventListener("input", updatePreview);
   
+  // ═══ إصلاح حفظ المنتج ═══
   document.getElementById("saveProductBtn")?.addEventListener("click", () => {
     const name = document.getElementById("pf_name").value.trim();
     const nameEn = document.getElementById("pf_nameEn").value.trim();
@@ -1792,7 +868,7 @@ function generateSitemap() {
       return;
     }
     
-       const existingId = document.getElementById("productForm").dataset.editId || "";
+    const existingId = document.getElementById("productForm").dataset.editId || "";
     const scents = document.getElementById("pf_scents").value.split(",").map(scent => scent.trim()).filter(Boolean);
     const stockVal = document.getElementById("pf_stock").value;
     const mainImgVal = document.getElementById("pf_img").value.trim();
@@ -1817,35 +893,16 @@ function generateSitemap() {
       active: true
     };
 
+    // ═══ إصلاح جذري للمخزون: إذا كان الرقم مكتوب، أرسله. وإلا لا ترسل الحقل ═══
     if (stockVal !== "" && !isNaN(stockVal) && Number(stockVal) >= 0) {
       data.stock = Number(stockVal);
     }
+    // لو فارغ، متحطش الحقل خالص عشان يبقى غير محدود
 
-    /* ✅ نحدد الـ Firestore document ID الصح */
-   let firestoreDocId;
-if (existingId) {
-  const existingProduct = PRODUCTS_ADMIN_CACHE.find(p => p.id === existingId);
-  firestoreDocId = (existingProduct && existingProduct._fid) ? existingProduct._fid : existingId;
-} else {
-  const slug = slugify(nameEn);
-  if (!slug) {
-    toast("⚠️ الاسم الإنجليزي غير صالح للرابط (استخدم حروف إنجليزية أو أرقام أو -)");
-    return;
-  }
-  if (PRODUCTS_ADMIN_CACHE.some(p => p.id === slug)) {
-    toast("⚠️ هذا الرابط مستخدم بالفعل. غيّر الاسم الإنجليزي قليلًا.");
-    return;
-  }
-  firestoreDocId = slug;
-}
-
-    const payload = existingId
-      ? { ...data, id_: existingId, updatedAt: Date.now() }
-      : { ...data, id_: firestoreDocId, createdAt: Date.now(), sold: 0 };
-
-    console.log("💾 Saving product to Firestore doc:", firestoreDocId, "with id_:", payload.id_);
-
-    window.FB.set("products", firestoreDocId, payload).then(() => {
+    const saveFn = existingId ? window.FB.set("products", existingId, { ...data, id_: existingId }) : 
+      window.FB.set("products", "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, id_: "p" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), createdAt: Date.now(), sold: 0 });
+      
+    saveFn.then(() => {
       toast("💾 تم حفظ المنتج");
       document.getElementById("productForm").classList.add("hidden");
       loadProducts();
@@ -1890,7 +947,7 @@ function openProductForm(product){
   form.scrollIntoView({ behavior:"smooth" });
 }
 
-// ═══ COUPONS ═══
+// ================= COUPONS =================
 function loadCoupons(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("coupons").then(coupons => {
@@ -1899,36 +956,18 @@ function loadCoupons(){
   }).catch(err => { console.error("Coupons error:", err); toast("⚠️ تعذر تحميل الكوبونات"); });
 }
 
-/* ✅ [جديد] — كوبونات النظام اللي مش بتظهر في الأدمن */
-const SYSTEM_COUPON_CODES = ["LOYAL15", "THANKS10"];
-function isSystemCoupon(c) {
-  if (!c || !c.code) return false;
-  const code = String(c.code).toUpperCase().trim();
-  if (SYSTEM_COUPON_CODES.indexOf(code) !== -1) return true;
-  if (c.loyaltyOnly === true) return true;
-  if (c.system === "loyalty") return true;
-  if (c.type === "loyalty") return true;
-  return false;
-}
-
 function renderCoupons(coupons){
   const body = document.getElementById("couponsBody");
   if(!body) return;
-  /* ✅ [جديد] — استثناء كوبونات النظام من العرض */
-let list = (coupons || []).slice();
+  let list = coupons || [];
   list.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
   if(!list.length){
-    body.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد كوبونات بعد. أنشئ أول كوبون الآن!</td></tr>`;
+    body.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--dim)">لا توجد كوبونات بعد. أنشئ أول كوبون الآن!</td></tr>`;
     return;
   }
   body.innerHTML = list.map(c => {
     const isActive = c.active !== false;
     const usesText = c.maxUses ? `${Number(c.usedCount||0)} / ${c.maxUses}` : `${Number(c.usedCount||0)} استخدام`;
-    let startText = "-";
-    if(c.startDate){
-      const d = new Date(c.startDate);
-      startText = d.toLocaleDateString("ar-EG");
-    }
     let expiresText = "-";
     if(c.expiresAt){
       const exp = Number(c.expiresAt);
@@ -1937,20 +976,13 @@ let list = (coupons || []).slice();
     }
     const valueText = c.type === "percent" ? `${c.value}%` : `${money(c.value||0)}`;
     const typeText = c.type === "percent" ? "نسبة مئوية" : "مبلغ ثابت";
-    const minOrderText = c.minOrder ? money(c.minOrder) : "-";
-    const maxDiscountText = c.maxDiscount ? money(c.maxDiscount) : "-";
-    const firstOnlyText = c.firstOrderOnly ? "✅ نعم" : "❌ لا";
     return `
       <tr>
         <td><span class="coupon-code">${c.code || "-"}</span></td>
         <td>${typeText}</td>
         <td><b>${valueText}</b></td>
         <td>${usesText}</td>
-        <td>${startText}</td>
         <td>${expiresText}</td>
-        <td>${minOrderText}</td>
-        <td>${maxDiscountText}</td>
-        <td>${firstOnlyText}</td>
         <td><span class="${isActive ? 'coupon-active' : 'coupon-inactive'}">${isActive ? '✅ مفعل' : '❌ متوقف'}</span></td>
         <td style="display:flex;gap:.3rem;flex-wrap:wrap">
           <button class="btn sm ghost" data-editc="${c.id}" type="button">✏️</button>
@@ -1985,9 +1017,7 @@ function bindCouponActions(list){
     btn.addEventListener("click", () => {
       if(!confirm("متأكد إنك عايز تحذف الكوبون ده؟")) return;
       const id = btn.dataset.delc;
-     window.FB.remove("coupons", id).then(() => {
-        COUPONS_CACHE = null;
-        COUPONS_CACHE_TIME = 0;
+      window.FB.remove("coupons", id).then(() => {
         toast("🗑️ تم حذف الكوبون");
         loadCoupons();
       }).catch(err => { console.error(err); toast("⚠️ فشل الحذف"); });
@@ -2012,11 +1042,12 @@ function openCouponForm(coupon){
     document.getElementById("cf_value").value = coupon.value || "";
     document.getElementById("cf_maxUses").value = coupon.maxUses || "";
     document.getElementById("cf_active").value = coupon.active !== false ? "true" : "false";
-    document.getElementById("cf_startDate").value = coupon.startDate || "";
-    document.getElementById("cf_expires").value = coupon.expiresAt ? new Date(Number(coupon.expiresAt)).toISOString().slice(0,10) : "";
-    document.getElementById("cf_minOrder").value = coupon.minOrder || "";
-    document.getElementById("cf_maxDiscount").value = coupon.maxDiscount || "";
-    document.getElementById("cf_firstOrderOnly").checked = coupon.firstOrderOnly === true;
+    if(coupon.expiresAt){
+      const date = new Date(Number(coupon.expiresAt));
+      document.getElementById("cf_expires").value = date.toISOString().slice(0,10);
+    } else {
+      document.getElementById("cf_expires").value = "";
+    }
   } else {
     form.dataset.editId = "";
     document.getElementById("couponFormTitle").textContent = "كوبون جديد";
@@ -2024,12 +1055,8 @@ function openCouponForm(coupon){
     document.getElementById("cf_type").value = "percent";
     document.getElementById("cf_value").value = "";
     document.getElementById("cf_maxUses").value = "";
-    document.getElementById("cf_active").value = "true";
-    document.getElementById("cf_startDate").value = "";
     document.getElementById("cf_expires").value = "";
-    document.getElementById("cf_minOrder").value = "";
-    document.getElementById("cf_maxDiscount").value = "";
-    document.getElementById("cf_firstOrderOnly").checked = false;
+    document.getElementById("cf_active").value = "true";
   }
   form.scrollIntoView({ behavior: "smooth" });
 }
@@ -2039,11 +1066,7 @@ function saveCoupon(){
   const type = document.getElementById("cf_type").value;
   const value = Number(document.getElementById("cf_value").value || 0);
   const maxUses = document.getElementById("cf_maxUses").value === "" ? null : Number(document.getElementById("cf_maxUses").value || 0);
-  const startDate = document.getElementById("cf_startDate").value;
   const expiresVal = document.getElementById("cf_expires").value;
-  const minOrder = document.getElementById("cf_minOrder").value === "" ? null : Number(document.getElementById("cf_minOrder").value || 0);
-  const maxDiscount = document.getElementById("cf_maxDiscount").value === "" ? null : Number(document.getElementById("cf_maxDiscount").value || 0);
-  const firstOrderOnly = document.getElementById("cf_firstOrderOnly").checked;
   const active = document.getElementById("cf_active").value === "true";
   const editId = document.getElementById("couponForm").dataset.editId || "";
   
@@ -2051,38 +1074,25 @@ function saveCoupon(){
   if(value <= 0){ toast("⚠️ قيمة الخصم لازم أكبر من صفر"); return; }
   if(type === "percent" && value > 100){ toast("⚠️ النسبة المئوية لازم تكون ≤ 100"); return; }
   
-
-const existing = ALL_COUPONS.find(c => c.code === code && c.id !== editId);
-if(existing){ toast("⚠️ الكود ده مستخدم من قبل. اختار كود تاني."); return; }
-  
+  const existing = ALL_COUPONS.find(c => c.code === code && c.id !== editId);
+  if(existing){ toast("⚠️ الكود ده مستخدم من قبل. اختار كود تاني."); return; }
   
   let expiresAt = null;
   if(expiresVal) expiresAt = new Date(expiresVal).setHours(23,59,59,999);
   
-  const data = {
-    code, type, value,
-    maxUses,
-    startDate: startDate || null,
-    expiresAt,
-    minOrder,
-    maxDiscount,
-    firstOrderOnly: !!firstOrderOnly,
-    active,
-  };
+  const data = { code, type, value, maxUses, expiresAt, active };
   
   const saveFn = editId ? window.FB.update("coupons", editId, data) : 
-    window.FB.set("coupons", "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, usedCount: 0, usedBy: [], createdAt: Date.now() });
+    window.FB.set("coupons", "c" + Date.now().toString(36) + Math.random().toString(16).slice(2,5), { ...data, usedCount: 0, createdAt: Date.now() });
     
   saveFn.then(() => {
-    COUPONS_CACHE = null;
-    COUPONS_CACHE_TIME = 0;
-    toast("💾 تم حفظ الكوبون الذكي");
+    toast("💾 تم حفظ الكوبون");
     document.getElementById("couponForm").classList.add("hidden");
     loadCoupons();
   }).catch(err => { console.error(err); toast("⚠️ فشل الحفظ — راجع Firestore Rules"); });
 }
 
-// ═══ REVIEWS ═══
+// ================= REVIEWS =================
 function loadReviews(){
   if(!window.FB || typeof window.FB.list !== "function") return;
   window.FB.list("reviews").then(reviews => {
@@ -2117,7 +1127,7 @@ function loadReviews(){
   }).catch(error => { console.error("Reviews error:", error); toast("⚠️ تعذر تحميل المراجعات"); });
 }
 
-// ═══ CRAFTSMANSHIP ═══
+// ================= CRAFTSMANSHIP =================
 let CRAFT_ITEMS = [];
 
 function loadCraftItems(){
