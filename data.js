@@ -29,8 +29,62 @@ let DB=LocalDB,CLOUD=!1;window.addEventListener("fb-ready",()=>{DB=window.FB,CLO
 
 let ALL_PRODUCTS=[],ALL_REVIEWS=[],dbProductsCache=[];
 
-async function loadAll(){try{dbProductsCache=await DB.list("products"),Array.isArray(dbProductsCache)||(dbProductsCache=[])}catch(e){console.warn("⚠️ Firebase failed, using local PRODUCTS",e),dbProductsCache=[]}const e=new Map;PRODUCTS.forEach(t=>{t&&t.id&&e.set(t.id,{...t})}),dbProductsCache.forEach(t=>{const a=t.id_||t.slug||t.pid||t.id;a&&(!1!==t.active?e.set(a,{...e.get(a)||{},...t,id:a,_fid:t.id||null}):e.delete(a))}),ALL_PRODUCTS=[...e.values()];try{localStorage.setItem("vl_products_v3",JSON.stringify(ALL_PRODUCTS.slice(0,200))),localStorage.setItem("vl_products_v3_time",String(Date.now()))}catch(e){}let t=[];try{t=await DB.list("reviews")}catch(e){}ALL_REVIEWS=[...void 0!==SEED_REVIEWS?SEED_REVIEWS:[],...t],setTimeout(function(){"function"==typeof injectAllProductSchemas&&injectAllProductSchemas(ALL_PRODUCTS),"function"==typeof injectBreadcrumbSchema&&injectBreadcrumbSchema()},100)}
+async function loadAll(){
+  // Render-safe baseline: keep the checked-in catalog available even when
+  // Firestore is slow, offline, or denies a public read.
+  const mergedProducts=new Map();
+  const initialProducts=Array.isArray(ALL_PRODUCTS)&&ALL_PRODUCTS.length?ALL_PRODUCTS:PRODUCTS;
+  initialProducts.forEach(product=>{
+    if(product&&product.id)mergedProducts.set(product.id,{...product});
+  });
+  ALL_PRODUCTS=[...mergedProducts.values()];
 
+  try{
+    localStorage.setItem("vl_products_v3",JSON.stringify(ALL_PRODUCTS.slice(0,200)));
+    localStorage.setItem("vl_products_v3_time",String(Date.now()));
+  }catch(e){}
+
+  try{
+    dbProductsCache=await DB.list("products");
+    if(!Array.isArray(dbProductsCache))dbProductsCache=[];
+  }catch(error){
+    console.warn("⚠️ Firebase failed, using local PRODUCTS",error);
+    dbProductsCache=[];
+  }
+
+  dbProductsCache.forEach(product=>{
+    const id=product&&(product.id_||product.slug||product.pid||product.id);
+    if(!id)return;
+    if(product.active===false){
+      mergedProducts.delete(id);
+      return;
+    }
+    mergedProducts.set(id,{
+      ...(mergedProducts.get(id)||{}),
+      ...product,
+      id,
+      _fid:product.id||null
+    });
+  });
+  ALL_PRODUCTS=[...mergedProducts.values()];
+
+  try{
+    localStorage.setItem("vl_products_v3",JSON.stringify(ALL_PRODUCTS.slice(0,200)));
+    localStorage.setItem("vl_products_v3_time",String(Date.now()));
+  }catch(e){}
+
+  let reviews=[];
+  try{
+    reviews=await DB.list("reviews");
+    if(!Array.isArray(reviews))reviews=[];
+  }catch(e){}
+  ALL_REVIEWS=[...(typeof SEED_REVIEWS!=="undefined"?SEED_REVIEWS:[]),...reviews];
+
+  setTimeout(function(){
+    if(typeof injectAllProductSchemas==="function")injectAllProductSchemas(ALL_PRODUCTS);
+    if(typeof injectBreadcrumbSchema==="function")injectBreadcrumbSchema();
+  },100);
+}
 function loadFromCache(){
   ALL_PRODUCTS=[...PRODUCTS];
   try{
