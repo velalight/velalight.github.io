@@ -571,3 +571,22 @@ body:has(#cartDrawer.open) #vlFreeShipWrap {
   -webkit-backdrop-filter: blur(4px) !important;
   z-index: 99999 !important;               /* أقل من السلة عشان متغطيهاش */
 }
+
+/* ═══ FIX: منع وميض صور المنتجات نهائيًا ═══ */
+.p-media img,
+.pgrid .p-media img,
+.rel-grid .p-media img,
+.products-grid .p-media img,
+#pdImg {
+  animation: none !important;
+  -webkit-animation: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+}
+
+.p-media img:not([src]),
+.p-media img[src=""],
+#pdImg:not([src]),
+#pdImg[src=""] {
+  opacity: 0 !important;
+}
