@@ -25,53 +25,58 @@ const imgsOf=e=>{if(!e)return[];if(Array.isArray(e.imgs)&&e.imgs.length>0)return
 
 const LocalDB={k:e=>"vl_"+e,g(e){try{return JSON.parse(localStorage.getItem(this.k(e)))||[]}catch(e){return[]}},s(e,t){try{localStorage.setItem(this.k(e),JSON.stringify(t))}catch(e){}},async list(e){return this.g(e)},async add(e,t){const a=this.g(e);return t.id="l"+Date.now()+Math.random().toString(16).slice(2,7),a.push(t),this.s(e,a),t.id},async update(e,t,a){this.s(e,this.g(e).map(e=>e.id===t?{...e,...a}:e))},async remove(e,t){this.s(e,this.g(e).filter(e=>e.id!==t))}};
 
-let DB=LocalDB,CLOUD=!1;window.addEventListener("fb-ready",()=>{DB=window.FB,CLOUD=!0;const e=$("#dbModeTag");e&&(e.textContent="☁️ Firestore متصل"),window.dispatchEvent(new Event("data-refresh"))});
+let DB=LocalDB,CLOUD=!1;window.addEventListener("fb-ready",()=>{DB=window.FB,CLOUD=!0;const e=$("#dbModeTag");e&&(e.textContent="☁️ Firestore متصل");if(document.readyState!=="loading")loadAll().then(()=>window.dispatchEvent(new Event("data-refresh"))).catch(e=>console.warn("⚠️ Firestore catalog refresh failed",e))});
 
 let ALL_PRODUCTS=[],ALL_REVIEWS=[],dbProductsCache=[];
 
 async function loadAll(){
-  // Render-safe baseline: keep the checked-in catalog available even when
-  // Firestore is slow, offline, or denies a public read.
+  // Start from the last successfully saved catalog, never from the demo catalog.
   const mergedProducts=new Map();
-  const initialProducts=Array.isArray(ALL_PRODUCTS)&&ALL_PRODUCTS.length?ALL_PRODUCTS:PRODUCTS;
-  initialProducts.forEach(product=>{
-    if(product&&product.id)mergedProducts.set(product.id,{...product});
+  (Array.isArray(ALL_PRODUCTS)?ALL_PRODUCTS:[]).forEach(product=>{
+    if(product&&product.id&&product.active!==false)mergedProducts.set(String(product.id),{...product});
   });
-  ALL_PRODUCTS=[...mergedProducts.values()];
 
+  let cloudSnapshotLoaded=false;
+  const sourceDB=DB;
+  const cloudAtStart=CLOUD;
   try{
-    localStorage.setItem("vl_products_v3",JSON.stringify(ALL_PRODUCTS.slice(0,200)));
-    localStorage.setItem("vl_products_v3_time",String(Date.now()));
-  }catch(e){}
-
-  try{
-    dbProductsCache=await DB.list("products");
+    dbProductsCache=await sourceDB.list("products");
     if(!Array.isArray(dbProductsCache))dbProductsCache=[];
+    cloudSnapshotLoaded=cloudAtStart;
+    // Local/offline records are not the public store catalog.
+    if(!cloudAtStart)dbProductsCache=[];
   }catch(error){
-    console.warn("⚠️ Firebase failed, using local PRODUCTS",error);
+    console.warn("⚠️ Firestore failed, keeping the last known catalog",error);
     dbProductsCache=[];
   }
 
+  // Ignore a slower local read if Firebase connected while it was in flight.
+  if(!cloudAtStart&&CLOUD)return;
+
+  // A successful Firestore read is authoritative, including an empty catalog.
+  if(cloudSnapshotLoaded)mergedProducts.clear();
   dbProductsCache.forEach(product=>{
     const id=product&&(product.id_||product.slug||product.pid||product.id);
     if(!id)return;
     if(product.active===false){
-      mergedProducts.delete(id);
+      mergedProducts.delete(String(id));
       return;
     }
-    mergedProducts.set(id,{
-      ...(mergedProducts.get(id)||{}),
+    mergedProducts.set(String(id),{
+      ...(mergedProducts.get(String(id))||{}),
       ...product,
-      id,
+      id:String(id),
       _fid:product.id||null
     });
   });
   ALL_PRODUCTS=[...mergedProducts.values()];
 
-  try{
-    localStorage.setItem("vl_products_v3",JSON.stringify(ALL_PRODUCTS.slice(0,200)));
-    localStorage.setItem("vl_products_v3_time",String(Date.now()));
-  }catch(e){}
+  if(cloudSnapshotLoaded){
+    try{
+      localStorage.setItem("vl_products_v3",JSON.stringify(ALL_PRODUCTS.slice(0,200)));
+      localStorage.setItem("vl_products_v3_time",String(Date.now()));
+    }catch(e){}
+  }
 
   let reviews=[];
   try{
@@ -86,44 +91,17 @@ async function loadAll(){
   },100);
 }
 function loadFromCache(){
-  ALL_PRODUCTS=[...PRODUCTS];
+  ALL_PRODUCTS=[];
   try{
-    const e=JSON.parse(localStorage.getItem("vl_products_v3")||"[]"),
-          t=Number(localStorage.getItem("vl_products_v3_time")||"0");
-    /* صلاحية الكاش: 5 دقايق بدل ساعة */
-    if(Array.isArray(e)&&e.length>0&&Date.now()-t<3e5){
-      const t=new Map(ALL_PRODUCTS.map(e=>[e.id,e]));
-      e.forEach(e=>{
-        if(!e||!e.id)return;
-        const a=t.get(e.id);
-        if(!a)return;
-        /* ✅ نحدّث كل الحقول المهمة بما فيها السعر */
-        if(void 0!==e.price)a.price=e.price;
-        if(void 0!==e.old)a.old=e.old;
-        if(void 0!==e.oldPrice)a.old=e.oldPrice;
-        if(void 0!==e.name)a.name=e.name;
-        if(void 0!==e.nameEn)a.nameEn=e.nameEn;
-        if(void 0!==e.desc)a.desc=e.desc;
-        if(void 0!==e.descEn)a.descEn=e.descEn;
-        if(void 0!==e.cat)a.cat=e.cat;
-        if(void 0!==e.badge)a.badge=e.badge;
-        if(void 0!==e.badgeEn)a.badgeEn=e.badgeEn;
-        if(void 0!==e.hours)a.hours=e.hours;
-        if(void 0!==e.hoursEn)a.hoursEn=e.hoursEn;
-        if(void 0!==e.scents)a.scents=e.scents;
-        if(void 0!==e.img)a.img=e.img;
-        if(void 0!==e.imgs)a.imgs=e.imgs;
-        if(void 0!==e.sold)a.sold=e.sold;
-        if(void 0!==e.stock)a.stock=e.stock;
-        if(void 0!==e.active)a.active=e.active;
-        if(void 0!==e.pinned)a.pinned=e.pinned;
-        if(void 0!==e.pinnedAt)a.pinnedAt=e.pinnedAt;
-        if(void 0!==e.video)a.video=e.video;
-      });
-      return!0;
+    const products=JSON.parse(localStorage.getItem("vl_products_v3")||"[]");
+    const savedAt=Number(localStorage.getItem("vl_products_v3_time")||"0");
+    // Use the complete last-known-good catalog, including new IDs absent from PRODUCTS.
+    if(Array.isArray(products)&&products.length>0&&Date.now()-savedAt<3e5){
+      ALL_PRODUCTS=products.filter(product=>product&&product.id&&product.active!==false);
+      return ALL_PRODUCTS.length>0;
     }
   }catch(e){}
-  return!1;
+  return false;
 }
 loadFromCache();
 
