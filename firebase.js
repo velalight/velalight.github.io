@@ -83,10 +83,22 @@ try {
   /* ═══════════════════════════════════════════════════════════
      ✅ Firestore مع offline persistence
      الميزة: الموقع يشتغل حتى لو النت قطع مؤقتاً
+     + إصلاح وميض الصور عبر تفعيل Persistent Cache
      ═══════════════════════════════════════════════════════════ */
-  // ✅ تعطيل الكاش المؤقت لحل مشكلة التهنيج
-db = getFirestore(app);
-console.log("Firestore initialized with default settings (cache disabled)");
+  // ✅ تفعيل الكاش الدائم عشان البيانات والصور تظهر فورًا من الزيارة التانية
+  try {
+    db = initializeFirestore(app, {
+      localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager()
+      })
+    });
+    console.log("Firestore initialized with persistent cache");
+  } catch (cacheError) {
+    console.warn("⚠️ Persistent cache failed, falling back to default:", cacheError);
+    // Fallback: لو الـ persistent cache فشلت لأي سبب، نرجع للطريقة القديمة
+    db = getFirestore(app);
+    console.log("Firestore initialized with default settings (cache disabled)");
+  }
   
   /* ═══════════════════════════════════════════════════════════
      ✅ Auth مع persistent login
