@@ -560,6 +560,8 @@ let ALL_USERS = [];
 let ALL_COUPONS = [];
 let ALL_ORDERS = [];
 let PRODUCTS_ADMIN_CACHE = [];
+let PRODUCTS_FIRESTORE_LOADED = false;
+let PRODUCT_FIRESTORE_DOC_IDS_BY_ID = new Map();
 
 // ═══ متغيرات الطلب اليدوي ═══
 let productRowCounter = 0;
@@ -1617,21 +1619,28 @@ function renderAdminProducts(){
     const stockDisplay = (product.stock === null || product.stock === undefined || product.stock === "") ? "∞" : product.stock;
     const pinIcon = product.pinned ? ' 📌' : '';
     const imgSrc = (typeof imgOf === "function") ? imgOf(product) : (product.img || "");
+    const actionsDisabled = PRODUCTS_FIRESTORE_LOADED ? "" : "disabled";
+    const duplicateNote = Number(product._duplicateCount || 0) > 1
+      ? `<br><small style="color:#b54708;font-size:.68rem">⚠️ ${product._duplicateCount} سجلات بنفس المعرّف — الحفظ سيحدّثها معًا</small>`
+      : "";
+    const syncNote = PRODUCTS_FIRESTORE_LOADED
+      ? ""
+      : `<br><small style="color:#b54708;font-size:.68rem">جارٍ التحقق من Firestore؛ التعديل متوقف مؤقتًا</small>`;
     return `
     <tr>
       <td><img class="adm-thumb" src="${imgSrc}" alt="" loading="lazy" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22><rect fill=%22%23f5efe5%22 width=%22400%22 height=%22400%22/><text x=%22200%22 y=%22200%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22serif%22 font-size=%2224%22 fill=%22%23d9ab5f%22>✦</text></svg>'"></td>
-      <td><b>${product.name || ""}${pinIcon}</b><br><small style="color:var(--dim);font-size:.7rem">ID: ${product.id}</small></td>
+      <td><b>${product.name || ""}${pinIcon}</b><br><small style="color:var(--dim);font-size:.7rem">ID: ${product.id}</small>${duplicateNote}${syncNote}</td>
       <td>${CATS.ar[product.cat] || product.cat || ""}</td>
       <td>${money(product.price || 0)}</td>
       <td>${stockDisplay}</td>
       <td>${product.video ? '🎥 نعم' : '-'}</td>
       <td>${product.active === false ? "❌ مخفي" : "✅ ظاهر"}</td>
       <td style="display:flex;gap:.3rem;flex-wrap:wrap">
-        <button class="btn sm ghost" data-edit="${product.id}" type="button">✏️ تعديل</button>
-        <button class="btn sm ghost" data-toggle="${product.id}" data-fid="${product._fid || ""}" data-active="${product.active !== false}" type="button">
+        <button class="btn sm ghost" data-edit="${product.id}" type="button" ${actionsDisabled}>✏️ تعديل</button>
+        <button class="btn sm ghost" data-toggle="${product.id}" data-fid="${product._fid || ""}" data-active="${product.active !== false}" type="button" ${actionsDisabled}>
           ${product.active === false ? "👁️ إظهار" : "🙈 إخفاء"}
         </button>
-        <button class="btn sm danger" data-del="${product.id}" data-fid="${product._fid || ""}" type="button">🗑️</button>
+        <button class="btn sm danger" data-del="${product.id}" data-fid="${product._fid || ""}" type="button" ${actionsDisabled}>🗑️</button>
       </td>
     </tr>`;
   }).join("");
@@ -1640,62 +1649,130 @@ function renderAdminProducts(){
 
 /* ✅ [تعديل] — عرض المنتجات المحلية فوراً + دمج مع Firebase */
 function loadProducts(){
-  /* ═══ 1) عرض المنتجات المحلية فوراً (تظهر بسرعة) ═══ */
+  PRODUCTS_FIRESTORE_LOADED = false;
+  PRODUCT_FIRESTORE_DOC_IDS_BY_ID = new Map();
+
+  // اعرض النسخة المحلية مؤقتًا، لكن لا تسمح بأي كتابة قبل وصول الكتالوج السحابي.
   try {
     if (Array.isArray(PRODUCTS) && PRODUCTS.length) {
       PRODUCTS_ADMIN_CACHE = PRODUCTS
-        .filter(p => p && p.id)
-        .map(p => ({ ...p, _fid: null, active: p.active !== false }));
+        .filter(product => product && product.id)
+        .map(product => ({
+          ...product,
+          _fid: null,
+          _fids: [],
+          _duplicateCount: 0,
+          active: product.active !== false
+        }));
       renderAdminProducts();
-      console.log("⚡ [Local] المنتجات المحلية ظهرت فوراً:", PRODUCTS_ADMIN_CACHE.length);
     }
-  } catch(e) {
-    console.warn("⚠️ Local products preload failed:", e);
+  } catch(error) {
+    console.warn("⚠️ Local products preload failed:", error);
   }
 
-  /* ═══ 2) ثم جلب من Firestore ودمج ═══ */
-  if(!window.FB || typeof window.FB.list !== "function") return;
-  window.FB.list("products").then(cloud => {
-    const map = new Map();
+  if(!window.FB || typeof window.FB.list !== "function"){
+    renderAdminProducts();
+    toast("⚠️ Firestore غير متصل — تم إيقاف تعديل المنتجات لمنع إنشاء سجلات مكررة");
+    return;
+  }
 
-    /* إضافة المنتجات المحلية (من data.js) */
+  window.FB.list("products").then(cloud => {
+    const productsById = new Map();
+
     (PRODUCTS || []).forEach(product => {
       if(!product || !product.id) return;
-      map.set(product.id, { ...product, _fid:null, active:true });
-    });
-
-    /* دمج منتجات Firestore (الـ 13 منتج بتوعك) */
-    (cloud || []).forEach(data => {
-      const slug = data.id_ || data.slug || data.pid || data.id;
-      if(!slug) return;
-      if(data.active === false){ map.delete(slug); return; }
-      const local = map.get(slug) || {};
-      let finalStock = null;
-      if (data.stock !== undefined && data.stock !== null && data.stock !== "") {
-        finalStock = Number(data.stock);
-      } else if (local.stock !== undefined && local.stock !== null && local.stock !== "") {
-        finalStock = Number(local.stock);
-      }
-      if (isNaN(finalStock)) finalStock = null;
-      map.set(slug, {
-        ...local,
-        ...data,
-        id: slug,
-        _fid: data.id || null,
-        active: data.active !== false,
-        stock: finalStock
+      const id = String(product.id);
+      productsById.set(id, {
+        ...product,
+        id,
+        _fid: null,
+        _fids: [],
+        _duplicateCount: 0,
+        active: product.active !== false
       });
     });
 
-    PRODUCTS_ADMIN_CACHE = [...map.values()];
+    const groups = new Map();
+    (Array.isArray(cloud) ? cloud : []).forEach(data => {
+      if(!data) return;
+      const slug = String(data.id_ || data.slug || data.pid || data.id || "").trim();
+      if(!slug) return;
+      const docId = String(data._fid || data.id || "").trim();
+      const records = groups.get(slug) || [];
+      records.push({ ...data, id:slug, _fid:docId || slug });
+      groups.set(slug, records);
+    });
+
+    const updatedAtMs = value => {
+      if(typeof value === "number" && Number.isFinite(value)) return value;
+      if(value && typeof value.toMillis === "function") return value.toMillis();
+      if(value && typeof value.seconds === "number") return value.seconds * 1000;
+      const parsed = Date.parse(value || "");
+      return Number.isFinite(parsed) ? parsed : 0;
+    };
+
+    groups.forEach((records, slug) => {
+      const docIds = [...new Set(records.map(record => record._fid).filter(Boolean))];
+      PRODUCT_FIRESTORE_DOC_IDS_BY_ID.set(slug, docIds);
+
+      // نسخة مخفية مكررة لا تلغي نسخة ظاهرة؛ وعند التعادل نفضّل المستند المطابق للـID.
+      const activeRecords = records.filter(record => record.active !== false);
+      const candidates = (activeRecords.length ? activeRecords : records).slice();
+      candidates.sort((a, b) => {
+        const timestampDiff = updatedAtMs(b.updatedAt) - updatedAtMs(a.updatedAt);
+        if(timestampDiff) return timestampDiff;
+        const aIsCanonical = String(a._fid) === slug;
+        const bIsCanonical = String(b._fid) === slug;
+        if(aIsCanonical !== bIsCanonical) return aIsCanonical ? -1 : 1;
+        return String(a._fid).localeCompare(String(b._fid));
+      });
+
+      const selected = candidates[0];
+      const local = productsById.get(slug) || {};
+      let finalStock = null;
+      if(selected.stock !== undefined && selected.stock !== null && selected.stock !== ""){
+        finalStock = Number(selected.stock);
+      } else if(local.stock !== undefined && local.stock !== null && local.stock !== ""){
+        finalStock = Number(local.stock);
+      }
+      if(Number.isNaN(finalStock)) finalStock = null;
+
+      productsById.set(slug, {
+        ...local,
+        ...selected,
+        id:slug,
+        _fid:selected._fid || null,
+        _fids:docIds,
+        _duplicateCount:records.length,
+        active:activeRecords.length > 0,
+        stock:finalStock
+      });
+    });
+
+    PRODUCTS_ADMIN_CACHE = [...productsById.values()];
+    PRODUCTS_FIRESTORE_LOADED = true;
     renderAdminProducts();
-    console.log("✅ [Merged] إجمالي المنتجات بعد الدمج:", PRODUCTS_ADMIN_CACHE.length);
+
+    const duplicateGroups = [...groups.values()].filter(records => records.length > 1).length;
+    console.log("✅ [Merged] إجمالي المنتجات:", PRODUCTS_ADMIN_CACHE.length,
+      "| مجموعات مكررة:", duplicateGroups);
+    if(duplicateGroups){
+      toast(`⚠️ تم اكتشاف ${duplicateGroups} مجموعات بمعرّفات مكررة؛ راجع التحذير بجوار كل منتج.`);
+    }
   }).catch(error => {
+    PRODUCTS_FIRESTORE_LOADED = false;
     console.error("Products error:", error);
-    toast("⚠️ تعذر تحميل المنتجات من السيرفر — يتم عرض المحلي فقط");
+    renderAdminProducts();
+    toast("⚠️ تعذر تحميل المنتجات من Firestore — التعديل متوقف لتجنب تحديث مستند خاطئ");
   });
 }
 function bindProductActions(list){
+  const getDocIds = product => {
+    const ids = Array.isArray(product?._fids) ? product._fids.slice() : [];
+    if(!ids.length && product?._fid) ids.push(product._fid);
+    return [...new Set(ids.map(id => String(id || "").trim()).filter(Boolean))];
+  };
+
   document.querySelectorAll("#productsBody [data-edit]").forEach(button => {
     button.addEventListener("click", () => {
       const product = list.find(item => item.id === button.dataset.edit);
@@ -1704,11 +1781,16 @@ function bindProductActions(list){
   });
   document.querySelectorAll("#productsBody [data-toggle]").forEach(button => {
     button.addEventListener("click", () => {
-      const fid = button.dataset.fid;
       const id = button.dataset.toggle;
+      const product = list.find(item => item.id === id);
+      if(!product) return;
       const newActive = button.dataset.active !== "true";
-      const updateFn = fid ? window.FB.update("products", fid, { active:newActive }) : window.FB.set("products", id, { id_:id, active:newActive });
-      updateFn.then(() => {
+      const fids = getDocIds(product);
+      if(fids.length > 1 && !confirm(`المنتج مرتبط بـ ${fids.length} مستندات مكررة. هل تريد تحديث حالتها كلها معًا؟`)) return;
+      const updates = fids.length
+        ? fids.map(fid => window.FB.update("products", fid, { active:newActive }))
+        : [window.FB.set("products", id, { id_:id, active:newActive })];
+      Promise.all(updates).then(() => {
         toast(newActive ? "👁️ تم الإظهار" : "🙈 تم الإخفاء");
         loadProducts();
       }).catch(error => { console.error(error); toast("⚠️ فشل تحديث المنتج"); });
@@ -1716,11 +1798,18 @@ function bindProductActions(list){
   });
   document.querySelectorAll("#productsBody [data-del]").forEach(button => {
     button.addEventListener("click", () => {
-      if(!confirm("متأكد إنك عايز تحذف/تخفي المنتج ده؟")) return;
-      const fid = button.dataset.fid;
       const id = button.dataset.del;
-      const updateFn = fid ? window.FB.update("products", fid, { active:false }) : window.FB.set("products", id, { id_:id, active:false });
-      updateFn.then(() => {
+      const product = list.find(item => item.id === id);
+      if(!product) return;
+      const fids = getDocIds(product);
+      const confirmText = fids.length > 1
+        ? `متأكد إنك عايز تخفي المنتج؟ هيتحدّث ${fids.length} مستندات مرتبطة به.`
+        : "متأكد إنك عايز تحذف/تخفي المنتج ده؟";
+      if(!confirm(confirmText)) return;
+      const updates = fids.length
+        ? fids.map(fid => window.FB.update("products", fid, { active:false }))
+        : [window.FB.set("products", id, { id_:id, active:false })];
+      Promise.all(updates).then(() => {
         toast("🗑️ تم إخفاء المنتج");
         loadProducts();
       }).catch(error => { console.error(error); toast("⚠️ فشل إخفاء المنتج"); });
@@ -1823,31 +1912,57 @@ function generateSitemap() {
       data.stock = Number(stockVal);
     }
 
-    /* ✅ نحدد الـ Firestore document ID الصح */
-   let firestoreDocId;
-if (existingId) {
-  const existingProduct = PRODUCTS_ADMIN_CACHE.find(p => p.id === existingId);
-  firestoreDocId = (existingProduct && existingProduct._fid) ? existingProduct._fid : existingId;
-} else {
-  const slug = slugify(nameEn);
-  if (!slug) {
-    toast("⚠️ الاسم الإنجليزي غير صالح للرابط (استخدم حروف إنجليزية أو أرقام أو -)");
-    return;
-  }
-  if (PRODUCTS_ADMIN_CACHE.some(p => p.id === slug)) {
-    toast("⚠️ هذا الرابط مستخدم بالفعل. غيّر الاسم الإنجليزي قليلًا.");
-    return;
-  }
-  firestoreDocId = slug;
-}
+    if(!PRODUCTS_FIRESTORE_LOADED){
+      toast("⏳ استنى اكتمال تحميل Firestore قبل حفظ المنتج");
+      return;
+    }
+
+    const existingProduct = existingId
+      ? PRODUCTS_ADMIN_CACHE.find(product => product.id === existingId)
+      : null;
+    if(existingId && !existingProduct){
+      toast("⚠️ المنتج غير موجود في القائمة الحالية؛ أعد تحميل لوحة الإدارة");
+      return;
+    }
+
+    let slug = existingId;
+    if(!existingId){
+      slug = slugify(nameEn);
+      if(!slug){
+        toast("⚠️ الاسم الإنجليزي غير صالح للرابط (استخدم حروف إنجليزية أو أرقام أو -)");
+        return;
+      }
+      if(PRODUCT_FIRESTORE_DOC_IDS_BY_ID.has(slug) || PRODUCTS_ADMIN_CACHE.some(product => product.id === slug)){
+        toast("⚠️ معرّف المنتج مستخدم بالفعل (حتى لو كان مخفيًا). افتح السجل الموجود بدل إنشاء نسخة أخرى.");
+        return;
+      }
+    }
 
     const payload = existingId
-      ? { ...data, id_: existingId, updatedAt: Date.now() }
-      : { ...data, id_: firestoreDocId, createdAt: Date.now(), sold: 0 };
+      ? { ...data, id_:existingId, updatedAt:Date.now() }
+      : { ...data, id_:slug, createdAt:Date.now(), sold:0 };
+    const firestoreDocIds = existingId
+      ? [...new Set((existingProduct._fids || []).filter(Boolean).map(String))]
+      : [];
 
-    console.log("💾 Saving product to Firestore doc:", firestoreDocId, "with id_:", payload.id_);
+    if(existingId && !firestoreDocIds.length && PRODUCT_FIRESTORE_DOC_IDS_BY_ID.has(existingId)){
+      toast("⚠️ تعذر تحديد معرّف مستند Firestore؛ لم يتم الحفظ لتجنب إنشاء نسخة مكررة");
+      return;
+    }
+    if(firestoreDocIds.length > 1 && !confirm(`تم العثور على ${firestoreDocIds.length} مستندات للمنتج نفسه. حفظ التعديل سيحدّثها كلها لتوحيد البيانات. هل تريد المتابعة؟`)) return;
 
-    window.FB.set("products", firestoreDocId, payload).then(() => {
+    console.log("💾 Saving product:", slug, "Firestore documents:", firestoreDocIds);
+    const saveRequest = existingId
+      ? (firestoreDocIds.length
+          ? Promise.all(firestoreDocIds.map(fid => window.FB.update("products", fid, payload)))
+          : window.FB.set("products", existingId, {
+              ...payload,
+              createdAt:existingProduct.createdAt || Date.now(),
+              sold:Number(existingProduct.sold || 0)
+            }))
+      : window.FB.set("products", slug, payload);
+
+    saveRequest.then(() => {
       toast("💾 تم حفظ المنتج");
       document.getElementById("productForm").classList.add("hidden");
       loadProducts();
