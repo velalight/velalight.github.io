@@ -104,16 +104,17 @@ try {
      ✅ Auth مع persistent login
      الميزة: المستخدم يفضل مسجل دخول حتى بعد إغلاق المتصفح
      ═══════════════════════════════════════════════════════════ */
-  auth = getAuth(app);
+ auth = getAuth(app);
 
-  setPersistence(auth, browserLocalPersistence)
-    .then(() => {
-      console.log("🔐 Auth persistence enabled");
-    })
-    .catch((persistError) => {
-      console.warn("⚠️ Auth persistence failed:", persistError);
-    });
-
+const authReady = setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log("🔐 Auth persistence enabled");
+    return true;
+  })
+  .catch((persistError) => {
+    console.warn("⚠️ Auth persistence failed:", persistError);
+    return false;
+  });
 
   /* =======================================================
      Firebase Interface
@@ -278,7 +279,9 @@ try {
        AUTH - LOGIN
        ========================= */
 
-    admin: (email, password) => {
+    admin: async (email, password) => {
+
+      await authReady;
 
       return signInWithEmailAndPassword(
         auth,
@@ -287,7 +290,6 @@ try {
       );
 
     },
-
 
     /* =========================
        AUTH - CURRENT USER
