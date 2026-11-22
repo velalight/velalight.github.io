@@ -671,8 +671,9 @@ document.addEventListener("keydown", (event) => {
 document.addEventListener("click", async (event) => {
   if(event.target.id !== "logoutBtn") return;
   try{
-    if(window.FB && typeof window.FB.signOut === "function") await window.FB.signOut();
-    else if(window.FB && window.FB.auth && typeof window.FB.auth.signOut === "function") await window.FB.auth.signOut();
+    if(window.FB && typeof window.FB.logout === "function") {
+  await window.FB.logout();
+}
   }catch(error){ console.error("LOGOUT ERROR:", error); }
   loggedIn = false;
   showLogin();
