@@ -25,7 +25,7 @@ const imgsOf=e=>{if(!e)return[];if(Array.isArray(e.imgs)&&e.imgs.length>0)return
 
 const LocalDB={k:e=>"vl_"+e,g(e){try{return JSON.parse(localStorage.getItem(this.k(e)))||[]}catch(e){return[]}},s(e,t){try{localStorage.setItem(this.k(e),JSON.stringify(t))}catch(e){}},async list(e){return this.g(e)},async add(e,t){const a=this.g(e);return t.id="l"+Date.now()+Math.random().toString(16).slice(2,7),a.push(t),this.s(e,a),t.id},async update(e,t,a){this.s(e,this.g(e).map(e=>e.id===t?{...e,...a}:e))},async remove(e,t){this.s(e,this.g(e).filter(e=>e.id!==t))}};
 
-let DB=LocalDB,CLOUD=!1;window.addEventListener("fb-ready",()=>{DB=window.FB,CLOUD=!0;const e=$("#dbModeTag");e&&(e.textContent="☁️ Firestore متصل");if(document.readyState!=="loading")loadAll().then(()=>window.dispatchEvent(new Event("data-refresh"))).catch(e=>console.warn("⚠️ Firestore catalog refresh failed",e))});
+let DB=LocalDB,CLOUD=!1;window.addEventListener("fb-ready",()=>{DB=window.FB,CLOUD=!0;const e=$("#dbModeTag");e&&(e.textContent="☁️ Firestore متصل");loadAll().then(()=>window.dispatchEvent(new Event("data-refresh"))).catch(e=>console.warn("⚠️ Firestore catalog refresh failed",e))});
 
 let ALL_PRODUCTS=[],ALL_REVIEWS=[],dbProductsCache=[];
 
@@ -96,8 +96,8 @@ function loadFromCache(){
     const products=JSON.parse(localStorage.getItem("vl_products_v3")||"[]");
     const savedAt=Number(localStorage.getItem("vl_products_v3_time")||"0");
     // Use the complete last-known-good catalog, including new IDs absent from PRODUCTS.
-    if(Array.isArray(products)&&products.length>0&&Date.now()-savedAt<3e5){
-      ALL_PRODUCTS=products.filter(product=>product&&product.id&&product.active!==false);
+if(Array.isArray(products)&&products.length>0&&Date.now()-savedAt<6e4){
+  ALL_PRODUCTS=products.filter(product=>product&&product.id&&product.active!==false);
       return ALL_PRODUCTS.length>0;
     }
   }catch(e){}
