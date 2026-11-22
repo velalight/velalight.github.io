@@ -1621,7 +1621,8 @@ function renderAdminProducts(){
     const imgSrc = (typeof imgOf === "function") ? imgOf(product) : (product.img || "");
     const actionsDisabled = PRODUCTS_FIRESTORE_LOADED ? "" : "disabled";
     const duplicateNote = Number(product._duplicateCount || 0) > 1
-      ? `<br><small style="color:#b54708;font-size:.68rem">⚠️ ${product._duplicateCount} سجلات بنفس المعرّف — الحفظ سيحدّثها معًا</small>`
+      ? `<br><small style="color:#b54708;font-size:.68rem">⚠️ ${product._duplicateCount} سجلات بنفس المعرّف — التعديل متوقف لحين مراجعتها</small>`
+      
       : "";
     const syncNote = PRODUCTS_FIRESTORE_LOADED
       ? ""
@@ -1695,7 +1696,7 @@ function loadProducts(){
     const groups = new Map();
     (Array.isArray(cloud) ? cloud : []).forEach(data => {
       if(!data) return;
-      const slug = String(data.id_ || data.slug || data.pid || data.id || "").trim();
+     const slug = String(data.id_ || data.slug || data.pid || data.productId || data._storedId || data.id || "").trim();
       if(!slug) return;
       const docId = String(data._fid || data.id || "").trim();
       const records = groups.get(slug) || [];
@@ -2437,7 +2438,7 @@ async function vlGetExportProducts(){
   if(window.FB&&typeof window.FB.list==='function'){
     const cloud=await window.FB.list('products');
     (cloud||[]).forEach(data=>{
-      const id=String(data.id_||data.slug||data.pid||data.productId||data.id||'').trim();
+     const id=String(data.id_||data.slug||data.pid||data.productId||data._storedId||data.id||'').trim();
       if(!id)return;
       const local=map.get(id)||{};
       map.set(id,{
