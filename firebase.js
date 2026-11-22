@@ -99,7 +99,7 @@ try {
     db = getFirestore(app);
     console.log("Firestore initialized with default settings (cache disabled)");
   }
-  
+
   /* ═══════════════════════════════════════════════════════════
      ✅ Auth مع persistent login
      الميزة: المستخدم يفضل مسجل دخول حتى بعد إغلاق المتصفح
@@ -139,8 +139,9 @@ try {
       );
 
       return snapshot.docs.map((d) => ({
+        ...d.data(),
         id: d.id,
-        ...d.data()
+        _fid: d.id
       }));
 
     },
@@ -159,8 +160,9 @@ try {
       if (!snapshot.exists()) return null;
 
       return {
+        ...snapshot.data(),
         id: snapshot.id,
-        ...snapshot.data()
+        _fid: snapshot.id
       };
 
     },
@@ -179,8 +181,9 @@ try {
         (snapshot) => {
 
           const data = snapshot.docs.map((d) => ({
+            ...d.data(),
             id: d.id,
-            ...d.data()
+            _fid: d.id
           }));
 
           callback(data);
