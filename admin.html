@@ -1621,10 +1621,18 @@ function renderAdminProducts(){
     const pinIcon = product.pinned ? ' 📌' : '';
     const imgSrc = (typeof imgOf === "function") ? imgOf(product) : (product.img || "");
     const actionsDisabled = PRODUCTS_FIRESTORE_LOADED ? "" : "disabled";
-    const duplicateNote = Number(product._duplicateCount || 0) > 1
-      ? `<br><small style="color:#b54708;font-size:.68rem">⚠️ ${product._duplicateCount} سجلات بنفس المعرّف — التعديل متوقف لحين مراجعتها</small>`
-      
-      : "";
+   const duplicateDocIds = (Array.isArray(product._fids) ? product._fids : [])
+  .map(id => String(id).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"))
+  .join(" | ");
+
+const duplicateNote = Number(product._duplicateCount || 0) > 1
+  ? `<br><small style="color:#b54708;font-size:.68rem">
+      ⚠️ ${product._duplicateCount} سجلات بنفس المعرّف — التعديل متوقف
+      <br>معرّفات مستندات Firestore:
+      <b dir="ltr" style="display:inline-block">${duplicateDocIds || "غير متاحة"}</b>
+    </small>`
+  : "";
+    
     const syncNote = PRODUCTS_FIRESTORE_LOADED
       ? ""
       : `<br><small style="color:#b54708;font-size:.68rem">جارٍ التحقق من Firestore؛ التعديل متوقف مؤقتًا</small>`;
