@@ -138,12 +138,15 @@ try {
         collection(db, collectionName)
       );
 
-      return snapshot.docs.map((d) => ({
-        ...d.data(),
-        id: d.id,
-        _fid: d.id
-      }));
-
+      return snapshot.docs.map((d) => {
+        const data = d.data();
+        return {
+          ...data,
+          _storedId: data.id ?? null,
+          id: d.id,
+          _fid: d.id
+        };
+      });
     },
 
 
@@ -159,12 +162,13 @@ try {
 
       if (!snapshot.exists()) return null;
 
+           const data = snapshot.data();
       return {
-        ...snapshot.data(),
+        ...data,
+        _storedId: data.id ?? null,
         id: snapshot.id,
         _fid: snapshot.id
       };
-
     },
 
 
@@ -180,12 +184,16 @@ try {
 
         (snapshot) => {
 
-          const data = snapshot.docs.map((d) => ({
-            ...d.data(),
-            id: d.id,
-            _fid: d.id
-          }));
-
+          const data = snapshot.docs.map((d) => {
+            const item = d.data();
+            return {
+              ...item,
+              _storedId: item.id ?? null,
+              id: d.id,
+              _fid: d.id
+            };
+          });
+          
           callback(data);
 
         },
