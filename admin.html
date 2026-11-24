@@ -1819,12 +1819,7 @@ function bindProductActions(list){
       }).catch(error => { console.error(error); toast("⚠️ فشل تحديث المنتج"); });
     });
   });
-  document.querySelectorAll("#productsBody [data-del]").forEach(button =>  document.querySelectorAll("#productsBody [data-resolve]").forEach(button => {
-    button.addEventListener("click", () => {
-      const product = list.find(item => item.id === button.dataset.resolve);
-      if(product) resolveProductDuplicates(product);
-    });
-  }); {
+  document.querySelectorAll("#productsBody [data-del]").forEach(button => {
     button.addEventListener("click", () => {
       const id = button.dataset.del;
       const product = list.find(item => item.id === id);
@@ -1845,8 +1840,14 @@ function bindProductActions(list){
       }).catch(error => { console.error(error); toast("⚠️ فشل إخفاء المنتج"); });
     });
   });
-}
 
+  document.querySelectorAll("#productsBody [data-resolve]").forEach(button => {
+    button.addEventListener("click", () => {
+      const product = list.find(item => item.id === button.dataset.resolve);
+      if(product) resolveProductDuplicates(product);
+    });
+  });
+}
   // ═══════════════════════════════════════════════════════════
 // 🔧 إصلاح تكرار المنتجات في Firestore
 // ═══════════════════════════════════════════════════════════
