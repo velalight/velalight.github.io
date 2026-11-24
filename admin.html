@@ -367,6 +367,7 @@ table.adm{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--
          <button class="btn sm ghost" id="exportProductsXlsxBtn" type="button">📊 تصدير Excel كامل</button>
 <button class="btn sm ghost" id="exportShopifyCsvBtn" type="button">🛍️ تصدير Shopify بالصور</button>
   <button class="btn sm ghost" id="generateSitemapBtn" type="button">📥 توليد sitemap.xml</button>
+         <button class="btn sm ghost" id="resolveAllDuplicatesBtn" type="button" style="background:#b54708;color:#fff;border-color:#b54708;">🔧 حل كل التكرارات</button>
 </div>
         <div style="display:flex;gap:.5rem;flex:1;min-width:260px;max-width:760px;flex-wrap:wrap">
           <input id="productSearch" type="search" placeholder="🔎 ابحث باسم المنتج أو ID..." style="flex:1;min-width:220px;margin:0">
@@ -1625,12 +1626,20 @@ function renderAdminProducts(){
   .map(id => String(id).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"))
   .join(" | ");
 
-const duplicateNote = Number(product._duplicateCount || 0) > 1
-  ? `<br><small style="color:#b54708;font-size:.68rem">
-      ⚠️ ${product._duplicateCount} سجلات بنفس المعرّف — التعديل متوقف
-      <br>معرّفات مستندات Firestore:
-      <b dir="ltr" style="display:inline-block">${duplicateDocIds || "غير متاحة"}</b>
-    </small>`
+const dupCount = Number(product._duplicateCount || 0);
+const duplicateNote = dupCount > 1
+  ? `<div style="margin-top:.4rem;padding:.5rem .6rem;background:#fff4e6;border:1px solid #f0c67a;border-radius:8px;">
+      <div style="color:#b54708;font-size:.68rem;font-weight:700;">
+        ⚠️ ${dupCount} سجلات بنفس المعرّف — التعديل متوقف
+      </div>
+      <div style="color:#7c5a1e;font-size:.62rem;direction:ltr;text-align:left;margin-top:.25rem;font-family:monospace;word-break:break-all;">
+        ${duplicateDocIds || "غير متاحة"}
+      </div>
+      <button class="btn sm" data-resolve="${product.id}" type="button"
+        style="margin-top:.4rem;font-size:.7rem;padding:.25rem .6rem;background:#b54708;color:#fff;border:none;cursor:pointer;">
+        🔧 حل التكرار
+      </button>
+    </div>`
   : "";
     
     const syncNote = PRODUCTS_FIRESTORE_LOADED
@@ -1810,7 +1819,12 @@ function bindProductActions(list){
       }).catch(error => { console.error(error); toast("⚠️ فشل تحديث المنتج"); });
     });
   });
-  document.querySelectorAll("#productsBody [data-del]").forEach(button => {
+  document.querySelectorAll("#productsBody [data-del]").forEach(button =>  document.querySelectorAll("#productsBody [data-resolve]").forEach(button => {
+    button.addEventListener("click", () => {
+      const product = list.find(item => item.id === button.dataset.resolve);
+      if(product) resolveProductDuplicates(product);
+    });
+  }); {
     button.addEventListener("click", () => {
       const id = button.dataset.del;
       const product = list.find(item => item.id === id);
@@ -1833,6 +1847,143 @@ function bindProductActions(list){
   });
 }
 
+  // ═══════════════════════════════════════════════════════════
+// 🔧 إصلاح تكرار المنتجات في Firestore
+// ═══════════════════════════════════════════════════════════
+
+async function resolveProductDuplicates(product, silent){
+  if(!product || !product.id) return { ok:false, reason:"no product" };
+  const productId = String(product.id).trim();
+  const docIds = Array.isArray(product._fids) ? product._fids.map(String).filter(Boolean) : [];
+
+  if(docIds.length <= 1){
+    if(!silent) toast("✅ المنتج في وضعه الصحيح — لا يوجد تكرار");
+    return { ok:true, skipped:true };
+  }
+
+  if(!window.FB || typeof window.FB.remove !== "function" || typeof window.FB.list !== "function"){
+    if(!silent) toast("⚠️ Firestore غير جاهز لحل التكرار");
+    return { ok:false, reason:"FB not ready" };
+  }
+
+  if(!silent){
+    const confirmed = confirm(
+      `🔧 حل تكرار المنتج: ${product.name || productId}\n\n` +
+      `عدد السجلات: ${docIds.length}\n` +
+      `المعرّفات:\n${docIds.join("\n")}\n\n` +
+      `سيتم:\n` +
+      `1. دمج بيانات كل السجلات\n` +
+      `2. إنشاء/تحديث سجل واحد نظيف بمعرّف: ${productId}\n` +
+      `3. حذف كل السجلات المكررة نهائيًا\n\n` +
+      `هل تريد المتابعة؟`
+    );
+    if(!confirmed) return { ok:false, reason:"cancelled" };
+  }
+
+  try{
+    const all = await window.FB.list("products");
+    const records = (all || []).filter(p => {
+      const id = String(p.id_ || p.slug || p.pid || p.productId || p._storedId || p.id || "").trim();
+      return id === productId;
+    });
+
+    if(records.length <= 1 && docIds.length <= 1){
+      if(!silent) toast("✅ المنتج في وضعه الصحيح — لا يوجد تكرار");
+      return { ok:true, skipped:true };
+    }
+
+    const updatedAtMs = value => {
+      if(typeof value === "number" && Number.isFinite(value)) return value;
+      if(value && typeof value.toMillis === "function") return value.toMillis();
+      if(value && typeof value.seconds === "number") return value.seconds * 1000;
+      const parsed = Date.parse(value || "");
+      return Number.isFinite(parsed) ? parsed : 0;
+    };
+
+    records.sort((a, b) => updatedAtMs(b.updatedAt) - updatedAtMs(a.updatedAt));
+
+    const merged = {};
+    for(const record of records){
+      for(const key of Object.keys(record)){
+        if(key.startsWith("_") || key === "id") continue;
+        const value = record[key];
+        if(value === undefined || value === null || value === "") continue;
+        if(merged[key] === undefined || merged[key] === null || merged[key] === ""){
+          merged[key] = value;
+        }
+      }
+    }
+    merged.id_ = productId;
+    merged.updatedAt = Date.now();
+    merged.active = records.some(r => r.active !== false);
+
+    await window.FB.set("products", productId, merged);
+
+    let deleted = 0, failed = 0;
+    const handled = new Set();
+
+    for(const record of records){
+      const fid = String(record._fid || "").trim();
+      if(!fid) continue;
+      handled.add(fid);
+      if(fid === productId) continue;
+      try{
+        await window.FB.remove("products", fid);
+        deleted++;
+      }catch(delErr){
+        console.error("Failed to delete duplicate:", fid, delErr);
+        failed++;
+      }
+    }
+
+    // احتياط: احذف أي doc IDs في _fids لم نغطّها في records
+    for(const fid of docIds){
+      if(!fid || handled.has(fid) || fid === productId) continue;
+      try{
+        await window.FB.remove("products", fid);
+        deleted++;
+      }catch(_e){ failed++; }
+    }
+
+    if(!silent){
+      if(failed > 0) toast(`⚠️ تم الدمج، لكن فشل حذف ${failed} سجل. راجع Firestore Rules.`);
+      else toast(`✅ تم حل التكرار — تم حذف ${deleted} سجل مكرر`);
+    }
+    return { ok:true, deleted, failed };
+
+  }catch(err){
+    console.error("resolveProductDuplicates error:", err);
+    if(!silent) toast("⚠️ فشل حل التكرار: " + (err.message || err));
+    return { ok:false, reason:err.message };
+  }
+}
+
+async function resolveAllDuplicates(){
+  const productsWithDuplicates = PRODUCTS_ADMIN_CACHE.filter(p => Number(p._duplicateCount || 0) > 1);
+  if(!productsWithDuplicates.length){
+    toast("✅ لا يوجد تكرار — كل المنتجات في وضعها الصحيح");
+    return;
+  }
+  const confirmed = confirm(
+    `🔧 سيتم حل تكرار ${productsWithDuplicates.length} منتج.\n\n` +
+    `لكل منتج:\n` +
+    `- دمج بيانات كل السجلات\n` +
+    `- إنشاء/تحديث سجل واحد نظيف\n` +
+    `- حذف السجلات المكررة\n\n` +
+    `هل تريد المتابعة؟`
+  );
+  if(!confirmed) return;
+
+  let success = 0, failed = 0;
+  for(const product of productsWithDuplicates){
+    const result = await resolveProductDuplicates(product, true);
+    if(result.ok) success++;
+    else failed++;
+  }
+  if(failed > 0) toast(`⚠️ تم حل ${success} منتج، فشل ${failed}`);
+  else toast(`✅ تم حل تكرار ${success} منتج بنجاح`);
+  loadProducts();
+}
 function initProductForm(){
   ["productSearch", "productCatFilter", "productSort"].forEach(id => {
     const el = document.getElementById(id);
@@ -1843,6 +1994,7 @@ function initProductForm(){
   });
   document.getElementById("addProductBtn")?.addEventListener("click", () => openProductForm(null));
   document.getElementById("generateSitemapBtn")?.addEventListener("click", generateSitemap);
+  document.getElementById("resolveAllDuplicatesBtn")?.addEventListener("click", resolveAllDuplicates);
 
 function generateSitemap() {
   const baseUrl = 'https://velalight.github.io';
