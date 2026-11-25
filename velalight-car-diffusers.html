@@ -1,477 +1,71 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#fff8ef">
-  <title>فواحات VelaLight للسيارة | عطرك يغيّر كل مشوار</title>
-  <meta name="description" content="اختار فواحة سيارتك من VelaLight، اختار عطر كل قطعة من 23 رائحة، واستمتع بالشحن المجاني عند شراء 3 فواحات متاحة.">
-  <meta property="og:title" content="خلي كل مشوار له رائحة تشبهك | VelaLight">
-  <meta property="og:description" content="أربع تصميمات أنيقة لفواحات السيارة، 23 عطرًا للاختيار، وشحن مجاني عند شراء 3 فواحات متاحة.">
-  <meta property="og:image" content="https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/Luxury%20Car%20Diffuser.webp">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    :root{--paper:#fffaf3;--cream:#fff1df;--ink:#29231d;--muted:#776e64;--coral:#ec6d52;--coral2:#d9503d;--green:#287a55;--line:#f0dfc9;--max:1160px}
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth;scroll-padding-top:90px}
-    body{margin:0;background:var(--paper);color:var(--ink);font-family:"Cairo",Tahoma,Arial,sans-serif;line-height:1.7;padding-bottom:104px;overflow-x:hidden}
-    a{color:inherit;text-decoration:none}
-    button,select{font:inherit}
-    button{cursor:pointer}
-    img{display:block;max-width:100%}
-    .wrap{width:min(var(--max),calc(100% - 38px));margin-inline:auto}
-    .promo{background:#2d6650;color:#fff;text-align:center;padding:9px 14px;font-size:13px;font-weight:800}
-    .promo strong{color:#ffe3a4}
-    .promo .spark{padding-inline:6px;color:#f3bd67}
-    header{position:sticky;top:0;z-index:30;background:rgba(255,250,243,.93);backdrop-filter:blur(14px);border-bottom:1px solid #f1e7da}
-    .nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}
-    .logo{color:var(--coral2);font-size:21px;font-weight:900;letter-spacing:1.2px;line-height:1.1}
-    .logo small{display:block;color:#89796b;font-size:9px;letter-spacing:2px}
-    .navlinks{display:flex;gap:25px;font-size:13px;font-weight:700;color:#63584e}
-    .navlinks a:hover{color:var(--coral)}
-    .nav-button,.btn{border:0;border-radius:999px;padding:12px 20px;background:var(--coral);color:white;font-weight:900;display:inline-flex;justify-content:center;align-items:center;gap:9px;box-shadow:0 9px 22px #ec6d5238;transition:.2s}
-    .nav-button:hover,.btn:hover{background:var(--coral2);transform:translateY(-2px)}
-    .hero{position:relative;padding:58px 0 48px;display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:55px}
-    .hero:before{content:"";position:absolute;z-index:-1;inset:5% 43% 0 -20%;background:radial-gradient(ellipse,#f8cf8f47,transparent 67%)}
-    .hero-copy{max-width:590px}
-    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;background:#e7f1e5;color:#327152;font-size:12px;font-weight:800}
-    .eyebrow i{width:8px;height:8px;border-radius:50%;background:#64ae78;box-shadow:0 0 0 4px #64ae7821}
-    h1{font-size:clamp(38px,5.5vw,68px);line-height:1.2;letter-spacing:-1px;margin:18px 0 13px;font-weight:900}
-    .highlight,.coral{color:var(--coral)}
-    .hero p{font-size:clamp(15px,1.7vw,18px);color:var(--muted);margin:0 0 22px}
-    .hero p b{color:#47392d}
-    .hero-actions{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
-    .hero-actions .btn{font-size:15px;padding:15px 24px}
-    .sub-link{font-size:13px;font-weight:800;color:#776b5d}
-    .sub-link:hover{color:var(--coral)}
-    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:23px}
-    .chips span{padding:7px 11px;border:1px solid #eedfc9;border-radius:999px;background:#ffffffbf;font-size:11px;font-weight:800;color:#5e5348}
-    .chips b{color:var(--coral2)}
-    .hero-art{position:relative;max-width:480px;width:100%;justify-self:center}
-    .hero-img{overflow:hidden;border-radius:34px;background:#f5efe6;border:8px solid white;box-shadow:0 18px 55px #754c231c;transform:rotate(1deg)}
-    .hero-img img{width:100%;aspect-ratio:1.04/1;object-fit:cover;object-position:center 45%}
-    .hero-sticker{position:absolute;top:18px;right:-20px;width:94px;height:94px;display:grid;place-content:center;text-align:center;border-radius:50%;background:#f2bd68;color:#47311a;border:5px solid white;box-shadow:0 12px 25px #a66d3240;font-size:12px;font-weight:900;line-height:1.35;transform:rotate(9deg)}
-    .hero-sticker b{font-size:22px}
-    .hero-note{position:absolute;bottom:17px;left:-19px;background:white;border-radius:16px;padding:11px 15px;box-shadow:0 12px 32px #6e4a2524;font-size:11px;font-weight:800;color:#5a4e43}
-    .hero-note b{color:#2d7655}
-    .reasons{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin:12px auto 40px}
-    .reason{display:flex;align-items:center;gap:13px;padding:17px 19px;border:1px solid #f0e3d0;border-radius:18px;background:#fff;box-shadow:0 8px 25px #754c230b}
-    .reason .emoji{width:42px;height:42px;display:grid;place-items:center;flex:none;border-radius:14px;background:#fff1df;font-size:20px}
-    .reason b{display:block;font-size:13px}
-    .reason small{display:block;color:var(--muted);font-size:11px;margin-top:1px}
-    .section{padding:47px 0}
-    .section-title{text-align:center;max-width:700px;margin:0 auto 27px}
-    .section-title .overline{font-size:11px;letter-spacing:1.7px;color:#bd7652;font-weight:900}
-    .section-title h2{font-size:clamp(27px,4vw,41px);line-height:1.25;margin:6px 0;font-weight:900}
-    .section-title p{font-size:13px;color:var(--muted);margin:0}
-    .products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;align-items:start}
-    .product{overflow:hidden;background:#fffefd;border:1px solid #efe2d1;border-radius:22px;box-shadow:0 10px 32px #6b4b290e;transition:transform .22s,box-shadow .22s,border-color .22s}
-    .product:hover{transform:translateY(-4px);box-shadow:0 20px 42px #6b4b291f;border-color:#e8c69f}
-    .photo{position:relative;background:#f2eee7;overflow:hidden}
-    .photo img{width:100%;height:240px;object-fit:cover;transition:transform .45s}
-    .product:hover .photo img{transform:scale(1.04)}
-    .badge{position:absolute;top:12px;right:12px;padding:5px 10px;border-radius:999px;background:#fff9ee;color:#855324;font-size:10px;font-weight:900;box-shadow:0 4px 12px #4c38221c}
-    .badge.out{background:#f2eee9;color:#71675c}
-    .product-content{padding:15px;display:flex;flex-direction:column}
-    .product h3{font-size:15px;line-height:1.45;margin:0 0 4px;font-weight:900}
-    .desc{font-size:11px;line-height:1.65;color:var(--muted);min-height:37px;margin:0 0 10px}
-    .price-line{display:flex;align-items:baseline;gap:7px;margin:0 0 12px}
-    .price{font-size:22px;color:#bd4e39;font-weight:900}
-    .currency{font-size:10px;color:var(--muted);font-weight:700}
-    .was{font-size:11px;text-decoration:line-through;color:#a79b8e}
-    .save{margin-right:auto;color:#287a55;font-size:10px;font-weight:900}
-    .add{width:100%;padding:11px 12px;border:0;border-radius:12px;background:#2f7253;color:white;font-size:12px;font-weight:900;transition:.18s}
-    .add:hover{background:#235e43;transform:translateY(-1px)}
-    .add:disabled{cursor:not-allowed;transform:none;background:#e6e0d8;color:#867c70}
-    .product-link{margin-top:8px;text-align:center;color:#99714b;font-size:10px;font-weight:800}
-    .product-link:hover{color:var(--coral)}
-    .sold-msg{font-size:10px;color:#776e64;font-weight:700;text-align:center;margin:7px 0 0}
-    .picked{margin-top:12px;border-top:1px solid #f1e7da;padding-top:10px;display:grid;gap:8px}
-    .picked:empty{display:none}
-    .picked-row{display:grid;grid-template-columns:1fr 30px;gap:6px;align-items:center}
-    .picked-row label{font-size:10px;color:#6e6256;font-weight:800;display:block;margin-bottom:3px}
-    .picked-row select{width:100%;border:1px solid #eadbc7;border-radius:9px;padding:8px 9px;background:#fffaf3;color:#332b24;font-size:11px;outline:none}
-    .picked-row select:focus{border-color:#d38b66;box-shadow:0 0 0 3px #ec6d5218}
-    .picked-row select.invalid{border-color:#d75050}
-    .remove-unit{width:28px;height:28px;border:1px solid #f0d8ce;border-radius:9px;background:#fff5f1;color:#b84938;font-size:17px;line-height:1}
-    .deal{margin:22px 0 0;display:grid;grid-template-columns:auto 1fr auto;gap:13px;align-items:center;padding:17px 20px;border-radius:18px;background:linear-gradient(100deg,#e8f3e8,#f8f0da);border:1px solid #d9e8d5}
-    .deal-icon{width:42px;height:42px;display:grid;place-items:center;background:#fff;border-radius:13px;font-size:20px}
-    .deal b{display:block;color:#285e43;font-size:14px}
-    .deal p{margin:1px 0 0;color:#6d7769;font-size:11px}
-    .deal-tag{font-size:11px;color:#2c704c;font-weight:900;white-space:nowrap}
-    .checkout{display:grid;grid-template-columns:1fr 350px;gap:18px;align-items:start;margin-top:23px}
-    .basket,.summary{background:white;border:1px solid #efe3d4;border-radius:20px;padding:18px;box-shadow:0 10px 30px #77552b0a}
-    .basket-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
-    .basket-head h3,.summary h3{font-size:16px;margin:0}
-    .qty-label{background:#fff2df;color:#9c5b30;border-radius:999px;padding:5px 10px;font-size:10px;font-weight:900;white-space:nowrap}
-    .empty{border:1px dashed #e7d9c7;border-radius:14px;padding:24px 14px;text-align:center;color:#82766a;font-size:12px;background:#fffcf8}
-    .cart-line{border-top:1px solid #f1e9de;padding:12px 0}
-    .line-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .line-title{font-size:12px;font-weight:900}
-    .line-price{display:block;color:#8a7b6b;font-size:10px}
-    .stepper{display:flex;align-items:center;gap:8px;direction:ltr}
-    .stepper button{width:29px;height:29px;border-radius:9px;border:1px solid #eadcc9;background:#fff8ed;color:#905a32;font-size:17px;font-weight:900;line-height:1}
-    .stepper span{font-size:12px;font-weight:900;min-width:15px;text-align:center}
-    .cart-units{display:grid;gap:7px;margin-top:8px}
-    .cart-unit{display:grid;grid-template-columns:1fr auto;align-items:center;gap:7px}
-    .cart-unit label{font-size:10px;color:#74695e;font-weight:700}
-    .cart-unit select{display:block;width:100%;margin-top:3px;border:1px solid #eadbc7;border-radius:9px;padding:8px 9px;background:#fffaf3;color:#332b24;font-size:11px}
-    .cart-unit select.invalid{border-color:#d75050}
-    .summary{position:sticky;top:89px}
-    .summary h3{margin-bottom:10px}
-    .sumrow{display:flex;justify-content:space-between;gap:10px;padding:7px 0;color:#655a50;font-size:11px}
-    .sumrow strong{color:#322b24;font-size:12px}
-    .sumrow .free{color:#287a55}
-    .sumtotal{border-top:1px solid #eee2d1;margin-top:7px;padding-top:12px;font-size:13px;font-weight:900}
-    .sumtotal strong{font-size:21px;color:#bd4e39}
-    .progressbox{padding:10px 11px;margin:10px 0 12px;border-radius:12px;background:#fff4e5;color:#855923;font-size:10px;font-weight:800;text-align:center}
-    .progressbox.done{background:#eaf5eb;color:#287a55}
-    .progress{height:6px;border-radius:99px;background:#e8dfd3;margin-top:8px;overflow:hidden}
-    .progress i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#efae54,#e86c51);transition:width .3s}
-    .progress i.done{background:#4d9a6b}
-    .checkout-btn{width:100%;padding:13px 14px;font-size:13px}
-    .checkout-btn:disabled{cursor:not-allowed;background:#d6cec3;box-shadow:none;transform:none}
-    .small-print{text-align:center;color:#877b6f;font-size:9px;line-height:1.6;margin:9px 0 0}
-    .error{min-height:18px;color:#bd3434;font-size:10px;font-weight:800;text-align:center;margin:7px 0 0}
-    .how{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .how article{padding:17px;background:#fff;border:1px solid #f0e4d4;border-radius:17px}
-    .how .num{display:grid;place-items:center;width:32px;height:32px;border-radius:11px;background:#fff0d8;color:#aa6834;font-size:12px;font-weight:900}
-    .how h3{margin:8px 0 2px;font-size:13px}
-    .how p{margin:0;color:var(--muted);font-size:11px}
-    .faq{max-width:850px;margin-inline:auto}
-    .faq details{background:#fff;border:1px solid #efe4d6;border-radius:14px;padding:13px 15px;margin:8px 0}
-    .faq summary{cursor:pointer;list-style:none;font-size:12px;font-weight:900;display:flex;justify-content:space-between;gap:12px}
-    .faq summary::-webkit-details-marker{display:none}
-    .faq summary:after{content:"+";font-size:18px;color:var(--coral);line-height:1}
-    .faq details[open] summary:after{content:"−"}
-    .faq details p{margin:8px 0 0;color:var(--muted);font-size:11px}
-    footer{padding:26px 0 16px;border-top:1px solid #efe4d6;text-align:center;color:#81766a;font-size:10px}
-    footer b{color:var(--coral2);font-size:15px;letter-spacing:1px}
-    footer a{color:#8b5e36;text-decoration:underline;text-underline-offset:3px}
-    .mobile-cta{display:none;position:fixed;z-index:40;bottom:0;inset-inline:0;align-items:center;gap:11px;padding:9px 14px calc(9px + env(safe-area-inset-bottom));background:#fffaf3f5;backdrop-filter:blur(14px);border-top:1px solid #eadcc9}
-    .mobile-total{flex:1;font-size:10px;font-weight:800;color:#75695c}
-    .mobile-total b{display:block;font-size:15px;color:#bd4e39}
-    .mobile-cta .btn{padding:11px 15px;font-size:11px;white-space:nowrap}
-    .toast{position:fixed;z-index:80;top:90px;left:50%;max-width:calc(100% - 30px);transform:translate(-50%,-160%);opacity:0;transition:.25s;padding:10px 15px;border-radius:13px;background:#2d6650;color:white;font-weight:800;font-size:11px;box-shadow:0 12px 32px #473c2d30}
-    .toast.show{transform:translate(-50%,0);opacity:1}
-    @media(max-width:940px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}.photo img{height:285px}.hero{gap:30px}.checkout{grid-template-columns:1fr 320px}}
-    @media(max-width:680px){
-      body{padding-bottom:84px}.wrap{width:calc(100% - 28px)}.nav{height:62px}.navlinks{display:none}
-      .nav-button{font-size:10px;padding:10px 13px}.logo{font-size:18px}
-      .hero{grid-template-columns:1fr;gap:25px;padding:30px 0 34px;text-align:center}
-      .hero-art{grid-row:1;width:min(82%,390px)}.hero-img{border-width:6px;border-radius:27px}
-      .hero-img img{aspect-ratio:1.12/1}.hero-sticker{width:75px;height:75px;right:-15px;top:12px;font-size:10px}
-      .hero-sticker b{font-size:18px}.hero-note{left:-12px;bottom:10px;font-size:9px;padding:9px 11px}
-      .hero-copy{margin:auto}.hero-actions{justify-content:center}.chips{justify-content:center}
-      .reasons{grid-template-columns:1fr;gap:8px;margin:0 auto 30px}.reason{padding:11px 13px}.reason .emoji{width:37px;height:37px}
-      .section{padding:35px 0}.section-title{margin-bottom:20px}
-      .products{gap:10px}.photo img{height:185px}.product{border-radius:17px}.product-content{padding:11px}
-      .product h3{font-size:12px}.desc{font-size:10px;min-height:46px}
-      .price-line{gap:5px;margin-bottom:9px}.price{font-size:19px}.was{font-size:9px}.save{font-size:8px}
-      .add{font-size:10px;padding:10px 5px}.product-link{font-size:9px}
-      .badge{top:8px;right:8px;font-size:8px;padding:4px 7px}
-      .picked-row{grid-template-columns:1fr 27px}.picked-row select{font-size:10px;padding:8px 6px}
-      .deal{grid-template-columns:auto 1fr;gap:9px;padding:13px}.deal-icon{width:36px;height:36px}
-      .deal b{font-size:12px}.deal p{font-size:9px}.deal-tag{grid-column:2;font-size:10px}
-      .checkout{grid-template-columns:1fr;gap:10px}.summary{position:static;order:-1;padding:15px}.basket{padding:15px}
-      .how{grid-template-columns:1fr;gap:8px}.how article{padding:13px}.mobile-cta{display:flex}
-    }
-    @media(max-width:380px){.photo img{height:155px}.product-content{padding:9px}.price{font-size:17px}.save{display:none}.picked-row label{font-size:9px}}
-    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ff654d">
+<title>فواحات السيارة VelaLight | عطرك يغيّر جو كل مشوار</title>
+<meta name="description" content="فواحات سيارة VelaLight بعطر خام نقي بدون إضافات. اختار من 23 عطرًا، والسعر يبدأ من 125 جنيه. شحن مجاني عند شراء 3 فواحات.">
+<meta property="og:title" content="خلي كل مشوار له رائحة تشبهك | VelaLight"><meta property="og:description" content="ثلاثة تصميمات، 23 رائحة، وعطر خام نقي يرافقك في مشاويرك."><meta property="og:image" content="https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/Luxury%20Car%20Diffuser.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2c1934;--muted:#695e6a;--pink:#f74378;--orange:#ff6e3e;--yellow:#ffbf43;--purple:#7642db;--aqua:#25b8aa;--paper:#fff8f4;--white:#fff;--line:#f1dfeb;--green:#26754e;--shadow:0 16px 42px #78445b16;--max:1160px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:84px}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Cairo",Tahoma,Arial,sans-serif;line-height:1.7;overflow-x:hidden;padding-bottom:100px}a{color:inherit;text-decoration:none}button,select{font:inherit}button{cursor:pointer}img{max-width:100%;display:block}.wrap{width:min(var(--max),calc(100% - 36px));margin-inline:auto}
+.promo{background:linear-gradient(90deg,#f64179,#ff6844 55%,#ffac2f);color:white;text-align:center;padding:9px 12px;font-weight:900;font-size:13px}.promo b{color:#fff2a9}.promo .star{padding-inline:7px;color:#ffe69a}
+header{position:sticky;top:0;z-index:40;background:#fffaf5ee;backdrop-filter:blur(14px);border-bottom:1px solid #f2e6df}.nav{height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}.logo{font-size:20px;line-height:1;font-weight:900;letter-spacing:1px;color:#f34d69}.logo small{display:block;font-size:8px;color:#796a73;letter-spacing:2px;margin-top:5px}.navlinks{display:flex;gap:23px;color:#665768;font-size:12px;font-weight:800}.navlinks a:hover{color:var(--pink)}.navbtn,.btn{border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:12px 19px;background:linear-gradient(100deg,var(--pink),var(--orange));color:white;font-weight:900;box-shadow:0 9px 22px #f3546940;transition:.18s}.navbtn:hover,.btn:hover{filter:saturate(1.15);transform:translateY(-2px)}
+.hero{position:relative;padding:50px 0 43px;display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:52px}.hero-copy{max-width:600px}.pill{display:inline-flex;align-items:center;gap:8px;background:#e7fbf4;border:1px solid #c9f0df;color:#22694b;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:900}.pill i{width:8px;height:8px;background:#33bd82;border-radius:50%;box-shadow:0 0 0 4px #33bd8220}h1{font-size:clamp(39px,5.5vw,67px);line-height:1.17;margin:18px 0 13px;font-weight:900;letter-spacing:-1px}.hero h1 em{font-style:normal;background:linear-gradient(90deg,#f23c75,#ff7a38 65%,#d88910);-webkit-background-clip:text;background-clip:text;color:transparent}.hero-copy>p{font-size:clamp(15px,1.65vw,18px);color:var(--muted);margin:0 0 20px}.hero-copy>p strong{color:var(--ink)}.hero-actions{display:flex;gap:13px;align-items:center;flex-wrap:wrap}.hero-actions .btn{padding:14px 23px;font-size:14px}.softlink{font-size:12px;color:#665768;font-weight:900}.softlink:hover{color:var(--pink)}.quick-facts{display:flex;gap:8px;flex-wrap:wrap;margin-top:21px}.quick-facts span{background:white;border:1px solid var(--line);border-radius:99px;padding:6px 10px;font-size:10px;font-weight:900;color:#5f4f60;box-shadow:0 4px 14px #794a5309}.quick-facts b{color:#ed4774}
+.hero-visual{position:relative;max-width:480px;width:100%;justify-self:center}.hero-photo{border:7px solid white;border-radius:32px;overflow:hidden;background:#f1e9df;box-shadow:0 20px 55px #9e4a4b24;transform:rotate(-1deg)}.hero-photo img{width:100%;aspect-ratio:1.03/1;object-fit:cover;object-position:center 46%}.sticker{position:absolute;top:10px;right:-19px;width:100px;height:100px;border-radius:50%;background:linear-gradient(145deg,#ffdc67,#ff9d38);border:5px solid white;box-shadow:0 12px 28px #9d58272a;display:grid;place-content:center;text-align:center;color:#532d26;font-size:11px;font-weight:900;line-height:1.3;transform:rotate(8deg)}.sticker b{font-size:25px}.photo-caption{position:absolute;bottom:19px;left:-17px;background:white;border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);font-size:10px;font-weight:900;color:#563f55}.photo-caption b{color:#23815a}
+.promise{margin:8px auto 37px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.promise-card{display:flex;align-items:center;gap:12px;padding:15px 16px;border:1px solid #f0dce8;border-radius:17px;background:#fff;box-shadow:0 8px 22px #7441570a}.promise-icon{width:43px;height:43px;border-radius:14px;display:grid;place-items:center;flex:none;font-size:20px;background:#fff0f5}.promise-card:nth-child(2) .promise-icon{background:#fff2dc}.promise-card:nth-child(3) .promise-icon{background:#e7fbf4}.promise-card b{display:block;font-size:12px}.promise-card small{display:block;font-size:10px;color:var(--muted)}
+.section{padding:43px 0}.heading{text-align:center;max-width:710px;margin:0 auto 24px}.overline{font-size:10px;letter-spacing:1.6px;color:#a34be0;font-weight:900}.heading h2{font-size:clamp(27px,4vw,41px);line-height:1.25;margin:6px 0;font-weight:900}.heading p{margin:0;color:var(--muted);font-size:12px}.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;align-items:start}.product{border:1px solid #f0dfea;border-radius:22px;overflow:hidden;background:#fff;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}.product:hover{transform:translateY(-4px);box-shadow:0 22px 48px #77405424}.product-img{position:relative;background:#f6eee6;overflow:hidden}.product-img img{width:100%;height:265px;object-fit:cover;transition:transform .4s}.product:hover .product-img img{transform:scale(1.035)}.product-badge{position:absolute;top:12px;right:12px;padding:5px 10px;border-radius:99px;background:#fff;color:#8c3b75;font-size:9px;font-weight:900;box-shadow:0 4px 14px #33202b17}.product-body{padding:16px}.product h3{font-size:15px;margin:0 0 4px;line-height:1.45}.product-desc{font-size:10px;color:var(--muted);margin:0 0 9px;min-height:32px}.price-line{display:flex;align-items:baseline;gap:6px;margin-bottom:11px}.price{font-size:24px;font-weight:900;color:#ef486b}.currency{font-size:10px;color:#766c76;font-weight:800}.perceived{margin-right:auto;font-size:9px;background:#fff4d7;color:#875c19;border-radius:99px;padding:3px 7px;font-weight:900}.scent-label{font-size:10px;font-weight:900;color:#625266;display:block;margin:0 0 4px}.scent-select{width:100%;padding:10px;border:1px solid #eadbe8;border-radius:11px;background:#fffbfd;color:#33263a;font-size:11px;outline:none}.scent-select:focus{border-color:#d44c91;box-shadow:0 0 0 3px #e64f8b19}.add-row{display:grid;grid-template-columns:104px 1fr;gap:8px;margin-top:10px}.quantity{display:flex;align-items:center;justify-content:space-between;border:1px solid #eadbe8;border-radius:12px;padding:4px;background:#fff9fc;direction:ltr}.quantity button{width:30px;height:31px;border:0;border-radius:9px;background:#f7e7f0;color:#8e3e70;font-size:18px;font-weight:900;line-height:1}.quantity output{font-size:12px;font-weight:900;min-width:18px;text-align:center}.add-product{border:0;border-radius:12px;background:linear-gradient(100deg,#2cbd89,#159b83);color:white;font-size:11px;font-weight:900;padding:10px 6px;box-shadow:0 7px 17px #189e8030}.add-product:hover{filter:brightness(.96)}.product-foot{font-size:9px;color:#7b6c79;margin:9px 0 0;text-align:center}
+.scent-ribbon{margin-top:24px;padding:19px;border-radius:20px;background:linear-gradient(115deg,#7a44dc,#c34bba 52%,#f05182);color:white;box-shadow:0 14px 30px #9346bd29}.scent-ribbon h3{text-align:center;font-size:15px;margin:0 0 5px}.scent-ribbon p{text-align:center;font-size:10px;opacity:.9;margin:0 0 13px}.scents{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}.scents span{background:#ffffff25;border:1px solid #ffffff40;padding:5px 10px;border-radius:99px;font-size:10px;font-weight:800}
+.value{display:grid;grid-template-columns:.95fr 1.05fr;align-items:stretch;gap:16px;margin-top:24px}.value-copy{border-radius:23px;padding:25px;background:linear-gradient(140deg,#ff5c72,#f14e87 58%,#a44ce0);color:white;box-shadow:0 15px 35px #df557b2b}.value-copy .mini{font-size:10px;font-weight:900;letter-spacing:1.2px;color:#ffe39b}.value-copy h3{font-size:25px;line-height:1.3;margin:8px 0}.value-copy p{font-size:12px;color:#fff5fa;margin:0}.value-points{display:grid;grid-template-columns:1fr 1fr;gap:10px}.value-point{border-radius:17px;padding:16px;background:white;border:1px solid #f0dfea;box-shadow:0 8px 20px #7441570a}.value-point i{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#fff0f5;font-style:normal;font-size:17px}.value-point b{display:block;font-size:11px;margin:7px 0 2px}.value-point small{font-size:9px;color:var(--muted);line-height:1.6;display:block}
+.offer{margin-top:19px;padding:17px 20px;border:1px solid #d8eee1;border-radius:18px;background:linear-gradient(100deg,#e5faef,#f4fbff);display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}.offer-icon{width:42px;height:42px;border-radius:14px;background:white;display:grid;place-items:center;font-size:20px}.offer b{display:block;color:#216c4b;font-size:13px}.offer p{margin:1px 0 0;font-size:10px;color:#5c7769}.offer-tag{font-size:11px;color:#18744c;font-weight:900;white-space:nowrap}
+.cart-layout{display:grid;grid-template-columns:1fr 330px;gap:16px;align-items:start;margin-top:19px}.cart-panel,.summary{background:white;border:1px solid #efdfeb;border-radius:19px;padding:17px;box-shadow:0 9px 26px #7344560e}.cart-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}.cart-title h3,.summary h3{font-size:15px;margin:0}.count{background:#fff0f6;color:#b53672;border-radius:99px;padding:4px 9px;font-size:10px;font-weight:900}.empty{border:1px dashed #e5d4e0;background:#fffafd;border-radius:13px;padding:20px;text-align:center;color:#786c79;font-size:11px}.cart-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:11px 0;border-top:1px solid #f1e9ef}.cart-name{font-size:11px;font-weight:900}.cart-meta{display:block;color:#817581;font-size:9px}.cart-qty{display:flex;align-items:center;gap:7px;direction:ltr}.cart-qty button{width:27px;height:27px;border:1px solid #ecdce8;border-radius:9px;background:#fff5fa;color:#9b3f77;font-size:16px;font-weight:900}.cart-qty span{min-width:15px;text-align:center;font-size:11px;font-weight:900}.remove{border:0;background:transparent;color:#b85767;font-size:10px;font-weight:800;text-decoration:underline;margin-right:8px}
+.summary{position:sticky;top:82px}.summary h3{margin-bottom:9px}.sumrow{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:10px;color:#645969}.sumrow strong{font-size:11px;color:var(--ink)}.sumrow .free{color:#198451}.sum-total{border-top:1px solid #f0e3ed;margin-top:6px;padding-top:11px;font-size:12px;font-weight:900}.sum-total strong{font-size:20px;color:#ef486b}.ship-msg{margin:10px 0 11px;padding:9px;border-radius:11px;background:#fff3dd;color:#88591b;font-size:10px;font-weight:900;text-align:center}.ship-msg.done{background:#e8faef;color:#26754e}.meter{height:6px;background:#ecdfeb;border-radius:99px;overflow:hidden;margin-top:7px}.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb83e,#f04c83,#7848da);transition:width .25s}.meter i.done{background:#24aa74}.checkout-btn{width:100%;font-size:12px;padding:13px 12px}.checkout-btn:disabled{background:#d9d0d8;box-shadow:none;cursor:not-allowed;transform:none}.fineprint{text-align:center;color:#837783;font-size:9px;line-height:1.6;margin:8px 0 0}.error{min-height:17px;color:#c13348;font-size:10px;font-weight:800;text-align:center;margin:5px 0 0}
+.limited{margin:25px auto;padding:25px;border-radius:23px;text-align:center;color:white;background:linear-gradient(110deg,#f4486d,#f15b48 54%,#ff9e32);box-shadow:0 15px 38px #ec566447}.limited .limited-tag{font-size:10px;font-weight:900;letter-spacing:1.5px;color:#ffebaa}.limited h2{font-size:clamp(24px,3.8vw,36px);margin:6px 0;line-height:1.3}.limited p{margin:0 auto 13px;max-width:620px;color:#fff4ed;font-size:11px}.limited .btn{background:white;color:#e84f69;box-shadow:none}
+.process{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.process article{background:white;border:1px solid #efdfeb;border-radius:16px;padding:15px}.stepno{width:31px;height:31px;border-radius:10px;background:#fff0d5;color:#a16b1e;display:grid;place-items:center;font-size:11px;font-weight:900}.process h3{font-size:12px;margin:7px 0 2px}.process p{font-size:10px;color:var(--muted);margin:0}
+.social{display:grid;grid-template-columns:1fr auto;align-items:center;gap:15px;padding:20px 22px;border:1px solid #ebd9f2;border-radius:19px;background:linear-gradient(110deg,#f5eaff,#fff0f4);margin-top:15px}.social h3{font-size:15px;margin:0 0 3px}.social p{font-size:10px;color:var(--muted);margin:0}.social .btn{background:var(--purple);font-size:10px;padding:11px 15px;box-shadow:none}
+.faq{max-width:850px;margin-inline:auto}.faq details{background:white;border:1px solid #efdfeb;border-radius:13px;padding:12px 14px;margin:8px 0}.faq summary{cursor:pointer;list-style:none;font-size:11px;font-weight:900;display:flex;justify-content:space-between;gap:12px}.faq summary::-webkit-details-marker{display:none}.faq summary:after{content:"+";font-size:18px;color:var(--pink);line-height:1}.faq details[open] summary:after{content:"−"}.faq details p{font-size:10px;color:var(--muted);margin:8px 0 0}
+footer{text-align:center;border-top:1px solid #efdfeb;padding:24px 10px 15px;color:#7d7180;font-size:10px}footer strong{color:#ec4d6d;font-size:14px;letter-spacing:1px}footer a{text-decoration:underline;text-underline-offset:3px;color:#8f47a9}.mobilebar{display:none;position:fixed;bottom:0;inset-inline:0;z-index:50;align-items:center;gap:10px;padding:9px 13px calc(9px + env(safe-area-inset-bottom));background:#fffaf5f5;border-top:1px solid #efdfeb;backdrop-filter:blur(14px)}.mobile-total{flex:1;font-size:9px;color:#736873;font-weight:800}.mobile-total b{display:block;color:#e64669;font-size:15px}.mobilebar .btn{padding:11px 15px;font-size:10px;white-space:nowrap}.toast{position:fixed;z-index:70;top:82px;left:50%;transform:translate(-50%,-150%);opacity:0;transition:.22s;background:#2c1934;color:white;border-radius:12px;padding:10px 15px;font-size:11px;font-weight:900;box-shadow:0 10px 28px #29172b35;max-width:calc(100% - 24px)}.toast.show{transform:translate(-50%,0);opacity:1}
+@media(max-width:900px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}.product-img img{height:300px}.hero{gap:27px}.cart-layout{grid-template-columns:1fr 300px}}
+@media(max-width:650px){body{padding-bottom:83px}.wrap{width:calc(100% - 26px)}.nav{height:60px}.navlinks{display:none}.logo{font-size:17px}.navbtn{font-size:10px;padding:9px 12px}.hero{grid-template-columns:1fr;text-align:center;gap:23px;padding:27px 0 31px}.hero-visual{grid-row:1;width:min(81%,370px)}.hero-photo{border-width:6px;border-radius:25px}.hero-photo img{aspect-ratio:1.13/1}.sticker{width:75px;height:75px;right:-13px;top:10px;font-size:9px}.sticker b{font-size:19px}.photo-caption{left:-13px;bottom:12px;font-size:9px;padding:8px 10px}.hero-actions{justify-content:center}.quick-facts{justify-content:center}.promise{grid-template-columns:1fr;gap:8px;margin-bottom:28px}.promise-card{padding:10px 12px}.promise-icon{width:37px;height:37px}.section{padding:33px 0}.heading{margin-bottom:18px}.products{gap:10px}.product{border-radius:17px}.product-img img{height:195px}.product-body{padding:11px}.product h3{font-size:12px}.product-desc{font-size:9px;min-height:42px}.price{font-size:19px}.perceived{font-size:8px;padding:2px 5px}.add-row{grid-template-columns:88px 1fr;gap:6px}.quantity button{width:27px;height:29px}.add-product{font-size:9px;padding:8px 4px}.scent-select{font-size:10px;padding:9px}.scent-ribbon{padding:15px 10px}.scents{gap:5px}.scents span{font-size:9px;padding:4px 8px}.value{grid-template-columns:1fr;gap:9px}.value-copy{padding:20px}.value-copy h3{font-size:21px}.value-point{padding:12px}.offer{grid-template-columns:auto 1fr;gap:9px;padding:13px}.offer-icon{width:36px;height:36px}.offer b{font-size:11px}.offer p{font-size:9px}.offer-tag{grid-column:2;font-size:9px}.cart-layout{grid-template-columns:1fr;gap:9px}.summary{position:static;order:-1;padding:14px}.cart-panel{padding:14px}.limited{padding:20px 14px}.limited p{font-size:10px}.process{grid-template-columns:1fr;gap:8px}.process article{padding:12px}.social{grid-template-columns:1fr;text-align:center;padding:16px}.social .btn{justify-self:center}.mobilebar{display:flex}}
+@media(max-width:370px){.product-img img{height:165px}.product-body{padding:9px}.price{font-size:17px}.perceived{display:none}.add-row{grid-template-columns:78px 1fr}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+</style>
 </head>
 <body>
-  <div class="promo"><span class="spark">✦</span> اختار 3 فواحات متاحة <strong>والشحن علينا</strong> — وخلي عطرك المفضل معاك في كل مشوار <span class="spark">✦</span></div>
-  <header>
-    <div class="wrap nav">
-      <a class="logo" href="https://velalight.github.io/">VELALIGHT<small>SCENT YOUR JOURNEY</small></a>
-      <nav class="navlinks" aria-label="روابط الصفحة">
-        <a href="#collection">الفواحات</a>
-        <a href="#how">إزاي تطلب؟</a>
-        <a href="#faq">أسئلة شائعة</a>
-      </nav>
-      <a class="nav-button" href="#collection">اختار عطرك <span aria-hidden="true">↓</span></a>
-    </div>
-  </header>
-
-  <main>
-    <section class="wrap hero">
-      <div class="hero-copy">
-        <span class="eyebrow"><i></i> مشوارك يبدأ من أول نفس</span>
-        <h1>افتح باب عربيتك…<br><span class="highlight">وافتح مزاجك.</span></h1>
-        <p>فيه ريحة بتفكّرك بمكان بتحبه، وريحة بتخلي الطريق أهدى، وريحة تقول <b>دي عربيتك.</b> اختار فواحتك وعطرك من 23 اختيار، وخلي كل مشوار له حكاية.</p>
-        <div class="hero-actions">
-          <a class="btn" href="#collection">اختار فواحتك دلوقتي <span aria-hidden="true">←</span></a>
-          <a class="sub-link" href="#offer">3 فواحات؟ الشحن علينا</a>
-        </div>
-        <div class="chips">
-          <span><b>23</b> عطر تختار منهم</span>
-          <span><b>4</b> تصميمات في المجموعة</span>
-          <span><b>3</b> قطع = شحن مجاني</span>
-        </div>
-      </div>
-      <div class="hero-art">
-        <div class="hero-img">
-          <img src="https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/Luxury%20Car%20Diffuser.webp" alt="فواحة السيارة الزجاجية الأنيقة من VelaLight" fetchpriority="high">
-        </div>
-        <div class="hero-sticker"><b>23</b><br>رائحة<br>على ذوقك</div>
-        <div class="hero-note">اختار عطر كل قطعة بنفسك <b>✓</b></div>
-      </div>
-    </section>
-
-    <section class="wrap reasons" aria-label="مميزات فواحات السيارة">
-      <div class="reason"><span class="emoji" aria-hidden="true">🌸</span><div><b>كل فواحة بعطرها</b><small>اختار رائحة مختلفة لكل قطعة في طلبك</small></div></div>
-      <div class="reason"><span class="emoji" aria-hidden="true">🎁</span><div><b>اختيار حلو ليك وللي بتحبهم</b><small>قطعة لعربيتك والباقي هدايا بطابعك</small></div></div>
-      <div class="reason"><span class="emoji" aria-hidden="true">🚚</span><div><b>كمّل 3 واستمتع بالشحن المجاني</b><small>العرض على الفواحات المتاحة للطلب</small></div></div>
-    </section>
-
-    <section class="wrap section" id="collection">
-      <div class="section-title">
-        <span class="overline">YOUR NEXT FAVORITE SCENT</span>
-        <h2>أنهي واحدة <span class="coral">شبهك؟</span></h2>
-        <p>اختار التصميم، زوّد العدد، وحدّد عطر كل فواحة من نفس الكارت. مفيش خطوات مخفية.</p>
-      </div>
-      <div class="products" id="products" aria-live="polite"></div>
-      <div class="deal" id="offer">
-        <div class="deal-icon" aria-hidden="true">🚚</div>
-        <div><b>خد 3 فواحات متاحة… ووفّر الشحن</b><p>اختار أي 3 من التصميمات المتاحة، وهنوضح العرض في رسالة طلبك للمتجر.</p></div>
-        <span class="deal-tag">الشحن علينا مع 3</span>
-      </div>
-
-      <div class="checkout" id="checkout">
-        <section class="basket" aria-label="سلة المشتريات">
-          <div class="basket-head"><h3>تشكيلتك جاهزة؟</h3><span class="qty-label" id="qtyLabel">0 فواحة</span></div>
-          <div id="basketItems"><div class="empty">لسه ما اخترتش فواحة — ابدأ من الكروت فوق، وكل إضافة هتظهر هنا.</div></div>
-        </section>
-        <aside class="summary" aria-label="ملخص الطلب">
-          <h3>ملخص طلبك</h3>
-          <div class="sumrow"><span>عدد الفواحات</span><strong id="totalQty">0</strong></div>
-          <div class="sumrow"><span>قيمة المنتجات</span><strong id="subtotal">0 ج.م</strong></div>
-          <div class="sumrow"><span>الشحن</span><strong id="shipping">يُؤكد مع المتجر</strong></div>
-          <div class="sumrow sumtotal"><span id="totalCaption">إجمالي المنتجات</span><strong id="total">0 ج.م</strong></div>
-          <div class="progressbox" id="progressBox">
-            <span id="progressText">أضف 3 فواحات متاحة عشان الشحن يبقى علينا.</span>
-            <div class="progress"><i id="progressFill"></i></div>
-          </div>
-          <button class="btn checkout-btn" id="sendOrder" type="button" disabled>كمّل اختيارك الأول</button>
-          <p class="error" id="error" aria-live="polite"></p>
-          <p class="small-print">تأكيد الطلب وبيانات التوصيل بيكونوا مع فريق VelaLight على واتساب. مفيش دفع من الصفحة دي.</p>
-        </aside>
-      </div>
-    </section>
-
-    <section class="wrap section" id="how">
-      <div class="section-title">
-        <span class="overline">EASY AS 1, 2, 3</span>
-        <h2>من اختيارك لحد <span class="coral">تأكيد طلبك</span></h2>
-        <p>كل اللي عليك 3 خطوات بسيطة.</p>
-      </div>
-      <div class="how">
-        <article><span class="num">01</span><h3>اختار التصميم والعدد</h3><p>اضغط «أضيفها للسلة» على الفواحة اللي عجبتك.</p></article>
-        <article><span class="num">02</span><h3>اختار العطر لكل قطعة</h3><p>كل فواحة في سلتك لها اختيار عطر مستقل من 23 رائحة.</p></article>
-        <article><span class="num">03</span><h3>ابعت طلبك على واتساب</h3><p>هنجهز لك رسالة بتفاصيل تشكيلتك. راجعها وابعتها للمتجر.</p></article>
-      </div>
-    </section>
-
-    <section class="wrap section faq" id="faq">
-      <div class="section-title"><span class="overline">A FEW QUICK ANSWERS</span><h2>محتاج تعرف حاجة؟</h2></div>
-      <details><summary>ينفع أختار عطر مختلف لكل فواحة؟</summary><p>طبعًا. بعد ما تضيف الفواحات، هيظهر اختيار مستقل للعطر تحت كل قطعة في سلتك.</p></details>
-      <details><summary>إمتى الشحن يبقى مجاني؟</summary><p>أضف 3 فواحات متاحة من التصميمات الموجودة هنا. رسوم الشحن للطلبات الأقل من 3 يؤكدها فريق المتجر على واتساب.</p></details>
-      <details><summary>هل كل الأربع تصميمات متاحة؟</summary><p>فيه تصميم واحد مسجل حاليًا على موقع المتجر كغير متوفر، وموضح في كارت المنتج. تقدر تسأل الفريق عن موعد رجوعه.</p></details>
-      <details><summary>إزاي أكمّل الطلب؟</summary><p>اختار منتجاتك وعطورها ثم اضغط «إتمام الطلب عبر واتساب». هتفتح رسالة جاهزة بتفاصيل تشكيلتك، وبعدها يؤكد معك الفريق بيانات التوصيل وطريقة الدفع.</p></details>
-      <details><summary>هل الأسعار نهائية؟</summary><p>الأسعار المعروضة مأخوذة من صفحات المنتجات وقد تتغير. المتجر يؤكد السعر والتوفر النهائيين قبل تثبيت الطلب.</p></details>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap"><b>VELALIGHT</b><p>خلي الطريق ألطف… وخلي عطرك يحكي عنك.</p><a href="https://velalight.github.io/">تسوّق كل منتجات VelaLight</a><p>© 2026 VelaLight · كل الحقوق محفوظة</p></div>
-  </footer>
-
-  <div class="mobile-cta" id="mobileCta">
-    <div class="mobile-total">تشكيلتك الحالية <b id="mobileTotal">0 ج.م</b></div>
-    <a class="btn" href="#checkout">راجع السلة <span aria-hidden="true">↑</span></a>
-  </div>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script>
-    const WHATSAPP_NUMBER="201223526105",FREE_SHIPPING_QTY=3;
-    const SCENTS=["فانيلا","سينامون سبايس فانيلا","لافندر","موكا","كراميل","كاريبيان فروت","فل","ياسمين","اناناس","شيكولاتة","كوكونات","كاسيليا","اينتو زانايت","بوكيت روز","ورد بلدى","تيوليب","قهوة","قهوة فانيلا","قهوة بندق","عود فانيليا","عنبر","فراولة","عود خشب صندل"];
-    const PRODUCTS=[
-      {id:"pmvj76q7f0ca",name:"فواحة السيارة بغطاء خشبي",desc:"تصميم زجاجي أنيق بحبل للتعليق ولمسة خشبية دافئة.",price:125,oldPrice:150,available:true,image:"https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/Velalight-Car-Diffuser-02.webp",url:"https://velalight.github.io/shop/pmvj76q7f0ca.html"},
-      {id:"pmvj8cij7c34",name:"فواحة السيارة بتصميم قطرة",desc:"شكل زجاجي انسيابي بتفاصيل أنيقة تلفت النظر.",price:125,oldPrice:150,available:true,image:"https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/Velalight-Car-Diffuser-03.webp",url:"https://velalight.github.io/shop/pmvj8cij7c34.html"},
-      {id:"pmvj8qxhca70",name:"فواحة السيارة الفاخرة",desc:"زجاج شفاف وغطاء خشبي بتصميم راقٍ يناسب عربيتك.",price:150,oldPrice:200,available:true,image:"https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/Luxury%20Car%20Diffuser.webp",url:"https://velalight.github.io/shop/pmvj8qxhca70.html"},
-      {id:"pmvoyd30hb35",name:"فواحة Smart Scent الزجاجية",desc:"تصميم زجاجي مزخرف بلمسات ذهبية مميزة.",price:175,oldPrice:225,available:false,image:"https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/Car-Freshener-Smart-Scent-Coconut-Glass-01.webp",url:"https://velalight.github.io/shop/pmvoyd30hb35.html"}
-    ];
-    const units=Object.fromEntries(PRODUCTS.map(p=>[p.id,[]]));
-    const $=s=>document.querySelector(s);
-    const money=n=>new Intl.NumberFormat("ar-EG").format(n)+" ج.م";
-    const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
-    const productsEl=$("#products");
-
-    function renderProducts(){
-      productsEl.innerHTML=PRODUCTS.map(p=>`
-        <article class="product">
-          <div class="photo">
-            <img src="${p.image}" alt="${esc(p.name)} من VelaLight" loading="lazy" width="720" height="900">
-            <span class="badge ${p.available?"":"out"}">${p.available?"اختار عطرك":"غير متوفرة حاليًا"}</span>
-          </div>
-          <div class="product-content">
-            <h3>${esc(p.name)}</h3>
-            <p class="desc">${esc(p.desc)}</p>
-            <div class="price-line">
-              <span class="price">${money(p.price)}</span><span class="currency">للقطعة</span>
-              <span class="was">${money(p.oldPrice)}</span><span class="save">وفر ${money(p.oldPrice-p.price)}</span>
-            </div>
-            <button class="add" type="button" data-add="${p.id}" ${p.available?"":"disabled"}>${p.available?"أضيفها للسلة +":"غير متوفرة حاليًا"}</button>
-            ${p.available?"":'<p class="sold-msg">اسألنا على واتساب عن موعد التوفر</p>'}
-            <a class="product-link" href="${p.url}" target="_blank" rel="noopener">تفاصيل المنتج في المتجر ↗</a>
-            <div class="picked" id="picked-${p.id}"></div>
-          </div>
-        </article>`).join("");
-      renderUnits();
-    }
-
-    function totals(){
-      let qty=0,subtotal=0;
-      PRODUCTS.forEach(p=>{if(p.available){qty+=units[p.id].length;subtotal+=units[p.id].length*p.price;}});
-      return{qty,subtotal,free:qty>=FREE_SHIPPING_QTY};
-    }
-
-    function renderUnits(){
-      PRODUCTS.forEach(p=>{
-        const box=$("#picked-"+p.id);
-        if(!box)return;
-        if(!p.available||!units[p.id].length){box.innerHTML="";return;}
-        box.innerHTML=units[p.id].map((u,i)=>`
-          <div class="picked-row">
-            <div><label for="pick-${p.id}-${i}">عطر الفواحة ${i+1}</label>
-              <select id="pick-${p.id}-${i}" data-scent="${p.id}" data-index="${i}" aria-label="اختيار عطر الفواحة ${i+1}">
-                <option value="">اختار من 23 عطرًا</option>
-                ${SCENTS.map(s=>`<option value="${esc(s)}" ${u.scent===s?"selected":""}>${esc(s)}</option>`).join("")}
-              </select>
-            </div>
-            <button type="button" class="remove-unit" data-remove="${p.id}" data-index="${i}" aria-label="حذف الفواحة">×</button>
-          </div>`).join("");
-      });
-      renderBasket();
-    }
-
-    function renderBasket(){
-      const chosen=PRODUCTS.filter(p=>p.available&&units[p.id].length);
-      const holder=$("#basketItems");
-      if(!chosen.length){
-        holder.innerHTML='<div class="empty">لسه ما اخترتش فواحة — ابدأ من الكروت فوق، وكل إضافة هتظهر هنا.</div>';
-      }else{
-        holder.innerHTML=chosen.map(p=>`
-          <div class="cart-line">
-            <div class="line-head">
-              <div><span class="line-title">${esc(p.name)}</span><span class="line-price">${money(p.price)} للقطعة</span></div>
-              <div class="stepper">
-                <button type="button" data-remove-last="${p.id}" aria-label="تقليل الكمية">−</button>
-                <span>${units[p.id].length}</span>
-                <button type="button" data-add="${p.id}" aria-label="زيادة الكمية">+</button>
-              </div>
-            </div>
-            <div class="cart-units">
-              ${units[p.id].map((u,i)=>`
-                <div class="cart-unit">
-                  <label for="cart-${p.id}-${i}">فواحة ${i+1}
-                    <select id="cart-${p.id}-${i}" data-scent="${p.id}" data-index="${i}">
-                      <option value="">اختار العطر</option>
-                      ${SCENTS.map(s=>`<option value="${esc(s)}" ${u.scent===s?"selected":""}>${esc(s)}</option>`).join("")}
-                    </select>
-                  </label>
-                  <button type="button" class="remove-unit" data-remove="${p.id}" data-index="${i}" aria-label="حذف الفواحة">×</button>
-                </div>`).join("")}
-            </div>
-          </div>`).join("");
-      }
-      updateSummary();
-    }
-
-    function updateSummary(){
-      const t=totals();
-      $("#totalQty").textContent=new Intl.NumberFormat("ar-EG").format(t.qty);
-      $("#qtyLabel").textContent=new Intl.NumberFormat("ar-EG").format(t.qty)+" فواحة";
-      $("#subtotal").textContent=money(t.subtotal);
-      $("#total").textContent=money(t.subtotal);
-      $("#mobileTotal").textContent=money(t.subtotal);
-      $("#shipping").textContent=t.free?"مجاني":"يُؤكد مع المتجر";
-      $("#shipping").classList.toggle("free",t.free);
-      $("#totalCaption").textContent=t.free?"الإجمالي مع الشحن المجاني":"إجمالي المنتجات قبل الشحن";
-      const box=$("#progressBox");
-      box.classList.toggle("done",t.free);
-      $("#progressText").textContent=t.free?"كده الشحن علينا — تشكيلتك مؤهلة للعرض!":"أضف "+(FREE_SHIPPING_QTY-t.qty)+" فواحات متاحة وخلي الشحن علينا.";
-      $("#progressFill").style.width=Math.min(100,t.qty/FREE_SHIPPING_QTY*100)+"%";
-      $("#progressFill").classList.toggle("done",t.free);
-      const btn=$("#sendOrder");
-      btn.disabled=t.qty===0;
-      btn.textContent=t.qty?"إتمام الطلب عبر واتساب  ↗":"كمّل اختيارك الأول";
-      $("#error").textContent="";
-    }
-
-    function toast(text){
-      const el=$("#toast");
-      el.textContent=text;
-      el.classList.add("show");
-      clearTimeout(toast.timer);
-      toast.timer=setTimeout(()=>el.classList.remove("show"),2100);
-    }
-
-    document.addEventListener("click",e=>{
-      const add=e.target.closest("[data-add]");
-      const rem=e.target.closest("[data-remove]");
-      const remLast=e.target.closest("[data-remove-last]");
-      if(add){
-        const p=PRODUCTS.find(x=>x.id===add.dataset.add);
-        if(!p||!p.available)return;
-        units[p.id].push({scent:""});
-        renderUnits();
-        toast("اتضافت للسلة — اختار عطرها من نفس الكارت.");
-      }
-      if(rem){
-        const id=rem.dataset.remove,i=Number(rem.dataset.index);
-        if(units[id])units[id].splice(i,1);
-        renderUnits();
-      }
-      if(remLast){
-        const id=remLast.dataset.removeLast;
-        if(units[id]?.length)units[id].pop();
-        renderUnits();
-      }
-    });
-
-    document.addEventListener("change",e=>{
-      const s=e.target.closest("[data-scent]");
-      if(!s)return;
-      const id=s.dataset.scent,i=Number(s.dataset.index);
-      if(units[id]?.[i])units[id][i].scent=s.value;
-      s.classList.toggle("invalid",!s.value);
-      renderBasket();
-    });
-
-    function sendOrder(){
-      const t=totals();
-      if(!t.qty)return;
-      const missing=PRODUCTS.flatMap(p=>p.available?units[p.id].map((u,i)=>u.scent?null:{id:p.id,index:i}).filter(Boolean):[]);
-      if(missing.length){
-        $("#error").textContent="اختار عطر كل فواحة في تشكيلتك الأول.";
-        const m=missing[0],el=$("#pick-"+m.id+"-"+m.index)||$("#cart-"+m.id+"-"+m.index);
-        if(el){el.classList.add("invalid");el.focus();}
-        return;
-      }
-      let message="أهلًا VelaLight، حابب أطلب فواحات السيارة دي:\n\n";
-      PRODUCTS.forEach(p=>{
-        if(p.available)units[p.id].forEach(u=>message+=`• ${p.name}\n  العطر: ${u.scent} — ${money(p.price)}\n`);
-      });
-      message+=`\nعدد الفواحات: ${t.qty}\nإجمالي المنتجات: ${money(t.subtotal)}\nالشحن: ${t.free?"مجاني — عرض 3 فواحات":"من فضلكم أكدوا رسوم الشحن"}\n\nياريت تأكدوا التوفر النهائي وتفاصيل التوصيل وطريقة الدفع. شكرًا!`;
-      window.location.href="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message);
-    }
-
-    $("#sendOrder").addEventListener("click",sendOrder);
-    renderProducts();
-  </script>
+<div class="promo"><span class="star">✦</span> الكميات محدودة <b>والشحن مجاني مع 3 فواحات</b> — اختار عطرك قبل ما تختار مشوارك الجاي <span class="star">✦</span></div>
+<header><div class="wrap nav"><a class="logo" href="https://velalight.github.io/">VELALIGHT<small>SCENT YOUR JOURNEY</small></a><nav class="navlinks"><a href="#collection">اختار فواحتك</a><a href="#why">ليه VelaLight؟</a><a href="#faq">أسئلة شائعة</a></nav><a class="navbtn" href="#collection">ابدأ اختيارك <span>↓</span></a></div></header>
+<main>
+<section class="wrap hero"><div class="hero-copy"><span class="pill"><i></i> لمسة صغيرة… تغيّر إحساس المشوار</span><h1>عربيتك تستاهل<br><em>ريحة على ذوقك.</em></h1><p><strong>عطر خام نقي بدون إضافات</strong>، وتصميم يليق بتفاصيل عربيتك. اختار من 23 رائحة، وخلي كل مرة تفتح فيها الباب بداية مزاج أحلى.</p><div class="hero-actions"><a class="btn" href="#collection">اختار فواحتك دلوقتي <span>←</span></a><a class="softlink" href="#offer">3 فواحات؟ الشحن علينا</a></div><div class="quick-facts"><span><b>23</b> عطر تختار منهم</span><span>السعر يبدأ من <b>125 جنيه</b></span><span><b>شحن مجاني</b> مع 3</span></div></div><div class="hero-visual"><div class="hero-photo"><img src="https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/Luxury%20Car%20Diffuser.webp" alt="فواحة سيارة VelaLight بتصميم زجاجي فاخر" fetchpriority="high"></div><div class="sticker"><b>23</b><br>عطر…<br>اختار حكايتك</div><div class="photo-caption">عطر نقي وثبات مميز <b>✓</b></div></div></section>
+<section class="wrap promise"><div class="promise-card"><span class="promise-icon">✨</span><div><b>عطر خام نقي</b><small>رائحة واضحة بدون إضافات، حسب وصف المنتج.</small></div></div><div class="promise-card"><span class="promise-icon">🌬️</span><div><b>وداعًا لجو العربية المكتوم</b><small>رائحة مميزة تساعد على تغليب الروائح المزعجة.</small></div></div><div class="promise-card"><span class="promise-icon">💎</span><div><b>تفاصيل صغيرة… فرق كبير</b><small>ثبات عطري مميز وتصميم يلفت من غير مبالغة.</small></div></div></section>
+<section class="wrap section" id="collection"><div class="heading"><span class="overline">PICK YOUR SIGNATURE SCENT</span><h2>اختار الفواحة… <span class="coral">وبعدين اختار عطرك</span></h2><p>حدد العطر والكمية من نفس الكارت. لو حبيت رائحة مختلفة، اختارها واضغط إضافة مرة تانية.</p></div><div class="products" id="products"></div>
+<div class="scent-ribbon"><h3>23 رائحة… وكل واحدة ليها مزاجها</h3><p>من الدافي الحلو لحد الانتعاش الخفيف — اختار اللي يشبهك.</p><div class="scents" id="scentList"></div></div>
+<div class="offer" id="offer"><div class="offer-icon">🚚</div><div><b>اختار 3 فواحات متاحة وخلي الشحن علينا</b><p>ينطبق العرض على ثلاث قطع من التصميمات المعروضة والمتاحة للطلب.</p></div><span class="offer-tag">الشحن مجاني × 3</span></div>
+<div class="cart-layout" id="cart"><section class="cart-panel"><div class="cart-title"><h3>سلتك — عطورك على ذوقك</h3><span class="count" id="count">0 فواحة</span></div><div id="cartItems"><div class="empty">اختار العطر والعدد من كارت الفواحة، وهتلاقي تشكيلتك هنا فورًا.</div></div></section><aside class="summary"><h3>ملخص الطلب</h3><div class="sumrow"><span>عدد الفواحات</span><strong id="qtyTotal">0</strong></div><div class="sumrow"><span>قيمة المنتجات</span><strong id="subtotal">0 ج.م</strong></div><div class="sumrow"><span>الشحن</span><strong id="shipping">يتأكد مع المتجر</strong></div><div class="sumrow sum-total"><span id="totalLabel">الإجمالي قبل الشحن</span><strong id="total">0 ج.م</strong></div><div class="ship-msg" id="shipMsg"><span id="shipText">أضف 3 فواحات متاحة عشان تكسب الشحن المجاني.</span><div class="meter"><i id="meterFill"></i></div></div><button class="btn checkout-btn" id="checkoutBtn" disabled>اختار فواحتك الأول</button><p class="error" id="error" aria-live="polite"></p><p class="fineprint">هنفتح لك واتساب برسالة طلب جاهزة. فريق VelaLight يؤكد التوفر والتوصيل والدفع.</p></aside></div></section>
+<section class="wrap section" id="why"><div class="heading"><span class="overline">SMALL DETAIL, BIG DIFFERENCE</span><h2>ليه فواحة <span class="coral">VelaLight؟</span></h2><p>اختيار العطر مش تفصيلة هامشية… ده الجو اللي هتعيش فيه كل يوم.</p></div><div class="value"><div class="value-copy"><span class="mini">PURE SCENT. PERSONAL STYLE.</span><h3>مش مجرد ريحة حلوة.<br>دي بصمتك في كل مشوار.</h3><p>اختار عطر خام نقي من 23 اختيار، واستمتع برائحة مميزة وثبات عطري طويل حسب وصف المنتج. التصميم الأنيق والعطر اللي بتحبه—بسعر يبدأ من 125 جنيه.</p></div><div class="value-points"><div class="value-point"><i>🌿</i><b>عطر خام بدون إضافات</b><small>رائحة نقية وواضحة، مش خلطة عشوائية.</small></div><div class="value-point"><i>🚘</i><b>جو ألطف في عربيتك</b><small>يساعد على تغليب الروائح المزعجة ويخلّي الجو أطيب.</small></div><div class="value-point"><i>💐</i><b>23 اختيارًا عطريًا</b><small>عود، ورد، فانيلا، قهوة، فواكه وروائح أخرى.</small></div><div class="value-point"><i>💸</i><b>فرق كبير بسعر يبدأ من 125</b><small>لمسة عطرية مميزة من غير ما تدفع ثمن تجربة فاخرة مبالغ فيها.</small></div></div></div>
+<div class="social"><div><h3>لسه بتتعرف على VelaLight؟</h3><p>شوف آراء وصور عملاء VelaLight على منتجات المتجر، واسألنا مباشرة عن تجربة فواحات السيارة.</p></div><a class="btn" href="https://velalight.github.io/reviews.html" target="_blank" rel="noopener">اطّلع على آراء العملاء ↗</a></div>
+<div class="limited"><span class="limited-tag">اختيارك المميز ما يستناش</span><h2>الكميات محدودة — اختار عطرك قبل نفاد المتاح</h2><p>أضف فواحتك للسلة، اختار الرائحة، وابعث طلبك مباشرة. ولو جمّعت 3 فواحات متاحة، الشحن مجاني.</p><a class="btn" href="#collection">اختار فواحتك الآن</a></div>
+</section>
+<section class="wrap section"><div class="heading"><span class="overline">FAST & EASY</span><h2>طلبك في <span class="coral">3 خطوات</span></h2></div><div class="process"><article><span class="stepno">01</span><h3>اختار عطرك والكمية</h3><p>حدد رائحتك من كارت المنتج واضغط إضافة.</p></article><article><span class="stepno">02</span><h3>راجع تشكيلتك</h3><p>عدّل عدد القطع أو أضف عطرًا مختلفًا بسهولة.</p></article><article><span class="stepno">03</span><h3>أرسل الطلب على واتساب</h3><p>رسالة جاهزة فيها الأصناف والعطور والإجمالي.</p></article></div></section>
+<section class="wrap section faq" id="faq"><div class="heading"><span class="overline">QUICK ANSWERS</span><h2>أسئلة قبل الطلب</h2></div><details><summary>أقدر أطلب أكتر من عطر مختلف؟</summary><p>أيوه. اختار العطر الأول والكمية واضغط إضافة، وبعدها غيّر العطر من نفس القائمة واضغط إضافة تاني. كل عطر هيظهر كسطر مستقل في السلة.</p></details><details><summary>إمتى الشحن يبقى مجاني؟</summary><p>مع 3 فواحات متاحة من التصميمات المعروضة. عند أقل من 3، المتجر يؤكد لك رسوم الشحن على واتساب.</p></details><details><summary>قد إيه العطر بيثبت؟</summary><p>المتجر يصف الفواحات بأن لها ثباتًا عطريًا مميزًا؛ ومدة الرائحة الفعلية ممكن تختلف حسب العطر ودرجة الحرارة والتهوية وطريقة الاستخدام.</p></details><details><summary>هل العطر فعلًا خام ومن غير إضافات؟</summary><p>ده وصف المنتج المنشور في صفحات VelaLight: عطر خام نقي بدون إضافات. لو محتاج تفاصيل محددة عن تركيبة رائحة بعينها، اسألنا على واتساب.</p></details><details><summary>هل الكميات متوفرة دائمًا؟</summary><p>التوفر بيتغير حسب المخزون. ابعت طلبك على واتساب عشان الفريق يؤكد لك الموديل والعطر قبل تثبيت الطلب.</p></details></section>
+</main>
+<footer><strong>VELALIGHT</strong><p>خلي عطرك يحكي عنك… في كل مشوار.</p><a href="https://velalight.github.io/">زيارة متجر VelaLight</a><p>© 2026 VelaLight · جميع الحقوق محفوظة</p></footer>
+<div class="mobilebar"><div class="mobile-total">قيمة تشكيلتك <b id="mobileTotal">0 ج.م</b></div><a class="btn" href="#cart">راجع السلة ↑</a></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const WHATSAPP="201223526105",FREE_AT=3;
+const SCENTS=["فانيلا","سينامون سبايس فانيلا","لافندر","موكا","كراميل","كاريبيان فروت","فل","ياسمين","اناناس","شيكولاتة","كوكونات","كاسيليا","اينتو زانايت","بوكيت روز","ورد بلدى","تيوليب","قهوة","قهوة فانيلا","قهوة بندق","عود فانيليا","عنبر","فراولة","عود خشب صندل"];
+const PRODUCTS=[
+{id:"pmvj76q7f0ca",name:"فواحة السيارة بغطاء خشبي",desc:"زجاج شفاف، غطاء خشبي وحبل للتعليق.",price:150,img:"https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/Velalight-Car-Diffuser-02.webp",url:"https://velalight.github.io/shop/pmvj76q7f0ca.html"},
+{id:"pmvj8cij7c34",name:"فواحة السيارة بتصميم قطرة",desc:"شكل زجاجي انسيابي ولمسة أنيقة داخل عربيتك.",price:125,img:"https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/Velalight-Car-Diffuser-03.webp",url:"https://velalight.github.io/shop/pmvj8cij7c34.html"},
+{id:"pmvj8qxhca70",name:"فواحة السيارة الفاخرة",desc:"تصميم زجاجي فاخر بغطاء خشبي أنيق.",price:150,img:"https://cdn.jsdelivr.net/gh/velalight/velalight.github.io@main/Luxury%20Car%20Diffuser.webp",url:"https://velalight.github.io/shop/pmvj8qxhca70.html"}
+];
+const cart=[],$=s=>document.querySelector(s),money=n=>new Intl.NumberFormat("ar-EG").format(n)+" ج.م",esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+function drawProducts(){ $("#products").innerHTML=PRODUCTS.map(p=>`<article class="product"><div class="product-img"><img src="${p.img}" alt="${esc(p.name)} من VelaLight" loading="lazy" width="760" height="900"><span class="product-badge">اختار عطرك</span></div><div class="product-body"><h3>${esc(p.name)}</h3><p class="product-desc">${esc(p.desc)}</p><div class="price-line"><span class="price">${money(p.price)}</span><span class="currency">للقطعة</span><span class="perceived">قيمة تفرّق في كل مشوار</span></div><label class="scent-label" for="scent-${p.id}">اختار الرائحة</label><select class="scent-select" id="scent-${p.id}"><option value="">اختار من 23 عطرًا</option>${SCENTS.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join("")}</select><div class="add-row"><div class="quantity"><button type="button" data-step="-1" data-id="${p.id}" aria-label="تقليل الكمية">−</button><output id="qty-${p.id}">1</output><button type="button" data-step="1" data-id="${p.id}" aria-label="زيادة الكمية">+</button></div><button class="add-product" type="button" data-add="${p.id}">أضف للسلة +</button></div><p class="product-foot">اختار عطرًا مختلفًا وأضفه مرة أخرى لو حبيت.</p></div></article>`).join("");$("#scentList").innerHTML=SCENTS.map(s=>`<span>${esc(s)}</span>`).join("");}
+function totals(){let qty=0,sum=0;cart.forEach(x=>{const p=PRODUCTS.find(y=>y.id===x.id);qty+=x.qty;sum+=p.price*x.qty;});return{qty,sum,free:qty>=FREE_AT};}
+function render(){const host=$("#cartItems"),t=totals();if(!cart.length)host.innerHTML='<div class="empty">اختار العطر والعدد من كارت الفواحة، وهتلاقي تشكيلتك هنا فورًا.</div>';else host.innerHTML=cart.map((x,i)=>{const p=PRODUCTS.find(y=>y.id===x.id);return `<div class="cart-row"><div><span class="cart-name">${esc(p.name)}</span><span class="cart-meta">عطر ${esc(x.scent)} · ${money(p.price)} للقطعة</span></div><div><div class="cart-qty"><button type="button" data-cart-step="-1" data-index="${i}" aria-label="تقليل">−</button><span>${x.qty}</span><button type="button" data-cart-step="1" data-index="${i}" aria-label="زيادة">+</button></div><button type="button" class="remove" data-delete="${i}">حذف</button></div></div>`;}).join("");$("#count").textContent=new Intl.NumberFormat("ar-EG").format(t.qty)+" فواحة";$("#qtyTotal").textContent=new Intl.NumberFormat("ar-EG").format(t.qty);$("#subtotal").textContent=money(t.sum);$("#total").textContent=money(t.sum);$("#mobileTotal").textContent=money(t.sum);$("#shipping").textContent=t.free?"مجاني":"يتأكد مع المتجر";$("#shipping").classList.toggle("free",t.free);$("#totalLabel").textContent=t.free?"الإجمالي — الشحن مجاني":"الإجمالي قبل الشحن";$("#shipMsg").classList.toggle("done",t.free);$("#shipText").textContent=t.free?"مبروك! تشكيلتك مؤهلة للشحن المجاني.":`فاضل ${FREE_AT-t.qty} فواحات متاحة والشحن علينا.`;$("#meterFill").style.width=Math.min(100,t.qty/FREE_AT*100)+"%";$("#meterFill").classList.toggle("done",t.free);$("#checkoutBtn").disabled=!t.qty;$("#checkoutBtn").textContent=t.qty?"إتمام الطلب عبر واتساب ↗":"اختار فواحتك الأول";$("#error").textContent="";}
+function toast(msg){const x=$("#toast");x.textContent=msg;x.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>x.classList.remove("show"),2100);}
+document.addEventListener("click",e=>{const step=e.target.closest("[data-step]"),add=e.target.closest("[data-add]"),cs=e.target.closest("[data-cart-step]"),del=e.target.closest("[data-delete]");if(step){const out=$("#qty-"+step.dataset.id);out.value=Math.max(1,Math.min(10,Number(out.value)+Number(step.dataset.step)));out.textContent=out.value;}if(add){const id=add.dataset.add,sel=$("#scent-"+id),scent=sel.value;if(!scent){sel.focus();sel.style.borderColor="#e44b67";toast("اختار العطر الأول عشان نضيفه للسلة.");return;}const p=PRODUCTS.find(x=>x.id===id),qty=Number($("#qty-"+id).value)||1,existing=cart.find(x=>x.id===id&&x.scent===scent);if(existing)existing.qty+=qty;else cart.push({id,scent,qty});render();toast("اتضاف للسلة — ذوقك اختيار ممتاز!");}if(cs){const line=cart[Number(cs.dataset.index)];line.qty+=Number(cs.dataset.cartStep);if(line.qty<=0)cart.splice(Number(cs.dataset.index),1);render();}if(del){cart.splice(Number(del.dataset.delete),1);render();}});
+function submitOrder(){const t=totals();if(!t.qty)return;let msg="أهلًا VelaLight، حابب أطلب فواحات السيارة دي:\n\n";cart.forEach(x=>{const p=PRODUCTS.find(y=>y.id===x.id);msg+=`• ${p.name}\n  العطر: ${x.scent} · الكمية: ${x.qty} · ${money(p.price*x.qty)}\n`;});msg+=`\nإجمالي المنتجات: ${money(t.sum)}\nالشحن: ${t.free?"مجاني مع عرض 3 فواحات":"يرجى تأكيد رسوم الشحن"}\n\nياريت تأكدوا التوفر وبيانات التوصيل وطريقة الدفع. شكرًا!`;window.location.href="https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(msg);}
+$("#checkoutBtn").addEventListener("click",submitOrder);drawProducts();render();
+</script>
 </body>
 </html>
