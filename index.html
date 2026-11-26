@@ -92,6 +92,7 @@
 <!-- ═══ End Preconnect ═══ -->
 <link rel="stylesheet" href="style.css?v=1">
   <link rel="stylesheet" href="mobile-luxury-fix.css">
+  <link rel="stylesheet" href="campaign-hub.css?v=1">
 <link rel="stylesheet" href="pwa.css">
 <link rel="stylesheet" href="search.css">
 <link rel="stylesheet" href="exit-intent.css">
@@ -320,277 +321,73 @@
 <!-- ═══ Skip Link for Accessibility ═══ -->
 <a href="#products" class="skip-link">تخطي للمحتوى</a>
 
-<!-- ═══════════════════════════════════════════════
-     ⚡ BLACK FRIDAY PROMO BAR v2 — عرض الصحاب
-     ═══════════════════════════════════════════════ -->
-<div class="bf-promo-bar" id="bfPromoBar" role="region" aria-label="عرض بلاك فرايدي: عرض الصحاب">
-  <div class="bf-promo-badge" aria-hidden="true">
-    <span class="bf-badge-line1">BLACK</span>
-    <span class="bf-badge-line2">FRIDAY</span>
-    <span class="bf-badge-sparkle">✨</span>
+<!-- ═══════════════════════════════════════════════════════════
+     VELALIGHT OFFERS HUB — 3 campaigns, one clear choice
+     ═══════════════════════════════════════════════════════════ -->
+<section class="vl-offer-hub bf-promo-bar" id="bfPromoBar" role="region" aria-label="عروض VelaLight المميزة">
+  <div class="vl-offer-hub__head">
+    <div class="vl-offer-hub__heading">
+      <span class="vl-offer-hub__eyebrow">✦ عروض وتجارب VelaLight</span>
+      <h2 class="vl-offer-hub__title">اختيارات مميزة… وكل عرض بطريقه</h2>
+      <p class="vl-offer-hub__sub">عرض الصحاب، تجربة المساج، وفواحات السيارة — اختار الوجهة المناسبة.</p>
+    </div>
+    <span class="vl-offer-hub__hint" aria-hidden="true">اضغط على العرض للتفاصيل ←</span>
+    <button type="button" class="vl-offer-hub__close" id="bfPromoClose" aria-label="إغلاق العروض">✕</button>
   </div>
 
-  <div class="bf-promo-content">
-    <h3 class="bf-promo-title">
-      <span class="bf-title-ar">عرض الصحاب</span>
-      <span class="bf-title-en">FRIENDS OFFER</span>
-    </h3>
-    <p class="bf-promo-sub">
-      اشتري <span class="bf-num">4</span> شمعات مساج
-      <span class="bf-amp">+</span>
-      الخامسة
-      <span class="bf-gift">هدية 🎁</span>
-    </p>
-    <p class="bf-promo-en-sub">BUY 4 · GET 1 FREE</p>
+  <div class="vl-offer-hub__grid">
+    <button type="button" class="vl-offer-card vl-offer-card--friends bf-promo-cta" id="bfPromoCta" aria-haspopup="dialog" data-vl-campaign="friends_offer">
+      <span class="vl-offer-card__image"><img src="velalight-massage-luxury-trio-set-main.webp" alt="مجموعة شموع مساج" loading="lazy" decoding="async"></span>
+      <span class="vl-offer-card__copy">
+        <span class="vl-offer-card__tag">عرض الصحاب</span>
+        <span class="vl-offer-card__title">4 + الخامسة هدية</span>
+        <span class="vl-offer-card__offer">اختيار 4 روائح مختلفة</span>
+      </span>
+      <span class="vl-offer-card__action">اختيار الروائح <span class="vl-offer-card__arrow" aria-hidden="true">←</span></span>
+    </button>
+
+    <a class="vl-offer-card vl-offer-card--massage" href="LP-massage-candle.html" data-vl-campaign="massage_candle">
+      <span class="vl-offer-card__image"><img src="velalight-massage-mandala-main-011.webp" alt="شمعة المساج المانديلا" loading="lazy" decoding="async"></span>
+      <span class="vl-offer-card__copy">
+        <span class="vl-offer-card__tag">لحظة استرخاء</span>
+        <span class="vl-offer-card__title">شمعة المساج</span>
+        <span class="vl-offer-card__offer">375 ج بدل 475 + تغليف هدايا مجاني</span>
+      </span>
+      <span class="vl-offer-card__action">تفاصيل التجربة <span class="vl-offer-card__arrow" aria-hidden="true">←</span></span>
+    </a>
+
+    <a class="vl-offer-card vl-offer-card--car" href="velalight-car-diffusers.html" data-vl-campaign="car_diffusers">
+      <span class="vl-offer-card__image"><img src="Luxury%20Car%20Diffuser.webp" alt="فواحة سيارة فاخرة" loading="lazy" decoding="async"></span>
+      <span class="vl-offer-card__copy">
+        <span class="vl-offer-card__tag">عطرك في كل مشوار</span>
+        <span class="vl-offer-card__title">فواحات السيارة</span>
+        <span class="vl-offer-card__offer">تصميمات تبدأ من 125 ج · الشحن مجاني عند شراء 3</span>
+      </span>
+      <span class="vl-offer-card__action">استكشاف الفواحات <span class="vl-offer-card__arrow" aria-hidden="true">←</span></span>
+    </a>
   </div>
-
-  <button type="button" class="bf-promo-cta" id="bfPromoCta" aria-haspopup="dialog">
-    <span class="bf-cta-ar">اطلبي العرض</span>
-    <span class="bf-cta-en">ORDER NOW ✨</span>
-  </button>
-  
-  <button type="button" class="bf-promo-close" id="bfPromoClose" aria-label="إغلاق العرض">✕</button>
-  <p class="bf-promo-note">* العرض ساري لحد نفاد الكمية · Limited Stock</p>
-</div>
-<style>
-/* ═══ COMPACT BLACK FRIDAY BAR (تم تقليل الارتفاع) ═══ */
-.bf-promo-bar {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 6px 40px 10px 16px;
-  background: radial-gradient(ellipse at top, rgba(212,175,55,0.35) 0%, transparent 60%), linear-gradient(135deg, #0a0805 0%, #1a1512 50%, #2a1c0b 100%);
-  border-bottom: 2px solid #d4af37;
-  box-shadow: 0 3px 15px rgba(212,175,55,0.25), inset 0 -1px 0 rgba(212,175,55,0.5);
-  overflow: hidden;
-  z-index: 100;
-  flex-wrap: wrap;
-  font-family: 'Tajawal', 'El Messiri', sans-serif;
-}
-.bf-promo-bar::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.18) 50%, transparent 100%);
-  animation: bfShimmer 4s infinite;
-  pointer-events: none;
-}
-@keyframes bfShimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-.bf-promo-bar.is-hidden { display: none !important; }
-
-.bf-promo-badge {
-  position: relative;
-  flex-shrink: 0;
-  width: 55px; height: 55px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #ffe45c 0%, #ffd700 40%, #d4af37 75%, #a67c00 100%);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  box-shadow: 0 0 15px rgba(255,215,0,0.6), inset 0 -2px 5px rgba(0,0,0,0.25), inset 0 2px 5px rgba(255,255,255,0.4);
-  animation: bfBadgePulse 2s ease-in-out infinite;
-  transform: rotate(-8deg);
-  z-index: 2;
-}
-@keyframes bfBadgePulse {
-  0%, 100% { transform: rotate(-8deg) scale(1); box-shadow: 0 0 15px rgba(255,215,0,0.6), inset 0 -2px 5px rgba(0,0,0,0.25); }
-  50% { transform: rotate(-8deg) scale(1.05); box-shadow: 0 0 25px rgba(255,215,0,0.9), inset 0 -2px 5px rgba(0,0,0,0.25); }
-}
-.bf-badge-line1 { font-size: 0.5rem; font-weight: 900; color: #1a1512; line-height: 1; margin-bottom: 1px; }
-.bf-badge-line2 { font-size: 0.65rem; font-weight: 900; color: #1a1512; line-height: 1; }
-.bf-badge-sparkle { position: absolute; top: -5px; right: -5px; font-size: 0.8rem; animation: bfSparkle 1.5s ease-in-out infinite; }
-@keyframes bfSparkle { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.3) rotate(15deg); } }
-
-.bf-promo-content { text-align: center; flex: 1; min-width: 200px; }
-.bf-promo-title { margin: 0 0 2px; display: flex; align-items: baseline; justify-content: center; gap: 6px; flex-wrap: wrap; }
-.bf-title-ar { font-size: 1.1rem; font-weight: 800; background: linear-gradient(135deg, #fff 0%, #ffd700 50%, #d4af37 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.bf-title-en { font-size: 0.55rem; font-weight: 800; letter-spacing: 2px; color: #d4af37; opacity: 0.85; }
-.bf-promo-sub { margin: 0 0 2px; font-size: 0.8rem; font-weight: 600; color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; }
-.bf-num { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, #ffd700, #d4af37); color: #1a1512; font-weight: 900; font-size: 0.75rem; }
-.bf-amp { color: #d4af37; font-weight: 900; font-size: 1rem; }
-.bf-gift { color: #ffd700; font-weight: 800; }
-.bf-promo-en-sub { margin: 0; font-size: 0.55rem; font-weight: 700; letter-spacing: 1px; color: rgba(212, 175, 55, 0.75); }
-
-.bf-promo-cta {
-  flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 0;
-  padding: 6px 16px; background: linear-gradient(135deg, #ffe45c 0%, #ffd700 40%, #d4af37 75%, #a67c00 100%);
-  color: #1a1512 !important; border: none; border-radius: 99px; text-decoration: none; cursor: pointer;
-  font-weight: 900; font-size: 0.8rem; box-shadow: 0 4px 12px rgba(255,215,0,0.5);
-  transition: all 0.25s ease; z-index: 2;
-}
-.bf-promo-cta:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 6px 20px rgba(255,215,0,0.8); }
-.bf-cta-ar { font-size: 0.8rem; font-weight: 900; }
-.bf-cta-en { font-size: 0.45rem; font-weight: 800; letter-spacing: 1px; opacity: 0.85; }
-
-.bf-promo-close { position: absolute; top: 4px; right: 6px; background: transparent; border: 1px solid rgba(212, 175, 55, 0.5); color: #d4af37; width: 20px; height: 20px; border-radius: 50%; font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; z-index: 3; }
-.bf-promo-close:hover { background: rgba(212, 175, 55, 0.3); transform: rotate(90deg); }
-.bf-promo-note { position: absolute; bottom: 2px; left: 0; right: 0; text-align: center; font-size: 0.5rem; color: rgba(212, 175, 55, 0.6); margin: 0; pointer-events: none; }
-
-@media (max-width: 700px) {
-  .bf-promo-bar { padding: 6px 30px 8px 10px; gap: 8px; }
-  .bf-promo-badge { width: 45px; height: 45px; }
-  .bf-title-ar { font-size: 0.95rem; }
-  .bf-promo-sub { font-size: 0.7rem; }
-  .bf-promo-cta { padding: 5px 12px; font-size: 0.75rem; }
-  .bf-promo-note { display: none; }
-}
-</style>
+</section>
 <script>
 (function(){
   "use strict";
-  var bar = document.getElementById("bfPromoBar");
+  var hub = document.getElementById("bfPromoBar");
   var close = document.getElementById("bfPromoClose");
-  if(!bar) return;
-  if(close){
-    close.addEventListener("click", function(){
-      bar.classList.add("is-hidden");
-    });
+  if(close && hub){
+    close.addEventListener("click", function(){ hub.classList.add("is-hidden"); });
   }
+  document.querySelectorAll(".vl-offer-hub [data-vl-campaign]").forEach(function(card){
+    if(card.id === "bfPromoCta") return;
+    card.addEventListener("click", function(){
+      var campaign = card.getAttribute("data-vl-campaign");
+      try {
+        if(typeof gtag === "function") gtag("event", "campaign_card_click", {campaign_id:campaign, placement:"homepage_offers_hub", transport_type:"beacon"});
+        if(typeof fbq === "function") fbq("trackCustom", "CampaignCardClick", {campaign_id:campaign, placement:"homepage_offers_hub"});
+      } catch(e){}
+    });
+  });
 })();
 </script>
-<!-- ═══ END BLACK FRIDAY PROMO BAR v2 ═══ -->
-
-<!-- ═══════════════════════════════════════════════
-     🧠 QUIZ BANNER — بعد عرض الصحاب مباشرة
-     ═══════════════════════════════════════════════ -->
-<section class="vl-quiz-banner" aria-label="العب ألعاب نفسية">
-  <a href="https://velalight.github.io/quiz/" class="vl-quiz-banner-inner">
-    <div class="vl-quiz-banner-icon">🧠</div>
-    <div class="vl-quiz-banner-content">
-      <h2 class="vl-quiz-banner-title">ألعاب خطرة نفسية</h2>
-      <p class="vl-quiz-banner-sub">اكتشف شخصيتك العطرية الحقيقية من 10 أسئلة عميقة ✨</p>
-    </div>
-    <div class="vl-quiz-banner-cta">
-      <span>العب الآن</span>
-      <span class="vl-quiz-banner-arrow">←</span>
-    </div>
-  </a>
-</section>
-<style>
-/* ═══ COMPACT QUIZ BANNER ═══ */
-.vl-quiz-banner {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  position: relative !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  width: 100% !important;
-  background: linear-gradient(135deg, #1a0f2e 0%, #2d1b4e 50%, #4a2c7a 100%) !important;
-  overflow: hidden !important;
-  border-bottom: 1px solid rgba(255, 209, 102, 0.4) !important;
-  z-index: 50 !important;
-  box-sizing: border-box !important;
-}
-.vl-quiz-banner::before {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  background: radial-gradient(circle at 20% 50%, rgba(255, 209, 102, 0.2) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(255, 107, 157, 0.15) 0%, transparent 50%) !important;
-  pointer-events: none !important;
-}
-.vl-quiz-banner-inner {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  position: relative !important;
-  align-items: center !important;
-  gap: 12px !important;
-  max-width: 1100px !important;
-  margin: 0 auto !important;
-  padding: 10px 20px !important;
-  text-decoration: none !important;
-  color: #fff !important;
-  z-index: 1 !important;
-  transition: transform 0.3s ease !important;
-}
-.vl-quiz-banner-inner:hover {
-  transform: scale(1.01) !important;
-}
-.vl-quiz-banner-icon {
-  display: block !important;
-  font-size: 1.8rem !important;
-  line-height: 1 !important;
-  filter: drop-shadow(0 0 10px rgba(255, 209, 102, 0.6)) !important;
-  animation: vlQuizIconPulse 2s ease-in-out infinite !important;
-  flex-shrink: 0 !important;
-}
-@keyframes vlQuizIconPulse {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.1) rotate(5deg); }
-}
-.vl-quiz-banner-content { display: block !important; flex: 1 !important; min-width: 0 !important; }
-.vl-quiz-banner-title {
-  display: block !important;
-  font-family: 'El Messiri', 'Tajawal', serif !important;
-  font-size: 1.1rem !important;
-  font-weight: 800 !important;
-  margin: 0 0 2px !important;
-  background: linear-gradient(135deg, #fff 0%, #ffd166 60%, #ff6b9d 100%) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  color: #ffd166 !important;
-  line-height: 1.2 !important;
-}
-.vl-quiz-banner-sub {
-  display: block !important;
-  font-size: 0.75rem !important;
-  margin: 0 !important;
-  color: rgba(255, 255, 255, 0.9) !important;
-  line-height: 1.3 !important;
-}
-.vl-quiz-banner-cta {
-  display: flex !important;
-  visibility: visible !important;
-  align-items: center !important;
-  gap: 6px !important;
-  padding: 8px 16px !important;
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #d4af37 100%) !important;
-  color: #1a1512 !important;
-  border-radius: 50px !important;
-  font-weight: 900 !important;
-  font-size: 0.85rem !important;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4) !important;
-  flex-shrink: 0 !important;
-  animation: vlQuizCtaPulse 2.5s ease-in-out infinite !important;
-  white-space: nowrap !important;
-}
-@keyframes vlQuizCtaPulse {
-  0%, 100% { box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4) !important; }
-  50% { box-shadow: 0 4px 25px rgba(255, 215, 0, 0.8) !important; }
-}
-.vl-quiz-banner-arrow {
-  display: inline-block !important;
-  font-size: 1rem !important;
-  animation: vlQuizArrow 1.5s ease-in-out infinite !important;
-}
-@keyframes vlQuizArrow {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-4px); }
-}
-@media (max-width: 700px) {
-  .vl-quiz-banner-inner {
-    gap: 10px !important;
-    padding: 8px 12px !important;
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    text-align: center !important;
-  }
-  .vl-quiz-banner-icon { font-size: 1.5rem !important; }
-  .vl-quiz-banner-content { flex: 1 1 100% !important; order: 2 !important; }
-  .vl-quiz-banner-title { font-size: 1rem !important; }
-  .vl-quiz-banner-sub { font-size: 0.65rem !important; }
-  .vl-quiz-banner-cta {
-    order: 3 !important;
-    flex: 1 1 100% !important;
-    justify-content: center !important;
-    padding: 6px 12px !important;
-    font-size: 0.75rem !important;
-  }
-  .vl-quiz-banner-arrow { transform: rotate(180deg) !important; }
-}
-</style>
-<!-- ═══ END QUIZ BANNER ═══ -->
+<!-- ═══ END VELALIGHT OFFERS HUB ═══ -->
   
 <!-- ═══════════════════════════════════════════════
      TOP BAR
@@ -1613,13 +1410,6 @@ if(btt){
   }, {passive: true});
   btt.addEventListener("click", () => {
     window.scrollTo({top: 0, behavior: "smooth"});
-  });
-}
-if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-// navigator.serviceWorker.register('/sw.js')
-    .then(() => console.log('✨ SW Ready'))
-      .catch(e => console.log('SW registration skipped'));
   });
 }
 document.addEventListener('load', function(e){
@@ -2713,174 +2503,5 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 <!-- ═══ END Free Shipping Badge ═══ -->
 
-<!-- ═══ VL_TOP_TRIO — 3 في 1 (يعمل على موبايل + لابتوب) ═══ -->
-<style>
-.vl-top-trio {
-  display: flex !important;
-  flex-wrap: nowrap !important;
-  gap: 8px !important;
-  padding: 10px 16px !important;
-  background: #0a0805 !important;
-  align-items: stretch !important;
-  justify-content: center !important;
-  width: 100% !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
-}
-.vl-top-trio > * {
-  margin: 0 !important;
-  border-radius: 10px !important;
-  height: 82px !important;
-  overflow: hidden !important;
-  box-sizing: border-box !important;
-}
-
-@media (min-width: 769px) {
-  .vl-top-trio > * {
-    flex: 1 1 0 !important;
-    min-width: 0 !important;
-    max-width: 33.333% !important;
-  }
-  .vl-top-trio .bf-promo-title { font-size: 0.95rem !important; }
-  .vl-top-trio .vl-quiz-banner-title { font-size: 0.95rem !important; }
-  .vl-top-trio #vlFreeShipWrap .vl-title { font-size: 0.95rem !important; }
-}
-
-@media (max-width: 768px) {
-  .vl-top-trio {
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory !important;
-    justify-content: flex-start !important;
-    padding: 6px !important;
-    scrollbar-width: none !important;
-  }
-  .vl-top-trio::-webkit-scrollbar { display: none !important; }
-  .vl-top-trio > * {
-    flex: 0 0 calc(100% - 12px) !important;
-    scroll-snap-align: center !important;
-  }
-}
-
-.vl-top-trio .bf-promo-badge,
-.vl-top-trio .bf-title-en,
-.vl-top-trio .bf-promo-en-sub,
-.vl-top-trio .bf-promo-note,
-.vl-top-trio .vl-quiz-banner-sub,
-.vl-top-trio .vl-quiz-banner-arrow,
-.vl-top-trio #vlFreeShipWrap .vl-spark,
-.vl-top-trio #vlFreeShipClose {
-  display: none !important;
-}
-
-.vl-top-trio .bf-promo-bar {
-  padding: 8px 30px 8px 10px !important;
-  border: 1px solid #d4af37 !important;
-  flex-wrap: nowrap !important;
-  align-items: center !important;
-}
-.vl-top-trio .bf-promo-content { text-align: right !important; min-width: 0 !important; flex: 1 !important; }
-.vl-top-trio .bf-promo-title { font-size: 0.9rem !important; margin: 0 !important; justify-content: flex-start !important; }
-.vl-top-trio .bf-promo-sub { font-size: 0.68rem !important; justify-content: flex-start !important; margin: 2px 0 0 !important; }
-.vl-top-trio .bf-promo-cta { padding: 6px 12px !important; font-size: 0.72rem !important; height: auto !important; flex-shrink: 0 !important; }
-
-.vl-top-trio .vl-quiz-banner { border: 1px solid #d4af37 !important; background: linear-gradient(135deg, #1a0f2e 0%, #2d1b4e 100%) !important; }
-.vl-top-trio .vl-quiz-banner-inner { padding: 8px 10px !important; flex-wrap: nowrap !important; height: 100% !important; align-items: center !important; gap: 8px !important; }
-.vl-top-trio .vl-quiz-banner-icon { font-size: 1.6rem !important; flex-shrink: 0 !important; }
-.vl-top-trio .vl-quiz-banner-content { flex: 1 !important; min-width: 0 !important; }
-.vl-top-trio .vl-quiz-banner-title { font-size: 0.9rem !important; margin: 0 !important; }
-.vl-top-trio .vl-quiz-banner-cta { padding: 6px 12px !important; font-size: 0.72rem !important; flex-shrink: 0 !important; }
-
-.vl-top-trio #vlFreeShipWrap {
-  position: static !important;
-  bottom: auto !important;
-  left: auto !important;
-  width: auto !important;
-  height: 82px !important;
-  animation: none !important;
-  padding: 8px 12px !important;
-  background: linear-gradient(135deg, #1a1512, #2a1c0b) !important;
-  border: 1px solid #d4af37 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-.vl-top-trio #vlFreeShipWrap .vl-badge {
-  width: 100% !important;
-  height: 100% !important;
-  animation: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-.vl-top-trio #vlFreeShipWrap .vl-badge::before,
-.vl-top-trio #vlFreeShipWrap .vl-badge-inner::before { display: none !important; }
-.vl-top-trio #vlFreeShipWrap .vl-badge-inner {
-  flex-direction: row !important;
-  gap: 10px !important;
-  width: 100% !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  overflow: visible !important;
-}
-.vl-top-trio #vlFreeShipWrap .vl-icon { font-size: 1.8rem !important; margin: 0 !important; flex-shrink: 0 !important; }
-.vl-top-trio #vlFreeShipWrap .vl-title { font-size: 0.9rem !important; color: #fff !important; margin: 0 0 2px !important; text-shadow: none !important; }
-.vl-top-trio #vlFreeShipWrap .vl-sub { font-size: 0.68rem !important; color: #d4af37 !important; max-width: none !important; }
-.vl-top-trio #vlFreeShipWrap .vl-sub b { color: #ffd700 !important; }
-.vl-top-trio #vlFreeShipWrap .vl-badge-inner > div { display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: flex-start !important; }
-
-@media (min-width: 769px) {
-  .vl-top-trio .bf-promo-bar::before, .vl-top-trio .vl-quiz-banner-icon, .vl-top-trio #vlFreeShipWrap .vl-icon { animation: none !important; }
-}
-</style>
-
-<script>
-(function(){
-  function buildTrio(){
-    var bf = document.getElementById("bfPromoBar");
-    var quiz = document.querySelector(".vl-quiz-banner");
-    if(!bf || !quiz) return false;
-
-    var freeShip = document.getElementById("vlFreeShipWrap");
-    if(!freeShip){
-      freeShip = document.createElement("div");
-      freeShip.id = "vlFreeShipWrap";
-      freeShip.innerHTML = '<div class="vl-badge"><div class="vl-badge-inner"><div class="vl-icon">🚚</div><div><div class="vl-title">شحن مجاني</div><div class="vl-sub">عند شراء <b>3 فواحات</b> للسيارة</div></div></div></div>';
-      freeShip.style.cssText = "display:none;";
-      document.body.appendChild(freeShip);
-    }
-
-    var trio = document.querySelector(".vl-top-trio");
-    if(!trio){
-      trio = document.createElement("div");
-      trio.className = "vl-top-trio";
-      bf.parentNode.insertBefore(trio, bf);
-    }
-    if(bf.parentNode !== trio) trio.appendChild(bf);
-    if(quiz.parentNode !== trio) trio.appendChild(quiz);
-    if(freeShip.parentNode !== trio){
-      freeShip.style.display = "";
-      trio.appendChild(freeShip);
-    }
-    return true;
-  }
-  var tries = 0;
-  var timer = setInterval(function(){ tries++; if(buildTrio() || tries > 50) clearInterval(timer); }, 200);
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", function(){
-      setTimeout(buildTrio, 500);
-      setTimeout(buildTrio, 1500);
-    });
-  } else {
-    setTimeout(buildTrio, 500);
-    setTimeout(buildTrio, 1500);
-  }
-})();
-</script>
-<!-- ═══ END VL_TOP_TRIO ═══ -->
 </body>
 </html>
