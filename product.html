@@ -1297,7 +1297,7 @@
   <button class="pd-sticky-btn" id="pdStickyAdd" type="button">🛍️ أضف للسلة</button>
 </div>
 
-<script src="data.js?v=11"></script>
+<script src="data.js?v=12"></script>
 <script type="module" src="firebase.js"></script>
 <script type="module" src="auth.js"></script>
 <script src="app.js?v=16"></script>
@@ -1359,6 +1359,11 @@ function parseFirestoreDoc(doc, fallbackId){
   for(const k in doc.fields) out[k]=firestoreValue(doc.fields[k]);
   return out;
 }
+function applyStorePriceOverride(product){
+  return typeof window.applyVelaPriceOverride === "function"
+    ? window.applyVelaPriceOverride(product)
+    : product;
+}
 async function fetchFreshProduct(pid){
   // ═══ 1) Firebase SDK مباشرة (يتجاوز الكاش) ═══
   try{
@@ -1366,7 +1371,7 @@ async function fetchFreshProduct(pid){
       const {doc,getDocFromServer}=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
       const snap=await getDocFromServer(doc(window.FB.db,"products",pid));
       if(snap.exists()){
-        return {id:pid,_fid:pid,...snap.data()};
+        return applyStorePriceOverride({id:pid,_fid:pid,...snap.data()});
       }
     }
   }catch(e){ console.warn("SDK fresh fetch failed:",e.message); }
@@ -1378,7 +1383,7 @@ async function fetchFreshProduct(pid){
     const resp=await fetch(url,{cache:"no-store"});
     if(resp.ok){
       const doc=await resp.json();
-      return parseFirestoreDoc(doc,pid);
+      return applyStorePriceOverride(parseFirestoreDoc(doc,pid));
     }
   }catch(e){}
 
@@ -1680,6 +1685,7 @@ async function loadCloudCatalog(pid){
 }
 
 function render(){
+  P=applyStorePriceOverride(P);
   $("#pdLoading").classList.add("hidden");
   $("#pdNotFound").classList.add("hidden");
   $("#pdWrap").classList.remove("hidden");
@@ -2040,8 +2046,9 @@ function renderRelated(){
   if(!box||!P) return;
   let all = [];
   if (cloudCatalog && cloudCatalog.length > 0) { all = cloudCatalog; } else if (typeof ALL_PRODUCTS !== "undefined") { all = ALL_PRODUCTS; } else if (typeof PRODUCTS !== "undefined") { all = PRODUCTS; }
-  let list = all.filter(x => x.cat === P.cat && x.id !== P.id).slice(0, 4);
-  if(list.length < 4){ list = [...list, ...all.filter(x => x.cat !== P.cat && x.id !== P.id && !list.find(y => y.id === x.id))].slice(0, 4); }
+  const normalizedAll=all.map(applyStorePriceOverride);
+  let list = normalizedAll.filter(x => x.cat === P.cat && x.id !== P.id).slice(0, 4);
+  if(list.length < 4){ list = [...list, ...normalizedAll.filter(x => x.cat !== P.cat && x.id !== P.id && !list.find(y => y.id === x.id))].slice(0, 4); }
   if(!list.length){ box.innerHTML = `<p style="color:var(--dim);text-align:center;padding:1.5rem">${(typeof LANG !== "undefined" && LANG==="en")?"No similar products":"لا توجد منتجات مشابهة"}</p>`; return; }
   /* ✅ [CLS Fix] width/height للصور */
   box.innerHTML = list.map(p => {

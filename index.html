@@ -92,7 +92,7 @@
 <!-- ═══ End Preconnect ═══ -->
 <link rel="stylesheet" href="style.css?v=1">
   <link rel="stylesheet" href="mobile-luxury-fix.css">
-  <link rel="stylesheet" href="campaign-hub.css?v=1">
+  <link rel="stylesheet" href="campaign-hub.css?v=2">
 <link rel="stylesheet" href="pwa.css">
 <link rel="stylesheet" href="search.css">
 <link rel="stylesheet" href="exit-intent.css">
@@ -335,7 +335,8 @@
     <button type="button" class="vl-offer-hub__close" id="bfPromoClose" aria-label="إغلاق العروض">✕</button>
   </div>
 
-  <div class="vl-offer-hub__grid">
+  <span class="vl-offer-hub__mobile-hint" aria-hidden="true">اسحب لاكتشاف بقية العروض ←</span>
+  <div class="vl-offer-hub__grid" role="group" aria-label="اسحب أفقيًا لاكتشاف العروض الثلاثة" tabindex="0">
     <button type="button" class="vl-offer-card vl-offer-card--friends bf-promo-cta" id="bfPromoCta" aria-haspopup="dialog" data-vl-campaign="friends_offer">
       <span class="vl-offer-card__image"><img src="velalight-massage-luxury-trio-set-main.webp" alt="مجموعة شموع مساج" loading="lazy" decoding="async"></span>
       <span class="vl-offer-card__copy">
@@ -349,9 +350,9 @@
     <a class="vl-offer-card vl-offer-card--massage" href="LP-massage-candle.html" data-vl-campaign="massage_candle">
       <span class="vl-offer-card__image"><img src="velalight-massage-mandala-main-011.webp" alt="شمعة المساج المانديلا" loading="lazy" decoding="async"></span>
       <span class="vl-offer-card__copy">
-        <span class="vl-offer-card__tag">لحظة استرخاء</span>
+        <span class="vl-offer-card__tag">تغليف هدايا مجاني</span>
         <span class="vl-offer-card__title">شمعة المساج</span>
-        <span class="vl-offer-card__offer">375 ج بدل 475 + تغليف هدايا مجاني</span>
+        <span class="vl-offer-card__offer">400 ج بدل 475 · وفّر 75 ج</span>
       </span>
       <span class="vl-offer-card__action">تفاصيل التجربة <span class="vl-offer-card__arrow" aria-hidden="true">←</span></span>
     </a>
@@ -1335,7 +1336,7 @@ langObserver.observe(document.documentElement, { attributes: true, attributeFilt
 })();
 </script>
 
-<script src="data.js?v=11"></script>
+<script src="data.js?v=12"></script>
 <script type="module" src="firebase.js"></script>
 <script src="app.js?v=17"></script>
   <script>
@@ -1701,8 +1702,8 @@ document.addEventListener('DOMContentLoaded', function(){
     <button class="bf-modal-close" id="bfModalClose" aria-label="إغلاق">✕</button>
     <div class="bf-modal-header">
       <span class="bf-modal-badge">⚡ BLACK FRIDAY · عرض الصحاب</span>
-      <h2 id="bfModalTitle">اشتري 4 شمعات مساج + الخامسة هدية 🎁</h2>
-      <p>اختاري عطر كل شمعة — الخامسة علينا</p>
+      <h2 id="bfModalTitle">4 شمعات مساج + الخامسة هدية 🎁</h2>
+      <p>حدّد عطر كل شمعة — الخامسة علينا</p>
     </div>
     <div class="bf-modal-body" id="bfModalBody"></div>
     <div class="bf-modal-footer">
@@ -1746,7 +1747,10 @@ document.addEventListener('DOMContentLoaded', function(){
     } catch(e){}
     try {
       const c = JSON.parse(localStorage.getItem("vl_products_v3") || "[]");
-      return c.find(x => Number(x.id) === PRODUCT_ID) || null;
+      const cachedProduct = c.find(x => Number(x.id) === PRODUCT_ID) || null;
+      return typeof window.applyVelaPriceOverride === "function"
+        ? window.applyVelaPriceOverride(cachedProduct)
+        : cachedProduct;
     } catch(e){ return null; }
   }
 
@@ -1762,7 +1766,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const product = getProduct();
     if(!product){
-      if(typeof toast === "function") toast("⚠️ حصل خطأ في تحميل المنتج، جربي تاني");
+      if(typeof toast === "function") toast("⚠️ تعذّر تحميل المنتج. أعد المحاولة.");
       return;
     }
 
@@ -1776,7 +1780,7 @@ document.addEventListener('DOMContentLoaded', function(){
       row.innerHTML = `
         <span class="bf-modal-num">${i+1}</span>
         <select class="bf-modal-scent" data-i="${i}" aria-label="عطر الشمعة ${i+1}">
-          <option value="">— اختاري العطر —</option>
+          <option value="">— حدّد العطر —</option>
           ${scentOpts}
         </select>
       `;
@@ -1816,7 +1820,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     if(hasError){
-      if(typeof toast === "function") toast("⚠️ اختاري العطر لكل شمعة من 1 لـ 4");
+      if(typeof toast === "function") toast("⚠️ حدّد العطر لكل شمعة من 1 لـ 4");
       return;
     }
 

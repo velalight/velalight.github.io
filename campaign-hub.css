@@ -90,6 +90,7 @@
   font-weight: 800;
   white-space: nowrap;
 }
+.vl-offer-hub__mobile-hint { display: none; }
 .vl-offer-hub__close {
   position: absolute;
   top: 2px;
@@ -228,9 +229,9 @@
 .vl-offer-card--car .vl-offer-card__action { background: linear-gradient(135deg, #158d72, #2563bd); }
 .vl-offer-card__arrow { font-size: .9rem; line-height: 1; }
 @media (max-width: 760px) {
-  .vl-offer-hub { padding: 10px 9px 12px; }
-  .vl-offer-hub__head { margin-bottom: 8px; gap: 6px; }
-  .vl-offer-hub__title { font-size: 1rem; }
+  .vl-offer-hub { padding: 9px 10px 11px; }
+  .vl-offer-hub__head { margin-bottom: 7px; gap: 6px; }
+  .vl-offer-hub__title { font-size: .98rem; }
   .vl-offer-hub__sub { font-size: .64rem; }
   .vl-offer-hub__hint { padding: 5px 8px; font-size: .61rem; }
   .vl-offer-hub__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
@@ -239,7 +240,7 @@
     flex-direction: column;
     justify-content: flex-start;
     gap: 4px;
-    min-height: 150px;
+    min-height: 138px;
     padding: 8px 5px 7px;
     border-radius: 14px;
     text-align: center;
@@ -251,11 +252,90 @@
   .vl-offer-card__action { min-width: 0; margin-top: auto; padding: 6px 7px; font-size: .58rem; }
   .vl-offer-card__arrow { font-size: .72rem; }
 }
-@media (max-width: 360px) {
+@media (max-width: 480px) {
+  .vl-offer-hub { padding: 8px 0 9px; }
+  .vl-offer-hub__head { margin: 0 10px 5px; padding-inline-end: 30px; }
+  .vl-offer-hub__eyebrow { margin-bottom: 0; font-size: .56rem; }
+  .vl-offer-hub__title { overflow: hidden; font-size: .91rem; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+  .vl-offer-hub__sub { max-width: calc(100vw - 64px); overflow: hidden; font-size: .6rem; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
   .vl-offer-hub__hint { display: none; }
-  .vl-offer-card { min-height: 156px; padding-inline: 4px; }
-  .vl-offer-card__offer { font-size: .56rem; }
-  .vl-offer-card__action { font-size: .55rem; }
+  .vl-offer-hub__mobile-hint { display: block; margin: 0 12px 4px; color: rgba(255,255,255,.74); font-size: .57rem; line-height: 1.2; }
+  .vl-offer-hub__grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(248px, calc(100vw - 72px));
+    grid-template-columns: none;
+    gap: 8px;
+    max-width: none;
+    margin: 0;
+    padding: 2px 10px 6px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .vl-offer-hub__grid::-webkit-scrollbar { display: none; }
+  .vl-offer-card {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) 68px;
+    align-items: center;
+    justify-content: initial;
+    gap: 7px;
+    min-height: 78px;
+    padding: 7px 8px;
+    border-radius: 14px;
+    text-align: start;
+    scroll-snap-align: start;
+  }
+  .vl-offer-card__image { width: 42px; height: 50px; border-radius: 10px; }
+  .vl-offer-card__tag { margin: 0 0 1px; font-size: .52rem; line-height: 1.1; }
+  .vl-offer-card__title { margin: 0 0 2px; font-size: .76rem; line-height: 1.2; }
+  .vl-offer-card__offer { display: -webkit-box; overflow: hidden; font-size: .59rem; line-height: 1.25; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+  .vl-offer-card__action { width: 68px; min-width: 0; margin: 0; padding: 6px 5px; font-size: .57rem; line-height: 1.25; white-space: normal; }
+  .vl-offer-card__arrow { font-size: .68rem; }
+}
+@media (max-width: 360px) {
+  .vl-offer-hub__grid { grid-auto-columns: minmax(242px, calc(100vw - 66px)); }
+  .vl-offer-card { grid-template-columns: 38px minmax(0, 1fr) 64px; gap: 6px; padding-inline: 7px; }
+  .vl-offer-card__image { width: 38px; height: 46px; }
+  .vl-offer-card__action { width: 64px; font-size: .55rem; }
+}
+@media (max-width: 700px) {
+  .vl-quiz-float {
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 12px !important;
+    width: 52px !important;
+    height: 52px !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    animation: none !important;
+    transition: transform .2s ease !important;
+    box-shadow: 0 5px 16px rgba(112, 83, 10, .28) !important;
+  }
+  .vl-quiz-float .vl-quiz-text {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+  .vl-quiz-float .vl-quiz-icon { font-size: 1.25rem !important; animation: none !important; }
+  .vl-quiz-float:active { transform: scale(.94) !important; }
+}
+@media (max-width: 600px) {
+  /* تظهر ميزة الشحن داخل بطاقة الفواحات؛ الشارة الدائرية تكرر الرسالة وتغطي الهيرو. */
+  #vlFreeShipWrap { display: none !important; }
+  .whatsapp-float { left: 12px !important; width: 48px !important; height: 48px !important; animation: none !important; }
+  .whatsapp-float svg { width: 24px !important; height: 24px !important; }
+  .vl-chroma-hero .floating-card { display: none !important; }
 }
 @media (prefers-reduced-motion: reduce) {
   .vl-offer-card,
